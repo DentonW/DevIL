@@ -839,7 +839,7 @@ ILboolean ILAPIENTRY iluReplaceColour(ILubyte Red, ILubyte Green, ILubyte Blue, 
 
 	if (Tolerance <= FLT_EPSILON && Tolerance >= 0) {
 
-
+            //@TODO what is this?
 	}
 	else {
 		switch (iluCurImage->Format)
@@ -872,8 +872,15 @@ ILboolean ILAPIENTRY iluReplaceColour(ILubyte Red, ILubyte Green, ILubyte Blue, 
 					}
 				}
 				break;
-			//case IL_LUMINANCE:  // @TODO
-                        //case IL_LUMINANCE_APLHA:  // @TODO
+			case IL_LUMINANCE:
+                        case IL_LUMINANCE_APLHA:
+                                for (i = 0; i < iluCurImage->SizeOfData; i += iluCurImage->Bpp) {
+					Dist1 = (ILint)iluCurImage->Data[i] - (ILint)ClearCol[0];
+					if (Dist1 >= -TolVal && Dist1 <= TolVal) {
+						iluCurImage->Data[i] = Blue;
+					}
+				}
+				break;
 			//case IL_COLOUR_INDEX:  // @TODO
 		}
 	}
