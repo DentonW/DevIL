@@ -249,7 +249,7 @@ ILboolean ReadGrey(PSDHEAD *Head)
 	if (!ilTexImage(Head->Width, Head->Height, 1, 1, IL_LUMINANCE, Type, NULL))
 		return IL_FALSE;
 
-	if (!GetData(Head, iCurImage->Data, (ILboolean)Compressed))
+	if (!PsdGetData(Head, iCurImage->Data, (ILboolean)Compressed))
 		return IL_FALSE;
 
 	ParseResources(ResourceSize, Resources);
@@ -314,7 +314,7 @@ ILboolean ReadIndexed(PSDHEAD *Head)
 	}
 	ifree(Palette);
 
-	if (!GetData(Head, iCurImage->Data, (ILboolean)Compressed))
+	if (!PsdGetData(Head, iCurImage->Data, (ILboolean)Compressed))
 		return IL_FALSE;
 
 	ParseResources(ResourceSize, Resources);
@@ -374,7 +374,7 @@ ILboolean ReadRGB(PSDHEAD *Head)
 	if (!ilTexImage(Head->Width, Head->Height, 1, (ILubyte)Head->Channels, Format, Type, NULL))
 		return IL_FALSE;
 
-	if (!GetData(Head, iCurImage->Data, (ILboolean)Compressed))
+	if (!PsdGetData(Head, iCurImage->Data, (ILboolean)Compressed))
 		return IL_FALSE;
 
 	ParseResources(ResourceSize, Resources);
@@ -437,7 +437,7 @@ ILboolean ReadCMYK(PSDHEAD *Head)
 	if (!ilTexImage(Head->Width, Head->Height, 1, (ILubyte)Head->Channels, Format, Type, NULL))
 		return IL_FALSE;
 
-	if (!GetData(Head, iCurImage->Data, (ILboolean)Compressed))
+	if (!PsdGetData(Head, iCurImage->Data, (ILboolean)Compressed))
 		return IL_FALSE;
 
 	Size = iCurImage->Bpc * iCurImage->Width * iCurImage->Height;
@@ -507,7 +507,7 @@ ILuint *GetCompChanLen(PSDHEAD *Head)
 }
 
 
-ILboolean GetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
+ILboolean PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 {
 	ILuint		c, x, y, i;
 	ILubyte		*Channel;
