@@ -23,10 +23,10 @@ const ILstring ILAPIENTRY iluGetString(ILenum StringName)
 {
 	switch (StringName)
 	{
-		case IL_VENDOR:
+		case ILU_VENDOR:
 			return (const ILstring)_iluVendor;
 		//changed 2003-09-04
-		case IL_VERSION_NUM:
+		case ILU_VERSION_NUM:
 			return (const ILstring)_iluVersion;
 		default:
 			ilSetError(ILU_INVALID_PARAM);
