@@ -872,8 +872,9 @@ ILboolean ILAPIENTRY iluReplaceColour(ILubyte Red, ILubyte Green, ILubyte Blue, 
 					}
 				}
 				break;
-			//case IL_LUMINANCE:  // @TODO:  Finish!
-			//case IL_COLOUR_INDEX:  // @TODO:  Finish!
+			//case IL_LUMINANCE:  // @TODO
+                        //case IL_LUMINANCE_APLHA:  // @TODO
+			//case IL_COLOUR_INDEX:  // @TODO
 		}
 	}
 
