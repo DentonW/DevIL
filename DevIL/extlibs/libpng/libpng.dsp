@@ -19,6 +19,7 @@ CFG=libpng - Win32 Debug
 !MESSAGE 
 !MESSAGE "libpng - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "libpng - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "libpng - Win32 Dynamic" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -76,12 +77,37 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\Lib\Release\libpng.lib"
 # ADD LIB32 /nologo /out:"..\..\Lib\libpng.lib"
 
+!ELSEIF  "$(CFG)" == "libpng - Win32 Dynamic"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "libpng___Win32_Dynamic"
+# PROP BASE Intermediate_Dir "libpng___Win32_Dynamic"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "Dynamic"
+# PROP Intermediate_Dir "Dynamic"
+# PROP Target_Dir ""
+MTL=midl.exe
+# ADD BASE CPP /nologo /MD /W3 /GX /O2 /I "..\zlib" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "..\zlib" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\Lib\libpng.lib"
+# ADD LIB32 /nologo /out:"..\..\Lib\libpng.lib"
+
 !ENDIF 
 
 # Begin Target
 
 # Name "libpng - Win32 Debug"
 # Name "libpng - Win32 Release"
+# Name "libpng - Win32 Dynamic"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"

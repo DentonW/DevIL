@@ -19,6 +19,7 @@ CFG=libtiff - Win32 Debug
 !MESSAGE 
 !MESSAGE "libtiff - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "libtiff - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "libtiff - Win32 Dynamic" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -76,12 +77,37 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\Lib\Release\libtiff.lib"
 # ADD LIB32 /nologo /out:"..\..\Lib\libtiff.lib"
 
+!ELSEIF  "$(CFG)" == "libtiff - Win32 Dynamic"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "libtiff___Win32_Dynamic"
+# PROP BASE Intermediate_Dir "libtiff___Win32_Dynamic"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "Dynamic"
+# PROP Intermediate_Dir "Dynamic"
+# PROP Target_Dir ""
+MTL=midl.exe
+# ADD BASE CPP /nologo /MD /W3 /GX /O2 /I ".\contrib\winnt" /I ".\libtiff" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX"tiffiop.h" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I ".\contrib\winnt" /I ".\libtiff" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX"tiffiop.h" /FD /c
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\Lib\libtiff.lib"
+# ADD LIB32 /nologo /out:"..\..\Lib\libtiff.lib"
+
 !ENDIF 
 
 # Begin Target
 
 # Name "libtiff - Win32 Debug"
 # Name "libtiff - Win32 Release"
+# Name "libtiff - Win32 Dynamic"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
@@ -95,6 +121,11 @@ SOURCE=.\contrib\winnt\fax3sm.c
 # ADD CPP /I ".\\"
 
 !ELSEIF  "$(CFG)" == "libtiff - Win32 Release"
+
+# ADD BASE CPP /I ".\\" /YX"tiffiop.h"
+# ADD CPP /I ".\\" /YX"tiffiop.h"
+
+!ELSEIF  "$(CFG)" == "libtiff - Win32 Dynamic"
 
 # ADD BASE CPP /I ".\\" /YX"tiffiop.h"
 # ADD CPP /I ".\\" /YX"tiffiop.h"

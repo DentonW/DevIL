@@ -19,12 +19,13 @@ CFG=ZLib - Win32 Debug
 !MESSAGE 
 !MESSAGE "ZLib - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "ZLib - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "ZLib - Win32 Dynamic" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
-# PROP Scc_ProjName ""
-# PROP Scc_LocalPath ""
+# PROP Scc_ProjName "ZLib"
+# PROP Scc_LocalPath "."
 CPP=cl.exe
 RSC=rc.exe
 
@@ -76,12 +77,37 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
+!ELSEIF  "$(CFG)" == "ZLib - Win32 Dynamic"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "ZLib___Win32_Dynamic"
+# PROP BASE Intermediate_Dir "ZLib___Win32_Dynamic"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "Dynamic"
+# PROP Intermediate_Dir "Dynamic"
+# PROP Target_Dir ""
+MTL=midl.exe
+# ADD BASE CPP /nologo /MD /W3 /GX /O1 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O1 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo
+
 !ENDIF 
 
 # Begin Target
 
 # Name "ZLib - Win32 Debug"
 # Name "ZLib - Win32 Release"
+# Name "ZLib - Win32 Dynamic"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"

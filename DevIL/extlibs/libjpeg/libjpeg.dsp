@@ -19,6 +19,7 @@ CFG=LibJpeg - Win32 Debug
 !MESSAGE 
 !MESSAGE "LibJpeg - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "LibJpeg - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "LibJpeg - Win32 Dynamic" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -76,12 +77,37 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\Lib\Release\LibJpeg.lib"
 # ADD LIB32 /nologo /out:"..\..\Lib\LibJpeg.lib"
 
+!ELSEIF  "$(CFG)" == "LibJpeg - Win32 Dynamic"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "LibJpeg___Win32_Dynamic"
+# PROP BASE Intermediate_Dir "LibJpeg___Win32_Dynamic"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "Dynamic"
+# PROP Intermediate_Dir "Dynamic"
+# PROP Target_Dir ""
+MTL=midl.exe
+# ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\Lib\LibJpeg.lib"
+# ADD LIB32 /nologo /out:"..\..\Lib\LibJpeg.lib"
+
 !ENDIF 
 
 # Begin Target
 
 # Name "LibJpeg - Win32 Debug"
 # Name "LibJpeg - Win32 Release"
+# Name "LibJpeg - Win32 Dynamic"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
@@ -356,11 +382,29 @@ SOURCE=.\jconfig.vc
 InputPath=.\jconfig.vc
 
 "jconfig.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy jconfig.vc jconfig.h
+	copy $(InputPath) jconfig.h
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "LibJpeg - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\jconfig.vc
+
+"jconfig.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) jconfig.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "LibJpeg - Win32 Dynamic"
+
+# Begin Custom Build
+InputPath=.\jconfig.vc
+
+"jconfig.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) jconfig.h
+
+# End Custom Build
 
 !ENDIF 
 

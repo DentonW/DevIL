@@ -19,6 +19,7 @@ CFG=libmng - Win32 Debug
 !MESSAGE 
 !MESSAGE "libmng - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "libmng - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "libmng - Win32 Dynamic" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -76,12 +77,37 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\Lib\Release\libmng.lib"
 # ADD LIB32 /nologo /out:"..\..\Lib\libmng.lib"
 
+!ELSEIF  "$(CFG)" == "libmng - Win32 Dynamic"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "libmng___Win32_Dynamic"
+# PROP BASE Intermediate_Dir "libmng___Win32_Dynamic"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "Dynamic"
+# PROP Intermediate_Dir "Dynamic"
+# PROP Target_Dir ""
+MTL=midl.exe
+# ADD BASE CPP /nologo /MD /W3 /GX /O2 /I "..\zlib" /I "..\lcms\src" /I "..\libjpeg" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /Yu"libmng_trace.h" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "..\zlib" /I "..\lcms\src" /I "..\libjpeg" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /Yu"libmng_trace.h" /FD /c
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\Lib\libmng.lib"
+# ADD LIB32 /nologo /out:"..\..\Lib\libmng.lib"
+
 !ENDIF 
 
 # Begin Target
 
 # Name "libmng - Win32 Debug"
 # Name "libmng - Win32 Release"
+# Name "libmng - Win32 Dynamic"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
