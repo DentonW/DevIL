@@ -472,7 +472,7 @@ ILboolean ILAPIENTRY iluWave(ILfloat Angle)
 ILboolean ILAPIENTRY iluSwapColours()
 {
 	ILuint	i = 0, Size;
-	ILbyte	Temp, PalBpp;
+	ILbyte	Temp;
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
@@ -480,53 +480,46 @@ ILboolean ILAPIENTRY iluSwapColours()
 		return IL_FALSE;
 	}
 
-	Size = iluCurImage->Bps * iluCurImage->Height;
-	PalBpp = ilGetBppPal(iluCurImage->Pal.PalType);
-
-	if ((iluCurImage->Bpp != 1 && iluCurImage->Bpp != 3 && iluCurImage->Bpp != 4)
-		|| (PalBpp >= 2)) {
-		ilSetError(ILU_INVALID_VALUE);
-		return IL_FALSE;
-	}
-
 	if (iluCurImage->Bpp == 1) {
-		if (PalBpp == 0 || iluCurImage->Format != IL_COLOUR_INDEX) {
-			ilSetError(ILU_ILLEGAL_OPERATION);
+		if (ilGetBppPal(iluCurImage->Pal.PalType) == 0 || iluCurImage->Format != IL_COLOUR_INDEX) {
+			ilSetError(ILU_ILLEGAL_OPERATION);  // Can be luminance.
 			return IL_FALSE;
 		}
 
-		for (; i < iluCurImage->Pal.PalSize; i += PalBpp) {
-			Temp = iluCurImage->Pal.Palette[i];
-			iluCurImage->Pal.Palette[i] = iluCurImage->Pal.Palette[i+2];
-			iluCurImage->Pal.Palette[i+2] = Temp;
-		}
-	}
-	else {
-		for (; i < Size; i += iluCurImage->Bpp) {
-			Temp = iluCurImage->Data[i];
-			iluCurImage->Data[i] = iluCurImage->Data[i+2];
-			iluCurImage->Data[i+2] = Temp;
+		switch (iluCurImage->Pal.PalType)
+		{
+			case IL_PAL_RGB24:
+				return ilConvertPal(IL_PAL_BGR24);
+			case IL_PAL_RGB32:
+				return ilConvertPal(IL_PAL_BGR32);
+			case IL_PAL_RGBA32:
+				return ilConvertPal(IL_PAL_BGRA32);
+			case IL_PAL_BGR24:
+				return ilConvertPal(IL_PAL_RGB24);
+			case IL_PAL_BGR32:
+				return ilConvertPal(IL_PAL_RGB32);
+			case IL_PAL_BGRA32:
+				return ilConvertPal(IL_PAL_RGBA32);
+			default:
+				ilSetError(ILU_INTERNAL_ERROR);
+				return IL_FALSE;
 		}
 	}
 
-	// @TODO:  Change palette format!
 	switch (iluCurImage->Format)
 	{
 		case IL_RGB:
-			iluCurImage->Format = IL_BGR;
-			break;
+			return ilConvertImage(IL_BGR, iluCurImage->Type);
 		case IL_RGBA:
-			iluCurImage->Format = IL_BGRA;
-			break;
+			return ilConvertImage(IL_BGRA, iluCurImage->Type);
 		case IL_BGR:
-			iluCurImage->Format = IL_RGB;
-			break;
+			return ilConvertImage(IL_RGB, iluCurImage->Type);
 		case IL_BGRA:
-			iluCurImage->Format = IL_RGBA;
-			break;
+			return ilConvertImage(IL_RGBA, iluCurImage->Type);
 	}
 
-	return IL_TRUE;
+	ilSetError(ILU_INTERNAL_ERROR);
+	return IL_FALSE;
 }
 
 

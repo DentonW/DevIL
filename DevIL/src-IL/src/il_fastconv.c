@@ -140,16 +140,26 @@ ILboolean iFastConvert(ILenum DestFormat)
 			{
 				case IL_BYTE:
 				case IL_UNSIGNED_BYTE:
-					SizeOfData = iCurImage->SizeOfData / 3;
+					SizeOfData = iCurImage->SizeOfData / 4;
 					#ifdef USE_WIN32_ASM
 						__asm
 						{
-							mov ebx, BytePtr
+							/*mov ebx, BytePtr
 							mov ecx, SizeOfData
 							L4:
 								mov al,[ebx+0]
 								xchg al,[ebx+2]
 								mov [ebx+0],al
+								add ebx,4
+								loop L4*/
+
+							mov ebx, BytePtr
+							mov ecx, SizeOfData
+							L4:
+								mov eax,[ebx]
+								bswap eax
+								ror eax,8
+								mov [ebx], eax
 								add ebx,4
 								loop L4
 						}
