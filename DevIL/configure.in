@@ -37,7 +37,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.33 $)
+AC_REVISION($Revision: 1.34 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -498,11 +498,12 @@ if test "$no_jpeg" = "no" ; then
   AC_CHECK_LIB(jpeg, jpeg_start_decompress, LIBJPG="-ljpeg", LIBJPG="", )
   if test "$LIBJPG" != "-ljpeg" ; then
     no_jpeg="yes"
-  else
-    AC_CHECK_LIB(jpeg, jpeg_init_exif_field, use_exif="yes", use_exif="no", )
-    if test "$use_exif" = "no" ; then
-      AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED)
-    fi
+  #else
+    #AC_CHECK_LIB(jpeg, jpeg_init_exif_field, use_exif="yes", use_exif="no", )
+    #if test "$use_exif" = "no" ; then
+    #  AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED)
+    #fi
+    AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED)
   fi
 
 else
