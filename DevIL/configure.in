@@ -30,7 +30,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.18 $)
+AC_REVISION($Revision: 1.19 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -70,16 +70,20 @@ dnl no_mdl="no"
 dnl no_mng="no"
 dnl no_pcd="no"
 dnl no_pcx="no"
+dnl no_pic="no"
+dnl no_pix="no"
 dnl no_png="no"
 dnl no_pnm="no"
 dnl no_psd="no"
 dnl no_psp="no"
+dnl no_pxr="no"
 dnl no_lcms="no"
 dnl no_raw="no"
 dnl no_sgi="no"
 dnl no_tga="no"
 dnl no_tiff="no"
 dnl no_wal="no"
+dnl no_xpm="no"
 
 dnl
 dnl Arguments
@@ -132,6 +136,14 @@ AC_ARG_ENABLE(pcx,
 [  --disable-pcx           Doesn't compile pcx support],
 no_pcx="yes", no_pcx="no")
 
+AC_ARG_ENABLE(pic,
+[  --disable-pic           Doesn't compile pic support],
+no_pic="yes", no_pic="no")
+
+AC_ARG_ENABLE(pix,
+[  --disable-pix           Doesn't compile pix support],
+no_pix="yes", no_pix="no")
+
 AC_ARG_ENABLE(png,
 [  --disable-png           Doesn't compile png support],
 no_png="yes", no_png="no")
@@ -147,6 +159,10 @@ no_psd="yes", no_psd="no")
 AC_ARG_ENABLE(psp,
 [  --disable-psp           Doesn't compile psp support],
 no_psp="yes", no_psp="no")
+
+AC_ARG_ENABLE(pxr,
+[  --disable-pxr           Doesn't compile pxr support],
+no_pxr="yes", no_pxr="no")
 
 AC_ARG_ENABLE(lcms,
 [  --disable-lcms          Doesn't compile lcms support],
@@ -171,6 +187,10 @@ no_tiff="yes", no_tiff="no")
 AC_ARG_ENABLE(wal,
 [  --disable-wal           Doesn't compile wal support],
 no_wal="yes", no_wal="no")
+
+AC_ARG_ENABLE(xpm,
+[  --disable-xpm           Doesn't compile xpm support],
+no_xpm="yes", no_xpm="no")
 
 AC_ARG_ENABLE(allegro,
 [  --disable-allegro       Doesn't compile allegro support],
@@ -440,6 +460,20 @@ else
 fi
 AM_CONDITIONAL(IL_NO_PCX, test x$no_pcx != "xyes")
 
+if test "$no_pic"  = "yes"  ; then
+  AC_DEFINE(IL_NO_PIC)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PIC "
+fi
+AM_CONDITIONAL(IL_NO_PIC, test x$no_pic != "xyes")
+
+if test "$no_pix"  = "yes"  ; then
+  AC_DEFINE(IL_NO_PIX)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PIX "
+fi
+AM_CONDITIONAL(IL_NO_PIX, test x$no_pix != "xyes")
+
 if test "$no_png"  = "yes"  ; then
   AC_DEFINE(IL_NO_PNG)
 else
@@ -467,6 +501,13 @@ else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PSP "
 fi
 AM_CONDITIONAL(IL_NO_PSP, test x$no_psp != "xyes")
+
+if test "$no_pxr"  = "yes"  ; then
+  AC_DEFINE(IL_NO_PXR)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PXR "
+fi
+AM_CONDITIONAL(IL_NO_PXR, test x$no_pxr != "xyes")
 
 if test "$no_raw"  = "yes"  ; then
   AC_DEFINE(IL_NO_RAW)
@@ -502,6 +543,13 @@ else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"WAL "
 fi
 AM_CONDITIONAL(IL_NO_WAL, test x$no_wal != "xyes")
+
+if test "$no_xpm"  = "yes"  ; then
+  AC_DEFINE(IL_NO_XPM)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"XPM "
+fi
+AM_CONDITIONAL(IL_NO_XPM, test x$no_xpm != "xyes")
 
 
 AC_MSG_RESULT([ ])

@@ -816,15 +816,19 @@ Optional Features:
   --disable-mng           Doesn't compile mng support
   --disable-pcd           Doesn't compile pcd support
   --disable-pcx           Doesn't compile pcx support
+  --disable-pic           Doesn't compile pic support
+  --disable-pix           Doesn't compile pix support
   --disable-png           Doesn't compile png support
   --disable-pnm           Doesn't compile pnm support
   --disable-psd           Doesn't compile psd support
   --disable-psp           Doesn't compile psp support
+  --disable-pxr           Doesn't compile pxr support
   --disable-raw           Doesn't compile raw support
   --disable-sgi           Doesn't compile sgi support
   --disable-tga           Doesn't compile tga support
   --disable-tiff          Doesn't compile tiff support
   --disable-wal           Doesn't compile wal support
+  --disable-xp,           Doesn't compile xpm support
   --disable-allegro       Doesn't compile allegro support
   --disable-directx       Doesn't compile directx support
   --disable-opengl        Doesn't compile opengl support
@@ -8053,6 +8057,22 @@ else
   no_pcx="no"
 fi;
 
+# Check whether --enable-pic or --disable-pic was given.
+if test "${enable_pic+set}" = set; then
+  enableval="$enable_pic"
+  no_pic="yes"
+else
+  no_pic="no"
+fi;
+
+# Check whether --enable-pix or --disable-pix was given.
+if test "${enable_pix+set}" = set; then
+  enableval="$enable_pix"
+  no_pix="yes"
+else
+  no_pix="no"
+fi;
+
 # Check whether --enable-png or --disable-png was given.
 if test "${enable_png+set}" = set; then
   enableval="$enable_png"
@@ -8083,6 +8103,14 @@ if test "${enable_psp+set}" = set; then
   no_psp="yes"
 else
   no_psp="no"
+fi;
+
+# Check whether --enable-pxr or --disable-pxr was given.
+if test "${enable_pxr+set}" = set; then
+  enableval="$enable_pxr"
+  no_pxr="yes"
+else
+  no_pxr="no"
 fi;
 
 # Check whether --enable-lcms or --disable-lcms was given.
@@ -8131,6 +8159,14 @@ if test "${enable_wal+set}" = set; then
   no_wal="yes"
 else
   no_wal="no"
+fi;
+
+# Check whether --enable-xpm or --disable-xpm was given.
+if test "${enable_xpm+set}" = set; then
+  enableval="$enable_xpm"
+  no_xpm="yes"
+else
+  no_xpm="no"
 fi;
 
 # Check whether --enable-allegro or --disable-allegro was given.
@@ -9275,6 +9311,7 @@ else
   IL_NO_MNG_FALSE=
 fi
 
+
 if test "$no_pcd"  = "yes"  ; then
   cat >>confdefs.h <<\EOF
 #define IL_NO_PCD 1
@@ -9292,6 +9329,7 @@ else
   IL_NO_PCD_FALSE=
 fi
 
+
 if test "$no_pcx"  = "yes"  ; then
   cat >>confdefs.h <<\EOF
 #define IL_NO_PCX 1
@@ -9308,6 +9346,44 @@ else
   IL_NO_PCX_TRUE='#'
   IL_NO_PCX_FALSE=
 fi
+
+
+if test "$no_pic"  = "yes"  ; then
+  cat >>confdefs.h <<\EOF
+#define IL_NO_PIC 1
+EOF
+
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PIC "
+fi
+
+if test x$no_pic != "xyes"; then
+  IL_NO_PIC_TRUE=
+  IL_NO_PIC_FALSE='#'
+else
+  IL_NO_PIC_TRUE='#'
+  IL_NO_PIC_FALSE=
+fi
+
+
+if test "$no_pix"  = "yes"  ; then
+  cat >>confdefs.h <<\EOF
+#define IL_NO_PIX 1
+EOF
+
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PIX "
+fi
+
+if test x$no_pix != "xyes"; then
+  IL_NO_PIX_TRUE=
+  IL_NO_PIX_FALSE='#'
+else
+  IL_NO_PIX_TRUE='#'
+  IL_NO_PIX_FALSE=
+fi
+
+
 
 if test "$no_png"  = "yes"  ; then
   cat >>confdefs.h <<\EOF
@@ -10043,6 +10119,10 @@ s,@IL_NO_PCD_TRUE@,$IL_NO_PCD_TRUE,;t t
 s,@IL_NO_PCD_FALSE@,$IL_NO_PCD_FALSE,;t t
 s,@IL_NO_PCX_TRUE@,$IL_NO_PCX_TRUE,;t t
 s,@IL_NO_PCX_FALSE@,$IL_NO_PCX_FALSE,;t t
+s,@IL_NO_PIC_TRUE@,$IL_NO_PIC_TRUE,;t t
+s,@IL_NO_PIC_FALSE@,$IL_NO_PIC_FALSE,;t t
+s,@IL_NO_PIX_TRUE@,$IL_NO_PIX_TRUE,;t t
+s,@IL_NO_PIX_FALSE@,$IL_NO_PIX_FALSE,;t t
 s,@IL_NO_PNG_TRUE@,$IL_NO_PNG_TRUE,;t t
 s,@IL_NO_PNG_FALSE@,$IL_NO_PNG_FALSE,;t t
 s,@IL_NO_PNM_TRUE@,$IL_NO_PNM_TRUE,;t t
@@ -10051,6 +10131,8 @@ s,@IL_NO_PSD_TRUE@,$IL_NO_PSD_TRUE,;t t
 s,@IL_NO_PSD_FALSE@,$IL_NO_PSD_FALSE,;t t
 s,@IL_NO_PSP_TRUE@,$IL_NO_PSP_TRUE,;t t
 s,@IL_NO_PSP_FALSE@,$IL_NO_PSP_FALSE,;t t
+s,@IL_NO_PXR_TRUE@,$IL_NO_PXR_TRUE,;t t
+s,@IL_NO_PXR_FALSE@,$IL_NO_PXR_FALSE,;t t
 s,@IL_NO_RAW_TRUE@,$IL_NO_RAW_TRUE,;t t
 s,@IL_NO_RAW_FALSE@,$IL_NO_RAW_FALSE,;t t
 s,@IL_NO_SGI_TRUE@,$IL_NO_SGI_TRUE,;t t
@@ -10061,6 +10143,8 @@ s,@IL_NO_TIF_TRUE@,$IL_NO_TIF_TRUE,;t t
 s,@IL_NO_TIF_FALSE@,$IL_NO_TIF_FALSE,;t t
 s,@IL_NO_WAL_TRUE@,$IL_NO_WAL_TRUE,;t t
 s,@IL_NO_WAL_FALSE@,$IL_NO_WAL_FALSE,;t t
+s,@IL_NO_XPM_TRUE@,$IL_NO_XPM_TRUE,;t t
+s,@IL_NO_XPM_FALSE@,$IL_NO_XPM_FALSE,;t t
 s,@LIBIL_CFLAGS@,$LIBIL_CFLAGS,;t t
 s,@LIBILU_CFLAGS@,$LIBILU_CFLAGS,;t t
 s,@LIBILUT_CFLAGS@,$LIBILUT_CFLAGS,;t t

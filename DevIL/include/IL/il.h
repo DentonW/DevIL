@@ -31,7 +31,6 @@ extern "C" {
 //#define IL_NO_ICO
 //#define IL_NO_JPG
 //#define IL_NO_LIF
-//#define IL_NO_LBM
 //#define IL_NO_MDL
 //#define IL_NO_MNG
 //#define IL_NO_PCD
