@@ -14,7 +14,7 @@ unit OpenILUT;
 
 {******************************************************************************}
 { Converted to Delphi by Alexander Blach (alexander@abee.de)                   }
-{   Version:       ILUT v1.4.2                                                 }
+{   Version:       ILUT v1.5.0                                                 }
 {   Last modified: 05/18/2002                                                  }
 {                                                                              }
 {   you will need the latest OpenGL units for Delphi. I recommend those on     }

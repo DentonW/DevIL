@@ -17,7 +17,7 @@
 #include <stdlib.h>
 
 const ILstring _ilVendor	= IL_TEXT("Abysmal Software");
-const ILstring _ilVersion	= IL_TEXT("Developer's Image Library (DevIL) 1.4.2");
+const ILstring _ilVersion	= IL_TEXT("Developer's Image Library (DevIL) 1.5.0");
 
 
 //! Set all states to their defaults.

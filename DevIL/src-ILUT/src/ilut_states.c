@@ -17,7 +17,7 @@
 
 
 const char *_ilutVendor		= "Abysmal Software";
-const char *_ilutVersion	= "Developer's Image Library Utility Toolkit (ILUT) 1.4.2";
+const char *_ilutVersion	= "Developer's Image Library Utility Toolkit (ILUT) 1.5.0";
 
 
 // Set all states to their defaults

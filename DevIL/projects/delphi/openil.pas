@@ -14,7 +14,7 @@ unit OpenIL;
 
 {******************************************************************************}
 { Converted to Delphi by Alexander Blach (alexander@abee.de)                   }
-{   Version:       DevIL v1.4.2                                                }
+{   Version:       DevIL v1.5.0                                                }
 {   Last modified: 05/18/2002                                                  }
 {******************************************************************************}
 
