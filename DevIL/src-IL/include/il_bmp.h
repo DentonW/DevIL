@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/13/2002 <--Y2K Compliant! =]
+// Last modified: 09/01/2003 <--Y2K Compliant! =]
 //
 // Filename: src-IL/include/il_bmp.h
 //
@@ -48,26 +48,13 @@ typedef struct OS2_HEAD
 	ILshort		yHotspot;
 	ILuint		DataOff;
 
-	// Bitmap info header.
+	// Bitmap core header.
 	ILuint		cbFix;
-	ILuint		cx;
-	ILuint		cy;
+	//2003-09-01: changed cx, cy to ushort according to MSDN
+	ILushort		cx;
+	ILushort		cy;
 	ILushort	cPlanes;
 	ILushort	cBitCount;
-	/*ILuint		ulCompression;
-	ILuint		cbImage;
-	ILuint		cxResolution;
-	ILuint		cyResolution;
-	ILuint		cclrUsed;
-	ILuint		cclrImportant;
-	ILushort	usUnits;
-	ILushort	usReserved;
-	ILushort	usRecording;
-	ILushort	usRendering;
-	ILuint		cSize1;
-	ILuint		cSize2;
-	ILuint		ulColorEncoding;
-	ILuint		ulIdentifier;*/
 } IL_PACKSTRUCT OS2_HEAD;
 #ifdef _WIN32
 	#pragma pack(pop, bmp_struct)
