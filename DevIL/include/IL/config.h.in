@@ -3,12 +3,6 @@
 #define __CONFIG_H__
 
 
-/*
- __BIG_ENDIAN__ src/il_convert.c src/il_endian.c
-__BORLANDC__ src/il_tiff.c
-DJGPP src/il_png.c src/il_targa.c
-*/
-
 /* Supported images formats (il) */
 
 #undef IL_NO_BMP
@@ -40,19 +34,6 @@ DJGPP src/il_png.c src/il_targa.c
 #undef ILUT_USE_OPENGL
 #undef ILUT_USE_SDL
 #undef ILUT_USE_WIN32
-
-/* CPU type */
-
-#undef WORDS_BIGENDIAN
-
-/*
-__LITTLE_ENDIAN__ src/il_endian.c src/il_png.c src/il_sgi.c src/il_tiff.c
-_MEM_DEBUG src/il_istack.c
-_MSC_VER src/il_cut.c
-RGB_RED src/il_jpeg.c
-_WIN32 src/il_internal.c src/il_main.c src/il_png.c src/il_profiles.c src/il_targa.c src/il_tiff.c
-_WIN32_WCE src/il_files.c src/il_header.c src/il_internal.c src/il_io.c src/il_main.c src/il_pal.c src/il_register.c
-*/
 
 
 /* Define if you have the <dlfcn.h> header file. */
