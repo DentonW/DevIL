@@ -1,4 +1,4 @@
-1.5.7
+1.6.0
 -----
 
 - Removed the NeuQuant samples limit of 15.
@@ -27,9 +27,6 @@
 - Changed ilGetString() to return an ILstring.
 - Added IL_BGRA support back in to ilApplyProfile().
 - Removed double flipping when saving .pcx and .jpg files.
-
-
-
 
 
 1.5.6

@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 06/11/2002 <--Y2K Compliant! =]
+// Last modified: 06/22/2002 <--Y2K Compliant! =]
 //
 // Filename: IL/il.h
 //
@@ -162,8 +162,8 @@ typedef void			ILvoid;
 // IL-specific #define's
 //
 
-#define IL_VERSION_1_5_6					1
-#define IL_VERSION							156
+#define IL_VERSION_1_6_0					1
+#define IL_VERSION							160
 
 
 // Attribute Bits
@@ -474,7 +474,7 @@ ILAPI ILboolean		ILAPIENTRY ilActiveMipmap(ILuint Number);
 ILAPI ILboolean		ILAPIENTRY ilApplyPal(const ILstring FileName);
 ILAPI ILboolean		ILAPIENTRY ilApplyProfile(const ILstring InProfile, const ILstring OutProfile);
 ILAPI ILvoid		ILAPIENTRY ilBindImage(ILuint Image);
-ILAPI ILboolean		ILAPIENTRY ilBlit(ILuint Src, ILint DestX, ILint DestY, ILint DestZ, ILuint SrcX, ILuint SrcY, ILuint SrcZ, ILuint Width, ILuint Height, ILuint Depth);
+ILAPI ILboolean		ILAPIENTRY ilBlit(ILuint Source, ILint DestX, ILint DestY, ILint DestZ, ILuint SrcX, ILuint SrcY, ILuint SrcZ, ILuint Width, ILuint Height, ILuint Depth);
 ILAPI ILvoid		ILAPIENTRY ilClearColour(ILclampf Red, ILclampf Green, ILclampf Blue, ILclampf Alpha);
 ILAPI ILboolean		ILAPIENTRY ilClearImage(ILvoid);
 ILAPI ILuint		ILAPIENTRY ilCloneCurImage(ILvoid);
@@ -516,7 +516,7 @@ ILAPI ILboolean		ILAPIENTRY ilLoadImage(const ILstring FileName);
 ILAPI ILboolean		ILAPIENTRY ilLoadL(ILenum Type, ILvoid *Lump, ILuint Size);
 ILAPI ILboolean		ILAPIENTRY ilLoadPal(const ILstring FileName);
 ILAPI ILboolean		ILAPIENTRY ilOriginFunc(ILenum Mode);
-ILAPI ILboolean		ILAPIENTRY ilOverlayImage(ILuint Src, ILint XCoord, ILint YCoord, ILint ZCoord);
+ILAPI ILboolean		ILAPIENTRY ilOverlayImage(ILuint Source, ILint XCoord, ILint YCoord, ILint ZCoord);
 ILAPI ILvoid		ILAPIENTRY ilPopAttrib(ILvoid);
 ILAPI ILvoid		ILAPIENTRY ilPushAttrib(ILuint Bits);
 ILAPI ILvoid		ILAPIENTRY ilRegisterFormat(ILenum Format);

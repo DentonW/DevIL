@@ -17,7 +17,7 @@
 #include <stdlib.h>
 
 const ILstring _ilVendor		= IL_TEXT("Abysmal Software");
-const ILstring _ilVersion		= IL_TEXT("Developer's Image Library (DevIL) 1.5.6");
+const ILstring _ilVersion		= IL_TEXT("Developer's Image Library (DevIL) 1.6.0");
 const ILstring _ilLoadExt		= "" IL_BMP_EXT IL_CUT_EXT IL_DCX_EXT IL_DDS_EXT
 									IL_GIF_EXT IL_ICO_EXT IL_JPG_EXT IL_LIF_EXT
 									IL_MDL_EXT IL_MNG_EXT IL_PCX_EXT IL_PIC_EXT

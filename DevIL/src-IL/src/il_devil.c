@@ -589,16 +589,16 @@ ILAPI ILboolean ILAPIENTRY ilClearImage_(ILimage *Image)
 
 
 //! Overlays the image found in Src on top of the current bound image at the coords specified.
-ILboolean ILAPIENTRY ilOverlayImage(ILuint Src, ILint XCoord, ILint YCoord, ILint ZCoord)
+ILboolean ILAPIENTRY ilOverlayImage(ILuint Source, ILint XCoord, ILint YCoord, ILint ZCoord)
 {
 	ILuint		c, x, y, z, SrcIndex, DestIndex, ConvBps, ConvSizePlane;
-	ILimage		*Dest;
+	ILimage		*Dest;//, *Src;
 	ILubyte		*Converted;
 	ILuint		DestName = ilGetCurName();
 	ILfloat		FrontPer, BackPer;
 	ILenum		DestOrigin, SrcOrigin;
 	ILuint		StartX, StartY, StartZ;
-	ILboolean	SrcFlipped = IL_FALSE, DestFlipped = IL_FALSE;
+	ILboolean	DestFlipped = IL_FALSE, SrcFlipped = IL_FALSE;
 
 
 	if (DestName == 0 || iCurImage == NULL) {
@@ -613,7 +613,7 @@ ILboolean ILAPIENTRY ilOverlayImage(ILuint Src, ILint XCoord, ILint YCoord, ILin
 	
 	Dest = iCurImage;
 	DestOrigin = iCurImage->Origin;
-	ilBindImage(Src);
+	ilBindImage(Source);
 	SrcOrigin = iCurImage->Origin;
 
 	if (iCurImage->Origin == IL_ORIGIN_LOWER_LEFT) {
@@ -679,7 +679,7 @@ ILboolean ILAPIENTRY ilOverlayImage(ILuint Src, ILint XCoord, ILint YCoord, ILin
 }
 
 
-ILboolean ILAPIENTRY ilBlit(ILuint Src, ILint DestX, ILint DestY, ILint DestZ, ILuint SrcX, ILuint SrcY, ILuint SrcZ, ILuint Width, ILuint Height, ILuint Depth)
+ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX, ILint DestY, ILint DestZ, ILuint SrcX, ILuint SrcY, ILuint SrcZ, ILuint Width, ILuint Height, ILuint Depth)
 {
 	ILuint		c, x, y, z, SrcIndex, DestIndex, ConvBps, ConvSizePlane;
 	ILimage		*Dest;
@@ -703,7 +703,7 @@ ILboolean ILAPIENTRY ilBlit(ILuint Src, ILint DestX, ILint DestY, ILint DestZ, I
 	
 	Dest = iCurImage;
 	DestOrigin = iCurImage->Origin;
-	ilBindImage(Src);
+	ilBindImage(Source);
 	SrcOrigin = iCurImage->Origin;
 
 	if (iCurImage->Origin == IL_ORIGIN_LOWER_LEFT) {
