@@ -484,7 +484,7 @@ ILboolean iSaveTiffInternal(char *Filename)
 	}
 
         
-        // Packbits makes file bigger
+        // Packbits makes file bigger most of the times
 	/*if (iGetHint(IL_COMPRESSION_HINT) == IL_USE_COMPRESSION)
 		Compression = COMPRESSION_PACKBITS;
 	else*/
@@ -543,9 +543,9 @@ ILboolean iSaveTiffInternal(char *Filename)
         // and set it always to normal view
         TIFFSetField(File, TIFFTAG_ORIENTATION,ORIENTATION_TOPLEFT );
         if( TempImage->Origin != IL_ORIGIN_UPPER_LEFT ) {
-            ILubyte *temp_image = iGetFlipped(TempImage);
-            ifree( TempImage->Bps );
-            TempImage->Bps = temp_image;
+            ILubyte *Data = iGetFlipped(TempImage);
+            ifree( (void*)TempImage->Data );
+            TempImage->Data = Data;
         }
         
         /*
