@@ -32,16 +32,27 @@ RSC=rc.exe
 
 !IF  "$(CFG)" == "IL - Win32 Debug"
 
-OUTDIR=.\../../lib
+OUTDIR=.\../../lib/debug
 INTDIR=.\../src/obj/debug
 # Begin Custom Macros
-OutDir=.\../../lib
+OutDir=.\../../lib/debug
 # End Custom Macros
+
+!IF "$(RECURSE)" == "0" 
 
 ALL : "$(OUTDIR)\DevIL-d.dll"
 
+!ELSE 
 
+ALL : "libjpeg - Win32 Debug" "$(OUTDIR)\DevIL-d.dll"
+
+!ENDIF 
+
+!IF "$(RECURSE)" == "1" 
+CLEAN :"libjpeg - Win32 DebugCLEAN" 
+!ELSE 
 CLEAN :
+!ENDIF 
 	-@erase "$(INTDIR)\IL.res"
 	-@erase "$(INTDIR)\il_alloc.obj"
 	-@erase "$(INTDIR)\il_bits.obj"
@@ -103,7 +114,7 @@ CLEAN :
 "$(INTDIR)" :
     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
 
-CPP_PROJ=/nologo /MDd /W3 /Gm /GX /ZI /Od /I "../include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /Fp"$(INTDIR)\IL.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_PROJ=/nologo /MDd /W3 /Gm /GX /ZI /Od /I "../include" /I "../../extlibs/libjpeg" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /Fp"$(INTDIR)\IL.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /win32 
 RSC_PROJ=/l 0x409 /fo"$(INTDIR)\IL.res" /d "_DEBUG" 
 BSC32=bscmake.exe
@@ -111,9 +122,7 @@ BSC32_FLAGS=/nologo /o"../src/obj/debug/DevIL.bsc"
 BSC32_SBRS= \
 	
 LINK32=link.exe
-LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:"$(OUTDIR)\DevIL-d.pdb" /debug /machine:I386 /def:".\il.def" /out:"$(OUTDIR)\DevIL-d.dll" /implib:"$(OUTDIR)\DevIL-d.lib" /pdbtype:sept 
-DEF_FILE= \
-	".\il.def"
+LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:"$(OUTDIR)\DevIL-d.pdb" /debug /machine:I386 /def:".\il.def" /out:"$(OUTDIR)\DevIL-d.dll" /implib:"$(OUTDIR)\DevIL-d.lib" /pdbtype:sept /libpath:"../../extlibs/lib/debug" 
 LINK32_OBJS= \
 	"$(INTDIR)\il_alloc.obj" \
 	"$(INTDIR)\il_bits.obj" \
@@ -161,25 +170,26 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_tiff.obj" \
 	"$(INTDIR)\il_utility.obj" \
 	"$(INTDIR)\il_wal.obj" \
-	"$(INTDIR)\IL.res"
+	"$(INTDIR)\IL.res" \
+	"..\..\iflibs\lib\debug\LibJpeg.lib"
 
 "$(OUTDIR)\DevIL-d.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
 
-TargetPath=\DevIL\lib\DevIL-d.dll
+TargetPath=\DevIL\lib\debug\DevIL-d.dll
 SOURCE="$(InputPath)"
 DS_POSTBUILD_DEP=$(INTDIR)\postbld.dep
 
 ALL : $(DS_POSTBUILD_DEP)
 
 # Begin Custom Macros
-OutDir=.\../../lib
+OutDir=.\../../lib/debug
 # End Custom Macros
 
-$(DS_POSTBUILD_DEP) : "$(OUTDIR)\DevIL-d.dll"
-   ..\..\projects\msvc\insdll.bat \DevIL\lib\DevIL-d.dll
+$(DS_POSTBUILD_DEP) : "libjpeg - Win32 Debug" "$(OUTDIR)\DevIL-d.dll"
+   ..\..\projects\msvc\insdll.bat \DevIL\lib\debug\DevIL-d.dll
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
 !ELSEIF  "$(CFG)" == "IL - Win32 Dynamic"
@@ -190,10 +200,21 @@ INTDIR=.\../src/obj/dynamic
 OutDir=.\../../lib
 # End Custom Macros
 
+!IF "$(RECURSE)" == "0" 
+
 ALL : "$(OUTDIR)\DevIL-l.dll"
 
+!ELSE 
 
+ALL : "$(OUTDIR)\DevIL-l.dll"
+
+!ENDIF 
+
+!IF "$(RECURSE)" == "1" 
 CLEAN :
+!ELSE 
+CLEAN :
+!ENDIF 
 	-@erase "$(INTDIR)\IL.res"
 	-@erase "$(INTDIR)\il_alloc.obj"
 	-@erase "$(INTDIR)\il_bits.obj"
@@ -252,7 +273,7 @@ CLEAN :
 "$(INTDIR)" :
     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
 
-CPP_PROJ=/nologo /MD /W3 /GX /O1 /I "../include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /Fp"$(INTDIR)\IL.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_PROJ=/nologo /MD /W3 /GX /O1 /I "../include" /I "../../extlibs/libjpeg" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /Fp"$(INTDIR)\IL.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /win32 
 RSC_PROJ=/l 0x409 /fo"$(INTDIR)\IL.res" /d "NDEBUG" 
 BSC32=bscmake.exe
@@ -260,9 +281,7 @@ BSC32_FLAGS=/nologo /o"../src/obj/dynamic/DevIL.bsc"
 BSC32_SBRS= \
 	
 LINK32=link.exe
-LINK32_FLAGS=delayimp.lib user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /incremental:no /pdb:"$(OUTDIR)\DevIL-l.pdb" /machine:I386 /def:".\il.def" /out:"$(OUTDIR)\DevIL-l.dll" /implib:"$(OUTDIR)\DevIL-l.lib" /OPT:NOWIN98 /delayload:libpng3.dll /delayload:lcms.dll 
-DEF_FILE= \
-	".\il.def"
+LINK32_FLAGS=delayimp.lib user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /incremental:no /pdb:"$(OUTDIR)\DevIL-l.pdb" /machine:I386 /def:".\il.def" /out:"$(OUTDIR)\DevIL-l.dll" /implib:"$(OUTDIR)\DevIL-l.lib" /libpath:"../../extlibs/lib" /OPT:NOWIN98 /delayload:libpng3.dll /delayload:lcms.dll 
 LINK32_OBJS= \
 	"$(INTDIR)\il_alloc.obj" \
 	"$(INTDIR)\il_bits.obj" \
@@ -339,10 +358,21 @@ INTDIR=.\../src/obj
 OutDir=.\../../lib
 # End Custom Macros
 
+!IF "$(RECURSE)" == "0" 
+
 ALL : "$(OUTDIR)\DevIL.dll"
 
+!ELSE 
 
+ALL : "libjpeg - Win32 Release" "$(OUTDIR)\DevIL.dll"
+
+!ENDIF 
+
+!IF "$(RECURSE)" == "1" 
+CLEAN :"libjpeg - Win32 ReleaseCLEAN" 
+!ELSE 
 CLEAN :
+!ENDIF 
 	-@erase "$(INTDIR)\IL.res"
 	-@erase "$(INTDIR)\il_alloc.obj"
 	-@erase "$(INTDIR)\il_bits.obj"
@@ -401,7 +431,7 @@ CLEAN :
 "$(INTDIR)" :
     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
 
-CPP_PROJ=/nologo /MD /W3 /GX /O1 /I "../include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /D "IL_STATIC_LIB" /Fp"$(INTDIR)\IL.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_PROJ=/nologo /MD /W3 /GX /O1 /I "../include" /I "../../extlibs/libjpeg" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /D "IL_STATIC_LIB" /Fp"$(INTDIR)\IL.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /win32 
 RSC_PROJ=/l 0x409 /fo"$(INTDIR)\IL.res" /d "NDEBUG" 
 BSC32=bscmake.exe
@@ -409,9 +439,7 @@ BSC32_FLAGS=/nologo /o"../src/obj/DevIL.bsc"
 BSC32_SBRS= \
 	
 LINK32=link.exe
-LINK32_FLAGS=user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /incremental:no /pdb:"$(OUTDIR)\DevIL.pdb" /machine:I386 /def:".\il.def" /out:"$(OUTDIR)\DevIL.dll" /implib:"$(OUTDIR)\DevIL.lib" /OPT:NOWIN98 
-DEF_FILE= \
-	".\il.def"
+LINK32_FLAGS=user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /incremental:no /pdb:"$(OUTDIR)\DevIL.pdb" /machine:I386 /def:".\il.def" /out:"$(OUTDIR)\DevIL.dll" /implib:"$(OUTDIR)\DevIL.lib" /libpath:"../../extlibs/lib" /OPT:NOWIN98 
 LINK32_OBJS= \
 	"$(INTDIR)\il_alloc.obj" \
 	"$(INTDIR)\il_bits.obj" \
@@ -459,7 +487,8 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_tiff.obj" \
 	"$(INTDIR)\il_utility.obj" \
 	"$(INTDIR)\il_wal.obj" \
-	"$(INTDIR)\IL.res"
+	"$(INTDIR)\IL.res" \
+	"..\..\iflibs\libjpeg\libjpeg.lib"
 
 "$(OUTDIR)\DevIL.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -476,7 +505,7 @@ ALL : $(DS_POSTBUILD_DEP)
 OutDir=.\../../lib
 # End Custom Macros
 
-$(DS_POSTBUILD_DEP) : "$(OUTDIR)\DevIL.dll"
+$(DS_POSTBUILD_DEP) : "libjpeg - Win32 Release" "$(OUTDIR)\DevIL.dll"
    ..\..\projects\msvc\insdll.bat \DevIL\lib\DevIL.dll
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
@@ -804,6 +833,34 @@ SOURCE=.\IL.rc
 "$(INTDIR)\IL.res" : $(SOURCE) "$(INTDIR)"
 	$(RSC) $(RSC_PROJ) $(SOURCE)
 
+
+!IF  "$(CFG)" == "IL - Win32 Debug"
+
+"libjpeg - Win32 Debug" : 
+   cd "\DevIL\iflibs\libjpeg"
+   $(MAKE) /$(MAKEFLAGS) /F .\LibJpeg.mak CFG="libjpeg - Win32 Debug" 
+   cd "..\..\src-IL\msvc"
+
+"libjpeg - Win32 DebugCLEAN" : 
+   cd "\DevIL\iflibs\libjpeg"
+   $(MAKE) /$(MAKEFLAGS) /F .\LibJpeg.mak CFG="libjpeg - Win32 Debug" RECURSE=1 CLEAN 
+   cd "..\..\src-IL\msvc"
+
+!ELSEIF  "$(CFG)" == "IL - Win32 Dynamic"
+
+!ELSEIF  "$(CFG)" == "IL - Win32 Release"
+
+"libjpeg - Win32 Release" : 
+   cd "\DevIL\iflibs\libjpeg"
+   $(MAKE) /$(MAKEFLAGS) /F .\LibJpeg.mak CFG="libjpeg - Win32 Release" 
+   cd "..\..\src-IL\msvc"
+
+"libjpeg - Win32 ReleaseCLEAN" : 
+   cd "\DevIL\iflibs\libjpeg"
+   $(MAKE) /$(MAKEFLAGS) /F .\LibJpeg.mak CFG="libjpeg - Win32 Release" RECURSE=1 CLEAN 
+   cd "..\..\src-IL\msvc"
+
+!ENDIF 
 
 
 !ENDIF 

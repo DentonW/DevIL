@@ -2,9 +2,9 @@
 //
 // ImageLib Utility Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Last modified: 02/16/2002 <--Y2K Compliant! =]
 //
-// Filename: openilu/manip.c
+// Filename: ilu/ilu-manip.c
 //
 // Description: Manipulates an image in several ways.
 //
@@ -30,16 +30,15 @@ ILboolean iluCrop2D(ILuint XOff, ILuint YOff, ILuint Width, ILuint Height)
 		return IL_FALSE;
 	}
 
-	Data = (ILubyte*)malloc(iluCurImage->SizeOfData);
-	if (Data == NULL) {
-		ilSetError(ILU_OUT_OF_MEMORY);
+	// Uh-oh, what about 0 dimensions?!
+	if (Width > iluCurImage->Width || Height > iluCurImage->Height) {
+		ilSetError(ILU_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
-	// Uh-oh, what about 0 dimensions?!
-	if (Width > iluCurImage->Width || Height > iluCurImage->Height) {
-		free(Data);
-		ilSetError(ILU_ILLEGAL_OPERATION);
+	Data = (ILubyte*)malloc(iluCurImage->SizeOfData);
+	if (Data == NULL) {
+		ilSetError(ILU_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -80,16 +79,15 @@ ILboolean iluCrop3D(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Width, ILuint 
 		return IL_FALSE;
 	}
 
-	Data = (ILubyte*)malloc(iluCurImage->SizeOfData);
-	if (Data == NULL) {
-		ilSetError(ILU_OUT_OF_MEMORY);
-		return IL_FALSE;
-	}
-
 	// Uh-oh, what about 0 dimensions?!
 	if (Width > iluCurImage->Width || Height > iluCurImage->Height || Depth > iluCurImage->Depth) {
 		ilSetError(ILU_ILLEGAL_OPERATION);
-		free(Data);
+		return IL_FALSE;
+	}
+
+	Data = (ILubyte*)malloc(iluCurImage->SizeOfData);
+	if (Data == NULL) {
+		ilSetError(ILU_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -471,9 +469,6 @@ ILboolean ILAPIENTRY iluWave(ILfloat Angle)
 //	Must be either an 8, 24 or 32-bit (coloured) image (or palette).
 ILboolean ILAPIENTRY iluSwapColours()
 {
-	ILuint	i = 0, Size;
-	ILbyte	Temp;
-
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
 		ilSetError(ILU_ILLEGAL_OPERATION);

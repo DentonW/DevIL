@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include"
+				AdditionalIncludeDirectories="../include; ../../iflibs/libjpeg"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;ILU_EXPORTS"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -68,7 +68,7 @@
 				InlineFunctionExpansion="1"
 				FavorSizeOrSpeed="2"
 				OmitFramePointers="TRUE"
-				AdditionalIncludeDirectories="../include"
+				AdditionalIncludeDirectories="../include; ../../iflibs/libjpeg"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ILU_EXPORTS"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"

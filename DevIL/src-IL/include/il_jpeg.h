@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 02/16/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/jpeg.h
+// Filename: il/il_jpeg.h
 //
 // Description: Jpeg (.jpg) functions
 //
@@ -20,7 +20,7 @@ ILboolean iIsValidJpg(ILvoid);
 
 #ifndef IL_USE_IJL
 	ILboolean iLoadJpegInternal(ILvoid);
-	ILboolean iSaveJpegInternal(ILvoid);
+	ILboolean iSaveJpegInternal(ILenum);
 #else
 	ILboolean iLoadJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size);
 	ILboolean iSaveJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size);

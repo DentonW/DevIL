@@ -32,10 +32,10 @@ RSC=rc.exe
 
 !IF  "$(CFG)" == "ILUT - Win32 Debug"
 
-OUTDIR=.\../../lib
+OUTDIR=.\../../lib/debug
 INTDIR=.\../src/obj/debug
 # Begin Custom Macros
-OutDir=.\../../lib
+OutDir=.\../../lib/debug
 # End Custom Macros
 
 !IF "$(RECURSE)" == "0" 
@@ -101,18 +101,18 @@ LINK32_OBJS= \
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
 
-TargetPath=\DevIL\lib\ilut-d.dll
+TargetPath=\DevIL\lib\debug\ilut-d.dll
 SOURCE="$(InputPath)"
 DS_POSTBUILD_DEP=$(INTDIR)\postbld.dep
 
 ALL : $(DS_POSTBUILD_DEP)
 
 # Begin Custom Macros
-OutDir=.\../../lib
+OutDir=.\../../lib/debug
 # End Custom Macros
 
 $(DS_POSTBUILD_DEP) : "ILU - Win32 Debug" "IL - Win32 Debug" "$(OUTDIR)\ilut-d.dll"
-   ..\..\projects\msvc\insdll.bat \DevIL\lib\ilut-d.dll
+   ..\..\projects\msvc\insdll.bat \DevIL\lib\debug\ilut-d.dll
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
 !ELSEIF  "$(CFG)" == "ILUT - Win32 Dynamic"

@@ -1,4 +1,4 @@
-Credits as of 01/11/2002
+Credits as of 02/16/2002
 ------------------------
 
 If I inadvertently omitted anyone's name from this list, please e-mail me at
@@ -202,4 +202,8 @@ DevIL to work on Big Endian machines.
 Jean-Francois Richard for the Python bindings of DevIL.
 
 Nick Marley for post-build information in MSVC++.
+
+Kenneth Hurley for his help in expanding and fixing my DDS code.
+
+Mark Callow for EXIF-loading and saving code, along with il[Load/Save]FromJpegStruct
 

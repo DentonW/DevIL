@@ -134,39 +134,38 @@ typedef struct ILimage
 extern ILimage *iCurImage;
 
 
-#define BIT_0	1
-#define BIT_1	2
-#define BIT_2	4
-#define BIT_3	8
-#define BIT_4	16
-#define BIT_5	32
-#define BIT_6	64
-#define BIT_7	128
-#define BIT_8	256
-#define BIT_9	512
-#define BIT_10	1024
-#define BIT_11	2048
-#define BIT_12	4096
-#define BIT_13	8192
-#define BIT_14	16384
-#define BIT_15	32768
-#define BIT_16	65536
-#define BIT_17	131072
-#define BIT_18	262144
-#define BIT_19	524288
-#define BIT_20	1048576
-#define BIT_21	2097152
-#define BIT_22	4194304
-#define BIT_23	8388608
-#define BIT_24	16777216
-#define BIT_25	33554432
-#define BIT_26	67108864
-#define BIT_27	134217728
-#define BIT_28	268435456
-#define BIT_29	536870912
-#define BIT_30	1073741824
-#define BIT_31	2147483648
-#define BIT_32	4294967296
+#define BIT_0	0x00000001
+#define BIT_1	0x00000002
+#define BIT_2	0x00000004
+#define BIT_3	0x00000008
+#define BIT_4	0x00000010
+#define BIT_5	0x00000020
+#define BIT_6	0x00000040
+#define BIT_7	0x00000080
+#define BIT_8	0x00000100
+#define BIT_9	0x00000200
+#define BIT_10	0x00000400
+#define BIT_11	0x00000800
+#define BIT_12	0x00001000
+#define BIT_13	0x00002000
+#define BIT_14	0x00004000
+#define BIT_15	0x00008000
+#define BIT_16	0x00010000
+#define BIT_17	0x00020000
+#define BIT_18	0x00040000
+#define BIT_19	0x00080000
+#define BIT_20	0x00100000
+#define BIT_21	0x00200000
+#define BIT_22	0x00400000
+#define BIT_23	0x00800000
+#define BIT_24	0x01000000
+#define BIT_25	0x02000000
+#define BIT_26	0x04000000
+#define BIT_27	0x08000000
+#define BIT_28	0x10000000
+#define BIT_29	0x20000000
+#define BIT_30	0x40000000
+#define BIT_31	0x80000000
 
 #define NUL '\0'  // Easier to type and ?portable?
 
@@ -371,9 +370,9 @@ ILboolean ilIsValidJpgL(ILvoid *Lump, ILuint Size);
 ILboolean ilLoadJpeg(const ILstring FileName);
 ILboolean ilLoadJpegF(ILHANDLE File);
 ILboolean ilLoadJpegL(ILvoid *Lump, ILuint Size);
-ILboolean ilSaveJpeg(const ILstring FileName);
-ILboolean ilSaveJpegF(ILHANDLE File);
-ILboolean ilSaveJpegL(ILvoid *Lump, ILuint Size);
+ILboolean ilSaveJpeg(const ILstring FileName, ILenum Type);
+ILboolean ilSaveJpegF(ILHANDLE File, ILenum Type);
+ILboolean ilSaveJpegL(ILvoid *Lump, ILuint Size, ILenum Type);
 
 ILboolean ilLoadLbm(const ILstring FileName);
 ILboolean ilLoadLbmF(ILHANDLE File);

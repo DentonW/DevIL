@@ -1015,7 +1015,7 @@ ILboolean ILAPIENTRY ilSave(ILenum Type, const ILstring FileName)
 
 		#ifndef IL_NO_JPG
 		case IL_JPG:
-			return ilSaveJpeg(FileName);
+			return ilSaveJpeg(FileName, IL_JFIF);
 		#endif
 
 		#ifndef IL_NO_PCX
@@ -1202,7 +1202,7 @@ ILboolean ILAPIENTRY ilSaveImage(const ILstring FileName)
 
 	#ifndef IL_NO_JPG
 	if (!iStrCmp(Ext, IL_TEXT("jpg")) || !iStrCmp(Ext, IL_TEXT("jpeg")) || !iStrCmp(Ext, IL_TEXT("jpe"))) {
-		return ilSaveJpeg(FileName);
+		return ilSaveJpeg(FileName, IL_JFIF);
 	}
 	#endif
 

@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 02/01/2002 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 02/16/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/jpeg.c
+// Filename: il/il_jpeg.c
 //
 // Description: Jpeg (.jpg) functions
 //
@@ -30,7 +30,7 @@
 		#define RGB_GREEN	1
 		#define RGB_BLUE	2
 
-		#include <jpeglib.h>
+		#include "jpeglib.h"
 
 		#if JPEG_LIB_VERSION < 62
 			#warning DevIL was designed with libjpeg 6b or higher in mind.  Consider upgrading at www.ijg.org
@@ -277,35 +277,23 @@ devil_jpeg_read_init (j_decompress_ptr cinfo)
 }
 
 
-// Internal function used to load the jpeg.
-ILboolean iLoadJpegInternal()
+// Access point for applications wishing to use the jpeg library directly in
+// conjunction with DevIL.
+//
+// The decompressor must be set up with an input source and all desired parameters
+// this function is called. The caller must call jpeg_finish_decompress because
+// the caller may still need decompressor after calling this for e.g. examining
+// saved markers.
+ILboolean ILAPIENTRY ilLoadFromJpegStruct(j_decompress_ptr JpegInfo)
 {
-	struct jpeg_error_mgr Error;
-	struct jpeg_decompress_struct JpegInfo;
+	void (*errorHandler)(j_common_ptr);
 	ILubyte *TempPtr[1];
 
-	if (iCurImage == NULL) {
-		ilSetError(IL_ILLEGAL_OPERATION);
-		return IL_FALSE;
-	}
+	errorHandler = JpegInfo->err->error_exit;
+	JpegInfo->err->error_exit = ExitErrorHandle;
+	jpeg_start_decompress(JpegInfo);
 
-	JpegInfo.err = jpeg_std_error(&Error);
-	JpegInfo.err->output_message = OutputMsg;
-	JpegInfo.err->error_exit = ExitErrorHandle;
-	//= ExitErrorHandle(&Error);
-	jpeg_create_decompress(&JpegInfo);
-	JpegInfo.do_block_smoothing = IL_TRUE;
-	JpegInfo.do_fancy_upsampling = IL_TRUE;
-
-	//jpeg_stdio_src(&JpegInfo, iGetFile());
-	devil_jpeg_read_init(&JpegInfo);
-	jpeg_read_header(&JpegInfo, IL_TRUE);
-
-	// Need to set params here?
-
-	jpeg_start_decompress(&JpegInfo);
-
-	if (!ilTexImage(JpegInfo.output_width, JpegInfo.output_height, 1, (ILubyte)JpegInfo.output_components, 0, IL_UNSIGNED_BYTE, NULL)) {
+	if (!ilTexImage(JpegInfo->output_width, JpegInfo->output_height, 1, (ILubyte)JpegInfo->output_components, 0, IL_UNSIGNED_BYTE, NULL)) {
 		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
@@ -328,13 +316,12 @@ ILboolean iLoadJpegInternal()
 	}
 
 	TempPtr[0] = iCurImage->Data;
-	while (JpegInfo.output_scanline < JpegInfo.output_height) {
-		jpeg_read_scanlines(&JpegInfo, TempPtr, 1);  // anyway to make it read all at once?
+	while (JpegInfo->output_scanline < JpegInfo->output_height) {
+		jpeg_read_scanlines(JpegInfo, TempPtr, 1);  // anyway to make it read all at once?
 		TempPtr[0] += iCurImage->Bps;
 	}
 
-	jpeg_finish_decompress(&JpegInfo);
-	jpeg_destroy_decompress(&JpegInfo);
+	JpegInfo->err->error_exit = errorHandler;
 
 	if (jpgErrorOccured)
 		return IL_FALSE;
@@ -344,7 +331,36 @@ ILboolean iLoadJpegInternal()
 	return IL_TRUE;
 }
 
-  
+
+// Internal function used to load the jpeg.
+ILboolean iLoadJpegInternal()
+{
+	struct jpeg_error_mgr Error;
+	struct jpeg_decompress_struct JpegInfo;
+	ILboolean result;
+
+	if (iCurImage == NULL) {
+		ilSetError(IL_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	JpegInfo.err = jpeg_std_error(&Error);
+	jpeg_create_decompress(&JpegInfo);
+	JpegInfo.do_block_smoothing = IL_TRUE;
+	JpegInfo.do_fancy_upsampling = IL_TRUE;
+
+	//jpeg_stdio_src(&JpegInfo, iGetFile());
+	devil_jpeg_read_init(&JpegInfo);
+	jpeg_read_header(&JpegInfo, IL_TRUE);
+
+	result = ilLoadFromJpegStruct(&JpegInfo);
+
+	jpeg_finish_decompress(&JpegInfo);
+	jpeg_destroy_decompress(&JpegInfo);
+	return result;
+}
+
+
 typedef struct {
 	struct jpeg_destination_mgr pub;
 	JOCTET *buffer;
@@ -409,7 +425,7 @@ devil_jpeg_write_init(j_compress_ptr cinfo)
 }
 
 //! Writes a Jpeg file
-ILboolean ilSaveJpeg(const ILstring FileName)
+ILboolean ilSaveJpeg(const ILstring FileName, ILenum Type)
 {
 	ILHANDLE	JpegFile;
 	ILboolean	bJpeg = IL_FALSE;
@@ -427,7 +443,7 @@ ILboolean ilSaveJpeg(const ILstring FileName)
 		return bJpeg;
 	}
 
-	bJpeg = ilSaveJpegF(JpegFile);
+	bJpeg = ilSaveJpegF(JpegFile, Type);
 	iclosew(JpegFile);
 
 	return bJpeg;
@@ -435,23 +451,91 @@ ILboolean ilSaveJpeg(const ILstring FileName)
 
 
 //! Writes a Jpeg to an already-opened file
-ILboolean ilSaveJpegF(ILHANDLE File)
+ILboolean ilSaveJpegF(ILHANDLE File, ILenum Type)
 {
 	iSetOutputFile(File);
-	return iSaveJpegInternal();
+	return iSaveJpegInternal(Type);
 }
 
 
 //! Writes a Jpeg to a memory "lump"
-ILboolean ilSaveJpegL(ILvoid *Lump, ILuint Size)
+ILboolean ilSaveJpegL(ILvoid *Lump, ILuint Size, ILenum Type)
 {
 	iSetOutputLump(Lump, Size);
-	return iSaveJpegInternal();
+	return iSaveJpegInternal(Type);
+}
+
+
+// Access point for applications wishing to use the jpeg library directly in
+// conjunction with DevIL.
+//
+// The caller must set up the desired parameters by e.g. calling
+// jpeg_set_defaults and overriding the parameters the caller wishes
+// to change, such as quality, before calling this function. The caller
+// is also responsible for calling jpeg_finish_compress in case the
+// caller still needs to compressor for something.
+// 
+ILboolean ILAPIENTRY ilSaveFromJpegStruct(j_compress_ptr JpegInfo)
+{
+	void (*errorHandler)(j_common_ptr);
+	JSAMPROW	row_pointer[1];
+	ILimage		*Temp;
+	ILenum		Origin;
+
+	if (iCurImage == NULL) {
+		ilSetError(IL_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	errorHandler = JpegInfo->err->error_exit;
+	JpegInfo->err->error_exit = ExitErrorHandle;
+
+
+	Origin = iCurImage->Origin;
+	if (Origin == IL_ORIGIN_LOWER_LEFT) {
+		ilFlipImage();
+	}
+
+	if ((iCurImage->Format != IL_RGB && iCurImage->Format != IL_LUMINANCE) || iCurImage->Bpc != 1) {
+		Temp = iConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+		if (Temp == NULL) {
+			return IL_FALSE;
+		}
+	}
+	else {
+		Temp = iCurImage;
+	}
+
+	JpegInfo->image_width = Temp->Width;  // image width and height, in pixels
+	JpegInfo->image_height = Temp->Height;
+	JpegInfo->input_components = Temp->Bpp;  // # of color components per pixel
+
+	jpeg_start_compress(JpegInfo, IL_TRUE);
+
+	//row_stride = image_width * 3;	// JSAMPLEs per row in image_buffer
+
+	while (JpegInfo->next_scanline < JpegInfo->image_height) {
+		// jpeg_write_scanlines expects an array of pointers to scanlines.
+		// Here the array is only one element long, but you could pass
+		// more than one scanline at a time if that's more convenient.
+		row_pointer[0] = &Temp->Data[JpegInfo->next_scanline * Temp->Bps];
+		(ILvoid) jpeg_write_scanlines(JpegInfo, row_pointer, 1);
+	}
+
+	if (Origin == IL_ORIGIN_LOWER_LEFT) {
+		ilFlipImage();
+	}
+
+	if (Temp != iCurImage) {
+		ilCloseImage(Temp);
+	}
+
+	return (!jpgErrorOccured);
 }
 
 
 // Internal function used to save the Jpeg.
-ILboolean iSaveJpegInternal()
+ILboolean iSaveJpegInternal(ILenum Type)
 {
 	struct		jpeg_compress_struct JpegInfo;
 	struct		jpeg_error_mgr Error;
@@ -502,6 +586,15 @@ ILboolean iSaveJpegInternal()
 		JpegInfo.in_color_space = JCS_RGB;
 
 	jpeg_set_defaults(&JpegInfo);
+
+	if (Type == IL_EXIF) {
+	  JpegInfo.write_JFIF_header = FALSE;
+	  JpegInfo.write_EXIF_header = TRUE;
+	} else if (Type == IL_JFIF) {
+	  JpegInfo.write_JFIF_header = TRUE;
+	  JpegInfo.write_EXIF_header = FALSE;
+	}
+
 	jpeg_set_quality(&JpegInfo, iGetInt(IL_JPG_QUALITY), IL_TRUE);
 
 	jpeg_start_compress(&JpegInfo, IL_TRUE);

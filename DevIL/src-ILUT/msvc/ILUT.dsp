@@ -24,8 +24,8 @@ CFG=ILUT - WIN32 DEBUG
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
-# PROP Scc_ProjName ""
-# PROP Scc_LocalPath ""
+# PROP Scc_ProjName "ILUT"
+# PROP Scc_LocalPath "..\.."
 CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
@@ -39,7 +39,7 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "../../lib"
+# PROP Output_Dir "../../lib/debug"
 # PROP Intermediate_Dir "../src/obj/debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
@@ -54,10 +54,10 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 delayimp.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /def:".\ilut.def" /out:"../../lib/ilut-d.dll" /pdbtype:sept /delayload:d3d8.dll /delayload:sdl.dll
+# ADD LINK32 delayimp.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /def:".\ilut.def" /out:"../../lib/debug/ilut-d.dll" /pdbtype:sept /delayload:d3d8.dll /delayload:sdl.dll
 # SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
-TargetPath=\DevIL\lib\ilut-d.dll
+TargetPath=\DevIL\lib\debug\ilut-d.dll
 SOURCE="$(InputPath)"
 PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
 # End Special Build Tool
@@ -199,27 +199,27 @@ SOURCE=..\..\include\il\ilut.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\internal\ilut_error.h
+SOURCE=..\include\ilut_allegro.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\internal\ilut_internal.h
+SOURCE=..\include\ilut_error.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\internal\ilut_opengl.h
+SOURCE=..\include\ilut_internal.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\internal\ilut_resource.h
+SOURCE=..\include\ilut_opengl.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\internal\ilut_states.h
+SOURCE=..\include\ilut_states.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\internal\ilut_win32.h
+SOURCE=.\resource.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include"
+				AdditionalIncludeDirectories="../include; ../../iflibs/libjpeg"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;IL_EXPORTS"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -68,7 +68,7 @@
 				InlineFunctionExpansion="1"
 				FavorSizeOrSpeed="2"
 				OmitFramePointers="TRUE"
-				AdditionalIncludeDirectories="../include"
+				AdditionalIncludeDirectories="../include; ../../iflibs/libjpeg"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;IL_EXPORTS"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -365,10 +365,10 @@
 				RelativePath="..\..\BUGS">
 			</File>
 			<File
-				RelativePath="..\..\ChangeLog">
+				RelativePath="..\..\CREDITS">
 			</File>
 			<File
-				RelativePath="..\..\CREDITS">
+				RelativePath="..\..\ChangeLog">
 			</File>
 			<File
 				RelativePath="..\..\Libraries.txt">

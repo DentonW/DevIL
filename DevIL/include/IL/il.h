@@ -188,6 +188,7 @@ typedef void ILvoid;
 #define IL_DOOM_FLAT						0x0423
 #define IL_ICO								0x0424
 #define IL_JPG								0x0425
+#define IL_JFIF								0x0425
 #define IL_LBM								0x0426
 #define IL_PCD								0x0427
 #define IL_PCX								0x0428
@@ -208,6 +209,7 @@ typedef void ILvoid;
 #define IL_DDS								0x0437
 #define IL_DCX								0x0438
 #define IL_PSD								0x0439
+#define IL_EXIF								0x043A
 
 #define IL_JASC_PAL							0x0475
 
@@ -504,6 +506,11 @@ ILAPI ILboolean		ILAPIENTRY ilLoadData(const ILstring FileName, ILuint Width, IL
 ILAPI ILboolean		ILAPIENTRY ilLoadDataF(ILHANDLE File, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp);
 ILAPI ILboolean		ILAPIENTRY ilLoadDataL(ILvoid *Lump, ILuint Size, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp);
 ILAPI ILboolean		ILAPIENTRY ilSaveData(const ILstring FileName);
+
+#if !IL_NO_JPG && !IL_USE_IJL
+	ILAPI ILboolean	ILAPIENTRY ilLoadFromJpegStruct(struct jpeg_decompress_struct* JpegDecompressorPtr);
+	ILAPI ILboolean	ILAPIENTRY ilSaveFromJpegStruct(struct jpeg_compress_struct* JpegCompressorPtr);
+#endif
 
 // For all those weirdos that spell "colour" without the 'u'.
 #define ilClearColor	ilClearColour

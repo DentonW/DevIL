@@ -24,8 +24,8 @@ CFG=ILU - Win32 Debug
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
-# PROP Scc_ProjName ""
-# PROP Scc_LocalPath ""
+# PROP Scc_ProjName "ILU"
+# PROP Scc_LocalPath "..\.."
 CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
@@ -39,7 +39,7 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "../../lib"
+# PROP Output_Dir "../../lib/debug"
 # PROP Intermediate_Dir "../src/obj/debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
@@ -54,9 +54,9 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /out:"../../lib/ilu-d.dll" /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /out:"../../lib/debug/ilu-d.dll" /pdbtype:sept
 # Begin Special Build Tool
-TargetPath=\DevIL\lib\ilu-d.dll
+TargetPath=\DevIL\lib\debug\ilu-d.dll
 SOURCE="$(InputPath)"
 PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
 # End Special Build Tool
@@ -225,15 +225,7 @@ SOURCE=..\include\ilu_internal.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\ilu_matrix.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\ilu_mipmap.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\ilu_resource.h
 # End Source File
 # Begin Source File
 
