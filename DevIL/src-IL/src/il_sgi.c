@@ -226,7 +226,7 @@ ILboolean iReadRleSgi(iSgiHeader *Head)
 
 #ifdef __LITTLE_ENDIAN__
 	/* Fix the offset/len table (it's big endian format) */
-	for (ixTable = 0; ixTable < TableSize; ++ixTable)
+	for (ixTable = 0; ixTable < TableSize; ixTable++)
 	{
 		*(OffTable + ixTable) = SwapInt(*(OffTable + ixTable));
 		*(LenTable + ixTable) = SwapInt(*(LenTable + ixTable));
@@ -236,7 +236,7 @@ ILboolean iReadRleSgi(iSgiHeader *Head)
 	/* We have to create a temporary buffer for the image, because SGI */
 	/*	images are plane-separated. */
 	TempData = (ILubyte**) ialloc(Head->ZSize * sizeof(ILubyte*));
-	for (ixPlane = 0; ixPlane < Head->ZSize; ++ixPlane)
+	for (ixPlane = 0; ixPlane < Head->ZSize; ixPlane++)
 	{
 		TempData[ixPlane] = 
 				(ILubyte*) ialloc(Head->XSize * Head->YSize * Head->Bpc);

@@ -228,7 +228,7 @@ ILboolean ReadGrey(PSDHEAD *Head)
 
 	Compressed = GetBigUShort();
 
-	Channels = Head->Channels;
+	ChannelNum = Head->Channels;
 	Head->Channels = 1;  // Temporary to read only one channel...some greyscale .psd files have 2.
 	if (Head->Channels != 1) {
 		ilSetError(IL_FORMAT_NOT_SUPPORTED);
@@ -293,7 +293,7 @@ ILboolean ReadIndexed(PSDHEAD *Head)
 		ilSetError(IL_FORMAT_NOT_SUPPORTED);
 		return IL_FALSE;
 	}
-	Channels = Head->Channels;
+	ChannelNum = Head->Channels;
 
 	if (!ilTexImage(Head->Width, Head->Height, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL))
 		return IL_FALSE;
@@ -346,7 +346,7 @@ ILboolean ReadRGB(PSDHEAD *Head)
 
 	Compressed = GetBigUShort();
 
-	Channels = Head->Channels;
+	ChannelNum = Head->Channels;
 	switch (Head->Channels)
 	{
 		case 3:
@@ -410,12 +410,12 @@ ILboolean ReadCMYK(PSDHEAD *Head)
 	{
 		case 4:
 			Format = IL_RGB;
-			Channels = 4;
+			ChannelNum = 4;
 			Head->Channels = 3;
 			break;
 		case 5:
 			Format = IL_RGBA;
-			Channels = 5;
+			ChannelNum = 5;
 			Head->Channels = 4;
 			break;
 		default:
@@ -480,21 +480,21 @@ ILuint *GetCompChanLen(PSDHEAD *Head)
 	ILushort	*RleTable;
 	ILuint		*ChanLen, c, i, j;
 
-	RleTable = (ILushort*)ialloc(Head->Height * Channels * sizeof(ILushort));
-	ChanLen = (ILuint*)ialloc(Channels * sizeof(ILuint));
+	RleTable = (ILushort*)ialloc(Head->Height * ChannelNum * sizeof(ILushort));
+	ChanLen = (ILuint*)ialloc(ChannelNum * sizeof(ILuint));
 	if (RleTable == NULL || ChanLen == NULL) {
 		return NULL;
 	}
 
-	iread(RleTable, sizeof(ILushort), Head->Height * Channels);
+	iread(RleTable, sizeof(ILushort), Head->Height * ChannelNum);
 #ifdef __LITTLE_ENDIAN__
-	for (i = 0; i < Head->Height * Channels; i++) {
+	for (i = 0; i < Head->Height * ChannelNum; i++) {
 		RleTable[i] = SwapShort(RleTable[i]);
 	}
 #endif
 
-	memset(ChanLen, 0, Channels * sizeof(ILuint));
-	for (c = 0; c < Channels; c++) {
+	memset(ChanLen, 0, ChannelNum * sizeof(ILuint));
+	for (c = 0; c < ChannelNum; c++) {
 		j = c * Head->Height;
 		for (i = 0; i < Head->Height; i++) {
 			ChanLen[c] += RleTable[i + j];

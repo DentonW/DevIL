@@ -35,7 +35,7 @@ typedef struct PSDHEAD
 #pragma pack(pop,  packed_struct)
 #endif
 
-ILushort	Channels;
+ILushort	ChannelNum;
 
 ILboolean	iIsValidPsd(ILvoid);
 ILboolean	iCheckPsd(PSDHEAD *Header);
