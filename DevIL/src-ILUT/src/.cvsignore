@@ -4,3 +4,4 @@ Makefile
 libILUT.la
 *.o
 *.lo
+obj

@@ -620,6 +620,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\il_hdr.c">
+			</File>
+			<File
 				RelativePath="..\src\il_header.c">
 				<FileConfiguration
 					Name="Debug|Win32">

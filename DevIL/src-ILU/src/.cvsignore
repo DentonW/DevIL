@@ -4,3 +4,4 @@ Makefile
 *.o
 *.lo
 libILU.la
+obj
