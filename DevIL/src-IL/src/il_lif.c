@@ -64,20 +64,22 @@ ILboolean ilIsValidLifL(ILvoid *Lump, ILuint Size)
 
 
 // Internal function used to get the Lif header from the current file.
-ILvoid iGetLifHead(LIF_HEAD *Header)
+ILboolean iGetLifHead(LIF_HEAD *Header)
 {
-	iread(&Header->Id, 1, 8);
-	Header->Version = GetLittleUInt();
-	Header->Flags = GetLittleUInt();
-	Header->Width = GetLittleUInt();
-	Header->Height = GetLittleUInt();
-	Header->PaletteCRC = GetLittleUInt();
-	Header->ImageCRC = GetLittleUInt();
-	Header->PalOffset = GetLittleUInt();
-	Header->TeamEffect0 = GetLittleUInt();
-	Header->TeamEffect1 = GetLittleUInt();
+	if (iread(Header, sizeof(LIF_HEAD), 1) != 1)
+		return IL_FALSE;
 
-	return;
+	Header->Version		= UInt(Header->Version);
+	Header->Flags		= UInt(Header->Flags);
+	Header->Width		= UInt(Header->Width);
+	Header->Height		= UInt(Header->Height);
+	Header->PaletteCRC	= UInt(Header->PaletteCRC);
+	Header->ImageCRC	= UInt(Header->ImageCRC);
+	Header->PalOffset	= UInt(Header->PalOffset);
+	Header->TeamEffect0	= UInt(Header->TeamEffect0);
+	Header->TeamEffect1	= UInt(Header->TeamEffect1);
+
+	return IL_TRUE;
 }
 
 
@@ -86,7 +88,8 @@ ILboolean iIsValidLif()
 {
 	LIF_HEAD	Head;
 
-	iGetLifHead(&Head);
+	if (!iGetLifHead(&Head))
+		return IL_FALSE;
 	iseek(-(ILint)sizeof(LIF_HEAD), IL_SEEK_CUR);
 
 	return iCheckLif(&Head);
@@ -156,7 +159,8 @@ ILboolean iLoadLifInternal()
 		return IL_FALSE;
 	}
 	
-	iGetLifHead(&LifHead);
+	if (!iGetLifHead(&LifHead))
+		return IL_FALSE;
 
 	if (!ilTexImage(LifHead.Width, LifHead.Height, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL)) {
 		return IL_FALSE;
@@ -164,14 +168,15 @@ ILboolean iLoadLifInternal()
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 
 	iCurImage->Pal.Palette = (ILubyte*)ialloc(1024);
-	if (iCurImage->Pal.Palette == NULL) {
+	if (iCurImage->Pal.Palette == NULL)
 		return IL_FALSE;
-	}
 	iCurImage->Pal.PalSize = 1024;
 	iCurImage->Pal.PalType = IL_PAL_RGBA32;
 
-	iread(iCurImage->Data, 1, LifHead.Width * LifHead.Height);
-	iread(iCurImage->Pal.Palette, 1, 1024);
+	if (iread(iCurImage->Data, LifHead.Width * LifHead.Height, 1) != 1)
+		return IL_FALSE;
+	if (iread(iCurImage->Pal.Palette, 1, 1024) != 1024)
+		return IL_FALSE;
 
 	// Each data offset is offset by -1, so we add one.
 	for (i = 0; i < iCurImage->SizeOfData; i++) {

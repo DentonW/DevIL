@@ -141,10 +141,6 @@ SOURCE=.\ilu.def
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\ilu_alloc.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\ilu_error.c
 # End Source File
 # Begin Source File
@@ -206,10 +202,6 @@ SOURCE=..\src\ilu_utilities.c
 # Begin Source File
 
 SOURCE=..\..\include\il\ilu.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\ilu_alloc.h
 # End Source File
 # Begin Source File
 

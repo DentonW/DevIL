@@ -15,7 +15,6 @@
 #include <math.h>
 //#include <time.h>
 #include <limits.h>
-#include "ilu_alloc.h"
 
 
 // Very simple right now.

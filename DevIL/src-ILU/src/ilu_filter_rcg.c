@@ -454,9 +454,8 @@ double fwidth;
 	int		nRet = -1;
 
 	/* create intermediate column to hold horizontal dst column zoom */
-	tmp = (ILubyte*)malloc(src->Height * sizeof(ILubyte));
+	tmp = (ILubyte*)ialloc(src->Height * sizeof(ILubyte));
 	if (tmp == NULL) {
-		ilSetError(ILU_OUT_OF_MEMORY);
 		return 0;
 	}
 
@@ -466,7 +465,7 @@ double fwidth;
 	/* pre-calculate filter contributions for a column */
 	contribY = (CLIST *)calloc(dst->Height, sizeof(CLIST));
 	if (contribY == NULL) {
-		free(tmp);
+		ifree(tmp);
 		ilSetError(ILU_OUT_OF_MEMORY);
 		return -1;
 	}
@@ -483,8 +482,8 @@ double fwidth;
 			contribY[i].p = (CONTRIB*)calloc((int) (width * 2 + 1),
 					sizeof(CONTRIB));
 			if(contribY[i].p == NULL) {
-				free(tmp);
-				free(contribY);
+				ifree(tmp);
+				ifree(contribY);
 				ilSetError(ILU_OUT_OF_MEMORY);
 				return -1;
 			}
@@ -512,8 +511,8 @@ double fwidth;
 			contribY[i].p = (CONTRIB *)calloc((int) (fwidth * 2 + 1),
 					sizeof(CONTRIB));
 			if (contribY[i].p == NULL) {
-				free(tmp);
-				free(contribY);
+				ifree(tmp);
+				ifree(contribY);
 				ilSetError(ILU_OUT_OF_MEMORY);
 				return -1;
 			}
@@ -567,7 +566,7 @@ double fwidth;
 			tmp[k] = (ILubyte)CLAMP(weight, BLACK_PIXEL, WHITE_PIXEL);
 		} /* next row in temp column */
 
-		free(contribX.p);
+		ifree(contribX.p);
 
 		/* The temp column has been built. Now stretch it 
 		 vertically into dst column. */
@@ -594,12 +593,12 @@ double fwidth;
 	nRet = 0; /* success */
 
 __zoom_cleanup:
-	free(tmp);
+	ifree(tmp);
 
 	/* free the memory allocated for vertical filter weights */
 	for(i = 0; i < (ILint)dst->Height; ++i)
-		free(contribY[i].p);
-	free(contribY);
+		ifree(contribY[i].p);
+	ifree(contribY);
 
 	return nRet;
 } /* zoom */

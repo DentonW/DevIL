@@ -312,13 +312,13 @@ double fwidth;				/* filter width (support) */
 				(Pixel)CLAMP(weight, BLACK_PIXEL, WHITE_PIXEL));
 		}
 	}
-	free(raster);
+	ifree(raster);
 
 	/* free the memory allocated for horizontal filter weights */
 	for(i = 0; i < tmp->xsize; ++i) {
-		free(contrib[i].p);
+		ifree(contrib[i].p);
 	}
-	free(contrib);
+	ifree(contrib);
 
 	/* pre-calculate filter contributions for a column */
 	contrib = (CLIST *)calloc(dst->ysize, sizeof(CLIST));
@@ -386,13 +386,13 @@ double fwidth;				/* filter width (support) */
 				(Pixel)CLAMP(weight, BLACK_PIXEL, WHITE_PIXEL));
 		}
 	}
-	free(raster);
+	ifree(raster);
 
 	/* free the memory allocated for vertical filter weights */
 	for(i = 0; i < dst->ysize; ++i) {
-		free(contrib[i].p);
+		ifree(contrib[i].p);
 	}
-	free(contrib);
+	ifree(contrib);
 
 	free_image(tmp);
 }

@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 05/20/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/pcx.c
+// Filename: src-IL/src/il_pcx.c
 //
 // Description: Reads and writes from/to a .pcx file.
 //
@@ -65,26 +65,21 @@ ILboolean ilIsValidPcxL(ILvoid *Lump, ILuint Size)
 
 
 // Internal function obtain the .pcx header from the current file.
-ILvoid iGetPcxHead(PCXHEAD *Head)
+ILboolean iGetPcxHead(PCXHEAD *Head)
 {
-	Head->Manufacturer = igetc();
-	Head->Version = igetc();
-	Head->Encoding = igetc();
-	Head->Bpp = igetc();
-	Head->Xmin = GetLittleUShort();
-	Head->Ymin = GetLittleUShort();
-	Head->Xmax = GetLittleUShort();
-	Head->Ymax = GetLittleUShort();
-	Head->HDpi = GetLittleUShort();
-	Head->VDpi = GetLittleUShort();
-	iread(&Head->ColMap, 1, 48);
-	Head->Reserved = igetc();
-	Head->NumPlanes = igetc();
-	Head->Bps = GetLittleUShort();
-	Head->PaletteInfo = GetLittleUShort();
-	Head->HScreenSize = GetLittleUShort();
-	Head->VScreenSize = GetLittleUShort();
-	iread(&Head->Filler, 1, 54);
+	if (iread(Head, sizeof(PCXHEAD), 1) != 1)
+		return IL_FALSE;
+
+	Head->Xmin			= UShort(Head->Xmin);
+	Head->Ymin			= UShort(Head->Ymin);
+	Head->Xmax			= UShort(Head->Xmax);
+	Head->Ymax			= UShort(Head->Ymax);
+	Head->HDpi			= UShort(Head->HDpi);
+	Head->VDpi			= UShort(Head->VDpi);
+	Head->Bps			= UShort(Head->Bps);
+	Head->PaletteInfo	= UShort(Head->PaletteInfo);
+	Head->HScreenSize	= UShort(Head->HScreenSize);
+	Head->VScreenSize	= UShort(Head->VScreenSize);
 
 	return;
 }
@@ -95,7 +90,8 @@ ILboolean iIsValidPcx()
 {
 	PCXHEAD Head;
 
-	iGetPcxHead(&Head);
+	if (!iGetPcxHead(&Head))
+		return IL_FALSE;
 	iseek(-(ILint)sizeof(PCXHEAD), IL_SEEK_CUR);
 
 	return iCheckPcx(&Head);
@@ -188,7 +184,8 @@ ILboolean iLoadPcxInternal()
 		return bPcx;
 	}
 
-	iGetPcxHead(&Header);
+	if (!iGetPcxHead(&Header))
+		return IL_FALSE;
 	if (!iCheckPcx(&Header)) {
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
@@ -294,18 +291,21 @@ ILboolean iUncompressPcx(PCXHEAD *Header)
 			for (c = 0; c < iCurImage->Bpp; c++) {
 				x = 0;
 				while (x < Header->Bps) {
-					iread(&ByteHead, 1, 1);
+					if (iread(&ByteHead, 1, 1) != 1)
+						goto file_read_error;
 					/*if ((ByteHead & BIT_7) && (ByteHead & BIT_6)) {
 						ClearBits(ByteHead, BIT_7);
 						ClearBits(ByteHead, BIT_6);
-						iread(&Colour, 1, 1);
+						if (iread(&Colour, 1, 1) != 1)
+							goto file_read_error;
 						for (i = 0; i < ByteHead; i++) {
 							ScanLine[x++] = Colour;
 						}
 					}*/
 					if ((ByteHead & 0xC0) == 0xC0) {
 						ByteHead &= 0x3F;
-						iread(&Colour, 1, 1);
+						if (iread(&Colour, 1, 1) != 1)
+							goto file_read_error;
 						for (i = 0; i < ByteHead; i++) {
 							ScanLine[x++] = Colour;
 						}
@@ -328,12 +328,17 @@ ILboolean iUncompressPcx(PCXHEAD *Header)
 							//	We should do a check to make certain it's 12...
 		if (ByteHead != 12)  // Some Quake2 .pcx files don't have this byte for some reason.
 			iseek(-1, IL_SEEK_CUR);
-		iread(iCurImage->Pal.Palette, 1, iCurImage->Pal.PalSize);
+		if (iread(iCurImage->Pal.Palette, 1, iCurImage->Pal.PalSize) != iCurImage->Pal.PalSize)
+			goto file_read_error;
 	}
 
 	ifree(ScanLine);
 
 	return IL_TRUE;
+
+file_read_error:
+	ifree(ScanLine);
+	return IL_FALSE;
 }
 
 
@@ -364,10 +369,12 @@ ILboolean iUncompressSmall(PCXHEAD *Header)
 		for (j = 0; j < iCurImage->Height; j++) {
 			i = 0;
 			while (i < iCurImage->Width) {
-				iread(&HeadByte, 1, 1);
+				if (iread(&HeadByte, 1, 1) != 1)
+					return IL_FALSE;
 				if (HeadByte >= 192) {
 					HeadByte -= 192;
-					iread(&Data, 1, 1);
+					if (iread(&Data, 1, 1) != 1)
+						return IL_FALSE;
 					
 					for (c = 0; c < HeadByte; c++) {
 						k = 128;
@@ -406,10 +413,12 @@ ILboolean iUncompressSmall(PCXHEAD *Header)
 			for (c = 0; c < Header->NumPlanes; c++) {
 				x = 0;
 				while (x < Bps) {
-					iread(&HeadByte, 1, 1);
+					if (iread(&HeadByte, 1, 1) != 1)
+						return IL_FALSE;
 					if ((HeadByte & 0xC0) == 0xC0) {
 						HeadByte &= 0x3F;
-						iread(&Colour, 1, 1);
+						if (iread(&Colour, 1, 1) != 1)
+							return IL_FALSE;
 						for (i = 0; i < HeadByte; i++) {
 							k = 128;
 							for (j = 0; j < 8; j++) {
@@ -605,14 +614,14 @@ ILuint encput(ILubyte byt, ILubyte cnt)
 {
 	if (cnt) {
 		if ((cnt == 1) && (0xC0 != (0xC0 & byt))) {
-			if (EOF == iputc(byt))
+			if (IL_EOF == iputc(byt))
 				return(0);     /* disk write error (probably full) */
 			return(1);
 		}
 		else {
-			if (EOF == iputc((ILubyte)((ILuint)0xC0 | cnt)))
+			if (IL_EOF == iputc((ILubyte)((ILuint)0xC0 | cnt)))
 				return (0);      /* disk write error */
-			if (EOF == iputc(byt))
+			if (IL_EOF == iputc(byt))
 				return (0);      /* disk write error */
 			return (2);
 		}

@@ -41,6 +41,7 @@
 
 	#define BigUShort(s) _SwapUShort(s)
 	#define BigUInt(i) _SwapUInt(i)
+	#define BigInt(i) _SwapInt(i)
 	#define BigUShort(s) _SwapUShort(s)
 	#define BigUInt(i) _SwapUInt(i)
 	#define BigFloat(f) _SwapFloat(f)

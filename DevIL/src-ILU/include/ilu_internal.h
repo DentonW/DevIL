@@ -125,6 +125,8 @@ ILAPI ILboolean		ILAPIENTRY ilResizeImage(ILimage *Image, ILuint Width, ILuint H
 ILAPI ILvoid		ILAPIENTRY ilSetCurImage(ILimage *Image);
 ILAPI ILvoid		ILAPIENTRY ilSetError(ILenum Error);
 ILAPI ILvoid		ILAPIENTRY ilSetPal(ILpal *Pal);
+ILAPI ILvoid*		ILAPIENTRY ialloc(ILuint Size);
+ILAPI ILvoid		ILAPIENTRY ifree(ILvoid *Ptr);
 
 ILAPI ILubyte		ILAPIENTRY ilGetBppFormat(ILenum Format);
 ILAPI ILubyte		ILAPIENTRY ilGetBppPal(ILenum PalType);

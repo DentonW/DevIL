@@ -13,7 +13,6 @@
 
 #include "ilu_internal.h"
 #include "ilu_states.h"
-#include "ilu_alloc.h"
 
 
 ILboolean ILAPIENTRY iluEnlargeImage(ILfloat XDim, ILfloat YDim, ILfloat ZDim)

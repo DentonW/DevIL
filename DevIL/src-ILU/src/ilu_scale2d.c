@@ -16,7 +16,6 @@
 
 #include "ilu_internal.h"
 #include "ilu_states.h"
-#include "ilu_alloc.h"
 
 
 ILimage *iluScale2DNear_(ILimage *Image, ILimage *Scaled, ILuint Width, ILuint Height);

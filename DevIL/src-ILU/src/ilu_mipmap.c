@@ -14,7 +14,6 @@
 #include "ilu_internal.h"
 #include "ilu_mipmap.h"
 #include "ilu_states.h"
-#include "ilu_alloc.h"
 
 
 ILimage *Original;  // So we can increment NumMips
@@ -161,7 +160,11 @@ ILboolean iBuild1DMipmaps_(ILuint Width)
 	MipMap->Pal.PalSize = iluCurImage->Pal.PalSize;
 	MipMap->Pal.PalType = iluCurImage->Pal.PalType;
 	if (iluCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
-		MipMap->Pal.Palette = (ILubyte*)malloc(iluCurImage->Pal.PalSize);  // check?
+		MipMap->Pal.Palette = (ILubyte*)ialloc(iluCurImage->Pal.PalSize);
+		if (MipMap->Pal.Palette == NULL) {
+			ilCloseImage(MipMap);
+			return IL_FALSE;
+		}
 		memcpy(MipMap->Pal.Palette, iluCurImage->Pal.Palette, MipMap->Pal.PalSize);
 	}
 
@@ -214,7 +217,11 @@ ILboolean iBuild1DMipmapsVertical_(ILuint Height)
 	MipMap->Pal.PalSize = iluCurImage->Pal.PalSize;
 	MipMap->Pal.PalType = iluCurImage->Pal.PalType;
 	if (iluCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
-		MipMap->Pal.Palette = (ILubyte*)malloc(iluCurImage->Pal.PalSize);  // check?
+		MipMap->Pal.Palette = (ILubyte*)ialloc(iluCurImage->Pal.PalSize);
+		if (MipMap->Pal.Palette == NULL) {
+			ilCloseImage(MipMap);
+			return IL_FALSE;
+		}
 		memcpy(MipMap->Pal.Palette, iluCurImage->Pal.Palette, MipMap->Pal.PalSize);
 	}
 
@@ -295,7 +302,11 @@ ILboolean iBuild2DMipmaps_(ILuint Width, ILuint Height)
 	MipMap->Pal.PalSize = iluCurImage->Pal.PalSize;
 	MipMap->Pal.PalType = iluCurImage->Pal.PalType;
 	if (iluCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
-		MipMap->Pal.Palette = (ILubyte*)malloc(iluCurImage->Pal.PalSize);  // check?
+		MipMap->Pal.Palette = (ILubyte*)ialloc(iluCurImage->Pal.PalSize);
+		if (MipMap->Pal.Palette == NULL) {
+			ilCloseImage(MipMap);
+			return IL_FALSE;
+		}
 		memcpy(MipMap->Pal.Palette, iluCurImage->Pal.Palette, MipMap->Pal.PalSize);
 	}
 
@@ -386,7 +397,11 @@ ILboolean iBuild3DMipmaps_(ILuint Width, ILuint Height, ILuint Depth)
 	MipMap->Pal.PalSize = iluCurImage->Pal.PalSize;
 	MipMap->Pal.PalType = iluCurImage->Pal.PalType;
 	if (iluCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
-		MipMap->Pal.Palette = (ILubyte*)malloc(iluCurImage->Pal.PalSize);  // check?
+		MipMap->Pal.Palette = (ILubyte*)ialloc(iluCurImage->Pal.PalSize);
+		if (MipMap->Pal.Palette == NULL) {
+			ilCloseImage(MipMap);
+			return IL_FALSE;
+		}
 		memcpy(MipMap->Pal.Palette, iluCurImage->Pal.Palette, MipMap->Pal.PalSize);
 	}
 
@@ -474,7 +489,11 @@ ILboolean iBuild3DMipmapsVertical_(ILuint Height, ILuint Depth)
 	MipMap->Pal.PalSize = iluCurImage->Pal.PalSize;
 	MipMap->Pal.PalType = iluCurImage->Pal.PalType;
 	if (iluCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
-		MipMap->Pal.Palette = (ILubyte*)malloc(iluCurImage->Pal.PalSize);  // check?
+		MipMap->Pal.Palette = (ILubyte*)ialloc(iluCurImage->Pal.PalSize);
+		if (MipMap->Pal.Palette == NULL) {
+			ilCloseImage(MipMap);
+			return IL_FALSE;
+		}
 		memcpy(MipMap->Pal.Palette, iluCurImage->Pal.Palette, MipMap->Pal.PalSize);
 	}
 
@@ -554,7 +573,11 @@ ILboolean iBuild3DMipmapsHorizontal_(ILuint Width, ILuint Depth)
 	MipMap->Pal.PalSize = iluCurImage->Pal.PalSize;
 	MipMap->Pal.PalType = iluCurImage->Pal.PalType;
 	if (iluCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
-		MipMap->Pal.Palette = (ILubyte*)malloc(iluCurImage->Pal.PalSize);  // check?
+		MipMap->Pal.Palette = (ILubyte*)ialloc(iluCurImage->Pal.PalSize);
+		if (MipMap->Pal.Palette == NULL) {
+			ilCloseImage(MipMap);
+			return IL_FALSE;
+		}
 		memcpy(MipMap->Pal.Palette, iluCurImage->Pal.Palette, MipMap->Pal.PalSize);
 	}
 

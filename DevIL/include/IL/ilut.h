@@ -25,15 +25,17 @@ extern "C" {
 #endif
 
 #ifdef _WIN32
-	#ifdef  _MSC_VER
-		#ifndef _ILUT_BUILD_LIBRARY
-			#ifdef IL_DEBUG
-				#pragma comment(lib, "ilut-d.lib")
-			#else
-				#pragma comment(lib, "ilut.lib")
-			#endif//_DEBUG
-		#endif//_ILUT_BUILD_LIBRARY
-	#endif//_MSC_VER
+	#ifndef IL_STATIC_LIB
+		#ifdef  _MSC_VER
+			#ifndef _ILUT_BUILD_LIBRARY
+				#ifdef IL_DEBUG
+					#pragma comment(lib, "ilut-d.lib")
+				#else
+					#pragma comment(lib, "ilut.lib")
+				#endif//_DEBUG
+			#endif//_ILUT_BUILD_LIBRARY
+		#endif//_MSC_VER
+	#endif//IL_STATIC_LIB
 #endif//_WIN32
 
 

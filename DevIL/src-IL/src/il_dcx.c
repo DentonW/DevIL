@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 12/03/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 05/20/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/dcx.c
+// Filename: src-IL/src/il_dcx.c
 //
 // Description: Reads from a .dcx file.
 //
@@ -65,28 +65,23 @@ ILboolean ilIsValidDcxL(ILvoid *Lump, ILuint Size)
 
 
 // Internal function obtain the .dcx header from the current file.
-ILvoid iGetDcxHead(DCXHEAD *Head)
+ILboolean iGetDcxHead(DCXHEAD *Head)
 {
-	Head->Manufacturer = igetc();
-	Head->Version = igetc();
-	Head->Encoding = igetc();
-	Head->Bpp = igetc();
-	Head->Xmin = GetLittleUShort();
-	Head->Ymin = GetLittleUShort();
-	Head->Xmax = GetLittleUShort();
-	Head->Ymax = GetLittleUShort();
-	Head->HDpi = GetLittleUShort();
-	Head->VDpi = GetLittleUShort();
-	iread(&Head->ColMap, 1, 48);
-	Head->Reserved = igetc();
-	Head->NumPlanes = igetc();
-	Head->Bps = GetLittleUShort();
-	Head->PaletteInfo = GetLittleUShort();
-	Head->HScreenSize = GetLittleUShort();
-	Head->VScreenSize = GetLittleUShort();
-	iread(&Head->Filler, 1, 54);
+	if (iread(Head, sizeof(DCXHEAD), 1) != 1)
+		return IL_FALSE;
 
-	return;
+	Head->Xmin			= UShort(Head->Xmin);
+	Head->Ymin			= UShort(Head->Ymin);
+	Head->Xmax			= UShort(Head->Xmax);
+	Head->Ymax			= UShort(Head->Ymax);
+	Head->HDpi			= UShort(Head->HDpi);
+	Head->VDpi			= UShort(Head->VDpi);
+	Head->Bps			= UShort(Head->Bps);
+	Head->PaletteInfo	= UShort(Head->PaletteInfo);
+	Head->HScreenSize	= UShort(Head->HScreenSize);
+	Head->VScreenSize	= UShort(Head->VScreenSize);
+
+	return IL_TRUE;
 }
 
 
@@ -95,7 +90,8 @@ ILboolean iIsValidDcx()
 {
 	ILuint Signature;
 
-	iread(&Signature, 1, 4);
+	if (iread(&Signature, 1, 4) != 4)
+		return IL_FALSE;
 	iseek(-4, IL_SEEK_CUR);
 
 	return (Signature == 987654321);
@@ -194,7 +190,8 @@ ILboolean iLoadDcxInternal()
 	iread(&Signature, 1, 4);
 
 	do {
-		iread(&Entries[Num], 1, 4);
+		if (iread(&Entries[Num], 1, 4) != 4)
+			return IL_FALSE;
 		Num++;
 	} while (Entries[Num-1] != 0);
 
@@ -326,18 +323,21 @@ ILimage *iUncompressDcx(DCXHEAD *Header)
 			for (c = 0; c < Image->Bpp; c++) {
 				x = 0;
 				while (x < Header->Bps) {
-					iread(&ByteHead, 1, 1);
+					if (iread(&ByteHead, 1, 1) != 1)
+						return IL_FALSE;
 					/*if ((ByteHead & BIT_7) && (ByteHead & BIT_6)) {
 						ClearBits(ByteHead, BIT_7);
 						ClearBits(ByteHead, BIT_6);
-						iread(&Colour, 1, 1);
+						if (iread(&Colour, 1, 1) != 1)
+							return IL_FALSE;
 						for (i = 0; i < ByteHead; i++) {
 							ScanLine[x++] = Colour;
 						}
 					}*/
 					if ((ByteHead & 0xC0) == 0xC0) {
 						ByteHead &= 0x3F;
-						iread(&Colour, 1, 1);
+						if (iread(&Colour, 1, 1) != 1)
+							return IL_FALSE;
 						for (i = 0; i < ByteHead; i++) {
 							ScanLine[x++] = Colour;
 						}
@@ -354,16 +354,17 @@ ILimage *iUncompressDcx(DCXHEAD *Header)
 		}
 	}
 
+	ifree(ScanLine);
+
 	// Read in the palette
 	if (Image->Bpp == 1) {
 		ByteHead = igetc();	// the value 12, because it signals there's a palette for some reason...
 							//	We should do a check to make certain it's 12...
 		if (ByteHead != 12)  // Some Quake2 .dcx files don't have this byte for some reason.
 			iseek(-1, IL_SEEK_CUR);
-		iread(Image->Pal.Palette, 1, Image->Pal.PalSize);
+		if (iread(Image->Pal.Palette, 1, Image->Pal.PalSize) != Image->Pal.PalSize)
+			return IL_FALSE;
 	}
-
-	ifree(ScanLine);
 
 	return Image;
 }
@@ -372,7 +373,7 @@ ILimage *iUncompressDcx(DCXHEAD *Header)
 ILimage *iUncompressDcxSmall(DCXHEAD *Header)
 {
 	ILuint	i = 0, j, k, c, d, x, y, Bps;
-	ILubyte	HeadByte, Colour, Data = 0, *ScanLine;
+	ILubyte	HeadByte, Colour, Data = 0, *ScanLine = NULL;
 	ILimage	*Image;
 
 	Image = ilNewImage(Header->Xmax - Header->Xmin + 1, Header->Ymax - Header->Ymin + 1, 1, Header->NumPlanes, 1);
@@ -401,10 +402,12 @@ ILimage *iUncompressDcxSmall(DCXHEAD *Header)
 		for (j = 0; j < Image->Height; j++) {
 			i = 0;
 			while (i < Image->Width) {
-				iread(&HeadByte, 1, 1);
+				if (iread(&HeadByte, 1, 1) != 1)
+					goto file_read_error;
 				if (HeadByte >= 192) {
 					HeadByte -= 192;
-					iread(&Data, 1, 1);
+					if (iread(&Data, 1, 1) != 1)
+						goto file_read_error;
 					
 					for (c = 0; c < HeadByte; c++) {
 						k = 128;
@@ -431,6 +434,7 @@ ILimage *iUncompressDcxSmall(DCXHEAD *Header)
 		Image->Pal.Palette = (ILubyte*)ialloc(16 * 3);  // Size of palette always (48 bytes).
 		ScanLine = (ILubyte*)ialloc(Bps);
 		if (Image->Pal.Palette == NULL || ScanLine == NULL) {
+			ilCloseImage(Image);
 			return NULL;
 		}
 		memcpy(Image->Pal.Palette, Header->ColMap, 16 * 3);
@@ -443,10 +447,12 @@ ILimage *iUncompressDcxSmall(DCXHEAD *Header)
 			for (c = 0; c < Header->NumPlanes; c++) {
 				x = 0;
 				while (x < Bps) {
-					iread(&HeadByte, 1, 1);
+					if (iread(&HeadByte, 1, 1) != 1)
+						goto file_read_error;
 					if ((HeadByte & 0xC0) == 0xC0) {
 						HeadByte &= 0x3F;
-						iread(&Colour, 1, 1);
+						if (iread(&Colour, 1, 1) != 1)
+							goto file_read_error;
 						for (i = 0; i < HeadByte; i++) {
 							k = 128;
 							for (j = 0; j < 8; j++) {
@@ -473,6 +479,12 @@ ILimage *iUncompressDcxSmall(DCXHEAD *Header)
 	}
 
 	return Image;
+
+	file_read_error:
+		if (ScanLine)
+			ifree(ScanLine);
+		ilCloseImage(Image);
+		return NULL;
 }
 
 #endif//IL_NO_DCX

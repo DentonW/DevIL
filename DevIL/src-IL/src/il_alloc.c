@@ -26,7 +26,7 @@ ILvoid* ILAPIENTRY DefaultAllocFunc(ILuint Size)
 }
 
 
-ILvoid *ialloc(ILuint Size)
+ILvoid* ILAPIENTRY ialloc(ILuint Size)
 {
 	static ILvoid *Ptr;
 
@@ -35,6 +35,13 @@ ILvoid *ialloc(ILuint Size)
 		ilSetError(IL_OUT_OF_MEMORY);
 
 	return Ptr;
+}
+
+
+ILvoid ILAPIENTRY ifree(ILvoid *Ptr)
+{
+	ifree_ptr(Ptr);
+	return;
 }
 
 
@@ -48,7 +55,7 @@ ILvoid ILAPIENTRY DefaultFreeFunc(ILvoid *Ptr)
 ILvoid ILAPIENTRY ilResetMemory()
 {
 	ialloc_ptr = DefaultAllocFunc;
-	ifree = DefaultFreeFunc;
+	ifree_ptr = DefaultFreeFunc;
 	return;
 }
 
@@ -60,7 +67,7 @@ ILvoid ILAPIENTRY ilSetMemory(mAlloc AllocFunc, mFree FreeFunc)
 		return;
 	}
 	ialloc_ptr = AllocFunc;
-	ifree = FreeFunc;
+	ifree_ptr = FreeFunc;
 	return;
 }
 

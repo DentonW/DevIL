@@ -122,7 +122,12 @@ ILboolean ILAPIENTRY iDefaultEof(ILHANDLE Handle)
 
 ILint ILAPIENTRY iDefaultGetc(ILHANDLE Handle)
 {
-	return fgetc((FILE*)Handle);
+	static ILint Val;
+
+	Val = fgetc((FILE*)Handle);
+	if (Val == IL_EOF)
+		ilSetError(IL_FILE_READ_ERROR);
+	return Val;
 }
 
 
@@ -361,7 +366,8 @@ ILint ILAPIENTRY iGetcLump(ILvoid)
 	if (ReadLumpSize > 0) {
 		if (ReadLumpPos + 1 > ReadLumpSize) {
 			ReadLumpPos--;
-			return EOF;
+			ilSetError(IL_FILE_READ_ERROR);
+			return IL_EOF;
 		}
 	}
 
@@ -373,9 +379,13 @@ ILuint ILAPIENTRY iReadFile(ILvoid *Buffer, ILuint Size, ILuint Number)
 {
 	ILuint	TotalBytes = 0, BytesCopied;
 	ILuint	BuffSize = Size * Number;
+	static	ILuint NumRead;
 
 	if (!UseCache) {
-		return ReadProc(Buffer, Size, Number, FileRead);
+		NumRead = ReadProc(Buffer, Size, Number, FileRead);
+		if (NumRead != NumRead)
+			ilSetError(IL_FILE_READ_ERROR);
+		return NumRead;
 	}
 
 	/*if (Cache == NULL || CacheSize == 0) {  // Shouldn't happen, but we check anyway.
@@ -417,12 +427,16 @@ ILuint ILAPIENTRY iReadLump(ILvoid *Buffer, ILuint Size, ILuint Number)
 		if (ReadLumpSize > 0) {  // ReadLumpSize is too large to care about apparently
 			if (ReadLumpPos + i > ReadLumpSize) {
 				ReadLumpPos += i;
+				if (i != Number)
+					ilSetError(IL_FILE_READ_ERROR);
 				return i;
 			}
 		}
 	}
 
 	ReadLumpPos += i;
+	if (i != Number)
+		ilSetError(IL_FILE_READ_ERROR);
 	return i;
 }
 
@@ -551,7 +565,7 @@ ILint ILAPIENTRY iPutcFile(ILubyte Char)
 ILint ILAPIENTRY iPutcLump(ILubyte Char)
 {
 	if (WriteLumpPos >= WriteLumpSize)
-		return -1;  // EOF
+		return IL_EOF;  // IL_EOF
 	*((ILubyte*)(WriteLump) + WriteLumpPos++) = Char;
 	return Char;
 }

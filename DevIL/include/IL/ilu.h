@@ -24,15 +24,17 @@ extern "C" {
 #endif
 
 #ifdef _WIN32
-	#ifdef  _MSC_VER
-		#ifndef _ILU_BUILD_LIBRARY
-			#ifdef IL_DEBUG
-				#pragma comment(lib, "ilu-d.lib")
-			#else
-				#pragma comment(lib, "ilu.lib")
-			#endif//_DEBUG
-		#endif//_ILU_BUILD_LIBRARY
-	#endif//_MSC_VER
+	#ifndef IL_STATIC_LIB
+		#ifdef  _MSC_VER
+			#ifndef _ILU_BUILD_LIBRARY
+				#ifdef IL_DEBUG
+					#pragma comment(lib, "ilu-d.lib")
+				#else
+					#pragma comment(lib, "ilu.lib")
+				#endif//_DEBUG
+			#endif//_ILU_BUILD_LIBRARY
+		#endif//_MSC_VER
+	#endif//IL_STATIC_LIB
 #endif//_WIN32
 
 #define ILU_VERSION_1_4_2					1

@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/18/2002 <--Y2K Compliant! =]
+// Last modified: 05/21/2002 <--Y2K Compliant! =]
 //
 // Filename: src-IL/src/il_pic.c
 //
@@ -67,17 +67,18 @@ ILboolean ilIsValidPicL(ILvoid *Lump, ILuint Size)
 
 
 // Internal function used to get the .pic header from the current file.
-ILvoid iGetPicHead(PIC_HEAD *Header)
+ILboolean iGetPicHead(PIC_HEAD *Header)
 {
-	Header->Magic = GetLittleInt();
-	iread(&Header->Version, sizeof(ILfloat), 1);  // wtf?  A float?!
-	iread(&Header->Comment, 1, 80);
-	iread(&Header->Id, 1, 4);
-	Header->Width = GetLittleShort();
-	Header->Height = GetLittleShort();
-	iread(&Header->Ratio, sizeof(ILfloat), 1);
-	Header->Fields = GetLittleShort();
-	Header->Padding = GetLittleShort();
+	if (iread(Header, sizeof(PIC_HEAD), 1) != 1)
+		return IL_FALSE;
+
+	Header->Magic	= Int(Header->Magic);
+	//iread(&Header->Version, sizeof(ILfloat), 1);  // wtf?  A float?!
+	Header->Width	= Short(Header->Width);
+	Header->Height	= Short(Header->Height);
+	//iread(&Header->Ratio, sizeof(ILfloat), 1);
+	Header->Fields	= Short(Header->Fields);
+	Header->Padding	= Short(Header->Padding);
 
 	return;
 }
@@ -88,7 +89,8 @@ ILboolean iIsValidPic()
 {
 	PIC_HEAD	Head;
 
-	iGetPicHead(&Head);
+	if (!iGetPicHead(&Head))
+		return IL_FALSE;
 	iseek(-(ILint)sizeof(PIC_HEAD), IL_SEEK_CUR);  // Go ahead and restore to previous state
 
 	return iCheckPic(&Head);
@@ -167,7 +169,8 @@ ILboolean iLoadPicInternal()
 		return IL_FALSE;
 	}
 
-	iGetPicHead(&Header);
+	if (!iGetPicHead(&Header))
+		return IL_FALSE;
 	if (!iCheckPic(&Header)) {
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
@@ -192,6 +195,10 @@ ILboolean iLoadPicInternal()
 		Channels->Size = igetc();
 		Channels->Type = igetc();
 		Channels->Chan = igetc();
+		if (Channels->Chan == IL_EOF) {
+			Read = IL_FALSE;
+			goto finish;
+		}
 		
 		// See if we have an alpha channel in there
 		if (Channels->Chan & PIC_ALPHA_CHANNEL)
@@ -201,6 +208,8 @@ ILboolean iLoadPicInternal()
 
 	Read = readScanlines((ILuint*)iCurImage->Data, Header.Width, Header.Height, Channel, Alpha);
 
+finish:
+
 	// Destroy channels
 	while (Channel) {
 		Prev = Channel;
@@ -208,10 +217,8 @@ ILboolean iLoadPicInternal()
 		ifree(Prev);
 	}
 
-	if (Read == IL_FALSE) {
-		ilSetError(IL_ILLEGAL_FILE_VALUE);
+	if (Read == IL_FALSE)
 		return IL_FALSE;
-	}
 
 	ilFixImage();
 
@@ -219,30 +226,31 @@ ILboolean iLoadPicInternal()
 }
 
 
-static ILuint readScanlines(ILuint *image,
-							 ILint width, ILint height, 
-							 CHANNEL *channel, ILuint alpha)
+ILboolean readScanlines(ILuint *image, ILint width, ILint height, CHANNEL *channel, ILuint alpha)
 {
-	ILint i;
+	ILint	i;
+	ILuint	*scan;
 
 	(ILvoid)alpha;
 	
 	for (i = height - 1; i >= 0; i--) {
-		ILuint *scan = image + i * width;
-		
-		if (!readScanline((ILubyte *)scan, width, channel, 4))
+		*scan = image + i * width;
+
+		if (!readScanline((ILubyte *)scan, width, channel, 4)) {
+			ilSetError(IL_ILLEGAL_FILE_VALUE);
 			return IL_FALSE;
+		}
 	}
-	
+
 	return IL_TRUE;
 }
 
-static ILuint readScanline(ILubyte *scan, ILint width, CHANNEL *channel, ILint bytes)
+ILuint readScanline(ILubyte *scan, ILint width, CHANNEL *channel, ILint bytes)
 {
 	ILint		noCol;
 	ILint		off[4];
 	ILuint		status=0;
-	
+
 	while (channel) {
 		noCol = 0;
 //#ifndef sgi
@@ -280,7 +288,7 @@ static ILuint readScanline(ILubyte *scan, ILint width, CHANNEL *channel, ILint b
 			noCol++;
 		}
 #endif*/
-		
+
 		switch(channel->Type & 0x0F) {
 			case PIC_UNCOMPRESSED:
 				status = channelReadRaw(scan, width, noCol, off, bytes);
@@ -294,34 +302,37 @@ static ILuint readScanline(ILubyte *scan, ILint width, CHANNEL *channel, ILint b
 		}
 		if (!status)
 			break;
-		
+
 		channel = channel->Next;
 	}
 	return status;
 }
 
-static ILuint channelReadRaw(ILubyte *scan, ILint width, ILint noCol, ILint *off, ILint bytes)
+ILboolean channelReadRaw(ILubyte *scan, ILint width, ILint noCol, ILint *off, ILint bytes)
 {
-	int i, j;
-	
+	ILint i, j;
+
 	for (i = 0; i < width; i++) {
 		if (ieof())
 			return IL_FALSE;
 		for (j = 0; j < noCol; j++)
-			scan[off[j]] = (ILubyte)igetc();
+			if (iread(&scan[off[j]], 1, 1) != 1)
+				return IL_FALSE;
 		scan += bytes;
 	}
 	return IL_TRUE;
 }
 
-static ILuint channelReadPure(ILubyte *scan, ILint width, ILint noCol, ILint *off, ILint bytes)
+ILboolean channelReadPure(ILubyte *scan, ILint width, ILint noCol, ILint *off, ILint bytes)
 {
 	ILubyte		col[4];
 	ILint		count;
 	int			i, j, k;
-	
+
 	for (i = width; i > 0; ) {
-		count = (unsigned char)igetc();
+		count = igetc();
+		if (count == IL_EOF)
+			return IL_FALSE;
 		if (count > width)
 			count = width;
 		i -= count;
@@ -330,7 +341,8 @@ static ILuint channelReadPure(ILubyte *scan, ILint width, ILint noCol, ILint *of
 			return IL_FALSE;
 		
 		for (j = 0; j < noCol; j++)
-			col[j] = (ILubyte)igetc();
+			if (iread(&col[j], 1, 1) != 1)
+				return IL_FALSE;
 		
 		for (k = 0; k < count; k++, scan += bytes) {
 			for(j = 0; j < noCol; j++)
@@ -340,21 +352,26 @@ static ILuint channelReadPure(ILubyte *scan, ILint width, ILint noCol, ILint *of
 	return IL_TRUE;
 }
 
-static ILuint channelReadMixed(ILubyte *scan, ILint width, ILint noCol, ILint *off, ILint bytes)
+ILboolean channelReadMixed(ILubyte *scan, ILint width, ILint noCol, ILint *off, ILint bytes)
 {
 	ILint	count;
 	int		i, j, k;
 	ILubyte	col[4];
-	
+
 	for(i = 0; i < width; i += count) {
 		if (ieof())
 			return IL_FALSE;
-		
-		count = (ILubyte)igetc();
-		
-		if (count >= 128) {		// Repeated sequence
-			if (count == 128)	// Long run
-				iread(&count, 2, 1);
+
+		count = igetc();
+		if (count == IL_EOF)
+			return IL_FALSE;
+
+		if (count >= 128) {  // Repeated sequence
+			if (count == 128) {  // Long run
+				count = GetLittleUShort();
+				if (ieof())
+					return IL_FALSE;
+			}
 			else
 				count -= 127;
 			
@@ -363,10 +380,11 @@ static ILuint channelReadMixed(ILubyte *scan, ILint width, ILint noCol, ILint *o
 				//fprintf(stderr, "ERROR: FF_PIC_load(): Overrun scanline (Repeat) [%d + %d > %d] (NC=%d)\n", i, count, width, noCol);
 				return IL_FALSE;
 			}
-			
+
 			for (j = 0; j < noCol; j++)
-				col[j] = (ILubyte)igetc();
-			
+				if (iread(&col[j], 1, 1) != 1)
+					return IL_FALSE;
+
 			for (k = 0; k < count; k++, scan += bytes) {
 				for (j = 0; j < noCol; j++)
 					scan[off[j]] = col[j];
@@ -380,7 +398,8 @@ static ILuint channelReadMixed(ILubyte *scan, ILint width, ILint noCol, ILint *o
 			
 			for (k = count; k > 0; k--, scan += bytes) {
 				for (j = 0; j < noCol; j++)
-					scan[off[j]] = (ILubyte)igetc();
+					if (iread(&scan[off[j]], 1, 1) != 1)
+						return IL_FALSE;
 			}
 		}
 	}

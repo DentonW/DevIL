@@ -116,14 +116,18 @@ ILboolean iLoadDoomInternal()
 		iseek(first_pos + column_offset, IL_SEEK_SET);
 
 		while (1) {
-			iread(&topdelta, 1, 1);
+			if (iread(&topdelta, 1, 1) != 1)
+				return IL_FALSE;
 			if (topdelta == 255)
 				break;
-			iread(&length, 1, 1);
-			iread(&post, 1, 1); // Skip extra byte for scaling
+			if (iread(&length, 1, 1) != 1)
+				return IL_FALSE;
+			if (iread(&post, 1, 1) != 1)
+				return IL_FALSE; // Skip extra byte for scaling
 
 			for (row_loop = 0; row_loop < length; row_loop++) {
-				iread(&post, 1, 1);
+				if (iread(&post, 1, 1) != 1)
+					return IL_FALSE;
 				if (row_loop + topdelta < height)
 					iCurImage->Data[(row_loop+topdelta) * width + column_loop] = post;
 			}
@@ -238,7 +242,8 @@ ILboolean iLoadDoomFlatInternal()
 	iCurImage->Pal.PalType = IL_PAL_RGB24;
 	memcpy(iCurImage->Pal.Palette, ilDefaultDoomPal, IL_DOOMPAL_SIZE);
 
-	iread(iCurImage->Data, 1, 4096);
+	if (iread(iCurImage->Data, 1, 4096) != 4096)
+		return IL_FALSE;
 
 	if (ilGetBoolean(IL_CONV_PAL) == IL_TRUE) {
 		NewData = (ILubyte*)ialloc(iCurImage->SizeOfData * 4);

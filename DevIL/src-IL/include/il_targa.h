@@ -97,8 +97,8 @@ ILboolean	iSaveTargaInternal(ILvoid);
 ILboolean	iReadBwTga(TARGAHEAD *Header);
 ILboolean	iReadColMapTga(TARGAHEAD *Header);
 ILboolean	iReadUnmapTga(TARGAHEAD *Header);
-ILvoid		iUncompressTgaData(ILimage *Image);
-ILvoid		i16BitTarga(ILimage *Image);
+ILboolean	iUncompressTgaData(ILimage *Image);
+ILboolean	i16BitTarga(ILimage *Image);
 ILvoid		GetDateTime(ILuint *Month, ILuint *Day, ILuint *Yr, ILuint *Hr, ILuint *Min, ILuint *Sec);
 
 

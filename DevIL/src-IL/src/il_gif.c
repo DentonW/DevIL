@@ -15,13 +15,6 @@
 //-----------------------------------------------------------------------------
 
 
-//
-//
-// @TODO:  Complete this code!
-//
-//
-
-
 #include "il_internal.h"
 #ifndef IL_NO_GIF
 
@@ -82,7 +75,8 @@ ILboolean iIsValidGif()
 {
 	char Header[6];
 	
-	iread(Header, 1, 6);
+	if (iread(Header, 1, 6) != 6)
+		return IL_FALSE;
 	iseek(-6, IL_SEEK_CUR);
 
 	if (!strnicmp(Header, "GIF87A", 6))
@@ -149,7 +143,8 @@ ILboolean iLoadGifInternal()
 
 	GlobalPal.Palette = NULL;
 	GlobalPal.PalSize = 0;
-	iread(&Header, sizeof(Header), 1);
+	if (iread(&Header, sizeof(Header), 1) != 1)
+		return IL_FALSE;
 
 	if (!strnicmp(Header.Sig, "GIF87A", 6)) {
 		GifType = GIF87A;
@@ -193,7 +188,10 @@ ILboolean GetPalette(ILubyte Info, ILpal *Pal)
 	Pal->Palette = (ILubyte*)ialloc(Pal->PalSize);
 	if (Pal->Palette == NULL)
 		return IL_FALSE;
-	iread(Pal->Palette, 1, Pal->PalSize);
+	if (iread(Pal->Palette, 1, Pal->PalSize) != IL_FALSE) {
+		ifree(Pal->Palette);
+		return IL_FALSE;
+	}
 
 	return IL_TRUE;
 }
@@ -331,10 +329,8 @@ ILboolean SkipExtensions(GFXCONTROL *Gfx)
 		switch (Label)
 		{
 			case 0xF9:
-				if (iread(Gfx, sizeof(GFXCONTROL) - sizeof(ILboolean), 1) != 1) {
-					ilSetError(IL_FILE_READ_ERROR);
+				if (iread(Gfx, sizeof(GFXCONTROL) - sizeof(ILboolean), 1) != 1)
 					return IL_FALSE;
-				}
 				Gfx->Used = IL_FALSE;
 
 				break;

@@ -12,7 +12,6 @@
 
 
 #include "ilu_internal.h"
-#include "ilu_alloc.h"
 
 // We can use ilSetError() in ILU, because it *is* exported, but there is
 //	no prototype in il.h, so we define it in il_error.h of ILU

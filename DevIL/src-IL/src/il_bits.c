@@ -58,7 +58,7 @@ BITFILE *bfile(ILHANDLE File)
 ILint bclose(BITFILE *BitFile)
 {
 	if (BitFile == NULL || BitFile->File == NULL)
-		return EOF;
+		return IL_EOF;
 
 	icloser(BitFile->File);
 	ifree(BitFile);
@@ -125,7 +125,7 @@ ILint bread(ILvoid *Buffer, ILuint Size, ILuint Number, BITFILE *BitFile)
 	while (BuffPos < Count) {
 		if (BitFile->ByteBitOff < 0 || BitFile->ByteBitOff > 7) {
 			BitFile->ByteBitOff = 7;
-			if (!iread(&BitFile->Buff, 1, 1))  // Reached eof or error...
+			if (iread(&BitFile->Buff, 1, 1) != 1)  // Reached eof or error...
 				return BuffPos;
 		}
 

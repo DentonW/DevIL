@@ -15,7 +15,6 @@
 #include "ilu_states.h"
 #include <float.h>
 #include <limits.h>
-#include "ilu_alloc.h"
 
 
 ILboolean iluCrop2D(ILuint XOff, ILuint YOff, ILuint Width, ILuint Height)
@@ -36,9 +35,8 @@ ILboolean iluCrop2D(ILuint XOff, ILuint YOff, ILuint Width, ILuint Height)
 		return IL_FALSE;
 	}
 
-	Data = (ILubyte*)malloc(iluCurImage->SizeOfData);
+	Data = (ILubyte*)ialloc(iluCurImage->SizeOfData);
 	if (Data == NULL) {
-		ilSetError(ILU_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -61,7 +59,7 @@ ILboolean iluCrop2D(ILuint XOff, ILuint YOff, ILuint Width, ILuint Height)
 		}
 	}
 
-	free(Data);
+	ifree(Data);
 
 	return IL_TRUE;
 }
@@ -85,9 +83,8 @@ ILboolean iluCrop3D(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Width, ILuint 
 		return IL_FALSE;
 	}
 
-	Data = (ILubyte*)malloc(iluCurImage->SizeOfData);
+	Data = (ILubyte*)ialloc(iluCurImage->SizeOfData);
 	if (Data == NULL) {
-		ilSetError(ILU_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -96,7 +93,7 @@ ILboolean iluCrop3D(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Width, ILuint 
 	Origin = iluCurImage->Origin;
 	ilCopyPixels(0, 0, 0, iluCurImage->Width, iluCurImage->Height, iluCurImage->Depth, iluCurImage->Format, iluCurImage->Type, Data);
 	if (!ilTexImage(Width - XOff, Height - YOff, Depth - ZOff, iluCurImage->Bpp, iluCurImage->Format, iluCurImage->Type, NULL)) {
-		free(Data);
+		ifree(Data);
 	}
 	iluCurImage->Origin = Origin;
 
@@ -111,7 +108,7 @@ ILboolean iluCrop3D(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Width, ILuint 
 		}
 	}
 
-	free(Data);
+	ifree(Data);
 
 	return IL_TRUE;
 }
@@ -203,9 +200,8 @@ ILboolean ILAPIENTRY iluEnlargeCanvas(ILuint Width, ILuint Height, ILuint Depth)
 
 	AddX *= iluCurImage->Bpp;
 
-	Data = (ILubyte*)malloc(iluCurImage->SizeOfData);
+	Data = (ILubyte*)ialloc(iluCurImage->SizeOfData);
 	if (Data == NULL) {
-		ilSetError(ILU_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -242,7 +238,7 @@ ILboolean ILAPIENTRY iluEnlargeCanvas(ILuint Width, ILuint Height, ILuint Depth)
 		}
 	}
 
-	free(Data);
+	ifree(Data);
 
 	return IL_TRUE;
 }
@@ -261,9 +257,8 @@ ILboolean ILAPIENTRY iluFlipImage()
 		return IL_FALSE;
 	}
 
-	Flipped = (ILubyte*)malloc(iluCurImage->SizeOfData);
+	Flipped = (ILubyte*)ialloc(iluCurImage->SizeOfData);
 	if (Flipped == NULL) {
-		ilSetError(ILU_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -280,7 +275,7 @@ ILboolean ILAPIENTRY iluFlipImage()
 		}
 	}
 
-	free(iluCurImage->Data);
+	ifree(iluCurImage->Data);
 	iluCurImage->Data = Flipped;
 
 	return IL_TRUE;
@@ -302,9 +297,8 @@ ILboolean ILAPIENTRY iluMirror()
 		return IL_FALSE;
 	}
 
-	Data = (ILubyte*)malloc(iluCurImage->SizeOfData);
+	Data = (ILubyte*)ialloc(iluCurImage->SizeOfData);
 	if (Data == NULL) {
-		ilSetError(ILU_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -354,7 +348,7 @@ ILboolean ILAPIENTRY iluMirror()
 			break;
 	}
 
-	free(iluCurImage->Data);
+	ifree(iluCurImage->Data);
 	iluCurImage->Data = Data;
 
 	return IL_TRUE;
@@ -543,9 +537,8 @@ ILboolean ILAPIENTRY iluWave(ILfloat Angle)
 		return IL_FALSE;
 	}
 
-	TempBuff = malloc(iluCurImage->SizeOfData);
+	TempBuff = (ILubyte*)ialloc(iluCurImage->SizeOfData);
 	if (TempBuff == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -569,7 +562,7 @@ ILboolean ILAPIENTRY iluWave(ILfloat Angle)
 		}
 	}
 
-	free(TempBuff);
+	ifree(TempBuff);
 
 	return IL_TRUE;
 }
@@ -657,7 +650,9 @@ ILuint ILAPIENTRY iluColoursUsed()
 	// I have determined that the average number of colours versus
 	//	the number of pixels is about a 1:8 ratio, so divide by 8.
 	HeapSize = iluCurImage->SizeOfData / iluCurImage->Bpp / 8;
-	Heap[0] = (BUCKET*)malloc(HeapSize * sizeof(BUCKET));
+	Heap[0] = (BUCKET*)ialloc(HeapSize * sizeof(BUCKET));
+	if (Heap[0] == NULL)
+		return IL_FALSE;
 
 	for (i = 0; i < SizeData; i += Bpp) {
 		*(ILuint*)ColTemp = 0;
@@ -677,10 +672,12 @@ ILuint ILAPIENTRY iluColoursUsed()
 		// Add to hash table
 		if (Buckets[BucketPos].Next == NULL) {
 			NumCols++;
-			//Buckets[BucketPos].Next = (BUCKET*)malloc(sizeof(BUCKET));
+			//Buckets[BucketPos].Next = (BUCKET*)ialloc(sizeof(BUCKET));
 			Buckets[BucketPos].Next = Heap[HeapPos] + HeapPtr++;
 			if (HeapPtr >= HeapSize) {
-				Heap[++HeapPos] = (BUCKET*)malloc(HeapSize * sizeof(BUCKET));
+				Heap[++HeapPos] = (BUCKET*)ialloc(HeapSize * sizeof(BUCKET));
+				if (Heap[HeapPos] == NULL)
+					return IL_FALSE;
 				HeapPtr = 0;
 			}
 			*(ILuint*)Buckets[BucketPos].Next->Colours = *(ILuint*)ColTemp;
@@ -702,10 +699,12 @@ ILuint ILAPIENTRY iluColoursUsed()
 				if (ColVal != *(ILuint*)Temp->Colours) {  // Check against last entry
 					NumCols++;
 					Temp = Buckets[BucketPos].Next;
-					//Buckets[BucketPos].Next = (BUCKET*)malloc(sizeof(BUCKET));
+					//Buckets[BucketPos].Next = (BUCKET*)ialloc(sizeof(BUCKET));
 					Buckets[BucketPos].Next = Heap[HeapPos] + HeapPtr++;
 					if (HeapPtr >= HeapSize) {
-						Heap[++HeapPos] = (BUCKET*)malloc(HeapSize * sizeof(BUCKET));
+						Heap[++HeapPos] = (BUCKET*)ialloc(HeapSize * sizeof(BUCKET));
+						if (Heap[HeapPos] == NULL)
+							return IL_FALSE;
 						HeapPtr = 0;
 					}
 					Buckets[BucketPos].Next->Next = Temp;
@@ -719,7 +718,7 @@ ILuint ILAPIENTRY iluColoursUsed()
 	for (i = 0; i < 9; i++) {
 		if (Heap[i] == NULL)
 			break;
-		free(Heap[i]);
+		ifree(Heap[i]);
 	}
 
 	return NumCols;

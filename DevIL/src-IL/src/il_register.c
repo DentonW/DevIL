@@ -199,8 +199,9 @@ ILvoid ilRemoveRegistered()
 
 ILboolean iRegisterLoad(const ILstring FileName)
 {
-	iFormatL *TempNode = LoadProcs;
-	ILstring Ext = iGetExtension(FileName);
+	iFormatL	*TempNode = LoadProcs;
+	ILstring	Ext = iGetExtension(FileName);
+	ILenum		Error;
 
 	if (!Ext)
 		return IL_FALSE;
@@ -211,7 +212,14 @@ ILboolean iRegisterLoad(const ILstring FileName)
 #else
 		if (_wcsicmp(Ext, TempNode->Ext)) {
 #endif//_UNICODE
-			return TempNode->Load(FileName);
+			Error = TempNode->Load(FileName);
+			if (Error == IL_NO_ERROR || Error == 0) {  // 0 and IL_NO_ERROR are both valid.
+				return IL_TRUE;
+			}
+			else {
+				ilSetError(Error);
+				return IL_FALSE;
+			}
 		}
 		TempNode = TempNode->Next;
 	}
@@ -222,8 +230,9 @@ ILboolean iRegisterLoad(const ILstring FileName)
 
 ILboolean iRegisterSave(const ILstring FileName)
 {
-	iFormatS *TempNode = SaveProcs;
-	ILstring Ext = iGetExtension(FileName);
+	iFormatS	*TempNode = SaveProcs;
+	ILstring	Ext = iGetExtension(FileName);
+	ILenum		Error;
 
 	if (!Ext)
 		return IL_FALSE;
@@ -234,7 +243,14 @@ ILboolean iRegisterSave(const ILstring FileName)
 #else
 		if (_wcsicmp(Ext, TempNode->Ext)) {
 #endif//_UNICODE
-			return TempNode->Save(FileName);
+			Error = TempNode->Save(FileName);
+			if (Error == IL_NO_ERROR || Error == 0) {  // 0 and IL_NO_ERROR are both valid.
+				return IL_TRUE;
+			}
+			else {
+				ilSetError(Error);
+				return IL_FALSE;
+			}
 		}
 		TempNode = TempNode->Next;
 	}

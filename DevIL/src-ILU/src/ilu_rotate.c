@@ -13,7 +13,6 @@
 
 #include "ilu_internal.h"
 #include "ilu_states.h"
-#include "ilu_alloc.h"
 
 
 ILboolean ILAPIENTRY iluRotate(ILfloat Angle)
@@ -47,9 +46,8 @@ ILboolean ILAPIENTRY iluRotate(ILfloat Angle)
 			iluCurImage = ilGetCurImage();
 			iluCurImage->Pal.PalSize = Temp->Pal.PalSize;
 			iluCurImage->Pal.PalType = Temp->Pal.PalType;
-			iluCurImage->Pal.Palette = (ILubyte*)malloc(Temp->Pal.PalSize);
+			iluCurImage->Pal.Palette = (ILubyte*)ialloc(Temp->Pal.PalSize);
 			if (iluCurImage->Pal.Palette == NULL) {
-				ilSetError(ILU_OUT_OF_MEMORY);
 				ilCloseImage(Temp);
 				return IL_FALSE;
 			}

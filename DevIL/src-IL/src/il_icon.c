@@ -62,9 +62,9 @@ ILboolean ilLoadIconL(ILvoid *Lump, ILuint Size)
 ILboolean iLoadIconInternal()
 {
 	ICODIR		IconDir;
-	ICODIRENTRY	*DirEntries;
-	ICOIMAGE	*IconImages;
-	ILimage		*Image=NULL;
+	ICODIRENTRY	*DirEntries = NULL;
+	ICOIMAGE	*IconImages = NULL;
+	ILimage		*Image = NULL;
 	ILint		i;
 	ILuint		Size, PadSize, j, k, l, m, /*NumImages = 0,*/ CurAndByte, PadCount, AndBytes;
 	ILboolean	BaseCreated = IL_FALSE;
@@ -74,26 +74,34 @@ ILboolean iLoadIconInternal()
 		return IL_FALSE;
 	}
 
-	iread(&IconDir, sizeof(ICODIR), 1);
+	if (iread(&IconDir, sizeof(ICODIR), 1) != 1)
+		goto file_read_error;
 	DirEntries = (ICODIRENTRY*)ialloc(sizeof(ICODIRENTRY) * IconDir.Count);
 	IconImages = (ICOIMAGE*)ialloc(sizeof(ICOIMAGE) * IconDir.Count);
-	if (DirEntries == NULL || IconImages == NULL) {
+	if (DirEntries == NULL || IconImages == NULL)
 		return IL_FALSE;
-	}
 
-	iread(DirEntries, sizeof(ICODIRENTRY), IconDir.Count);
+	// Make it easier for file_read_error.
+	for (i = 0; i < IconDir.Count; i++)
+		memset(&IconImages[i], 0, sizeof(ICOIMAGE));
+
+	if (iread(DirEntries, sizeof(ICODIRENTRY), IconDir.Count) != (ILuint)IconDir.Count)
+		goto file_read_error;
 
 	for (i = 0; i < IconDir.Count; i++) {
 		iseek(DirEntries[i].Offset, IL_SEEK_SET);
-		iread(&IconImages[i].Head, 1, sizeof(INFOHEAD));
+		if (iread(&IconImages[i].Head, sizeof(INFOHEAD), 1) != 1)
+			goto file_read_error;
 
 		if (IconImages[i].Head.BitCount < 8) {
 			IconImages[i].Pal = (ILubyte*)ialloc(IconImages[i].Head.ColourUsed * 4);
-			iread(IconImages[i].Pal, 1, IconImages[i].Head.ColourUsed * 4);
+			if (iread(IconImages[i].Pal, IconImages[i].Head.ColourUsed * 4, 1) != 1)
+				goto file_read_error;
 		}
 		else if (IconImages[i].Head.BitCount == 8) {
 			IconImages[i].Pal = (ILubyte*)ialloc(256 * 4);
-			iread(IconImages[i].Pal, 1, 256 * 4);
+			if (iread(IconImages[i].Pal, 1, 256 * 4) != 256*4)
+				goto file_read_error;
 		}
 		else {
 			IconImages[i].Pal = NULL;
@@ -108,12 +116,14 @@ ILboolean iLoadIconInternal()
 			Size = (IconImages[i].Head.Width * (IconImages[i].Head.Height / 2) * IconImages[i].Head.BitCount) >> 3;
 		}
 		IconImages[i].Data = (ILubyte*)ialloc(Size);
-		iread(IconImages[i].Data, 1, Size);
+		if (iread(IconImages[i].Data, 1, Size) != Size)
+			goto file_read_error;
 
 		//Size = (IconImages[i].Head.Width * (IconImages[i].Head.Height / 2)) >> 3;  // 1 bpp
 		Size = ((IconImages[i].Head.Width >> 3) + PadSize) * (IconImages[i].Head.Height / 2);
 		IconImages[i].AND = (ILubyte*)ialloc(Size);
-		iread(IconImages[i].AND, 1, Size);
+		if (iread(IconImages[i].AND, 1, Size) != Size)
+			goto file_read_error;
 	}
 
 
@@ -232,6 +242,21 @@ ILboolean iLoadIconInternal()
 	ilFixImage();
 
 	return IL_TRUE;
+
+file_read_error:
+	for (i = 0; i < IconDir.Count; i++) {
+		if (IconImages[i].Pal)
+			ifree(IconImages[i].Pal);
+		if (IconImages[i].Data)
+			ifree(IconImages[i].Data);
+		if (IconImages[i].AND)
+			ifree(IconImages[i].AND);
+	}
+	if (IconImages)
+		ifree(IconImages);
+	if (DirEntries)
+		ifree(DirEntries);
+	return IL_FALSE;
 }
 
 

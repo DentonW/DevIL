@@ -100,6 +100,8 @@ ILAPI ILenum		ILAPIENTRY ilTypeFromExt(const char *FileName);
 ILAPI ILimage*		ILAPIENTRY ilNewImage(ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILubyte Bpc);
 ILAPI ILvoid		ILAPIENTRY ilSetCurImage(ILimage *Image);
 ILAPI ILvoid		ILAPIENTRY ilSetError(ILenum Error);
+ILAPI ILvoid*		ILAPIENTRY ialloc(ILuint Size);
+ILAPI ILvoid		ILAPIENTRY ifree(ILvoid *Ptr);
 
 ILAPI ILubyte		ILAPIENTRY ilGetBppFormat(ILenum Format);
 ILAPI ILubyte		ILAPIENTRY ilGetBppPal(ILenum PalType);

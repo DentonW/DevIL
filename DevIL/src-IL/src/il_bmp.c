@@ -67,9 +67,10 @@ ILboolean ilIsValidBmpL(ILvoid *Lump, ILuint Size)
 
 
 // Internal function used to get the .bmp header from the current file.
-ILvoid iGetBmpHead(BMPHEAD *Header)
+ILboolean iGetBmpHead(BMPHEAD *Header)
 {
-	iread(Header, 1, sizeof(BMPHEAD));
+	if (iread(Header, sizeof(BMPHEAD), 1) != 1)
+		return IL_FALSE;
 
 	Header->bfType			= UShort(Header->bfType);
 	Header->bfSize			= Int(Header->bfSize);
@@ -87,13 +88,14 @@ ILvoid iGetBmpHead(BMPHEAD *Header)
 	Header->biClrUsed		= Int(Header->biClrUsed);
 	Header->biClrImportant	= Int(Header->biClrImportant);
 
-	return;
+	return IL_TRUE;
 }
 
 
-ILvoid iGetOS2Head(OS2_HEAD *Header)
+ILboolean iGetOS2Head(OS2_HEAD *Header)
 {
-	iread(Header, 1, sizeof(OS2_HEAD));
+	if (iread(Header, sizeof(OS2_HEAD), 1) != 1)
+		return IL_FALSE;
 
 	Header->bfType		= UShort(Header->bfType);
 	Header->biSize		= UInt(Header->biSize);
@@ -108,7 +110,7 @@ ILvoid iGetOS2Head(OS2_HEAD *Header)
 
 	iseek((ILint)Header->cbFix - 12, IL_SEEK_CUR);  // Skip rest of header, if any.
 
-	return;
+	return IL_TRUE;
 }
 
 
@@ -340,7 +342,8 @@ ILboolean ilReadUncompBmp(BMPHEAD *Header)
 
 	// Read the palette
 	iseek(sizeof(BMPHEAD), IL_SEEK_SET);
-	iread(iCurImage->Pal.Palette, 1, iCurImage->Pal.PalSize);
+	if (iread(iCurImage->Pal.Palette, 1, iCurImage->Pal.PalSize) != iCurImage->Pal.PalSize)
+		return IL_FALSE;
 
 	// Seek to the data from the "beginning" of the file
 	iseek(Header->bfDataOff, IL_SEEK_SET);
@@ -382,7 +385,8 @@ ILboolean ilReadUncompBmp(BMPHEAD *Header)
 					for (j = 0; j < iCurImage->Height; j++) {
 						Read = 0;
 						for (i = 0; i < iCurImage->Width; ) {
-							iread(&ByteData, 1, 1);
+							if (iread(&ByteData, 1, 1) != 1)
+								return IL_FALSE;
 							Read++;
 							k = 128;
 							for (c = 0; c < 8; c++) {
@@ -423,7 +427,8 @@ ILboolean ilReadUncompBmp(BMPHEAD *Header)
 					PadSize = ((8 - (iCurImage->Width % 8)) / 2) % 4;  // Has to truncate
 					for (j = 0; j < iCurImage->Height; j++) {
 						for (i = 0; i < iCurImage->Width; i++) {
-							iread(&ByteData, 1, 1);
+							if (iread(&ByteData, 1, 1) != 1)
+								return IL_FALSE;
 							iCurImage->Data[j * iCurImage->Width + i] = ByteData >> 4;
 							if (++i == iCurImage->Width)
 								break;
@@ -440,7 +445,8 @@ ILboolean ilReadUncompBmp(BMPHEAD *Header)
 	else {
 		PadSize = (4 - (iCurImage->Bps % 4)) % 4;
 		if (PadSize == 0) {
-			iread(iCurImage->Data, 1, iCurImage->SizeOfPlane);
+			if (iread(iCurImage->Data, 1, iCurImage->SizeOfPlane) != iCurImage->SizeOfPlane)
+				return IL_FALSE;
 		}
 		else {  // M$ requires lines to be padded if the widths aren't multiples of 4.
 			if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST) {
@@ -458,7 +464,8 @@ ILboolean ilReadUncompBmp(BMPHEAD *Header)
 			else {
 				PadSize = (4 - (iCurImage->Bps % 4));
 				for (i = 0; i < iCurImage->SizeOfPlane; i += iCurImage->Bps) {
-					iread(iCurImage->Data + i, 1, iCurImage->Bps);
+					if (iread(iCurImage->Data + i, 1, iCurImage->Bps) != iCurImage->Bps)
+						return IL_FALSE;
 					iseek(PadSize, IL_SEEK_CUR);
 				}
 			}
@@ -483,7 +490,7 @@ ILboolean ilReadRLE8Bmp(BMPHEAD *Header)
 
 	// A height of 0 is illegal
 	if (Header->biHeight == 0)
-		goto illegal_file_value;
+		return IL_FALSE;
 
 	iCurImage->Format = IL_COLOUR_INDEX;
 	iCurImage->Pal.PalType = IL_PAL_BGR32;
@@ -504,7 +511,7 @@ ILboolean ilReadRLE8Bmp(BMPHEAD *Header)
 	// Read the palette
 	iseek(sizeof(BMPHEAD), IL_SEEK_SET);
 	if (iread(iCurImage->Pal.Palette, iCurImage->Pal.PalSize, 1) != 1)
-		goto file_read_error;
+		return IL_FALSE;
 
 	// Seek to the data from the "beginning" of the file
 	iseek(Header->bfDataOff, IL_SEEK_SET);
@@ -515,7 +522,7 @@ ILboolean ilReadRLE8Bmp(BMPHEAD *Header)
 		while (1)
 		{
 			if (iread(Bytes, sizeof(Bytes), 1) != 1)
-				goto file_read_error;
+				return IL_FALSE;
 			if (Bytes[0] == 0x0) {  // Escape sequence
 				if (Bytes[1] == 0x0)  // End of line
 					break;
@@ -525,7 +532,7 @@ ILboolean ilReadRLE8Bmp(BMPHEAD *Header)
 				}
 				else if (Bytes[1] == 0x2) {
 					if (iread(Bytes, sizeof(Bytes), 1) != 1)
-						goto file_read_error;
+						return IL_FALSE;
 					x += Bytes[0];
 					y += Bytes[1];
 					if (y >= iCurImage->Height)
@@ -533,14 +540,14 @@ ILboolean ilReadRLE8Bmp(BMPHEAD *Header)
 				}
 				else {  // Run of pixels
 					if ((ILint)iCurImage->Width - (ILint)x < (ILint)Bytes[1])
-						goto illegal_file_value;
+						return IL_FALSE;
 					if (iread(iCurImage->Data + (y * iCurImage->Width + x),
 								IL_MIN(((ILint)iCurImage->Width-(ILint)x), Bytes[1]), 1) != 1)
-						goto file_read_error;
+						return IL_FALSE;
 					x += Bytes[1];
 					if (Bytes[1] % 2)  // Must be on a word boundary
 						if (iread( &Bytes[0], 1, 1) != 1)
-							goto file_read_error;
+							return IL_FALSE;
 				}
 			}
 			else
@@ -551,14 +558,6 @@ ILboolean ilReadRLE8Bmp(BMPHEAD *Header)
 		}
 	}
 	return IL_TRUE;
-
-file_read_error:
-	ilSetError( IL_FILE_READ_ERROR );
-	return IL_FALSE;
-
-illegal_file_value:
-	ilSetError( IL_ILLEGAL_FILE_VALUE );
-	return IL_FALSE;
 }
 
 #else		// if IL_USE_POINTER == 1
@@ -600,7 +599,7 @@ ILboolean ilReadRLE8Bmp(BMPHEAD *Header)
 	// Read the palette
 	iseek( sizeof(BMPHEAD), IL_SEEK_SET );
 	if ( iread( iCurImage->Pal.Palette, iCurImage->Pal.PalSize, 1 ) != 1 )
-		goto file_read_error;
+		return IL_FALSE;
 
 	// Seek to the data from the "beginning" of the file
 	iseek( Header->bfDataOff, IL_SEEK_SET );
@@ -611,7 +610,7 @@ ILboolean ilReadRLE8Bmp(BMPHEAD *Header)
 	while ( start < end )
 	{
 		if ( iread( Bytes, sizeof(Bytes), 1 ) != 1 )
-			goto file_read_error;
+			return IL_FALSE;
 		if ( Bytes[0] == 0x0 )  // Escape sequence
 		{
 			if ( Bytes[1] == 0x0 )			// End of line
@@ -625,17 +624,17 @@ ILboolean ilReadRLE8Bmp(BMPHEAD *Header)
 				break;
 			else if ( Bytes[1] == 0x2 ) {
 				if (iread(&Bytes[0], sizeof(Bytes), 1) != 1)
-					goto file_read_error;
+					return IL_FALSE;
 				start += iCurImage->Width * Bytes[1] + Bytes[0];
 			}
 			else  { // Run of pixels
 				if ( iread( start, Bytes[1], 1 ) != 1 )
-					goto file_read_error;
+					return IL_FALSE;
 				start += Bytes[1];
 
 				if (Bytes[1] % 2)	// Must be on a dword boundary
 					if (iread(&Bytes[0], sizeof(Bytes[0]), 1) != 1)
-						goto file_read_error;
+						return IL_FALSE;
 			}
 		}
 		else {
@@ -644,11 +643,6 @@ ILboolean ilReadRLE8Bmp(BMPHEAD *Header)
 		}
 	}
 	return IL_TRUE;
-
-file_read_error:
-	ilSetError( IL_FILE_READ_ERROR );
-	return IL_FALSE;
-
 }
 
 #endif
@@ -690,7 +684,7 @@ ILboolean ilReadRLE4Bmp(BMPHEAD *Header)
 	iseek( sizeof(BMPHEAD), IL_SEEK_SET );
 
 	if ( iread( iCurImage->Pal.Palette, iCurImage->Pal.PalSize, 1 ) != 1 )
-		goto file_read_error;
+		return IL_FALSE;
 
 	// Seek to the data from the "beginning" of the file
 	iseek( Header->bfDataOff, IL_SEEK_SET );
@@ -701,7 +695,7 @@ ILboolean ilReadRLE4Bmp(BMPHEAD *Header)
 		while ( 1 )
 		{
 			if ( iread( &Bytes[0], sizeof(Bytes), 1 ) != 1 )
-				goto file_read_error;
+				return IL_FALSE;
 			if ( Bytes[0] == 0x0 )				// Escape sequence
 			{
 				if ( Bytes[1] == 0x0 )			// End of line
@@ -714,7 +708,7 @@ ILboolean ilReadRLE4Bmp(BMPHEAD *Header)
 				else if ( Bytes[1] == 0x2 )
 				{
 					if ( iread( &Bytes[0], sizeof(Bytes), 1 ) != 1 )
-						goto file_read_error;
+						return IL_FALSE;
 					x += Bytes[0];
 					y += Bytes[1];
 					if ( y >= iCurImage->Height )
@@ -731,7 +725,7 @@ ILboolean ilReadRLE4Bmp(BMPHEAD *Header)
 						if ( (i & 0x01) == 0 )
 						{
 							if ( iread( &Bytes[0], sizeof(Bytes[0]), 1 ) != 1 )
-								goto file_read_error;
+								return IL_FALSE;
 							byte = (Bytes[0] >> 4);
 						}
 						else
@@ -743,7 +737,7 @@ ILboolean ilReadRLE4Bmp(BMPHEAD *Header)
 
 					if ( align == 1 || align == 2 )	// Must be on a dword boundary
 						if ( iread( &Bytes[0], sizeof(Bytes[0]), 1 ) != 1 )
-							goto file_read_error;
+							return IL_FALSE;
 				}
 			}
 			else
@@ -757,11 +751,6 @@ ILboolean ilReadRLE4Bmp(BMPHEAD *Header)
 		}
 	}
 	return IL_TRUE;
-
-file_read_error:
-
-	ilSetError( IL_FILE_READ_ERROR );
-	return IL_FALSE;
 }
 
 #else		// if IL_USE_POINTER == 1
@@ -802,7 +791,7 @@ ILboolean ilReadRLE4Bmp(BMPHEAD *Header)
 	// Read the palette
 	iseek( sizeof(BMPHEAD), IL_SEEK_SET );
 	if ( iread( iCurImage->Pal.Palette, iCurImage->Pal.PalSize, 1 ) != 1 )
-		goto file_read_error;
+		return IL_FALSE;
 
 	// Seek to the data from the "beginning" of the file
 	iseek( Header->bfDataOff, IL_SEEK_SET );
@@ -813,7 +802,7 @@ ILboolean ilReadRLE4Bmp(BMPHEAD *Header)
 	while ( start < end )
 	{
 		if ( iread( &Bytes[0], sizeof(Bytes), 1 ) != 1 )
-			goto file_read_error;
+			return IL_FALSE;
 		if ( Bytes[0] == 0x0 )		  		// Escape sequence
 		{
 			if ( Bytes[1] == 0x0 )			// End of line
@@ -828,7 +817,7 @@ ILboolean ilReadRLE4Bmp(BMPHEAD *Header)
 			else if ( Bytes[1] == 0x2 )
 			{
 				if ( iread( &Bytes[0], sizeof(Bytes), 1 ) != 1 )
-					goto file_read_error;
+					return IL_FALSE;
 				start += iCurImage->Width * Bytes[1] + Bytes[0];
 			}
 			else						// Run of pixels
@@ -840,7 +829,7 @@ ILboolean ilReadRLE4Bmp(BMPHEAD *Header)
 					if ( (i & 0x01) == 0 )
 					{
 						if ( iread( &Bytes[0], sizeof(Bytes[0]), 1 ) != 1 )
-							goto file_read_error;
+							return IL_FALSE;
 						*start++ = (ILubyte)(Bytes[0] >> 4);
 					}
 					else
@@ -850,7 +839,7 @@ ILboolean ilReadRLE4Bmp(BMPHEAD *Header)
 				align = Bytes[1] % 4;
 				if ( align == 1 || align == 2 )	// Must be on a dword boundary
 					if ( iread( &Bytes[0], sizeof(Bytes[0]), 1 ) != 1 )
-						goto file_read_error;
+						return IL_FALSE;
 			}
 		}
 		else
@@ -863,11 +852,6 @@ ILboolean ilReadRLE4Bmp(BMPHEAD *Header)
 		}
 	}
 	return IL_TRUE;
-
-file_read_error:
-
-	ilSetError( IL_FILE_READ_ERROR );
-	return IL_FALSE;
 }
 
 #endif
@@ -890,7 +874,8 @@ ILboolean iGetOS2Bmp(OS2_HEAD *Header)
 		iCurImage->Pal.PalSize = 2 * 3;
 		iCurImage->Pal.PalType = IL_PAL_BGR24;
 
-		iread(iCurImage->Pal.Palette, 1, 2 * 3);
+		if (iread(iCurImage->Pal.Palette, 1, 2 * 3) != 6)
+			return IL_FALSE;
 
 		PadSize = ((32 - (iCurImage->Width % 32)) / 8) % 4;  // Has to truncate.
 		iseek(Header->DataOff, IL_SEEK_SET);
@@ -898,7 +883,8 @@ ILboolean iGetOS2Bmp(OS2_HEAD *Header)
 		for (j = 0; j < iCurImage->Height; j++) {
 			Read = 0;
 			for (i = 0; i < iCurImage->Width; ) {
-				iread(&ByteData, 1, 1);
+				if (iread(&ByteData, 1, 1) != 1)
+					return IL_FALSE;
 				Read++;
 				k = 128;
 				for (c = 0; c < 8; c++) {
@@ -927,14 +913,16 @@ ILboolean iGetOS2Bmp(OS2_HEAD *Header)
 		iCurImage->Pal.PalSize = 16 * 3;
 		iCurImage->Pal.PalType = IL_PAL_BGR24;
 
-		iread(iCurImage->Pal.Palette, 1, 16 * 3);
+		if (iread(iCurImage->Pal.Palette, 1, 16 * 3) != 16*3)
+			return IL_FALSE;
 
 		PadSize = ((8 - (iCurImage->Width % 8)) / 2) % 4;  // Has to truncate
 		iseek(Header->DataOff, IL_SEEK_SET);
 
 		for (j = 0; j < iCurImage->Height; j++) {
 			for (i = 0; i < iCurImage->Width; i++) {
-				iread(&ByteData, 1, 1);
+				if (iread(&ByteData, 1, 1) != 1)
+					return IL_FALSE;
 				iCurImage->Data[j * iCurImage->Width + i] = ByteData >> 4;
 				if (++i == iCurImage->Width)
 					break;
@@ -955,7 +943,8 @@ ILboolean iGetOS2Bmp(OS2_HEAD *Header)
 		iCurImage->Pal.PalSize = 256 * 3;
 		iCurImage->Pal.PalType = IL_PAL_BGR24;
 
-		iread(iCurImage->Pal.Palette, 1, 256 * 3);
+		if (iread(iCurImage->Pal.Palette, 1, 256 * 3) != 256*3)
+			return IL_FALSE;
 	}
 
 	if (!ilTexImage(Header->cx, Header->cy, 1, (ILubyte)(Header->cBitCount >> 3), IL_BGR, IL_UNSIGNED_BYTE, NULL)) {
@@ -970,11 +959,13 @@ ILboolean iGetOS2Bmp(OS2_HEAD *Header)
 
 	PadSize = PadSize = (4 - (iCurImage->Bps % 4)) % 4;
 	if (PadSize == 0) {
-		iread(iCurImage->Data, 1, iCurImage->SizeOfData);
+		if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) != iCurImage->SizeOfData)
+			return IL_FALSE;
 	}
 	else {
 		for (i = 0; i < iCurImage->Height; i++) {
-			iread(iCurImage->Data + i * iCurImage->Bps, 1, iCurImage->Bps);
+			if (iread(iCurImage->Data + i * iCurImage->Bps, 1, iCurImage->Bps) != iCurImage->Bps)
+				return IL_FALSE;
 			iseek(PadSize, IL_SEEK_CUR);
 		}
 	}
@@ -1131,7 +1122,7 @@ ILboolean iSaveBitmapInternal()
 		ifree(TempPal);
 	}
 	if (TempData != TempImage->Data)
-		free(TempData);
+		ifree(TempData);
 	if (TempImage != iCurImage)
 		ilCloseImage(TempImage);
 

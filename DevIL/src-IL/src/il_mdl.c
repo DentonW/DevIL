@@ -98,7 +98,8 @@ ILboolean iLoadMdlInternal()
 	iseek(TexOff, IL_SEEK_SET);
 
 	for (ImageNum = 0; ImageNum < NumTex; ImageNum++) {
-		iread(TexHead.Name, 1, 64);
+		if (iread(TexHead.Name, 1, 64) != 64)
+			return IL_FALSE;
 		TexHead.Flags = GetLittleUInt();
 		TexHead.Width = GetLittleUInt();
 		TexHead.Height = GetLittleUInt();
@@ -134,8 +135,10 @@ ILboolean iLoadMdlInternal()
 		iCurImage->Pal.PalType = IL_PAL_RGB24;
 
 		iseek(TexHead.Offset, IL_SEEK_SET);
-		iread(iCurImage->Data, 1, TexHead.Width * TexHead.Height);
-		iread(iCurImage->Pal.Palette, 1, 768);
+		if (iread(iCurImage->Data, TexHead.Width * TexHead.Height, 1) != 1)
+			return IL_FALSE;
+		if (iread(iCurImage->Pal.Palette, 1, 768) != 768)
+			return IL_FALSE;
 
 		if (ilGetBoolean(IL_CONV_PAL) == IL_TRUE) {
 			ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);

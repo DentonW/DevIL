@@ -34,8 +34,7 @@
 
 
 __ALLOC_EXTERN mAlloc ialloc_ptr;
-__ALLOC_EXTERN mFree  ifree;
-ILvoid *ialloc(ILuint Size);
+__ALLOC_EXTERN mFree  ifree_ptr;
 
 
 

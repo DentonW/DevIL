@@ -489,7 +489,7 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, const ILstring FileName)
 #ifndef _UNICODE
 	if (FileName == NULL || strlen(FileName) < 1) {
 #else
-	char AnsiName[512];  // @TODO:  May want to use MAX_LEN...
+	char AnsiName[512];
 	if (FileName == NULL || wcslen(FileName) < 1) {
 #endif//_UNICODE
 		ilSetError(IL_INVALID_PARAM);
@@ -555,7 +555,7 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, const ILstring FileName)
 
 		#ifndef IL_NO_PCD
 		case IL_PCD:
-			return ilLoadPcd(FileName, 3);
+			return ilLoadPcd(FileName);
 		#endif
 
 		#ifndef IL_NO_PCX
@@ -691,7 +691,7 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 
 		#ifndef IL_NO_PCD
 		case IL_PCD:
-			return ilLoadPcdF(File, 3);
+			return ilLoadPcdF(File);
 		#endif
 
 		#ifndef IL_NO_PCX
@@ -814,7 +814,7 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, ILvoid *Lump, ILuint Size)
 
 		#ifndef IL_NO_PCD
 		case IL_PCD:
-			return ilLoadPcdL(Lump, Size, 3);
+			return ilLoadPcdL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_PCX
@@ -965,7 +965,7 @@ ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 
 		#ifndef IL_NO_PCD
 		if (!iStrCmp(Ext, IL_TEXT("pcd"))) {
-			return ilLoadPcd(FileName, 3);
+			return ilLoadPcd(FileName);
 		}
 		#endif
 

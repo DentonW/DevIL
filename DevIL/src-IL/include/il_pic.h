@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 05/21/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/pic.h
+// Filename: src-IL/include/il_pic.h
 //
 // Description: Softimage Pic (.pic) functions
 //
@@ -68,11 +68,11 @@ typedef struct CHANNEL
 ILboolean iIsValidPic(ILvoid);
 ILboolean iCheckPic(PIC_HEAD *Header);
 ILboolean iLoadPicInternal(ILvoid);
-static ILuint readScanlines(ILuint *image, ILint width, ILint height, CHANNEL *channel, ILuint alpha);
-static ILuint readScanline(ILubyte *scan, ILint width, CHANNEL *channel,  ILint bytes);
-static ILuint channelReadRaw(ILubyte *scan, ILint width, ILint noCol, ILint *off, ILint bytes);
-static ILuint channelReadPure(ILubyte *scan, ILint width, ILint noCol, ILint *off, ILint bytes);
-static ILuint channelReadMixed(ILubyte *scan, ILint width, ILint noCol, ILint *off, ILint bytes);
+ILboolean readScanlines(ILuint *image, ILint width, ILint height, CHANNEL *channel, ILuint alpha);
+ILuint    readScanline(ILubyte *scan, ILint width, CHANNEL *channel,  ILint bytes);
+ILboolean channelReadRaw(ILubyte *scan, ILint width, ILint noCol, ILint *off, ILint bytes);
+ILboolean channelReadPure(ILubyte *scan, ILint width, ILint noCol, ILint *off, ILint bytes);
+ILboolean channelReadMixed(ILubyte *scan, ILint width, ILint noCol, ILint *off, ILint bytes);
 
 
 

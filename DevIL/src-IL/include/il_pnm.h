@@ -38,7 +38,6 @@ typedef struct PPMINFO
 	ILubyte	Bpp;
 } PPMINFO;
 
-ILvoid		iGetPnmHead(char Header[2]);
 ILboolean	iIsValidPnm(ILvoid);
 ILboolean	iCheckPnm(char Header[2]);
 ILboolean	iLoadPnmInternal(ILvoid);

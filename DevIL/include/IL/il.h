@@ -335,6 +335,7 @@ typedef void			ILvoid;
 #define IL_TIF_AUTHNAME_STRING				0x0720
 #define IL_JPG_SAVE_FORMAT					0x0721
 #define IL_CHEAD_HEADER_STRING				0x0722
+#define IL_PCD_PICNUM						0x0723
 
 
 // DXTC definitions
@@ -423,9 +424,10 @@ typedef void			ILvoid;
 #endif
 
 
-#define IL_SEEK_SET 0
-#define IL_SEEK_CUR 1
-#define IL_SEEK_END 2
+#define IL_SEEK_SET	0
+#define IL_SEEK_CUR	1
+#define IL_SEEK_END	2
+#define IL_EOF		-1
 
 
 // Callback functions for file reading
@@ -451,8 +453,8 @@ typedef ILvoid*		(ILAPIENTRY *mAlloc)(ILuint);
 typedef ILvoid		(ILAPIENTRY *mFree) (ILvoid*);
 
 // Registered format procedures
-typedef ILboolean	(ILAPIENTRY *IL_LOADPROC)(const ILstring);
-typedef ILboolean	(ILAPIENTRY *IL_SAVEPROC)(const ILstring);
+typedef ILenum		(ILAPIENTRY *IL_LOADPROC)(const ILstring);
+typedef ILenum		(ILAPIENTRY *IL_SAVEPROC)(const ILstring);
 
 
 // ImageLib Functions

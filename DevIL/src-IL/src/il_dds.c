@@ -96,43 +96,48 @@ ILboolean ilIsValidDdsL(ILvoid *Lump, ILuint Size)
 
 
 // Internal function used to get the .bmp header from the current file.
-ILvoid iGetDdsHead(DDSHEAD *Header)
+ILboolean iGetDdsHead(DDSHEAD *Header)
 {
-	iread(Header->Signature, 1, 4);
-	Header->Size1 = GetLittleUInt();
-	Header->Flags1 = GetLittleUInt();
-	Header->Height = GetLittleUInt();
-	Header->Width = GetLittleUInt();
-	Header->LinearSize = GetLittleUInt();
-	Header->Depth = GetLittleUInt();
-	Header->MipMapCount = GetLittleUInt();
-	Header->AlphaBitDepth = GetLittleUInt();
-	iread(Header->NotUsed, sizeof(ILuint), 10);
-	Header->Size2 = GetLittleUInt();
-	Header->Flags2 = GetLittleUInt();
-	Header->FourCC = GetLittleUInt();
-	Header->RGBBitCount = GetLittleUInt();
-	Header->RBitMask = GetLittleUInt();
-	Header->GBitMask = GetLittleUInt();
-	Header->BBitMask = GetLittleUInt();
-	Header->RGBAlphaBitMask = GetLittleUInt();
-	Header->ddsCaps1 = GetLittleUInt();
-	Header->ddsCaps2 = GetLittleUInt();
-	Header->ddsCaps3 = GetLittleUInt();
-	Header->ddsCaps4 = GetLittleUInt();
-	Header->TextureStage = GetLittleUInt();
+	if (iread(Header, sizeof(DDSHEAD), 1) != 1)
+		return IL_FALSE;
+
+	Header->Size1			= UInt(Header->Size1);
+	Header->Flags1			= UInt(Header->Flags1);
+	Header->Height			= UInt(Header->Height);
+	Header->Width			= UInt(Header->Width);
+	Header->LinearSize		= UInt(Header->LinearSize);
+	Header->Depth			= UInt(Header->Depth);
+	Header->MipMapCount		= UInt(Header->MipMapCount);
+	Header->AlphaBitDepth	= UInt(Header->AlphaBitDepth);
+	Header->Size2			= UInt(Header->Size2);
+	Header->Flags2			= UInt(Header->Flags2);
+	Header->FourCC			= UInt(Header->FourCC);
+	Header->RGBBitCount		= UInt(Header->RGBBitCount);
+	Header->RBitMask		= UInt(Header->RBitMask);
+	Header->GBitMask		= UInt(Header->GBitMask);
+	Header->BBitMask		= UInt(Header->BBitMask);
+	Header->RGBAlphaBitMask	= UInt(Header->RGBAlphaBitMask);
+	Header->ddsCaps1		= UInt(Header->ddsCaps1);
+	Header->ddsCaps2		= UInt(Header->ddsCaps2);
+	Header->ddsCaps3		= UInt(Header->ddsCaps3);
+	Header->ddsCaps4		= UInt(Header->ddsCaps4);
+	Header->TextureStage	= UInt(Header->TextureStage);
 
 	if (Head.Depth == 0)
 		Head.Depth = 1;
-	
+
 	DecodePixelFormat();
+	if (CompFormat == PF_UNKNOWN) {
+		ilSetError(IL_INVALID_FILE_HEADER);
+		return IL_FALSE;
+	}
 	// Microsoft bug, they're not following their own documentation.
 	if (!(Head.Flags1 & (DDS_LINEARSIZE | DDS_PITCH))) {
 		Head.Flags1 |= DDS_LINEARSIZE;
 		Head.LinearSize = BlockSize;
 	}
 
-	return;
+	return IL_TRUE;
 }
 
 
@@ -353,7 +358,10 @@ ILboolean ReadData()
 			return IL_FALSE;
 		}
 
-		iread(CompData, 1, Head.LinearSize);
+		if (iread(CompData, 1, Head.LinearSize) != (ILuint)Head.LinearSize) {
+			ifree(CompData);
+			return IL_FALSE;
+		}
     } else {
 		Bps = Width * Head.RGBBitCount / 8;
 		CompSize = Bps * Height * Depth;
@@ -367,7 +375,10 @@ ILboolean ReadData()
         Temp = CompData;
 		for (z = 0; z < Depth; z++) {
 	        for (y = 0; y < Height; y++) {
-		        iread(Temp, 1, Bps);
+				if (iread(Temp, 1, Bps) != Bps) {
+					ifree(CompData);
+					return IL_FALSE;
+				}
 				Temp += Bps;
 			}
 		}

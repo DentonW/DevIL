@@ -68,18 +68,19 @@ ILboolean ilIsValidPsdL(ILvoid *Lump, ILuint Size)
 
 
 // Internal function used to get the Psd header from the current file.
-ILvoid iGetPsdHead(PSDHEAD *Header)
+ILboolean iGetPsdHead(PSDHEAD *Header)
 {
-	iread(Header->Signature, 1, 4);
-	Header->Version = GetBigUShort();
-	iread(Header->Reserved, 1, 6);
-	Header->Channels = GetBigUShort();
-	Header->Height = GetBigUInt();
-	Header->Width = GetBigUInt();
-	Header->Depth = GetBigUShort();
-	Header->Mode = GetBigUShort();
+	if (iread(Header, sizeof(PSDHEAD), 1) != 1)
+		return IL_FALSE;
 
-	return;
+	Header->Version		= BigUShort(Header->Version);
+	Header->Channels	= BigUShort(Header->Channels);
+	Header->Height		= BigUInt(Header->Height);
+	Header->Width		= BigUInt(Header->Width);
+	Header->Depth		= BigUShort(Header->Depth);
+	Header->Mode		= BigUShort(Header->Mode);
+
+	return IL_TRUE;
 }
 
 
@@ -211,7 +212,7 @@ ILboolean ReadGrey(PSDHEAD *Head)
 	ILuint		ColorMode, ResourceSize, MiscInfo;
 	ILushort	Compressed;
 	ILenum		Type;
-	ILubyte		*Resources;
+	ILubyte		*Resources = NULL;
 
 	ColorMode = GetBigUInt();  // Skip over the 'color mode data section'
 	iseek(ColorMode, IL_SEEK_CUR);
@@ -221,7 +222,8 @@ ILboolean ReadGrey(PSDHEAD *Head)
 	if (Resources == NULL) {
 		return IL_FALSE;
 	}
-	iread(Resources, 1, ResourceSize);
+	if (iread(Resources, 1, ResourceSize) != ResourceSize)
+		goto cleanup_error;
 
 	MiscInfo = GetBigUInt();
 	iseek(MiscInfo, IL_SEEK_CUR);
@@ -246,16 +248,20 @@ ILboolean ReadGrey(PSDHEAD *Head)
 			ilSetError(IL_FORMAT_NOT_SUPPORTED);
 			return IL_FALSE;
 	}
+
 	if (!ilTexImage(Head->Width, Head->Height, 1, 1, IL_LUMINANCE, Type, NULL))
-		return IL_FALSE;
-
+		goto cleanup_error;
 	if (!PsdGetData(Head, iCurImage->Data, (ILboolean)Compressed))
-		return IL_FALSE;
-
-	ParseResources(ResourceSize, Resources);
+		goto cleanup_error;
+	if (!ParseResources(ResourceSize, Resources))
+		goto cleanup_error;
 	ifree(Resources);
 
 	return IL_TRUE;
+
+cleanup_error:
+	ifree(Resources);
+	return IL_FALSE;
 }
 
 
@@ -263,7 +269,7 @@ ILboolean ReadIndexed(PSDHEAD *Head)
 {
 	ILuint		ColorMode, ResourceSize, MiscInfo, i, j, NumEnt;
 	ILushort	Compressed;
-	ILubyte		*Palette, *Resources;
+	ILubyte		*Palette = NULL, *Resources = NULL;
 
 	ColorMode = GetBigUInt();  // Skip over the 'color mode data section'
 	if (ColorMode % 3 != 0) {
@@ -271,37 +277,40 @@ ILboolean ReadIndexed(PSDHEAD *Head)
 		return IL_FALSE;
 	}
 	Palette = (ILubyte*)ialloc(ColorMode);
-	if (Palette == NULL) {
+	if (Palette == NULL)
 		return IL_FALSE;
-	}
-	iread(Palette, 1, ColorMode);
+	if (iread(Palette, 1, ColorMode) != ColorMode)
+		goto cleanup_error;
 
 	ResourceSize = GetBigUInt();  // Read the 'image resources section'
 	Resources = (ILubyte*)ialloc(ResourceSize);
 	if (Resources == NULL) {
 		return IL_FALSE;
 	}
-	iread(Resources, 1, ResourceSize);
+	if (iread(Resources, 1, ResourceSize) != ResourceSize)
+		goto cleanup_error;
 
 	MiscInfo = GetBigUInt();
+	if (ieof())
+		goto cleanup_error;
 	iseek(MiscInfo, IL_SEEK_CUR);
 
 	Compressed = GetBigUShort();
+	if (ieof())
+		goto cleanup_error;
 
 	if (Head->Channels != 1 || Head->Depth != 8) {
-		ifree(Palette);
 		ilSetError(IL_FORMAT_NOT_SUPPORTED);
-		return IL_FALSE;
+		goto cleanup_error;
 	}
 	ChannelNum = Head->Channels;
 
 	if (!ilTexImage(Head->Width, Head->Height, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL))
-		return IL_FALSE;
+		goto cleanup_error;
 
 	iCurImage->Pal.Palette = (ILubyte*)ialloc(ColorMode);
 	if (iCurImage->Pal.Palette == NULL) {
-		ifree(Palette);
-		return IL_FALSE;
+		goto cleanup_error;
 	}
 	iCurImage->Pal.PalSize = ColorMode;
 	iCurImage->Pal.PalType = IL_PAL_RGB24;
@@ -313,14 +322,24 @@ ILboolean ReadIndexed(PSDHEAD *Head)
 		iCurImage->Pal.Palette[i+2] = Palette[j+NumEnt*2];
 	}
 	ifree(Palette);
+	Palette = NULL;
 
 	if (!PsdGetData(Head, iCurImage->Data, (ILboolean)Compressed))
-		return IL_FALSE;
+		goto cleanup_error;
 
 	ParseResources(ResourceSize, Resources);
 	ifree(Resources);
+	Resources = NULL;
 
 	return IL_TRUE;
+
+cleanup_error:
+	if (Palette)
+		ifree(Palette);
+	if (Resources)
+		ifree(Resources);
+
+	return IL_FALSE;
 }
 
 
@@ -329,17 +348,17 @@ ILboolean ReadRGB(PSDHEAD *Head)
 	ILuint		ColorMode, ResourceSize, MiscInfo;
 	ILushort	Compressed;
 	ILenum		Format, Type;
-	ILubyte		*Resources;
+	ILubyte		*Resources = NULL;
 
 	ColorMode = GetBigUInt();  // Skip over the 'color mode data section'
 	iseek(ColorMode, IL_SEEK_CUR);
 
 	ResourceSize = GetBigUInt();  // Read the 'image resources section'
 	Resources = (ILubyte*)ialloc(ResourceSize);
-	if (Resources == NULL) {
+	if (Resources == NULL)
 		return IL_FALSE;
-	}
-	iread(Resources, 1, ResourceSize);
+	if (iread(Resources, 1, ResourceSize) != ResourceSize)
+		goto cleanup_error;
 
 	MiscInfo = GetBigUInt();
 	iseek(MiscInfo, IL_SEEK_CUR);
@@ -372,15 +391,18 @@ ILboolean ReadRGB(PSDHEAD *Head)
 			return IL_FALSE;
 	}
 	if (!ilTexImage(Head->Width, Head->Height, 1, (ILubyte)Head->Channels, Format, Type, NULL))
-		return IL_FALSE;
-
+		goto cleanup_error;
 	if (!PsdGetData(Head, iCurImage->Data, (ILboolean)Compressed))
-		return IL_FALSE;
-
-	ParseResources(ResourceSize, Resources);
+		goto cleanup_error;
+	if (!ParseResources(ResourceSize, Resources))
+		goto cleanup_error;
 	ifree(Resources);
 
 	return IL_TRUE;
+
+cleanup_error:
+	ifree(Resources);
+	return IL_FALSE;
 }
 
 
@@ -389,7 +411,7 @@ ILboolean ReadCMYK(PSDHEAD *Head)
 	ILuint		ColorMode, ResourceSize, MiscInfo, Size, i, j;
 	ILushort	Compressed;
 	ILenum		Format, Type;
-	ILubyte		*Resources, *KChannel;
+	ILubyte		*Resources = NULL, *KChannel = NULL;
 
 	ColorMode = GetBigUInt();  // Skip over the 'color mode data section'
 	iseek(ColorMode, IL_SEEK_CUR);
@@ -399,7 +421,8 @@ ILboolean ReadCMYK(PSDHEAD *Head)
 	if (Resources == NULL) {
 		return IL_FALSE;
 	}
-	iread(Resources, 1, ResourceSize);
+	if (iread(Resources, 1, ResourceSize) != ResourceSize)
+		goto cleanup_error;
 
 	MiscInfo = GetBigUInt();
 	iseek(MiscInfo, IL_SEEK_CUR);
@@ -435,20 +458,16 @@ ILboolean ReadCMYK(PSDHEAD *Head)
 			return IL_FALSE;
 	}
 	if (!ilTexImage(Head->Width, Head->Height, 1, (ILubyte)Head->Channels, Format, Type, NULL))
-		return IL_FALSE;
-
+		goto cleanup_error;
 	if (!PsdGetData(Head, iCurImage->Data, (ILboolean)Compressed))
-		return IL_FALSE;
+		goto cleanup_error;
 
 	Size = iCurImage->Bpc * iCurImage->Width * iCurImage->Height;
 	KChannel = (ILubyte*)ialloc(Size);
-	if (KChannel == NULL) {
-		return IL_FALSE;
-	}
-	if (!GetSingleChannel(Head, KChannel, (ILboolean)Compressed)) {
-		ifree(KChannel);
-		return IL_FALSE;
-	}
+	if (KChannel == NULL)
+		goto cleanup_error;
+	if (!GetSingleChannel(Head, KChannel, (ILboolean)Compressed))
+		goto cleanup_error;
 
 	if (Format == IL_RGB) {
 		for (i = 0, j = 0; i < iCurImage->SizeOfData; i += 3, j++) {
@@ -467,10 +486,19 @@ ILboolean ReadCMYK(PSDHEAD *Head)
 		}
 	}
 
-	ParseResources(ResourceSize, Resources);
+	if (!ParseResources(ResourceSize, Resources))
+		goto cleanup_error;
+
 	ifree(Resources);
 	ifree(KChannel);
 
+	return IL_TRUE;
+
+cleanup_error:
+	if (Resources)
+		ifree(Resources);
+	if (KChannel)
+		ifree(KChannel);
 	return IL_FALSE;
 }
 
@@ -486,7 +514,11 @@ ILuint *GetCompChanLen(PSDHEAD *Head)
 		return NULL;
 	}
 
-	iread(RleTable, sizeof(ILushort), Head->Height * ChannelNum);
+	if (iread(RleTable, sizeof(ILushort), Head->Height * ChannelNum) != Head->Height * ChannelNum) {
+		ifree(RleTable);
+		ifree(ChanLen);
+		return NULL;
+	}
 #ifdef __LITTLE_ENDIAN__
 	for (i = 0; i < Head->Height * ChannelNum; i++) {
 		RleTable[i] = SwapShort(RleTable[i]);
@@ -513,7 +545,7 @@ ILboolean PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 	ILubyte		*Channel;
 	ILushort	*ShortPtr;
 	ILbyte		HeadByte;
-	ILubyte		Run;
+	ILint		Run;
 	ILuint		*ChanLen;
 	ILboolean	PreCache = IL_FALSE;
 
@@ -534,7 +566,10 @@ ILboolean PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 		if (iCurImage->Bpc == 1) {
 			for (c = 0; c < Head->Channels; c++) {
 				i = 0;
-				iread(Channel, 1, Head->Width * Head->Height);
+				if (iread(Channel, Head->Width * Head->Height, 1) != 1) {
+					ifree(Channel);
+					return IL_FALSE;
+				}
 				for (y = 0; y < Head->Height * iCurImage->Bps; y += iCurImage->Bps) {
 					for (x = 0; x < iCurImage->Bps; x += iCurImage->Bpp, i++) {
 						iCurImage->Data[y + x + c] = Channel[i];
@@ -545,7 +580,10 @@ ILboolean PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 		else {  // iCurImage->Bpc == 2
 			for (c = 0; c < Head->Channels; c++) {
 				i = 0;
-				iread(Channel, 1, Head->Width * Head->Height * 2);
+				if (iread(Channel, Head->Width * Head->Height * 2, 1) != 1) {
+					ifree(Channel);
+					return IL_FALSE;
+				}
 				iCurImage->Bps /= 2;
 				for (y = 0; y < Head->Height * iCurImage->Bps; y += iCurImage->Bps) {
 					for (x = 0; x < iCurImage->Bps; x += iCurImage->Bpp, i++) {
@@ -568,11 +606,24 @@ ILboolean PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 				HeadByte = igetc();
 
 				if (HeadByte >= 0) {  //  && HeadByte <= 127
-					iread(Channel + i, 1, HeadByte + 1);
+					if (iread(Channel + i, HeadByte + 1, 1) != 1) {
+						ifree(Channel);
+						if (PreCache)
+							iUnCache();
+						return IL_FALSE;
+					}
+
 					i += HeadByte + 1;
 				}
 				if (HeadByte >= -127 && HeadByte <= -1) {
 					Run = igetc();
+					if (Run == IL_EOF) {
+						ifree(Channel);
+						if (PreCache)
+							iUnCache();
+						return IL_FALSE;
+					}
+
 					memset(Channel + i, Run, -HeadByte + 1);
 					i += -HeadByte + 1;
 				}
@@ -662,16 +713,18 @@ ILboolean GetSingleChannel(PSDHEAD *Head, ILubyte *Buffer, ILboolean Compressed)
 	ILuint		i;
 	ILushort	*ShortPtr;
 	ILbyte		HeadByte;
-	ILubyte		Run;
+	ILint		Run;
 
 	ShortPtr = (ILushort*)Buffer;
 
 	if (!Compressed) {
 		if (iCurImage->Bpc == 1) {
-			iread(Buffer, 1, Head->Width * Head->Height);
+			if (iread(Buffer, Head->Width * Head->Height, 1) != 1)
+				return IL_FALSE;
 		}
 		else {  // iCurImage->Bpc == 2
-			iread(Buffer, 1, Head->Width * Head->Height * 2);
+			if (iread(Buffer, Head->Width * Head->Height * 2, 1) != 1)
+				return IL_FALSE;
 		}
 	}
 	else {
@@ -679,11 +732,14 @@ ILboolean GetSingleChannel(PSDHEAD *Head, ILubyte *Buffer, ILboolean Compressed)
 			HeadByte = igetc();
 
 			if (HeadByte >= 0) {  //  && HeadByte <= 127
-				iread(Buffer + i, 1, HeadByte + 1);
+				if (iread(Buffer + i, HeadByte + 1, 1) != 1)
+					return IL_FALSE;
 				i += HeadByte + 1;
 			}
 			if (HeadByte >= -127 && HeadByte <= -1) {
 				Run = igetc();
+				if (Run == IL_EOF)
+					return IL_FALSE;
 				memset(Buffer + i, Run, -HeadByte + 1);
 				i += -HeadByte + 1;
 			}

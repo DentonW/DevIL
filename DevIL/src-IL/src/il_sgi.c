@@ -75,23 +75,22 @@ ILboolean ilIsValidSgiL(ILvoid *Lump, ILuint Size)
 /*----------------------------------------------------------------------------*/
 
 /* Internal function used to get the .sgi header from the current file.*/
-ILvoid iGetSgiHead(iSgiHeader *Header)
+ILboolean iGetSgiHead(iSgiHeader *Header)
 {
-	Header->MagicNum = GetBigUShort();
-	Header->Storage = igetc();
-	Header->Bpc = igetc();
-	Header->Dim = GetBigUShort();
-	Header->XSize = GetBigUShort();
-	Header->YSize = GetBigUShort();
-	Header->ZSize = GetBigUShort();
-	Header->PixMin = GetBigInt();
-	Header->PixMax = GetBigInt();
-	Header->Dummy1 = GetBigInt();
-	iread(&Header->Name, 1, 80);
-	Header->ColMap = GetBigInt();
-	iread(&Header->Dummy, 1, 404);
+	if (iread(Header, sizeof(iSgiHeader), 1) != 1)
+		return IL_FALSE;
 
-	return;
+	Header->MagicNum	= BigUShort(Header->MagicNum);
+	Header->Dim			= BigUShort(Header->Dim);
+	Header->XSize		= BigUShort(Header->XSize);
+	Header->YSize		= BigUShort(Header->YSize);
+	Header->ZSize		= BigUShort(Header->ZSize);
+	Header->PixMin		= BigInt(Header->PixMin);
+	Header->PixMax		= BigInt(Header->PixMax);
+	Header->Dummy1		= BigInt(Header->Dummy1);
+	Header->ColMap		= BigInt(Header->ColMap);
+
+	return IL_TRUE;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -101,7 +100,8 @@ ILboolean iIsValidSgi()
 {
 	iSgiHeader	Head;
 
-	iGetSgiHead(&Head);
+	if (!iGetSgiHead(&Head))
+		return IL_FALSE;
 	iseek(-(ILint)sizeof(iSgiHeader), IL_SEEK_CUR);  // Go ahead and restore to previous state
 
 	return iCheckSgi(&Head);
@@ -177,27 +177,22 @@ ILboolean iLoadSgiInternal()
 	iSgiHeader	Header;
 	ILboolean	bSgi;
 
-	if (iCurImage == NULL)
-	{
+	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
-	iGetSgiHead(&Header);
-	if (!iCheckSgi(&Header))
-	{
+	if (!iGetSgiHead(&Header))
+		return IL_FALSE;
+	if (!iCheckSgi(&Header)) {
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
 	}
 	
-	if (Header.Storage == SGI_RLE)
-	{   /* RLE */
-		printf("RLE encoded image\n");
+	if (Header.Storage == SGI_RLE) {  // RLE
 		bSgi = iReadRleSgi(&Header);
 	}
-	else /* Non RLE */
-	{  //(Header.Storage == SGI_VERBATIM)
-		printf("RLE encoded image\n");
+	else {  // Non-RLE  //(Header.Storage == SGI_VERBATIM)
 		bSgi = iReadNonRleSgi(&Header);
 	}
 
@@ -210,24 +205,25 @@ ILboolean iLoadSgiInternal()
 
 ILboolean iReadRleSgi(iSgiHeader *Head)
 {
-	ILuint  	ixTable,ixPlane,ixHeight,ixPixel, RleOff, RleLen;
-	ILuint		*OffTable, *LenTable, TableSize, Cur, ChanInt = 0;
-	ILubyte		**TempData;
+	ILuint  	ixTable, ixPlane, ixHeight,ixPixel, RleOff, RleLen;
+	ILuint		*OffTable=NULL, *LenTable=NULL, TableSize, Cur, ChanInt = 0;
+	ILubyte		**TempData=NULL;
 
 	if (!iNewSgi(Head)) {
 		return IL_FALSE;
 	}
 
 	TableSize = Head->YSize * Head->ZSize;
-	OffTable = (ILuint*) ialloc(TableSize * sizeof(ILuint));
-	LenTable = (ILuint*) ialloc(TableSize * sizeof(ILuint));
-	iread(OffTable, 1, TableSize * sizeof(ILuint));
-	iread(LenTable, 1, TableSize * sizeof(ILuint));
+	OffTable = (ILuint*)ialloc(TableSize * sizeof(ILuint));
+	LenTable = (ILuint*)ialloc(TableSize * sizeof(ILuint));
+	if (iread(OffTable, TableSize * sizeof(ILuint), 1) != 1)
+		goto cleanup_error;
+	if (iread(LenTable, TableSize * sizeof(ILuint), 1) != 1)
+		goto cleanup_error;
 
 #ifdef __LITTLE_ENDIAN__
-	/* Fix the offset/len table (it's big endian format) */
-	for (ixTable = 0; ixTable < TableSize; ixTable++)
-	{
+	// Fix the offset/len table (it's big endian format)
+	for (ixTable = 0; ixTable < TableSize; ixTable++) {
 		*(OffTable + ixTable) = SwapInt(*(OffTable + ixTable));
 		*(LenTable + ixTable) = SwapInt(*(LenTable + ixTable));
 	}
@@ -235,53 +231,45 @@ ILboolean iReadRleSgi(iSgiHeader *Head)
 
 	/* We have to create a temporary buffer for the image, because SGI */
 	/*	images are plane-separated. */
-	TempData = (ILubyte**) ialloc(Head->ZSize * sizeof(ILubyte*));
-	for (ixPlane = 0; ixPlane < Head->ZSize; ixPlane++)
-	{
-		TempData[ixPlane] = 
-				(ILubyte*) ialloc(Head->XSize * Head->YSize * Head->Bpc);
+	TempData = (ILubyte**)ialloc(Head->ZSize * sizeof(ILubyte*));
+	if (TempData == NULL)
+		goto cleanup_error;
+	for (ixPlane = 0; ixPlane < Head->ZSize; ixPlane++) {
+		TempData[ixPlane] = (ILubyte*)ialloc(Head->XSize * Head->YSize * Head->Bpc);
+		if (TempData[ixPlane] == NULL)
+			goto cleanup_error;
 	}
 
-	/* read the Planes into the temporary memory */
-	for (ixPlane = 0; ixPlane < Head->ZSize; ++ixPlane)
-	{
-		for (	ixHeight = 0, Cur = 0;
-				ixHeight < Head->YSize;
-				++ixHeight, Cur += Head->XSize * Head->Bpc)
-		{
+	// Read the Planes into the temporary memory
+	for (ixPlane = 0; ixPlane < Head->ZSize; ixPlane++) {
+		for (ixHeight = 0, Cur = 0;	ixHeight < Head->YSize;
+			ixHeight++, Cur += Head->XSize * Head->Bpc) {
+
 			RleOff = OffTable[ixHeight + ixPlane * Head->YSize];
 			RleLen = LenTable[ixHeight + ixPlane * Head->YSize];
 			
 			// Seeks to the offset table position
 			iseek(RleOff, IL_SEEK_SET);
-			iGetScanLine(	(TempData[ixPlane]) +
-							(ixHeight * Head->XSize * Head->Bpc),
-							 Head, RleLen);
+			if (iGetScanLine((TempData[ixPlane]) + (ixHeight * Head->XSize * Head->Bpc),
+				Head, RleLen) != Head->XSize * Head->Bpc)
+					goto cleanup_error;
 		}
 	}
 
-	/* check if an alphaplane exists and invert it */
-	if (Head->ZSize==4)
-	{
-		for (ixPixel=0; (ILint)ixPixel<Head->XSize * Head->YSize;++ixPixel)
- 		{
+	// Check if an alphaplane exists and invert it
+	if (Head->ZSize == 4) {
+		for (ixPixel=0; (ILint)ixPixel<Head->XSize * Head->YSize; ixPixel++) {
  			TempData[3][ixPixel] = TempData[3][ixPixel] ^ 255;
  		}	
 	}
 	
-	/* Assemble the image from its planes */
-	for (	ixPixel = 0; 
-			ixPixel < iCurImage->SizeOfData;
-			ixPixel += Head->ZSize * Head->Bpc, ChanInt += Head->Bpc)
-	{
-		for (	ixPlane = 0; 
-				(ILint)ixPlane < Head->ZSize * Head->Bpc;
-				ixPlane += Head->Bpc)
-		{
+	// Assemble the image from its planes
+	for (ixPixel = 0; ixPixel < iCurImage->SizeOfData;
+		ixPixel += Head->ZSize * Head->Bpc, ChanInt += Head->Bpc) {
+		for (ixPlane = 0; (ILint)ixPlane < Head->ZSize * Head->Bpc;	ixPlane += Head->Bpc) {
 			iCurImage->Data[ixPixel + ixPlane] = TempData[ixPlane][ChanInt];
 			if (Head->Bpc == 2)
-				iCurImage->Data[ixPixel + ixPlane + 1] =
-											TempData[ixPlane][ChanInt + 1];
+				iCurImage->Data[ixPixel + ixPlane + 1] = TempData[ixPlane][ChanInt + 1];
 		}
 	}
 
@@ -291,19 +279,33 @@ ILboolean iReadRleSgi(iSgiHeader *Head)
 	ifree(OffTable);
 	ifree(LenTable);
 
-	/* remove the temporary buffers */
-	for (ixPlane = 0; ixPlane < Head->ZSize; ++ixPlane)
-	{
+	for (ixPlane = 0; ixPlane < Head->ZSize; ixPlane++) {
 		ifree(TempData[ixPlane]);
 	}
 	ifree(TempData);
 
 	return IL_TRUE;
+
+cleanup_error:
+	if (OffTable)
+		ifree(OffTable);
+	if (LenTable)
+		ifree(LenTable);
+	if (TempData) {
+		for (ixPlane = 0; ixPlane < Head->ZSize; ixPlane++) {
+			if (TempData[ixPlane]) {
+				ifree(TempData[ixPlane]);
+			}
+		}
+		ifree(TempData);
+	}
+
+	return IL_FALSE;
 }
 
 /*----------------------------------------------------------------------------*/
 
-ILvoid iGetScanLine(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length)
+ILint iGetScanLine(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length)
 {
 	ILushort Pixel, Count;  // For current pixel
 	ILuint	 BppRead = 0, CurPos = 0, Bps = Head->XSize * Head->Bpc;
@@ -311,39 +313,36 @@ ILvoid iGetScanLine(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length)
 	while (BppRead < Length && CurPos < Bps)
 	{
 		Pixel = 0;
-		iread(&Pixel, Head->Bpc, 1);
+		if (iread(&Pixel, Head->Bpc, 1) != 1)
+			return -1;
 		
 #ifndef __LITTLE_ENDIAN__
 		Pixel = SwapShort(Pixel);
 #endif
 		
 		if (!(Count = (Pixel & 0x7f)))  // If 0, line ends
-			return;
-		if (Pixel & 0x80) // If top bit set, then it is a "run"
-		{ 
-			iread(ScanLine, Head->Bpc, Count);
+			return CurPos;
+		if (Pixel & 0x80) {  // If top bit set, then it is a "run"
+			if (iread(ScanLine, Head->Bpc, Count) != Count)
+				return -1;
 			BppRead += Head->Bpc * Count + Head->Bpc;
 			ScanLine += Head->Bpc * Count;
 		}
-		else
-		{
-			iread(&Pixel, Head->Bpc, 1);
+		else {
+			if (iread(&Pixel, Head->Bpc, 1) != 1)
+				return -1;
 #ifndef __LITTLE_ENDIAN__
 			Pixel = SwapShort(Pixel);
 #endif
-			if (Head->Bpc == 1)
-			{
-				while (Count--)
-				{
-					*ScanLine = (ILubyte) Pixel;
+			if (Head->Bpc == 1) {
+				while (Count--) {
+					*ScanLine = (ILubyte)Pixel;
 					ScanLine++;
 				}
 			}
-			else
-			{
-				while (Count--)
-				{
-					*(ILushort*) ScanLine = Pixel;
+			else {
+				while (Count--) {
+					*(ILushort*)ScanLine = Pixel;
 					ScanLine += 2;
 				}
 			}
@@ -351,12 +350,12 @@ ILvoid iGetScanLine(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length)
 		}
 	}
 
-	return;
+	return CurPos;
 }
 
 /*----------------------------------------------------------------------------*/
 
-ILvoid iGetScanLineFast(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length, ILubyte *FileData)
+ILint iGetScanLineFast(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length, ILubyte *FileData)
 {
 	ILushort Pixel, Count;  // For current pixel
 	ILuint	 BppRead = 0, CurPos = 0, Bps = Head->XSize * Head->Bpc;
@@ -364,7 +363,7 @@ ILvoid iGetScanLineFast(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length, ILub
 	while (BppRead < Length && CurPos < Bps) {
 		Pixel = (*FileData += Head->Bpc);
 		if (!(Count = (Pixel & 0x7f)))  // If 0, line ends
-			return;
+			return CurPos;
 		if (Pixel & 0x80) {  // If top bit set, then it is a "run"
 			memcpy(ScanLine, FileData, Count * Head->Bpc);
 			FileData += Count * Head->Bpc;
@@ -391,7 +390,7 @@ ILvoid iGetScanLineFast(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length, ILub
 		}
 	}
 
-	return;
+	return CurPos;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -400,7 +399,7 @@ ILvoid iGetScanLineFast(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length, ILub
 ILboolean iReadNonRleSgi(iSgiHeader *Head)
 {
 	ILubyte **Temp;
-	ILuint i, c;
+	ILuint i, c, k;
 	ILint j, ChanInt = 0, ChanSize;
 
 	if (!iNewSgi(Head)) {
@@ -412,7 +411,12 @@ ILboolean iReadNonRleSgi(iSgiHeader *Head)
 		Temp = (ILubyte**)ialloc(Head->ZSize * sizeof(ILubyte*));
 		for (i = 0; i < Head->ZSize; i++) {
 			Temp[i] = (ILubyte*)ialloc(ChanSize);
-			iread(Temp[i], 1, ChanSize);
+			if (iread(Temp[i], 1, ChanSize) != (ILuint)ChanSize) {
+				for (k = 0; k < i; k++)
+					ifree(Temp[k]);
+				ifree(Temp);
+				return IL_FALSE;
+			}
 		}
 
 		// Assemble the image from its planes
@@ -429,7 +433,8 @@ ILboolean iReadNonRleSgi(iSgiHeader *Head)
 	else {  // Uses less mem but ?slower?
 		for (c = 0; c < iCurImage->Bpp; c++) {
 			for (i = c; i < iCurImage->SizeOfData; i += iCurImage->Bpp) {
-				iread(iCurImage->Data + i, 1, 1);
+				if (iread(iCurImage->Data + i, 1, 1) != 1)
+					return IL_FALSE;
 			}
 		}
 	}
@@ -444,7 +449,6 @@ ILvoid sgiSwitchData(ILubyte *Data, ILuint SizeOfData)
 	ILubyte	Temp;
 	ILuint	i;
 #ifdef __LITTLE_ENDIAN__
-	printf("LittleEndian conversion\n");
 	for (i = 0; i < SizeOfData; i += 2) {
 		Temp = Data[i];
 		Data[i] = Data[i+1];
@@ -600,6 +604,7 @@ ILboolean iSaveSgiInternal()
 	SaveBigUShort((ILushort)Temp->Bpp);
 
 	// @TODO:  If we have signed values or shorts, we needed to modify accordingly.
+	if (
 	SaveBigInt(0);  // Minimum pixel value
 	SaveBigInt(255);  // Maximum pixel value
 

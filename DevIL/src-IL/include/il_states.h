@@ -67,6 +67,7 @@ typedef struct IL_STATES
 	ILboolean	ilSgiRle;
 	ILenum		ilJpgFormat;
 	ILenum		ilDxtcFormat;
+	ILenum		ilPcdPicNum;
 
 
 	//

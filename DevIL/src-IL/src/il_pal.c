@@ -147,7 +147,7 @@ char *iFgetw(char *Buff, ILint MaxLen, FILE *File)
 
 	for (i = 0; i < MaxLen - 1; i++) {
 		Temp = fgetc(File);
-		if (Temp == '\n' || Temp == '\0' || Temp == EOF || feof(File)) {
+		if (Temp == '\n' || Temp == '\0' || Temp == IL_EOF || feof(File)) {
 			break;			
 		}
 
@@ -294,7 +294,7 @@ ILboolean ilLoadHaloPal(const ILstring FileName)
 	ILHANDLE	HaloFile;
 	HALOHEAD	HaloHead;
 	ILushort	*TempPal;
-	ILuint		i;
+	ILuint		i, Size;
 
 	if (!iCheckExtension(FileName, IL_TEXT("pal"))) {
 		ilSetError(IL_INVALID_EXTENSION);
@@ -312,12 +312,8 @@ ILboolean ilLoadHaloPal(const ILstring FileName)
 		return IL_FALSE;
 	}
 
-	if (iCurImage->Pal.Palette && iCurImage->Pal.PalSize > 0 && iCurImage->Pal.PalType != IL_PAL_NONE) {
-		ifree(iCurImage->Pal.Palette);
-		iCurImage->Pal.Palette = NULL;
-	}
-
-	iread(&HaloHead, sizeof(HALOHEAD), 1);
+	if (iread(&HaloHead, sizeof(HALOHEAD), 1) != 1)
+		return IL_FALSE;
 
 	if (HaloHead.Id != 'A' + ('H' << 8) || HaloHead.Version != 0xe3) {
 		icloser(HaloFile);
@@ -325,23 +321,26 @@ ILboolean ilLoadHaloPal(const ILstring FileName)
 		return IL_FALSE;
 	}
 
-	iCurImage->Pal.PalType = IL_PAL_RGB24;
-	iCurImage->Pal.PalSize = (HaloHead.MaxIndex + 1) * 3;
-	iCurImage->Pal.Palette = (ILubyte*)ialloc(iCurImage->Pal.PalSize);
-	TempPal = (ILushort*)ialloc(iCurImage->Pal.PalSize * sizeof(ILushort));
-	if (!iCurImage->Pal.Palette || !TempPal) {
+	Size = (HaloHead.MaxIndex + 1) * 3;
+	TempPal = (ILushort*)ialloc(Size * sizeof(ILushort));
+	if (TempPal == NULL) {
 		icloser(HaloFile);
 		return IL_FALSE;
 	}
 
-	if (iread(TempPal, sizeof(ILushort), iCurImage->Pal.PalSize) != iCurImage->Pal.PalSize) {
+	if (iread(TempPal, sizeof(ILushort), Size) != Size) {
 		icloser(HaloFile);
 		ifree(TempPal);
-		ifree(iCurImage->Pal.Palette);
-		iCurImage->Pal.Palette = NULL;
-		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
+
+	if (iCurImage->Pal.Palette && iCurImage->Pal.PalSize > 0 && iCurImage->Pal.PalType != IL_PAL_NONE) {
+		ifree(iCurImage->Pal.Palette);
+		iCurImage->Pal.Palette = NULL;
+	}
+	iCurImage->Pal.PalType = IL_PAL_RGB24;
+	iCurImage->Pal.PalSize = Size;
+	iCurImage->Pal.Palette = (ILubyte*)ialloc(iCurImage->Pal.PalSize);
 
 	for (i = 0; i < iCurImage->Pal.PalSize; i++, TempPal++) {
 		iCurImage->Pal.Palette[i] = (ILubyte)*TempPal;
@@ -356,7 +355,7 @@ ILboolean ilLoadHaloPal(const ILstring FileName)
 
 
 // Hasn't been tested
-//	@TODO: Test the damn thing!
+//	@TODO: Test the thing!
 
 //! Loads a .col palette file
 ILboolean ilLoadColPal(const ILstring FileName)
@@ -397,13 +396,19 @@ ILboolean ilLoadColPal(const ILstring FileName)
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
 			return IL_FALSE;
 		}
-		iread(&Version, 2, 1);
+		if (iread(&Version, 2, 1) != 1) {
+			icloser(ColFile);
+			return IL_FALSE;
+		}
 		if (Version != 0xB123) {
 			icloser(ColFile);
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
 			return IL_FALSE;
 		}
-		iread(&Version, 2, 1);
+		if (iread(&Version, 2, 1) != 1) {
+			icloser(ColFile);
+			return IL_FALSE;
+		}
 		if (Version != 0) {
 			icloser(ColFile);
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
@@ -419,7 +424,6 @@ ILboolean ilLoadColPal(const ILstring FileName)
 
 	if (iread(iCurImage->Pal.Palette, 1, 768) != 768) {
 		icloser(ColFile);
-		ilSetError(IL_ILLEGAL_OPERATION);
 		ifree(iCurImage->Pal.Palette);
 		iCurImage->Pal.Palette = NULL;
 		return IL_FALSE;
@@ -469,7 +473,6 @@ ILboolean ilLoadActPal(const ILstring FileName)
 	}
 
 	if (iread(iCurImage->Pal.Palette, 1, 768) != 768) {
-		ilSetError(IL_INVALID_FILE_HEADER);
 		icloser(ActFile);
 		return IL_FALSE;
 	}

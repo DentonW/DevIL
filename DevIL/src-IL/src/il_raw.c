@@ -79,7 +79,8 @@ ILboolean iLoadRawInternal()
 	iread(&iCurImage->Height, sizeof(ILuint), 1);
 	iread(&iCurImage->Depth, sizeof(ILuint), 1);
 	iread(&iCurImage->Bpp, sizeof(ILubyte), 1);
-	iread(&iCurImage->Bpc, sizeof(ILubyte), 1);
+	if (iread(&iCurImage->Bpc, sizeof(ILubyte), 1) != 1)
+		return IL_FALSE;
 
 	if (!ilTexImage(iCurImage->Width, iCurImage->Height, iCurImage->Depth, iCurImage->Bpp, 0, ilGetTypeBpc(iCurImage->Bpc), NULL)) {
 		return IL_FALSE;
@@ -87,10 +88,8 @@ ILboolean iLoadRawInternal()
 	iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
 
 	// Tries to read the correct amount of data
-	if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) < iCurImage->SizeOfData) {
-		ilSetError(IL_ILLEGAL_OPERATION);
+	if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) < iCurImage->SizeOfData)
 		return IL_FALSE;
-	}
 
 	if (ilIsEnabled(IL_ORIGIN_SET)) {
 		iCurImage->Origin = ilGetInteger(IL_ORIGIN_MODE);

@@ -12,7 +12,6 @@
 
 
 #include "ilu_internal.h"
-#include "ilu_alloc.h"
 
 
 ILdouble IL_PI      = 3.1415926535897932384626;

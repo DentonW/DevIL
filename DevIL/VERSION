@@ -1,3 +1,21 @@
+1.4.3
+-----
+
+- Removed the printfs that somehow got left in il_sgi.c.
+- Added ILUT_D3D_MIPLEVELS to ilutSetInteger().
+- Updated the static library workspace.
+- Updated ilAddAlpha, ilAddAlphaKey and ilRemoveAlpha in il_convert.c to deal
+  with differing bits per channel.
+- Changed the registered loading/saving function handler so that they can return errors.
+- Changed ILU and ILUT to use DevIL's memory handler.
+- Removed the last of the malloc/free calls.
+- Changed the file/lump reading functions to set IL_FILE_READ_ERROR automatically
+  when one occurs.
+- Added IL_EOF for use with other languages.
+- Fixed a small memory leak in the .psp loading code.
+
+
+
 1.4.2
 -----
 

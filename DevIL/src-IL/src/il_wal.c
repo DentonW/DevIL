@@ -86,22 +86,20 @@ ILboolean iLoadWalInternal()
 	}
 	CurImage = iCurImage;
 
+	if (iread(&Header, sizeof(WALHEAD), 1) != 1)
+		return IL_FALSE;
+	if (!ilTexImage(Header.Width, Header.Height, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL))
+		return IL_FALSE;
+
 	for (i = 0; i < 3; i++) {
 		Mipmaps[i] = (ILimage*)calloc(sizeof(ILimage), 1);
-		if (Mipmaps[i] == NULL) {
-			return IL_FALSE;
-		}
+		if (Mipmaps[i] == NULL)
+			goto cleanup_error;
 		Mipmaps[i]->Pal.Palette = (ILubyte*)ialloc(768);
-		if (Mipmaps[i]->Pal.Palette == NULL) {
-			return IL_FALSE;
-		}
+		if (Mipmaps[i]->Pal.Palette == NULL)
+			goto cleanup_error;
 		memcpy(Mipmaps[i]->Pal.Palette, ilDefaultQ2Pal, 768);
 		Mipmaps[i]->Pal.PalType = IL_PAL_RGB24;
-	}
-
-	iread(&Header, sizeof(WALHEAD), 1);
-	if (!ilTexImage(Header.Width, Header.Height, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL)) {
-		return IL_FALSE;
 	}
 
 	NewW = Header.Width;
@@ -110,9 +108,8 @@ ILboolean iLoadWalInternal()
 		NewW /= 2;
 		NewH /= 2;
 		iCurImage = Mipmaps[i];
-		if (!ilTexImage(NewW, NewH, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL)) {
-			return IL_FALSE;
-		}
+		if (!ilTexImage(NewW, NewH, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL))
+			goto cleanup_error;
 		// Don't set until now so ilTexImage won't get rid of the palette.
 		Mipmaps[i]->Pal.PalSize = 768;
 		Mipmaps[i]->Origin = IL_ORIGIN_UPPER_LEFT;
@@ -129,20 +126,21 @@ ILboolean iLoadWalInternal()
 	if (iCurImage->Pal.Palette && iCurImage->Pal.PalSize && iCurImage->Pal.PalType != IL_PAL_NONE)
 		ifree(iCurImage->Pal.Palette);
 	iCurImage->Pal.Palette = (ILubyte*)ialloc(768);
-	if (iCurImage->Pal.Palette == NULL) {
-		return IL_FALSE;
-	}
+	if (iCurImage->Pal.Palette == NULL)
+		goto cleanup_error;
 
 	iCurImage->Pal.PalSize = 768;
 	iCurImage->Pal.PalType = IL_PAL_RGB24;
 	memcpy(iCurImage->Pal.Palette, ilDefaultQ2Pal, 768);
 
 	iseek(Header.Offsets[0], IL_SEEK_SET);
-	iread(iCurImage->Data, 1, Header.Width * Header.Height);
+	if (iread(iCurImage->Data, Header.Width * Header.Height, 1) != 1)
+		goto cleanup_error;
 
 	for (i = 0; i < 3; i++) {
 		iseek(Header.Offsets[i+1], IL_SEEK_SET);
-		iread(Mipmaps[i]->Data, 1, Mipmaps[i]->Width * Mipmaps[i]->Height);
+		if (iread(Mipmaps[i]->Data, Mipmaps[i]->Width * Mipmaps[i]->Height, 1) != 1)
+			goto cleanup_error;
 	}
 
 	iCurImage->NumMips = 3;
@@ -151,6 +149,14 @@ ILboolean iLoadWalInternal()
 	ilFixImage();
 
 	return IL_TRUE;
+
+cleanup_error:
+	for (i = 0; i < 3; i++) {
+		if (Mipmaps[i]) {
+			ilCloseImage(Mipmaps[i]);
+		}
+	}
+	return IL_FALSE;
 }
 
 

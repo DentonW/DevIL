@@ -432,8 +432,8 @@ ILboolean ilSwapColours()
 // Adds an opaque alpha channel to a 24-bit image
 ILboolean ilAddAlpha()
 {
-	ILubyte *NewData, NewBpp;
-	ILuint i = 0, j = 0, Size;
+	ILubyte		*NewData, NewBpp;
+	ILuint		i = 0, j = 0, Size;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -445,23 +445,74 @@ ILboolean ilAddAlpha()
 		return IL_FALSE;
 	}
 
-	Size = iCurImage->Bps * iCurImage->Height;
+	Size = iCurImage->Bps * iCurImage->Height / iCurImage->Bpc;
 	NewBpp = (ILubyte)(iCurImage->Bpp + 1);
 	
-	NewData = (ILubyte*)ialloc(NewBpp * iCurImage->Width * iCurImage->Height);
+	NewData = (ILubyte*)ialloc(NewBpp * iCurImage->Bpc * iCurImage->Width * iCurImage->Height);
 	if (NewData == NULL) {
 		return IL_FALSE;
 	}
 
-	for (; i < Size; i += iCurImage->Bpp, j += NewBpp) {
-		NewData[j]   = iCurImage->Data[i];
-		NewData[j+1] = iCurImage->Data[i+1];
-		NewData[j+2] = iCurImage->Data[i+2];
-		NewData[j+3] = 255;  // Max opaqueness
+	switch (iCurImage->Type)
+	{
+		case IL_BYTE:
+		case IL_UNSIGNED_BYTE:
+			for (; i < Size; i += iCurImage->Bpp, j += NewBpp) {
+				NewData[j]   = iCurImage->Data[i];
+				NewData[j+1] = iCurImage->Data[i+1];
+				NewData[j+2] = iCurImage->Data[i+2];
+				NewData[j+3] = UCHAR_MAX;  // Max opaqueness
+			}
+			break;
+
+		case IL_SHORT:
+		case IL_UNSIGNED_SHORT:
+			for (; i < Size; i += iCurImage->Bpp, j += NewBpp) {
+				((ILushort*)NewData)[j]   = ((ILushort*)iCurImage->Data)[i];
+				((ILushort*)NewData)[j+1] = ((ILushort*)iCurImage->Data)[i+1];
+				((ILushort*)NewData)[j+2] = ((ILushort*)iCurImage->Data)[i+2];
+				((ILushort*)NewData)[j+3] = USHRT_MAX;
+			}
+			break;
+
+		case IL_INT:
+		case IL_UNSIGNED_INT:
+			for (; i < Size; i += iCurImage->Bpp, j += NewBpp) {
+				((ILuint*)NewData)[j]   = ((ILuint*)iCurImage->Data)[i];
+				((ILuint*)NewData)[j+1] = ((ILuint*)iCurImage->Data)[i+1];
+				((ILuint*)NewData)[j+2] = ((ILuint*)iCurImage->Data)[i+2];
+				((ILuint*)NewData)[j+3] = UINT_MAX;
+			}
+			break;
+
+		case IL_FLOAT:
+			for (; i < Size; i += iCurImage->Bpp, j += NewBpp) {
+				((ILfloat*)NewData)[j]   = ((ILfloat*)iCurImage->Data)[i];
+				((ILfloat*)NewData)[j+1] = ((ILfloat*)iCurImage->Data)[i+1];
+				((ILfloat*)NewData)[j+2] = ((ILfloat*)iCurImage->Data)[i+2];
+				((ILfloat*)NewData)[j+3] = 1.0f;
+			}
+			break;
+
+		case IL_DOUBLE:
+			for (; i < Size; i += iCurImage->Bpp, j += NewBpp) {
+				((ILdouble*)NewData)[j]   = ((ILdouble*)iCurImage->Data)[i];
+				((ILdouble*)NewData)[j+1] = ((ILdouble*)iCurImage->Data)[i+1];
+				((ILdouble*)NewData)[j+2] = ((ILdouble*)iCurImage->Data)[i+2];
+				((ILdouble*)NewData)[j+3] = 1.0;
+			}
+			break;
+
+		default:
+			ilSetError(IL_INTERNAL_ERROR);
+			return IL_FALSE;
 	}
 
+
 	iCurImage->Bpp = NewBpp;
-	iCurImage->Bps = iCurImage->Width * NewBpp;
+	iCurImage->Bps = iCurImage->Width * iCurImage->Bpc * NewBpp;
+	iCurImage->SizeOfPlane = iCurImage->Bps * iCurImage->Height;
+	iCurImage->SizeOfData = iCurImage->SizeOfPlane * iCurImage->Depth;
 	ifree(iCurImage->Data);
 	iCurImage->Data = NewData;
 
@@ -495,7 +546,8 @@ ILvoid ILAPIENTRY ilKeyColour(ILclampf Red, ILclampf Green, ILclampf Blue, ILcla
 //	making the image transparent where Key is equal to the pixel.
 ILboolean ilAddAlphaKey(ILimage *Image)
 {
-	ILubyte		*NewData, NewBpp, KeyColour[3];
+	ILubyte		*NewData, NewBpp;
+	ILfloat		KeyColour[3];
 	ILuint		i = 0, j = 0, c, Size;
 	ILboolean	Same;
 
@@ -511,43 +563,128 @@ ILboolean ilAddAlphaKey(ILimage *Image)
 		}
 
 		if (Image->Format == IL_BGR || Image->Format == IL_BGRA) {
-			KeyColour[0] = (ILuint)(KeyBlue * UCHAR_MAX);
-			KeyColour[1] = (ILuint)(KeyGreen * UCHAR_MAX);
-			KeyColour[2] = (ILuint)(KeyRed * UCHAR_MAX);
+			KeyColour[0] = KeyBlue;
+			KeyColour[1] = KeyGreen;
+			KeyColour[2] = KeyRed;
 		}
 		else {
-			KeyColour[0] = (ILuint)(KeyRed * UCHAR_MAX);
-			KeyColour[1] = (ILuint)(KeyGreen * UCHAR_MAX);
-			KeyColour[2] = (ILuint)(KeyBlue * UCHAR_MAX);
+			KeyColour[0] = KeyRed;
+			KeyColour[1] = KeyGreen;
+			KeyColour[2] = KeyBlue;
 		}
 
-		Size = Image->Bps * Image->Height;
+		Size = Image->Bps * Image->Height / Image->Bpc;
 
 		NewBpp = (ILubyte)(Image->Bpp + 1);
 		
-		NewData = (ILubyte*)ialloc(NewBpp * Image->Width * Image->Height);
+		NewData = (ILubyte*)ialloc(NewBpp * Image->Bpc * Image->Width * Image->Height);
 		if (NewData == NULL) {
 			return IL_FALSE;
 		}
 
-		for (; i < Size; i += Image->Bpp, j += NewBpp) {
-			NewData[j]   = Image->Data[i];
-			NewData[j+1] = Image->Data[i+1];
-			NewData[j+2] = Image->Data[i+2];
-			Same = IL_TRUE;
-			for (c = 0; c < Image->Bpp; c++) {
-				if (Image->Data[i+c] != KeyColour[c])
-					Same = IL_FALSE;
-			}
+		switch (Image->Type)
+		{
+			case IL_BYTE:
+			case IL_UNSIGNED_BYTE:
+				for (; i < Size; i += Image->Bpp, j += NewBpp) {
+					NewData[j]   = Image->Data[i];
+					NewData[j+1] = Image->Data[i+1];
+					NewData[j+2] = Image->Data[i+2];
+					Same = IL_TRUE;
+					for (c = 0; c < Image->Bpp; c++) {
+						if (Image->Data[i+c] != KeyColour[c] * UCHAR_MAX)
+							Same = IL_FALSE;
+					}
 
-			if (Same)
-				NewData[j+3] = 0;  // Transparent - matches key colour
-			else
-				NewData[j+3] = 255;  // Max opaqueness
+					if (Same)
+						NewData[j+3] = 0;  // Transparent - matches key colour
+					else
+						NewData[j+3] = UCHAR_MAX;
+				}
+				break;
+
+			case IL_SHORT:
+			case IL_UNSIGNED_SHORT:
+				for (; i < Size; i += Image->Bpp, j += NewBpp) {
+					((ILushort*)NewData)[j]   = ((ILushort*)Image->Data)[i];
+					((ILushort*)NewData)[j+1] = ((ILushort*)Image->Data)[i+1];
+					((ILushort*)NewData)[j+2] = ((ILushort*)Image->Data)[i+2];
+					Same = IL_TRUE;
+					for (c = 0; c < Image->Bpp; c++) {
+						if (((ILushort*)Image->Data)[i+c] != KeyColour[c] * USHRT_MAX)
+							Same = IL_FALSE;
+					}
+
+					if (Same)
+						((ILushort*)NewData)[j+3] = 0;
+					else
+						((ILushort*)NewData)[j+3] = USHRT_MAX;
+				}
+				break;
+
+			case IL_INT:
+			case IL_UNSIGNED_INT:
+				for (; i < Size; i += Image->Bpp, j += NewBpp) {
+					((ILuint*)NewData)[j]   = ((ILuint*)Image->Data)[i];
+					((ILuint*)NewData)[j+1] = ((ILuint*)Image->Data)[i+1];
+					((ILuint*)NewData)[j+2] = ((ILuint*)Image->Data)[i+2];
+					Same = IL_TRUE;
+					for (c = 0; c < Image->Bpp; c++) {
+						if (((ILuint*)Image->Data)[i+c] != KeyColour[c] * UINT_MAX)
+							Same = IL_FALSE;
+					}
+
+					if (Same)
+						((ILuint*)NewData)[j+3] = 0;
+					else
+						((ILuint*)NewData)[j+3] = UINT_MAX;
+				}
+				break;
+
+			case IL_FLOAT:
+				for (; i < Size; i += Image->Bpp, j += NewBpp) {
+					((ILfloat*)NewData)[j]   = ((ILfloat*)Image->Data)[i];
+					((ILfloat*)NewData)[j+1] = ((ILfloat*)Image->Data)[i+1];
+					((ILfloat*)NewData)[j+2] = ((ILfloat*)Image->Data)[i+2];
+					Same = IL_TRUE;
+					for (c = 0; c < Image->Bpp; c++) {
+						if (((ILfloat*)Image->Data)[i+c] != KeyColour[c])
+							Same = IL_FALSE;
+					}
+
+					if (Same)
+						((ILfloat*)NewData)[j+3] = 0.0f;
+					else
+						((ILfloat*)NewData)[j+3] = 1.0f;
+				}
+				break;
+
+			case IL_DOUBLE:
+				for (; i < Size; i += Image->Bpp, j += NewBpp) {
+					((ILdouble*)NewData)[j]   = ((ILdouble*)Image->Data)[i];
+					((ILdouble*)NewData)[j+1] = ((ILdouble*)Image->Data)[i+1];
+					((ILdouble*)NewData)[j+2] = ((ILdouble*)Image->Data)[i+2];
+					Same = IL_TRUE;
+					for (c = 0; c < Image->Bpp; c++) {
+						if (((ILdouble*)Image->Data)[i+c] != KeyColour[c])
+							Same = IL_FALSE;
+					}
+
+					if (Same)
+						((ILdouble*)NewData)[j+3] = 0.0;
+					else
+						((ILdouble*)NewData)[j+3] = 1.0;
+				}
+				break;
+
+			default:
+				ilSetError(IL_INTERNAL_ERROR);
+				return IL_FALSE;
 		}
 
+
 		Image->Bpp = NewBpp;
-		Image->Bps = Image->Width * NewBpp;
+		Image->Bps = Image->Width * Image->Bpc * NewBpp;
 		Image->SizeOfPlane = Image->Bps * Image->Height;
 		Image->SizeOfData = Image->SizeOfPlane * Image->Depth;
 		ifree(Image->Data);
@@ -632,19 +769,66 @@ ILboolean ilRemoveAlpha()
 	Size = iCurImage->Bps * iCurImage->Height;
 	NewBpp = (ILubyte)(iCurImage->Bpp - 1);
 	
-	NewData = (ILubyte*)ialloc(NewBpp * iCurImage->Width * iCurImage->Height);
+	NewData = (ILubyte*)ialloc(NewBpp * iCurImage->Bpc * iCurImage->Width * iCurImage->Height);
 	if (NewData == NULL) {
 		return IL_FALSE;
 	}
 
-	for (; i < Size; i += iCurImage->Bpp, j += NewBpp) {
-		NewData[j]   = iCurImage->Data[i];
-		NewData[j+1] = iCurImage->Data[i+1];
-		NewData[j+2] = iCurImage->Data[i+2];
+	switch (iCurImage->Type)
+	{
+		case IL_BYTE:
+		case IL_UNSIGNED_BYTE:
+			for (; i < Size; i += iCurImage->Bpp, j += NewBpp) {
+				NewData[j]   = iCurImage->Data[i];
+				NewData[j+1] = iCurImage->Data[i+1];
+				NewData[j+2] = iCurImage->Data[i+2];
+			}
+			break;
+
+		case IL_SHORT:
+		case IL_UNSIGNED_SHORT:
+			for (; i < Size; i += iCurImage->Bpp, j += NewBpp) {
+				((ILushort*)NewData)[j]   = ((ILushort*)iCurImage->Data)[i];
+				((ILushort*)NewData)[j+1] = ((ILushort*)iCurImage->Data)[i+1];
+				((ILushort*)NewData)[j+2] = ((ILushort*)iCurImage->Data)[i+2];
+			}
+			break;
+
+		case IL_INT:
+		case IL_UNSIGNED_INT:
+			for (; i < Size; i += iCurImage->Bpp, j += NewBpp) {
+				((ILuint*)NewData)[j]   = ((ILuint*)iCurImage->Data)[i];
+				((ILuint*)NewData)[j+1] = ((ILuint*)iCurImage->Data)[i+1];
+				((ILuint*)NewData)[j+2] = ((ILuint*)iCurImage->Data)[i+2];
+			}
+			break;
+
+		case IL_FLOAT:
+			for (; i < Size; i += iCurImage->Bpp, j += NewBpp) {
+				((ILfloat*)NewData)[j]   = ((ILfloat*)iCurImage->Data)[i];
+				((ILfloat*)NewData)[j+1] = ((ILfloat*)iCurImage->Data)[i+1];
+				((ILfloat*)NewData)[j+2] = ((ILfloat*)iCurImage->Data)[i+2];
+			}
+			break;
+
+		case IL_DOUBLE:
+			for (; i < Size; i += iCurImage->Bpp, j += NewBpp) {
+				((ILdouble*)NewData)[j]   = ((ILdouble*)iCurImage->Data)[i];
+				((ILdouble*)NewData)[j+1] = ((ILdouble*)iCurImage->Data)[i+1];
+				((ILdouble*)NewData)[j+2] = ((ILdouble*)iCurImage->Data)[i+2];
+			}
+			break;
+
+		default:
+			ilSetError(IL_INTERNAL_ERROR);
+			return IL_FALSE;
 	}
 
+
 	iCurImage->Bpp = NewBpp;
-	iCurImage->Bps = iCurImage->Width * NewBpp;
+	iCurImage->Bps = iCurImage->Width * iCurImage->Bpc * NewBpp;
+	iCurImage->SizeOfPlane = iCurImage->Bps * iCurImage->Height;
+	iCurImage->SizeOfData = iCurImage->SizeOfPlane * iCurImage->Depth;
 	ifree(iCurImage->Data);
 	iCurImage->Data = NewData;
 

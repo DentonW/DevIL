@@ -192,6 +192,12 @@ ILvoid ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param)
 			break;
 #endif//ILUT_USE_OPENGL
 
+#ifdef ILUT_USE_DIRECTX8
+		case ILUT_D3D_MIPLEVELS:
+			ilutStates[ilutCurrentPos].D3DMipLevels = Param;
+			break;
+#endif//ILUT_USE_DIRECTX8
+
 		default:
 			ilSetError(ILUT_INVALID_ENUM);
 	}

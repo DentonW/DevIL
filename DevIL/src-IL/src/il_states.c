@@ -44,6 +44,7 @@ ILvoid ilDefaultStates()
 	ilStates[ilCurrentPos].ilSgiRle = IL_FALSE;
 	ilStates[ilCurrentPos].ilJpgFormat = IL_JFIF;
 	ilStates[ilCurrentPos].ilDxtcFormat = IL_DXT1;
+	ilStates[ilCurrentPos].ilPcdPicNum = 2;
 
 	ilStates[ilCurrentPos].ilTgaId = NULL;
 	ilStates[ilCurrentPos].ilTgaAuthName = NULL;
@@ -548,6 +549,8 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 			*Param = ilStates[ilCurrentPos].ilJpgFormat;
 		case IL_DXTC_FORMAT:
 			*Param = ilStates[ilCurrentPos].ilDxtcFormat;
+		case IL_PCD_PICNUM:
+			*Param = ilStates[ilCurrentPos].ilPcdPicNum;
 
 
 		// Boolean values
@@ -721,6 +724,7 @@ ILvoid ILAPIENTRY ilPushAttrib(ILuint Bits)
 		ilStates[ilCurrentPos].ilSgiRle = ilStates[ilCurrentPos-1].ilSgiRle;
 		ilStates[ilCurrentPos].ilJpgFormat = ilStates[ilCurrentPos-1].ilJpgFormat;
 		ilStates[ilCurrentPos].ilDxtcFormat = ilStates[ilCurrentPos-1].ilDxtcFormat;
+		ilStates[ilCurrentPos].ilPcdPicNum = ilStates[ilCurrentPos-1].ilPcdPicNum;
 
 		// Strings
 		if (ilStates[ilCurrentPos].ilTgaId)
@@ -942,6 +946,12 @@ ILvoid ILAPIENTRY ilSetInteger(ILenum Mode, ILint Param)
 				return;
 			}
 			break;
+		case IL_PCD_PICNUM:
+			if (Param >= 0 || Param <= 2) {
+				ilStates[ilCurrentPos].ilPcdPicNum = Param;
+				return;
+			}
+			break;
 		case IL_IMAGE_OFFX:
 			if (iCurImage == NULL) {
 				ilSetError(IL_ILLEGAL_OPERATION);
@@ -1016,6 +1026,8 @@ ILint iGetInt(ILenum Mode)
 			return ilStates[ilCurrentPos].ilJpgFormat;
 		case IL_DXTC_FORMAT:
 			return ilStates[ilCurrentPos].ilDxtcFormat;
+		case IL_PCD_PICNUM:
+			return ilStates[ilCurrentPos].ilPcdPicNum;
 		case IL_QUANTIZATION_MODE:
 			return ilStates[ilCurrentPos].ilQuantMode;
 		case IL_NEU_QUANT_SAMPLE:

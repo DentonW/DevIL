@@ -72,7 +72,7 @@ HBITMAP ILAPIENTRY ilutConvertToHBitmap(HDC hDC)
 	//Bitmap = CreateBitmap(ilutCurImage->Width, ilutCurImage->Height, 1, ilutCurImage->Bpp * 8, Data);
 	//SetBitmapBits(Bitmap, ilutCurImage->SizeOfData, ilutCurImage->Data);
 
-	free(Data);
+	ifree(Data);
 
 	if (TempImage != ilutCurImage)
 		ilCloseImage(TempImage);
@@ -95,9 +95,8 @@ ILubyte* ILAPIENTRY iGetPaddedData(ILimage *Image)
 		iluFlipImage();
 
 	if (Image->Format == IL_RGB || Image->Format == IL_RGBA) {
-		TempBuff = (ILubyte*)malloc(Image->SizeOfData);
+		TempBuff = (ILubyte*)ialloc(Image->SizeOfData);
 		if (TempBuff == NULL) {
-			ilSetError(ILUT_OUT_OF_MEMORY);
 			return NULL;
 		}
 		// Swap red and blue.
@@ -112,9 +111,8 @@ ILubyte* ILAPIENTRY iGetPaddedData(ILimage *Image)
 	}
 
 	PadSize = (4 - (Image->Bps % 4)) % 4;
-	NewData = (ILubyte*)malloc((Image->Width + PadSize) * Image->Height * Image->Bpp);
+	NewData = (ILubyte*)ialloc((Image->Width + PadSize) * Image->Height * Image->Bpp);
 	if (NewData == NULL) {
-		ilSetError(ILUT_OUT_OF_MEMORY);
 		return NULL;
 	}
 
@@ -126,7 +124,7 @@ ILubyte* ILAPIENTRY iGetPaddedData(ILimage *Image)
 	}
 
 	if (TempBuff != Image->Data)
-		free(TempBuff);
+		ifree(TempBuff);
 	if (Image->Origin != IL_ORIGIN_LOWER_LEFT)
 		iluFlipImage();
 
@@ -238,9 +236,8 @@ HPALETTE ILAPIENTRY ilutGetHPal()
 	}
 	NumEntries = ilutCurImage->Pal.PalSize / 3;
 
-	LogPal = (LOGPALETTE*)malloc(sizeof(LOGPALETTE) + NumEntries * sizeof(PALETTEENTRY));
+	LogPal = (LOGPALETTE*)ialloc(sizeof(LOGPALETTE) + NumEntries * sizeof(PALETTEENTRY));
 	if (!LogPal) {
-		ilSetError(ILUT_OUT_OF_MEMORY);
 		return NULL;
 	}
 
@@ -255,7 +252,7 @@ HPALETTE ILAPIENTRY ilutGetHPal()
 	}
 
 	Palette = CreatePalette(LogPal);
-	free(LogPal);
+	ifree(LogPal);
 
 	ilConvertPal(CurPalType);  // Should we check the return value?
 
@@ -291,10 +288,9 @@ ILboolean ILAPIENTRY ilutSetHBitmap(HBITMAP Bitmap)
 		return IL_FALSE;
 	}
 
-	Buffer1 = (ILubyte*)malloc(Info[0].bmiHeader.biSizeImage);
-	Buffer2 = (ILubyte*)malloc(Info[0].bmiHeader.biSizeImage);
+	Buffer1 = (ILubyte*)ialloc(Info[0].bmiHeader.biSizeImage);
+	Buffer2 = (ILubyte*)ialloc(Info[0].bmiHeader.biSizeImage);
 	if (!Buffer1 || !Buffer2) {
-		ilSetError(ILUT_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -319,8 +315,8 @@ ILboolean ILAPIENTRY ilutSetHBitmap(HBITMAP Bitmap)
 	}
 	ilutCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
 
-	free(Buffer1);
-	free(Buffer2);
+	ifree(Buffer1);
+	ifree(Buffer2);
 
 #endif//_WIN32_WCE
 
@@ -344,22 +340,20 @@ ILboolean ILAPIENTRY ilutSetHPal(HPALETTE Pal)
 	if (NumEntries == 0)
 		return IL_TRUE;  // @TODO:  Determine if correct...
 
-	PalEntries = (LPPALETTEENTRY)malloc(NumEntries * sizeof(PALETTEENTRY));
+	PalEntries = (LPPALETTEENTRY)ialloc(NumEntries * sizeof(PALETTEENTRY));
 	if (PalEntries == NULL) {
-		ilSetError(ILUT_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
 	NumEntries = GetPaletteEntries(Pal, 0, NumEntries, PalEntries);
 
-	TempPal = (ILubyte*)malloc(NumEntries * 3);
+	TempPal = (ILubyte*)ialloc(NumEntries * 3);
 	if (TempPal == NULL) {
-		free(PalEntries);
-		ilSetError(ILUT_OUT_OF_MEMORY);
+		ifree(PalEntries);
 		return IL_FALSE;
 	}
 	if (ilutCurImage->Pal.Palette)
-		free(ilutCurImage->Pal.Palette);
+		ifree(ilutCurImage->Pal.Palette);
 	ilutCurImage->Pal.Palette = TempPal;
 	ilutCurImage->Pal.PalSize = NumEntries * 3;
 	ilutCurImage->Pal.PalType = IL_PAL_RGB24;
@@ -370,7 +364,7 @@ ILboolean ILAPIENTRY ilutSetHPal(HPALETTE Pal)
 		*TempPal++ = PalEntries[i].peBlue;
 	}
 
-	free(PalEntries);
+	ifree(PalEntries);
 
 	return IL_TRUE;
 }
@@ -539,15 +533,14 @@ ILboolean ILAPIENTRY ilutWinLoadUrl(const ILstring Url)
 	ILboolean	Is404 = IL_TRUE;
 	char		Buffer404[] = { '<', 'h', 't', 'm', 'l', '>' };
 
-	Buffer = (ILubyte*)malloc(0);
+	Buffer = (ILubyte*)ialloc(0);
 	if (Buffer == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
 	Handle = InternetOpen("Developer's Image Library", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
 	if (Handle == NULL) {
-		free(Buffer);
+		ifree(Buffer);
 		ilSetError(ILUT_COULD_NOT_OPEN_FILE);
 		return IL_FALSE;
 	}
@@ -558,13 +551,13 @@ ILboolean ILAPIENTRY ilutWinLoadUrl(const ILstring Url)
 		InternetCloseHandle(Handle);
 		Handle = InternetOpen("Developer's Image Library", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, INTERNET_FLAG_FROM_CACHE);
 		if (Handle == NULL) {
-			free(Buffer);
+			ifree(Buffer);
 			ilSetError(ILUT_COULD_NOT_OPEN_FILE);
 			return IL_FALSE;
 		}
 		UrlHandle = InternetOpenUrl(Handle, Url, NULL, 0, 0, Context);
 		if (UrlHandle == NULL) {
-			free(Buffer);
+			ifree(Buffer);
 			InternetCloseHandle(Handle);
 			ilSetError(ILUT_COULD_NOT_OPEN_FILE);
 			return IL_FALSE;
@@ -575,20 +568,19 @@ ILboolean ILAPIENTRY ilutWinLoadUrl(const ILstring Url)
 		if (!InternetReadFile(UrlHandle, Buff, BUFFSIZE, &BytesRead)) {
 			InternetCloseHandle(UrlHandle);
 			InternetCloseHandle(Handle);
-			free(Buffer);
+			ifree(Buffer);
 			ilSetError(ILUT_COULD_NOT_OPEN_FILE);
 			return IL_FALSE;
 		}
 
-		TempBuff = (ILubyte*)malloc(BufferSize + BytesRead);
+		TempBuff = (ILubyte*)ialloc(BufferSize + BytesRead);
 		if (TempBuff == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 
 		memcpy(TempBuff, Buffer, BufferSize);
 		memcpy(TempBuff + BufferSize, Buff, BytesRead);
-		free(Buffer);
+		ifree(Buffer);
 		Buffer = TempBuff;
 
 		BufferSize += BytesRead;
@@ -613,7 +605,7 @@ ILboolean ILAPIENTRY ilutWinLoadUrl(const ILstring Url)
 		}
 	}
 
-	free(Buffer);
+	ifree(Buffer);
 
 	return IL_TRUE;
 }

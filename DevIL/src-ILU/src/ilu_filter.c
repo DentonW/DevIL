@@ -13,7 +13,6 @@
 
 #include "ilu_internal.h"
 #include "ilu_filter.h"
-#include "ilu_alloc.h"
 #include <math.h>
 #include <limits.h>
 
@@ -191,9 +190,8 @@ ILubyte *Filter(ILimage *Image, ILushort Filt)
 		return NULL;
 	}
 
-	Data = (ILubyte*)malloc(Image->SizeOfData);
+	Data = (ILubyte*)ialloc(Image->SizeOfData);
 	if (Data == NULL) {
-		ilSetError(ILU_OUT_OF_MEMORY);
 		return NULL;
 	}
 
@@ -404,8 +402,8 @@ ILboolean ILAPIENTRY iluEdgeDetectP()
 		iluCurImage->Data[i] = (ILubyte)sqrt(HPass[i]*HPass[i]+VPass[i]*VPass[i]);
 	}*/
 	
-	free(HPass);
-	free(VPass);
+	ifree(HPass);
+	ifree(VPass);
 
 	if (Palette)
 		ilConvertImage(IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
@@ -451,8 +449,8 @@ ILboolean ILAPIENTRY iluEdgeDetectS()
 		iluCurImage->Data[i] = (ILubyte)sqrt(HPass[i]*HPass[i]+VPass[i]*VPass[i]);
 	}*/
 	
-	free(HPass);
-	free(VPass);
+	ifree(HPass);
+	ifree(VPass);
 
 	if (Palette)
 		ilConvertImage(IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
@@ -482,7 +480,7 @@ ILboolean ILAPIENTRY iluBlurAvg(ILuint Iter)
 		Data = Filter(iluCurImage, 0);
 		if (!Data)
 			return IL_FALSE;
-		free(iluCurImage->Data);
+		ifree(iluCurImage->Data);
 		iluCurImage->Data = Data;
 	}
 
@@ -514,7 +512,7 @@ ILboolean ILAPIENTRY iluBlurGaussian(ILuint Iter)
 		Data = Filter(iluCurImage, 1);
 		if (!Data)
 			return IL_FALSE;
-		free(iluCurImage->Data);
+		ifree(iluCurImage->Data);
 		iluCurImage->Data = Data;
 	}
 
@@ -544,7 +542,7 @@ ILboolean ILAPIENTRY iluEmboss()
 	Data = Filter(iluCurImage, 6);
 	if (!Data)
 		return IL_FALSE;
-	free(iluCurImage->Data);
+	ifree(iluCurImage->Data);
 	iluCurImage->Data = Data;
 
 	if (Palette)
@@ -564,9 +562,8 @@ ILboolean ILAPIENTRY iluEmboss()
 		return IL_FALSE;
 	}
 
-	Data = (ILubyte*)malloc(iluCurImage->SizeOfData);
+	Data = (ILubyte*)ialloc(iluCurImage->SizeOfData);
 	if (Data == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -579,7 +576,7 @@ ILboolean ILAPIENTRY iluEmboss()
 		Data[i+x] = 128;
 	}
 
-	free(iluCurImage->Data);
+	ifree(iluCurImage->Data);
 	iluCurImage->Data = Data;
 
 	return IL_TRUE;
@@ -605,7 +602,7 @@ ILboolean ILAPIENTRY iluEdgeDetectE()
 	Data = Filter(iluCurImage, 7);
 	if (!Data)
 		return IL_FALSE;
-	free(iluCurImage->Data);
+	ifree(iluCurImage->Data);
 	iluCurImage->Data = Data;
 
 	if (Palette)

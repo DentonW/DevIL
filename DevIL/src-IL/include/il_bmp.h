@@ -74,8 +74,8 @@ typedef struct OS2_HEAD
 #endif
 
 // Internal functions
-ILvoid		iGetBmpHead(BMPHEAD *Header);
-ILvoid		iGetOS2Head(OS2_HEAD *Header);
+ILboolean	iGetBmpHead(BMPHEAD *Header);
+ILboolean	iGetOS2Head(OS2_HEAD *Header);
 ILboolean	iIsValidBmp(ILvoid);
 ILboolean	iCheckBmp(BMPHEAD *Header);
 ILboolean	iCheckOS2(OS2_HEAD *Header);

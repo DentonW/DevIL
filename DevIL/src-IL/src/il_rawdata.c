@@ -81,10 +81,8 @@ ILboolean iLoadDataInternal(ILuint Width, ILuint Height, ILuint Depth, ILubyte B
 	iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
 
 	// Tries to read the correct amount of data
-	if (iread(iCurImage->Data, 1, Width * Height * Depth * Bpp) < Width * Height * Depth * Bpp) {
-		ilSetError(IL_ILLEGAL_OPERATION);
+	if (iread(iCurImage->Data, 1, Width * Height * Depth * Bpp) < Width * Height * Depth * Bpp)
 		return IL_FALSE;
-	}
 
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 	if (ilIsEnabled(IL_ORIGIN_SET)) {

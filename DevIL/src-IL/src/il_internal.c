@@ -192,13 +192,13 @@ ILbyte *iFgets(char *buffer, ILuint maxlen)
 	ILuint	counter = 0;
 	ILint	temp = '\0';
 
-	while ((temp = igetc()) && temp != '\n' && temp != EOF && counter < maxlen) {
+	while ((temp = igetc()) && temp != '\n' && temp != IL_EOF && counter < maxlen) {
 		buffer[counter] = temp;
 		counter++;
 	}
 	buffer[counter] = '\0';
 	
-	if (temp == EOF && counter == 0)  // Only return NULL if no data was "got".
+	if (temp == IL_EOF && counter == 0)  // Only return NULL if no data was "got".
 		return NULL;
 
 	return buffer;

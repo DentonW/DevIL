@@ -93,7 +93,7 @@ ILvoid Hist3d(ILint *vwt, ILint *vmr, ILint *vmg, ILint *vmb, ILfloat *m2)
 	for (i = 0; i < 256; i++) {
 		table[i] = i * i;
 	}
-	Qadd = (ILushort*)malloc(sizeof(ILushort) * size);
+	Qadd = (ILushort*)ialloc(sizeof(ILushort) * size);
 	if (Qadd == NULL) {
 		return;
 	}
@@ -425,18 +425,18 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 
 	//color_num = ImagePrecalculate(Image);
 
-	NewData = (ILubyte*)malloc(Image->Width * Image->Height * Image->Depth);
-	Palette = (ILubyte*)malloc(3 * NumCols);
+	NewData = (ILubyte*)ialloc(Image->Width * Image->Height * Image->Depth);
+	Palette = (ILubyte*)ialloc(3 * NumCols);
 	if (!NewData || !Palette) {
 		return NULL;
 	}
 
-	Ir = malloc(Width * Height * Depth);
-	Ig = malloc(Width * Height * Depth);
-	Ib = malloc(Width * Height * Depth);
+	Ir = ialloc(Width * Height * Depth);
+	Ig = ialloc(Width * Height * Depth);
+	Ib = ialloc(Width * Height * Depth);
 	if (!Ir || !Ig || !Ib) {
-		free(NewData);
-		free(Palette);
+		ifree(NewData);
+		ifree(Palette);
 		return NULL;
 	}
 
@@ -492,13 +492,13 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 			}
 		}
 
-		tag = (ILubyte*)malloc(33 * 33 * 33 * sizeof(ILubyte));
+		tag = (ILubyte*)ialloc(33 * 33 * 33 * sizeof(ILubyte));
 		if (tag == NULL) {
-			free(NewData);
-			free(Palette);
-			free(Ig);
-			free(Ib);
-			free(Ir);
+			ifree(NewData);
+			ifree(Palette);
+			ifree(Ig);
+			ifree(Ib);
+			ifree(Ir);
 			return NULL;
 		}
 		for (k = 0; (ILint)k < K; k++) {
@@ -518,8 +518,8 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 		for (i = 0; i < (ILint)size; i++) {
 			NewData[i] = tag[Qadd[i]];
 		}
-		free(tag);
-		free(Qadd);
+		ifree(tag);
+		ifree(Qadd);
 
 		for (k = 0; k < NumCols; k++) {
 			Palette[k * 3]     = lut_b[k];
@@ -530,17 +530,17 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 	else { // If colors more than 256
 		// Begin Octree quantization
 		//Quant_Octree(Image->Width, Image->Height, Image->Bpp, buffer2, NewData, Palette, K);
-		free(NewData);
-		free(Palette);
-		free(Ig);
-		free(Ib);
-		free(Ir);
+		ifree(NewData);
+		ifree(Palette);
+		ifree(Ig);
+		ifree(Ib);
+		ifree(Ir);
 		return NULL;
 	}
 
-	free(Ig);
-	free(Ib);
-	free(Ir);
+	ifree(Ig);
+	ifree(Ib);
+	ifree(Ir);
 	ilCloseImage(TempImage);
 
 	NewImage = (ILimage*)calloc(sizeof(ILimage), 1);

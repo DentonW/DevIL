@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 05/21/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/pnm.c
+// Filename: src-IL/src/il_pnm.c
 //
 // Description: Reads/writes to/from pbm/pgm/ppm formats (enough slashes? =)
 //
@@ -73,14 +73,6 @@ ILboolean ilIsValidPnmL(ILvoid *Lump, ILuint Size)
 }
 
 
-// Internal function used to get the .pnm header from the current file.
-ILvoid iGetPnmHead(char Header[2])
-{
-	iread(Header, 1, 2);
-	return;
-}
-
-
 // Internal function to get the header and check it.
 ILboolean iIsValidPnm()
 {
@@ -89,6 +81,8 @@ ILboolean iIsValidPnm()
 
 	Read = iread(Head, 1, 2);
 	iseek(-Read, IL_SEEK_CUR);  // Go ahead and restore to previous state
+	if (Read != 2)
+		return IL_FALSE;
 
 	return iCheckPnm(Head);
 }
@@ -369,15 +363,8 @@ ILimage *ilReadBinaryPpm(PPMINFO *Info)
 	}
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 
-	DataInc = iread(iCurImage->Data, 1, Info->Width * Info->Height * Info->Bpp);
-
-	// If we read less than what we should have...
-	if (DataInc < Size) {
-		//ilCloseImage(iCurImage);
-		//ilSetCurImage(NULL);
-		ilSetError(IL_ILLEGAL_FILE_VALUE);
+	if (iread(iCurImage->Data, 1, Size) != Size)
 		return NULL;
-	}
 
 	return iCurImage;
 }
@@ -432,6 +419,8 @@ ILboolean iGetWord(ILvoid)
 
 	while (Looping) {
 		while ((Current = igetc()) != -1 && Current != '\n' && Current != '#' && Current != ' ') {
+			if (Current == IL_EOF)
+				return IL_FALSE;
 			if (!isalnum(Current)) {
 				if (Started) {
 					Looping = IL_FALSE;
@@ -450,11 +439,14 @@ ILboolean iGetWord(ILvoid)
 			break;
 
 		if (Current == '#') {  // '#' is a comment...read until end of line
-			while ((Current = igetc()) != -1 && Current != '\n');
+			while ((Current = igetc()) != IL_EOF && Current != '\n');
 		}
 
 		// Get rid of any erroneous spaces
-		while ((Current = igetc()) == ' ');
+		while ((Current = igetc()) != IL_EOF) {
+			if (Current == ' ')
+				break;
+		}
 		iseek(-1, IL_SEEK_CUR);
 
 		if (WordPos > 0)

@@ -226,7 +226,7 @@ ILimage* MakeGLCompliant(ILimage *Src)
 
 	if (Dest->Origin != (ILenum)ilGetInteger(IL_ORIGIN_MODE)) {
 		Flipped = iGetFlipped(Dest);
-		free(Dest->Data);
+		ifree(Dest->Data);
 		Dest->Data = Flipped;
 	}
 
@@ -351,21 +351,20 @@ ILboolean ILAPIENTRY ilutGLSetTex(GLuint TexID)
 	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH,  &Width);
 	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &Height);
 
-	Data = (ILubyte*)malloc(Width * Height * 4);
+	Data = (ILubyte*)ialloc(Width * Height * 4);
 	if (Data == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
 	glGetTexImage(GL_TEXTURE_2D, 0, IL_BGRA, GL_UNSIGNED_BYTE, Data);
 
 	if (!ilTexImage(Width, Height, 1, 4, IL_BGRA, IL_UNSIGNED_BYTE, Data)) {
-		free(Data);
+		ifree(Data);
 		return IL_FALSE;
 	}
 	ilutCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
 
-	free(Data);
+	ifree(Data);
 	return IL_TRUE;
 }
 

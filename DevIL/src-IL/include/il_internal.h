@@ -196,6 +196,11 @@ char*		ilStrDup(const char *Str);
 ILuint		ilStrLen(const char *Str);
 
 
+// Memory functions
+ILAPI ILvoid*	ILAPIENTRY ialloc(ILuint Size);
+ILAPI ILvoid	ILAPIENTRY ifree(ILvoid *Ptr);
+
+
 // Miscellaneous functions
 ILvoid					ilDefaultStates(ILvoid);
 ILenum					iGetHint(ILenum Target);
@@ -401,9 +406,9 @@ ILboolean ilSaveMng(const ILstring FileName);
 ILboolean ilSaveMngF(ILHANDLE File);
 ILboolean ilSaveMngL(ILvoid *Lump, ILuint Size);
 
-ILboolean ilLoadPcd(const ILstring FileName, ILuint PicNum);
-ILboolean ilLoadPcdF(ILHANDLE File, ILuint PicNum);
-ILboolean ilLoadPcdL(ILvoid *Lump, ILuint Size, ILuint PicNum);
+ILboolean ilLoadPcd(const ILstring FileName);
+ILboolean ilLoadPcdF(ILHANDLE File);
+ILboolean ilLoadPcdL(ILvoid *Lump, ILuint Size);
 
 ILboolean ilIsValidPcx(const ILstring FileName);
 ILboolean ilIsValidPcxF(ILHANDLE File);

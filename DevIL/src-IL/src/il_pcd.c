@@ -2,14 +2,13 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/18/2002 <--Y2K Compliant! =]
+// Last modified: 05/19/2002 <--Y2K Compliant! =]
 //
 // Filename: src-IL/src/il_pcd.c
 //
 // Description: Reads from a Kodak PhotoCD (.pcd) file.
 //		Note:  The code here is sloppy - I had to convert it from Pascal,
 //				which I've never even attempted to read before...enjoy! =)
-//				I have nooooooo idea if it works...don't have a .pcd!
 //
 //-----------------------------------------------------------------------------
 
@@ -19,10 +18,10 @@
 #include "il_manip.h"
 
 
-ILboolean iLoadPcdInternal(ILuint PicNum);
+ILboolean iLoadPcdInternal(ILvoid);
 
 //! Reads a .pcd file
-ILboolean ilLoadPcd(const ILstring FileName, ILuint PicNum)
+ILboolean ilLoadPcd(const ILstring FileName)
 {
 	ILHANDLE	PcdFile;
 	ILboolean	bPcd = IL_FALSE;
@@ -33,7 +32,7 @@ ILboolean ilLoadPcd(const ILstring FileName, ILuint PicNum)
 		return bPcd;
 	}
 
-	bPcd = ilLoadPcdF(PcdFile, PicNum);
+	bPcd = ilLoadPcdF(PcdFile);
 	icloser(PcdFile);
 
 	return bPcd;
@@ -41,14 +40,14 @@ ILboolean ilLoadPcd(const ILstring FileName, ILuint PicNum)
 
 
 //! Reads an already-opened .pcd file
-ILboolean ilLoadPcdF(ILHANDLE File, ILuint PicNum)
+ILboolean ilLoadPcdF(ILHANDLE File)
 {
 	ILuint		FirstPos;
 	ILboolean	bRet;
 
 	iSetInputFile(File);
 	FirstPos = itell();
-	bRet = iLoadPcdInternal(PicNum);
+	bRet = iLoadPcdInternal();
 	iseek(FirstPos, IL_SEEK_SET);
 
 	return bRet;
@@ -56,10 +55,10 @@ ILboolean ilLoadPcdF(ILHANDLE File, ILuint PicNum)
 
 
 //! Reads from a memory "lump" that contains a .pcd file
-ILboolean ilLoadPcdL(ILvoid *Lump, ILuint Size, ILuint PicNum)
+ILboolean ilLoadPcdL(ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
-	return iLoadPcdInternal(PicNum);
+	return iLoadPcdInternal();
 }
 
 
@@ -105,11 +104,12 @@ ILvoid YCbCr2RGB(ILubyte Y, ILubyte Cb, ILubyte Cr, ILubyte *r, ILubyte *g, ILub
 }
 
 
-ILboolean iLoadPcdInternal(ILuint PicNum)
+ILboolean iLoadPcdInternal()
 {
 	ILenum	VertOrientation;
 	ILuint	Width, Height, i, Total, x, CurPos = 0;
-	ILubyte	*Y1, *Y2, *CbCr, r = 0, g = 0, b = 0;
+	ILubyte	*Y1=NULL, *Y2=NULL, *CbCr=NULL, r = 0, g = 0, b = 0;
+	ILuint	PicNum;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -117,9 +117,12 @@ ILboolean iLoadPcdInternal(ILuint PicNum)
 	}
 
 	iseek(72, IL_SEEK_CUR);
-	iread(&VertOrientation, 1, 1);
+	if (iread(&VertOrientation, 1, 1) != 1)
+		return IL_FALSE;
 
 	iseek(-72, IL_SEEK_CUR);  // Can't rewind
+
+	PicNum = iGetInt(IL_PCD_PICNUM);
 
 	switch (PicNum)
 	{
@@ -159,7 +162,12 @@ ILboolean iLoadPcdInternal(ILuint PicNum)
 	for (i = 0; i < Total; i++) {
 		iread(Y1, 1, Width);
 		iread(Y2, 1, Width);
-		iread(CbCr, 1, Width);
+		if (iread(CbCr, 1, Width) != Width) {  // Only really need to check the last one.
+			ifree(Y1);
+			ifree(Y2);
+			ifree(CbCr);
+			return IL_FALSE;
+		}
 
 		for (x = 0; x < Width; x++) {
 			YCbCr2RGB(Y1[x], CbCr[x / 2], CbCr[(Width / 2) + (x / 2)], &r, &g, &b);

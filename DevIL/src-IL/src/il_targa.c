@@ -238,19 +238,13 @@ ILboolean iLoadTargaInternal()
 ILboolean iReadColMapTga(TARGAHEAD *Header)
 {
 	char		ID[255];
-	ILuint		Depth, i;
+	ILuint		i;
 	ILushort	Pixel;
 
-	iread(ID, 1, Header->IDLen);
-	/*if (!strnicmp("3D Targa", ID, strlen("3D Targa"))) {
-		DepthPtr = (ILuint*)(ID + strlen("3D Targa") + 1);  // +1 for the NULL
-		Depth = *DepthPtr;
-	}
-	else {*/
-		Depth = 1;
-	//}
+	if (iread(ID, 1, Header->IDLen) != Header->IDLen)
+		return IL_FALSE;
 	
-	if (!ilTexImage(Header->Width, Header->Height, Depth, (ILubyte)(Header->Bpp >> 3), 0, IL_UNSIGNED_BYTE, NULL)) {
+	if (!ilTexImage(Header->Width, Header->Height, 1, (ILubyte)(Header->Bpp >> 3), 0, IL_UNSIGNED_BYTE, NULL)) {
 		return IL_FALSE;
 	}
 	if (iCurImage->Pal.Palette && iCurImage->Pal.PalSize)
@@ -285,11 +279,14 @@ ILboolean iReadColMapTga(TARGAHEAD *Header)
 	// Do we need to do something with FirstEntry?  Like maybe:
 	//	iread(Image->Pal + Targa->FirstEntry, 1, Image->Pal.PalSize);  ??
 	if (Header->ColMapEntSize != 16) {
-		iread(iCurImage->Pal.Palette, 1, iCurImage->Pal.PalSize);
+		if (iread(iCurImage->Pal.Palette, 1, iCurImage->Pal.PalSize) != iCurImage->Pal.PalSize)
+			return IL_FALSE;
 	}
 	else {
 		for (i = 0; i < iCurImage->Pal.PalSize; i += 4) {
 			Pixel = GetBigUShort();
+			if (ieof())
+				return IL_FALSE;
 			iCurImage->Pal.Palette[3] = (Pixel & 0x8000) >> 12;
 			iCurImage->Pal.Palette[0] = (Pixel & 0xFC00) >> 7;
 			iCurImage->Pal.Palette[1] = (Pixel & 0x03E0) >> 2;
@@ -298,9 +295,11 @@ ILboolean iReadColMapTga(TARGAHEAD *Header)
 	}
 
 	if (Header->ImageType == TGA_COLMAP_COMP)
-		iUncompressTgaData(iCurImage);
+		if (!iUncompressTgaData(iCurImage))
+			return IL_FALSE;
 	else
-		i = iread(iCurImage->Data, 1, iCurImage->SizeOfData);
+		if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) != iCurImage->SizeOfData)
+			return IL_FALSE;
 
 	return IL_TRUE;
 }
@@ -310,24 +309,16 @@ ILboolean iReadUnmapTga(TARGAHEAD *Header)
 {
 	ILubyte	Bpp;
 	char	ID[255];
-	ILuint	Depth;
 
-	iread(ID, 1, Header->IDLen);
-	/*if (!strnicmp("3D Targa", ID, strlen("3D Targa"))) {
-		DepthPtr = (ILuint*)(ID + strlen("3D Targa") + 1);  // +1 for the NULL
-		Depth = *DepthPtr;
-	}
-	else {*/
-		Depth = 1;
-	//}
-
+	if (iread(ID, 1, Header->IDLen) != Header->IDLen)
+		return IL_FALSE;
 
 	/*if (Header->Bpp == 16)
 		Bpp = 3;
 	else*/
 		Bpp = (ILubyte)(Header->Bpp >> 3);
 
-	if (!ilTexImage(Header->Width, Header->Height, Depth, Bpp, 0, IL_UNSIGNED_BYTE, NULL)) {
+	if (!ilTexImage(Header->Width, Header->Height, 1, Bpp, 0, IL_UNSIGNED_BYTE, NULL)) {
 		return IL_FALSE;
 	}
 
@@ -371,13 +362,16 @@ ILboolean iReadUnmapTga(TARGAHEAD *Header)
 
 
 	if (Header->ImageType == TGA_UNMAP_COMP)
-		iUncompressTgaData(iCurImage);
+		if (!iUncompressTgaData(iCurImage))
+			return IL_FALSE;
 	else
-		iread(iCurImage->Data, 1, iCurImage->SizeOfData);
+		if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) != iCurImage->SizeOfData)
+			return IL_FALSE;
 
 	// Go ahead and expand it to 24-bit.
 	if (Header->Bpp == 16) {
-		i16BitTarga(iCurImage);
+		if (!i16BitTarga(iCurImage))
+			return IL_FALSE;
 		return IL_TRUE;
 	}
 
@@ -387,42 +381,40 @@ ILboolean iReadUnmapTga(TARGAHEAD *Header)
 
 ILboolean iReadBwTga(TARGAHEAD *Header)
 {
-	char	ID[255];
-	ILuint	Depth;
+	char ID[255];
 
-	iread(ID, 1, Header->IDLen);
-	/*if (!strnicmp("3D Targa", ID, strlen("3D Targa"))) {
-		DepthPtr = (ILuint*)(ID + strlen("3D Targa") + 1);  // +1 for the NULL
-		Depth = *DepthPtr;
-	}
-	else {*/
-		Depth = 1;
-	//}
+	if (iread(ID, 1, Header->IDLen) != Header->IDLen)
+		return IL_FALSE;
 
 	// We assume that no palette is present, but it's possible...
 	//  Should we mess with it or not?
 
-	if (!ilTexImage(Header->Width, Header->Height, Depth, (ILubyte)(Header->Bpp >> 3), IL_LUMINANCE, IL_UNSIGNED_BYTE, NULL)) {
+	if (!ilTexImage(Header->Width, Header->Height, 1, (ILubyte)(Header->Bpp >> 3), IL_LUMINANCE, IL_UNSIGNED_BYTE, NULL)) {
 		return IL_FALSE;
 	}
 
-	if (Header->ImageType == TGA_BW_COMP)
-		iUncompressTgaData(iCurImage);
-	else
-		iread(iCurImage->Data, 1, iCurImage->SizeOfData);
+	if (Header->ImageType == TGA_BW_COMP) {
+		if (!iUncompressTgaData(iCurImage)) {
+			return IL_FALSE;
+		}
+	}
+	else {
+		if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) != iCurImage->SizeOfData) {
+			return IL_FALSE;
+		}
+	}
 
 	return IL_TRUE;
 }
 
 
-ILvoid iUncompressTgaData(ILimage *Image)
+ILboolean iUncompressTgaData(ILimage *Image)
 {
 	ILuint	BytesRead = 0, Size, RunLen, i;
 	ILubyte	Header, Color[4];
 	ILint	c;
 
 	Size = Image->Width * Image->Height * Image->Depth * Image->Bpp;
-
 
 	if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST) {
 		iPreCache(iCurImage->SizeOfData / 2);
@@ -431,7 +423,10 @@ ILvoid iUncompressTgaData(ILimage *Image)
 			Header = igetc();
 			if (Header & BIT_7) {
 				ClearBits(Header, BIT_7);
-				iread(Color, 1, Image->Bpp);
+				if (iread(Color, 1, Image->Bpp) != Image->Bpp) {
+					iUnCache();
+					return IL_FALSE;
+				}
 				RunLen = (Header+1) * Image->Bpp;
 				for (i = 0; i < RunLen; i += Image->Bpp) {
 					for (c = 0; c < Image->Bpp; c++) {
@@ -442,7 +437,10 @@ ILvoid iUncompressTgaData(ILimage *Image)
 			}
 			else {
 				RunLen = (Header+1) * Image->Bpp;
-				iread(Image->Data + BytesRead, 1, RunLen);
+				if (iread(Image->Data + BytesRead, 1, RunLen) != RunLen) {
+					iUnCache();
+					return IL_FALSE;
+				}
 				BytesRead += RunLen;
 			}
 		}
@@ -454,7 +452,8 @@ ILvoid iUncompressTgaData(ILimage *Image)
 			Header = igetc();
 			if (Header & BIT_7) {
 				ClearBits(Header, BIT_7);
-				iread(Color, 1, Image->Bpp);
+				if (iread(Color, 1, Image->Bpp) != Image->Bpp)
+					return IL_FALSE;
 				RunLen = (Header+1) * Image->Bpp;
 				for (i = 0; i < RunLen; i += Image->Bpp) {
 					for (c = 0; c < Image->Bpp; c++) {
@@ -465,18 +464,19 @@ ILvoid iUncompressTgaData(ILimage *Image)
 			}
 			else {
 				RunLen = (Header+1) * Image->Bpp;
-				iread(Image->Data + BytesRead, 1, RunLen);
+				if (iread(Image->Data + BytesRead, 1, RunLen) != RunLen)
+					return IL_FALSE;
 				BytesRead += RunLen;
 			}
 		}
 	}
 
-	return;
+	return IL_TRUE;
 }
 
 
 // Pretty damn unoptimized
-ILvoid i16BitTarga(ILimage *Image)
+ILboolean i16BitTarga(ILimage *Image)
 {
 	ILushort	*Temp1;
 	ILubyte		*Data, *Temp2;
@@ -485,6 +485,9 @@ ILvoid i16BitTarga(ILimage *Image)
 	Data = (ILubyte*)ialloc(Image->Width * Image->Height * 3);
 	Temp1 = (ILushort*)Image->Data;
 	Temp2 = Data;
+
+	if (Data == NULL)
+		return IL_FALSE;
 
 	for (x = 0; x < PixSize; x++) {
 		*Temp2++ = (*Temp1 & 0x001F) << 3;  // Blue
@@ -511,12 +514,12 @@ ILvoid i16BitTarga(ILimage *Image)
 
 	if (!ilTexImage(Image->Width, Image->Height, 1, 3, IL_BGR, IL_UNSIGNED_BYTE, Data)) {
 		ifree(Data);
-		return;
+		return IL_FALSE;
 	}
 
 	ifree(Data);
 
-	return;
+	return IL_TRUE;
 }
 
 

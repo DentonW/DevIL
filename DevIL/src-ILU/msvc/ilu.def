@@ -27,6 +27,7 @@ iluGetInteger
 iluGetIntegerv
 iluImageParameter
 iluInit
+iluInvertAlpha
 iluLoadImage
 iluMirror
 iluNegative
