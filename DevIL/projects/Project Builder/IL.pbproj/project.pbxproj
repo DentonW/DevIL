@@ -87,7 +87,8 @@
 				INSTALL_PATH = /Library/Frameworks;
 				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-faltivec";
+				OTHER_CFLAGS = "-faltivec -O3";
+				OTHER_LDFLAGS = "-lz -lpng -ljpeg -lmng -ltiff -llcms";
 				PRODUCT_NAME = IL;
 				SECTORDER_FLAGS = "";
 				USE_GCC3_PFE_SUPPORT = NO;
@@ -175,6 +176,7 @@
 				A3800B2903C37D7B00A80001,
 				A3800B2A03C37D7B00A80001,
 				A3800B2B03C37D7B00A80001,
+				A3E7771A068C591B009ADBC2,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -183,6 +185,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				089C1668FE841158C02AAC07,
+				A328B2A8068C5CF00098952D,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -190,7 +193,6 @@
 		0867D69FFE84028FC02AAC07 = {
 			buildActionMask = 2147483647;
 			files = (
-				A3800AD003C37D1F00A80001,
 				A3800B6203C37DA400A80001,
 				A3800B6303C37DA400A80001,
 				A3800B6403C37DA400A80001,
@@ -322,6 +324,7 @@
 		};
 		08FB77ACFE841707C02AAC07 = {
 			children = (
+				A328B2A7068C5CF00098952D,
 				A3800ACB03C37CF400A80001,
 				A3800ACC03C37D0100A80001,
 				A3800ACA03C37CEF00A80001,
@@ -393,6 +396,21 @@
 			settings = {
 			};
 		};
+		A328B2A7068C5CF00098952D = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = configure.in;
+			path = /Users/dario/Developer/Projects/DevIL/cvsroot/DevIL/configure.in;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		A328B2A8068C5CF00098952D = {
+			fileRef = A328B2A7068C5CF00098952D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		A3800ACA03C37CEF00A80001 = {
 			children = (
 				A3800B2E03C37D8D00A80001,
@@ -460,12 +478,6 @@
 			path = "../../cpp wrapper/il_wrap.cpp";
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
-		};
-		A3800AD003C37D1F00A80001 = {
-			fileRef = A3800ACF03C37D1F00A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		A3800AD103C37D2600A80001 = {
 			fileEncoding = 30;
@@ -574,6 +586,7 @@
 		};
 		A3800ADD03C37D3D00A80001 = {
 			children = (
+				A3E77719068C591B009ADBC2,
 				A3800ADE03C37D5100A80001,
 				A3800ADF03C37D5100A80001,
 				A3800AE003C37D5100A80001,
@@ -2347,6 +2360,20 @@
 		};
 		A3AB3C3A06896BA00048586A = {
 			fileRef = A3AB3C3906896BA00048586A;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		A3E77719068C591B009ADBC2 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = il_hdr.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		A3E7771A068C591B009ADBC2 = {
+			fileRef = A3E77719068C591B009ADBC2;
 			isa = PBXBuildFile;
 			settings = {
 			};
