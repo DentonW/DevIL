@@ -188,19 +188,16 @@ void errorHandler(const char* mod, const char* fmt, va_list ap)
 /*
 ILboolean iLoadTiffInternal (TIFF* tif, ILimage* Image)
 {
-	uint32 photometric;
-
 	////
 
-    uint32   w, h, d, photometric, planarconfig, orientation;
-    uint32   samplesperpixel, bitspersample, *sampleinfo, extrasamples;
-    uint32   linesize, tilewidth, tilelength;
-    ILushort si;
+	uint16   photometric, planarconfig, orientation;
+	uint16   samplesperpixel, bitspersample, *sampleinfo, extrasamples;
+	uint32   w, h, d, linesize, tilewidth, tilelength;
+	ILushort si;
 
 	////
 
 	TIFFSetDirectory(tif, directory);
-
 	////
 
 	// Process fields
@@ -260,9 +257,9 @@ ILboolean iLoadTiffInternal (TIFF* tif, ILimage* Image)
 ILboolean iLoadTiffInternal()
 {
     TIFF     *tif;
-    uint32   w, h, d, photometric, planarconfig, orientation;
-    uint32   samplesperpixel, bitspersample, *sampleinfo, extrasamples;
-    uint32   linesize, tilewidth, tilelength;
+    uint16   photometric, planarconfig, orientation;
+    uint16   samplesperpixel, bitspersample, *sampleinfo, extrasamples;
+    uint32   w, h, d, linesize, tilewidth, tilelength;
     ILubyte  *pImageData;
     ILuint   i, ProfileLen, DirCount = 0;
     ILvoid   *Buffer;
