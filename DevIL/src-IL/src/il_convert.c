@@ -954,7 +954,7 @@ ILboolean ilFixCur()
 	return IL_TRUE;
 }
 
-
+/*
 ILboolean ilFixImage()
 {
 	ILuint NumImages, i;
@@ -988,6 +988,55 @@ ILboolean ilFixImage()
 
 	ilBindImage(ilGetCurName());
 	ilFixCur();
+
+	return IL_TRUE;
+}
+*/
+
+/*
+This function was replaced 20050304, because the previous version
+didn't fix the mipmaps of the subimages etc. This version is not
+completely correct either, because the subimages of the subimages
+etc. are not fixed, but at the moment no images of this type can
+be loaded anyway. Thanks to Chris Lux for pointing this out.
+*/
+
+ILboolean ilFixImage()
+{
+	ILuint NumImages, i;
+	ILuint NumMipmaps,j;
+	ILuint NumLayers, k;
+
+	NumImages  = ilGetInteger(IL_NUM_IMAGES);
+	for (i = 0; i <= NumImages; i++) {
+		ilBindImage(ilGetCurName());  // Set to parent image first.
+		if (!ilActiveImage(i))
+			return IL_FALSE;
+
+		NumLayers  = 0;//ilGetInteger(IL_NUM_LAYERS);
+		for (k = 0; k <= NumLayers; k++) {
+			ilBindImage(ilGetCurName());  // Set to parent image first.
+			if (!ilActiveImage(i))
+				return IL_FALSE;
+			if (!ilActiveLayer(k))
+				return IL_FALSE;
+
+			NumMipmaps = ilGetInteger(IL_NUM_MIPMAPS);
+
+			for (j = 0; j <= NumMipmaps; j++) {
+				ilBindImage(ilGetCurName());	// Set to parent image first.
+				if (!ilActiveImage(i))
+					return IL_FALSE;
+				if (!ilActiveLayer(k))
+					return IL_FALSE;
+				if (!ilActiveMipmap(j))
+					return IL_FALSE;
+				if (!ilFixCur())
+					return IL_FALSE;
+			}
+		}
+	}
+	ilBindImage(ilGetCurName());
 
 	return IL_TRUE;
 }
