@@ -158,7 +158,7 @@ ILboolean iLoadPicInternal()
 {
 	ILuint		Alpha = IL_FALSE;
 	ILubyte		Chained;
-	CHANNEL		*Channel = NULL, *Channels, *Prev;
+	CHANNEL		*Channel = NULL, *Channels = NULL, *Prev;
 	PIC_HEAD	Header;
 	ILboolean	Read;
 
@@ -242,7 +242,7 @@ static ILuint readScanline(ILubyte *scan, ILint width, CHANNEL *channel, ILint b
 {
 	ILint		noCol;
 	ILint		off[4];
-	ILuint		status;
+	ILuint		status=0;
 	
 	while (channel) {
 		noCol = 0;

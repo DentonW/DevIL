@@ -102,7 +102,7 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 #elif _WIN32_WCE
 	#define ILUT_USE_WIN32
 #elif _WIN32
-	#ifdef __CYGWIN32__
+	#ifdef __GNUC__ //__CYGWIN32__ (Cygwin seems to not define this with DevIL builds)
 		#include "config.h"
 	#else
 	  	#define ILUT_USE_WIN32

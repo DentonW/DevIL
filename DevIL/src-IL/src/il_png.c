@@ -2,9 +2,9 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 08/30/2001 <--Y2K Compliant! =]
+// Last modified: 02/01/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/png.c
+// Filename: openil/il_png.c
 //
 // Description: Portable network graphics file (.png) functions
 //
@@ -16,6 +16,10 @@
 #ifndef IL_NO_PNG
 #include <png.h>
 #include "il_manip.h"
+
+#if PNG_LIBPNG_VER < 10200
+	#warning DevIL was designed with libpng 1.2.0 or higher in mind.  Consider upgrading at www.libpng.org
+#endif
 
 ILboolean	iIsValidPng(ILvoid);
 ILboolean	iLoadPngInternal(ILvoid);

@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 09/18/2001 <--Y2K Compliant! =]
+// Last modified: 02/01/2002 <--Y2K Compliant! =]
 //
 // Filename: openil/jpeg.c
 //
@@ -20,17 +20,21 @@
 #ifndef IL_NO_JPG
 	#ifndef IL_USE_IJL
 
-	#ifdef RGB_RED
-		#undef RGB_RED
-		#undef RGB_GREEN
-		#undef RGB_BLUE
-	#endif
+		#ifdef RGB_RED
+			#undef RGB_RED
+			#undef RGB_GREEN
+			#undef RGB_BLUE
+		#endif
 
-	#define RGB_RED		0
-	#define RGB_GREEN	1
-	#define RGB_BLUE	2
+		#define RGB_RED		0
+		#define RGB_GREEN	1
+		#define RGB_BLUE	2
 
 		#include <jpeglib.h>
+
+		#if JPEG_LIB_VERSION < 62
+			#warning DevIL was designed with libjpeg 6b or higher in mind.  Consider upgrading at www.ijg.org
+		#endif
 	#else
 		#include <ijl.h>
 		#include <limits.h>
