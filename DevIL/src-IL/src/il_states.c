@@ -551,7 +551,7 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 				ilSetError(IL_ILLEGAL_OPERATION);
 				break;
 			}
-			*Param = iCurImage->NumMips;
+			*Param = iCurImage->NumLayers; //changed 20050304
 			break;
 		case IL_NUM_MIPMAPS:
 			if (iCurImage == NULL) {
