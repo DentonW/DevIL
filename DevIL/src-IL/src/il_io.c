@@ -78,6 +78,8 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 		return IL_TIF;
 	if (!iStrCmp(Ext, IL_TEXT("wal")))
 		return IL_WAL;
+	if (!iStrCmp(Ext, IL_TEXT("xpm")))
+		return IL_XPM;
 
 	return IL_TYPE_UNKNOWN;
 }
@@ -642,6 +644,11 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, const ILstring FileName)
 		case IL_WAL:
 			return ilLoadWal(FileName);
 		#endif
+
+		#ifndef IL_NO_XPM
+		case IL_XPM:
+			return ilLoadXpm(FileName);
+		#endif
 	}
 
 	ilSetError(IL_INVALID_ENUM);
@@ -776,6 +783,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 		#ifndef IL_NO_WAL
 		case IL_WAL:
 			return ilLoadWalF(File);
+		#endif
+
+		#ifndef IL_NO_XPM
+		case IL_XPM:
+			return ilLoadXpmF(File);
 		#endif
 	}
 
@@ -914,6 +926,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, ILvoid *Lump, ILuint Size)
 		#ifndef IL_NO_WAL
 		case IL_WAL:
 			return ilLoadWalL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_XPM
+		case IL_XPM:
+			return ilLoadXpmL(Lump, Size);
 		#endif
 	}
 

@@ -418,7 +418,7 @@ ILboolean iGetWord(ILvoid)
 		return IL_FALSE;
 
 	while (Looping) {
-		while ((Current = igetc()) != -1 && Current != '\n' && Current != '#' && Current != ' ') {
+		while ((Current = igetc()) != IL_EOF && Current != '\n' && Current != '#' && Current != ' ') {
 			if (Current == IL_EOF)
 				return IL_FALSE;
 			if (!isalnum(Current)) {
