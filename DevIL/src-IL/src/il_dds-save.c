@@ -65,7 +65,7 @@ ILboolean ilSaveDdsL(ILvoid *Lump, ILuint Size)
 ILboolean iSaveDdsInternal()
 {
 	ILenum	DXTCFormat;
-	ILuint	counter, numMipMaps;
+	ILuint	counter, numMipMaps, image;
 	ILubyte	*CurData = NULL;
 
 	if (ilNextPower2(iCurImage->Width) != iCurImage->Width ||
@@ -75,6 +75,7 @@ ILboolean iSaveDdsInternal()
 			return IL_FALSE;
 	}
 
+	image = ilGetInteger(IL_CUR_IMAGE);
 	DXTCFormat = iGetInt(IL_DXTC_FORMAT);
 	WriteHeader(iCurImage, DXTCFormat);
 	
@@ -99,7 +100,8 @@ ILboolean iSaveDdsInternal()
 			iCurImage->Data = CurData;
 		}
 		
-		ilActiveMipmap(0);
+		//ilActiveMipmap(0);
+		ilBindImage(image);
 	}
 
 	return IL_TRUE;
@@ -140,6 +142,9 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat)
 			break;
 		case IL_3DC:
 			FourCC = IL_MAKEFOURCC('A','T','I','2');
+			break;
+		case IL_RXGB:
+			FourCC = IL_MAKEFOURCC('R','X','G','B');
 			break;
 		default:
 			// Error!
@@ -212,6 +217,7 @@ ILuint ILAPIENTRY ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize, ILenum DXTCFo
 			case IL_DXT3:
 			case IL_DXT5:
 			case IL_3DC:
+			case IL_RXGB:
 				return iCurImage->Width * iCurImage->Height / 16 * 16;
 			default:
 				ilSetError(IL_FORMAT_NOT_SUPPORTED);
@@ -394,6 +400,92 @@ ILubyte *CompressTo88(ILimage *Image)
 	return Data;
 }
 
+void CompressToRXGB(ILimage *Image, ILushort** xgb, ILubyte** r)
+{
+	ILimage		*TempImage;
+	ILuint		i, j;
+	ILushort	*Data;
+	ILubyte		*Alpha;
+
+	*xgb = NULL;
+	*r = NULL;
+
+	if ((Image->Type != IL_UNSIGNED_BYTE && Image->Type != IL_BYTE) || Image->Format == IL_COLOUR_INDEX) {
+		TempImage = iConvertImage(iCurImage, IL_BGR, IL_UNSIGNED_BYTE);  // @TODO: Needs to be BGRA.
+		if (TempImage == NULL)
+			return;
+	}
+	else {
+		TempImage = Image;
+	}
+
+	*xgb = (ILushort*)ialloc(iCurImage->Width * iCurImage->Height * 2);
+	*r = ialloc(iCurImage->Width * iCurImage->Height);
+	if (*xgb == NULL || *r == NULL) {
+		if (TempImage != Image)
+			ilCloseImage(TempImage);
+		return;
+	}
+
+	//Alias pointers to be able to use copy'n'pasted code :)
+	Data = *xgb;
+	Alpha = *r;
+
+	switch (TempImage->Format)
+	{
+		case IL_RGB:
+			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 3, j++) {
+				Alpha[j] = TempImage->Data[i];
+				Data[j] = (TempImage->Data[i+1] >> 2) << 5;
+				Data[j] |=  TempImage->Data[i+2] >> 3;
+			}
+			break;
+
+		case IL_RGBA:
+			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 4, j++) {
+				Alpha[j]  = TempImage->Data[i];
+				Data[j] = (TempImage->Data[i+1] >> 2) << 5;
+				Data[j] |=  TempImage->Data[i+2] >> 3;
+			}
+			break;
+
+		case IL_BGR:
+			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 3, j++) {
+				Alpha[j]  = TempImage->Data[i+2];
+				Data[j] = (TempImage->Data[i+1] >> 2) << 5;
+				Data[j] |=  TempImage->Data[i  ] >> 3;
+			}
+			break;
+
+		case IL_BGRA:
+			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 4, j++) {
+				Alpha[j]  = TempImage->Data[i+2];
+				Data[j] = (TempImage->Data[i+1] >> 2) << 5;
+				Data[j] |=  TempImage->Data[i  ] >> 3;
+			}
+			break;
+
+		case IL_LUMINANCE:
+			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i++, j++) {
+				Alpha[j]  = TempImage->Data[i];
+				Data[j] = (TempImage->Data[i] >> 2) << 5;
+				Data[j] |=  TempImage->Data[i] >> 3;
+			}
+			break;
+
+		case IL_LUMINANCE_ALPHA:
+			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 2, j++) {
+				Alpha[j]  = TempImage->Data[i];
+				Data[j] = (TempImage->Data[i] >> 2) << 5;
+				Data[j] |=  TempImage->Data[i] >> 3;
+			}
+			break;
+	}
+
+	if (TempImage != Image)
+		ilCloseImage(TempImage);
+}
+
 
 ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 {
@@ -440,15 +532,26 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 	}
 	else
 	{
+		if (DXTCFormat != IL_RXGB) {
+			Data = CompressTo565(Image);
+			if (Data == NULL)
+				return 0;
 
-		Data = CompressTo565(Image);
-		if (Data == NULL)
-			return 0;
-
-		Alpha = ilGetAlpha(IL_UNSIGNED_BYTE);
-		if (Alpha == NULL) {
-			ifree(Data);
-			return 0;
+			Alpha = ilGetAlpha(IL_UNSIGNED_BYTE);
+			if (Alpha == NULL) {
+				ifree(Data);
+				return 0;
+			}
+		}
+		else {
+			CompressToRXGB(Image, &Data, &Alpha);
+			if (Data == NULL || Alpha == NULL) {
+				if (Data != NULL)
+					ifree(Data);
+				if (Alpha != NULL)
+					ifree(Alpha);
+				return 0;
+			}
 		}
 
 		switch (DXTCFormat)
@@ -476,7 +579,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 							BitMask = GenBitMask(ex0, ex1, 4, Block, NULL, NULL);
 						SaveLittleUInt(BitMask);
 						Count += 8;
-					}		
+					}
 				}
 				break;
 
@@ -518,6 +621,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 				}
 				break;
 
+			case IL_RXGB:
 			case IL_DXT5:
 				for (y = 0; y < Image->Height; y += 4) {
 					for (x = 0; x < Image->Width; x += 4) {
