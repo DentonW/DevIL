@@ -10,6 +10,7 @@ int			NumLib, NumInc;
 ofstream	Out;
 
 bool	GetDirs(void);
+bool	TestVC7(void);
 void	TestInc(char *FileName, char *SubDir, char *Directive, bool IfFound);
 void	CleanUp(void);
 void	Compare(void);
@@ -66,6 +67,9 @@ bool GetDirs()
 	DWORD	IncLen=2048, LibLen=2048, i;
 	char	*Token;
 
+	if (TestVC7())
+		return true;
+
 	Result = RegOpenKey(HKEY_CURRENT_USER, 
 		TEXT("Software\\Microsoft\\DevStudio\\6.0\\Build System\\Components\\Platforms\\Win32 (x86)\\Directories"),
 		&Key);
@@ -116,9 +120,6 @@ bool GetDirs()
 	}
 
 
-
-	printf("\n");
-
 	strcpy(Temp, Lib);
 	i = 0;
 	Token = strtok(Temp, ";");
@@ -137,6 +138,85 @@ bool GetDirs()
 		Token = strtok(NULL, ";");
 	}
 
+
+	return true;
+}
+
+
+bool TestVC7()
+{
+	LONG	Result;
+	HKEY	Key;
+	char	VCInstallDir[2048], Inc[2048], Temp[2048];
+	DWORD	InstLen=2048, IncLen=2048, i;
+	char	*Token;
+
+	Result = RegOpenKey(HKEY_LOCAL_MACHINE, 
+		TEXT("SOFTWARE\\Microsoft\\VisualStudio\\7.0\\Setup\\VC"),
+		&Key);
+	if (Result != ERROR_SUCCESS)
+		return false;
+
+	Result = RegQueryValueEx(Key,
+		TEXT("ProductDir"),
+		NULL,
+		NULL,
+		(LPBYTE)VCInstallDir,
+		&InstLen);
+	if (Result != ERROR_SUCCESS) {
+		RegCloseKey(Key);
+		return false;
+	}
+	RegCloseKey(Key);
+
+
+	Result = RegOpenKey(HKEY_LOCAL_MACHINE, 
+		TEXT("SOFTWARE\\Microsoft\\VisualStudio\\7.0\\VC\\VC_OBJECTS_PLATFORM_INFO\\Win32\\Directories"),
+		&Key);
+	if (Result != ERROR_SUCCESS)
+		return false;
+
+	Result = RegQueryValueEx(Key,
+		TEXT("Include Dirs"),
+		NULL,
+		NULL,
+		(LPBYTE)Inc,
+		&IncLen);
+	if (Result != ERROR_SUCCESS) {
+		RegCloseKey(Key);
+		return false;
+	}
+	RegCloseKey(Key);
+
+
+	i = 0;
+	strcpy(Temp, Inc);
+	Token = strtok(Temp, ";");
+	while (Token != NULL) {
+		i++;
+		Token = strtok(NULL, ";");
+	}
+	IncDirs = new char *[i];
+	NumInc = i;
+
+	i = 0;
+	strcpy(Temp, Inc);
+	Token = strtok(Temp, ";");
+	while (Token != NULL) {
+		IncDirs[i++] = strdup(Token);
+		Token = strtok(NULL, ";");
+	}
+
+
+	// Replace $(VCInstallDir) with InstDir.
+	for (i = 0; i < (DWORD)NumInc; i++) {
+		if (!strncmp("$(VCInstallDir)", IncDirs[i], strlen("$(VCInstallDir)"))) {
+			strcpy(Temp, VCInstallDir);
+			strcat(Temp, IncDirs[i] + strlen("$(VCInstallDir)"));
+			free(IncDirs[i]);
+			IncDirs[i] = strdup(Temp);
+		}
+	}
 
 	return true;
 }
@@ -166,9 +246,9 @@ void TestInc(char *FileName, char *SubDir, char *Directive, bool IfFound)
 	}
 
 	if (IfFound)
-		Out << "#define " << Directive << endl;
-	else
 		Out << "//#define " << Directive << endl;
+	else
+		Out << "#define " << Directive << endl;
 
 	return;
 }
