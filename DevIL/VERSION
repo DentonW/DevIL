@@ -4,6 +4,7 @@
 - Fixed a crash with the .psp code and a large memory leak.
 - Fixed .gif loading, even loading animations better than I did with libungif.
 - Added the static library workspace to /projects/msvc/static.
+- Fixed another Mac OS X compilation problem.
 
 
 1.4.0

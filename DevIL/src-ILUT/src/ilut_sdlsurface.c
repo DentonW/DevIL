@@ -1,11 +1,11 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2001 by Denton Woods
-// Copyright (C) 2001 Nelson Rush.
-// Last modified:  8/14/01
+// Copyright (C) 2002 by Denton Woods
+// Copyright (C) 2002 Nelson Rush.
+// Last modified:  05/18/2002
 //
-// Filename: openilut/sdlsurface.c
+// Filename: src-ILUT/src/ilut_sdlsurface.c
 //
 // Description:  SDL Surface functions for images
 //
@@ -43,7 +43,7 @@ ILvoid InitSDL()
 
 //ILboolean ilConvertPal(ILenum DestFormat);
 
-ILpal *Pal;
+//ILpal *Pal;
 
 // Does not account for converting luminance...
 SDL_Surface * ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags)
