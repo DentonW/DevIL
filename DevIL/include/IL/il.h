@@ -397,6 +397,7 @@ typedef void			ILvoid;
 #define IL_IMAGE_OFFX						0x0DFB
 #define IL_IMAGE_OFFY						0x0DFC
 #define IL_IMAGE_CUBEFLAGS					0x0DFD
+#define IL_IMAGE_ORIGIN	    				0x0DFE
 
 
 //
@@ -563,13 +564,6 @@ ILAPI ILboolean		ILAPIENTRY ilSaveFromJpegStruct(ILvoid* JpegCompressorPtr);
 #define ilKeyColor		ilKeyColour
 
 
-#ifdef __cplusplus
-}
-#endif
-
-#endif // __IL_H__
-#endif // __il_h__
-
 #ifdef ALTIVEC
     #define imemclear(x,y) vec_memclear(x,y);
 #else
@@ -579,3 +573,12 @@ ILAPI ILboolean		ILAPIENTRY ilSaveFromJpegStruct(ILvoid* JpegCompressorPtr);
 #ifdef ALTIVEC
     void vec_memclear( ILvoid *, ILuint );
 #endif
+
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // __IL_H__
+#endif // __il_h__
