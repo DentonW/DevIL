@@ -818,6 +818,8 @@ Optional Features:
   --disable-pcx           Doesn't compile pcx support
   --disable-png           Doesn't compile png support
   --disable-pnm           Doesn't compile pnm support
+  --disable-psd           Doesn't compile psd support
+  --disable-psp           Doesn't compile psp support
   --disable-raw           Doesn't compile raw support
   --disable-sgi           Doesn't compile sgi support
   --disable-tga           Doesn't compile tga support
@@ -8067,6 +8069,22 @@ else
   no_pnm="no"
 fi;
 
+# Check whether --enable-psd or --disable-psd was given.
+if test "${enable_psd+set}" = set; then
+  enableval="$enable_psd"
+  no_psd="yes"
+else
+  no_psd="no"
+fi;
+
+# Check whether --enable-psp or --disable-psp was given.
+if test "${enable_psp+set}" = set; then
+  enableval="$enable_psp"
+  no_psp="yes"
+else
+  no_psp="no"
+fi;
+
 # Check whether --enable-lcms or --disable-lcms was given.
 if test "${enable_lcms+set}" = set; then
   enableval="$enable_lcms"
@@ -9431,6 +9449,43 @@ else
   IL_NO_PNM_FALSE=
 fi
 
+
+if test "$no_psd"  = "yes"  ; then
+  cat >>confdefs.h <<\EOF
+#define IL_NO_PSD 1
+EOF
+
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PSD "
+fi
+
+if test x$no_psd != "xyes"; then
+  IL_NO_PSD_TRUE=
+  IL_NO_PSD_FALSE='#'
+else
+  IL_NO_PSD_TRUE='#'
+  IL_NO_PSD_FALSE=
+fi
+
+
+if test "$no_psp"  = "yes"  ; then
+  cat >>confdefs.h <<\EOF
+#define IL_NO_PSP 1
+EOF
+
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PSP "
+fi
+
+if test x$no_psp != "xyes"; then
+  IL_NO_PSP_TRUE=
+  IL_NO_PSP_FALSE='#'
+else
+  IL_NO_PSP_TRUE='#'
+  IL_NO_PSP_FALSE=
+fi
+
+
 if test "$no_raw"  = "yes"  ; then
   cat >>confdefs.h <<\EOF
 #define IL_NO_RAW 1
@@ -10098,6 +10153,10 @@ s,@IL_NO_PNG_TRUE@,$IL_NO_PNG_TRUE,;t t
 s,@IL_NO_PNG_FALSE@,$IL_NO_PNG_FALSE,;t t
 s,@IL_NO_PNM_TRUE@,$IL_NO_PNM_TRUE,;t t
 s,@IL_NO_PNM_FALSE@,$IL_NO_PNM_FALSE,;t t
+s,@IL_NO_PSD_TRUE@,$IL_NO_PSD_TRUE,;t t
+s,@IL_NO_PSD_FALSE@,$IL_NO_PSD_FALSE,;t t
+s,@IL_NO_PSP_TRUE@,$IL_NO_PSP_TRUE,;t t
+s,@IL_NO_PSP_FALSE@,$IL_NO_PSP_FALSE,;t t
 s,@IL_NO_RAW_TRUE@,$IL_NO_RAW_TRUE,;t t
 s,@IL_NO_RAW_FALSE@,$IL_NO_RAW_FALSE,;t t
 s,@IL_NO_SGI_TRUE@,$IL_NO_SGI_TRUE,;t t
