@@ -2,7 +2,7 @@
 
 CC=gcc
 OBJECTS=gltest.o
-LIBS=-lGL -lGLU -lglut -lIL -lILU -lILUT
+LIBS=-lm -lGL -lGLU -lglut -lIL -lILU -lILUT
 
 all: DevIL_testGL
 
