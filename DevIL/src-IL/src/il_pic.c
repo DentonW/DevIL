@@ -225,7 +225,7 @@ static ILuint readScanlines(ILuint *image,
 							 CHANNEL *channel, ILuint alpha)
 {
 	ILint i;
-	
+
 	(ILvoid)alpha;
 	
 	for (i = height - 1; i >= 0; i--) {
@@ -361,7 +361,7 @@ static ILuint channelReadMixed(ILubyte *scan, ILint width, ILint noCol, ILint *o
 			
 			// We've run past...
 			if ((i + count) > width) {
-				fprintf(stderr, "ERROR: FF_PIC_load(): Overrun scanline (Repeat) [%d + %d > %d] (NC=%d)\n", i, count, width, noCol);
+				//fprintf(stderr, "ERROR: FF_PIC_load(): Overrun scanline (Repeat) [%d + %d > %d] (NC=%d)\n", i, count, width, noCol);
 				return IL_FALSE;
 			}
 			
@@ -375,7 +375,7 @@ static ILuint channelReadMixed(ILubyte *scan, ILint width, ILint noCol, ILint *o
 		} else {				// Raw sequence
 			count++;
 			if ((i + count) > width) {
-				fprintf(stderr, "ERROR: FF_PIC_load(): Overrun scanline (Raw) [%d + %d > %d] (NC=%d)\n", i, count, width, noCol);
+				//fprintf(stderr, "ERROR: FF_PIC_load(): Overrun scanline (Raw) [%d + %d > %d] (NC=%d)\n", i, count, width, noCol);
 				return IL_FALSE;
 			}
 			

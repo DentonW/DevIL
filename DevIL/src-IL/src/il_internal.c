@@ -21,7 +21,7 @@ ILimage *iCurImage = NULL;
 
 /* Siigron: added this for Linux... a #define should work, but for some reason
 	it doesn't (anyone who knows why?) */
-#if !_WIN32
+#if !_WIN32 //|| (_WIN32 && __GNUC__) // Cygwin
 	int stricmp(const char *src1, const char *src2)
 	{
 		return strcasecmp(src1, src2);
@@ -41,7 +41,18 @@ ILimage *iCurImage = NULL;
 	}
 #endif /* _WIN32 */
 
-#if _WIN32_WCE
+#ifndef stricmp
+	int stricmp(const char *src1, const char *src2)
+	{
+		return strcasecmp(src1, src2);
+	}
+	int strnicmp(const char *src1, const char *src2, size_t max)
+	{
+		return strncasecmp(src1, src2, max);
+	}
+#endif//stricmp
+
+#if _UNICODE //_WIN32_WCE
 	int iStrCmp(const ILstring src1, const ILstring src2)
 	{
 		return wcsicmp(src1, src2);
