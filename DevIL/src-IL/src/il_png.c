@@ -8,6 +8,10 @@
 //
 // Description: Portable network graphics file (.png) functions
 //
+// 20040223 XIX : now may spit out pngs with a transparent index, this is mostly a hack
+// but the proper way of doing it would be to change the pal stuff to think in argb rather than rgb
+// which is something of a bigger job.
+//
 //-----------------------------------------------------------------------------
 
 // Most of the comments are left in this file from libpng's excellent example.c
@@ -457,6 +461,10 @@ ILboolean iSavePngInternal()
 	ILimage 	*Temp = NULL;
 	ILpal		*TempPal = NULL;
 
+//XIX alpha
+	ILubyte		transpart[1];
+	ILint		trans;
+
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
@@ -561,6 +569,14 @@ ILboolean iSavePngInternal()
 		TempPal = iConvertPal(&iCurImage->Pal, IL_PAL_RGB24);
 		png_set_PLTE(png_ptr, info_ptr, (png_colorp)TempPal->Palette,
 			ilGetInteger(IL_PALETTE_NUM_COLS));
+
+//XIX alpha
+		trans=iGetInt(IL_PNG_ALPHA_INDEX);
+		if ( trans>=0)
+		{
+			transpart[0]=(ILubyte)trans;
+			png_set_tRNS(png_ptr, info_ptr, transpart, 1, 0);
+		}
 	}
 
 	/*

@@ -14,10 +14,10 @@
 /* #undef IL_NO_GIF */
 /* #undef IL_NO_ICO */
 /* #undef IL_NO_JPG */
-#define IL_NO_LCMS 1
+//#define IL_NO_LCMS 1
 /* #undef IL_NO_LIF */
 /* #undef IL_NO_MDL */
-#define IL_NO_MNG 1
+//#define IL_NO_MNG 1
 /* #undef IL_NO_PCD */
 /* #undef IL_NO_PCX */
 /* #undef IL_NO_PIC */
@@ -33,15 +33,16 @@
 /* #undef IL_NO_TIF */
 /* #undef IL_NO_WAL */
 /* #undef IL_NO_XPM */
+#undef IL_USE_JPEGLIB_UNMODIFIED
 #define IL_USE_JPEGLIB_UNMODIFIED 1
 
 /* Supported api (ilut) */
 
 /* #undef ILUT_USE_ALLEGRO */
-/* #undef ILUT_USE_DIRECTX8 */
-/* #undef ILUT_USE_DIRECTX9 */
+#define ILUT_USE_DIRECTX8 1
+#define ILUT_USE_DIRECTX9 1
 #define ILUT_USE_OPENGL 1
-#define ILUT_USE_SDL 1
+//#define ILUT_USE_SDL 1
 #define ILUT_USE_WIN32 1
 
 

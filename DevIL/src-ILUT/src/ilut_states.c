@@ -32,6 +32,7 @@ ILvoid ilutDefaultStates()
 	ilutStates[ilutCurrentPos].ilutGenS3TC = IL_FALSE;
 	ilutStates[ilutCurrentPos].D3DMipLevels = 0;
 	ilutStates[ilutCurrentPos].D3DPool = 0;
+	ilutStates[ilutCurrentPos].D3DAlphaKeyColor = -1;
 }
 
 
@@ -196,6 +197,9 @@ ILvoid ILAPIENTRY ilutGetIntegerv(ILenum Mode, ILint *Param)
 		case ILUT_D3D_MIPLEVELS:
 			*Param = ilutStates[ilutCurrentPos].D3DMipLevels;
 			break;
+		case ILUT_D3D_ALPHA_KEY_COLOR:
+			*Param = ilutStates[ilutCurrentPos].D3DAlphaKeyColor;
+			break;
 		case ILUT_D3D_POOL:
 			*Param = ilutStates[ilutCurrentPos].D3DPool;
 			break;
@@ -225,7 +229,7 @@ ILvoid ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param)
 				return;
 			}
 
-#ifdef ILUT_USE_OPENGL
+//#ifdef ILUT_USE_OPENGL
 		case ILUT_MAXTEX_WIDTH:
 			iGLSetMaxW(Param);
 			return;
@@ -247,14 +251,19 @@ ILvoid ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param)
 				return;
 			}
 			break;
-#endif//ILUT_USE_OPENGL
+//#endif//ILUT_USE_OPENGL
 
-#ifdef ILUT_USE_DIRECTX8
+//#ifdef ILUT_USE_DIRECTX8
 		case ILUT_D3D_MIPLEVELS:
 			if (Param >= 0) {
 				ilutStates[ilutCurrentPos].D3DMipLevels = Param;
 				return;
 			}
+			break;
+
+		case ILUT_D3D_ALPHA_KEY_COLOR:
+				ilutStates[ilutCurrentPos].D3DAlphaKeyColor = Param;
+				return;
 			break;
 
 		case ILUT_D3D_POOL:
@@ -263,7 +272,7 @@ ILvoid ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param)
 				return;
 			}
 			break;
-#endif//ILUT_USE_DIRECTX8
+//#endif//ILUT_USE_DIRECTX8
 
 		default:
 			ilSetError(ILUT_INVALID_ENUM);
@@ -294,6 +303,7 @@ ILvoid ILAPIENTRY ilutPushAttrib(ILuint Bits)
 	}
 	if (Bits & ILUT_D3D_BIT) {
 		ilutStates[ilutCurrentPos].D3DMipLevels = ilutStates[ilutCurrentPos-1].D3DMipLevels;
+		ilutStates[ilutCurrentPos].D3DAlphaKeyColor = ilutStates[ilutCurrentPos-1].D3DAlphaKeyColor;
 	}
 
 	return;

@@ -21,12 +21,12 @@
 ILimage*	MakeD3D8Compliant(IDirect3DDevice8 *Device, D3DFORMAT *DestFormat);
 ILenum		GetD3D8Compat(ILenum Format);
 D3DFORMAT	GetD3DFormat(ILenum Format);
-ILboolean	iD3DCreateMipmaps(IDirect3DTexture8 *Texture, ILimage *Image);
+ILboolean	iD3D8CreateMipmaps(IDirect3DTexture8 *Texture, ILimage *Image);
 
-ILboolean	FormatsChecked = IL_FALSE;
-ILboolean	FormatSupported[6] =
+ILboolean	FormatsDX8Checked = IL_FALSE;
+ILboolean	FormatsDX8supported[6] =
 	{ IL_FALSE, IL_FALSE, IL_FALSE, IL_FALSE, IL_FALSE, IL_FALSE };
-D3DFORMAT	Formats[6] =
+D3DFORMAT	FormatsDX8[6] =
 	{ D3DFMT_R8G8B8, D3DFMT_A8R8G8B8, D3DFMT_L8, D3DFMT_DXT1, D3DFMT_DXT3, D3DFMT_DXT5 };
 
 
@@ -37,7 +37,7 @@ ILboolean ilutD3D8Init()
 }
 
 
-ILvoid CheckFormats(IDirect3DDevice8 *Device)
+ILvoid CheckFormatsDX8(IDirect3DDevice8 *Device)
 {
 	D3DDISPLAYMODE	DispMode;
 	HRESULT			hr;
@@ -49,12 +49,12 @@ ILvoid CheckFormats(IDirect3DDevice8 *Device)
 
 	for (i = 0; i < 6; i++) {
 		hr = IDirect3D8_CheckDeviceFormat(TestD3D8, D3DADAPTER_DEFAULT,
-			D3DDEVTYPE_HAL, DispMode.Format, 0, D3DRTYPE_TEXTURE, Formats[i]);
-		FormatSupported[i] = SUCCEEDED(hr);
+			D3DDEVTYPE_HAL, DispMode.Format, 0, D3DRTYPE_TEXTURE, FormatsDX8[i]);
+		FormatsDX8supported[i] = SUCCEEDED(hr);
 	}
 
 	IDirect3D8_Release(TestD3D8);
-	FormatsChecked = IL_TRUE;
+	FormatsDX8Checked = IL_TRUE;
 
 	return;
 }
@@ -172,7 +172,7 @@ ILboolean ILAPIENTRY ilutD3D8VolTexFromFileHandle(IDirect3DDevice8 *Device, ILHA
 }
 
 
-D3DFORMAT D3DGetDXTCNum(ILenum DXTCFormat)
+D3DFORMAT D3DGetDXTCNumDX8(ILenum DXTCFormat)
 {
 	switch (DXTCFormat)
 	{
@@ -204,12 +204,12 @@ IDirect3DTexture8* ILAPIENTRY ilutD3D8Texture(IDirect3DDevice8 *Device)
 		return NULL;
 	}
 
-	if (!FormatsChecked)
-		CheckFormats(Device);
+	if (!FormatsDX8Checked)
+		CheckFormatsDX8(Device);
 
-	if (ilutGetBoolean(ILUT_D3D_USE_DXTC) && FormatSupported[3] && FormatSupported[4] && FormatSupported[5]) {
+	if (ilutGetBoolean(ILUT_D3D_USE_DXTC) && FormatsDX8supported[3] && FormatsDX8supported[4] && FormatsDX8supported[5]) {
 		if (ilutCurImage->DxtcData != NULL && ilutCurImage->DxtcSize != 0) {
-			Format = D3DGetDXTCNum(ilutCurImage->DxtcFormat);
+			Format = D3DGetDXTCNumDX8(ilutCurImage->DxtcFormat);
 
 			if (FAILED(IDirect3DDevice8_CreateTexture(Device, ilutCurImage->Width,
 				ilutCurImage->Height, ilutGetInteger(ILUT_D3D_MIPLEVELS), 0, Format,
@@ -235,7 +235,7 @@ IDirect3DTexture8* ILAPIENTRY ilutD3D8Texture(IDirect3DDevice8 *Device)
 					return NULL;
 				}
 
-				Format = D3DGetDXTCNum(DXTCFormat);
+				Format = D3DGetDXTCNumDX8(DXTCFormat);
 				if (FAILED(IDirect3DDevice8_CreateTexture(Device, ilutCurImage->Width,
 					ilutCurImage->Height, ilutGetInteger(ILUT_D3D_MIPLEVELS), 0, Format,
 					ilutGetInteger(ILUT_D3D_POOL), &Texture))) {
@@ -273,7 +273,7 @@ success:
 	IDirect3DTexture8_UnlockRect(Texture, 0);
 	// Just let D3DX filter for us.
 	//D3DXFilterTexture(Texture, NULL, D3DX_DEFAULT, D3DX_FILTER_BOX);
-	iD3DCreateMipmaps(Texture, Image);
+	iD3D8CreateMipmaps(Texture, Image);
 
 	if (Image != ilutCurImage)
 		ilCloseImage(Image);
@@ -295,8 +295,8 @@ IDirect3DVolumeTexture8* ILAPIENTRY ilutD3D8VolumeTexture(IDirect3DDevice8 *Devi
 		return NULL;
 	}
 
-	if (!FormatsChecked)
-		CheckFormats(Device);
+	if (!FormatsDX8Checked)
+		CheckFormatsDX8(Device);
 
 	Image = MakeD3D8Compliant(Device, &Format);
 	if (Image == NULL)
@@ -363,7 +363,7 @@ ILimage *MakeD3D8Compliant(IDirect3DDevice8 *Device, D3DFORMAT *DestFormat)
 }
 
 
-ILboolean iD3DCreateMipmaps(IDirect3DTexture8 *Texture, ILimage *Image)
+ILboolean iD3D8CreateMipmaps(IDirect3DTexture8 *Texture, ILimage *Image)
 {
 	D3DLOCKED_RECT	Rect;
 	D3DSURFACE_DESC	Desc;

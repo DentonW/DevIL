@@ -10,6 +10,7 @@
 //
 //-----------------------------------------------------------------------------
 
+
 #include "ilut_internal.h"
 #ifdef ILUT_USE_DIRECTX9
 
@@ -21,15 +22,15 @@
 ILimage*	MakeD3D9Compliant(IDirect3DDevice9 *Device, D3DFORMAT *DestFormat);
 ILenum		GetD3D9Compat(ILenum Format);
 //D3DFORMAT	GetD3DFormat(ILenum Format);
-D3DFORMAT	D3DGetDXTCNum(ILenum DXTCFormat);
+D3DFORMAT	D3DGetDXTCNumDX9(ILenum DXTCFormat);
 ILenum		D3DGetDXTCFormat(D3DFORMAT DXTCNum);
-ILboolean	iD3DCreateMipmaps(IDirect3DTexture9 *Texture, ILimage *Image);
+ILboolean	iD3D9CreateMipmaps(IDirect3DTexture9 *Texture, ILimage *Image);
 IDirect3DTexture9* iD3DMakeTexture( IDirect3DDevice9 *Device, void *Data, ILuint DLen, ILuint Width, ILuint Height, D3DFORMAT Format, D3DPOOL Pool, ILuint Levels );
 
-ILboolean	FormatsChecked = IL_FALSE;
-ILboolean	FormatSupported[6] =
+ILboolean	FormatsDX9Checked = IL_FALSE;
+ILboolean	FormatsDX9supported[6] =
 	{ IL_FALSE, IL_FALSE, IL_FALSE, IL_FALSE, IL_FALSE, IL_FALSE };
-D3DFORMAT	Formats[6] =
+D3DFORMAT	FormatsDX9[6] =
 	{ D3DFMT_R8G8B8, D3DFMT_A8R8G8B8, D3DFMT_L8, D3DFMT_DXT1, D3DFMT_DXT3, D3DFMT_DXT5 };
 
 
@@ -40,7 +41,7 @@ ILboolean ilutD3D9Init()
 }
 
 
-ILvoid CheckFormats(IDirect3DDevice9 *Device)
+ILvoid CheckFormatsDX9(IDirect3DDevice9 *Device)
 {
 	D3DDISPLAYMODE	DispMode;
 	HRESULT			hr;
@@ -52,12 +53,12 @@ ILvoid CheckFormats(IDirect3DDevice9 *Device)
 
 	for (i = 0; i < 6; i++) {
 		hr = IDirect3D9_CheckDeviceFormat(TestD3D9, D3DADAPTER_DEFAULT,
-			D3DDEVTYPE_HAL, DispMode.Format, 0, D3DRTYPE_TEXTURE, Formats[i]);
-		FormatSupported[i] = SUCCEEDED(hr);
+			D3DDEVTYPE_HAL, DispMode.Format, 0, D3DRTYPE_TEXTURE, FormatsDX9[i]);
+		FormatsDX9supported[i] = SUCCEEDED(hr);
 	}
 
 	IDirect3D9_Release(TestD3D9);
-	FormatsChecked = IL_TRUE;
+	FormatsDX9Checked = IL_TRUE;
 
 	return;
 }
@@ -175,7 +176,7 @@ ILboolean ILAPIENTRY ilutD3D9VolTexFromFileHandle(IDirect3DDevice9 *Device, ILHA
 }
 
 
-D3DFORMAT D3DGetDXTCNum(ILenum DXTCFormat)
+D3DFORMAT D3DGetDXTCNumDX9(ILenum DXTCFormat)
 {
 	switch (DXTCFormat)
 	{
@@ -226,7 +227,7 @@ IDirect3DTexture9* iD3DMakeTexture( IDirect3DDevice9 *Device, void *Data, ILuint
 IDirect3DTexture9* ILAPIENTRY ilutD3D9Texture(IDirect3DDevice9 *Device)
 {
 	IDirect3DTexture9 *Texture;
-	D3DLOCKED_RECT Rect;
+//	D3DLOCKED_RECT Rect;
 	D3DFORMAT Format;
 	ILimage	*Image;
 	ILenum	DXTCFormat;
@@ -239,13 +240,13 @@ IDirect3DTexture9* ILAPIENTRY ilutD3D9Texture(IDirect3DDevice9 *Device)
 		return NULL;
 	}
 
-	if (!FormatsChecked)
-		CheckFormats(Device);
+	if (!FormatsDX9Checked)
+		CheckFormatsDX9(Device);
 
-	if (ilutGetBoolean(ILUT_D3D_USE_DXTC) && FormatSupported[3] && FormatSupported[4] && FormatSupported[5]) {
+	if (ilutGetBoolean(ILUT_D3D_USE_DXTC) && FormatsDX9supported[3] && FormatsDX9supported[4] && FormatsDX9supported[5]) {
 		if (ilutCurImage->DxtcData != NULL && ilutCurImage->DxtcSize != 0) {
 			ILuint	dxtcFormat = ilutGetInteger(ILUT_DXTC_FORMAT);
-			Format = D3DGetDXTCNum(ilutCurImage->DxtcFormat);
+			Format = D3DGetDXTCNumDX9(ilutCurImage->DxtcFormat);
 			ilutSetInteger(ILUT_DXTC_FORMAT, ilutCurImage->DxtcFormat);
 
 			Texture = iD3DMakeTexture(Device, ilutCurImage->DxtcData, ilutCurImage->DxtcSize,
@@ -253,7 +254,7 @@ IDirect3DTexture9* ILAPIENTRY ilutD3D9Texture(IDirect3DDevice9 *Device)
 				ilutGetInteger(ILUT_D3D_POOL) == D3DPOOL_DEFAULT ? D3DPOOL_SYSTEMMEM : ilutGetInteger(ILUT_D3D_POOL), ilutGetInteger(ILUT_D3D_MIPLEVELS));
 			if (!Texture)
 				return NULL;
-			iD3DCreateMipmaps(Texture, Image);
+			iD3D9CreateMipmaps(Texture, Image);
 			if (ilutGetInteger(ILUT_D3D_POOL) == D3DPOOL_DEFAULT) {
 				IDirect3DTexture9 *SysTex = Texture;
 				// copy texture to device memory
@@ -277,6 +278,15 @@ IDirect3DTexture9* ILAPIENTRY ilutD3D9Texture(IDirect3DDevice9 *Device)
 		if (ilutGetBoolean(ILUT_D3D_GEN_DXTC)) {
 			DXTCFormat = ilutGetInteger(ILUT_DXTC_FORMAT);
 
+/*
+Image = MakeD3D9Compliant(Device, &Format);
+			if (Image == NULL) {
+				if (Image != ilutCurImage)
+					ilCloseImage(Image);
+				return NULL;
+			}
+*/
+
 			Size = ilGetDXTCData(NULL, 0, DXTCFormat);
 			if (Size != 0) {
 				Buffer = (ILubyte*)ialloc(Size);
@@ -288,13 +298,13 @@ IDirect3DTexture9* ILAPIENTRY ilutD3D9Texture(IDirect3DDevice9 *Device)
 					return NULL;
 				}
 
-				Format = D3DGetDXTCNum(DXTCFormat);
+				Format = D3DGetDXTCNumDX9(DXTCFormat);
 				Texture = iD3DMakeTexture(Device, Buffer, Size,
 					ilutCurImage->Width, ilutCurImage->Height, Format,
 					ilutGetInteger(ILUT_D3D_POOL) == D3DPOOL_DEFAULT ? D3DPOOL_SYSTEMMEM : ilutGetInteger(ILUT_D3D_POOL), ilutGetInteger(ILUT_D3D_MIPLEVELS));
 				if (!Texture)
 					return NULL;
-				iD3DCreateMipmaps(Texture, Image);
+				iD3D9CreateMipmaps(Texture, Image);
 				if (ilutGetInteger(ILUT_D3D_POOL) == D3DPOOL_DEFAULT) {
 					IDirect3DTexture9 *SysTex = Texture;
 					
@@ -328,7 +338,7 @@ IDirect3DTexture9* ILAPIENTRY ilutD3D9Texture(IDirect3DDevice9 *Device)
 		ilutGetInteger(ILUT_D3D_POOL) == D3DPOOL_DEFAULT ? D3DPOOL_SYSTEMMEM : ilutGetInteger(ILUT_D3D_POOL), ilutGetInteger(ILUT_D3D_MIPLEVELS));
 	if (!Texture)
 		return NULL;
-	iD3DCreateMipmaps(Texture, Image);
+	iD3D9CreateMipmaps(Texture, Image);
 	if (ilutGetInteger(ILUT_D3D_POOL) == D3DPOOL_DEFAULT) {
 		IDirect3DTexture9 *SysTex = Texture;
 		// create texture in system memory
@@ -344,8 +354,8 @@ IDirect3DTexture9* ILAPIENTRY ilutD3D9Texture(IDirect3DDevice9 *Device)
 		}
 		IDirect3DTexture9_Release(SysTex);
 	}
-	if (Image != ilutCurImage)
-		ilCloseImage(Image);
+//	if (Image != ilutCurImage)
+//		ilCloseImage(Image);
 
 success:
 
@@ -369,8 +379,8 @@ IDirect3DVolumeTexture9* ILAPIENTRY ilutD3D9VolumeTexture(IDirect3DDevice9 *Devi
 		return NULL;
 	}
 
-	if (!FormatsChecked)
-		CheckFormats(Device);
+	if (!FormatsDX9Checked)
+		CheckFormatsDX9(Device);
 
 	Image = MakeD3D9Compliant(Device, &Format);
 	if (Image == NULL)
@@ -396,6 +406,7 @@ IDirect3DVolumeTexture9* ILAPIENTRY ilutD3D9VolumeTexture(IDirect3DDevice9 *Devi
 
 ILimage *MakeD3D9Compliant(IDirect3DDevice9 *Device, D3DFORMAT *DestFormat)
 {
+	ILuint	color;
 	ILimage	*Converted, *Scaled, *CurImage;
 
 	*DestFormat = D3DFMT_A8R8G8B8;
@@ -408,6 +419,31 @@ ILimage *MakeD3D9Compliant(IDirect3DDevice9 *Device, D3DFORMAT *DestFormat)
 	}
 	else {
 		Converted = ilutCurImage;
+	}
+
+	// perform alpha key on images if requested
+	color=ilutGetInteger(ILUT_D3D_ALPHA_KEY_COLOR);
+	if(color>=0)
+	{
+	ILubyte *data;
+	ILubyte *maxdata;
+	ILuint t;
+
+		data=(Converted->Data);
+		maxdata=(Converted->Data+Converted->SizeOfData);
+		while(data<maxdata)
+		{
+			t= (data[2]<<16) + (data[1]<<8) + (data[0]) ;
+
+			if((t&0x00ffffff)==(color&0x00ffffff))
+			{
+				data[0]=0;
+				data[1]=0;
+				data[2]=0;
+				data[3]=0;
+			}
+			data+=4;
+		}
 	}
 
 	// Images must have their origin in the upper left.
@@ -433,11 +469,14 @@ ILimage *MakeD3D9Compliant(IDirect3DDevice9 *Device, D3DFORMAT *DestFormat)
 			Converted = Scaled;
 	}
 
+
+
+
 	return Converted;
 }
 
 
-ILboolean iD3DCreateMipmaps(IDirect3DTexture9 *Texture, ILimage *Image)
+ILboolean iD3D9CreateMipmaps(IDirect3DTexture9 *Texture, ILimage *Image)
 {
 	D3DLOCKED_RECT	Rect;
 	D3DSURFACE_DESC	Desc;
@@ -469,7 +508,7 @@ ILboolean iD3DCreateMipmaps(IDirect3DTexture9 *Texture, ILimage *Image)
 //	ilSetCurImage(CurImage);
 	Temp = MipImage->Mipmaps;
 
-	if (ilutGetBoolean(ILUT_D3D_USE_DXTC) && FormatSupported[3] && FormatSupported[4] && FormatSupported[5])
+	if (ilutGetBoolean(ILUT_D3D_USE_DXTC) && FormatsDX9supported[3] && FormatsDX9supported[4] && FormatsDX9supported[5])
 		useDXTC = IL_TRUE;
 
 	// Counts the base texture as 1.

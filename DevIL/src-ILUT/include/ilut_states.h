@@ -42,6 +42,7 @@ typedef struct ILUT_STATES
 	// D3D states
 	ILuint		D3DMipLevels;
 	ILenum		D3DPool;
+	ILint		D3DAlphaKeyColor; // 0x00rrggbb format , -1 for none
 
 } ILUT_STATES;
 

@@ -1,0 +1,37 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IL", "IL\IL.vcproj", "{97591BF1-AE8B-46AC-BF64-7396E7B14B41}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ILU", "ILU\ILU.vcproj", "{E8336D79-326F-4C8D-900D-48B39BD6B0D3}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ILUT", "ILUT\ILUT.vcproj", "{9B0A8B9B-062E-4675-A5A1-577802D0B4DC}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{97591BF1-AE8B-46AC-BF64-7396E7B14B41}.Debug.ActiveCfg = Debug|Win32
+		{97591BF1-AE8B-46AC-BF64-7396E7B14B41}.Debug.Build.0 = Debug|Win32
+		{97591BF1-AE8B-46AC-BF64-7396E7B14B41}.Release.ActiveCfg = Release|Win32
+		{97591BF1-AE8B-46AC-BF64-7396E7B14B41}.Release.Build.0 = Release|Win32
+		{E8336D79-326F-4C8D-900D-48B39BD6B0D3}.Debug.ActiveCfg = Debug|Win32
+		{E8336D79-326F-4C8D-900D-48B39BD6B0D3}.Debug.Build.0 = Debug|Win32
+		{E8336D79-326F-4C8D-900D-48B39BD6B0D3}.Release.ActiveCfg = Release|Win32
+		{E8336D79-326F-4C8D-900D-48B39BD6B0D3}.Release.Build.0 = Release|Win32
+		{9B0A8B9B-062E-4675-A5A1-577802D0B4DC}.Debug.ActiveCfg = Debug|Win32
+		{9B0A8B9B-062E-4675-A5A1-577802D0B4DC}.Debug.Build.0 = Debug|Win32
+		{9B0A8B9B-062E-4675-A5A1-577802D0B4DC}.Release.ActiveCfg = Release|Win32
+		{9B0A8B9B-062E-4675-A5A1-577802D0B4DC}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

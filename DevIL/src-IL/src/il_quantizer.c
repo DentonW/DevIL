@@ -27,6 +27,10 @@
 //
 // Description:  Heavily modified by Denton Woods.
 //
+// 20040223 XIX : Modified so it works better with color requests < 256
+// pallete always has memory space for 256 entries
+// used so we can quant down to 255 colors then add a transparent color in there.
+//
 //-----------------------------------------------------------------------------
 
 #include "il_internal.h"
@@ -411,10 +415,18 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 	ILimage	*TempImage = NULL, *NewImage = NULL;
 	ILubyte	*Ir = NULL, *Ig = NULL, *Ib = NULL;
 
+	ILint num_alloced_colors; // number of colors we allocated space for in palette, as NumCols but eill not be less than 256
+
+	num_alloced_colors=NumCols;
+	if(num_alloced_colors<256) { num_alloced_colors=256; }
+
+
 	NewImage = iCurImage;
 	iCurImage = Image;
 	TempImage = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
 	iCurImage = NewImage;
+
+
 
 	if (TempImage == NULL)
 		return NULL;
@@ -429,7 +441,7 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 	//color_num = ImagePrecalculate(Image);
 
 	NewData = (ILubyte*)ialloc(Image->Width * Image->Height * Image->Depth);
-	Palette = (ILubyte*)ialloc(3 * NumCols);
+	Palette = (ILubyte*)ialloc(3 * num_alloced_colors);
 	if (!NewData || !Palette) {
 		ifree(NewData);
 		ifree(Palette);
@@ -610,7 +622,7 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 	NewImage->Type = IL_UNSIGNED_BYTE;
 
 	NewImage->Pal.Palette = Palette;
-	NewImage->Pal.PalSize = NumCols * 3;
+	NewImage->Pal.PalSize = 256 * 3;
 	NewImage->Pal.PalType = IL_PAL_BGR24;
 	NewImage->Data = NewData;
 

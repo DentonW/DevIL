@@ -71,9 +71,9 @@ void ResizeWin(void);
 void CreateGDI(void);
 bool IsOpenable(char *FileName);
 
+extern "C"
 // Colour picker export
 __declspec( dllexport ) bool WINAPI FSColorPickerDoModal(unsigned int * currentColor, unsigned int * originalColor, const int initialExpansionState);
-
 
 
 

@@ -55,7 +55,9 @@ extern "C" {
 //#define IL_STATIC_LIB
 //#define IL_NO_LCMS
 #ifdef _WIN32
-	#define IL_USE_JPEGLIB_UNMODIFIED
+	#ifndef IL_USE_JPEGLIB_UNMODIFIED
+		#define IL_USE_JPEGLIB_UNMODIFIED
+	#endif
 #endif
 
 #ifdef _WIN32_WCE
@@ -87,19 +89,22 @@ extern "C" {
 
 
 #ifdef _WIN32
-	//#define IL_USE_IJL  // Whether we use the Intel Jpeg Library (else use libjpeg).
-	#ifndef IL_STATIC_LIB
-		#if defined(_MSC_VER) || defined(__BORLANDC__)
+	#if defined(_MSC_VER) || defined(__BORLANDC__)
+		#ifndef IL_STATIC_LIB
+			#ifndef _IL_BUILD_LIBRARY
+				#pragma comment(lib, "Devil_DLL.lib")
+			#endif
+		#else
 			#ifndef _IL_BUILD_LIBRARY
 				#ifdef  IL_DEBUG
-					#pragma comment(lib, "devil-d.lib")
+					#pragma comment(lib, "Devil_DBG.lib")
 				#else
-					#pragma comment(lib, "devil.lib")
+					#pragma comment(lib, "Devil.lib")
 				#endif//IL_DEBUG
-			#endif//_IL_BUILD_LIBRARY
-		#endif//_MSC_VER || __BORLANDC__
-	#endif//IL_STATIC_LIB
-#endif//_WIN32
+			#endif
+		#endif
+	#endif
+#endif
 
 #include <stdio.h>
 
@@ -299,6 +304,7 @@ typedef void			ILvoid;
 #define IL_WU_QUANT							0x0641
 #define IL_NEU_QUANT						0x0642
 #define IL_NEU_QUANT_SAMPLE					0x0643
+#define IL_MAX_QUANT_INDEXS					0x0644	//XIX : ILint : Maximum number of colors to reduce to, default of 256. and has a range of 2-256
 
 
 // Hints
@@ -346,6 +352,7 @@ typedef void			ILvoid;
 #define IL_CHEAD_HEADER_STRING				0x0722
 #define IL_PCD_PICNUM						0x0723
 
+#define IL_PNG_ALPHA_INDEX					0x0724	//XIX : ILint : the color in the pallete at this index value (0-255) is considered transparent, -1 for no trasparent color
 
 // DXTC definitions
 #define IL_DXTC_FORMAT						0x0705
@@ -406,7 +413,7 @@ typedef void			ILvoid;
 
 // This is from Win32's <windef.h>
 #if (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED) || defined(__BORLANDC__) || defined(__LCC__)
-	#define ILAPIENTRY __stdcall
+	#define ILAPIENTRY __stdcall 
 	#define IL_PACKSTRUCT
 //#elif defined(linux) || defined(MACOSX) || defined(__CYGWIN__) //fix bug 840364
 #elif defined( __GNUC__ )

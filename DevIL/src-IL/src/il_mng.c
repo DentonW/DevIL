@@ -16,6 +16,10 @@
 #define MNG_SUPPORT_WRITE
 #define MNG_SUPPORT_DISPLAY
 
+#ifdef _WIN32
+//#define MNG_USE_SO
+#endif
+
 
 #ifdef MACOSX
     #include <libmng/libmng.h>

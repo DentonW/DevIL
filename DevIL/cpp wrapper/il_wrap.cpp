@@ -329,6 +329,15 @@ ILenum ilImage::PaletteType()
 	return 0;
 }
 
+Lenum ilImage::PaletteAlphaIndex()
+{
+	if (this->Id) {
+		this->Bind();
+		return ilGetInteger(IL_PNG_ALPHA_INDEX);
+	}
+	return 0;
+}
+
 
 ILenum ilImage::Type()
 {

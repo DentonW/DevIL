@@ -265,7 +265,7 @@ ILAPI ILimage* ILAPIENTRY iConvertImage(ILimage *Image, ILenum DestFormat, ILenu
 		if (iGetInt(IL_QUANTIZATION_MODE) == IL_NEU_QUANT)
 			return iNeuQuant(Image);
 		else // Assume IL_WU_QUANT otherwise.
-			return iQuantizeImage(Image, 256);
+			return iQuantizeImage(Image, iGetInt(IL_MAX_QUANT_INDEXS));
 	}
 	else {
 		NewImage = (ILimage*)icalloc(1, sizeof(ILimage));  // Much better to have it all set to 0.

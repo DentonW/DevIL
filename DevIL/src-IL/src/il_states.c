@@ -8,6 +8,9 @@
 //
 // Description: State machine
 //
+//
+// 20040223 XIX : now has a ilPngAlphaIndex member, so we can spit out png files with a transparent index, set to -1 for none
+//
 //-----------------------------------------------------------------------------
 
 
@@ -54,6 +57,7 @@ ILvoid ilDefaultStates()
 	ilStates[ilCurrentPos].ilJpgFormat = IL_JFIF;
 	ilStates[ilCurrentPos].ilDxtcFormat = IL_DXT1;
 	ilStates[ilCurrentPos].ilPcdPicNum = 2;
+	ilStates[ilCurrentPos].ilPngAlphaIndex = -1;
 
 	ilStates[ilCurrentPos].ilTgaId = NULL;
 	ilStates[ilCurrentPos].ilTgaAuthName = NULL;
@@ -71,6 +75,7 @@ ILvoid ilDefaultStates()
 
 	ilStates[ilCurrentPos].ilQuantMode = IL_WU_QUANT;
 	ilStates[ilCurrentPos].ilNeuSample = 15;
+	ilStates[ilCurrentPos].ilQuantMaxIndexs = 256;
 
 	ilStates[ilCurrentPos].ilKeepDxtcData = IL_FALSE;
 
@@ -384,6 +389,9 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 		case IL_NEU_QUANT_SAMPLE:
 			*Param = ilStates[ilCurrentPos].ilNeuSample;
 			break;
+		case IL_MAX_QUANT_INDEXS:
+			*Param = ilStates[ilCurrentPos].ilQuantMaxIndexs;
+			break;
 		case IL_KEEP_DXTC_DATA:
 			*Param = ilStates[ilCurrentPos].ilKeepDxtcData;
 			break;
@@ -617,6 +625,10 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 			*Param = ilStates[ilCurrentPos].ilPcdPicNum;
 			break;
 
+		case IL_PNG_ALPHA_INDEX:
+			*Param = ilStates[ilCurrentPos].ilPngAlphaIndex;
+			break;
+
 
 		// Boolean values
 		case IL_CONV_PAL:
@@ -790,6 +802,8 @@ ILvoid ILAPIENTRY ilPushAttrib(ILuint Bits)
 		ilStates[ilCurrentPos].ilJpgFormat = ilStates[ilCurrentPos-1].ilJpgFormat;
 		ilStates[ilCurrentPos].ilDxtcFormat = ilStates[ilCurrentPos-1].ilDxtcFormat;
 		ilStates[ilCurrentPos].ilPcdPicNum = ilStates[ilCurrentPos-1].ilPcdPicNum;
+
+		ilStates[ilCurrentPos].ilPngAlphaIndex = ilStates[ilCurrentPos-1].ilPngAlphaIndex;
 
 		// Strings
 		if (ilStates[ilCurrentPos].ilTgaId)
@@ -1023,6 +1037,12 @@ ILvoid ILAPIENTRY ilSetInteger(ILenum Mode, ILint Param)
 				return;
 			}
 			break;
+		case IL_PNG_ALPHA_INDEX:
+			if (Param >= -1 || Param <= 255) {
+				ilStates[ilCurrentPos].ilPngAlphaIndex=Param;
+				return;
+			}
+			break;
 		case IL_TGA_RLE:
 			if (Param == IL_FALSE || Param == IL_TRUE) {
 				ilStates[ilCurrentPos].ilTgaRle = Param;
@@ -1101,6 +1121,14 @@ ILvoid ILAPIENTRY ilSetInteger(ILenum Mode, ILint Param)
 				return;
 			}
 			break;
+
+		case IL_MAX_QUANT_INDEXS:
+			if (Param >= 2 && Param <= 256) {
+				ilStates[ilCurrentPos].ilQuantMaxIndexs = Param;
+				return;
+			}
+			break;
+
 		case IL_KEEP_DXTC_DATA:
 			if (Param == IL_FALSE || Param == IL_TRUE) {
 				ilStates[ilCurrentPos].ilKeepDxtcData = Param;
@@ -1147,8 +1175,8 @@ ILint iGetInt(ILenum Mode)
 			return ilStates[ilCurrentPos].ilNeuSample;
 		case IL_KEEP_DXTC_DATA:
 			return ilStates[ilCurrentPos].ilKeepDxtcData;
-
-
+		case IL_MAX_QUANT_INDEXS:
+			return ilStates[ilCurrentPos].ilQuantMaxIndexs ;
 	}
 
 	ilSetError(IL_INTERNAL_ERROR);

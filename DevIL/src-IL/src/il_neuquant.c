@@ -55,7 +55,7 @@ ILvoid	learn();
 // -------------------
    
 #define netsize			256					// number of colours used
-#define maxnetpos		(netsize-1)
+#define maxnetpos		(netsizethink-1)
 #define netbiasshift	4					// bias for colour values
 #define ncycles			100					// no. of learning cycles
 
@@ -100,6 +100,7 @@ int				bias [netsize];			// bias and freq arrays for learning
 int				freq [netsize];
 int				radpower[initrad];		// radpower for precomputation
 
+int netsizethink; // number of colors we want to reduce to, 2-256
 
 // Initialise network in range (0,0,0) to (255,255,255) and set parameters
 // -----------------------------------------------------------------------
@@ -113,10 +114,10 @@ ILvoid initnet(ILubyte *thepic, ILint len, ILint sample)
 	lengthcount = len;
 	samplefac = sample;
 	
-	for (i=0; i<netsize; i++) {
+	for (i=0; i<netsizethink; i++) {
 		p = network[i];
 		p[0] = p[1] = p[2] = (i << (netbiasshift+8))/netsize;
-		freq[i] = intbias/netsize;	// 1/netsize
+		freq[i] = intbias/netsizethink;	// 1/netsize
 		bias[i] = 0;
 	}
 	return;
@@ -130,7 +131,7 @@ ILvoid unbiasnet()
 {
 	ILint i,j;
 
-	for (i=0; i<netsize; i++) {
+	for (i=0; i<netsizethink; i++) {
 		for (j=0; j<3; j++)
 			network[i][j] >>= netbiasshift;
 		network[i][3] = i;			// record colour no
@@ -150,12 +151,12 @@ ILvoid inxbuild()
 
 	previouscol = 0;
 	startpos = 0;
-	for (i=0; i<netsize; i++) {
+	for (i=0; i<netsizethink; i++) {
 		p = network[i];
 		smallpos = i;
 		smallval = p[1];			// index on g
 		// find smallest in i..netsize-1
-		for (j=i+1; j<netsize; j++) {
+		for (j=i+1; j<netsizethink; j++) {
 			q = network[j];
 			if (q[1] < smallval) {	// index on g
 				smallpos = j;
@@ -198,11 +199,11 @@ ILubyte inxsearch(ILint b, ILint g, ILint r)
 	i = netindex[g];	// index on g
 	j = i-1;			// start at netindex[g] and work outwards
 
-	while ((i<netsize) || (j>=0)) {
-		if (i<netsize) {
+	while ((i<netsizethink) || (j>=0)) {
+		if (i<netsizethink) {
 			p = network[i];
 			dist = p[1] - g;		// inx key
-			if (dist >= bestd) i = netsize;	// stop iter
+			if (dist >= bestd) i = netsizethink;	// stop iter
 			else {
 				i++;
 				if (dist<0) dist = -dist;
@@ -257,7 +258,7 @@ ILint contest(ILint b, ILint g, ILint r)
 	p = bias;
 	f = freq;
 
-	for (i=0; i<netsize; i++) {
+	for (i=0; i<netsizethink; i++) {
 		n = network[i];
 		dist = n[0] - b;   if (dist<0) dist = -dist;
 		a = n[1] - g;   if (a<0) a = -a;
@@ -303,7 +304,7 @@ ILvoid alterneigh(ILint rad, ILint i, ILint b, ILint g, ILint r)
 	ILint *p, *q;
 
 	lo = i-rad;   if (lo<-1) lo=-1;
-	hi = i+rad;   if (hi>netsize) hi=netsize;
+	hi = i+rad;   if (hi>netsizethink) hi=netsizethink;
 
 	j = i+1;
 	k = i-1;
@@ -400,6 +401,8 @@ ILimage *iNeuQuant(ILimage *Image)
 	ILimage	*TempImage, *NewImage;
 	ILuint	sample, i, j;
 
+	netsizethink=iGetInt(IL_MAX_QUANT_INDEXS);
+
 	NewImage = iCurImage;
 	iCurImage = Image;
 	TempImage = iConvertImage(iCurImage, IL_BGR, IL_UNSIGNED_BYTE);
@@ -432,16 +435,16 @@ ILimage *iNeuQuant(ILimage *Image)
 	NewImage->Format = IL_COLOUR_INDEX;
 	NewImage->Type = IL_UNSIGNED_BYTE;
 
-	NewImage->Pal.PalSize = netsize * 3;
+	NewImage->Pal.PalSize = netsizethink * 3;
 	NewImage->Pal.PalType = IL_PAL_BGR24;
-	NewImage->Pal.Palette = (ILubyte*)ialloc(NewImage->Pal.PalSize);
+	NewImage->Pal.Palette = (ILubyte*)ialloc(256*3);
 	if (NewImage->Pal.Palette == NULL) {
 		ilCloseImage(TempImage);
 		ilCloseImage(NewImage);
 		return NULL;
 	}
 
-	for (i = 0, j = 0; i < netsize; i++, j += 3) {
+	for (i = 0, j = 0; i < (unsigned)netsizethink; i++, j += 3) {
 		NewImage->Pal.Palette[j  ] = network[i][0];
 		NewImage->Pal.Palette[j+1] = network[i][1];
 		NewImage->Pal.Palette[j+2] = network[i][2];

@@ -15,14 +15,15 @@
 
 #ifndef _WIN32
 	#define NON_WINDOWS 1
+	#include <lcms/lcms.h>
 #else
-	#ifndef IL_DEBUG
-		#pragma comment(lib, "lcms108.lib")
-	#else
-		#pragma comment(lib, "debug/lcms108.lib")
-	#endif
+//	#ifndef IL_DEBUG
+//		#pragma comment(lib, "lcms108.lib")
+//	#else
+//		#pragma comment(lib, "debug/lcms108.lib")
+//	#endif
+	#include <lcms.h>
 #endif//_WIN32
-#include <lcms/lcms.h>
 
 #endif//IL_NO_LCMS
 ILboolean ILAPIENTRY ilApplyProfile(const ILstring InProfile, const ILstring OutProfile)

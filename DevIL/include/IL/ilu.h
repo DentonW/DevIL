@@ -24,18 +24,25 @@ extern "C" {
 #endif
 
 #ifdef _WIN32
-	#ifndef IL_STATIC_LIB
-		#if defined(_MSC_VER) || defined(__BORLANDC__)
-			#ifndef _ILU_BUILD_LIBRARY
-				#ifdef IL_DEBUG
-					#pragma comment(lib, "ilu-d.lib")
+	#if defined(_MSC_VER) || defined(__BORLANDC__)
+		#ifndef IL_STATIC_LIB
+			#pragma comment(lib, "DevIL_DLL.lib")
+			#ifndef _IL_BUILD_LIBRARY
+				#pragma comment(lib, "DevILU_DLL.lib")
+			#endif
+		#else
+			#ifndef _IL_BUILD_LIBRARY
+				#ifdef  IL_DEBUG
+					#pragma comment(lib, "DevILU_DBG.lib")
 				#else
-					#pragma comment(lib, "ilu.lib")
-				#endif//_DEBUG
-			#endif//_ILU_BUILD_LIBRARY
-		#endif//_MSC_VER || __BORLANDC__
-	#endif//IL_STATIC_LIB
-#endif//_WIN32
+					#pragma comment(lib, "DevILU.lib")
+				#endif//IL_DEBUG
+			#endif
+		#endif
+	#endif
+#endif
+
+
 
 #define ILU_VERSION_1_6_6					1
 #define ILU_VERSION							166

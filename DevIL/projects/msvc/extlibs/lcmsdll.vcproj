@@ -2,58 +2,109 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="ILU"
-	RootNamespace="ILU"
-	SccProjectName="ILU"
-	SccLocalPath="..\..">
+	Name="lcmsdll"
+	ProjectGUID="{75EE92E6-DF8D-4FB1-89C0-B2BA687D1144}"
+	RootNamespace="lcmsdll"
+	SccProjectName=""
+	SccLocalPath="">
 	<Platforms>
 		<Platform
 			Name="Win32"/>
 	</Platforms>
 	<Configurations>
 		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory=".\..\..\..\extlibs\lib"
+			IntermediateDirectory=".\lcms___Win32_Debug"
+			ConfigurationType="4"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..\..\include;../../../extlibs/littlecms/include"
+				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile=".\lcms___Win32_Debug/lcmsdll.pch"
+				AssemblerListingLocation=".\lcms___Win32_Debug/"
+				ObjectFile=".\lcms___Win32_Debug/"
+				ProgramDataBaseFileName=".\lcms___Win32_Debug/"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				DebugInformationFormat="4"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)/lcms_DBG.lib"/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="_DEBUG"
+				MkTypLibCompatible="TRUE"
+				SuppressStartupBanner="TRUE"
+				TargetEnvironment="1"
+				TypeLibraryName=".\..\..\..\extlibs\lib\debug/lcmsdll.tlb"
+				HeaderFileName=""/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="3082"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
 			Name="Dynamic|Win32"
-			OutputDirectory=".\../../lib"
-			IntermediateDirectory=".\../src/obj/dynamic"
+			OutputDirectory=".\..\..\..\extlibs\lib"
+			IntermediateDirectory=".\lcms___Win32_Dynamic"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="1"
+				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../include;../../include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ILU_EXPORTS"
+				AdditionalIncludeDirectories="..\..\include;../../../extlibs/littlecms/include"
+				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile=".\../src/obj/dynamic/ILU.pch"
-				AssemblerListingLocation=".\../src/obj/dynamic/"
-				ObjectFile=".\../src/obj/dynamic/"
-				ProgramDataBaseFileName=".\../src/obj/dynamic/"
+				PrecompiledHeaderFile=".\lcmsdll___Win32_Dynamic/lcmsdll.pch"
+				AssemblerListingLocation=".\lcmsdll___Win32_Dynamic/"
+				ObjectFile=".\lcmsdll___Win32_Dynamic/"
+				ProgramDataBaseFileName=".\lcmsdll___Win32_Dynamic/"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/DevILU.dll"
-				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="E:\XIX\S\sourceforge\DevIL\lib"
-				ModuleDefinitionFile=".\ilu.def"
-				ProgramDatabaseFile=".\../../lib/ilu-l.pdb"
-				ImportLibrary="$(OutDir)/DevILU_DLL.lib"
-				TargetMachine="1"/>
+				OutputFile="$(OutDir)/lcms.dll"
+				ModuleDefinitionFile="lcms.def"
+				ImportLibrary="$(OutDir)/lcms_DLL.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\../../lib/ILU.tlb"
+				TypeLibraryName=".\..\..\..\extlibs\lib/lcmsdll.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -64,7 +115,7 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"/>
+				Culture="3082"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -77,96 +128,41 @@
 				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
-			Name="Debug|Win32"
-			OutputDirectory=".\../../lib"
-			IntermediateDirectory=".\../src/obj/debuf"
-			ConfigurationType="4"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="../include;../../include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;ILU_EXPORTS"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile=".\../src/obj/debug/ILU.pch"
-				AssemblerListingLocation=".\../src/obj/debug/"
-				ObjectFile=".\../src/obj/debug/"
-				ProgramDataBaseFileName=".\../src/obj/debug/"
-				WarningLevel="3"
-				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="4"/>
-			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/DevILU_DBG.lib"/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG"
-				MkTypLibCompatible="TRUE"
-				SuppressStartupBanner="TRUE"
-				TargetEnvironment="1"
-				TypeLibraryName=".\../../lib/debug/ILU.tlb"
-				HeaderFileName=""/>
-			<Tool
-				Name="VCPostBuildEventTool"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="1033"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
-		</Configuration>
-		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\../../lib"
-			IntermediateDirectory=".\../src/obj"
+			OutputDirectory=".\..\..\..\extlibs\lib"
+			IntermediateDirectory=".\lcms___Win32_Release"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="1"
+				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../include;../../include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ILU_EXPORTS"
+				AdditionalIncludeDirectories="..\..\include;../../../extlibs/littlecms/include"
+				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile=".\../src/obj/ILU.pch"
-				AssemblerListingLocation=".\../src/obj/"
-				ObjectFile=".\../src/obj/"
-				ProgramDataBaseFileName=".\../src/obj/"
+				PrecompiledHeaderFile=".\lcms___Win32_Release/lcmsdll.pch"
+				AssemblerListingLocation=".\lcms___Win32_Release/"
+				ObjectFile=".\lcms___Win32_Release/"
+				ProgramDataBaseFileName=".\lcms___Win32_Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/DevILU.lib"/>
+				OutputFile="$(OutDir)/lcms.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\../../lib/ILU.tlb"
+				TypeLibraryName=".\..\..\..\extlibs\lib/lcmsdll.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -177,7 +173,7 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"/>
+				Culture="3082"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -195,18 +191,28 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
-				RelativePath="ilu.def">
-			</File>
-			<File
-				RelativePath="..\src\ilu_error.c">
+				RelativePath="..\..\..\extlibs\littlecms\src\cmscam02.c">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="Dynamic|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=" "/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LittleCMS\src\cmscam97.c">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -217,24 +223,24 @@
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
+						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=" "/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\ilu_filter.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=" "/>
-				</FileConfiguration>
+				RelativePath="..\..\..\extlibs\LittleCMS\src\cmscnvrt.c">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -245,24 +251,24 @@
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
+						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=" "/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\ilu_filter_rcg.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=" "/>
-				</FileConfiguration>
+				RelativePath="..\..\..\extlibs\LittleCMS\src\cmserr.c">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -273,24 +279,24 @@
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
+						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=" "/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\ilu_internal.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=" "/>
-				</FileConfiguration>
+				RelativePath="..\..\..\extlibs\LittleCMS\src\cmsgamma.c">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -301,24 +307,24 @@
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
+						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=" "/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\ilu_main.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=" "/>
-				</FileConfiguration>
+				RelativePath="..\..\..\extlibs\LittleCMS\src\cmsgmt.c">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -329,24 +335,24 @@
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
+						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=" "/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\ilu_manip.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=" "/>
-				</FileConfiguration>
+				RelativePath="..\..\..\extlibs\LittleCMS\src\cmsintrp.c">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -357,24 +363,24 @@
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
+						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=" "/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\ilu_mipmap.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=" "/>
-				</FileConfiguration>
+				RelativePath="..\..\..\extlibs\LittleCMS\src\cmsio1.c">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -385,24 +391,24 @@
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
+						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=" "/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\ilu_noise.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=" "/>
-				</FileConfiguration>
+				RelativePath="..\..\..\extlibs\LittleCMS\src\cmslut.c">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -413,24 +419,24 @@
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
+						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=" "/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\ilu_region.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=" "/>
-				</FileConfiguration>
+				RelativePath="..\..\..\extlibs\LittleCMS\src\cmsmatsh.c">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -441,24 +447,24 @@
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
+						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=" "/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\ilu_rotate.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=" "/>
-				</FileConfiguration>
+				RelativePath="..\..\..\extlibs\LittleCMS\src\cmsmtrx.c">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -469,24 +475,45 @@
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
+						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=" "/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\ilu_scale.c">
+				RelativePath="..\..\..\extlibs\littlecms\src\cmsnamed.c">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="Dynamic|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=" "/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LittleCMS\src\cmspack.c">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -497,24 +524,24 @@
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
+						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=" "/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\ilu_scale2d.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=" "/>
-				</FileConfiguration>
+				RelativePath="..\..\..\extlibs\LittleCMS\src\cmspcs.c">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -525,24 +552,45 @@
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
+						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=" "/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\ilu_scale3d.c">
+				RelativePath="..\..\..\extlibs\littlecms\src\cmsps2.c">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="Dynamic|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=" "/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LittleCMS\src\cmssamp.c">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -553,24 +601,45 @@
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
+						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=" "/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\ilu_states.c">
+				RelativePath="..\..\..\extlibs\littlecms\src\cmsvirt.c">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="Dynamic|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=" "/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LittleCMS\src\cmswtpnt.c">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -581,24 +650,24 @@
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
+						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=" "/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\ilu_utilities.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=" "/>
-				</FileConfiguration>
+				RelativePath="..\..\..\extlibs\LittleCMS\src\cmsxform.c">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
@@ -609,12 +678,68 @@
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Dynamic|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
+						Optimization="2"
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=" "/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LittleCMS\Projects\VC6\lcms.rc">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCResourceCompilerTool"
+						PreprocessorDefinitions=""
+						AdditionalIncludeDirectories="\XIX\S\sourceforge\DevIL\extlibs\LittleCMS\Projects\VC6"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Dynamic|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCResourceCompilerTool"
+						PreprocessorDefinitions=""
+						AdditionalIncludeDirectories="\XIX\S\sourceforge\DevIL\extlibs\LittleCMS\Projects\VC6"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCResourceCompilerTool"
+						PreprocessorDefinitions=""
+						AdditionalIncludeDirectories="\XIX\S\sourceforge\DevIL\extlibs\LittleCMS\Projects\VC6"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LittleCMS\Projects\VC6\lcmsvc.def">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCustomBuildTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Dynamic|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCustomBuildTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCustomBuildTool"/>
 				</FileConfiguration>
 			</File>
 		</Filter>
@@ -622,36 +747,15 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
 			<File
-				RelativePath="..\..\include\IL\devil_internal_exports.h">
+				RelativePath="..\..\..\extlibs\LittleCMS\include\icc34.h">
 			</File>
 			<File
-				RelativePath="..\..\include\il\ilu.h">
-			</File>
-			<File
-				RelativePath="..\include\ilu_filter.h">
-			</File>
-			<File
-				RelativePath="..\include\ilu_internal.h">
-			</File>
-			<File
-				RelativePath="..\include\ilu_mipmap.h">
-			</File>
-			<File
-				RelativePath="..\include\ilu_region.h">
-			</File>
-			<File
-				RelativePath="..\include\ilu_states.h">
+				RelativePath="..\..\..\extlibs\LittleCMS\include\lcms.h">
 			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
-			<File
-				RelativePath="resources\IL Logo.ico">
-			</File>
-			<File
-				RelativePath="ILU.rc">
-			</File>
 		</Filter>
 	</Files>
 	<Globals>
