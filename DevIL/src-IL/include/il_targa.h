@@ -19,6 +19,10 @@
 #ifdef _MSC_VER
 #pragma pack(push, tga_struct, 1)
 #endif
+// Mac OS X fix from Tron Thomas
+#ifdef MACOSX 
+#pragma pack(1)
+#endif
 typedef struct TARGAHEAD
 {
 	ILubyte		IDLen;
@@ -44,6 +48,9 @@ typedef struct TARGAFOOTER
 	ILbyte Reserved;		// ASCII period '.'
 	ILbyte NullChar;		// NULL
 } IL_PACKSTRUCT TARGAFOOTER;
+#ifdef MACOSX
+#pragma pack()
+#endif
 #ifdef _MSC_VER
 #pragma pack(pop, tga_struct)
 #endif
