@@ -30,7 +30,9 @@ ILimage*	MakeGLCompliant(ILimage *Src);
 ILboolean	IsExtensionSupported(const char *extension);
 
 
-typedef void (ILAPIENTRY * ILGLCOMPRESSEDTEXIMAGE2DARBPROC) (GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *data);
+#ifdef _MSC_VER
+	typedef void (ILAPIENTRY * ILGLCOMPRESSEDTEXIMAGE2DARBPROC) (GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *data);
+#endif
 
 
 #endif//ILUT_OPENGL_H

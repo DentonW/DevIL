@@ -25,7 +25,9 @@
 
 
 ILint MaxTexW = 256, MaxTexH = 256;  // maximum texture widths and heights
-ILGLCOMPRESSEDTEXIMAGE2DARBPROC ilGLCompressed2D = NULL;
+#ifdef _MSC_VER
+	ILGLCOMPRESSEDTEXIMAGE2DARBPROC ilGLCompressed2D = NULL;
+#endif
 
 
 // Absolutely *have* to call this if planning on using the image library with OpenGL.
@@ -52,7 +54,7 @@ ILboolean ilutGLInit()
     glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
-#if _WIN32
+#ifdef _MSC_VER
 	if (IsExtensionSupported("GL_ARB_texture_compression") &&
 		IsExtensionSupported("GL_EXT_texture_compression_s3tc")) {
 			ilGLCompressed2D = (ILGLCOMPRESSEDTEXIMAGE2DARBPROC)
