@@ -175,7 +175,6 @@
 				A3800B2903C37D7B00A80001,
 				A3800B2A03C37D7B00A80001,
 				A3800B2B03C37D7B00A80001,
-				A3FF6834041C2A3700A80001,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -424,7 +423,6 @@
 			children = (
 				A3800ACD03C37D1700A80001,
 				A3800AD103C37D2600A80001,
-				A3FF6833041C2A3700A80001,
 				A3800AD503C37D2E00A80001,
 				A3800AD603C37D2E00A80001,
 				A3800AD703C37D2E00A80001,
@@ -2351,23 +2349,6 @@
 			fileRef = A3AB3C3906896BA00048586A;
 			isa = PBXBuildFile;
 			settings = {
-			};
-		};
-		A3FF6833041C2A3700A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = macconfig.h;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		A3FF6834041C2A3700A80001 = {
-			fileRef = A3FF6833041C2A3700A80001;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Public,
-				);
 			};
 		};
 	};
