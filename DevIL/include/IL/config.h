@@ -103,6 +103,9 @@
    first (like Motorola and SPARC, unlike Intel and VAX). */
 /* #undef WORDS_BIGENDIAN */
 
+/* If using Mac OS X uncomment this line */
+/* #include "macconfig.h" */
+
 /* Define to 1 if the X Window System is missing or not being used. */
 /* #undef X_DISPLAY_MISSING */
 #endif /* __CONFIG_H__ */
