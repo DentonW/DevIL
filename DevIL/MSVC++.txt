@@ -1,3 +1,16 @@
+Installation
+------------
+
+Run configure.bat to tell DevIL what external libraries you are using.
+
+Then go to Tools - Options - Directories to add in the include and lib
+directories for DevIL.
+
+
+
+Usage
+-----
+
 In the Post-Build step, a Copy command used to copy the resultant dlls to the
 Windows\System directory.  If your Windows System directory is not
 c:\Windows\System, edit the post-build step for all the DevIL* projects.

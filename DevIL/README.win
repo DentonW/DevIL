@@ -95,9 +95,10 @@ range.  ilGetError() will return 0 (IL_NO_ERROR) if no error has occurred.
 Installation:
 -------------
 
-Just unzip and compile other libs included if needed...  You should be able to
-just go to tools - options - directories and add in the include and lib
-directories for DevIL.
+Just unzip and compile other libs included if needed.
+
+Please also refer to MSVC++.txt for further instructions if you are using
+Microsoft Visual C++.
 
 
 Usage:

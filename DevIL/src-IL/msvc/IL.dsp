@@ -437,15 +437,6 @@ InputName=il_internal
 
 !ELSEIF  "$(CFG)" == "IL - Win32 Release"
 
-# Begin Custom Build
-InputPath=..\include\il_internal.h
-InputName=il_internal
-
-"$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	"..\..\LIBTOOLS\config gen\config_gen.exe" ..\..\include\IL
-
-# End Custom Build
-
 !ENDIF 
 
 # End Source File
