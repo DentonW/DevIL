@@ -96,7 +96,7 @@ X_CFLAGS = @X_CFLAGS@
 allegro_config = @allegro_config@
 sdl_config = @sdl_config@
 
-noinst_HEADERS = ilut_allegro.h   ilut_error.h                   ilut_internal.h  ilut_opengl.h                   ilut_states.h
+noinst_HEADERS = ilut_allegro.h   ilut_internal.h  ilut_opengl.h                   ilut_states.h
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/libtools/mkinstalldirs
 CONFIG_HEADER = ../../include/IL/config.h
