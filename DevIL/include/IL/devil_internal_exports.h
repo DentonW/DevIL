@@ -13,6 +13,9 @@
 #ifndef IL_EXPORTS_H
 #define IL_EXPORTS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define IL_MAX(a,b) (((a) > (b)) ? (a) : (b))
 #define IL_MIN(a,b) (((a) < (b)) ? (a) : (b))
@@ -85,6 +88,7 @@ ILAPI ILenum	ILAPIENTRY ilGetTypeBpc(ILubyte Bpc);
 ILAPI ILenum	ILAPIENTRY ilGetPalBaseType(ILenum PalType);
 ILAPI ILuint	ILAPIENTRY ilNextPower2(ILuint Num);
 ILAPI ILenum	ILAPIENTRY ilTypeFromExt(const ILstring FileName);
+ILAPI ILvoid ILAPIENTRY ilReplaceCurImage(ILimage *Image);
 
 //
 // Image functions
@@ -114,5 +118,8 @@ ILAPI ILimage* ILAPIENTRY iluRotate_(ILimage *Image, ILfloat Angle);
 ILAPI ILimage* ILAPIENTRY iluRotate3D_(ILimage *Image, ILfloat x, ILfloat y, ILfloat z, ILfloat Angle);
 ILAPI ILimage* ILAPIENTRY iluScale_(ILimage *Image, ILuint Width, ILuint Height, ILuint Depth);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif//IL_EXPORTS_H
