@@ -171,7 +171,7 @@ ILint XpmGetsInternal(char *Buffer, ILint MaxLen)
 	if (ieof())
 		return IL_EOF;
 
-	while ((Current = igetc()) != -1 && i < MaxLen - 1) {
+	while ((Current = igetc()) != IL_EOF && i < MaxLen - 1) {
 		if (Current == IL_EOF)
 			return 0;
 		if (Current == '\n') //unix line ending
@@ -181,7 +181,7 @@ ILint XpmGetsInternal(char *Buffer, ILint MaxLen)
 			if (Current == '\n') //dos line ending
 				break;
 
-			if (Current == -1)
+			if (Current == IL_EOF)
 				break;
 
 			Buffer[i++] = Current;
@@ -199,9 +199,8 @@ ILint XpmGetsInternal(char *Buffer, ILint MaxLen)
 
 ILint XpmGets(char *Buffer, ILint MaxLen)
 {
-	ILint		Size, i;
+	ILint		Size, i, j;
 	ILboolean	NotComment = IL_FALSE, InsideComment = IL_FALSE;
-	char *Buffer2;
 
 	do {
 		Size = XpmGetsInternal(Buffer, MaxLen);
@@ -209,17 +208,19 @@ ILint XpmGets(char *Buffer, ILint MaxLen)
 			return IL_EOF;
 
 		//stip leading whitespace (sometimes there's whitespace
-		//before a comment
+		//before a comment or before the pixel data)
 		for(i = 0; i < Size && isspace(Buffer[i]); ++i) ;
-		Buffer2 = Buffer + i;
 		Size = Size - i;
+		for(j = 0; j < Size; ++j)
+			Buffer[j] = Buffer[j + i];
+
 
 		if (Size == 0)
 			continue;
 
-		if (Buffer2[0] == '/' && Buffer2[1] == '*') {
+		if (Buffer[0] == '/' && Buffer[1] == '*') {
 			for (i = 2; i < Size; i++) {
-				if (Buffer2[i] == '*' && Buffer2[i+1] == '/') {
+				if (Buffer[i] == '*' && Buffer[i+1] == '/') {
 					break;
 				}
 			}
@@ -228,7 +229,7 @@ ILint XpmGets(char *Buffer, ILint MaxLen)
 		}
 		else if (InsideComment) {
 			for (i = 0; i < Size; i++) {
-				if (Buffer2[i] == '*' && Buffer2[i+1] == '/') {
+				if (Buffer[i] == '*' && Buffer[i+1] == '/') {
 					break;
 				}
 			}
