@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 08/30/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 01/29/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/convert.c
+// Filename: openil/il_convert.c
 //
 // Description: Converts between several image formats
 //
@@ -276,6 +276,13 @@ ILboolean ILAPIENTRY ilConvertImage(ILenum DestFormat, ILenum DestType)
 	if (DestFormat == iCurImage->Format && DestType == iCurImage->Type)
 		return IL_TRUE;  // No conversion needed.
 
+	if (DestType == iCurImage->Type) {
+		if (iFastConvert(DestFormat)) {
+			iCurImage->Format = DestFormat;
+			return IL_TRUE;
+		}
+	}
+
 	if (ilIsEnabled(IL_USE_KEY_COLOUR)) {
 		ilAddAlphaKey(iCurImage);
 	}
@@ -284,6 +291,8 @@ ILboolean ILAPIENTRY ilConvertImage(ILenum DestFormat, ILenum DestType)
 		return IL_FALSE;
 
 	//ilCopyImageAttr(iCurImage, Image);  // Destroys subimages.
+
+	// We don't copy the colour profile here, since it stays the same.
 	iCurImage->Format = DestFormat;
 	iCurImage->Type = DestType;
 	iCurImage->Bpc = ilGetBppType(DestType);

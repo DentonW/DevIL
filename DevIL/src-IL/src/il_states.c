@@ -16,7 +16,7 @@
 #include <malloc.h>
 
 const ILstring _ilVendor	= IL_TEXT("Abysmal Software");
-const ILstring _ilVersion	= IL_TEXT("Developer's Image Library (DevIL) 1.2.2");
+const ILstring _ilVersion	= IL_TEXT("Developer's Image Library (DevIL) 1.3.0");
 
 
 //! Set all states to their defaults.
@@ -431,6 +431,18 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 			}
 			*Param = iCurImage->Bpc;
 			break;
+		case IL_IMAGE_OFFX:
+		case IL_IMAGE_OFFY:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			if (Mode == IL_IMAGE_OFFX)
+				*Param = iCurImage->OffX;
+			else  // IL_IMAGE_OFFY
+				*Param = iCurImage->OffY;
+			break;
+
 
 		case IL_ACTIVE_IMAGE:
 		case IL_ACTIVE_MIPMAP:
@@ -853,7 +865,36 @@ ILvoid ILAPIENTRY ilSetInteger(ILenum Mode, ILint Param)
 				return;
 			}
 			break;
-
+		case IL_IMAGE_OFFX:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			iCurImage->OffX = Param;
+			return;
+		case IL_IMAGE_OFFY:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			iCurImage->OffY = Param;
+			return;
+		case IL_IMAGE_DURATION:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			iCurImage->Duration = Param;
+			return;
+		case IL_FORMAT_MODE:
+			ilFormatFunc(Param);
+			return;
+		case IL_TYPE_MODE:
+			ilTypeFunc(Param);
+			return;
+		case IL_ORIGIN_MODE:
+			ilOriginFunc(Param);
+			return;
 
 
 		default:

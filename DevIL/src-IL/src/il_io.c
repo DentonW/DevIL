@@ -60,6 +60,8 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 	if (!iStrCmp(Ext, IL_TEXT("pbm")) || !iStrCmp(Ext, IL_TEXT("pgm")) ||
 		!iStrCmp(Ext, IL_TEXT("pnm")) || !iStrCmp(Ext, IL_TEXT("ppm")))
 		return IL_PNM;
+	if (!iStrCmp(Ext, IL_TEXT("psd")))
+		return IL_PSD;
 	if (!iStrCmp(Ext, IL_TEXT("sgi")) || !iStrCmp(Ext, IL_TEXT("bw")) ||
 		!iStrCmp(Ext, IL_TEXT("rgb")) || !iStrCmp(Ext, IL_TEXT("rgba")))
 		return IL_SGI;
@@ -157,6 +159,11 @@ ILenum ilDetermineTypeF(ILHANDLE File)
 		return IL_PNM;
 	#endif
 
+	#ifndef IL_NO_PSD
+	if (ilIsValidPsdF(File))
+		return IL_PSD;
+	#endif
+
 	#ifndef IL_NO_SGI
 	if (ilIsValidSgiF(File))
 		return IL_SGI;
@@ -221,6 +228,11 @@ ILenum ilDetermineTypeL(ILvoid *Lump, ILuint Size)
 		return IL_PNM;
 	#endif
 
+	#ifndef IL_NO_PSD
+	if (ilIsValidPsdL(Lump, Size))
+		return IL_PSD;
+	#endif
+
 	#ifndef IL_NO_SGI
 	if (ilIsValidSgiL(Lump, Size))
 		return IL_SGI;
@@ -282,6 +294,11 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, const ILstring FileName)
 		#ifndef IL_NO_PNM
 		case IL_PNM:
 			return ilIsValidPnm(FileName);
+		#endif
+
+		#ifndef IL_NO_PSD
+		case IL_PSD:
+			return ilIsValidPsd(FileName);
 		#endif
 
 		#ifndef IL_NO_SGI
@@ -349,6 +366,11 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 			return ilIsValidPnmF(File);
 		#endif
 
+		#ifndef IL_NO_PSD
+		case IL_PSD:
+			return ilIsValidPsdF(File);
+		#endif
+
 		#ifndef IL_NO_SGI
 		case IL_SGI:
 			return ilIsValidSgiF(File);
@@ -412,6 +434,11 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, ILvoid *Lump, ILuint Size)
 		#ifndef IL_NO_PNM
 		case IL_PNM:
 			return ilIsValidPnmL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_PSD
+		case IL_PSD:
+			return ilIsValidPsdL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_SGI
@@ -522,6 +549,11 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, const ILstring FileName)
 		#ifndef IL_NO_PNM
 		case IL_PNM:
 			return ilLoadPnm(FileName);
+		#endif
+
+		#ifndef IL_NO_PSD
+		case IL_PSD:
+			return ilLoadPsd(FileName);
 		#endif
 
 		#ifndef IL_NO_RAW
@@ -650,6 +682,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadPnmF(File);
 		#endif
 
+		#ifndef IL_NO_PSD
+		case IL_PSD:
+			return ilLoadPsdF(File);
+		#endif
+
 		#ifndef IL_NO_RAW
 		case IL_RAW:
 			return ilLoadRawF(File);
@@ -761,6 +798,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, ILvoid *Lump, ILuint Size)
 		#ifndef IL_NO_PNM
 		case IL_PNM:
 			return ilLoadPnmL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_PSD
+		case IL_PSD:
+			return ilLoadPsdL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_RAW
@@ -910,6 +952,12 @@ ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 		}
 		if (!iStrCmp(Ext, IL_TEXT("ppm"))) {
 			return ilLoadPnm(FileName);
+		}
+		#endif
+
+		#ifndef IL_NO_PSD
+		if (!iStrCmp(Ext, IL_TEXT("psd"))) {
+			return ilLoadPsd(FileName);
 		}
 		#endif
 

@@ -49,6 +49,8 @@ ILAPI ILimage* ILAPIENTRY ilNewImage(ILuint Width, ILuint Height, ILuint Depth, 
 	Image->Pal.Palette = NULL;
 	Image->Pal.PalSize = 0;
 	Image->Pal.PalType = IL_PAL_NONE;
+	Image->OffX = 0;
+	Image->OffY = 0;
 
 	switch (Bpp)
 	{
@@ -849,7 +851,7 @@ ILAPI ILboolean ILAPIENTRY ilCopyImageAttr(ILimage *Dest, ILimage *Src)
 		memcpy(Dest->AnimList, Src->AnimList, Src->AnimSize * sizeof(ILuint));
 	}
 	if (Src->Profile) {
-		Dest->Profile = (ILubyte*)ialloc(Dest->ProfileSize);
+		Dest->Profile = (ILubyte*)ialloc(Src->ProfileSize);
 		if (Dest->Profile == NULL) {
 			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
@@ -884,6 +886,8 @@ ILAPI ILboolean ILAPIENTRY ilCopyImageAttr(ILimage *Dest, ILimage *Src)
 	Dest->Origin = Src->Origin;
 	Dest->Duration = Src->Duration;
 	Dest->AnimSize = Src->AnimSize;
+	Dest->OffX = Src->OffX;
+	Dest->OffY = Src->OffY;
 
 	return IL_TRUE/*iCopySubImages(Dest, Src)*/;
 }

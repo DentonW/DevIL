@@ -528,7 +528,7 @@ ILboolean ILAPIENTRY ilutLoadResource(HINSTANCE hInst, ILint ID, const ILstring 
 }
 
 
-#ifndef _WIN32_WCE
+#if !_WIN32_WCE && !__CYGWIN32__
 #define BUFFSIZE 8192  // Change to suit the efficiency.
 ILboolean ILAPIENTRY ilutWinLoadUrl(const ILstring Url)
 {
@@ -617,7 +617,7 @@ ILboolean ILAPIENTRY ilutWinLoadUrl(const ILstring Url)
 
 	return IL_TRUE;
 }
-#endif//_WIN32_WCE
+#endif
 
 
 #endif//ILUT_USE_WIN32

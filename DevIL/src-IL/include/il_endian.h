@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 10/27/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 01/29/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/endian.h
+// Filename: openil/il_endian.h
 //
 // Description: Handles Endian-ness
 //
@@ -17,16 +17,34 @@
 
 #ifdef __BIG_ENDIAN__
 	#define Short(s) _SwapShort(s)
+	#define UShort(s) _SwapUShort(s)
 	#define Int(i) _SwapInt(i)
+	#define UInt(i) _SwapUInt(i)
 	#define Float(f) _SwapFloat(f)
 	#define Double(d) _SwapDouble(d)
+
+	#define BigShort(s) (s)
+	#define BigUShort(s) (s)
+	#define BigInt(i) (i)
+	#define BigUInt(i) (i)
+	#define BigFloat(f) (f)
+	#define BigDouble(d) (d)
 #else
 	#undef __LITTLE_ENDIAN__  // Not sure if it's defined by any compiler...
 	#define __LITTLE_ENDIAN__
 	#define Short(s) (s)
+	#define UShort(s) (s)
 	#define Int(i) (i)
+	#define UInt(i) (i)
 	#define Float(f) (f)
 	#define Double(d) (d)
+
+	#define BigUShort(s) _SwapUShort(s)
+	#define BigUInt(i) _SwapUInt(i)
+	#define BigUShort(s) _SwapUShort(s)
+	#define BigUInt(i) _SwapUInt(i)
+	#define BigFloat(f) _SwapFloat(f)
+	#define BigDouble(d) _SwapDouble(d)
 #endif
 
 

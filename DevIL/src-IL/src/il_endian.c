@@ -18,24 +18,54 @@
 // From the DooM sources
 ILushort _SwapUShort(ILushort s)
 {
-	// No masking with 0xFF should be necessary.
-	return (s>>8) | (s<<8);
+	#ifdef USE_WIN32_ASM
+		__asm {
+			mov cx, s
+			mov al, ch
+			mov ah, cl
+		}
+	#else
+		// No masking with 0xFF should be necessary.
+		return (s>>8) | (s<<8);
+	#endif//USE_WIN32_ASM
 }
 
 ILshort _SwapShort(ILshort s)
 {
-	// No masking with 0xFF should be necessary.
-	return (s>>8) | (s<<8);
+	#ifdef USE_WIN32_ASM
+		__asm {
+			mov cx, s
+			mov al, ch
+			mov ah, cl
+		}
+	#else
+		// No masking with 0xFF should be necessary.
+		return (s>>8) | (s<<8);
+	#endif//USE_WIN32_ASM
 }
 
 ILuint _SwapUInt(ILuint i)
 {
-	return (i>>24) | ((i>>8) & 0xff00) | ((i<<8) & 0xff0000) | (i<<24);
+	#ifdef USE_WIN32_ASM
+		__asm {
+			mov eax, i
+			bswap eax
+		}
+	#else
+		return (i>>24) | ((i>>8) & 0xff00) | ((i<<8) & 0xff0000) | (i<<24);
+	#endif//USE_WIN32_ASM
 }
 
 ILint _SwapInt(ILint i)
 {
-	return (i>>24) | ((i>>8) & 0xff00) | ((i<<8) & 0xff0000) | (i<<24);
+	#ifdef USE_WIN32_ASM
+		__asm {
+			mov eax, i
+			bswap eax
+		}
+	#else
+		return (i>>24) | ((i>>8) & 0xff00) | ((i<<8) & 0xff0000) | (i<<24);
+	#endif//USE_WIN32_ASM
 }
 
 /*ILfloat _SwapFloat(ILfloat f)

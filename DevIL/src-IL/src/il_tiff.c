@@ -235,7 +235,7 @@ ILboolean iLoadTiffInternal()
 		_TIFFfree(Buffer);
 	}
 
-	TIFFClose(tif);
+	//TIFFClose(tif);
 
 	iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;  // eiu...dunno if this is right
 

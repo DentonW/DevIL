@@ -61,7 +61,7 @@ ILboolean ilSaveCHeader(const ILstring FileName, const char *InternalName)
 		TempImage = iCurImage;
 	}
 
-#ifndef _unicode
+#ifndef _WIN32_WCE
 	HeadFile = fopen(FileName, "rb");
 #else
 	HeadFile = _wfopen(FileName, L"rb");

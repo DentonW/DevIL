@@ -80,6 +80,11 @@
 	#define IL_TEXT(s) (s)
 #endif
 
+#ifdef IL_INLINE_ASM
+	#ifdef _WIN32
+		#define USE_WIN32_ASM
+	#endif
+#endif
 
 
 #define IL_MAX(a,b) (((a) > (b)) ? (a) : (b))
@@ -121,6 +126,7 @@ typedef struct ILimage
 	ILuint	AnimSize;			// animation list size
 	ILvoid	*Profile;			// colour profile
 	ILuint	ProfileSize;		// colour profile size
+	ILuint	OffX, OffY;			// offset of the image
 } ILimage;
 
 
@@ -239,6 +245,7 @@ ILboolean					ilAddAlpha(ILvoid);
 ILboolean					ilAddAlphaKey(ILimage *Image);
 ILAPI ILvoid*	ILAPIENTRY	ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, ILenum DestFormat, ILenum SrcType, ILenum DestType, ILvoid *Buffer);
 ILAPI ILimage*	ILAPIENTRY	iConvertImage(ILenum DestFormat, ILenum DestType);
+ILboolean					iFastConvert(ILenum DestFormat);
 ILAPI ILpal*	ILAPIENTRY	iConvertPal(ILpal *Pal, ILenum DestFormat);
 ILboolean					ilFixImage(ILvoid);
 ILAPI ILubyte*	ILAPIENTRY	iGetFlipped(ILimage *Image);
@@ -254,28 +261,53 @@ char *iGetString(ILenum StringName);  // Internal version of ilGetString
 // Library usage
 #if _MSC_VER && !_WIN32_WCE
 	#ifndef IL_NO_GIF
-		#pragma comment(lib, "libungif.lib")
+		#ifndef IL_DEBUG
+			#pragma comment(lib, "libungif.lib")
+		#else
+			#pragma comment(lib, "debug/libungif.lib")
+		#endif
 	#endif
 	#ifndef IL_NO_JPG
 		#ifdef IL_USE_IJL
 			#pragma comment(lib, "ijl15.lib")
 		#else
-			#pragma comment(lib, "libjpeg.lib")
+			#ifndef IL_DEBUG
+				#pragma comment(lib, "libjpeg.lib")
+			#else
+				#pragma comment(lib, "debug/libjpeg.lib")
+			#endif
 		#endif
 	#endif
 	#ifndef IL_NO_MNG
-		#pragma comment(lib, "libmng.lib")
-		#pragma comment(lib, "libjpeg.lib")  // For JNG support.
+		#ifndef IL_DEBUG
+			#pragma comment(lib, "libmng.lib")
+			#pragma comment(lib, "libjpeg.lib")  // For JNG support.
+		#else
+			#pragma comment(lib, "debug/libmng.lib")
+			#pragma comment(lib, "debug/libjpeg.lib")  // For JNG support.
+		#endif
 	#endif
 	#ifndef IL_NO_PNG
-		#pragma comment(lib, "libpng.lib")
+		#ifndef IL_DEBUG
+			#pragma comment(lib, "libpng.lib")
+		#else
+			#pragma comment(lib, "debug/libpng.lib")
+		#endif
 	#endif
 	#ifndef IL_NO_TIF
-		#pragma comment(lib, "libtiff.lib")
+		#ifndef IL_DEBUG
+			#pragma comment(lib, "libtiff.lib")
+		#else
+			#pragma comment(lib, "debug/libtiff.lib")
+		#endif
 	#endif
 
 	#if !defined(IL_NO_MNG) || !defined(IL_NO_PNG)
-		#pragma comment(lib, "zlib.lib")
+		#ifndef IL_DEBUG
+			#pragma comment(lib, "zlib.lib")
+		#else
+			#pragma comment(lib, "debug/zlib.lib")
+		#endif
 	#endif
 #endif
 
@@ -407,6 +439,13 @@ ILboolean ilLoadPnmL(ILvoid *Lump, ILuint Size);
 ILboolean ilSavePnm(const ILstring FileName);
 ILboolean ilSavePnmF(ILHANDLE File);
 ILboolean ilSavePnmL(ILvoid *Lump, ILuint Size);
+
+ILboolean ilIsValidPsd(const ILstring FileName);
+ILboolean ilIsValidPsdF(ILHANDLE File);
+ILboolean ilIsValidPsdL(ILvoid *Lump, ILuint Size);
+ILboolean ilLoadPsd(const ILstring FileName);
+ILboolean ilLoadPsdF(ILHANDLE File);
+ILboolean ilLoadPsdL(ILvoid *Lump, ILuint Size);
 
 ILboolean ilLoadRaw(const ILstring FileName);
 ILboolean ilLoadRawF(ILHANDLE File);

@@ -73,6 +73,7 @@ typedef struct ILimage
 	ILuint	AnimSize;			// animation list size
 	ILvoid	*Profile;			// colour profile
 	ILuint	ProfileSize;		// colour profile size
+	ILuint	OffX, OffY;			// offset of the image
 } ILimage;
 
 

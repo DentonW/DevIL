@@ -743,6 +743,7 @@ ILboolean DecompressARGB()
 }
 
 
+// @TODO:  Look at using the BSF/BSR operands for inline ASM here.
 ILvoid GetBitsFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight)
 {
 	ILuint Temp, i;

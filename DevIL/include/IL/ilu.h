@@ -35,8 +35,8 @@ extern "C" {
 	#endif//_MSC_VER
 #endif//_WIN32
 
-#define ILU_VERSION_1_2_5					1
-#define ILU_VERSION							125
+#define ILU_VERSION_1_3_0					1
+#define ILU_VERSION							130
 
 
 #define ILU_FILTER							0x2600

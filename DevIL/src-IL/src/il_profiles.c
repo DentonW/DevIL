@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 12/04/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 01/23/2001 <--Y2K Compliant! =]
 //
 // Filename: openil/il_profiles.c
 //
@@ -17,7 +17,11 @@
 #ifndef _WIN32
 	#define NON_WINDOWS 1
 #else
-	#pragma comment(lib, "lcms107.lib")
+	#ifndef IL_DEBUG
+		#pragma comment(lib, "lcms108.lib")
+	#else
+		#pragma comment(lib, "debug/lcms108.lib")
+	#endif
 #endif//_WIN32
 #include <lcms/lcms.h>
 
@@ -111,7 +115,7 @@ ILboolean ILAPIENTRY ilApplyProfile(const ILstring InProfile, const ILstring Out
 
 	hTransform = cmsCreateTransform(hInProfile, Format, hOutProfile, Format, INTENT_PERCEPTUAL, 0);
 
-	Temp = (ILbyte*)malloc(iCurImage->SizeOfData);
+	Temp = (ILbyte*)ialloc(iCurImage->SizeOfData);
 	if (Temp == NULL) {
 		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
