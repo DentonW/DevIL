@@ -127,48 +127,48 @@ typedef void ILvoid;
 // Matches OpenGL's right now.
 #define IL_COLOUR_INDEX						0x1900
 #define IL_COLOR_INDEX						0x1900
-#define IL_RGB								0x1907
-#define IL_RGBA								0x1908
-#define IL_BGR								0x80E0
-#define IL_BGRA								0x80E1
+#define IL_RGB							0x1907
+#define IL_RGBA							0x1908
+#define IL_BGR							0x80E0
+#define IL_BGRA							0x80E1
 #define IL_LUMINANCE						0x1909
 
 
-#define IL_BYTE								0x1400
+#define IL_BYTE							0x1400
 #define IL_UNSIGNED_BYTE					0x1401
-#define IL_SHORT							0x1402
+#define IL_SHORT						0x1402
 #define IL_UNSIGNED_SHORT					0x1403
-#define IL_INT								0x1404
+#define IL_INT							0x1404
 #define IL_UNSIGNED_INT						0x1405
-#define IL_FLOAT							0x1406
-#define IL_DOUBLE							0x140A
+#define IL_FLOAT						0x1406
+#define IL_DOUBLE						0x140A
 
 
-#define IL_VENDOR							0x1F00
+#define IL_VENDOR						0x1F00
 
 
 //
 // IL-specific #define's
 //
 
-#define IL_VERSION_1_2_4					1
-#define IL_VERSION							124
+#define IL_VERSION_1_3_0					1
+#define IL_VERSION						130
 
 
 // Attribute Bits
 #define IL_ORIGIN_BIT						0x00000001
-#define IL_FILE_BIT							0x00000002
-#define IL_PAL_BIT							0x00000004
+#define IL_FILE_BIT						0x00000002
+#define IL_PAL_BIT						0x00000004
 #define IL_FORMAT_BIT						0x00000008
-#define IL_TYPE_BIT							0x00000010
+#define IL_TYPE_BIT						0x00000010
 #define IL_COMPRESS_BIT						0x00000020
 #define IL_LOADFAIL_BIT						0x00000040
-#define IL_FORMAT_SPECIFIC_BIT				0x00000080
+#define IL_FORMAT_SPECIFIC_BIT					0x00000080
 #define IL_ALL_ATTRIB_BITS					0x000FFFFF
 
 
 // Palette types
-#define IL_PAL_NONE							0x0400
+#define IL_PAL_NONE						0x0400
 #define IL_PAL_RGB24						0x0401
 #define IL_PAL_RGB32						0x0402
 #define IL_PAL_RGBA32						0x0403
@@ -179,53 +179,53 @@ typedef void ILvoid;
 
 // Image types
 #define IL_TYPE_UNKNOWN						0x0000
-#define IL_BMP								0x0420
-#define IL_CUT								0x0421
-#define IL_DOOM								0x0422
+#define IL_BMP							0x0420
+#define IL_CUT							0x0421
+#define IL_DOOM							0x0422
 #define IL_DOOM_FLAT						0x0423
-#define IL_ICO								0x0424
-#define IL_JPG								0x0425
-#define IL_LBM								0x0426
-#define IL_PCD								0x0427
-#define IL_PCX								0x0428
-#define IL_PIC								0x0429
-#define IL_PNG								0x042A
-#define IL_PNM								0x042B
-#define IL_SGI								0x042C
-#define IL_TGA								0x042D
-#define IL_TIF								0x042E
-#define IL_CHEAD							0x042F
-#define IL_RAW								0x0430
-#define IL_MDL								0x0431
-#define IL_WAL								0x0432
-#define IL_LIF								0x0434
-#define IL_MNG								0x0435
-#define IL_JNG								0x0435
-#define IL_GIF								0x0436
-#define IL_DDS								0x0437
-#define IL_DCX								0x0438
+#define IL_ICO							0x0424
+#define IL_JPG							0x0425
+#define IL_LBM							0x0426
+#define IL_PCD							0x0427
+#define IL_PCX							0x0428
+#define IL_PIC							0x0429
+#define IL_PNG							0x042A
+#define IL_PNM							0x042B
+#define IL_SGI							0x042C
+#define IL_TGA							0x042D
+#define IL_TIF							0x042E
+#define IL_CHEAD						0x042F
+#define IL_RAW							0x0430
+#define IL_MDL							0x0431
+#define IL_WAL							0x0432
+#define IL_LIF							0x0434
+#define IL_MNG							0x0435
+#define IL_JNG							0x0435
+#define IL_GIF							0x0436
+#define IL_DDS							0x0437
+#define IL_DCX							0x0438
 
-#define IL_JASC_PAL							0x0475
+#define IL_JASC_PAL						0x0475
 
 
 // Error Types
-#define IL_NO_ERROR							0x0000
+#define IL_NO_ERROR						0x0000
 #define IL_INVALID_ENUM						0x0501
 #define IL_OUT_OF_MEMORY					0x0502
-#define IL_FORMAT_NOT_SUPPORTED				0x0503
+#define IL_FORMAT_NOT_SUPPORTED					0x0503
 #define IL_INTERNAL_ERROR					0x0504
 #define IL_INVALID_VALUE					0x0505
-#define IL_ILLEGAL_OPERATION				0x0506
-#define IL_ILLEGAL_FILE_VALUE				0x0507
-#define IL_INVALID_FILE_HEADER				0x0508
+#define IL_ILLEGAL_OPERATION					0x0506
+#define IL_ILLEGAL_FILE_VALUE					0x0507
+#define IL_INVALID_FILE_HEADER					0x0508
 #define IL_INVALID_PARAM					0x0509
-#define IL_COULD_NOT_OPEN_FILE				0x050A
-#define IL_INVALID_EXTENSION				0x050B
-#define IL_FILE_ALREADY_EXISTS				0x050C
+#define IL_COULD_NOT_OPEN_FILE					0x050A
+#define IL_INVALID_EXTENSION					0x050B
+#define IL_FILE_ALREADY_EXISTS					0x050C
 #define IL_OUT_FORMAT_SAME					0x050D
 #define IL_STACK_OVERFLOW					0x050E
 #define IL_STACK_UNDERFLOW					0x050F
-#define IL_INVALID_CONVERSION				0x0510
+#define IL_INVALID_CONVERSION					0x0510
 #define IL_LIB_GIF_ERROR					0x05E1
 #define IL_LIB_JPEG_ERROR					0x05E2
 #define IL_LIB_PNG_ERROR					0x05E3
@@ -236,15 +236,15 @@ typedef void ILvoid;
 
 // Origin Definitions
 #define IL_ORIGIN_SET						0x0600
-#define IL_ORIGIN_LOWER_LEFT				0x0601
-#define IL_ORIGIN_UPPER_LEFT				0x0602
+#define IL_ORIGIN_LOWER_LEFT					0x0601
+#define IL_ORIGIN_UPPER_LEFT					0x0602
 #define IL_ORIGIN_MODE						0x0603
 
 
 // Format and Type Mode Definitions
 #define IL_FORMAT_SET						0x0610
 #define IL_FORMAT_MODE						0x0611
-#define IL_TYPE_SET							0x0612
+#define IL_TYPE_SET						0x0612
 #define IL_TYPE_MODE						0x0613
 
 
@@ -254,7 +254,7 @@ typedef void ILvoid;
 
 
 // Palette definitions
-#define IL_CONV_PAL							0x0630
+#define IL_CONV_PAL						0x0630
 
 
 // Load fail definitions
@@ -272,8 +272,8 @@ typedef void ILvoid;
 
 
 // Hints
-#define IL_FASTEST							0x0660
-#define IL_LESS_MEM							0x0661
+#define IL_FASTEST						0x0660
+#define IL_LESS_MEM						0x0661
 #define IL_DONT_CARE						0x0662
 #define IL_MEM_SPEED_HINT					0x0665
 #define IL_USE_COMPRESSION					0x0666
@@ -282,7 +282,7 @@ typedef void ILvoid;
 
 
 // Subimage types
-#define IL_SUB_NEXT							0x0680
+#define IL_SUB_NEXT						0x0680
 #define IL_SUB_MIPMAP						0x0681
 #define IL_SUB_LAYER						0x0682
 
@@ -299,19 +299,19 @@ typedef void ILvoid;
 #define IL_TGA_CREATE_STAMP					0x0710
 #define IL_JPG_QUALITY						0x0711
 #define IL_PNG_INTERLACE					0x0712
-#define IL_TGA_RLE							0x0713
-#define IL_BMP_RLE							0x0714
-#define IL_SGI_RLE							0x0715
+#define IL_TGA_RLE						0x0713
+#define IL_BMP_RLE						0x0714
+#define IL_SGI_RLE						0x0715
 #define IL_TGA_ID_STRING					0x0717
-#define IL_TGA_AUTHNAME_STRING				0x0718
-#define IL_TGA_AUTHCOMMENT_STRING			0x0719
-#define IL_PNG_AUTHNAME_STRING				0x071A
+#define IL_TGA_AUTHNAME_STRING					0x0718
+#define IL_TGA_AUTHCOMMENT_STRING				0x0719
+#define IL_PNG_AUTHNAME_STRING					0x071A
 #define IL_PNG_TITLE_STRING					0x071B
-#define IL_PNG_DESCRIPTION_STRING			0x071C
-#define IL_TIF_DESCRIPTION_STRING			0x071D
-#define IL_TIF_HOSTCOMPUTER_STRING			0x071E
-#define IL_TIF_DOCUMENTNAME_STRING			0x071F
-#define IL_TIF_AUTHNAME_STRING				0x0720
+#define IL_PNG_DESCRIPTION_STRING				0x071C
+#define IL_TIF_DESCRIPTION_STRING				0x071D
+#define IL_TIF_HOSTCOMPUTER_STRING				0x071E
+#define IL_TIF_DOCUMENTNAME_STRING				0x071F
+#define IL_TIF_AUTHNAME_STRING					0x0720
 
 
 
@@ -322,17 +322,17 @@ typedef void ILvoid;
 #define IL_IMAGE_WIDTH						0x0DE4
 #define IL_IMAGE_HEIGHT						0x0DE5
 #define IL_IMAGE_DEPTH						0x0DE6
-#define IL_IMAGE_SIZE_OF_DATA				0x0DE7
+#define IL_IMAGE_SIZE_OF_DATA					0x0DE7
 #define IL_IMAGE_BPP						0x0DE8
-#define IL_IMAGE_BYTES_PER_PIXEL			0x0DE8
-#define IL_IMAGE_BITS_PER_PIXEL				0x0DE9
+#define IL_IMAGE_BYTES_PER_PIXEL				0x0DE8
+#define IL_IMAGE_BITS_PER_PIXEL					0x0DE9
 #define IL_IMAGE_FORMAT						0x0DEA
 #define IL_IMAGE_TYPE						0x0DEB
 #define IL_PALETTE_TYPE						0x0DEC
 #define IL_PALETTE_SIZE						0x0DED
 #define IL_PALETTE_BPP						0x0DEE
 #define IL_PALETTE_NUM_COLS					0x0DEF
-#define IL_PALETTE_BASE_TYPE				0x0DF0
+#define IL_PALETTE_BASE_TYPE					0x0DF0
 #define IL_NUM_IMAGES						0x0DF1
 #define IL_NUM_MIPMAPS						0x0DF2
 #define IL_NUM_LAYERS						0x0DF3
@@ -436,7 +436,7 @@ ILAPI ILboolean		ILAPIENTRY ilGetBoolean(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilGetBooleanv(ILenum Mode, ILboolean *Param);
 ILAPI ILubyte*		ILAPIENTRY ilGetData(ILvoid);
 ILAPI ILenum		ILAPIENTRY ilGetError(ILvoid);
-ILAPI ILint			ILAPIENTRY ilGetInteger(ILenum Mode);
+ILAPI ILint		ILAPIENTRY ilGetInteger(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param);
 ILAPI ILuint		ILAPIENTRY ilGetLumpPos(ILvoid);
 ILAPI ILubyte*		ILAPIENTRY ilGetPalette(ILvoid);
@@ -496,7 +496,7 @@ ILAPI ILboolean		ILAPIENTRY ilSaveData(const ILstring FileName);
 
 // For all those weirdos that spell "colour" without the 'u'.
 #define ilClearColor	ilClearColour
-#define ilKeyColor		ilKeyColour
+#define ilKeyColor	ilKeyColour
 
 
 #ifdef __cplusplus
