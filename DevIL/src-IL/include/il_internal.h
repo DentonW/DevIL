@@ -266,13 +266,6 @@ char *iGetString(ILenum StringName);  // Internal version of ilGetString
 
 // Library usage
 #if _MSC_VER && !_WIN32_WCE
-	#ifndef IL_NO_GIF
-		#ifndef IL_DEBUG
-			#pragma comment(lib, "libungif.lib")
-		#else
-			#pragma comment(lib, "debug/libungif.lib")
-		#endif
-	#endif
 	#ifndef IL_NO_JPG
 		#ifdef IL_USE_IJL
 			#pragma comment(lib, "ijl15.lib")

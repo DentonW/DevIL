@@ -5,6 +5,7 @@
 - Fixed .gif loading, even loading animations better than I did with libungif.
 - Added the static library workspace to /projects/msvc/static.
 - Fixed another Mac OS X compilation problem.
+- Removed references to libungif.
 
 
 1.4.0

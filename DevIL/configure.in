@@ -30,7 +30,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.17 $)
+AC_REVISION($Revision: 1.18 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -293,16 +293,6 @@ else
   LIBMNG=""
 fi
 AC_SUBST(LIBMNG)
-
-if test "$no_gif" = "no" ; then
-   AC_CHECK_LIB(ungif, DGifOpenFileName, LIBGIF="-lungif", LIBGIF="", )
-   if test "$LIBGIF" != "-lungif" ; then
-     no_gif="yes"
-   fi
-else
-  LIBGIF=""
-fi
-AC_SUBST(LIBGIF)
 
 dnl
 dnl ILUT APIs checking
