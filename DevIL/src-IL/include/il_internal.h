@@ -137,6 +137,15 @@ extern ILimage *iCurImage;
 
 int iStrCmp(const ILstring src1, const ILstring src2);
 
+//
+// Some math functions
+//
+
+// A fast integer squareroot, completely accurate for x < 289.
+// Taken from http://atoms.org.uk/sqrt/
+// There is also a version that is accurate for all integers
+// < 2^31, if we should need it
+int iSqrt(int x);
 
 //
 // Useful miscellaneous functions
