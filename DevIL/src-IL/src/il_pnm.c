@@ -169,26 +169,31 @@ ILboolean iLoadPnmInternal()
 	if (iGetWord() == IL_FALSE)
 		return IL_FALSE;
 
-	if (SmallBuff[0] + SmallBuff[1] == 'P' + '1') {
+	if (SmallBuff[0] != 'P') {
+		ilSetError(IL_INVALID_FILE_HEADER);
+		return IL_FALSE;
+	}
+
+	if (SmallBuff[1] == '1') {
 		Info.Type = IL_PBM_ASCII;
 	}
-	else if (SmallBuff[0] + SmallBuff[1] == 'P' + '2') {
+	else if (SmallBuff[1] == '2') {
 		Info.Type = IL_PGM_ASCII;
 	}
-	else if (SmallBuff[0] + SmallBuff[1] == 'P' + '3') {
+	else if (SmallBuff[1] == '3') {
 		Info.Type = IL_PPM_ASCII;
 	}
-	else if (SmallBuff[0] + SmallBuff[1] == 'P' + '4') {
+	else if (SmallBuff[1] == '4') {
 		Info.Type = IL_PBM_BINARY;
 		if (IsLump) {
 			ilSetError(IL_FORMAT_NOT_SUPPORTED);
 			return IL_FALSE;
 		}
 	}
-	else if (SmallBuff[0] + SmallBuff[1] == 'P' + '5') {
+	else if (SmallBuff[1] == '5') {
 		Info.Type = IL_PGM_BINARY;
 	}
-	else if (SmallBuff[0] + SmallBuff[1] == 'P' + '6') {
+	else if (SmallBuff[1] == '6') {
 		Info.Type = IL_PPM_BINARY;
 	}
 	else {
@@ -259,7 +264,7 @@ ILboolean iLoadPnmInternal()
 	}
 
 	// Is this conversion needed?  Just 0's and 1's shows up as all black
-	if (Info.Type == IL_PBM_ASCII || Info.Type == IL_PBM_BINARY) {
+	if (Info.Type == IL_PBM_ASCII) {
 		PbmMaximize(PmImage);
 	}
 
@@ -372,35 +377,21 @@ ILimage *ilReadBinaryPpm(PPMINFO *Info)
 
 ILimage *ilReadBitPbm(PPMINFO *Info)
 {
-	BITFILE *BitFile;
-	ILuint	DataInc = 0, /*LinePos = 0,*/ Size;
-	//ILint	BytesRead = 0;
+	ILuint	m, j, x, CurrByte;
 
-	Size = Info->Width * Info->Height * Info->Bpp;
-
-	BitFile = bfile(iGetFile());
-
-	if (!ilTexImage(Info->Width, Info->Height, 1, (ILubyte)(Info->Bpp), 0, IL_UNSIGNED_BYTE, NULL) || !BitFile) {
+	if (!ilTexImage(Info->Width, Info->Height, 1, (ILubyte)(Info->Bpp), 0, IL_UNSIGNED_BYTE, NULL)) {
 		return IL_FALSE;
 	}
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 
-	/*while (DataInc < Size) {// && !feof(File)) {
-		Image->Data[DataInc] = igetc();
-		// We should set some kind of state flag that enables this
-		//Image->Data[DataInc] *= (ILubyte)(255 / Info->MaxColour);  // Scales to 0-255
-		DataInc++;
-	}*/
-
-	DataInc = bread(iCurImage->Data, 1, Info->Width * Info->Height * Info->Bpp, BitFile);
-	ifree(BitFile);
-
-	// If we read less than what we should have...
-	if (DataInc < Size) {
-		//ilCloseImage(iCurImage);
-		//ilSetCurImage(NULL);
-		ilSetError(IL_ILLEGAL_FILE_VALUE);
-		return NULL;
+	x = 0;
+	for (j = 0; j < iCurImage->SizeOfData;) {
+		CurrByte = igetc();
+		for (m = 128; m > 0 && x < Info->Width; m >>= 1, ++x, ++j) {
+			iCurImage->Data[j] = (CurrByte & m)?255:0;
+		}
+		if (x == Info->Width)
+			x = 0;
 	}
 
 	return iCurImage;
