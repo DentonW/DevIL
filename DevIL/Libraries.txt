@@ -26,9 +26,10 @@ Intel Jpeg Library from
 
 MAC OS X
 These library are not still uploaded !!!!
+To know how to install these libraries read README.macosx
 
 Source of external framework, downloaded from the previous sites
-http://openil.sourceforge.net/libs/FrameworksSrc.sitx
+http://openil.sourceforge.net/libs/ExternFrameworksSrc.sitx
 
-Compiled version
-http://openil.sourceforge.net/libs/FrameworksBin.sitx
+Complete Compiled Library
+http://openil.sourceforge.net/libs/OpenILBin.sitx

@@ -72,7 +72,7 @@ range.  ilGetError() will return 0 (IL_NO_ERROR) if no error has occurred.
 Installation:
 -------------
 
-Copy this Framework and all the extern needed framework inside the /Library/Framework folder of your root folder ( / )
+Copy this Framework inside the /Library/Framework folder and all the other framework inside a the folder /Library/Framework/IL.framework/Frameworks
 
 
 Usage:
