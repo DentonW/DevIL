@@ -201,6 +201,7 @@ ILboolean iLoadTargaInternal()
 			break;
 		default:
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
+			return IL_FALSE;
 	}
 
 	// @JASON Extra Code to manipulate the image depending on
