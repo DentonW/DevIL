@@ -37,7 +37,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.36 $)
+AC_REVISION($Revision: 1.37 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -499,11 +499,11 @@ if test "$no_jpeg" = "no" ; then
   AC_CHECK_LIB(jpeg, jpeg_start_decompress, LIBJPG="-ljpeg", LIBJPG="", )
   if test "$LIBJPG" != "-ljpeg" ; then
     no_jpeg="yes"
-  #else
-    #AC_CHECK_LIB(jpeg, jpeg_init_exif_field, use_exif="yes", use_exif="no", )
-    #if test "$use_exif" = "no" ; then
-    #  AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED)
-    #fi
+  else
+    AC_CHECK_LIB(jpeg, jpeg_init_exif_field, use_exif="yes", use_exif="no", )
+    if test "$use_exif" = "no" ; then
+      AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED)
+    fi
     AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED)
   fi
 
@@ -511,6 +511,11 @@ else
   LIBJPG=""
 fi
 AC_SUBST(LIBJPG)
+
+case "$target" in
+*-apple-darwin*)
+	AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED)
+esac
 
 if test "$no_tiff" = "no" ; then
    AC_CHECK_LIB(tiff, TIFFReadRGBAImage, LIBTIFF="-ltiff", LIBTIFF="", -lm)
@@ -563,16 +568,19 @@ LIBSDL="$SDL_LIBS"
 AC_SUBST(LIBSDL)
 AC_SUBST(HSDL)
 
+
 if test "$use_opengl" = "yes" ; then
 AC_CHECK_HEADER(GL/gl.h, [have_gl_hdr=yes])
 case "$target" in
 *-*-cygwin* | *-*-mingw32*)
 	LIBGL="-lopengl32 -lglu32"
 	;;
+*-apple-darwin*)
+	LIBGL="-framework OpenGL"
+	;;
 *-*-*)
 	AC_CHECK_LIB(GL,glLoadIdentity,[LIBGL="-lGL"])
 	AC_CHECK_LIB(GLU,gluPerspective,[LIBGL="-lGLU"],,$LIBGL)
-	AC_CHECK_FILE( /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib, LIBGL="-framework OpenGL" )
 	;;
 esac
    if test "x$have_gl_hdr" != "xyes" ; then
