@@ -533,23 +533,8 @@ ILAPI ILboolean		ILAPIENTRY ilLoadDataF(ILHANDLE File, ILuint Width, ILuint Heig
 ILAPI ILboolean		ILAPIENTRY ilLoadDataL(ILvoid *Lump, ILuint Size, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp);
 ILAPI ILboolean		ILAPIENTRY ilSaveData(const ILstring FileName);
 
-#if !defined(IL_NO_JPG) && !defined(IL_USE_IJL)
-	#ifdef _MSC_VER
-		#pragma pack(push, erroneous_warnings, 1)
-		// remove 'FAR' : macro redefinition warning
-		#pragma warning(disable : 4005)
-		// remove benign redefinition of type warning
-		#pragma warning(disable : 4142)
-	#endif
-
-	#include <jpeglib.h>
-	ILAPI ILboolean	ILAPIENTRY ilLoadFromJpegStruct(struct jpeg_decompress_struct* JpegDecompressorPtr);
-	ILAPI ILboolean	ILAPIENTRY ilSaveFromJpegStruct(struct jpeg_compress_struct* JpegCompressorPtr);
-
-	#ifdef _MSC_VER
-		#pragma pack(pop,  erroneous_warnings)
-	#endif
-#endif
+ILAPI ILboolean	ILAPIENTRY ilLoadFromJpegStruct(ILvoid* JpegDecompressorPtr);
+ILAPI ILboolean	ILAPIENTRY ilSaveFromJpegStruct(ILvoid* JpegCompressorPtr);
 
 // For all those weirdos that spell "colour" without the 'u'.
 #define ilClearColor	ilClearColour

@@ -284,10 +284,11 @@ devil_jpeg_read_init (j_decompress_ptr cinfo)
 // this function is called. The caller must call jpeg_finish_decompress because
 // the caller may still need decompressor after calling this for e.g. examining
 // saved markers.
-ILboolean ILAPIENTRY ilLoadFromJpegStruct(j_decompress_ptr JpegInfo)
+ILboolean ILAPIENTRY ilLoadFromJpegStruct(ILvoid *JpegDecompressorPtr)
 {
 	void (*errorHandler)(j_common_ptr);
 	ILubyte *TempPtr[1];
+	j_decompress_ptr JpegInfo = (j_decompress_ptr)JpegDecompressorPtr;
 
 	errorHandler = JpegInfo->err->error_exit;
 	JpegInfo->err->error_exit = ExitErrorHandle;
@@ -475,12 +476,14 @@ ILboolean ilSaveJpegL(ILvoid *Lump, ILuint Size)
 // is also responsible for calling jpeg_finish_compress in case the
 // caller still needs to compressor for something.
 // 
-ILboolean ILAPIENTRY ilSaveFromJpegStruct(j_compress_ptr JpegInfo)
+ILboolean ILAPIENTRY ilSaveFromJpegStruct(ILvoid* JpegCompressPtr)
 {
 	void (*errorHandler)(j_common_ptr);
 	JSAMPROW	row_pointer[1];
 	ILimage		*Temp;
 	ILenum		Origin;
+	j_compress_ptr JpegInfo = (j_compress_ptr)JpegCompressPtr;
+
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -894,6 +897,10 @@ ILboolean iSaveJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size)
 #endif//IL_USE_IJL
 
 
-
-
 #endif//IL_NO_JPG
+
+// Keep the entry points
+#if defined(IL_NO_JPG) || defined(IL_USE_IJL)
+	ILboolean ILAPIENTRY ilLoadFromJpegStruct(ILvoid *JpegDecompressorPtr) { return IL_FALSE; }
+	ILboolean ILAPIENTRY ilSaveFromJpegStruct(ILvoid *JpegCompressorPtr) { return IL_FALSE; }
+#endif

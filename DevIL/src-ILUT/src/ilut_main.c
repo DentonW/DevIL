@@ -46,7 +46,7 @@ static void GccMain()
 ILvoid ILAPIENTRY ilutInit()
 {
 	ilutDefaultStates();  // Set states to their defaults
-	// Can cause crashes if OpenIL is not initialized yet
+	// Can cause crashes if DevIL is not initialized yet
 
 #ifdef ILUT_USE_OPENGL
 	ilutGLInit();  // default renderer is OpenGL

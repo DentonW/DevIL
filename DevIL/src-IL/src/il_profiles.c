@@ -24,9 +24,10 @@
 #endif//_WIN32
 #include <lcms/lcms.h>
 
-
+#endif//IL_NO_LCMS
 ILboolean ILAPIENTRY ilApplyProfile(const ILstring InProfile, const ILstring OutProfile)
 {
+#ifndef IL_NO_LCMS
 	cmsHPROFILE		hInProfile, hOutProfile;
 	cmsHTRANSFORM	hTransform;
 	ILbyte			*Temp;
@@ -131,6 +132,5 @@ ILboolean ILAPIENTRY ilApplyProfile(const ILstring InProfile, const ILstring Out
 	cmsCloseProfile(hOutProfile);
 
 	return IL_TRUE;
-}
-
 #endif//IL_NO_LCMS
+}
