@@ -1,16 +1,30 @@
 # Unix Makefile
 
-CC=gcc
-OBJECTS=gltest.o
-LIBS=-lX11 -lm -lGL -lGLU -lglut -lIL -lILU -lILUT -lXext -lXi -lXmu
+CC       = gcc
+CFLAGS   = -Wall
+INCLUDES = -I$(HOME)/usr/DevIL/include
+LIBS     = -lX11 -lm -lGL -lGLU -lglut -lIL -lILU -lILUT -lXext -lXi -lXmu
 
-all: DevIL_testGL
+SRC     = gltest.c
+OBJECTS = $(SRC:%.c=.objects/%.o)
+DEPENDS = $(SRC:%.c=.depends/%.d)
+TARGET  = DevIL_testGL
 
-DevIL_testGL: $(OBJECTS)
-	$(CC) $(OBJECTS) $(LIBS) -o DevIL_testGL
+all: $(TARGET)
 
-gltest.o: gltest.c gltest.h
-	$(CC) -I$(HOME)/usr/DevIL/include -Wall -o gltest.o -c gltest.c
+$(TARGET): $(OBJECTS)
+	$(CC) $(CFLAGS) $(INCLUDES) $(LIBS) -o $@ $^
+
+.objects/%.o: %.c
+	@@if [ ! -d $(@D) ]; then mkdir -p $(@D); fi
+	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
+
+.depends/%.d: %.c
+	@@if [ ! -d $(@D) ]; then mkdir -p $(@D); fi
+	$(CC) $(INCLUDES) -MM -MG $< -MT '.objects/$(@F:%.d=%.o)' > $@
 
 clean:
-	rm $(OBJECTS) DevIL_testGL
+	rm -rf $(DEPENDS) $(OBJECTS) $(TARGET)
+
+-include $(DEPENDS)
+
