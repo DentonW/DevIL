@@ -201,16 +201,25 @@ ILint XpmGets(char *Buffer, ILint MaxLen)
 {
 	ILint		Size, i;
 	ILboolean	NotComment = IL_FALSE, InsideComment = IL_FALSE;
+	char *Buffer2;
 
 	do {
 		Size = XpmGetsInternal(Buffer, MaxLen);
-		if (Size == 0)
-			continue;
 		if (Size == IL_EOF)
 			return IL_EOF;
-		if (Buffer[0] == '/' && Buffer[1] == '*') {
+
+		//stip leading whitespace (sometimes there's whitespace
+		//before a comment
+		for(i = 0; i < Size && isspace(Buffer[i]); ++i) ;
+		Buffer2 = Buffer + i;
+		Size = Size - i;
+
+		if (Size == 0)
+			continue;
+
+		if (Buffer2[0] == '/' && Buffer2[1] == '*') {
 			for (i = 2; i < Size; i++) {
-				if (Buffer[i] == '*' && Buffer[i+1] == '/') {
+				if (Buffer2[i] == '*' && Buffer2[i+1] == '/') {
 					break;
 				}
 			}
@@ -219,7 +228,7 @@ ILint XpmGets(char *Buffer, ILint MaxLen)
 		}
 		else if (InsideComment) {
 			for (i = 0; i < Size; i++) {
-				if (Buffer[i] == '*' && Buffer[i+1] == '/') {
+				if (Buffer2[i] == '*' && Buffer2[i+1] == '/') {
 					break;
 				}
 			}
