@@ -72,7 +72,7 @@
 <dt>IL_ORIGIN_SET</dt>
 <dd>Returns whether all images loaded and saved adhere to a specific origin.</dd>
 <dt>IL_ORIGIN_MODE</dt>
-<dd>Returns the current origin position.  Returned values can be:</dd>
+<dd>Returns the current origin position images are converted to if IL_ORIGIN_SET is enabled.  Returned values can be:</dd>
 <dl>
 <dt>IL_ORIGIN_LOWER_LEFT</dt>
 <dd>The origin is in the lower left corner.</dd>
@@ -111,6 +111,14 @@
 <dd>Returns the bytes per pixel of the current image's palette.</dd>
 <dt>IL_PALETTE_NUM_COLS</dt>
 <dd>Returns the number of colours of the current image's palette.</dd>
+<dt>IL_IMAGE_ORIGIN</dt>
+<dd>Returns the origin position of the current image. Returned values can be:</dd>
+<dl>
+<dt>IL_ORIGIN_LOWER_LEFT</dt>
+<dd>The origin is in the lower left corner.</dd>
+<dt>IL_ORIGIN_UPPER_LEFT</dt>
+<dd>The origin is in the upper left corner.</dd>
+</dl>
 <dt>IL_ACTIVE_IMAGE</dt>
 <dd>Returns the current image number.</dd>
 <dt>IL_ACTIVE_LAYER</dt>
