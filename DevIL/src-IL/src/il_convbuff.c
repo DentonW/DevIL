@@ -47,8 +47,8 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 	if (Data == NULL)
 		return NULL;
 
-	BpcDest = ilGetBppType(DestType);
-	NumPix = SizeOfData / ilGetBppType(SrcType);
+	BpcDest = ilGetBpcType(DestType);
+	NumPix = SizeOfData / ilGetBpcType(SrcType);
 
 	if (DestFormat == SrcFormat) {
 		NewData = (ILubyte*)ialloc(NumPix * BpcDest);
@@ -1551,8 +1551,8 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 	ILfloat		*FloatPtr, tempFloat;
 	ILdouble	*DblPtr, tempDouble;
 
-	BpcSrc = ilGetBppType(SrcType);
-	BpcDest = ilGetBppType(DestType);
+	BpcSrc = ilGetBpcType(SrcType);
+	BpcDest = ilGetBpcType(DestType);
 
 	if (BpcSrc == 0 || BpcDest == 0) {
 		ilSetError(IL_INTERNAL_ERROR);

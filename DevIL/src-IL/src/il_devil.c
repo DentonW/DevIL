@@ -16,70 +16,91 @@
 #include <limits.h>
 #include "il_manip.h"
 
+ILAPI ILboolean ILAPIENTRY ilInitImage(ILimage *Image, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, ILvoid *Data)
+{
+    ILubyte BpcType = ilGetBpcType(Type);
+    if (BpcType == 0) {
+        ilSetError(IL_INVALID_PARAM);
+        return IL_FALSE;
+    }
+
+	memset (Image, 0, sizeof(ILimage));
+
+	////
+
+    Image->Width       = Width  == 0 ? 1 : Width;
+    Image->Height      = Height == 0 ? 1 : Height;
+    Image->Depth       = Depth  == 0 ? 1 : Depth;
+    Image->Bpp         = Bpp;
+    Image->Bpc         = BpcType;
+    Image->Bps         = Width * Bpp * Image->Bpc;
+    Image->SizeOfPlane = Image->Bps * Height;
+    Image->SizeOfData  = Image->SizeOfPlane * Depth;
+    Image->Format      = Format;
+    Image->Type        = Type;
+    Image->Origin      = IL_ORIGIN_LOWER_LEFT;
+	Image->Pal.PalType = IL_PAL_NONE;
+    Image->DxtcFormat  = IL_DXT_NO_COMP;
+
+    Image->Data = (ILubyte*)ialloc(Image->SizeOfData);
+    if (Image->Data == NULL) {
+        return IL_FALSE;
+    }
+
+    if (Data != NULL) {
+        memcpy(Image->Data, Data, Image->SizeOfData);
+    }
+
+	return IL_TRUE;
+}
+
+
 
 // Creates a new ILimage based on the specifications given
 ILAPI ILimage* ILAPIENTRY ilNewImage(ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILubyte Bpc)
 {
-    ILimage *Image = (ILimage*)ialloc(sizeof(ILimage));
+	ILimage *Image;
+
+	if (Bpp == 0 || Bpp > 4) {
+		return NULL;
+	}
+
+    Image = (ILimage*)ialloc(sizeof(ILimage));
     if (Image == NULL) {
         return NULL;
     }
-    Image->Width = Width == 0 ? 1 : Width;
-    Image->Height = Height == 0 ? 1 : Height;
-    Image->Depth = Depth == 0 ? 1 : Depth;
-    Image->Bpp = Bpp;
-    Image->Bpc = Bpc;
-    Image->Bps = Bpp * Image->Bpc * Width;
-    Image->SizeOfPlane = Image->Bps * Height;
-    Image->SizeOfData = Image->SizeOfPlane * Depth;
-    Image->Layers = NULL;
-    Image->Mipmaps = NULL;
-    Image->Next = NULL;
-    Image->NumLayers = 0;
-    Image->NumMips = 0;
-    Image->NumNext = 0;
-    Image->Duration = 0;
-    Image->CubeFlags = 0;
-    Image->Type = IL_UNSIGNED_BYTE;
-    Image->Origin = IL_ORIGIN_LOWER_LEFT;
-    Image->AnimList = NULL;
-    Image->AnimSize = 0;
-    Image->Profile = NULL;
-    Image->ProfileSize = 0;
-    Image->Pal.Palette = NULL;
-    Image->Pal.PalSize = 0;
-    Image->Pal.PalType = IL_PAL_NONE;
-    Image->OffX = 0;
-    Image->OffY = 0;
-    Image->DxtcData = NULL;
-    Image->DxtcFormat = IL_DXT_NO_COMP;
-    Image->DxtcSize = 0;
+
+	if (!ilInitImage (Image, Width, Height, Depth, Bpp, ilGetFormatBpp(Bpp), ilGetTypeBpc(Bpc), NULL)) {
+		if (Image->Data != NULL) {
+			ifree(Image->Data);
+		}
+		ifree(Image);
+		return NULL;
+	}
     
-    switch (Bpp)
-    {
-        case 1:
-            Image->Format = IL_LUMINANCE;
-            break;
-        case 2:
-            Image->Format = IL_LUMINANCE_ALPHA;
-            break;
-        case 3:
-            Image->Format = IL_RGB;
-            break;
-        case 4:
-            Image->Format = IL_RGBA;
-            break;
-        default:
-            ilSetError(IL_INVALID_PARAM);
-            ifree(Image);
-            return NULL;
-    }
-    
-    Image->Data = (ILubyte*)ialloc(Image->SizeOfData);
-    if (Image->Data == NULL) {
-        ifree(Image);
+    return Image;
+}
+
+ILAPI ILimage* ILAPIENTRY ilNewImageFull(ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, ILvoid *Data)
+{
+	ILimage *Image;
+
+	if (Bpp == 0 || Bpp > 4) {
+		return NULL;
+	}
+
+    Image = (ILimage*)ialloc(sizeof(ILimage));
+    if (Image == NULL) {
         return NULL;
     }
+
+	if (!ilInitImage (Image, Width, Height, Depth, Bpp, Format, Type, Data)) {
+		if (Image->Data != NULL) {
+			ifree(Image->Data);
+		}
+		ifree(Image);
+		return NULL;
+	}
     
     return Image;
 }
@@ -94,82 +115,37 @@ ILboolean ILAPIENTRY ilTexImage(ILuint Width, ILuint Height, ILuint Depth, ILuby
 
 // Internal version of ilTexImage.
 ILAPI ILboolean ILAPIENTRY ilTexImage_(ILimage *Image, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, ILvoid *Data)
-{
-    ILubyte BppType;
-    
+{    
     if (Image == NULL) {
         ilSetError(IL_ILLEGAL_OPERATION);
         return IL_FALSE;
     }
-    
+
+	////
+
+    // Not sure if we should be getting rid of the palette...
+    if (Image->Pal.Palette && Image->Pal.PalSize && Image->Pal.PalType != IL_PAL_NONE) {
+        ifree(Image->Pal.Palette);
+    }
+
+    ilCloseImage(Image->Mipmaps);
+    ilCloseImage(Image->Next);
+    ilCloseImage(Image->Layers);
+
+    if (Image->AnimList) ifree(Image->AnimList);
+    if (Image->Profile)  ifree(Image->Profile);
+    if (Image->DxtcData) ifree(Image->DxtcData);
+	if (Image->Data)     ifree(Image->Data);
+
+	////
+
     // Also check against format?
     /*if (Width == 0 || Height == 0 || Depth == 0 || Bpp == 0) {
         ilSetError(IL_INVALID_PARAM);
     return IL_FALSE;
     }*/
-    
-    BppType = ilGetBppType(Type);
-    if (BppType == 0) {
-        ilSetError(IL_INVALID_PARAM);
-        return IL_FALSE;
-    }
-    Image->Width = Width == 0 ? 1 : Width;
-    Image->Height = Height == 0 ? 1 : Height;
-    Image->Depth = Depth == 0 ? 1 : Depth;
-    Image->Bpp = Bpp;
-    Image->Bpc = BppType;
-    Image->Bps = Width * Bpp * Image->Bpc;
-    Image->SizeOfPlane = Image->Bps * Height;
-    Image->SizeOfData = Image->SizeOfPlane * Depth;
-    Image->Format = Format;
-    Image->Type = Type;
-    Image->Origin = IL_ORIGIN_LOWER_LEFT;
-    
-    // Not sure if we should be getting rid of the palette...
-    if (Image->Pal.Palette && Image->Pal.PalSize && Image->Pal.PalType != IL_PAL_NONE) {
-        ifree(Image->Pal.Palette);
-        Image->Pal.Palette = NULL;
-        Image->Pal.PalSize = 0;
-        Image->Pal.PalType = IL_PAL_NONE;
-    }
-    
-    // Added 05-23-2002.
-    ilCloseImage(Image->Mipmaps);
-    ilCloseImage(Image->Next);
-    ilCloseImage(Image->Layers);
-    if (Image->AnimList)
-        ifree(Image->AnimList);
-    if (Image->Profile)
-        ifree(Image->Profile);
-    if (Image->DxtcData)
-        ifree(Image->DxtcData);
-    
-    Image->Mipmaps = NULL;
-    Image->NumMips = 0;
-    Image->Next = NULL;
-    Image->NumNext = 0;
-    Image->Layers = NULL;
-    Image->NumLayers = 0;
-    Image->AnimList = NULL;
-    Image->AnimSize = 0;
-    Image->Profile = NULL;
-    Image->ProfileSize = 0;
-    Image->DxtcData = NULL;
-    Image->DxtcFormat = IL_DXT_NO_COMP;
-    Image->DxtcSize = 0;
-    
-    if (Image->Data)
-        ifree(Image->Data);
-    Image->Data = (ILubyte*)ialloc(Image->SizeOfData);
-    if (Image->Data == NULL) {
-        return IL_FALSE;
-    }
-    
-    if (Data != NULL) {
-        memcpy(Image->Data, Data, Image->SizeOfData);
-    }
-    
-    return IL_TRUE;
+
+	return ilInitImage(Image, Width, Height, Depth, Bpp, Format, Type, Data);
 }
 
 

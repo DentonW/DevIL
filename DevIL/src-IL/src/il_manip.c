@@ -325,7 +325,7 @@ ILuint ILAPIENTRY ilCopyPixels(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Wid
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return 0;
 	}
-	DestSize = Width * Height * Depth * ilGetBppFormat(Format) * ilGetBppType(Type);
+	DestSize = Width * Height * Depth * ilGetBppFormat(Format) * ilGetBpcType(Type);
 	if (DestSize == 0) {
 		return DestSize;
 	}
@@ -574,7 +574,7 @@ ILvoid ILAPIENTRY ilSetPixels(ILint XOff, ILint YOff, ILint ZOff, ILuint Width, 
 		Converted = (ILvoid*)Data;
 	}
 	else {
-		Converted = ilConvertBuffer(Width * Height * Depth * ilGetBppFormat(Format) * ilGetBppType(Type), Format, iCurImage->Format, iCurImage->Type, Type, Data);
+		Converted = ilConvertBuffer(Width * Height * Depth * ilGetBppFormat(Format) * ilGetBpcType(Type), Format, iCurImage->Format, iCurImage->Type, Type, Data);
 		if (!Converted)
 			return;
 	}
@@ -678,7 +678,7 @@ ILubyte* ILAPIENTRY ilGetAlpha(ILenum Type)
 		return IL_FALSE;
 	}
 
-	Bpc = ilGetBppType(Type);
+	Bpc = ilGetBpcType(Type);
 	if (Bpc == 0) {
 		ilSetError(IL_INVALID_PARAM);
 		return NULL;

@@ -38,8 +38,26 @@ ILAPI ILubyte ILAPIENTRY ilGetBppFormat(ILenum Format)
 }
 
 
-// Returns the bpp of any Type
-ILAPI ILubyte ILAPIENTRY ilGetBppType(ILenum Type)
+// Returns the format of any bpp
+ILAPI ILenum ILAPIENTRY ilGetFormatBpp(ILubyte Bpp)
+{
+	switch (Bpp)
+	{
+	case 1:
+		return IL_LUMINANCE;
+	case 2:
+		return IL_LUMINANCE_ALPHA;
+	case 3:
+		return IL_RGB;
+	case 4:
+		return IL_RGBA;
+	}
+	return 0;
+}
+
+
+// Returns the bpc of any Type
+ILAPI ILubyte ILAPIENTRY ilGetBpcType(ILenum Type)
 {
 	switch (Type)
 	{

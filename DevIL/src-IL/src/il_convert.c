@@ -175,7 +175,7 @@ ILimage *iConvertPalette(ILimage *Image, ILenum DestFormat)
 	}
 
 	// Resize to new bpp
-	ilResizeImage(NewImage, NewImage->Width, NewImage->Height, NewImage->Depth, ilGetBppFormat(DestFormat), /*ilGetBppType(DestType)*/1);
+	ilResizeImage(NewImage, NewImage->Width, NewImage->Height, NewImage->Depth, ilGetBppFormat(DestFormat), /*ilGetBpcType(DestType)*/1);
 
 	// ilConvertPal already sets the error message - no need to confuse the user.
 	if (!Converted) {
@@ -255,7 +255,7 @@ ILAPI ILimage* ILAPIENTRY iConvertImage(ILimage *Image, ILenum DestFormat, ILenu
 		ilCopyImageAttr(NewImage, Image);
 		NewImage->Format = DestFormat;
 		NewImage->Type = DestType;
-		NewImage->Bpc = ilGetBppType(DestType);
+		NewImage->Bpc = ilGetBpcType(DestType);
 		NewImage->Bpp = ilGetBppFormat(DestFormat);
 		NewImage->Bps = NewImage->Bpp * NewImage->Bpc * NewImage->Width;
 		NewImage->SizeOfPlane = NewImage->Bps * NewImage->Height;
@@ -282,7 +282,7 @@ ILAPI ILimage* ILAPIENTRY iConvertImage(ILimage *Image, ILenum DestFormat, ILenu
 		ilCopyImageAttr(NewImage, Image);
 		NewImage->Format = DestFormat;
 		NewImage->Type = DestType;
-		NewImage->Bpc = ilGetBppType(DestType);
+		NewImage->Bpc = ilGetBpcType(DestType);
 		NewImage->Bpp = ilGetBppFormat(DestFormat);
 		NewImage->Bps = NewImage->Bpp * NewImage->Bpc * NewImage->Width;
 		NewImage->SizeOfPlane = NewImage->Bps * NewImage->Height;
@@ -350,7 +350,7 @@ ILboolean ILAPIENTRY ilConvertImage(ILenum DestFormat, ILenum DestType)
 	//	Same with the DXTC data.
 	iCurImage->Format = DestFormat;
 	iCurImage->Type = DestType;
-	iCurImage->Bpc = ilGetBppType(DestType);
+	iCurImage->Bpc = ilGetBpcType(DestType);
 	iCurImage->Bpp = ilGetBppFormat(DestFormat);
 	iCurImage->Bps = iCurImage->Width * iCurImage->Bpc * iCurImage->Bpp;
 	iCurImage->SizeOfPlane = iCurImage->Bps * iCurImage->Height;

@@ -172,6 +172,79 @@ void errorHandler(const char* mod, const char* fmt, va_list ap)
     //_vsnprintf(buff, 1024, fmt, ap);
 }
 
+////
+
+/*
+ILboolean iLoadTiffInternal (TIFF* tif, ILimage* Image)
+{
+	uint32 photometric;
+
+	////
+
+    uint32   w, h, d, photometric, planarconfig, orientation;
+    uint32   samplesperpixel, bitspersample, *sampleinfo, extrasamples;
+    uint32   linesize, tilewidth, tilelength;
+    ILushort si;
+
+	////
+
+	TIFFSetDirectory(tif, directory);
+
+	////
+
+	// Process fields
+
+	TIFFGetField(tif, TIFFTAG_IMAGEWIDTH,  &w);
+	TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
+
+	TIFFGetFieldDefaulted(tif, TIFFTAG_IMAGEDEPTH,      &d); //TODO: d is ignored...
+	TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samplesperpixel);
+	TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE,   &bitspersample);
+	TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES,    &extrasamples, &sampleinfo);
+	TIFFGetFieldDefaulted(tif, TIFFTAG_ORIENTATION,     &orientation);
+
+	linesize = TIFFScanlineSize(tif);
+
+	TIFFGetFieldDefaulted(tif, TIFFTAG_PHOTOMETRIC,  &photometric);
+	TIFFGetFieldDefaulted(tif, TIFFTAG_PLANARCONFIG, &planarconfig);
+
+	tilewidth = w; tilelength = h;
+	TIFFGetFieldDefaulted(tif, TIFFTAG_TILEWIDTH,  &tilewidth);
+	TIFFGetFieldDefaulted(tif, TIFFTAG_TILELENGTH, &tilelength);
+
+	////
+
+	if (extrasamples != 0) {
+		return IL_FALSE;
+	}
+
+	////
+
+	if (!Image) {
+		int type = IL_UNSIGNED_BYTE;
+		if (bitspersample == 16) type = IL_UNSIGNED_SHORT;
+		if(!ilTexImage(w, h, 1, 1, IL_LUMINANCE, type, NULL)) {
+			TIFFClose(tif);
+			return IL_FALSE;
+		}
+		iCurImage->NumNext = 0;
+		Image = iCurImage;
+	}
+	else {
+		Image->Next = ilNewImage(w, h, 1, 1, 1);
+		if(Image->Next == NULL) {
+			TIFFClose(tif);
+			return IL_FALSE;
+		}
+		Image = Image->Next;
+		iCurImage->NumNext++;
+	}
+}
+*/
+
+////
+
+
 // Internal function used to load the Tiff.
 ILboolean iLoadTiffInternal()
 {
@@ -193,8 +266,8 @@ ILboolean iLoadTiffInternal()
         return IL_FALSE;
     }
     
-    TIFFSetWarningHandler(NULL);
-    TIFFSetErrorHandler(NULL);
+    TIFFSetWarningHandler (NULL);
+    TIFFSetErrorHandler   (NULL);
     
     //for debugging only
     //TIFFSetWarningHandler(warningHandler);
@@ -229,28 +302,30 @@ ILboolean iLoadTiffInternal()
     Image = NULL;
     for (i = 0; i < DirCount; i++) {
         TIFFSetDirectory(tif, (tdir_t)i);
-        TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
+        TIFFGetField(tif, TIFFTAG_IMAGEWIDTH,  &w);
         TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
-        TIFFGetFieldDefaulted(tif, TIFFTAG_IMAGEDEPTH, &d); //TODO: d is ignored...
+
+        TIFFGetFieldDefaulted(tif, TIFFTAG_IMAGEDEPTH,      &d); //TODO: d is ignored...
         TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samplesperpixel);
-        TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bitspersample);
-        TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES, &extrasamples, &sampleinfo);
-        TIFFGetFieldDefaulted(tif, TIFFTAG_ORIENTATION, &orientation);
+        TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE,   &bitspersample);
+        TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES,    &extrasamples, &sampleinfo);
+        TIFFGetFieldDefaulted(tif, TIFFTAG_ORIENTATION,     &orientation);
+
         linesize = TIFFScanlineSize(tif);
         
         //added 2003-08-31
         //1 bpp tiffs are not neccessarily greyscale, they can
         //have a palette (photometric == 3)...get this information
-        TIFFGetFieldDefaulted(tif, TIFFTAG_PHOTOMETRIC, &photometric);
+        TIFFGetFieldDefaulted(tif, TIFFTAG_PHOTOMETRIC,  &photometric);
         TIFFGetFieldDefaulted(tif, TIFFTAG_PLANARCONFIG, &planarconfig);
-#if 1
-        //special-case code for frequent data cases that may be read more
+
+		//special-case code for frequent data cases that may be read more
         //efficiently than with the TIFFReadRGBAImage() interface.
         
         //added 2004-05-12
         //Get tile sizes and use TIFFReadRGBAImage() for tiled images for now
         tilewidth = w; tilelength = h;
-        TIFFGetFieldDefaulted(tif, TIFFTAG_TILEWIDTH, &tilewidth);
+        TIFFGetFieldDefaulted(tif, TIFFTAG_TILEWIDTH,  &tilewidth);
         TIFFGetFieldDefaulted(tif, TIFFTAG_TILELENGTH, &tilelength);
         
         
@@ -409,7 +484,6 @@ ILboolean iLoadTiffInternal()
                   }
                   */
         else
-#endif
         { //not direclty supported format
             
             if(!Image) {
