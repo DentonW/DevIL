@@ -304,12 +304,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	static RECT			WinSize;
 
-	unsigned int	currentColor = 0x80000000;
-	unsigned int	originalColor = 0x80000000;
-	bool			userClickedOK;
-	ILclampf		Red, Green, Blue;
-	ILubyte			*AlphaChannel;
-	ILenum			Origin;
+	unsigned int		currentColor = 0x80000000;
+	unsigned int		originalColor = 0x80000000;
+	bool				userClickedOK;
+	ILclampf			Red, Green, Blue;
+	ILubyte				*AlphaChannel;
+	ILenum				Origin;
+
 
 	switch (message)
 	{

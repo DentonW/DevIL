@@ -249,44 +249,11 @@ ILboolean iUncompressPcx(PCXHEAD *Header)
 		default:
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
 			ifree(ScanLine);
-			//ilCloseImage(iCurImage);
-			//ilSetCurImage(NULL);
 			return IL_FALSE;
 	}
 
 
 	if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST) {
-		/*StartPos = itell();
-		Compressed = (ILubyte*)ialloc(iCurImage->SizeOfData * 4 / 3);
-		iread(Compressed, 1, iCurImage->SizeOfData * 4 / 3);
-
-		for (y = 0; y < iCurImage->Height; y++) {
-			for (c = 0; c < iCurImage->Bpp; c++) {
-				x = 0;
-				while (x < Header->Bps) {
-					ByteHead = Compressed[Read++];
-					if ((ByteHead & 0xC0) == 0xC0) {
-						ByteHead &= 0x3F;
-						Colour = Compressed[Read++];
-						for (i = 0; i < ByteHead; i++) {
-							ScanLine[x++] = Colour;
-						}
-					}
-					else {
-						ScanLine[x++] = ByteHead;
-					}
-				}
-
-				for (x = 0; x < iCurImage->Width; x++) {  // 'Cleverly' ignores the pad bytes ;)
-					iCurImage->Data[y * iCurImage->Bps + x * iCurImage->Bpp + c] = ScanLine[x];
-				}
-			}
-		}
-
-		ifree(Compressed);
-		iseek(StartPos + Read, IL_SEEK_SET);*/
-
-
 		iPreCache(iCurImage->SizeOfData / 4);
 
 		for (y = 0; y < iCurImage->Height; y++) {
@@ -300,6 +267,10 @@ ILboolean iUncompressPcx(PCXHEAD *Header)
 					if ((ByteHead & 0xC0) == 0xC0) {
 						ByteHead &= 0x3F;
 						if (iread(&Colour, 1, 1) != 1) {
+							iUnCache();
+							goto file_read_error;
+						}
+						if (x + ByteHead > iCurImage->Width) {
 							iUnCache();
 							goto file_read_error;
 						}
@@ -340,6 +311,9 @@ ILboolean iUncompressPcx(PCXHEAD *Header)
 						ByteHead &= 0x3F;
 						if (iread(&Colour, 1, 1) != 1)
 							goto file_read_error;
+						if (x + ByteHead > iCurImage->Width) {
+							goto file_read_error;
+						}
 						for (i = 0; i < ByteHead; i++) {
 							ScanLine[x++] = Colour;
 						}
@@ -358,6 +332,7 @@ ILboolean iUncompressPcx(PCXHEAD *Header)
 
 	// Read in the palette
 	if (iCurImage->Bpp == 1) {
+		x = itell();
 		if (iread(&ByteHead, 1, 1) == 0) {  // If true, assume that we have a luminance image.
 			ilGetError();  // Get rid of the IL_FILE_READ_ERROR.
 			iCurImage->Format = IL_LUMINANCE;

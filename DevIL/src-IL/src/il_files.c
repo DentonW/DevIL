@@ -363,6 +363,7 @@ ILint ILAPIENTRY iGetcFile(ILvoid)
 		iPreCache(CacheSize);
 	}
 
+	CacheBytesRead++;
 	return Cache[CachePos++];
 }
 
@@ -402,9 +403,9 @@ ILuint ILAPIENTRY iReadFile(ILvoid *Buffer, ILuint Size, ILuint Number)
 	if (BuffSize < CacheSize - CachePos) {
 		memcpy(Buffer, Cache + CachePos, BuffSize);
 		CachePos += BuffSize;
+		CacheBytesRead += BuffSize;
 		if (Size != 0)
 			BuffSize /= Size;
-		CacheBytesRead += BuffSize;
 		return BuffSize;
 	}
 	else {
@@ -424,9 +425,9 @@ ILuint ILAPIENTRY iReadFile(ILvoid *Buffer, ILuint Size, ILuint Number)
 		}
 	}
 
+	CacheBytesRead += TotalBytes;
 	if (Size != 0)
 		TotalBytes /= Size;
-	CacheBytesRead += TotalBytes;
 	if (TotalBytes != Number)
 		ilSetError(IL_FILE_READ_ERROR);
 	return TotalBytes;
@@ -462,7 +463,7 @@ ILboolean iPreCache(ILuint Size)
 {
 	// Reading from a memory lump, so don't cache.
 	if (iread == iReadLump) {
-		iUnCache();
+		//iUnCache();  // DW: Removed 06-10-2002.
 		return IL_TRUE;
 	}
 
@@ -496,6 +497,9 @@ ILboolean iPreCache(ILuint Size)
 
 ILvoid iUnCache()
 {
+	if (iread == iReadLump)
+		return;
+
 	CacheSize = 0;
 	CachePos = 0;
 	if (Cache) {
