@@ -23,6 +23,7 @@ ilDisable
 ilEnable
 ilFormatFunc
 ilGenImages
+ilGetAlpha
 ilGetBoolean
 ilGetBooleanv
 ilGetBppFormat

@@ -90,7 +90,7 @@ extern "C" {
 
 typedef struct ILinfo
 {
-	ILuint	Id;				// the image's id
+	ILuint	Id;					// the image's id
 	ILubyte	*Data;				// the image's data
 	ILuint	Width;				// the image's width
 	ILuint	Height;				// the image's height

@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 02/21/2002 <--Y2K Compliant! =]
+// Last modified: 03/05/2002 <--Y2K Compliant! =]
 //
 // Filename: il/il.h
 //
@@ -532,9 +532,21 @@ ILAPI ILboolean		ILAPIENTRY ilLoadDataL(ILvoid *Lump, ILuint Size, ILuint Width,
 ILAPI ILboolean		ILAPIENTRY ilSaveData(const ILstring FileName);
 
 #if !defined(IL_NO_JPG) && !defined(IL_USE_IJL)
+	#ifdef _MSC_VER
+		#pragma pack(push, erroneous_warnings, 1)
+		// remove 'FAR' : macro redefinition warning
+		#pragma warning(disable : 4005)
+		// remove benign redefinition of type warning
+		#pragma warning(disable : 4142)
+	#endif
+
 	#include <jpeglib.h>
 	ILAPI ILboolean	ILAPIENTRY ilLoadFromJpegStruct(struct jpeg_decompress_struct* JpegDecompressorPtr);
 	ILAPI ILboolean	ILAPIENTRY ilSaveFromJpegStruct(struct jpeg_compress_struct* JpegCompressorPtr);
+
+	#ifdef _MSC_VER
+		#pragma pack(pop,  erroneous_warnings)
+	#endif
 #endif
 
 // For all those weirdos that spell "colour" without the 'u'.

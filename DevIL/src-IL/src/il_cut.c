@@ -2,9 +2,9 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Last modified: 03/02/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/cut.c
+// Filename: openil/il_cut.c
 //
 // Description: Reads a Dr. Halo .cut file
 //

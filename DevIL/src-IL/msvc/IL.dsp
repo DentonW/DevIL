@@ -44,7 +44,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "../include" /I "../../extlibs/libjpeg" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "../include" /I "../../extlibs/libjpeg" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /D "MNG_USE_DLL" /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -86,9 +86,9 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo /o"../src/obj/dynamic/DevIL.bsc"
 # ADD BSC32 /nologo /o"../src/obj/dynamic/DevIL.bsc"
 LINK32=link.exe
-# ADD BASE LINK32 delayimp.lib user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /machine:I386 /def:".\il.def" /out:"../../lib/DevIL-l.dll" /OPT:NOWIN98 /delayload:libpng3.dll /delayload:lcms.dll
+# ADD BASE LINK32 delayimp.lib user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /machine:I386 /def:".\il.def" /out:"../../lib/DevIL-l.dll" /OPT:NOWIN98 /delayload:libpng3.dll /delayload:lcms108.dll
 # SUBTRACT BASE LINK32 /pdb:none
-# ADD LINK32 delayimp.lib user32.lib gdi32.lib comdlg32.lib shell32.lib C:\DevIL\extlibs\lib\libmng.lib /nologo /dll /machine:I386 /def:".\il.def" /out:"../../lib/DevIL-l.dll" /libpath:"../../extlibs/lib" /OPT:NOWIN98 /delayload:libpng3.dll /delayload:lcms.dll
+# ADD LINK32 delayimp.lib user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /machine:I386 /def:".\il.def" /out:"../../lib/DevIL-l.dll" /libpath:"../../extlibs/lib" /OPT:NOWIN98 /delayload:lcms108.dll /delayload:libpng.dll
 # SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
 TargetPath=\DevIL\lib\DevIL-l.dll
@@ -303,6 +303,10 @@ SOURCE=..\src\il_psd.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\il_psp.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\il_quantizer.c
 # End Source File
 # Begin Source File
@@ -436,6 +440,10 @@ SOURCE=..\include\il_pnm.h
 # Begin Source File
 
 SOURCE=..\include\il_psd.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\il_psp.h
 # End Source File
 # Begin Source File
 

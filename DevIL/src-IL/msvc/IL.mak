@@ -44,12 +44,12 @@ ALL : "$(OUTDIR)\DevIL-d.dll"
 
 !ELSE 
 
-ALL : "Libtiff - Win32 Debug" "lcmsdll - Win32 Debug" "libjpeg - Win32 Debug" "$(OUTDIR)\DevIL-d.dll"
+ALL : "libpng - Win32 Debug" "libmng - Win32 Debug" "Libtiff - Win32 Debug" "lcmsdll - Win32 Debug" "libjpeg - Win32 Debug" "$(OUTDIR)\DevIL-d.dll"
 
 !ENDIF 
 
 !IF "$(RECURSE)" == "1" 
-CLEAN :"libjpeg - Win32 DebugCLEAN" "lcmsdll - Win32 DebugCLEAN" "Libtiff - Win32 DebugCLEAN" 
+CLEAN :"libjpeg - Win32 DebugCLEAN" "lcmsdll - Win32 DebugCLEAN" "Libtiff - Win32 DebugCLEAN" "libmng - Win32 DebugCLEAN" "libpng - Win32 DebugCLEAN" 
 !ELSE 
 CLEAN :
 !ENDIF 
@@ -89,6 +89,7 @@ CLEAN :
 	-@erase "$(INTDIR)\il_pnm.obj"
 	-@erase "$(INTDIR)\il_profiles.obj"
 	-@erase "$(INTDIR)\il_psd.obj"
+	-@erase "$(INTDIR)\il_psp.obj"
 	-@erase "$(INTDIR)\il_quantizer.obj"
 	-@erase "$(INTDIR)\il_raw.obj"
 	-@erase "$(INTDIR)\il_rawdata.obj"
@@ -115,7 +116,7 @@ CLEAN :
 "$(INTDIR)" :
     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
 
-CPP_PROJ=/nologo /MDd /W3 /Gm /GX /ZI /Od /I "../include" /I "../../extlibs/libjpeg" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /Fp"$(INTDIR)\IL.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_PROJ=/nologo /MDd /W3 /Gm /GX /ZI /Od /I "../include" /I "../../extlibs/libjpeg" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /D "MNG_USE_DLL" /Fp"$(INTDIR)\IL.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /win32 
 RSC_PROJ=/l 0x409 /fo"$(INTDIR)\IL.res" /d "_DEBUG" 
 BSC32=bscmake.exe
@@ -160,6 +161,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_pnm.obj" \
 	"$(INTDIR)\il_profiles.obj" \
 	"$(INTDIR)\il_psd.obj" \
+	"$(INTDIR)\il_psp.obj" \
 	"$(INTDIR)\il_quantizer.obj" \
 	"$(INTDIR)\il_raw.obj" \
 	"$(INTDIR)\il_rawdata.obj" \
@@ -174,8 +176,10 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_wal.obj" \
 	"$(INTDIR)\IL.res" \
 	"..\..\extlibs\lib\debug\LibJpeg.lib" \
-	"..\..\extlibs\lib\debug\lcmsd.lib" \
-	"..\..\extlibs\lib\debug\Libtiff.lib"
+	"$(OUTDIR)\lcms108.lib" \
+	"..\..\extlibs\lib\debug\Libtiff.lib" \
+	"..\..\extlibs\lib\debug\libmng.lib" \
+	"..\..\extlibs\lib\debug\libpng.lib"
 
 "$(OUTDIR)\DevIL-d.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -192,7 +196,7 @@ ALL : $(DS_POSTBUILD_DEP)
 OutDir=.\../../lib/debug
 # End Custom Macros
 
-$(DS_POSTBUILD_DEP) : "Libtiff - Win32 Debug" "lcmsdll - Win32 Debug" "libjpeg - Win32 Debug" "$(OUTDIR)\DevIL-d.dll"
+$(DS_POSTBUILD_DEP) : "libpng - Win32 Debug" "libmng - Win32 Debug" "Libtiff - Win32 Debug" "lcmsdll - Win32 Debug" "libjpeg - Win32 Debug" "$(OUTDIR)\DevIL-d.dll"
    ..\..\projects\msvc\insdll.bat \DevIL\lib\debug\DevIL-d.dll
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
@@ -210,12 +214,12 @@ ALL : "$(OUTDIR)\DevIL-l.dll"
 
 !ELSE 
 
-ALL : "Libtiff - Win32 Dynamic" "lcmsdll - Win32 Dynamic" "libjpeg - Win32 Dynamic" "$(OUTDIR)\DevIL-l.dll"
+ALL : "libpng - Win32 Dynamic" "libmng - Win32 Dynamic" "Libtiff - Win32 Dynamic" "lcmsdll - Win32 Dynamic" "libjpeg - Win32 Dynamic" "$(OUTDIR)\DevIL-l.dll"
 
 !ENDIF 
 
 !IF "$(RECURSE)" == "1" 
-CLEAN :"libjpeg - Win32 DynamicCLEAN" "lcmsdll - Win32 DynamicCLEAN" "Libtiff - Win32 DynamicCLEAN" 
+CLEAN :"libjpeg - Win32 DynamicCLEAN" "lcmsdll - Win32 DynamicCLEAN" "Libtiff - Win32 DynamicCLEAN" "libmng - Win32 DynamicCLEAN" "libpng - Win32 DynamicCLEAN" 
 !ELSE 
 CLEAN :
 !ENDIF 
@@ -255,6 +259,7 @@ CLEAN :
 	-@erase "$(INTDIR)\il_pnm.obj"
 	-@erase "$(INTDIR)\il_profiles.obj"
 	-@erase "$(INTDIR)\il_psd.obj"
+	-@erase "$(INTDIR)\il_psp.obj"
 	-@erase "$(INTDIR)\il_quantizer.obj"
 	-@erase "$(INTDIR)\il_raw.obj"
 	-@erase "$(INTDIR)\il_rawdata.obj"
@@ -286,7 +291,7 @@ BSC32_FLAGS=/nologo /o"../src/obj/dynamic/DevIL.bsc"
 BSC32_SBRS= \
 	
 LINK32=link.exe
-LINK32_FLAGS=delayimp.lib user32.lib gdi32.lib comdlg32.lib shell32.lib C:\DevIL\extlibs\lib\libmng.lib /nologo /dll /incremental:no /pdb:"$(OUTDIR)\DevIL-l.pdb" /machine:I386 /def:".\il.def" /out:"$(OUTDIR)\DevIL-l.dll" /implib:"$(OUTDIR)\DevIL-l.lib" /libpath:"../../extlibs/lib" /OPT:NOWIN98 /delayload:libpng3.dll /delayload:lcms.dll 
+LINK32_FLAGS=delayimp.lib user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /incremental:no /pdb:"$(OUTDIR)\DevIL-l.pdb" /machine:I386 /def:".\il.def" /out:"$(OUTDIR)\DevIL-l.dll" /implib:"$(OUTDIR)\DevIL-l.lib" /libpath:"../../extlibs/lib" /OPT:NOWIN98 /delayload:lcms.dll /delayload:lcms108.dll /delayload:libpng.dll 
 LINK32_OBJS= \
 	"$(INTDIR)\il_alloc.obj" \
 	"$(INTDIR)\il_bits.obj" \
@@ -323,6 +328,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_pnm.obj" \
 	"$(INTDIR)\il_profiles.obj" \
 	"$(INTDIR)\il_psd.obj" \
+	"$(INTDIR)\il_psp.obj" \
 	"$(INTDIR)\il_quantizer.obj" \
 	"$(INTDIR)\il_raw.obj" \
 	"$(INTDIR)\il_rawdata.obj" \
@@ -336,9 +342,11 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_utility.obj" \
 	"$(INTDIR)\il_wal.obj" \
 	"$(INTDIR)\IL.res" \
-	"..\..\extlibs\libjpeg\libjpeg.lib" \
-	"..\..\extlibs\lib\lcms.lib" \
-	"..\..\extlibs\lib\Libtiff.lib"
+	"..\..\extlibs\lib\LibJpeg.lib" \
+	"$(OUTDIR)\lcms108.lib" \
+	"..\..\extlibs\lib\Libtiff.lib" \
+	"..\..\extlibs\lib\libmng.lib" \
+	"..\..\extlibs\lib\libpng.lib"
 
 "$(OUTDIR)\DevIL-l.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -355,7 +363,7 @@ ALL : $(DS_POSTBUILD_DEP)
 OutDir=.\../../lib
 # End Custom Macros
 
-$(DS_POSTBUILD_DEP) : "Libtiff - Win32 Dynamic" "lcmsdll - Win32 Dynamic" "libjpeg - Win32 Dynamic" "$(OUTDIR)\DevIL-l.dll"
+$(DS_POSTBUILD_DEP) : "libpng - Win32 Dynamic" "libmng - Win32 Dynamic" "Libtiff - Win32 Dynamic" "lcmsdll - Win32 Dynamic" "libjpeg - Win32 Dynamic" "$(OUTDIR)\DevIL-l.dll"
    ..\..\projects\msvc\insdll.bat \DevIL\lib\DevIL-l.dll
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
@@ -373,12 +381,12 @@ ALL : "$(OUTDIR)\DevIL.dll"
 
 !ELSE 
 
-ALL : "Libtiff - Win32 Release" "lcmsdll - Win32 Release" "libjpeg - Win32 Release" "$(OUTDIR)\DevIL.dll"
+ALL : "libpng - Win32 Release" "libmng - Win32 Release" "Libtiff - Win32 Release" "lcmsdll - Win32 Release" "libjpeg - Win32 Release" "$(OUTDIR)\DevIL.dll"
 
 !ENDIF 
 
 !IF "$(RECURSE)" == "1" 
-CLEAN :"libjpeg - Win32 ReleaseCLEAN" "lcmsdll - Win32 ReleaseCLEAN" "Libtiff - Win32 ReleaseCLEAN" 
+CLEAN :"libjpeg - Win32 ReleaseCLEAN" "lcmsdll - Win32 ReleaseCLEAN" "Libtiff - Win32 ReleaseCLEAN" "libmng - Win32 ReleaseCLEAN" "libpng - Win32 ReleaseCLEAN" 
 !ELSE 
 CLEAN :
 !ENDIF 
@@ -418,6 +426,7 @@ CLEAN :
 	-@erase "$(INTDIR)\il_pnm.obj"
 	-@erase "$(INTDIR)\il_profiles.obj"
 	-@erase "$(INTDIR)\il_psd.obj"
+	-@erase "$(INTDIR)\il_psp.obj"
 	-@erase "$(INTDIR)\il_quantizer.obj"
 	-@erase "$(INTDIR)\il_raw.obj"
 	-@erase "$(INTDIR)\il_rawdata.obj"
@@ -486,6 +495,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_pnm.obj" \
 	"$(INTDIR)\il_profiles.obj" \
 	"$(INTDIR)\il_psd.obj" \
+	"$(INTDIR)\il_psp.obj" \
 	"$(INTDIR)\il_quantizer.obj" \
 	"$(INTDIR)\il_raw.obj" \
 	"$(INTDIR)\il_rawdata.obj" \
@@ -499,9 +509,11 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_utility.obj" \
 	"$(INTDIR)\il_wal.obj" \
 	"$(INTDIR)\IL.res" \
-	"..\..\extlibs\libjpeg\libjpeg.lib" \
-	"..\..\extlibs\lib\lcms.lib" \
-	"..\..\extlibs\lib\Libtiff.lib"
+	"..\..\extlibs\lib\ibjpeg.lib" \
+	"$(OUTDIR)\lcms108.lib" \
+	"..\..\extlibs\lib\Libtiff.lib" \
+	"..\..\extlibs\lib\libmng.lib" \
+	"..\..\extlibs\lib\libpng.lib"
 
 "$(OUTDIR)\DevIL.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -518,7 +530,7 @@ ALL : $(DS_POSTBUILD_DEP)
 OutDir=.\../../lib
 # End Custom Macros
 
-$(DS_POSTBUILD_DEP) : "Libtiff - Win32 Release" "lcmsdll - Win32 Release" "libjpeg - Win32 Release" "$(OUTDIR)\DevIL.dll"
+$(DS_POSTBUILD_DEP) : "libpng - Win32 Release" "libmng - Win32 Release" "Libtiff - Win32 Release" "lcmsdll - Win32 Release" "libjpeg - Win32 Release" "$(OUTDIR)\DevIL.dll"
    ..\..\projects\msvc\insdll.bat \DevIL\lib\DevIL.dll
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
@@ -775,6 +787,12 @@ SOURCE=..\src\il_psd.c
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
+SOURCE=..\src\il_psp.c
+
+"$(INTDIR)\il_psp.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
 SOURCE=..\src\il_quantizer.c
 
 "$(INTDIR)\il_quantizer.obj" : $(SOURCE) "$(INTDIR)"
@@ -856,114 +874,190 @@ SOURCE=.\IL.rc
 !IF  "$(CFG)" == "IL - Win32 Debug"
 
 "libjpeg - Win32 Debug" : 
-   cd "\DevIL\extlibs\libjpeg"
+   cd "\DevIL\projects\msvc\extlibs"
    $(MAKE) /$(MAKEFLAGS) /F .\LibJpeg.mak CFG="libjpeg - Win32 Debug" 
-   cd "..\..\src-IL\msvc"
+   cd "..\..\..\src-IL\msvc"
 
 "libjpeg - Win32 DebugCLEAN" : 
-   cd "\DevIL\extlibs\libjpeg"
+   cd "\DevIL\projects\msvc\extlibs"
    $(MAKE) /$(MAKEFLAGS) /F .\LibJpeg.mak CFG="libjpeg - Win32 Debug" RECURSE=1 CLEAN 
-   cd "..\..\src-IL\msvc"
+   cd "..\..\..\src-IL\msvc"
 
 !ELSEIF  "$(CFG)" == "IL - Win32 Dynamic"
 
 "libjpeg - Win32 Dynamic" : 
-   cd "\DevIL\extlibs\libjpeg"
+   cd "\DevIL\projects\msvc\extlibs"
    $(MAKE) /$(MAKEFLAGS) /F .\LibJpeg.mak CFG="libjpeg - Win32 Dynamic" 
-   cd "..\..\src-IL\msvc"
+   cd "..\..\..\src-IL\msvc"
 
 "libjpeg - Win32 DynamicCLEAN" : 
-   cd "\DevIL\extlibs\libjpeg"
+   cd "\DevIL\projects\msvc\extlibs"
    $(MAKE) /$(MAKEFLAGS) /F .\LibJpeg.mak CFG="libjpeg - Win32 Dynamic" RECURSE=1 CLEAN 
-   cd "..\..\src-IL\msvc"
+   cd "..\..\..\src-IL\msvc"
 
 !ELSEIF  "$(CFG)" == "IL - Win32 Release"
 
 "libjpeg - Win32 Release" : 
-   cd "\DevIL\extlibs\libjpeg"
+   cd "\DevIL\projects\msvc\extlibs"
    $(MAKE) /$(MAKEFLAGS) /F .\LibJpeg.mak CFG="libjpeg - Win32 Release" 
-   cd "..\..\src-IL\msvc"
+   cd "..\..\..\src-IL\msvc"
 
 "libjpeg - Win32 ReleaseCLEAN" : 
-   cd "\DevIL\extlibs\libjpeg"
+   cd "\DevIL\projects\msvc\extlibs"
    $(MAKE) /$(MAKEFLAGS) /F .\LibJpeg.mak CFG="libjpeg - Win32 Release" RECURSE=1 CLEAN 
-   cd "..\..\src-IL\msvc"
+   cd "..\..\..\src-IL\msvc"
 
 !ENDIF 
 
 !IF  "$(CFG)" == "IL - Win32 Debug"
 
 "lcmsdll - Win32 Debug" : 
-   cd "\DevIL\extlibs\LittleCMS\Projects\VC6"
+   cd "\DevIL\projects\msvc\extlibs"
    $(MAKE) /$(MAKEFLAGS) /F .\lcmsdll.mak CFG="lcmsdll - Win32 Debug" 
-   cd "..\..\..\..\src-IL\msvc"
+   cd "..\..\..\src-IL\msvc"
 
 "lcmsdll - Win32 DebugCLEAN" : 
-   cd "\DevIL\extlibs\LittleCMS\Projects\VC6"
+   cd "\DevIL\projects\msvc\extlibs"
    $(MAKE) /$(MAKEFLAGS) /F .\lcmsdll.mak CFG="lcmsdll - Win32 Debug" RECURSE=1 CLEAN 
-   cd "..\..\..\..\src-IL\msvc"
+   cd "..\..\..\src-IL\msvc"
 
 !ELSEIF  "$(CFG)" == "IL - Win32 Dynamic"
 
 "lcmsdll - Win32 Dynamic" : 
-   cd "\DevIL\extlibs\LittleCMS\Projects\VC6"
+   cd "\DevIL\projects\msvc\extlibs"
    $(MAKE) /$(MAKEFLAGS) /F .\lcmsdll.mak CFG="lcmsdll - Win32 Dynamic" 
-   cd "..\..\..\..\src-IL\msvc"
+   cd "..\..\..\src-IL\msvc"
 
 "lcmsdll - Win32 DynamicCLEAN" : 
-   cd "\DevIL\extlibs\LittleCMS\Projects\VC6"
+   cd "\DevIL\projects\msvc\extlibs"
    $(MAKE) /$(MAKEFLAGS) /F .\lcmsdll.mak CFG="lcmsdll - Win32 Dynamic" RECURSE=1 CLEAN 
-   cd "..\..\..\..\src-IL\msvc"
+   cd "..\..\..\src-IL\msvc"
 
 !ELSEIF  "$(CFG)" == "IL - Win32 Release"
 
 "lcmsdll - Win32 Release" : 
-   cd "\DevIL\extlibs\LittleCMS\Projects\VC6"
+   cd "\DevIL\projects\msvc\extlibs"
    $(MAKE) /$(MAKEFLAGS) /F .\lcmsdll.mak CFG="lcmsdll - Win32 Release" 
-   cd "..\..\..\..\src-IL\msvc"
+   cd "..\..\..\src-IL\msvc"
 
 "lcmsdll - Win32 ReleaseCLEAN" : 
-   cd "\DevIL\extlibs\LittleCMS\Projects\VC6"
+   cd "\DevIL\projects\msvc\extlibs"
    $(MAKE) /$(MAKEFLAGS) /F .\lcmsdll.mak CFG="lcmsdll - Win32 Release" RECURSE=1 CLEAN 
-   cd "..\..\..\..\src-IL\msvc"
+   cd "..\..\..\src-IL\msvc"
 
 !ENDIF 
 
 !IF  "$(CFG)" == "IL - Win32 Debug"
 
 "Libtiff - Win32 Debug" : 
-   cd "\DevIL\extlibs\tiff-v3.5.4\libtiff\Libtiff"
-   $(MAKE) /$(MAKEFLAGS) /F ".\Libtiff.mak" CFG="Libtiff - Win32 Debug" 
-   cd "..\..\..\..\src-IL\msvc"
+   cd "\DevIL\projects\msvc\extlibs"
+   $(MAKE) /$(MAKEFLAGS) /F .\Libtiff.mak CFG="Libtiff - Win32 Debug" 
+   cd "..\..\..\src-IL\msvc"
 
 "Libtiff - Win32 DebugCLEAN" : 
-   cd "\DevIL\extlibs\tiff-v3.5.4\libtiff\Libtiff"
-   $(MAKE) /$(MAKEFLAGS) /F ".\Libtiff.mak" CFG="Libtiff - Win32 Debug" RECURSE=1 CLEAN 
-   cd "..\..\..\..\src-IL\msvc"
+   cd "\DevIL\projects\msvc\extlibs"
+   $(MAKE) /$(MAKEFLAGS) /F .\Libtiff.mak CFG="Libtiff - Win32 Debug" RECURSE=1 CLEAN 
+   cd "..\..\..\src-IL\msvc"
 
 !ELSEIF  "$(CFG)" == "IL - Win32 Dynamic"
 
 "Libtiff - Win32 Dynamic" : 
-   cd "\DevIL\extlibs\tiff-v3.5.4\libtiff\Libtiff"
-   $(MAKE) /$(MAKEFLAGS) /F ".\Libtiff.mak" CFG="Libtiff - Win32 Dynamic" 
-   cd "..\..\..\..\src-IL\msvc"
+   cd "\DevIL\projects\msvc\extlibs"
+   $(MAKE) /$(MAKEFLAGS) /F .\Libtiff.mak CFG="Libtiff - Win32 Dynamic" 
+   cd "..\..\..\src-IL\msvc"
 
 "Libtiff - Win32 DynamicCLEAN" : 
-   cd "\DevIL\extlibs\tiff-v3.5.4\libtiff\Libtiff"
-   $(MAKE) /$(MAKEFLAGS) /F ".\Libtiff.mak" CFG="Libtiff - Win32 Dynamic" RECURSE=1 CLEAN 
-   cd "..\..\..\..\src-IL\msvc"
+   cd "\DevIL\projects\msvc\extlibs"
+   $(MAKE) /$(MAKEFLAGS) /F .\Libtiff.mak CFG="Libtiff - Win32 Dynamic" RECURSE=1 CLEAN 
+   cd "..\..\..\src-IL\msvc"
 
 !ELSEIF  "$(CFG)" == "IL - Win32 Release"
 
 "Libtiff - Win32 Release" : 
-   cd "\DevIL\extlibs\tiff-v3.5.4\libtiff\Libtiff"
-   $(MAKE) /$(MAKEFLAGS) /F ".\Libtiff.mak" CFG="Libtiff - Win32 Release" 
-   cd "..\..\..\..\src-IL\msvc"
+   cd "\DevIL\projects\msvc\extlibs"
+   $(MAKE) /$(MAKEFLAGS) /F .\Libtiff.mak CFG="Libtiff - Win32 Release" 
+   cd "..\..\..\src-IL\msvc"
 
 "Libtiff - Win32 ReleaseCLEAN" : 
-   cd "\DevIL\extlibs\tiff-v3.5.4\libtiff\Libtiff"
-   $(MAKE) /$(MAKEFLAGS) /F ".\Libtiff.mak" CFG="Libtiff - Win32 Release" RECURSE=1 CLEAN 
-   cd "..\..\..\..\src-IL\msvc"
+   cd "\DevIL\projects\msvc\extlibs"
+   $(MAKE) /$(MAKEFLAGS) /F .\Libtiff.mak CFG="Libtiff - Win32 Release" RECURSE=1 CLEAN 
+   cd "..\..\..\src-IL\msvc"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "IL - Win32 Debug"
+
+"libmng - Win32 Debug" : 
+   cd "\DevIL\projects\msvc\extlibs"
+   $(MAKE) /$(MAKEFLAGS) /F .\libmng.mak CFG="libmng - Win32 Debug" 
+   cd "..\..\..\src-IL\msvc"
+
+"libmng - Win32 DebugCLEAN" : 
+   cd "\DevIL\projects\msvc\extlibs"
+   $(MAKE) /$(MAKEFLAGS) /F .\libmng.mak CFG="libmng - Win32 Debug" RECURSE=1 CLEAN 
+   cd "..\..\..\src-IL\msvc"
+
+!ELSEIF  "$(CFG)" == "IL - Win32 Dynamic"
+
+"libmng - Win32 Dynamic" : 
+   cd "\DevIL\projects\msvc\extlibs"
+   $(MAKE) /$(MAKEFLAGS) /F .\libmng.mak CFG="libmng - Win32 Dynamic" 
+   cd "..\..\..\src-IL\msvc"
+
+"libmng - Win32 DynamicCLEAN" : 
+   cd "\DevIL\projects\msvc\extlibs"
+   $(MAKE) /$(MAKEFLAGS) /F .\libmng.mak CFG="libmng - Win32 Dynamic" RECURSE=1 CLEAN 
+   cd "..\..\..\src-IL\msvc"
+
+!ELSEIF  "$(CFG)" == "IL - Win32 Release"
+
+"libmng - Win32 Release" : 
+   cd "\DevIL\projects\msvc\extlibs"
+   $(MAKE) /$(MAKEFLAGS) /F .\libmng.mak CFG="libmng - Win32 Release" 
+   cd "..\..\..\src-IL\msvc"
+
+"libmng - Win32 ReleaseCLEAN" : 
+   cd "\DevIL\projects\msvc\extlibs"
+   $(MAKE) /$(MAKEFLAGS) /F .\libmng.mak CFG="libmng - Win32 Release" RECURSE=1 CLEAN 
+   cd "..\..\..\src-IL\msvc"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "IL - Win32 Debug"
+
+"libpng - Win32 Debug" : 
+   cd "\DevIL\projects\msvc\extlibs"
+   $(MAKE) /$(MAKEFLAGS) /F .\libpng.mak CFG="libpng - Win32 Debug" 
+   cd "..\..\..\src-IL\msvc"
+
+"libpng - Win32 DebugCLEAN" : 
+   cd "\DevIL\projects\msvc\extlibs"
+   $(MAKE) /$(MAKEFLAGS) /F .\libpng.mak CFG="libpng - Win32 Debug" RECURSE=1 CLEAN 
+   cd "..\..\..\src-IL\msvc"
+
+!ELSEIF  "$(CFG)" == "IL - Win32 Dynamic"
+
+"libpng - Win32 Dynamic" : 
+   cd "\DevIL\projects\msvc\extlibs"
+   $(MAKE) /$(MAKEFLAGS) /F .\libpng.mak CFG="libpng - Win32 Dynamic" 
+   cd "..\..\..\src-IL\msvc"
+
+"libpng - Win32 DynamicCLEAN" : 
+   cd "\DevIL\projects\msvc\extlibs"
+   $(MAKE) /$(MAKEFLAGS) /F .\libpng.mak CFG="libpng - Win32 Dynamic" RECURSE=1 CLEAN 
+   cd "..\..\..\src-IL\msvc"
+
+!ELSEIF  "$(CFG)" == "IL - Win32 Release"
+
+"libpng - Win32 Release" : 
+   cd "\DevIL\projects\msvc\extlibs"
+   $(MAKE) /$(MAKEFLAGS) /F .\libpng.mak CFG="libpng - Win32 Release" 
+   cd "..\..\..\src-IL\msvc"
+
+"libpng - Win32 ReleaseCLEAN" : 
+   cd "\DevIL\projects\msvc\extlibs"
+   $(MAKE) /$(MAKEFLAGS) /F .\libpng.mak CFG="libpng - Win32 Release" RECURSE=1 CLEAN 
+   cd "..\..\..\src-IL\msvc"
 
 !ENDIF 
 

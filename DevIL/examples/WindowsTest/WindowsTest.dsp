@@ -19,6 +19,7 @@ CFG=WindowsTest - Win32 Debug
 !MESSAGE 
 !MESSAGE "WindowsTest - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE "WindowsTest - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "WindowsTest - Win32 Dynamic" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -83,12 +84,42 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 user32.lib gdi32.lib comdlg32.lib shell32.lib colorpicker.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 
+!ELSEIF  "$(CFG)" == "WindowsTest - Win32 Dynamic"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "WindowsTest___Win32_Dynamic"
+# PROP BASE Intermediate_Dir "WindowsTest___Win32_Dynamic"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "WindowsTest___Win32_Dynamic"
+# PROP Intermediate_Dir "WindowsTest___Win32_Dynamic"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /FD /c
+# SUBTRACT BASE CPP /YX
+# ADD CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /FD /c
+# SUBTRACT CPP /YX
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 user32.lib gdi32.lib comdlg32.lib shell32.lib colorpicker.lib /nologo /subsystem:windows /machine:I386
+# ADD LINK32 user32.lib gdi32.lib comdlg32.lib shell32.lib colorpicker.lib /nologo /subsystem:windows /machine:I386
+
 !ENDIF 
 
 # Begin Target
 
 # Name "WindowsTest - Win32 Release"
 # Name "WindowsTest - Win32 Debug"
+# Name "WindowsTest - Win32 Dynamic"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
