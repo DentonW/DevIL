@@ -101,27 +101,27 @@ ILboolean iGetDdsHead(DDSHEAD *Header)
 	if (iread(Header, sizeof(DDSHEAD), 1) != 1)
 		return IL_FALSE;
 
-	Header->Size1			= UInt(Header->Size1);
-	Header->Flags1			= UInt(Header->Flags1);
-	Header->Height			= UInt(Header->Height);
-	Header->Width			= UInt(Header->Width);
-	Header->LinearSize		= UInt(Header->LinearSize);
-	Header->Depth			= UInt(Header->Depth);
-	Header->MipMapCount		= UInt(Header->MipMapCount);
-	Header->AlphaBitDepth	= UInt(Header->AlphaBitDepth);
-	Header->Size2			= UInt(Header->Size2);
-	Header->Flags2			= UInt(Header->Flags2);
-	Header->FourCC			= UInt(Header->FourCC);
-	Header->RGBBitCount		= UInt(Header->RGBBitCount);
-	Header->RBitMask		= UInt(Header->RBitMask);
-	Header->GBitMask		= UInt(Header->GBitMask);
-	Header->BBitMask		= UInt(Header->BBitMask);
-	Header->RGBAlphaBitMask	= UInt(Header->RGBAlphaBitMask);
-	Header->ddsCaps1		= UInt(Header->ddsCaps1);
-	Header->ddsCaps2		= UInt(Header->ddsCaps2);
-	Header->ddsCaps3		= UInt(Header->ddsCaps3);
-	Header->ddsCaps4		= UInt(Header->ddsCaps4);
-	Header->TextureStage	= UInt(Header->TextureStage);
+	Header->Size1			= Int(Header->Size1);
+	Header->Flags1			= Int(Header->Flags1);
+	Header->Height			= Int(Header->Height);
+	Header->Width			= Int(Header->Width);
+	Header->LinearSize		= Int(Header->LinearSize);
+	Header->Depth			= Int(Header->Depth);
+	Header->MipMapCount		= Int(Header->MipMapCount);
+	Header->AlphaBitDepth	= Int(Header->AlphaBitDepth);
+	Header->Size2			= Int(Header->Size2);
+	Header->Flags2			= Int(Header->Flags2);
+	Header->FourCC			= Int(Header->FourCC);
+	Header->RGBBitCount		= Int(Header->RGBBitCount);
+	Header->RBitMask		= Int(Header->RBitMask);
+	Header->GBitMask		= Int(Header->GBitMask);
+	Header->BBitMask		= Int(Header->BBitMask);
+	Header->RGBAlphaBitMask	= Int(Header->RGBAlphaBitMask);
+	Header->ddsCaps1		= Int(Header->ddsCaps1);
+	Header->ddsCaps2		= Int(Header->ddsCaps2);
+	Header->ddsCaps3		= Int(Header->ddsCaps3);
+	Header->ddsCaps4		= Int(Header->ddsCaps4);
+	Header->TextureStage	= Int(Header->TextureStage);
 
 	if (Head.Depth == 0)
 		Head.Depth = 1;
@@ -228,16 +228,13 @@ ILboolean iLoadDdsCubemapInternal()
 
 	startImage = Image;
 	// run through cube map possibilities
-	for (i=0; i<CUBEMAP_SIDES; i++)
-	{
+	for (i = 0; i < CUBEMAP_SIDES; i++) {
 		// reset each time
 		Width = Head.Width;
 		Height = Head.Height;
 		Depth = Head.Depth;
-		if (Head.ddsCaps2 & CubemapDirections[i])
-		{
-			if (i != 0)
-			{
+		if (Head.ddsCaps2 & CubemapDirections[i]) {
+			if (i != 0) {
 				Image->Next = ilNewImage(Width, Height, Depth, Bpp, 1);
 				if (Image->Next == NULL)
 					return IL_FALSE;
@@ -273,8 +270,7 @@ ILboolean iLoadDdsCubemapInternal()
 		}
 	}
 
-	if (CompData)
-	{
+	if (CompData) {
 		ifree(CompData);
 		CompData = NULL;
 	}
@@ -293,7 +289,10 @@ ILboolean iLoadDdsInternal()
 		return IL_FALSE;
 	}
 
-	iGetDdsHead(&Head);
+	if (!iGetDdsHead(&Head)) {
+		ilSetError(IL_INVALID_FILE_HEADER);
+		return IL_FALSE;
+	}
 	Image = iCurImage;
 	if (Head.ddsCaps1 & DDS_COMPLEX) {
 		if (Head.ddsCaps2 & DDS_CUBEMAP) {
@@ -305,6 +304,8 @@ ILboolean iLoadDdsInternal()
 	Width = Head.Width;
 	Height = Head.Height;
 	Depth = Head.Depth;
+
+	AdjustVolumeTexture(&Head);
 
 	if (!ReadData())
 		return IL_FALSE;
@@ -332,6 +333,45 @@ ILboolean iLoadDdsInternal()
 }
 
 
+// The few volume textures that I have don't have consistent LinearSize
+//	entries, even thouh the DDS_LINEARSIZE flag is set.
+ILvoid AdjustVolumeTexture(DDSHEAD *Head)
+{
+	if (Head->Depth <= 1)
+		return;
+
+	if (!(Head->ddsCaps1 & DDS_COMPLEX) || !(Head->ddsCaps2 & DDS_VOLUME)) {
+		Head->Depth = 1;
+		Depth = 1;
+	}
+
+	switch (CompFormat)
+	{
+		case PF_ARGB:
+		case PF_RGB:
+			Head->LinearSize = IL_MAX(1,Head->Width) * IL_MAX(1,Head->Height) *
+				(Head->RGBBitCount / 8);
+			break;
+	
+		case PF_DXT1:
+			Head->LinearSize = IL_MAX(1,Head->Width/4) * IL_MAX(1,Head->Height/4) * 8;
+			break;
+
+		case PF_DXT2:
+		case PF_DXT3:
+		case PF_DXT4:
+		case PF_DXT5:
+			Head->LinearSize = IL_MAX(1,Head->Width/4) * IL_MAX(1,Head->Height/4) * 16;
+			break;
+	}
+
+	Head->Flags1 |= DDS_LINEARSIZE;
+	Head->LinearSize *= Head->Depth;
+
+	return;
+}
+
+
 // Reads the compressed data
 ILboolean ReadData()
 {
@@ -351,7 +391,7 @@ ILboolean ReadData()
 	}
 
 	if (Head.Flags1 & DDS_LINEARSIZE) {
-		Head.LinearSize = Head.LinearSize * Depth;
+		//Head.LinearSize = Head.LinearSize * Depth;
 
 		CompData = (ILubyte*)ialloc(Head.LinearSize);
 		if (CompData == NULL) {
@@ -362,7 +402,8 @@ ILboolean ReadData()
 			ifree(CompData);
 			return IL_FALSE;
 		}
-    } else {
+    }
+	else {
 		Bps = Width * Head.RGBBitCount / 8;
 		CompSize = Bps * Height * Depth;
 		CompLineSize = Bps;
@@ -390,19 +431,28 @@ ILboolean ReadData()
 
 ILboolean AllocImage()
 {
-	switch (CompFormat) {
+	switch (CompFormat)
+	{
 		case PF_RGB:
-			if (!ilTexImage(Width, Height, Depth, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL)) {
-				ifree(CompData);
+			if (!ilTexImage(Width, Height, Depth, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL))
 				return IL_FALSE;
-			}
 			break;
 		case PF_ARGB:
-		default:
-			if (!ilTexImage(Width, Height, Depth, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL)) {
-				ifree(CompData);
+			if (!ilTexImage(Width, Height, Depth, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL))
 				return IL_FALSE;
+			break;
+		default:
+			if (!ilTexImage(Width, Height, Depth, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL))
+				return IL_FALSE;
+			if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
+				iCurImage->DxtcFormat = CompFormat - PF_DXT1 + IL_DXT1;
+				iCurImage->DxtcSize = Head.LinearSize;
+				iCurImage->DxtcData = (ILubyte*)ialloc(Head.LinearSize);
+				if (iCurImage->DxtcData == NULL)
+					return IL_FALSE;
+				memcpy(iCurImage->DxtcData, CompData, iCurImage->DxtcSize);
 			}
+			break;
 	}
 
 	Image->Origin = IL_ORIGIN_UPPER_LEFT;
@@ -494,8 +544,7 @@ ILboolean Decompress()
 
 ILboolean ReadMipmaps()
 {
-	ILint	i;
-	ILuint	CompFactor=0;
+	ILuint	i, CompFactor=0;
 	ILubyte	Bpp;
 	ILimage	*startImage;
 	ILuint	LastLinear;
@@ -512,8 +561,7 @@ ILboolean ReadMipmaps()
 
 	startImage = Image;
 
-	if (!(Head.Flags1 & DDS_MIPMAPCOUNT))
-	{
+	if (!(Head.Flags1 & DDS_MIPMAPCOUNT)) {
 		Head.MipMapCount = 1;
 	}
 

@@ -19,6 +19,7 @@ ilutConvertToHBitmap
 ;ilutD3D8VolTexFromResource
 ilutDisable
 ilutEnable
+ilutFreePaddedData
 ilutGetBmpInfo
 ilutGetBoolean
 ilutGetBooleanv

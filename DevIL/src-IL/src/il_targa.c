@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 08/03/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 05/22/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/targa.c
+// Filename: src-IL/src/il_targa.c
 //
 // Description: Reads from and writes to a targa (.tga) file.
 //
@@ -30,7 +30,10 @@ ILboolean ilIsValidTga(const ILstring FileName)
 	ILHANDLE	TargaFile;
 	ILboolean	bTarga = IL_FALSE;
 
-	if (!iCheckExtension(FileName, IL_TEXT("tga"))) {
+	if (!iCheckExtension(FileName, IL_TEXT("tga")) &&
+		!iCheckExtension(FileName, IL_TEXT("vda")) &&
+		!iCheckExtension(FileName, IL_TEXT("icb")) &&
+		!iCheckExtension(FileName, IL_TEXT("vst"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bTarga;
 	}
@@ -357,16 +360,21 @@ ILboolean iReadUnmapTga(TARGAHEAD *Header)
 	}
 
 
+	// @TODO:  Determine this:
 	// We assume that no palette is present, but it's possible...
 	//  Should we mess with it or not?
 
 
-	if (Header->ImageType == TGA_UNMAP_COMP)
-		if (!iUncompressTgaData(iCurImage))
+	if (Header->ImageType == TGA_UNMAP_COMP) {
+		if (!iUncompressTgaData(iCurImage)) {
 			return IL_FALSE;
-	else
-		if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) != iCurImage->SizeOfData)
+		}
+	}
+	else {
+		if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) != iCurImage->SizeOfData) {
 			return IL_FALSE;
+		}
+	}
 
 	// Go ahead and expand it to 24-bit.
 	if (Header->Bpp == 16) {

@@ -13,6 +13,20 @@
   when one occurs.
 - Added IL_EOF for use with other languages.
 - Fixed a small memory leak in the .psp loading code.
+- Fixed a bug where images with types larger than short were not saving as .sgi correctly.
+- Added checks for all file reads to see if they succeeded.
+- Added recognition for the .pdd extension (.psd renamed).
+- Fixed some leaks in the .dcx code.
+- Added ilutFreePaddedData().
+- Fixed some possible leaks in ilTexImage().
+- Fixed a problem with loading some .dds volume textures (LinearSize field appears to be
+  incorrect on some images).
+- Fixed a problem loading some .tga files.
+- Added more checks to determine if a .dds file has a volume texture in it.
+- Added ilGetDXTCData().
+- Fixed some RLE .sgi loading bugs.
+- Added direct S3TC/DXTC to OpenGL code.
+
 
 
 

@@ -80,7 +80,7 @@ ILboolean iGetPicHead(PIC_HEAD *Header)
 	Header->Fields	= Short(Header->Fields);
 	Header->Padding	= Short(Header->Padding);
 
-	return;
+	return IL_TRUE;
 }
 
 
@@ -234,7 +234,7 @@ ILboolean readScanlines(ILuint *image, ILint width, ILint height, CHANNEL *chann
 	(ILvoid)alpha;
 	
 	for (i = height - 1; i >= 0; i--) {
-		*scan = image + i * width;
+		scan = image + i * width;
 
 		if (!readScanline((ILubyte *)scan, width, channel, 4)) {
 			ilSetError(IL_ILLEGAL_FILE_VALUE);

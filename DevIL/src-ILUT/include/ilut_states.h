@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Toolkit Sources
-// Copyright (C) 2000-2001 by Denton Woods
+// Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 05/28/2001 <--Y2K Compliant! =]
 //
-// Filename: openilut/states.h
+// Filename: src-ILUT/include/ilut_states.h
 //
 // Description: State machine
 //
@@ -30,9 +30,14 @@ ILuint ilutCurrentPos = 0;  // Which position on the stack
 typedef struct ILUT_STATES
 {
 
-	// OpenILUT states
+	// ILUT states
 	ILboolean	ilutUsePalettes;
 	ILboolean	ilutOglConv;
+	ILenum		ilutDXTCFormat;
+
+	// GL states
+	ILboolean	ilutUseS3TC;
+	ILboolean	ilutGenS3TC;
 
 	// D3D states
 	ILuint		D3DMipLevels;

@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2001 by Denton Woods
 // Last modified: 12/25/2001 <--Y2K Compliant! =]
 //
-// Filename: openil/il_stack.c
+// Filename: src-IL/src/il_stack.c
 //
 // Description: The main image stack
 //
@@ -214,6 +214,13 @@ ILAPI ILvoid ILAPIENTRY ilCloseImage(ILimage *Image)
 		ifree(Image->Profile);
 		Image->Profile = NULL;
 		Image->ProfileSize = 0;
+	}
+
+	if (Image->DxtcData != NULL && Image->DxtcFormat != IL_DXT_NO_COMP) {
+		ifree(Image->DxtcData);
+		Image->DxtcData = NULL;
+		Image->DxtcFormat = IL_DXT_NO_COMP;
+		Image->DxtcSize = 0;
 	}
 
 	ifree(Image);

@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Toolkit Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 05/28/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 05/25/2002 <--Y2K Compliant! =]
 //
-// Filename: openilut/opengl.h
+// Filename: src-ILUT/include/ilut_opengl.c
 //
 // Description: OpenGL functions for images
 //
@@ -27,7 +27,10 @@ ILvoid iGLSetMaxH(ILuint Height);
 
 ILenum		ilutGLFormat(ILenum, ILubyte);
 ILimage*	MakeGLCompliant(ILimage *Src);
-ILboolean	iIsExtensionSupported(const char *Ext);
+ILboolean	IsExtensionSupported(const char *extension);
+
+
+typedef void (ILAPIENTRY * ILGLCOMPRESSEDTEXIMAGE2DARBPROC) (GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *data);
 
 
 #endif//ILUT_OPENGL_H

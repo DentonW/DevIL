@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2001 by Denton Woods
 // Last modified: 12/16/2001 <--Big Endian Changes =]
 //
-// Filename: openil/tiff.c
+// Filename: src-IL/src/il_tiff.c
 //
 // Description: Tiff (.tif) functions
 //

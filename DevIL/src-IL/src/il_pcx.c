@@ -81,7 +81,7 @@ ILboolean iGetPcxHead(PCXHEAD *Head)
 	Head->HScreenSize	= UShort(Head->HScreenSize);
 	Head->VScreenSize	= UShort(Head->VScreenSize);
 
-	return;
+	return IL_TRUE;
 }
 
 
@@ -202,8 +202,8 @@ ILboolean iLoadPcxInternal()
 // Internal function to uncompress the .pcx (all .pcx files are rle compressed)
 ILboolean iUncompressPcx(PCXHEAD *Header)
 {
-	ILubyte		ByteHead, Colour, *Compressed, *ScanLine /* Only one plane */;
-	ILuint		c, i, x, y, StartPos, Read = 0;
+	ILubyte		ByteHead, Colour, *ScanLine /* Only one plane */;
+	ILuint		c, i, x, y, Read = 0;
 
 	if (Header->Bpp < 8) {
 		/*ilSetError(IL_FORMAT_NOT_SUPPORTED);
@@ -256,7 +256,7 @@ ILboolean iUncompressPcx(PCXHEAD *Header)
 
 
 	if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST) {
-		StartPos = itell();
+		/*StartPos = itell();
 		Compressed = (ILubyte*)ialloc(iCurImage->SizeOfData * 4 / 3);
 		iread(Compressed, 1, iCurImage->SizeOfData * 4 / 3);
 
@@ -284,7 +284,41 @@ ILboolean iUncompressPcx(PCXHEAD *Header)
 		}
 
 		ifree(Compressed);
-		iseek(StartPos + Read, IL_SEEK_SET);
+		iseek(StartPos + Read, IL_SEEK_SET);*/
+
+
+		iPreCache(iCurImage->SizeOfData / 4);
+
+		for (y = 0; y < iCurImage->Height; y++) {
+			for (c = 0; c < iCurImage->Bpp; c++) {
+				x = 0;
+				while (x < Header->Bps) {
+					if (iread(&ByteHead, 1, 1) != 1) {
+						iUnCache();
+						goto file_read_error;
+					}
+					if ((ByteHead & 0xC0) == 0xC0) {
+						ByteHead &= 0x3F;
+						if (iread(&Colour, 1, 1) != 1) {
+							iUnCache();
+							goto file_read_error;
+						}
+						for (i = 0; i < ByteHead; i++) {
+							ScanLine[x++] = Colour;
+						}
+					}
+					else {
+						ScanLine[x++] = ByteHead;
+					}
+				}
+
+				for (x = 0; x < iCurImage->Width; x++) {  // 'Cleverly' ignores the pad bytes ;)
+					iCurImage->Data[y * iCurImage->Bps + x * iCurImage->Bpp + c] = ScanLine[x];
+				}
+			}
+		}
+
+		iUnCache();
 	}
 	else {
 		for (y = 0; y < iCurImage->Height; y++) {

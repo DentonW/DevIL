@@ -12,11 +12,12 @@
 
 
 #include "il_internal.h"
-#ifndef IL_NO_DDS
 #include "il_dds.h"
 #include "il_manip.h"
 #include <limits.h>
 
+
+#ifndef IL_NO_DDS
 
 //! Writes a Dds file
 ILboolean ilSaveDds(const ILstring FileName)
@@ -77,11 +78,9 @@ ILboolean iSaveDdsInternal()
 		ilFlipImage();
 
 	DXTCFormat = iGetInt(IL_DXTC_FORMAT);
-DXTCFormat = IL_DXT5;
+// DXTCFormat = IL_DXT5;  // Just a test...
 	WriteHeader(iCurImage, DXTCFormat);
 	Compress(iCurImage, DXTCFormat);
-
-
 
 	if (Origin != IL_ORIGIN_UPPER_LEFT)
 		ilFlipImage();
@@ -160,6 +159,37 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat)
 	SaveLittleUInt(0);			// ddsCaps3
 	SaveLittleUInt(0);			// ddsCaps4
 	SaveLittleUInt(0);			// TextureStage
+
+	return IL_TRUE;
+}
+
+#endif//IL_NO_DDS
+
+
+ILuint ILAPIENTRY ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize, ILenum DXTCFormat)
+{
+	if (Buffer == NULL) {  // Return the number that will be written with a subsequent call.
+		if (ilNextPower2(iCurImage->Width) != iCurImage->Width ||
+			ilNextPower2(iCurImage->Height) != iCurImage->Height ||
+			ilNextPower2(iCurImage->Depth) != iCurImage->Depth) {
+				return 0;
+		}
+
+		switch (DXTCFormat)
+		{
+			case IL_DXT1:
+				return iCurImage->Width * iCurImage->Height / 16 * 8;
+			case IL_DXT3:
+			case IL_DXT5:
+				return iCurImage->Width * iCurImage->Height / 16 * 16;
+			default:
+				ilSetError(IL_FORMAT_NOT_SUPPORTED);
+				return 0;
+		}
+	}
+
+	iSetOutputLump(Buffer, BufferSize);
+	Compress(iCurImage, DXTCFormat);
 
 	return IL_TRUE;
 }
@@ -243,6 +273,13 @@ ILboolean Compress(ILimage *Image, ILenum DXTCFormat)
 	ILuint		x, y, i, BitMask;//, Rms1, Rms2;
 	ILubyte		*Alpha, AlphaBlock[16], AlphaBitMask[6], AlphaOut[16], a0, a1;
 	ILboolean	HasAlpha;
+
+	if (ilNextPower2(iCurImage->Width) != iCurImage->Width ||
+		ilNextPower2(iCurImage->Height) != iCurImage->Height ||
+		ilNextPower2(iCurImage->Depth) != iCurImage->Depth) {
+			ilSetError(IL_BAD_DIMENSIONS);
+			return IL_FALSE;
+	}
 
 	Data = CompressTo565(Image);
 	if (Data == NULL)
@@ -654,5 +691,3 @@ ILvoid PreMult(ILushort *Data, ILubyte *Alpha)
 
 	return;
 }
-
-#endif//IL_NO_DDS

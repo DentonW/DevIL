@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 08/03/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 05/24/2001 <--Y2K Compliant! =]
 //
-// Filename: openil/states.h
+// Filename: src-IL/src/il_states.h
 //
 // Description: State machine
 //
@@ -53,6 +53,8 @@ typedef struct IL_STATES
 	// Quantization states
 	ILenum		ilQuantMode;
 	ILuint		ilNeuSample;
+	// DXTC states
+	ILboolean	ilKeepDxtcData;
 
 
 	//

@@ -51,6 +51,9 @@ ILAPI ILimage* ILAPIENTRY ilNewImage(ILuint Width, ILuint Height, ILuint Depth, 
 	Image->Pal.PalType = IL_PAL_NONE;
 	Image->OffX = 0;
 	Image->OffY = 0;
+	Image->DxtcData = NULL;
+	Image->DxtcFormat = IL_DXT_NO_COMP;
+	Image->DxtcSize = 0;
 
 	switch (Bpp)
 	{
@@ -126,6 +129,31 @@ ILAPI ILboolean ILAPIENTRY ilTexImage_(ILimage *Image, ILuint Width, ILuint Heig
 		Image->Pal.PalSize = 0;
 		Image->Pal.PalType = IL_PAL_NONE;
 	}
+
+	// Added 05-23-2002.
+	ilCloseImage(Image->Mipmaps);
+	ilCloseImage(Image->Next);
+	ilCloseImage(Image->Layers);
+	if (Image->AnimList)
+		ifree(Image->AnimList);
+	if (Image->Profile)
+		ifree(Image->Profile);
+	if (Image->DxtcData)
+		ifree(Image->DxtcData);
+
+	Image->Mipmaps = NULL;
+	Image->NumMips = 0;
+	Image->Next = NULL;
+	Image->NumNext = 0;
+	Image->Layers = NULL;
+	Image->NumLayers = 0;
+	Image->AnimList = NULL;
+	Image->AnimSize = 0;
+	Image->Profile = NULL;
+	Image->ProfileSize = 0;
+	Image->DxtcData = NULL;
+	Image->DxtcFormat = IL_DXT_NO_COMP;
+	Image->DxtcSize = 0;
 
 	if (Image->Data)
 		ifree(Image->Data);
@@ -838,6 +866,12 @@ ILAPI ILboolean ILAPIENTRY ilCopyImageAttr(ILimage *Dest, ILimage *Src)
 		ifree(Dest->Profile);
 		Dest->Profile = NULL;
 		Dest->ProfileSize = 0;
+	}
+	if (Dest->DxtcData) {
+		ifree(Dest->DxtcData);
+		Dest->DxtcData = NULL;
+		Dest->DxtcFormat = IL_DXT_NO_COMP;
+		Dest->DxtcSize = 0;
 	}
 
 	if (Src->AnimList && Src->AnimSize) {

@@ -24,28 +24,28 @@ typedef struct DDSHEAD
 {
 	ILbyte	Signature[4];
     
-	ILint	Size1;				// size of the structure (minus MagicNum)
-    ILint	Flags1;				// determines what fields are valid
-    ILint	Height;				// height of surface to be created
-    ILint	Width;				// width of input surface
-    ILint	LinearSize;			// Formless late-allocated optimized surface size
-    ILint	Depth;				// Depth if a volume texture
-    ILint	MipMapCount;		// number of mip-map levels requested
-    ILint	AlphaBitDepth;		// depth of alpha buffer requested
+	ILuint	Size1;				// size of the structure (minus MagicNum)
+    ILuint	Flags1;				// determines what fields are valid
+    ILuint	Height;				// height of surface to be created
+    ILuint	Width;				// width of input surface
+    ILuint	LinearSize;			// Formless late-allocated optimized surface size
+    ILuint	Depth;				// Depth if a volume texture
+    ILuint	MipMapCount;		// number of mip-map levels requested
+    ILuint	AlphaBitDepth;		// depth of alpha buffer requested
 
-	ILint	NotUsed[sizeof(ILint) * 10];
+	ILuint	NotUsed[10];
 
-	ILint	Size2;				// size of structure
-	ILint	Flags2;				// pixel format flags
-	ILint	FourCC;				// (FOURCC code)
-	ILint	RGBBitCount;		// how many bits per pixel
-	ILint	RBitMask;			// mask for red bit
-	ILint	GBitMask;			// mask for green bits
-	ILint	BBitMask;			// mask for blue bits
-	ILint	RGBAlphaBitMask;	// mask for alpha channel
+	ILuint	Size2;				// size of structure
+	ILuint	Flags2;				// pixel format flags
+	ILuint	FourCC;				// (FOURCC code)
+	ILuint	RGBBitCount;		// how many bits per pixel
+	ILuint	RBitMask;			// mask for red bit
+	ILuint	GBitMask;			// mask for green bits
+	ILuint	BBitMask;			// mask for blue bits
+	ILuint	RGBAlphaBitMask;	// mask for alpha channel
 	
-    ILint	ddsCaps1, ddsCaps2, ddsCaps3, ddsCaps4; // direct draw surface capabilities
-	ILint	TextureStage;
+    ILuint	ddsCaps1, ddsCaps2, ddsCaps3, ddsCaps4; // direct draw surface capabilities
+	ILuint	TextureStage;
 } IL_PACKSTRUCT DDSHEAD;
 #ifdef _WIN32
 	#pragma pack(pop, dds_struct)
@@ -160,6 +160,7 @@ extern ILuint	BlockSize;
 ILboolean	iLoadDdsInternal(ILvoid);
 ILboolean	iIsValidDds(ILvoid);
 ILboolean	iCheckDds(DDSHEAD *Head);
+ILvoid		AdjustVolumeTexture(DDSHEAD *Head);
 ILboolean	ReadData(ILvoid);
 ILboolean	AllocImage(ILvoid);
 ILboolean	Decompress(ILvoid);

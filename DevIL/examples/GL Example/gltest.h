@@ -1,12 +1,12 @@
 //-----------------------------------------------------------------------------
 //
-// ImageLib WindowTest Source
-// Copyright (C) 2000 by Denton Woods
-// Last modified:  10/13/2000 <--Y2K Compliant! =]
+// ImageLib GL Test Source
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 10/13/2000 <--Y2K Compliant! =]
 //
-// Filename: testil/gltest/gltest.h
+// Filename: examples/gl example/gl example.h
 //
-// Description:  Sample implementation of an OpenGL image viewer.
+// Description: Sample implementation of an OpenGL image viewer.
 //
 //-----------------------------------------------------------------------------
 

@@ -26,7 +26,8 @@ ILboolean ilIsValidPsd(const ILstring FileName)
 	ILHANDLE	PsdFile;
 	ILboolean	bPsd = IL_FALSE;
 
-	if (!iCheckExtension(FileName, IL_TEXT("psd"))) {
+	if (!iCheckExtension(FileName, IL_TEXT("psd")) &&
+		!iCheckExtension(FileName, IL_TEXT("pdd"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bPsd;
 	}

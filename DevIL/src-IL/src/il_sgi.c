@@ -1,19 +1,20 @@
-/*----------------------------------------------------------------------------
-
-   ImageLib Sources
-   Copyright (C) 2000-2001 by Denton Woods
-   Last modified: 05/25/2001 <--Y2K Compliant! =]
-  
-   Filename: openil/sgi.c
-  
-   Description: Reads from and writes to SGI graphics files.
-  
-------------------------------------------------------------------------------*/
+//-----------------------------------------------------------------------------
+//
+// ImageLib Sources
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 05/25/2002 <--Y2K Compliant! =]
+//
+// Filename: src-IL/src/il_states.c
+//
+// Description: Reads from and writes to SGI graphics files.
+//
+//-----------------------------------------------------------------------------
 
 #include "il_internal.h"
 #ifndef IL_NO_SGI
 #include "il_sgi.h"
 #include "il_manip.h"
+#include <limits.h>
 
 static char *FName = NULL;
 
@@ -256,12 +257,13 @@ ILboolean iReadRleSgi(iSgiHeader *Head)
 		}
 	}
 
-	// Check if an alphaplane exists and invert it
+	// DW: Removed on 05/25/2002.
+	/*// Check if an alphaplane exists and invert it
 	if (Head->ZSize == 4) {
 		for (ixPixel=0; (ILint)ixPixel<Head->XSize * Head->YSize; ixPixel++) {
  			TempData[3][ixPixel] = TempData[3][ixPixel] ^ 255;
  		}	
-	}
+	}*/
 	
 	// Assemble the image from its planes
 	for (ixPixel = 0; ixPixel < iCurImage->SizeOfData;
@@ -319,7 +321,7 @@ ILint iGetScanLine(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length)
 #ifndef __LITTLE_ENDIAN__
 		Pixel = SwapShort(Pixel);
 #endif
-		
+
 		if (!(Count = (Pixel & 0x7f)))  // If 0, line ends
 			return CurPos;
 		if (Pixel & 0x80) {  // If top bit set, then it is a "run"
@@ -327,6 +329,7 @@ ILint iGetScanLine(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length)
 				return -1;
 			BppRead += Head->Bpc * Count + Head->Bpc;
 			ScanLine += Head->Bpc * Count;
+			CurPos += Head->Bpc * Count;
 		}
 		else {
 			if (iread(&Pixel, Head->Bpc, 1) != 1)
@@ -338,12 +341,14 @@ ILint iGetScanLine(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length)
 				while (Count--) {
 					*ScanLine = (ILubyte)Pixel;
 					ScanLine++;
+					CurPos++;
 				}
 			}
 			else {
 				while (Count--) {
 					*(ILushort*)ScanLine = Pixel;
 					ScanLine += 2;
+					CurPos += 2;
 				}
 			}
 			BppRead += Head->Bpc + Head->Bpc;
@@ -354,6 +359,8 @@ ILint iGetScanLine(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length)
 }
 
 /*----------------------------------------------------------------------------*/
+
+// @TODO: Figure out why exactly I have this...
 
 ILint iGetScanLineFast(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length, ILubyte *FileData)
 {
@@ -366,9 +373,10 @@ ILint iGetScanLineFast(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length, ILuby
 			return CurPos;
 		if (Pixel & 0x80) {  // If top bit set, then it is a "run"
 			memcpy(ScanLine, FileData, Count * Head->Bpc);
-			FileData += Count * Head->Bpc;
+			FileData += Head->Bpc * Count;
 			BppRead += Head->Bpc * Count + Head->Bpc;
 			ScanLine += Head->Bpc * Count;
+			CurPos += Head->Bpc * Count;
 		}
 		else {
 			//iread(&Pixel, Head->Bpc, 1);
@@ -378,11 +386,13 @@ ILint iGetScanLineFast(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length, ILuby
 				while (Count--) {
 					*ScanLine = (ILubyte)Pixel;
 					ScanLine++;
+					CurPos++;
 				}
 			}
 			else {
 				while (Count--) {
 					*(ILushort*)ScanLine = Pixel;
+					ScanLine += 2;
 					ScanLine += 2;
 				}
 			}
@@ -578,6 +588,15 @@ ILboolean iSaveSgiInternal()
 		if (Temp == NULL)
 			return IL_FALSE;
 	}
+	else if (iCurImage->Type > IL_UNSIGNED_SHORT) {
+		if (iCurImage->Type == IL_INT)
+			Temp = iConvertImage(iCurImage, iCurImage->Format, IL_SHORT);
+		else
+			Temp = iConvertImage(iCurImage, iCurImage->Format, IL_UNSIGNED_SHORT);
+
+		if (Temp == NULL)
+			return IL_FALSE;
+	}
 	else {
 		Temp = iCurImage;
 	}
@@ -603,10 +622,25 @@ ILboolean iSaveSgiInternal()
 	SaveBigUShort((ILushort)Temp->Height);
 	SaveBigUShort((ILushort)Temp->Bpp);
 
-	// @TODO:  If we have signed values or shorts, we needed to modify accordingly.
-	if (
-	SaveBigInt(0);  // Minimum pixel value
-	SaveBigInt(255);  // Maximum pixel value
+	switch (Temp->Type)
+	{
+		case IL_BYTE:
+			SaveBigInt(SCHAR_MIN);	// Minimum pixel value
+			SaveBigInt(SCHAR_MAX);	// Maximum pixel value
+			break;
+		case IL_UNSIGNED_BYTE:
+			SaveBigInt(0);			// Minimum pixel value
+			SaveBigInt(UCHAR_MAX);	// Maximum pixel value
+			break;
+		case IL_SHORT:
+			SaveBigInt(SHRT_MIN);	// Minimum pixel value
+			SaveBigInt(SHRT_MAX);	// Maximum pixel value
+			break;
+		case IL_UNSIGNED_SHORT:
+			SaveBigInt(0);			// Minimum pixel value
+			SaveBigInt(USHRT_MAX);	// Maximum pixel value
+			break;
+	}
 
 	SaveBigInt(0);  // Dummy value
 

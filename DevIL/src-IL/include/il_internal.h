@@ -134,6 +134,9 @@ typedef struct ILimage
 	ILvoid	*Profile;			// colour profile
 	ILuint	ProfileSize;		// colour profile size
 	ILuint	OffX, OffY;			// offset of the image
+	ILubyte	*DxtcData;			// compressed data
+	ILenum	DxtcFormat;			// compressed data format
+	ILuint	DxtcSize;			// compressed data size
 } ILimage;
 
 

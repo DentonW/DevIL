@@ -58,6 +58,7 @@ extern "C" {
 #define ILUT_COULD_NOT_OPEN_FILE			0x050A
 #define ILUT_STACK_OVERFLOW					0x050E
 #define ILUT_STACK_UNDERFLOW				0x050F
+#define ILUT_BAD_DIMENSIONS					0x0511
 #define ILUT_NOT_SUPPORTED					0x0550
 
 
@@ -68,6 +69,9 @@ extern "C" {
 #define ILUT_MAXTEX_WIDTH					0x0630
 #define ILUT_MAXTEX_HEIGHT					0x0631
 #define ILUT_MAXTEX_DEPTH					0x0632
+#define ILUT_GL_USE_S3TC					0x0634
+#define ILUT_GL_GEN_S3TC					0x0635
+#define ILUT_S3TC_FORMAT					0x0705
 
 
 // Values
@@ -188,6 +192,7 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 		#define WIN32_LEAN_AND_MEAN
 		#include <windows.h>
 		ILAPI HBITMAP	ILAPIENTRY ilutConvertToHBitmap(HDC hDC);
+		ILAPI ILvoid	ILAPIENTRY ilutFreePaddedData(ILubyte *Data);
 		ILAPI ILvoid	ILAPIENTRY ilutGetBmpInfo(BITMAPINFO *Info);
 		ILAPI HPALETTE	ILAPIENTRY ilutGetHPal(ILvoid);
 		ILAPI ILubyte*	ILAPIENTRY ilutGetPaddedData(ILvoid);

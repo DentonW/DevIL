@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 05/25/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/sgi.h
+// Filename: src-IL/include/sgi.h
 //
 // Description: Reads from and writes to SGI graphics files.
 //

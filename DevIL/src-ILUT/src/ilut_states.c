@@ -25,6 +25,9 @@ ILvoid ilutDefaultStates()
 {
 	ilutStates[ilutCurrentPos].ilutUsePalettes = IL_FALSE;
 	ilutStates[ilutCurrentPos].ilutOglConv = IL_FALSE;  // IL_TRUE ?
+	ilutStates[ilutCurrentPos].ilutDXTCFormat = 0;
+	ilutStates[ilutCurrentPos].ilutUseS3TC = IL_FALSE;
+	ilutStates[ilutCurrentPos].ilutGenS3TC = IL_FALSE;
 	ilutStates[ilutCurrentPos].D3DMipLevels = 0;
 }
 
@@ -76,6 +79,14 @@ ILboolean ilutAble(ILenum Mode, ILboolean Flag)
       		ilutStates[ilutCurrentPos].ilutOglConv = Flag;
       		break;
 
+		case ILUT_GL_USE_S3TC:
+      		ilutStates[ilutCurrentPos].ilutUseS3TC = Flag;
+      		break;
+
+		case ILUT_GL_GEN_S3TC:
+      		ilutStates[ilutCurrentPos].ilutGenS3TC = Flag;
+      		break;
+
 
 		default:
 			ilSetError(ILUT_INVALID_ENUM);
@@ -95,6 +106,12 @@ ILboolean ILAPIENTRY ilutIsEnabled(ILenum Mode)
 
 		case ILUT_OPENGL_CONV:
       		return ilutStates[ilutCurrentPos].ilutOglConv;
+
+		case ILUT_GL_USE_S3TC:
+			return ilutStates[ilutCurrentPos].ilutUseS3TC;
+
+		case ILUT_GL_GEN_S3TC:
+			return ilutStates[ilutCurrentPos].ilutGenS3TC;
 
 
 		default:
@@ -122,6 +139,11 @@ ILvoid ILAPIENTRY ilutGetBooleanv(ILenum Mode, ILboolean *Param)
 		case ILUT_OPENGL_CONV:
       		*Param = ilutStates[ilutCurrentPos].ilutOglConv;
       		break;
+
+		case ILUT_GL_USE_S3TC:
+      		*Param = ilutStates[ilutCurrentPos].ilutOglConv;
+      		break;
+
 
 
 		default:
@@ -156,6 +178,15 @@ ILvoid ILAPIENTRY ilutGetIntegerv(ILenum Mode, ILint *Param)
 		case ILUT_OPENGL_CONV:
       		*Param = ilutStates[ilutCurrentPos].ilutOglConv;
       		break;
+		case ILUT_GL_USE_S3TC:
+      		*Param = ilutStates[ilutCurrentPos].ilutUseS3TC;
+      		break;
+		case ILUT_GL_GEN_S3TC:
+      		*Param = ilutStates[ilutCurrentPos].ilutUseS3TC;
+      		break;
+		case ILUT_S3TC_FORMAT:
+			*Param = ilutStates[ilutCurrentPos].ilutDXTCFormat;
+			break;
 		case ILUT_D3D_MIPLEVELS:
 			*Param = ilutStates[ilutCurrentPos].D3DMipLevels;
 			break;
@@ -180,27 +211,48 @@ ILvoid ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param)
 {
 	switch (Mode)
 	{
+		case ILUT_S3TC_FORMAT:
+			if (Param >= IL_DXT1 && Param <= IL_DXT5) {
+				ilutStates[ilutCurrentPos].ilutDXTCFormat = Param;
+				return;
+			}
+
 #ifdef ILUT_USE_OPENGL
 		case ILUT_MAXTEX_WIDTH:
 			iGLSetMaxW(Param);
-			break;
+			return;
 		case ILUT_MAXTEX_HEIGHT:
 			iGLSetMaxH(Param);
-			break;
+			return;
 		case ILUT_MAXTEX_DEPTH:
 
 			break;
+		case ILUT_GL_USE_S3TC:
+			if (Param == IL_TRUE || Param == IL_FALSE) {
+				ilutStates[ilutCurrentPos].ilutUseS3TC = Param;
+				return;
+			}
+		case ILUT_GL_GEN_S3TC:
+			if (Param == IL_TRUE || Param == IL_FALSE) {
+				ilutStates[ilutCurrentPos].ilutGenS3TC = Param;
+				return;
+			}
 #endif//ILUT_USE_OPENGL
 
 #ifdef ILUT_USE_DIRECTX8
 		case ILUT_D3D_MIPLEVELS:
-			ilutStates[ilutCurrentPos].D3DMipLevels = Param;
+			if (Param >= 0) {
+				ilutStates[ilutCurrentPos].D3DMipLevels = Param;
+				return;
+			}
 			break;
 #endif//ILUT_USE_DIRECTX8
 
 		default:
 			ilSetError(ILUT_INVALID_ENUM);
 	}
+
+	ilSetError(IL_INVALID_PARAM);  // Parameter not in valid bounds.
 	return;
 }
 

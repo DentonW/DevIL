@@ -60,7 +60,7 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 	if (!iStrCmp(Ext, IL_TEXT("pbm")) || !iStrCmp(Ext, IL_TEXT("pgm")) ||
 		!iStrCmp(Ext, IL_TEXT("pnm")) || !iStrCmp(Ext, IL_TEXT("ppm")))
 		return IL_PNM;
-	if (!iStrCmp(Ext, IL_TEXT("psd")))
+	if (!iStrCmp(Ext, IL_TEXT("psd")) || !iStrCmp(Ext, IL_TEXT("pdd")))
 		return IL_PSD;
 	if (!iStrCmp(Ext, IL_TEXT("psp")))
 		return IL_PSP;
@@ -940,7 +940,8 @@ ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 		#endif
 
 		#ifndef IL_NO_JPG
-		if (!iStrCmp(Ext, IL_TEXT("jpg")) || !iStrCmp(Ext, IL_TEXT("jpe")) || !iStrCmp(Ext, IL_TEXT("jpeg"))) {
+		if (!iStrCmp(Ext, IL_TEXT("jpg")) || !iStrCmp(Ext, IL_TEXT("jpe")) ||
+			!iStrCmp(Ext, IL_TEXT("jpeg"))) {
 			return ilLoadJpeg(FileName);
 		}
 		#endif
@@ -1003,7 +1004,7 @@ ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 		#endif
 
 		#ifndef IL_NO_PSD
-		if (!iStrCmp(Ext, IL_TEXT("psd"))) {
+		if (!iStrCmp(Ext, IL_TEXT("psd")) || !iStrCmp(Ext, IL_TEXT("pdd"))) {
 			return ilLoadPsd(FileName);
 		}
 		#endif

@@ -52,7 +52,7 @@ ILubyte		*Cache = NULL;
 ILuint		CacheSize, CachePos;
 
 
-// Just preserves the current read functions and replaces
+/*// Just preserves the current read functions and replaces
 //	the current read functions with the default read funcs.
 ILvoid ILAPIENTRY iPreserveReadFuncs()
 {
@@ -82,7 +82,7 @@ ILvoid ILAPIENTRY iRestoreReadFuncs()
 	icloser = icloseCopy;
 
 	return;
-}
+}*/
 
 
 // Next 7 functions are the default read functions
@@ -383,7 +383,7 @@ ILuint ILAPIENTRY iReadFile(ILvoid *Buffer, ILuint Size, ILuint Number)
 
 	if (!UseCache) {
 		NumRead = ReadProc(Buffer, Size, Number, FileRead);
-		if (NumRead != NumRead)
+		if (NumRead != Number)
 			ilSetError(IL_FILE_READ_ERROR);
 		return NumRead;
 	}

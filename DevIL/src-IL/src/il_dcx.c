@@ -213,6 +213,7 @@ ILboolean iLoadDcxInternal()
 			ilTexImage(Image->Width, Image->Height, 1, Image->Bpp, Image->Format, Image->Type, Image->Data);
 			Base = iCurImage;
 			Base->Origin = IL_ORIGIN_UPPER_LEFT;
+			ilCloseImage(Image);
 		}
 		else {
 			iCurImage->Next = Image;
@@ -229,8 +230,8 @@ ILboolean iLoadDcxInternal()
 // Internal function to uncompress the .dcx (all .dcx files are rle compressed)
 ILimage *iUncompressDcx(DCXHEAD *Header)
 {
-	ILubyte		ByteHead, Colour, *Compressed, *ScanLine /* Only one plane */;
-	ILuint		c, i, x, y, StartPos, Read = 0;
+	ILubyte		ByteHead, Colour, *ScanLine /* Only one plane */;
+	ILuint		c, i, x, y, Read = 0;
 	ILimage		*Image;
 
 	if (Header->Bpp < 8) {
@@ -249,7 +250,8 @@ ILimage *iUncompressDcx(DCXHEAD *Header)
 
 	ScanLine = (ILubyte*)ialloc(Header->Bps);
 	if (ScanLine == NULL) {
-		return IL_FALSE;
+		ilCloseImage(Image);
+		return NULL;
 	}
 
 	switch (Image->Bpp)
@@ -260,6 +262,7 @@ ILimage *iUncompressDcx(DCXHEAD *Header)
 			Image->Pal.PalSize = 256 * 3; // Need to find out for sure...
 			Image->Pal.Palette = (ILubyte*)ialloc(Image->Pal.PalSize);
 			if (Image->Pal.Palette == NULL) {
+				ilCloseImage(Image);
 				ifree(ScanLine);
 				return NULL;
 			}
@@ -288,7 +291,7 @@ ILimage *iUncompressDcx(DCXHEAD *Header)
 
 
 	if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST) {
-		StartPos = itell();
+		/*StartPos = itell();
 		Compressed = (ILubyte*)ialloc(Image->SizeOfData * 4 / 3);
 		iread(Compressed, 1, Image->SizeOfData * 4 / 3);
 
@@ -316,15 +319,52 @@ ILimage *iUncompressDcx(DCXHEAD *Header)
 		}
 
 		ifree(Compressed);
-		iseek(StartPos + Read, IL_SEEK_SET);
+		iseek(StartPos + Read, IL_SEEK_SET);*/
+
+		iPreCache(iCurImage->SizeOfData);
+
+		for (y = 0; y < Image->Height; y++) {
+			for (c = 0; c < Image->Bpp; c++) {
+				x = 0;
+				while (x < Header->Bps) {
+					if (iread(&ByteHead, 1, 1) != 1) {
+						iUnCache();
+						ilCloseImage(Image);
+						return NULL;
+					}
+					if ((ByteHead & 0xC0) == 0xC0) {
+						ByteHead &= 0x3F;
+						if (iread(&Colour, 1, 1) != 1) {
+							iUnCache();
+							ilCloseImage(Image);
+							return NULL;
+						}
+						for (i = 0; i < ByteHead; i++) {
+							ScanLine[x++] = Colour;
+						}
+					}
+					else {
+						ScanLine[x++] = ByteHead;
+					}
+				}
+
+				for (x = 0; x < Image->Width; x++) {  // 'Cleverly' ignores the pad bytes ;)
+					Image->Data[y * Image->Bps + x * Image->Bpp + c] = ScanLine[x];
+				}
+			}
+		}
+
+		iUnCache();
 	}
 	else {
 		for (y = 0; y < Image->Height; y++) {
 			for (c = 0; c < Image->Bpp; c++) {
 				x = 0;
 				while (x < Header->Bps) {
-					if (iread(&ByteHead, 1, 1) != 1)
-						return IL_FALSE;
+					if (iread(&ByteHead, 1, 1) != 1) {
+						ilCloseImage(Image);
+						return NULL;
+					}
 					/*if ((ByteHead & BIT_7) && (ByteHead & BIT_6)) {
 						ClearBits(ByteHead, BIT_7);
 						ClearBits(ByteHead, BIT_6);
@@ -336,8 +376,10 @@ ILimage *iUncompressDcx(DCXHEAD *Header)
 					}*/
 					if ((ByteHead & 0xC0) == 0xC0) {
 						ByteHead &= 0x3F;
-						if (iread(&Colour, 1, 1) != 1)
-							return IL_FALSE;
+						if (iread(&Colour, 1, 1) != 1) {
+							ilCloseImage(Image);
+							return NULL;
+						}
 						for (i = 0; i < ByteHead; i++) {
 							ScanLine[x++] = Colour;
 						}
@@ -360,10 +402,12 @@ ILimage *iUncompressDcx(DCXHEAD *Header)
 	if (Image->Bpp == 1) {
 		ByteHead = igetc();	// the value 12, because it signals there's a palette for some reason...
 							//	We should do a check to make certain it's 12...
-		if (ByteHead != 12)  // Some Quake2 .dcx files don't have this byte for some reason.
+		if (ByteHead != 12)
 			iseek(-1, IL_SEEK_CUR);
-		if (iread(Image->Pal.Palette, 1, Image->Pal.PalSize) != Image->Pal.PalSize)
-			return IL_FALSE;
+		if (iread(Image->Pal.Palette, 1, Image->Pal.PalSize) != Image->Pal.PalSize) {
+			ilCloseImage(Image);
+			return NULL;
+		}
 	}
 
 	return Image;
@@ -395,6 +439,7 @@ ILimage *iUncompressDcxSmall(DCXHEAD *Header)
 			break;
 		default:
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
+			ilCloseImage(Image);
 			return NULL;
 	}
 
@@ -480,11 +525,11 @@ ILimage *iUncompressDcxSmall(DCXHEAD *Header)
 
 	return Image;
 
-	file_read_error:
-		if (ScanLine)
-			ifree(ScanLine);
-		ilCloseImage(Image);
-		return NULL;
+file_read_error:
+	if (ScanLine)
+		ifree(ScanLine);
+	ilCloseImage(Image);
+	return NULL;
 }
 
 #endif//IL_NO_DCX

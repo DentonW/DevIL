@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 02/02/2002 <--Y2K Compliant! =]
+// Last modified: 05/24/2002 <--Y2K Compliant! =]
 //
 // Filename: src-IL/src/il_states.c
 //
@@ -56,6 +56,9 @@ ILvoid ilDefaultStates()
 
 	ilStates[ilCurrentPos].ilQuantMode = IL_WU_QUANT;
 	ilStates[ilCurrentPos].ilNeuSample = 15;
+
+	ilStates[ilCurrentPos].ilKeepDxtcData = IL_FALSE;
+
 
 
 
@@ -348,6 +351,9 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 			break;
 		case IL_NEU_QUANT_SAMPLE:
 			*Param = ilStates[ilCurrentPos].ilNeuSample;
+			break;
+		case IL_KEEP_DXTC_DATA:
+			*Param = ilStates[ilCurrentPos].ilKeepDxtcData;
 			break;
 
 		case IL_IMAGE_WIDTH:
@@ -994,11 +1000,17 @@ ILvoid ILAPIENTRY ilSetInteger(ILenum Mode, ILint Param)
 				return;
 			}
 			break;
-
+		case IL_KEEP_DXTC_DATA:
+			if (Param == IL_FALSE || Param == IL_TRUE) {
+				ilStates[ilCurrentPos].ilKeepDxtcData = Param;
+				return;
+			}
+			break;
 
 
 		default:
 			ilSetError(IL_INVALID_ENUM);
+			return;
 	}
 
 	ilSetError(IL_INVALID_PARAM);  // Parameter not in valid bounds.
@@ -1032,6 +1044,8 @@ ILint iGetInt(ILenum Mode)
 			return ilStates[ilCurrentPos].ilQuantMode;
 		case IL_NEU_QUANT_SAMPLE:
 			return ilStates[ilCurrentPos].ilNeuSample;
+		case IL_KEEP_DXTC_DATA:
+			return ilStates[ilCurrentPos].ilKeepDxtcData;
 
 
 	}

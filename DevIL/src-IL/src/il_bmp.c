@@ -270,7 +270,7 @@ ILboolean iLoadBitmapInternal()
 ILboolean ilReadUncompBmp(BMPHEAD *Header)
 {
 	ILuint i, j, k, c, Read;
-	ILubyte Bpp, ByteData, PadSize, *Padded, *Temp;
+	ILubyte Bpp, ByteData, PadSize;
 
 	if (Header->biBitCount < 8)
 		Bpp = 1;  // We can't have an integral number less than one and greater than 0
@@ -354,31 +354,30 @@ ILboolean ilReadUncompBmp(BMPHEAD *Header)
 		{
 			case 1:
 				if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST) {
-					PadSize = (ILubyte)(((32 - (iCurImage->Width % 32)) / 8) % 4);  // Has to truncate
-					Padded = (ILubyte*)ialloc((iCurImage->Width / 8 + 4) * iCurImage->Height * 4 / 3);
-					iread(Padded, (iCurImage->Width / 8 + 4) * 4 / 3, iCurImage->Height);
-					Temp = Padded;
+					iPreCache(iCurImage->Width / 8 * iCurImage->Height);
 
+					PadSize = ((32 - (iCurImage->Width % 32)) / 8) % 4;  // Has to truncate
 					for (j = 0; j < iCurImage->Height; j++) {
 						Read = 0;
 						for (i = 0; i < iCurImage->Width; ) {
-							ByteData = *Temp++;
+							if (iread(&ByteData, 1, 1) != 1) {
+								iUnCache();
+								return IL_FALSE;
+							}
 							Read++;
 							k = 128;
 							for (c = 0; c < 8; c++) {
-								/*iCurImage->Data[j * iCurImage->Width + i] =
-									(!!(ByteData & k) == 1 ? 255 : 0);*/
 								iCurImage->Data[j * iCurImage->Width + i] = 
-									(!!(ByteData & k));
+									(!!(ByteData & k) == 1 ? 255 : 0);
 								k >>= 1;
 								if (++i >= iCurImage->Width)
 									break;
 							}
 						}
-						Temp += PadSize;
+						iseek(PadSize, IL_SEEK_CUR);
 					}
 
-					ifree(Padded);
+					iUnCache();
 				}
 				else {
 					PadSize = ((32 - (iCurImage->Width % 32)) / 8) % 4;  // Has to truncate
@@ -405,23 +404,24 @@ ILboolean ilReadUncompBmp(BMPHEAD *Header)
 
 			case 4:
 				if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST) {
-					PadSize = ((8 - (iCurImage->Width % 8)) / 2) % 4;  // Has to truncate
-					Padded = (ILubyte*)ialloc((iCurImage->Width / 2 + 4) * iCurImage->Height * 4 / 3);
-					iread(Padded, (iCurImage->Width / 2 + 4) * 4 / 3, iCurImage->Height);
-					Temp = Padded;
+					iPreCache(iCurImage->Width / 2 * iCurImage->Height);
 
+					PadSize = ((8 - (iCurImage->Width % 8)) / 2) % 4;  // Has to truncate
 					for (j = 0; j < iCurImage->Height; j++) {
 						for (i = 0; i < iCurImage->Width; i++) {
-							ByteData = *Temp++;
+							if (iread(&ByteData, 1, 1) != 1) {
+								iUnCache();
+								return IL_FALSE;
+							}
 							iCurImage->Data[j * iCurImage->Width + i] = ByteData >> 4;
 							if (++i == iCurImage->Width)
 								break;
 							iCurImage->Data[j * iCurImage->Width + i] = ByteData & 0x0F;
 						}
-						Temp += PadSize;
+						iseek(PadSize, IL_SEEK_CUR);
 					}
 
-					ifree(Padded);
+					iUnCache();
 				}
 				else {
 					PadSize = ((8 - (iCurImage->Width % 8)) / 2) % 4;  // Has to truncate
@@ -450,16 +450,18 @@ ILboolean ilReadUncompBmp(BMPHEAD *Header)
 		}
 		else {  // M$ requires lines to be padded if the widths aren't multiples of 4.
 			if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST) {
-				Padded = (ILubyte*)ialloc((iCurImage->Width + 4) * iCurImage->Height * iCurImage->Bpp * 4 / 3);
-				iread(Padded, iCurImage->Width + 4, iCurImage->Height * iCurImage->Bpp * 4 / 3);
-				Temp = Padded;
+				iPreCache(iCurImage->Width * iCurImage->Height);
 
+				PadSize = (4 - (iCurImage->Bps % 4));
 				for (i = 0; i < iCurImage->SizeOfPlane; i += iCurImage->Bps) {
-					memcpy(iCurImage->Data + i, Temp, iCurImage->Bps);
-					Temp += iCurImage->Bps + PadSize;
+					if (iread(iCurImage->Data + i, 1, iCurImage->Bps) != iCurImage->Bps) {
+						iUnCache();
+						return IL_FALSE;
+					}
+					iseek(PadSize, IL_SEEK_CUR);
 				}
 
-				ifree(Padded);
+				iUnCache();
 			}
 			else {
 				PadSize = (4 - (iCurImage->Bps % 4));

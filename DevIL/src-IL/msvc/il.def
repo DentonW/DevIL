@@ -33,6 +33,7 @@ ilGetClear
 ilGetCurImage
 ilGetCurName
 ilGetData
+ilGetDXTCData
 ilGetError
 ilGetInteger
 ilGetIntegerv

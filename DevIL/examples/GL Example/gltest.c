@@ -1,12 +1,12 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib GL Test Source
-// Copyright (C) 2000 by Denton Woods
-// Last modified:  05/17/2002 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 05/17/2002 <--Y2K Compliant! =]
 //
-// Filename:  examples/gl example/gl example.c
+// Filename: examples/gl example/gl example.c
 //
-// Description:  Sample implementation of an OpenGL image viewer.
+// Description: Sample implementation of an OpenGL image viewer.
 //
 //-----------------------------------------------------------------------------
 
@@ -18,16 +18,17 @@
 #else
 #include <GL/glut.h>
 #endif
+
+#ifdef  _DEBUG
+#define IL_DEBUG
+#endif//_DEBUG
+
 #include <IL/il.h>
 #include <IL/ilu.h>
 #include <IL/ilut.h>
 #include "gltest.h"
 #include <math.h>
 #include <string.h>
-
-#ifdef  _DEBUG
-#define IL_DEBUG
-#endif//_DEBUG
 
 //
 // Easier to do this than change the project's settings in MSVC++. (I'm lazy!)

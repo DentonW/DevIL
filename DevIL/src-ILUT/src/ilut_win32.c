@@ -132,6 +132,13 @@ ILubyte* ILAPIENTRY iGetPaddedData(ILimage *Image)
 }
 
 
+ILvoid ILAPIENTRY ilutFreePaddedData(ILubyte *Data)
+{
+	ifree(Data);
+	return;
+}
+
+
 // DirectX/GDI insists that all scanlines end on a dword boundary. =(
 ILubyte* ILAPIENTRY ilutGetPaddedData()
 {

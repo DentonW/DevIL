@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/15/2002 <--Y2K Compliant! =]
+// Last modified: 05/25/2002 <--Y2K Compliant! =]
 //
 // Filename: il/il.h
 //
@@ -346,6 +346,7 @@ typedef void			ILvoid;
 #define IL_DXT4								0x0709
 #define IL_DXT5								0x070A
 #define IL_DXT_NO_COMP						0x070B
+#define IL_KEEP_DXTC_DATA					0x070C
 
 
 // Cube map definitions
@@ -484,6 +485,7 @@ ILAPI ILubyte*		ILAPIENTRY ilGetAlpha(ILenum Type);
 ILAPI ILboolean		ILAPIENTRY ilGetBoolean(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilGetBooleanv(ILenum Mode, ILboolean *Param);
 ILAPI ILubyte*		ILAPIENTRY ilGetData(ILvoid);
+ILAPI ILuint		ILAPIENTRY ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize, ILenum DXTCFormat);
 ILAPI ILenum		ILAPIENTRY ilGetError(ILvoid);
 ILAPI ILint			ILAPIENTRY ilGetInteger(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param);

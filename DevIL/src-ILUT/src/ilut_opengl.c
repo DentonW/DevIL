@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Toolkit Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 05/28/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 05/25/2002 <--Y2K Compliant! =]
 //
-// Filename: openilut/opengl.c
+// Filename: src-ILUT/src/ilut_opengl.c
 //
 // Description: OpenGL functions for images
 //
@@ -25,6 +25,7 @@
 
 
 ILint MaxTexW = 256, MaxTexH = 256;  // maximum texture widths and heights
+ILGLCOMPRESSEDTEXIMAGE2DARBPROC ilGLCompressed2D = NULL;
 
 
 // Absolutely *have* to call this if planning on using the image library with OpenGL.
@@ -50,6 +51,14 @@ ILboolean ilutGLInit()
     glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
     glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
+
+#if _WIN32
+	if (IsExtensionSupported("GL_ARB_texture_compression") &&
+		IsExtensionSupported("GL_EXT_texture_compression_s3tc")) {
+			ilGLCompressed2D = (ILGLCOMPRESSEDTEXIMAGE2DARBPROC)
+				wglGetProcAddress("glCompressedTexImage2DARB");
+	}
+#endif
 
 	return IL_TRUE;
 }
@@ -97,15 +106,69 @@ GLuint ILAPIENTRY ilutGLBindTexImage()
 }
 
 
+ILuint GetDXTCNum(ILenum DXTCFormat)
+{
+	switch (DXTCFormat)
+	{
+		// Constants from glext.h.
+		case IL_DXT1:
+			DXTCFormat = 0x83F1;
+			break;
+		case IL_DXT3:
+			DXTCFormat = 0x83F2;
+			break;
+		case IL_DXT5:
+			DXTCFormat = 0x83F3;
+			break;
+	}
+
+	return DXTCFormat;
+}
+
+
 // We assume *all* states have been set by the user, including 2d texturing!
 ILboolean ILAPIENTRY ilutGLTexImage(GLuint Level)
 {
 	ILimage	*Image;
+	ILenum	DXTCFormat;
+	ILuint	Size;
+	ILubyte	*Buffer;
 
 	ilutCurImage = ilGetCurImage();
 	if (ilutCurImage == NULL) {
 		ilSetError(ILUT_ILLEGAL_OPERATION);
 		return IL_FALSE;
+	}
+
+	if (ilutGetBoolean(ILUT_GL_USE_S3TC)) {
+		if (ilutCurImage->DxtcData != NULL && ilutCurImage->DxtcSize != 0 && ilGLCompressed2D != NULL) {
+			DXTCFormat = GetDXTCNum(ilutCurImage->DxtcFormat);
+			ilGLCompressed2D(GL_TEXTURE_2D, 0, DXTCFormat, ilutCurImage->Width,
+				ilutCurImage->Height, 0, ilutCurImage->DxtcSize, ilutCurImage->DxtcData);
+			return IL_TRUE;
+		}
+
+		if (ilutGetBoolean(ILUT_GL_GEN_S3TC) && ilGLCompressed2D != NULL) {
+			DXTCFormat = ilutGetInteger(ILUT_S3TC_FORMAT);
+
+			Size = ilGetDXTCData(NULL, 0, DXTCFormat);
+			if (Size != 0) {
+				Buffer = (ILubyte*)ialloc(Size);
+				if (Buffer == NULL)
+					return IL_FALSE;
+				Size = ilGetDXTCData(Buffer, Size, DXTCFormat);
+				if (Size == 0) {
+					ifree(Buffer);
+					return IL_FALSE;
+				}
+
+				DXTCFormat = GetDXTCNum(DXTCFormat);
+				ilGLCompressed2D(GL_TEXTURE_2D, 0, DXTCFormat, ilutCurImage->Width,
+					ilutCurImage->Height, 0, Size, Buffer);
+				ifree(Buffer);
+				return IL_TRUE;
+			}
+		}
 	}
 
 	Image = MakeGLCompliant(ilutCurImage);
@@ -114,6 +177,7 @@ ILboolean ILAPIENTRY ilutGLTexImage(GLuint Level)
 
 	glTexImage2D(GL_TEXTURE_2D, 0, ilutGLFormat(Image->Format, Image->Bpp), Image->Width,
 				Image->Height, 0, Image->Format, Image->Type, Image->Data);
+
 
 	if (Image != ilutCurImage)
 		ilCloseImage(Image);
@@ -384,5 +448,38 @@ ILenum ilutGLFormat(ILenum Format, ILubyte Bpp)
 
 	return Bpp;
 }
+
+
+// From http://www.opengl.org/News/Special/OGLextensions/OGLextensions.html
+//	Should we make this accessible outside the lib?
+ILboolean IsExtensionSupported(const char *extension)
+{
+	const GLubyte *extensions;// = NULL;
+	const GLubyte *start;
+	GLubyte *where, *terminator;
+
+	/* Extension names should not have spaces. */
+	where = (GLubyte *) strchr(extension, ' ');
+	if (where || *extension == '\0')
+		return IL_FALSE;
+	extensions = glGetString(GL_EXTENSIONS);
+	if (!extensions)
+		return IL_FALSE;
+	/* It takes a bit of care to be fool-proof about parsing the
+		OpenGL extensions string. Don't be fooled by sub-strings, etc. */
+	start = extensions;
+	for (;;) {
+		where = (GLubyte *)strstr((const char *) start, extension);
+		if (!where)
+			break;
+		terminator = where + strlen(extension);
+		if (where == start || *(where - 1) == ' ')
+		if (*terminator == ' ' || *terminator == '\0')
+			return IL_TRUE;
+		start = terminator;
+	}
+	return IL_FALSE;
+}
+
 
 #endif//ILUT_USE_OPENGL

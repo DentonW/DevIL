@@ -32,7 +32,8 @@ ILboolean ilIsValidPnm(const ILstring FileName)
 
 	if (   !iCheckExtension(FileName, IL_TEXT("pbm"))
 		&& !iCheckExtension(FileName, IL_TEXT("pgm"))
-		&& !iCheckExtension(FileName, IL_TEXT("ppm"))) {
+		&& !iCheckExtension(FileName, IL_TEXT("ppm"))
+		&& !iCheckExtension(FileName, IL_TEXT("pnm"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bPnm;
 	}

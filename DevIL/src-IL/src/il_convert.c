@@ -289,6 +289,7 @@ ILboolean ILAPIENTRY ilConvertImage(ILenum DestFormat, ILenum DestType)
 	//ilCopyImageAttr(iCurImage, Image);  // Destroys subimages.
 
 	// We don't copy the colour profile here, since it stays the same.
+	//	Same with the DXTC data.
 	iCurImage->Format = DestFormat;
 	iCurImage->Type = DestType;
 	iCurImage->Bpc = ilGetBppType(DestType);
