@@ -70,7 +70,8 @@ extern "C" {
 #define ILU_UPPER_RIGHT						0x0704
 #define ILU_CENTER							0x0705
 #define ILU_CONVOLUTION_MATRIX				0x0710
-#define ILU_VERSION_NUM						0x0DE2
+#define ILU_VERSION_NUM						IL_VERSION_NUM
+#define ILU_VENDOR							IL_VENDOR
 
 
 // Filters
