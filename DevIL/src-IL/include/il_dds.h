@@ -75,7 +75,7 @@ typedef struct Color888
 typedef struct Color565
 {
 	unsigned nBlue  : 5;		// order of names changes
-	unsigned nGreen : 6;		//	byte order of output to 32 bit
+	unsigned nGreen : 6;		//  byte order of output to 32 bit
 	unsigned nRed	: 5;
 } Color565;
 
@@ -151,18 +151,15 @@ enum PixFormat
 	PF_LUMINANCE,
 	PF_LUMINANCE_ALPHA,
 	PF_RXGB, //Doom3 normal maps
+	PF_A16B16G16R16,
+	PF_R16F,
+	PF_G16R16F,
+	PF_A16B16G16R16F,
+	PF_R32F,
+	PF_G32R32F,
+	PF_A32B32G32R32F,
 	PF_UNKNOWN = 0xFF
 };
-
-// Global variables
-extern DDSHEAD	Head;			// Image header
-extern ILubyte	*CompData;		// Compressed data
-extern ILuint	CompSize;		// Compressed size
-extern ILuint	CompLineSize;		// Compressed line size
-extern ILuint	CompFormat;		// Compressed format
-extern ILimage	*Image;
-extern ILint	Width, Height, Depth;
-extern ILuint	BlockSize;
 
 #define CUBEMAP_SIDES 6
 
@@ -184,6 +181,7 @@ ILboolean	DecompressDXT4(ILvoid);
 ILboolean	DecompressDXT5(ILvoid);
 ILboolean	Decompress3Dc(ILvoid);
 ILboolean	DecompressRXGB(ILvoid);
+ILboolean	DecompressFloat(ILvoid);
 ILvoid		CorrectPreMult(ILvoid);
 ILvoid		GetBitsFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight);
 ILboolean	iSaveDdsInternal(ILvoid);

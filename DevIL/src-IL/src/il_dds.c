@@ -203,23 +203,59 @@ ILboolean ilLoadDdsL(ILvoid *Lump, ILuint Size)
 	return iLoadDdsInternal();
 }
 
+ILubyte iCompFormatToBpp(ILenum Format)
+{
+	if (Format == PF_RGB || Format == PF_3DC || Format == PF_RXGB)
+		return 3;
+	else if (Format == PF_LUMINANCE)
+		return 1;
+	else if (Format == PF_LUMINANCE_ALPHA || Format == PF_R16F)
+		return 2;
+	else if (Format == PF_A16B16G16R16 || Format == PF_A16B16G16R16F
+		|| Format == PF_G32R32F)
+		return 8;
+	else if (Format == PF_A32B32G32R32F)
+		return 16;
+	else //if (Format == PF_ARGB || Format == PF_G16R16F || Format == PF_R32F || dxt)
+		return 4;
+}
+
+ILubyte iCompFormatToBpc(ILenum Format)
+{
+	if (Format == PF_R16F || Format == PF_G16R16F || Format == PF_A16B16G16R16F)
+		//DevIL has no internal half type, so these formats are converted to 32 bits
+		return 4;
+	else if (Format == PF_R32F || Format == PF_G32R32F || Format == PF_A32B32G32R32F)
+		return 4;
+	else if(Format == PF_A16B16G16R16)
+		return 2;
+	else
+		return 1;
+}
+
+ILubyte iCompFormatToChannelCount(ILenum Format)
+{
+	if (Format == PF_RGB || Format == PF_3DC || Format == PF_RXGB)
+		return 3;
+	else if (Format == PF_LUMINANCE || Format == PF_R16F || Format == PF_R32F)
+		return 1;
+	else if (Format == PF_LUMINANCE_ALPHA || Format == PF_G16R16F || Format == PF_G32R32F)
+		return 2;
+	else //if(Format == PF_ARGB || dxt)
+		return 4;
+}
 
 ILboolean iLoadDdsCubemapInternal()
 {
 	ILuint	i;
-	ILubyte	Bpp;
+	ILubyte	Bpp, Channels, Bpc;
 	ILimage *startImage;
 
 	CompData = NULL;
 
-	if (CompFormat == PF_RGB || CompFormat == PF_3DC || CompFormat == PF_RXGB)
-		Bpp = 3;
-	else if (CompFormat == PF_LUMINANCE)
-		Bpp = 1;
-	else if (CompFormat == PF_LUMINANCE_ALPHA)
-		Bpp = 2;
-	else
-		Bpp = 4;
+	Bpp = iCompFormatToBpp(CompFormat);
+	Channels = iCompFormatToChannelCount(CompFormat);
+	Bpc = iCompFormatToBpc(CompFormat);
 
 	startImage = Image;
 	// run through cube map possibilities
@@ -230,11 +266,24 @@ ILboolean iLoadDdsCubemapInternal()
 		Depth = Head.Depth;
 		if (Head.ddsCaps2 & CubemapDirections[i]) {
 			if (i != 0) {
-				Image->Next = ilNewImage(Width, Height, Depth, Bpp, 1);
+				Image->Next = ilNewImage(Width, Height, Depth, Channels, Bpc);
 				if (Image->Next == NULL)
 					return IL_FALSE;
 
 				Image = Image->Next;
+
+				if (CompFormat == PF_R16F
+					|| CompFormat == PF_G16R16F
+					|| CompFormat == PF_A16B16G16R16F
+					|| CompFormat == PF_R32F
+					|| CompFormat == PF_G32R32F
+					|| CompFormat == PF_A32B32G32R32F) {
+					//DevIL's format autodetection doesn't work for
+					//float images...correct this
+					Image->Type = IL_FLOAT;
+					Image->Bpp = Channels;
+				}
+
 				startImage->NumNext++;
 				ilBindImage(ilGetCurName()); // Set to parent image first.
 				ilActiveImage(i); //now Image == iCurImage...globals SUCK, fix this!!!
@@ -407,6 +456,41 @@ ILuint DecodePixelFormat()
 				BlockSize *= 16;
 				break;
 
+			case IL_MAKEFOURCC('$', '\0', '\0', '\0'):
+				CompFormat = PF_A16B16G16R16;
+				BlockSize = Head.Width * Head.Height * Head.Depth * 8;
+				break;
+
+			case IL_MAKEFOURCC('o', '\0', '\0', '\0'):
+				CompFormat = PF_R16F;
+				BlockSize = Head.Width * Head.Height * Head.Depth * 2;
+				break;
+
+			case IL_MAKEFOURCC('p', '\0', '\0', '\0'):
+				CompFormat = PF_G16R16F;
+				BlockSize = Head.Width * Head.Height * Head.Depth * 4;
+				break;
+
+			case IL_MAKEFOURCC('q', '\0', '\0', '\0'):
+				CompFormat = PF_A16B16G16R16F;
+				BlockSize = Head.Width * Head.Height * Head.Depth * 8;
+				break;
+
+			case IL_MAKEFOURCC('r', '\0', '\0', '\0'):
+				CompFormat = PF_R32F;
+				BlockSize = Head.Width * Head.Height * Head.Depth * 4;
+				break;
+
+			case IL_MAKEFOURCC('s', '\0', '\0', '\0'):
+				CompFormat = PF_G32R32F;
+				BlockSize = Head.Width * Head.Height * Head.Depth * 8;
+				break;
+
+			case IL_MAKEFOURCC('t', '\0', '\0', '\0'):
+				CompFormat = PF_A32B32G32R32F;
+				BlockSize = Head.Width * Head.Height * Head.Depth * 16;
+				break;
+
 			default:
 				CompFormat = PF_UNKNOWN;
 				BlockSize *= 16;
@@ -456,6 +540,8 @@ ILvoid AdjustVolumeTexture(DDSHEAD *Head)
 		case PF_RGB:
 		case PF_LUMINANCE:
 		case PF_LUMINANCE_ALPHA:
+			//don't use the iCompFormatToBpp() function because this way
+			//argb images with only 8 bits (eg. a1r2g3b2) work as well
 			Head->LinearSize = IL_MAX(1,Head->Width) * IL_MAX(1,Head->Height) *
 				(Head->RGBBitCount / 8);
 			break;
@@ -471,6 +557,17 @@ ILvoid AdjustVolumeTexture(DDSHEAD *Head)
 		case PF_3DC:
 		case PF_RXGB:
 			Head->LinearSize = IL_MAX(1,Head->Width/4) * IL_MAX(1,Head->Height/4) * 16;
+			break;
+
+		case PF_A16B16G16R16:
+		case PF_R16F:
+		case PF_G16R16F:
+		case PF_A16B16G16R16F:
+		case PF_R32F:
+		case PF_G32R32F:
+		case PF_A32B32G32R32F:
+			Head->LinearSize = IL_MAX(1,Head->Width) * IL_MAX(1,Head->Height) *
+				iCompFormatToBpp(CompFormat);
 			break;
 	}
 
@@ -562,6 +659,24 @@ ILboolean AllocImage()
 			if (!ilTexImage(Width, Height, Depth, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL))
 				return IL_FALSE;
 			break;
+
+		case PF_A16B16G16R16:
+			if (!ilTexImage(Width, Height, Depth, iCompFormatToChannelCount(CompFormat),
+				ilGetFormatBpp(iCompFormatToChannelCount(CompFormat)), IL_UNSIGNED_SHORT, NULL))
+				return IL_FALSE;
+			break;
+
+		case PF_R16F:
+		case PF_G16R16F:
+		case PF_A16B16G16R16F:
+		case PF_R32F:
+		case PF_G32R32F:
+		case PF_A32B32G32R32F:
+			if (!ilTexImage(Width, Height, Depth, iCompFormatToChannelCount(CompFormat),
+				ilGetFormatBpp(iCompFormatToChannelCount(CompFormat)), IL_FLOAT, NULL))
+				return IL_FALSE;
+			break;
+
 		default:
 			if (CompFormat == PF_RXGB) {
 				channels = 3; //normal map
@@ -618,6 +733,20 @@ ILboolean Decompress()
 		case PF_RXGB:
 			return DecompressRXGB();
 
+		case PF_A16B16G16R16:
+			memcpy(Image->Data, CompData, Image->SizeOfData);
+			return IL_TRUE;
+
+
+		case PF_R16F:
+		case PF_G16R16F:
+		case PF_A16B16G16R16F:
+		case PF_R32F:
+		case PF_G32R32F:
+		case PF_A32B32G32R32F:
+			return DecompressFloat();
+
+
 		case PF_UNKNOWN:
 			return IL_FALSE;
 	}
@@ -629,19 +758,14 @@ ILboolean Decompress()
 ILboolean ReadMipmaps()
 {
 	ILuint	i, CompFactor=0;
-	ILubyte	Bpp;
+	ILubyte	Bpp, Channels, Bpc;
 	ILimage	*StartImage, *TempImage;
 	ILuint	LastLinear;
 	ILuint	minW, minH;
 
-	if (CompFormat == PF_RGB || CompFormat == PF_3DC || CompFormat == PF_RXGB)
-		Bpp = 3;
-	else if (CompFormat == PF_LUMINANCE)
-		Bpp = 1;
-	else if (CompFormat == PF_LUMINANCE_ALPHA)
-		Bpp = 2;
-	else
-		Bpp = 4;
+	Bpp = iCompFormatToBpp(CompFormat);
+	Channels = iCompFormatToChannelCount(CompFormat);
+	Bpc = iCompFormatToBpc(CompFormat);
 
 	//This doesn't work for images which first mipmap (= the image
 	//itself) has width or height < 4
@@ -693,21 +817,35 @@ ILboolean ReadMipmaps()
 			Height = 1;
 
 		//TODO: mipmaps don't keep DXT data???
-		Image->Next = ilNewImage(Width, Height, Depth, Bpp, 1);
+		Image->Next = ilNewImage(Width, Height, Depth, Channels, Bpc);
 		if (Image->Next == NULL)
 			goto mip_fail;
 		Image = Image->Next;
 		Image->Origin = IL_ORIGIN_UPPER_LEFT;
 
 		if (Head.Flags1 & DDS_LINEARSIZE) {
-			if (CompFormat != PF_RGB && CompFormat != PF_ARGB
+			if (CompFormat == PF_R16F
+				|| CompFormat == PF_G16R16F
+				|| CompFormat == PF_A16B16G16R16F
+				|| CompFormat == PF_R32F
+				|| CompFormat == PF_G32R32F
+				|| CompFormat == PF_A32B32G32R32F) {
+				Head.LinearSize = Width * Height * Depth * Bpp;
+
+				//DevIL's format autodetection doesn't work for
+				//float images...correct this
+				Image->Type = IL_FLOAT;
+				Image->Bpp = Channels;
+			}
+			else if (CompFormat != PF_RGB && CompFormat != PF_ARGB
 				&& CompFormat != PF_LUMINANCE
-				&& CompFormat != PF_LUMINANCE_ALPHA){
+				&& CompFormat != PF_LUMINANCE_ALPHA) {
 				minW = IL_MAX(4, Width);
 				minH = IL_MAX(4, Height);
 				Head.LinearSize = (minW * minH * Depth * Bpp) / CompFactor;
 			}
 			else {
+				//don't use Bpp to support argb images with less than 32 bits
 				Head.LinearSize = Width * Height * Depth * (Head.RGBBitCount >> 3);
 			}
 		}
@@ -1280,6 +1418,109 @@ ILboolean DecompressRXGB()
 	return IL_TRUE;
 }
 
+//stolen from OpenEXR
+unsigned int
+halfToFloat (unsigned short y)
+{
+
+	int s = (y >> 15) & 0x00000001;
+	int e = (y >> 10) & 0x0000001f;
+	int m =  y		  & 0x000003ff;
+
+	if (e == 0)
+	{
+		if (m == 0)
+		{
+			//
+			// Plus or minus zero
+			//
+
+			return s << 31;
+		}
+		else
+		{
+			//
+			// Denormalized number -- renormalize it
+			//
+
+			while (!(m & 0x00000400))
+			{
+				m <<= 1;
+				e -=  1;
+			}
+
+			e += 1;
+			m &= ~0x00000400;
+		}
+	}
+	else if (e == 31)
+	{
+		if (m == 0)
+		{
+			//
+			// Positive or negative infinity
+			//
+
+			return (s << 31) | 0x7f800000;
+		}
+		else
+		{
+			//
+			// Nan -- preserve sign and significand bits
+			//
+
+			return (s << 31) | 0x7f800000 | (m << 13);
+		}
+	}
+
+	//
+	// Normalized number
+	//
+
+	e = e + (127 - 15);
+	m = m << 13;
+
+	//
+	// Assemble s, e and m.
+	//
+
+	return (s << 31) | (e << 23) | m;
+}
+
+
+ILboolean iConvFloat16ToFloat32(ILuint* dest, ILushort* src, ILuint size)
+{
+	ILuint i;
+	for(i = 0; i < size; ++i, ++dest, ++src) {
+		//float: 1 sign bit, 8 exponent bits, 23 mantissa bits
+		//half: 1 sign bit, 5 exponent bits, 10 mantissa bits
+		*dest = halfToFloat(*src);
+
+	}
+	return IL_TRUE;
+}
+
+ILboolean DecompressFloat()
+{
+	if(Head.FourCC == IL_MAKEFOURCC('$', '\0', '\0', '\0'))
+		Image->Format = IL_BGRA;
+
+	switch(CompFormat)
+	{
+		case PF_R32F:
+		case PF_G32R32F:
+		case PF_A32B32G32R32F:
+			memcpy(Image->Data, CompData, Image->SizeOfData);
+			return IL_TRUE;
+		case PF_R16F:
+		case PF_G16R16F:
+		case PF_A16B16G16R16F:
+			return iConvFloat16ToFloat32((ILuint*)Image->Data, (ILushort*)CompData,
+				Image->Width * Image->Height * Image->Depth * Image->Bpp);
+		default:
+			return IL_FALSE;
+	}
+}
 
 ILvoid CorrectPreMult()
 {
@@ -1299,7 +1540,7 @@ ILvoid CorrectPreMult()
 
 ILboolean DecompressARGB()
 {
-	ILuint	i, ReadI, RedL, RedR, GreenL, GreenR, BlueL, BlueR, AlphaL, AlphaR;
+	ILuint	i, ReadI, RedL, RedR, GreenL, GreenR, BlueL, BlueR, AlphaL, AlphaR, TempBpp;
 	ILubyte	*Temp;
 
 	if (!CompData)
@@ -1310,26 +1551,29 @@ ILboolean DecompressARGB()
 	GetBitsFromMask(Head.BBitMask, &BlueL, &BlueR);
 	GetBitsFromMask(Head.RGBAlphaBitMask, &AlphaL, &AlphaR);
 	Temp = CompData;
+	TempBpp = Head.RGBBitCount / 8;
 
 	for (i = 0; i < Image->SizeOfData; i += Image->Bpp) {
 
 		//TODO: This is SLOOOW...
 		//but the old version crashed in release build under
-		//winxp (and xp is right that it crahes - I always
+		//winxp (and xp is right to stop this code - I always
 		//wondered that it worked the old way at all)
-		if (Image->Bpp == 4)
-			ReadI = *((ILuint*)Temp);
-		if (Image->Bpp == 3) { //this branch is extra-SLOOOW
-			ReadI =
-				*((ILubyte*)Temp)
-				| (*((ILubyte*)(Temp + 1)) << 8)
-				| (*((ILubyte*)(Temp + 2)) << 16);
+		if (Image->SizeOfData - i < 4) { //less than 4 byte to write?
+			if (TempBpp == 3) { //this branch is extra-SLOOOW
+				ReadI =
+					*((ILubyte*)Temp)
+					| (*((ILubyte*)(Temp + 1)) << 8)
+					| (*((ILubyte*)(Temp + 2)) << 16);
+			}
+			else if (TempBpp == 1)
+				ReadI = *((ILubyte*)Temp);
+			else if (TempBpp == 2)
+				ReadI = *((ILushort*)Temp);
 		}
-		else if (Image->Bpp == 1)
-			ReadI = *((ILubyte*)Temp);
-		else if (Image->Bpp == 2)
-		  ReadI = *((ILushort*)Temp);
-		Temp += (Head.RGBBitCount / 8);
+		else
+			ReadI = *((ILuint*)Temp); //read 4 bytes at once, faster
+		Temp += TempBpp;
 
 		Image->Data[i] = ((ReadI & Head.RBitMask) >> RedR) << RedL;
 
