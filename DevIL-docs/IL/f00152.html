@@ -1,0 +1,240 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>DevIL Documentation, ilLoad, ilLoadF, ilLoadL</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
+</font>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="RIGHT">
+<td align="LEFT"><font color="white">DevIL Documentation</font>
+</td>
+<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00127.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00039.html">Next</a> </td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilLoad, ilLoadF, ilLoadL</font></h2>
+
+<p><font face="verdana"><font size="-1">These functions load a
+specific type of image from a file, file handle or memory
+"lump".</font></font></p>
+
+<pre>
+<font face="verdana"><code><b>ILboolean ilLoad(
+  ILenum</b> <i>Type,</i> <b> char</b> <i>*FileName</i><b>);
+<br>
+ILboolean ilLoadF(
+  ILenum</b> <i>Type,</i> <b> ILHANDLE</b> <i>File</i><b>);
+<br>
+ILboolean ilLoadL(
+  ILenum</b> <i>Type,</i> <b> ILvoid</b> <i>*Lump,</i> <b> ILuint</b> <i>Size</i><b>);</b>
+</code></font>
+</pre>
+
+<font face="verdana"><br>
+</font>
+<h4><font face="verdana">Parameters</font></h4>
+
+<dl>
+<dt><font face="verdana"><font size=
+"-1"><i>Type</i></font></font></dt>
+
+<dd>
+<dl>
+<dt><font face="verdana"><font size=
+"-1">IL_TYPE_UNKNOWN</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Tells OpenIL to try to
+determine the type of image present in <i>FileName</i>, <i>File</i>
+or <i>Lump</i>.</font></font></dd>
+
+<dt><font face="verdana"><font size="-1">IL_BMP</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Load the image as a
+Microsoft bitmap (.bmp).</font></font></dd>
+
+<dt><font face="verdana"><font size="-1">IL_CUT</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Load the image as a .cut
+image.</font></font></dd>
+
+<dt><font face="verdana"><font size="-1">IL_DOOM</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Load the image as a Doom
+texture.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1">IL_DOOM_FLAT</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Load the image as a Doom
+flat (floor).</font></font></dd>
+
+<dt><font face="verdana"><font size="-1">IL_ICO</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Load the image as a
+Microsoft icon (.ico).</font></font></dd>
+
+<dt><font face="verdana"><font size="-1">IL_JPG</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Load the image as a Jpeg
+(.jpg).</font></font></dd>
+
+<dt><font face="verdana"><font size="-1">IL_LBM</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Load the image as a .lbm
+image.</font></font></dd>
+
+<dt><font face="verdana"><font size="-1">IL_PCD</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Load the image as a .pcd
+image.</font></font></dd>
+
+<dt><font face="verdana"><font size="-1">IL_PCX</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Load the image as a
+PCX.</font></font></dd>
+
+<dt><font face="verdana"><font size="-1">IL_PIC</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Load the image as a .pic
+image.</font></font></dd>
+
+<dt><font face="verdana"><font size="-1">IL_PNG</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Load the image as a
+Portable Network Graphics (.png) image.</font></font></dd>
+
+<dt><font face="verdana"><font size="-1">IL_PNM</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Load the image as a
+Portable AnyMap (.pbm, .pgm or .ppm).</font></font></dd>
+
+<dt><font face="verdana"><font size="-1">IL_SGI</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Load the image as a SGI
+(.bw, .rgb, .rgba or .sgi).</font></font></dd>
+
+<dt><font face="verdana"><font size="-1">IL_TGA</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Load the image as a
+TrueVision Targa.</font></font></dd>
+
+<dt><font face="verdana"><font size="-1">IL_TIF</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Load the image as a TIFF
+(.tif or .tiff) image.</font></font></dd>
+
+<dt><font face="verdana"><font size="-1">IL_RAW</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Load the image as raw data
+with a 13-byte header.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1">IL_JASC_PAL</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Load the file into the
+current image's palette as a Paint Shop Pro (Jasc)
+palette.</font></font></dd>
+</dl>
+</dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>FileName</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">The filename of a file to
+open.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>File</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Pointer to a file handle
+to read from.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Lump</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Pointer to a memory "lump"
+to read from.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Size</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Size of the memory "lump".
+If zero, no bounds-checking is done.</font></font></dd>
+</dl>
+
+<br>
+<br>
+<font face="verdana"><font size="-1"></font></font>
+<h4><font face="verdana">Remarks</font></h4>
+
+<p><font face="verdana"><font size="-1"><b>ilLoad</b> can be used
+much in the same way <a href="./f00039.html">ilLoadImage</a> is
+used, except with <b>ilLoad</b>, it is possible to force OpenIL to
+load a file as a specific image format, no matter what the
+extension. <b>ilLoadF</b> is useful for when an image is being read
+from some type of resource or .pak-type file, as is <b>ilLoadL</b>.
+To provide support for other languages than C/C++, <a href=
+"./f00056.html">ilSetFileCallbacks</a> was introduced to allow
+loading from file handles in these languages via
+<b>ilLoadF</b>.</font></font></p>
+
+<p><font face="verdana"><font size="-1">Due to limitations in the
+external libraries used, <b>ilLoadF</b> and <b>ilLoadL</b> do not
+support all the formats <b>ilLoad</b> does. <b>ilLoadF</b> is
+missing support for IL_TIF images. <b>ilLoadL</b> also lacks
+support for the IL_TIF format.</font></font></p>
+
+<h4><font face="verdana">Error Codes</font></h4>
+
+<p><font face="verdana"><font size="-1">IL_ILLEGAL_OPERATION -
+There is currently no image bound. Use <a href=
+"./f00026.html">ilGenImages</a> and <a href=
+"./f00013.html">ilBindImage</a> before calling this function.<br>
+ IL_COULD_NOT_OPEN_FILE - The file pointed to by <i>FileName</i>
+could not be opened. Either the file does not exist or is in use by
+another process.<br>
+ IL_INVALID_ENUM - <i>Type</i> was of an invalid value.<br>
+ IL_INVALID_PARAM - <i>FileName</i>, <i>File</i> or <i>Lump</i> was
+NULL.<br>
+ IL_INVALID_FILE_HEADER - The file had an invalid header and could
+not be loaded.<br>
+ IL_ILLEGAL_FILE_VALUE - The file could not be loaded due to an
+invalid value present.<br>
+ IL_OUT_OF_MEMORY - Could not allocate memory for the new image
+data.<br>
+ IL_LIB_JPEG_ERROR - Error occurred when trying to load a jpeg.<br>
+ IL_LIB_PNG_ERROR - Error occurred when trying to load a
+png.</font></font></p>
+
+<h4><font face="verdana">See Also</font></h4>
+
+<p><font face="verdana"><font size="-1"><a href=
+"./f00026.html">ilGenImages</a>, <a href=
+"./f00013.html">ilBindImage</a>, <a href=
+"./f00039.html">ilLoadImage</a>, <a href=
+"./f00164.html">ilSave</a>, <a href=
+"./f00053.html">ilSaveImage</a>, <a href=
+"./f00056.html">ilSetFileCallbacks</a></font></font></p>
+
+<font face="verdana"><font size="-1"><br>
+</font></font>
+</body>
+</html>
+

@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>DevIL Documentation, ilSetRead</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
+</font>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="RIGHT">
+<td align="LEFT"><font color="white">DevIL Documentation</font>
+</td>
+<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00180.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00161.html">Next</a> </td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilSetRead</font></h2>
+
+<p><font face="verdana"><font size="-1">The <b>ilSetRead</b>
+function changes the reading file functions used by
+DevIL.</font></font></p>
+
+<pre>
+<font face="verdana"><code><b>ILvoid ilSetRead(
+  fOpenRProc</b> <i>Open,</i> <b> fCloseRProc</b> <i>Close,</i> <b> fEofProc</b> <i>Eof,</i> <b> fGetcProc</b> <i>Getc,</i> <b> fReadProc</b> <i>Read,</i> <b> fSeekRProc</b> <i>Seek,</i> <b> fTellRProc</b> <i>Tell</i><b>);</b>
+</code></font>
+</pre>
+
+<font face="verdana"><br>
+</font>
+<h4><font face="verdana">Parameters</font></h4>
+
+<dl>
+<dt><font face="verdana"><font size=
+"-1"><i>Open</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Pointer to a function to
+open a file.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Close</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Pointer to a function to
+close a file.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Eof</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Pointer to a function that
+returns IL_TRUE if the end of file is reached.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Getc</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Pointer to a function to
+return one byte from a file.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Read</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Pointer to a function to
+read multiple bytes from a file.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Seek</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Pointer to a function to
+change position in a file.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Tell</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Pointer to a function to
+report the position in a file.</font></font></dd>
+</dl>
+
+<br>
+<br>
+<font face="verdana"><font size="-1"></font></font>
+<h4><font face="verdana">Remarks</font></h4>
+
+<p><font face="verdana"><font size="-1"><b>ilSetRead</b> was
+primarily designed to allow languages other than C/C++ access to
+DevIL's file-reading functions, since other languages do not use
+stdio.h's FILE* struct. This function can also double usefully in
+instances where filetypes other than FILE* are used, such as
+Windows file handles and C++ istreams. Simply provide an
+alternative to each of the functions needed by DevIL. The "special"
+datatype ILHANDLE is passed to these functions when used, so any
+internal datatype used by the differing language (or file handle)
+can be used.</font></font></p>
+
+<h4><font face="verdana">Error Codes</font></h4>
+
+<p><font face="verdana"><font size="-1">None</font></font></p>
+
+<h4><font face="verdana">See Also</font></h4>
+
+<p><font face="verdana"><font size="-1"><a href=
+"./f00204.html">ilSetWrite</a>, <a href=
+"./f00205.html">ilResetRead, ilResetWrite</a></font></font></p>
+
+<font face="verdana"><font size="-1"><br>
+</font></font>
+</body>
+</html>
+

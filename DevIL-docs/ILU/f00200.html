@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>DevIL Documentation, iluGetImageInfo</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
+</font>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="RIGHT">
+<td align="LEFT"><font color="white">DevIL Documentation</font>
+</td>
+<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00199.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00150.html">Next</a> </td>
+</tr>
+</table>
+
+<h2><font face="verdana">iluGetImageInfo</font></h2>
+
+<p><font face="verdana"><font size="-1">The <b>iluGetImageInfo</b>
+function retrieves information about the current image in an easy
+format.</font></font></p>
+
+<pre>
+<font face="verdana"><code><b>ILvoid iluGetImageInfo(
+  ILinfo</b> <i>*Info</i><b>);</b>
+</code></font>
+</pre>
+
+<font face="verdana"><br>
+</font>
+<h4><font face="verdana">Parameters</font></h4>
+
+<dl>
+<dt><font face="verdana"><font size=
+"-1"><i>Info</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">ILinfo struct to receive
+the image information.</font></font></dd>
+</dl>
+
+<br>
+<br>
+<font face="verdana"><font size="-1"></font></font>
+<h4><font face="verdana">Remarks</font></h4>
+
+<p><font face="verdana"><font size="-1">The <b>iluGetImageInfo</b>
+function retrieves information about the current image in an ILinfo
+struct. This is useful when you are repeatedly calling <a href=
+"../IL/f00027.html">ilGetInteger</a> and is more efficient in this
+case. The ILinfo struct is described below:</font></font></p>
+
+<p><font face="verdana"><font size="-1">typedef struct ILinfo<br>
+{<br>
+</font></font></p>
+
+<dl>
+<dd><font face="verdana"><font size=
+"-1">ILuint&nbsp;&nbsp;&nbsp;Width; // the image's width<br>
+</font></font></dd>
+
+<dd><font face="verdana"><font size=
+"-1">ILuint&nbsp;&nbsp;&nbsp;Height; // the image's height<br>
+</font></font></dd>
+
+<dd><font face="verdana"><font size=
+"-1">ILuint&nbsp;&nbsp;&nbsp;Depth; // the image's depth<br>
+</font></font></dd>
+
+<dd><font face="verdana"><font size="-1">ILubyte&nbsp;Bpp; // bytes
+per pixel (not bits) of the image<br>
+</font></font></dd>
+
+<dd><font face="verdana"><font size=
+"-1">ILuint&nbsp;&nbsp;&nbsp;SizeOfData; // the total size of the
+data (in bytes)<br>
+</font></font></dd>
+
+<dd><font face="verdana"><font size="-1">ILenum Format; // image
+format (in IL enum style)<br>
+</font></font></dd>
+
+<dd><font face="verdana"><font size="-1">ILenum Type; // image type
+(in IL enum style)<br>
+</font></font></dd>
+
+<dd><font face="verdana"><font size="-1">ILenum Origin; // origin
+of the image<br>
+</font></font></dd>
+
+<dd><font face="verdana"><font size="-1">ILenum PalType; // palette
+type<br>
+</font></font></dd>
+
+<dd><font face="verdana"><font size=
+"-1">ILuint&nbsp;&nbsp;&nbsp;PalSize; // palette size<br>
+</font></font></dd>
+
+<dd><font face="verdana"><font size=
+"-1">ILuint&nbsp;&nbsp;&nbsp;NumNext; // number of images
+following<br>
+</font></font></dd>
+
+<dd><font face="verdana"><font size=
+"-1">ILuint&nbsp;&nbsp;&nbsp;NumMips; // number of mipmaps<br>
+</font></font></dd>
+
+<dd><font face="verdana"><font size=
+"-1">ILuint&nbsp;&nbsp;&nbsp;NumLayers; // number of layers<br>
+</font></font></dd>
+
+<dt><font face="verdana"><font size="-1">} ILinfo;<br>
+</font></font></dt>
+</dl>
+
+<h4><font face="verdana">Error Codes</font></h4>
+
+<p><font face="verdana"><font size="-1">ILU_ILLEGAL_OPERATION -
+There is currently no image bound. Use <a href=
+"../IL/f00026.html">ilGenImages</a> and <a href=
+"../IL/f00013.html">ilBindImage</a> before calling this function.
+This error is also produced when <i>Info</i> is
+NULL.</font></font></p>
+
+<h4><font face="verdana">See Also</font></h4>
+
+<p><font face="verdana"><font size="-1"><a href=
+"../IL/f00027.html">ilGetBoolean, ilGetBooleanv, ilGetInteger,
+ilGetIntegerv</a></font></font></p>
+
+<font face="verdana"><font size="-1"><br>
+</font></font>
+</body>
+</html>
+

@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>DevIL Documentation, ilOverlayImage</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
+</font>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="RIGHT">
+<td align="LEFT"><font color="white">DevIL Documentation</font>
+</td>
+<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00046.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00048.html">Next</a> </td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilOverlayImage</font></h2>
+
+<p><font face="verdana"><font size="-1">The <b>ilOverlayImage</b>
+function overlays an image onto the current
+image.</font></font></p>
+
+<pre>
+<font face="verdana"><code><b>ILboolean ilOverlayImage(
+  ILuint</b> <i>Src,</i> <b> ILint</b> <i>XCoord,</i> <b> ILint</b> <i>YCoord,</i> <b> ILint</b> <i>ZCoord</i><b>);</b>
+</code></font>
+</pre>
+
+<font face="verdana"><br>
+</font>
+<h4><font face="verdana">Parameters</font></h4>
+
+<dl>
+<dt><font face="verdana"><font size=
+"-1"><i>Src</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">The image to
+copy.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>XCoord</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">The starting x position of
+the current image to copy <i>Src</i> to.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>YCoord</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">The starting y position of
+the current image to copy <i>Src</i> to.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>ZCoord</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">The starting z position of
+the current image to copy <i>Src</i> to.</font></font></dd>
+</dl>
+
+<br>
+<br>
+<font face="verdana"><font size="-1"></font></font>
+<h4><font face="verdana">Remarks</font></h4>
+
+<p><font face="verdana"><font size="-1">The <b>ilOverlayImage</b>
+function copies the image named by <i>Src</i> onto the current
+bound image. <i>XCoord</i>, <i>YCoord</i> and <i>ZCoord</i> are
+allowed to be any number, even negative numbers, for if you want to
+start copying <i>Src</i> in the middle of it to the current image's
+left side. If the image named by <i>Src</i> has alpha components,
+then blending will occur, instead of just a simple
+overlay.</font></font></p>
+
+<h4><font face="verdana">Error Codes</font></h4>
+
+<p><font face="verdana"><font size="-1">IL_ILLEGAL_OPERATION -
+There is currently no image bound. Use <a href=
+"./f00026.html">ilGenImages</a> and <a href=
+"./f00013.html">ilBindImage</a> before calling this function.
+Another possible source of this error is that <i>Src</i> was an
+invalid image id.</font></font></p>
+
+<h4><font face="verdana">See Also</font></h4>
+
+<p><font face="verdana"><font size="-1"><a href=
+"./f00026.html">ilGenImages</a>, <a href=
+"./f00013.html">ilBindImage</a></font></font></p>
+
+<font face="verdana"><font size="-1"><br>
+</font></font>
+</body>
+</html>
+

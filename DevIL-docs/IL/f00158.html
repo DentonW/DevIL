@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>DevIL Documentation, ilRegisterSave</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
+</font>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="RIGHT">
+<td align="LEFT"><font color="white">DevIL Documentation</font>
+</td>
+<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00156.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00157.html">Next</a> </td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilRegisterSave</font></h2>
+
+<p><font face="verdana"><font size="-1">The <b>ilRegisterSave</b>
+function registers a function to save a new imagetype, extending
+OpenIL's capabilities.</font></font></p>
+
+<pre>
+<font face="verdana"><code><b>ILboolean ilRegisterSave(
+  char</b> <i>*Ext,</i> <b> IL_SAVEPROC</b> <i>Save</i><b>);</b>
+</code></font>
+</pre>
+
+<font face="verdana"><br>
+</font>
+<h4><font face="verdana">Parameters</font></h4>
+
+<dl>
+<dt><font face="verdana"><font size=
+"-1"><i>Ext</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Extension of the image
+type to save.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Load</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Pointer to a saving
+function.</font></font></dd>
+</dl>
+
+<br>
+<br>
+<font face="verdana"><font size="-1"></font></font>
+<h4><font face="verdana">Remarks</font></h4>
+
+<p><font face="verdana"><font size="-1"><b>ilRegisterSave</b>
+allows the user to register functions for use by OpenIL, when
+saving unknown image types. The user can also override the default
+internal saving functions by passing their extension in <i>Ext</i>
+when using <a href="./f00053.html">ilSaveImage</a>.
+<b>ilRegisterSave</b> allows the user to use their own saving
+functions while using OpenIL's capabilities, or to extend OpenIL
+when it does not support a specific image format.</font></font></p>
+
+<h4><font face="verdana">Error Codes</font></h4>
+
+<p><font face="verdana"><font size="-1">IL_OUT_OF_MEMORY - Could
+not allocate enough memory to use the saving
+function.</font></font></p>
+
+<h4><font face="verdana">See Also</font></h4>
+
+<p><font face="verdana"><font size="-1"><a href=
+"./f00153.html">ilRegisterLoad</a>, <a href=
+"./f00160.html">ilRemoveSave</a>, <a href=
+"./f00159.html">ilRemoveLoad</a></font></font></p>
+
+<font face="verdana"><font size="-1"><br>
+</font></font>
+</body>
+</html>
+

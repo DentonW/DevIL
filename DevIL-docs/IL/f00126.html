@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>DevIL Documentation, ilHint</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
+</font>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="RIGHT">
+<td align="LEFT"><font color="white">DevIL Documentation</font>
+</td>
+<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00036.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00057.html">Next</a> </td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilHint</font></h2>
+
+<p><font face="verdana"><font size="-1">The <b>ilHint</b> function
+specifies implementation-specific hints.</font></font></p>
+
+<pre>
+<font face="verdana"><code><b>ILvoid ilHint(
+  ILenum</b> <i>Target,</i> <b> ILenum</b> <i>Mode</i><b>);</b>
+</code></font>
+</pre>
+
+<font face="verdana"><br>
+</font>
+<h4><font face="verdana">Parameters</font></h4>
+
+<dl>
+<dt><font face="verdana"><font size=
+"-1"><i>Target</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">An enum indicating what
+behaviour of the library is to be controlled. The following values
+are accepted:</font></font></dd>
+
+<dd>
+<dl>
+<dt><font face="verdana"><font size=
+"-1">IL_MEM_SPEED_HINT</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Controls the memory used
+vs. speed tradeoff.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1">IL_COMPRESSION_HINT</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Controls whether
+compression is used when saving images.</font></font></dd>
+</dl>
+</dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Mode</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">The desired behaviour. The
+following values are accepted:</font></font></dd>
+
+<dd>
+<dl>
+<dt><font face="verdana"><font size=
+"-1">IL_FASTEST</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Makes the target use a
+faster but more memory-intensive algorithm.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1">IL_LESS_MEM</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Makes the target use less
+memory but a potentially slower algorithm.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1">IL_USE_COMPRESSION</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Specifies that OpenIL
+should use compression when saving, if possible.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1">IL_NO_COMPRESSION</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Specifies that OpenIL
+should never use compression when saving.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1">IL_DONT_CARE</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">The client does not have a
+preference.</font></font></dd>
+</dl>
+</dd>
+</dl>
+
+<br>
+<br>
+<font face="verdana"><font size="-1"></font></font>
+<h4><font face="verdana">Remarks</font></h4>
+
+<p><font face="verdana"><font size="-1"><b>ilHint</b> lets the user
+control aspects of OpenIL's behaviour, in order to optimize either
+speed, memory, compression or quality, depending wholly on what the
+user desires.</font></font></p>
+
+<h4><font face="verdana">Error Codes</font></h4>
+
+<p><font face="verdana"><font size="-1">IL_INVALID_ENUM - Either
+<i>Target</i> or <i>Mode</i> was an invalid enum.</font></font></p>
+
+<h4><font face="verdana">See Also</font></h4>
+
+<p><font face="verdana"><font size="-1"><a href=
+"./f00039.html">ilLoadImage</a></font></font></p>
+
+<font face="verdana"><font size="-1"><br>
+</font></font>
+</body>
+</html>
+

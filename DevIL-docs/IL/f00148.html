@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>DevIL Documentation, ilConvertPal</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
+</font>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="RIGHT">
+<td align="LEFT"><font color="white">DevIL Documentation</font>
+</td>
+<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00016.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00017.html">Next</a> </td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilConvertPal</font></h2>
+
+<p><font face="verdana"><font size="-1">The <b>ilConvertPal</b>
+function converts an image's palette from one format to
+another.</font></font></p>
+
+<pre>
+<font face="verdana"><code><b>ILboolean ilConvertPal(
+  ILenum</b> <i>DestFormat</i><b>);</b>
+</code></font>
+</pre>
+
+<font face="verdana"><br>
+</font>
+<h4><font face="verdana">Parameters</font></h4>
+
+<dl>
+<dt><font face="verdana"><font size=
+"-1"><i>DestFormat</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">The format the current
+image palette should be converted to. Values accepted for
+<i>DestFormat</i> include:</font></font></dd>
+
+<dd>
+<dl>
+<dd><font face="verdana"><font size=
+"-1">IL_PAL_RGB24</font></font></dd>
+
+<dd><font face="verdana"><font size=
+"-1">IL_PAL_RGB32</font></font></dd>
+
+<dd><font face="verdana"><font size=
+"-1">IL_PAL_RGBA32</font></font></dd>
+
+<dd><font face="verdana"><font size=
+"-1">IL_PAL_BGR24</font></font></dd>
+
+<dd><font face="verdana"><font size=
+"-1">IL_PAL_BGR32</font></font></dd>
+
+<dd><font face="verdana"><font size=
+"-1">IL_PAL_BGRA32</font></font></dd>
+</dl>
+</dd>
+</dl>
+
+<br>
+<br>
+<font face="verdana"><font size="-1"></font></font>
+<h4><font face="verdana">Remarks</font></h4>
+
+<p><font face="verdana"><font size="-1"><b>ilConvertPal</b>
+converts the current bound image's palette from its format to
+<i>DestFormat</i>. The only palette formats not supported yet are
+IL_PAL_RGB16_TGA and IL_PAL_BGR16_TGA.</font></font></p>
+
+<h4><font face="verdana">Error Codes</font></h4>
+
+<p><font face="verdana"><font size="-1">IL_ILLEGAL_OPERATION -
+There is currently no image bound. Use <a href=
+"./f00026.html">ilGenImages</a> and <a href=
+"./f00013.html">ilBindImage</a> before calling this function.<br>
+ IL_OUT_OF_MEMORY - Could not allocate memory for the new image
+palette.</font></font></p>
+
+<h4><font face="verdana">See Also</font></h4>
+
+<p><font face="verdana"><font size="-1"><a href=
+"./f00026.html">ilGenImages</a>, <a href=
+"./f00013.html">ilBindImage</a>, <a href=
+"./f00016.html">ilConvertImage</a></font></font></p>
+
+<font face="verdana"><font size="-1"><br>
+</font></font>
+</body>
+</html>
+

@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>DevIL Documentation, ilGenImages</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
+</font>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="RIGHT">
+<td align="LEFT"><font color="white">DevIL Documentation</font>
+</td>
+<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00024.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00027.html">Next</a> </td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilGenImages</font></h2>
+
+<p><font face="verdana"><font size="-1">The <b>ilGenImages</b>
+function generates image names.</font></font></p>
+
+<pre>
+<font face="verdana"><code><b>ILvoid ilGenImages(
+  ILsizei</b> <i>Num,</i> <b> ILuint</b> <i>Images</i><b>};</b>
+</code></font>
+</pre>
+
+<font face="verdana"><br>
+</font>
+<h4><font face="verdana">Parameters</font></h4>
+
+<dl>
+<dt><font face="verdana"><font size=
+"-1"><i>Num</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1"></font></font></dd>
+
+<dd><font face="verdana"><font size="-1">Number of image names to
+generate.</font></font></dd>
+
+<dd><font face="verdana"><font size="-1"><br>
+</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Images</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1"></font></font></dd>
+
+<dd><font face="verdana"><font size="-1">Pointer in which the
+generated image names are stored.</font></font></dd>
+</dl>
+
+<br>
+<br>
+<font face="verdana"><font size="-1"></font></font>
+<h4><font face="verdana">Remarks</font></h4>
+
+<p><font face="verdana"><font size="-1"><b>ilGenImages</b> stores
+<i>Num</i> image names in <i>Images</i>. The names stored are not
+necessarily contiguous, and names can have been deleted via <a
+href="./f00023.html">ilDeleteImages</a> beforehand. The image names
+stored in <i>Images</i> can be used with <a href=
+"./f00013.html">ilBindImage</a> after calling <b>ilGenImages</b>.
+After calling <b>ilGenImages</b>, all image dimensions and features
+are undefined.</font></font></p>
+
+<h4><font face="verdana">Error Codes</font></h4>
+
+<p><font face="verdana"><font size="-1">IL_INVALID_VALUE -
+<i>Num</i> was less than 1 or <i>Images</i> was
+NULL.</font></font></p>
+
+<h4><font face="verdana">See Also</font></h4>
+
+<p><font face="verdana"><font size="-1"><a href=
+"./f00013.html">ilBindImage</a>, <a href=
+"./f00023.html">ilDeleteImages</a></font></font></p>
+
+<font face="verdana"><font size="-1"><br>
+</font></font>
+</body>
+</html>
+

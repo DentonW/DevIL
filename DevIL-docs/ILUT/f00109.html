@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>DevIL Documentation, ilutIsEnabled, ilutIsDisabled</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
+</font>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="RIGHT">
+<td align="LEFT"><font color="white">DevIL Documentation</font>
+</td>
+<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00172.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00189.html">Next</a> </td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilutIsEnabled, ilutIsDisabled</font></h2>
+
+<p><font face="verdana"><font size="-1">These two functions return
+whether a mode is disabled or enabled.</font></font></p>
+
+<pre>
+<font face="verdana"><code><b>ILboolean ilutIsEnabled(
+  ILenum</b> <i>Mode</i><b>);
+<br>
+ILboolean ilutIsDisabled(
+  ILenum</b> <i>Mode</i><b>);</b>
+</code></font>
+</pre>
+
+<font face="verdana"><br>
+</font>
+<h4><font face="verdana">Parameters</font></h4>
+
+<dl>
+<dt><font face="verdana"><font size=
+"-1"><i>Mode</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">An enum indicating an ilut
+mode. The following values are accepted:</font></font></dd>
+
+<dd>
+<dl>
+<dt><font face="verdana"><font size=
+"-1">ILUT_PALETTE_MODE</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Not used right
+now.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1">ILUT_OPENGL_CONV</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Whether ilut is allowed to
+use GL_RGB8 and GL_RGBA8 instead of GL_RGB8 or GL_RGBA8 (useful
+with nVidia cards).</font></font></dd>
+</dl>
+</dd>
+</dl>
+
+<br>
+<br>
+<font face="verdana"><font size="-1"></font></font>
+<h4><font face="verdana">Remarks</font></h4>
+
+<p><font face="verdana"><font size="-1"><b>ilutIsEnabled</b>
+returns whether the mode indicated by <i>Mode</i> is enabled, and
+<b>ilutIsDisabled</b> returns whether it is
+disabled.</font></font></p>
+
+<h4><font face="verdana">Error Codes</font></h4>
+
+<p><font face="verdana"><font size="-1">ILUT_INVALID_ENUM -
+<i>Mode</i> was of an invalid value.</font></font></p>
+
+<h4><font face="verdana">See Also</font></h4>
+
+<p><font face="verdana"><font size="-1"><a href=
+"./f00103.html">ilutEnable, ilutDisable</a>, <a href=
+"./f00109.html">ilutIsEnabled, ilutIsDisabled</a></font></font></p>
+
+<font face="verdana"><font size="-1"><br>
+</font></font>
+</body>
+</html>
+

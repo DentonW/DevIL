@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>DevIL Documentation, ilutGLBindMipmaps</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
+</font>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="RIGHT">
+<td align="LEFT"><font color="white">DevIL Documentation</font>
+</td>
+<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00176.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00171.html">Next</a> </td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilutGLBindMipmaps</font></h2>
+
+<p><font face="verdana"><font size="-1">The
+<b>ilutGLBindMipmaps</b> function binds an image to an OpenGL
+texture and creates mipmaps.</font></font></p>
+
+<pre>
+<font face="verdana"><code><b>GLuint ilutGLBindMipmaps(
+  ILvoid
+);</b>
+</code></font>
+</pre>
+
+<font face="verdana"><br>
+</font>
+<h4><font face="verdana">Parameters</font></h4>
+
+<p><font face="verdana"><font size=
+"-1"><i>None</i></font></font></p>
+
+<h4><font face="verdana">Remarks</font></h4>
+
+<p><font face="verdana"><font size="-1"><b>ilutGLBindMipmaps</b>
+generates a texture via glGenTextures, binds the current OpenIL
+image to it, generates mipmaps via gluBuild2DMipmaps and returns
+the texture name. This function is a more general purpose version
+of <a href=
+"./f00171.html">ilutOglBindTexImage</a>.</font></font></p>
+
+<h4><font face="verdana">Error Codes</font></h4>
+
+<p><font face="verdana"><font size="-1">ILUT_ILLEGAL_OPERATION -
+There is currently no image bound. Use <a href=
+"../IL/f00026.html">ilGenImages</a> and <a href=
+"../IL/f00013.html">ilBindImage</a> before calling this
+function.</font></font></p>
+
+<h4><font face="verdana">See Also</font></h4>
+
+<p><font face="verdana"><font size="-1"><a href=
+"../IL/f00026.html">ilGenImages</a>, <a href=
+"../IL/f00013.html">ilBindImage</a>, <a href=
+"./f00201.html">ilutOglBuildMipmaps</a>, <a href=
+"./f00171.html">ilutGLBindTexImage</a></font></font></p>
+
+<font face="verdana"><font size="-1"><br>
+</font></font>
+</body>
+</html>
+

@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>DevIL Documentation, iluImageParameter</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
+</font>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="RIGHT">
+<td align="LEFT"><font color="white">DevIL Documentation</font>
+</td>
+<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00095.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00168.html">Next</a> </td>
+</tr>
+</table>
+
+<h2><font face="verdana">iluImageParameter</font></h2>
+
+<p><font face="verdana"><font size="-1">The
+<b>iluImageParameter</b> function sets some aspects of the
+behaviour of ilu.</font></font></p>
+
+<pre>
+<font face="verdana"><code><b>ILvoid iluImageParameter(
+  ILenum</b> <i>PName,</i> <b> ILenum</b> <i>Param</i><b>);</b>
+</code></font>
+</pre>
+
+<font face="verdana"><br>
+</font>
+<h4><font face="verdana">Parameters</font></h4>
+
+<dl>
+<dt><font face="verdana"><font size=
+"-1"><i>PName</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Parameter name. Accepted
+values are:</font></font></dd>
+
+<dd>
+<dl>
+<dt><font face="verdana"><font size=
+"-1">ILU_FILTER</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">What filter <a href=
+"./f00099.html">iluScale</a> uses. The default is
+ILU_NEAREST.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1">ILU_PLACEMENT</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Where to place the image
+when using <a href="./f00138.html">iluEnlargeCanvas</a>. The
+default is ILU_CENTER.</font></font></dd>
+</dl>
+</dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Param</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Behaviour to use. Accepted
+values are:</font></font></dd>
+
+<dd>
+<dl>
+<dt><font face="verdana"><font size=
+"-1">ILU_NEAREST</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Uses a nearest filter to
+scale the image (looks worst).</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1">ILU_LINEAR</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Uses a linear
+interpolation filter to scale the image (looks
+better).</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1">ILU_BILINEAR</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Uses a bilinear (or
+trilinear for 3d images) interpolation filter to scale the image
+(looks best).</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1">ILU_LOWER_LEFT</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Places the image in the
+lower left of the enlarged canvas.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1">ILU_LOWER_RIGHT</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Places the image in the
+lower right of the enlarged canvas.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1">ILU_UPPER_LEFT</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Places the image in the
+upper left of the enlarged canvas.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1">ILU_UPPER_RIGHT</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Places the image in the
+upper right of the enlarged canvas.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1">ILU_CENTER</font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Places the image in the
+center of the enlarged canvas.</font></font></dd>
+</dl>
+</dd>
+</dl>
+
+<br>
+<br>
+<font face="verdana"><font size="-1"></font></font>
+<h4><font face="verdana">Remarks</font></h4>
+
+<p><font face="verdana"><font size="-1"><b>iluImageParameter</b>
+modifies the behaviour of some ilu functions. Right now, it
+controls the behaviour of <a href=
+"./f00138.html">iluEnlargeCanvas</a> and <a href=
+"./f00099.html">iluScale</a>.</font></font></p>
+
+<h4><font face="verdana">Error Codes</font></h4>
+
+<p><font face="verdana"><font size="-1">ILU_INVALID_ENUM -
+<i>PName</i> or <i>Param</i> was of an invalid
+value.</font></font></p>
+
+<h4><font face="verdana">See Also</font></h4>
+
+<p><font face="verdana"><font size="-1"><a href=
+"./f00138.html">iluEnlargeCanvas</a>, <a href=
+"./f00099.html">iluScale</a></font></font></p>
+
+<font face="verdana"><font size="-1"><br>
+</font></font>
+</body>
+</html>
+

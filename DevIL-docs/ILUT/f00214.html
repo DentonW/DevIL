@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>DevIL Documentation, ilutD3D8TexFromFileInMemory</title>
+<style type="text/css">
+         A:link                {color: red;}
+        A:link                {text-decoration: none;}
+        A:visited        {color: orange;}
+        A:visited        {text-decoration: none;}
+        A:active        {color: yellow;}
+        A:active        {text-decoration: none;}
+        A:hover                {color: 00B4ED;}
+        A:hover                {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="#ffffff">
+<font face="verdana"><img src="../images/openil_small.gif"><br>
+</font>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="RIGHT">
+<td align="LEFT"><font color="white">DevIL Documentation</font>
+</td>
+<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00216.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00210.html">Next</a> </td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilutD3D8TexFromFileInMemory</font></h2>
+
+<p><font face="verdana"><font size="-1">The
+<b>ilutD3D8TexFromFileInMemory</b> function loads a file in memory
+into a D3D8 texture.</font></font></p>
+
+<pre>
+<font face="verdana"><code><b>ILboolean ilutD3D8TexFromFile(
+  IDirect3DDevice8</b> <i>*Device,</i> <b> ILvoid</b> <i>*Lump,</i> <b> ILuint</b> <i>Size,</i> <b> IDirect3DTexture8</b> <i>**Texture</i><b>);</b>
+</code></font>
+</pre>
+
+<font face="verdana"><br>
+</font>
+<h4><font face="verdana">Parameters</font></h4>
+
+<dl>
+<dt><font face="verdana"><font size=
+"-1"><i>Device</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Pointer to an
+IDirect3DDevice8 interface, representing the device to be
+associated with the texture.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Lump</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Location of memory
+file.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Size</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Size of <i>Lump</i> in
+bytes.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Texture</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">Address of a pointer to an
+IDirect3DTexture8 interface, representing the created texture
+object.</font></font></dd>
+</dl>
+
+<br>
+<br>
+<font face="verdana"><font size="-1"></font></font>
+<h4><font face="verdana">Remarks</font></h4>
+
+<p><font face="verdana"><font size=
+"-1"><b>ilutD3D8TexFromFileInMemory</b> loads the file present in
+<i>Lump</i> and converts it to a Direct3D 8 texture
+(IDirect3DTexture8). This function creates the texture, so the
+pointer does not even have to be allocated beforehand. This
+function is functionally equivalent to D3DX's
+D3DXCreateTextureFromFileInMemory.</font></font></p>
+
+<h4><font face="verdana">Error Codes</font></h4>
+
+<p><font face="verdana"><font size="-1">ILUT_ILLEGAL_OPERATION -
+There is currently no image bound. Use <a href=
+"../IL/f00026.html">ilGenImages</a> and <a href=
+"../IL/f00013.html">ilBindImage</a> before calling this
+function.</font></font></p>
+
+<h4><font face="verdana">See Also</font></h4>
+
+<p><font face="verdana"><font size="-1"><a href=
+"../IL/f00152.html">ilLoadL</a></font></font></p>
+
+<font face="verdana"><font size="-1"><br>
+</font></font>
+</body>
+</html>
+

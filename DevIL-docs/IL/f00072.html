@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>DevIL Documentation, ilSetDoomPal</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
+</font>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="RIGHT">
+<td align="LEFT"><font color="white">DevIL Documentation</font>
+</td>
+<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00060.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00206.html">Next</a> </td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilSetDoomPal</font></h2>
+
+<p><font face="verdana"><font size="-1">The <b>ilSetDoomPal</b>
+function sets the shared palette as the default Doom
+palette.</font></font></p>
+
+<pre>
+<font face="verdana"><code><b>ILboolean ilSetDoomPal(
+  ILvoid
+);</b>
+</code></font>
+</pre>
+
+<font face="verdana"><br>
+</font>
+<h4><font face="verdana">Parameters</font></h4>
+
+<p><font face="verdana"><font size=
+"-1"><i>None</i></font></font></p>
+
+<h4><font face="verdana">Remarks</font></h4>
+
+<p><font face="verdana"><font size="-1"><b>ilSetDoomPal</b> sets
+the palette to be used by all functions for images that do not
+contain palettes. Doom textures and flats contain no internal
+palettes and usually rely on a palette entry in a Doom .wad file.
+This function is the equivalent of calling <a href=
+"./f00161.html">ilSetSharedPal</a> with the Doom palette. OpenIL
+contains an internal copy of the default palette used by Doom, so
+this is usually unnecessary.</font></font></p>
+
+<h4><font face="verdana">Error Codes</font></h4>
+
+<p><font face="verdana"><font size="-1">None</font></font></p>
+
+<h4><font face="verdana">See Also</font></h4>
+
+<p><font face="verdana"><font size="-1"><a href=
+"./f00161.html">ilSetSharedPal</a>, <a href="./f00152.html">ilLoad,
+ilLoadF, ilLoadL</a>, <a href=
+"./f00039.html">ilLoadImage</a></font></font></p>
+
+<font face="verdana"><font size="-1"><br>
+</font></font>
+</body>
+</html>
+

@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>DevIL Documentation, ilTexImage</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
+</font>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="RIGHT">
+<td align="LEFT"><font color="white">DevIL Documentation</font>
+</td>
+<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00204.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"../ILU/f00209.html">Next</a> </td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilTexImage</font></h2>
+
+<p><font face="verdana"><font size="-1">The <b>ilTexImage</b>
+function changes the current bound image to use new
+dimensions.</font></font></p>
+
+<pre>
+<font face="verdana"><code><b>ILboolean ilTexImage(
+  ILuint</b> <i>Width,</i> <b> ILuint</b> <i>Height,</i> <b> ILuint</b> <i>Depth,</i> <b> ILubyte</b> <i>Bpp,</i> <b> ILenum</b> <i>Format,</i> <b> ILenum</b> <i>Type,</i> <b> ILvoid</b> <i>*Data</i>
+<b>);</b>
+</code></font>
+</pre>
+
+<font face="verdana"><br>
+</font>
+<h4><font face="verdana">Parameters</font></h4>
+
+<dl>
+<dt><font face="verdana"><font size=
+"-1"><i>Width</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1"></font></font></dd>
+
+<dd><font face="verdana"><font size="-1">Specifies the new image
+width. This cannot be 0.</font></font></dd>
+
+<dd><font face="verdana"><font size="-1"><br>
+</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Height</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1"></font></font></dd>
+
+<dd><font face="verdana"><font size="-1">Specifies the new image
+height. This cannot be 0.</font></font></dd>
+
+<dd><font face="verdana"><font size="-1"><br>
+</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Depth</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1"></font></font></dd>
+
+<dd><font face="verdana"><font size="-1">Specifies the new image
+depth. Anything greater than 1 will make the image 3d. This cannot
+be 0.</font></font></dd>
+
+<dd><font face="verdana"><font size="-1"><br>
+</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Bpp</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1"></font></font></dd>
+
+<dd><font face="verdana"><font size="-1">Specifies the new bytes
+per pixel (not bits per pixel). Common values are 3 and
+4.</font></font></dd>
+
+<dd><font face="verdana"><font size="-1"><br>
+</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Format</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1"></font></font></dd>
+
+<dd><font face="verdana"><font size="-1">Specifies the data format
+this image has. For a list of values this can be, see the See Also
+section.</font></font></dd>
+
+<dd><font face="verdana"><font size="-1"><br>
+</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Type</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1"></font></font></dd>
+
+<dd><font face="verdana"><font size="-1">Specifies the data format
+this image has. For a list of values this can be, see the See Also
+section.</font></font></dd>
+
+<dd><font face="verdana"><font size="-1"><br>
+</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Data</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1"></font></font></dd>
+
+<dd><font face="verdana"><font size="-1">Specifies data that should
+be copied to the new image. If this parameter is NULL, no data is
+copied, and the new image data consists of undefined
+values.</font></font></dd>
+</dl>
+
+<br>
+<br>
+<font face="verdana"><font size="-1"></font></font>
+<h4><font face="verdana">Remarks</font></h4>
+
+<p><font face="verdana"><font size="-1">Any current image data is
+destroyed by <b>ilTexImage</b> and replaced by a new image with the
+attributes specified. The new image data has undefined values. To
+set the new image data to a certain value, use <b>ilClearImage</b>
+or <b>ilClearImageTo</b>.</font></font></p>
+
+<h4><font face="verdana">Error Codes</font></h4>
+
+<p><font face="verdana"><font size="-1">IL_ILLEGAL_OPERATION -
+There is currently no image bound. Use <a href=
+"./f00026.html">ilGenImages</a> and <a href=
+"./f00013.html">ilBindImage</a> before calling this function.<br>
+ IL_INVALID_PARAM - One of the parameters provided was invalid.
+Width, Height, Depth or Bpp was an incorrect 0.<br>
+ IL_OUT_OF_MEMORY - Could not allocate memory for the new image
+data.</font></font></p>
+
+<h4><font face="verdana">See Also</font></h4>
+
+<p><font face="verdana"><font size="-1"><a href=
+"./f00026.html">ilGenImages</a>, <a href=
+"./f00013.html">ilBindImage</a></font></font></p>
+
+<font face="verdana"><font size="-1"><br>
+</font></font>
+</body>
+</html>
+

@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>DevIL Documentation, ilutLoadResource</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
+</font>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="RIGHT">
+<td align="LEFT"><font color="white">DevIL Documentation</font>
+</td>
+<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00109.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00178.html">Next</a> </td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilutLoadResource</font></h2>
+
+<p><font face="verdana"><font size="-1">The <b>ilutLoadResource</b>
+function loads a Windows resource as the current
+image.</font></font></p>
+
+<pre>
+<font face="verdana"><code><b>ILboolean ilutLoadResource(
+  HINSTANCE</b> <i>hInst,</i> <b> ILint</b> <i>ID,</i> <b> char</b> <i>*ResourceType,</i> <b> ILenum</b> <i>Type</i><b>);</b>
+</code></font>
+</pre>
+
+<font face="verdana"><br>
+</font>
+<h4><font face="verdana">Parameters</font></h4>
+
+<dl>
+<dt><font face="verdana"><font size=
+"-1"><i>hInst</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">The application's
+HINSTANCE.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>ID</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">The resource identifier of
+the resource to be loaded.</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>ResourceType</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">The type of user-defined
+resource (name used when creating).</font></font></dd>
+
+<dt><font face="verdana"><font size=
+"-1"><i>Type</i></font></font></dt>
+
+<dd><font face="verdana"><font size="-1">The type of image to be
+loaded. Use IL_TYPE_UNKNOWN to let OpenIL determine the
+type.</font></font></dd>
+</dl>
+
+<br>
+<br>
+<font face="verdana"><font size="-1"></font></font>
+<h4><font face="verdana">Remarks</font></h4>
+
+<p><font face="verdana"><font size="-1"><b>ilutLoadResource</b> is
+a Windows-specific function that loads a resource as the current
+bound image. This feature allows you to have images directly in
+your .exe and not worry whether a particular file is present on the
+user's harddrive. An alternative, more portable solution is to use
+<a href="../IL/f00164.html">ilSave</a> with IL_CHEAD as the
+<i>Type</i> parameter.</font></font></p>
+
+<h4><font face="verdana">Error Codes</font></h4>
+
+<p><font face="verdana"><font size="-1">ILUT_ILLEGAL_OPERATION -
+There is currently no image bound. Use <a href=
+"../IL/f00026.html">ilGenImages</a> and <a href=
+"../IL/f00013.html">ilBindImage</a> before calling this
+function.</font></font></p>
+
+<h4><font face="verdana">See Also</font></h4>
+
+<p><font face="verdana"><font size="-1"><a href=
+"../IL/f00026.html">ilGenImages</a>, <a href=
+"../IL/f00013.html">ilBindImage</a>, <a href=
+"./f00176.html">ilutGetWinClipboard</a>, <a href=
+"../IL/f00164.html">ilSave</a></font></font></p>
+
+<font face="verdana"><font size="-1"><br>
+</font></font>
+</body>
+</html>
+

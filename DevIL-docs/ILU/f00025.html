@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>DevIL Documentation, iluFlipImage</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
+</font>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="RIGHT">
+<td align="LEFT"><font color="white">DevIL Documentation</font>
+</td>
+<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00096.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00139.html">Next</a> </td>
+</tr>
+</table>
+
+<h2><font face="verdana">iluFlipImage</font></h2>
+
+<p><font face="verdana"><font size="-1"><b>iluFlipImage</b> flips
+an image.</font></font></p>
+
+<pre>
+<font face="verdana"><code><b>ILboolean iluFlipImage(
+  ILvoid
+);</b>
+</code></font>
+</pre>
+
+<font face="verdana"><br>
+</font>
+<h4><font face="verdana">Parameters</font></h4>
+
+<p><font face="verdana"><font size=
+"-1"><i>None</i></font></font></p>
+
+<h4><font face="verdana">Remarks</font></h4>
+
+<p><font face="verdana"><font size="-1"><b>iluFlipImage</b> inverts
+an image over the x axis. The image will be upside-down after
+calling this function. If this function is called twice in
+succession, the image is restored to its original state. A version
+of this function in OpenIL is used throughout internally when
+loading images to correct images that would otherwise be
+upside-down. Using <a href="../IL/f00046.html">ilOriginFunc</a>
+will essentially tell the library which way is
+up.</font></font></p>
+
+<h4><font face="verdana">Error Codes</font></h4>
+
+<p><font face="verdana"><font size="-1">ILU_ILLEGAL_OPERATION -
+There is currently no image bound. Use <a href=
+"../IL/f00026.html">ilGenImages</a> and <a href=
+"../IL/f00013.html">ilBindImage</a> before calling this
+function.<br>
+ ILU_OUT_OF_MEMORY - Could not allocate memory for the new image
+data.</font></font></p>
+
+<h4><font face="verdana">See Also</font></h4>
+
+<p><font face="verdana"><font size="-1"><a href=
+"../IL/f00026.html">ilGenImages</a>, <a href=
+"../IL/f00013.html">ilBindImage</a>, <a href=
+"../IL/f00046.html">ilOriginFunc</a></font></font></p>
+
+<font face="verdana"><font size="-1"><br>
+</font></font>
+</body>
+</html>
+
