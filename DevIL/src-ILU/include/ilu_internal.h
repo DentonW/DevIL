@@ -58,6 +58,15 @@
 #endif
 
 
+#ifdef _MSC_VER
+	#define INLINE __inline
+	#define FINLINE __forceinline
+#else
+	#define INLINE
+	#define FINLINE
+#endif
+
+
 // Basic Palette struct
 typedef struct ILpal
 {

@@ -14,34 +14,34 @@
 #include "ilu_internal.h"
 #include "ilu_alloc.h"
 
-// We can use ilSetError() in OpenILU, because it *is* exported, but there is
-//	no prototype in il.h, so we define it in error.h of OpenILU
+// We can use ilSetError() in ILU, because it *is* exported, but there is
+//	no prototype in il.h, so we define it in error.h of ILU
 
 static const ILstring iluErrorStrings[IL_INVALID_CONVERSION - IL_INVALID_ENUM + 1] = {
-	TEXT("invalid enumerant"),
-    TEXT("out of memory"),
-	TEXT("format not supported yet"),
-	TEXT("internal error"),
-	TEXT("invalid value"),
-    TEXT("illegal operation"),
-	TEXT("illegal file value"),
-	TEXT("invalid file header"),
-	TEXT("invalid parameter"),
-	TEXT("could not open file"),
-	TEXT("invalid extension"),
-	TEXT("file already exists"),
-	TEXT("out format equivalent"),
-	TEXT("stack overflow"),
-    TEXT("stack underflow"),
-	TEXT("invalid conversion")
+	IL_TEXT("invalid enumerant"),
+    IL_TEXT("out of memory"),
+	IL_TEXT("format not supported yet"),
+	IL_TEXT("internal error"),
+	IL_TEXT("invalid value"),
+    IL_TEXT("illegal operation"),
+	IL_TEXT("illegal file value"),
+	IL_TEXT("invalid file header"),
+	IL_TEXT("invalid parameter"),
+	IL_TEXT("could not open file"),
+	IL_TEXT("invalid extension"),
+	IL_TEXT("file already exists"),
+	IL_TEXT("out format equivalent"),
+	IL_TEXT("stack overflow"),
+    IL_TEXT("stack underflow"),
+	IL_TEXT("invalid conversion")
 };
 
 static const ILstring iluLibErrorStrings[IL_LIB_MNG_ERROR - IL_LIB_GIF_ERROR + 1] = {
-	TEXT("gif library error"),
-	TEXT("jpeg library error"),
-	TEXT("png library error"),
-	TEXT("tiff library error"),
-	TEXT("mng library error")
+	IL_TEXT("gif library error"),
+	IL_TEXT("jpeg library error"),
+	IL_TEXT("png library error"),
+	IL_TEXT("tiff library error"),
+	IL_TEXT("mng library error")
 };
 
 

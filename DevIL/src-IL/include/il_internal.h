@@ -81,7 +81,7 @@
 #endif
 
 #ifdef IL_INLINE_ASM
-	#ifdef _WIN32
+	#ifdef _MSC_VER  // MSVC++ only
 		#define USE_WIN32_ASM
 	#endif
 #endif

@@ -16,8 +16,8 @@
 #include "ilu_alloc.h"
 
 
-const ILstring _iluVendor		= TEXT("Abysmal Software");
-const ILstring _iluVersion		= TEXT("Developer's Image Library Utilities (ILU) 1.3.0");
+const ILstring _iluVendor		= IL_TEXT("Abysmal Software");
+const ILstring _iluVersion		= IL_TEXT("Developer's Image Library Utilities (ILU) 1.3.0");
 
 
 const ILstring ILAPIENTRY iluGetString(ILenum StringName)

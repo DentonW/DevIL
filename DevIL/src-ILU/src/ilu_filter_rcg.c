@@ -108,7 +108,7 @@ int x, y;
 	return y * image->Bps + x;
 }*/
 
-void
+INLINE void
 get_row(row, Image, y)
 ILubyte *row;
 ILimage *Image;
@@ -123,7 +123,7 @@ int y;
 		row[i] = Image->Data[y * Image->Bps + i * Image->Bpp + c];
 }
 
-void
+INLINE void
 get_column(column, Image, x)
 ILubyte *column;
 ILimage *Image;
@@ -170,7 +170,7 @@ ILubyte data;
 
 #define	filter_support		(1.0)
 
-double
+INLINE double
 filter(t)
 double t;
 {
@@ -182,7 +182,7 @@ double t;
 
 #define	box_support		(0.5)
 
-double
+INLINE double
 box_filter(t)
 double t;
 {
@@ -192,7 +192,7 @@ double t;
 
 #define	triangle_support	(1.0)
 
-double
+INLINE double
 triangle_filter(t)
 double t;
 {
@@ -203,7 +203,7 @@ double t;
 
 #define	bell_support		(1.5)
 
-double
+INLINE double
 bell_filter(t)		/* box (*) box (*) box */
 double t;
 {
@@ -218,7 +218,10 @@ double t;
 
 #define	B_spline_support	(2.0)
 
-double
+#define FRAC_2_3 0.6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666667
+#define FRAC_1_6 0.1666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666667
+
+INLINE double
 B_spline_filter(t)	/* box (*) box (*) box (*) box */
 double t;
 {
@@ -235,7 +238,7 @@ double t;
 	return(0.0);
 }
 
-double
+FINLINE double
 sinc(x)
 double x;
 {
@@ -246,7 +249,7 @@ double x;
 
 #define	Lanczos3_support	(3.0)
 
-double
+INLINE double
 Lanczos3_filter(t)
 double t;
 {
@@ -260,7 +263,7 @@ double t;
 #define	B	(1.0 / 3.0)
 #define	C	(1.0 / 3.0)
 
-double
+INLINE double
 Mitchell_filter(t)
 double t;
 {
@@ -306,7 +309,7 @@ CLIST	*contrib;		/* array of contribution lists */
 	Round an FP value to its closest int representation.
 	General routine; ideally belongs in general math lib file.
 */	
-int roundcloser(double d)
+INLINE int roundcloser(double d)
 {
 	/* Untested potential one-liner, but smacks of call overhead */
 	/* return fabs(ceil(d)-d) <= 0.5 ? ceil(d) : floor(d); */
@@ -648,3 +651,4 @@ ILuint iluScaleAdvanced(ILuint Width, ILuint Height, ILenum Filter)
 
 	return IL_TRUE;
 }
+

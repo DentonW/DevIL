@@ -15,27 +15,27 @@
 #include "ilu_alloc.h"
 
 
-ILdouble IL_PI      = 3.14159265359f;
-ILdouble IL_DEGCONV = 0.01745329251f;
+ILdouble IL_PI      = 3.1415926535897932384626;
+ILdouble IL_DEGCONV = 0.0174532925199432957692;
 #if !defined(__APPLE__)
 	ILimage *iluCurImage = NULL;
 #endif
 
 
 // Anyway we can inline these next 3 functions in pure C without making them macros?
-ILfloat ilCos(ILfloat Angle)
+INLINE extern ILfloat ilCos(ILfloat Angle)
 {
 	return (ILfloat)(cos(Angle * IL_DEGCONV));
 }
 
 
-ILfloat ilSin(ILfloat Angle)
+INLINE extern ILfloat ilSin(ILfloat Angle)
 {
 	return (ILfloat)(sin(Angle * IL_DEGCONV));
 }
 
 
-ILint ilRound(ILfloat Num)
+INLINE extern ILint ilRound(ILfloat Num)
 {
 	return (ILint)(Num + 0.5);
 }

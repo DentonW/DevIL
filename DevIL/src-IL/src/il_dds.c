@@ -509,8 +509,8 @@ ILboolean ReadMipmaps()
 			minW = Width;
 			minH = Height;
 			if ((CompFormat != PF_RGB) && (CompFormat != PF_ARGB)) {
-				minW = max(4, Width);
-				minH = max(4, Height);
+				minW = IL_MAX(4, Width);
+				minH = IL_MAX(4, Height);
 			}
 			Head.LinearSize = (minW * minH * Depth * Bpp) / CompFactor;
 		} else {

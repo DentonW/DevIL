@@ -33,16 +33,6 @@ BOOL ILAPIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReser
 	return TRUE;
 }
 
-
-#else  // Should check if gcc?
-
-// Should be able to condense this...
-static void GccMain() __attribute__((constructor));
-static void GccMain()
-{
-	//iluInit();
-}
-
 #endif
 
 
