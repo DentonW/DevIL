@@ -179,10 +179,12 @@ ILboolean iBuild1DMipmaps_(ILuint Width)
 
 	for (c = 0; c < CurMipMap->Bpp; c++) {  // 8-12-2001
 		for (i = 0, j = 0; i < Width; i++) {
-			//the old code that was here had overflow problems...(result was clamped
-			//to byte before the shift)
+			//the old code that was here had overflow problems...
+			//(result was clamped to byte before the shift)
 			MipMap->Data[i * MipMap->Bpp + c] =
-				(CurMipMap->Data[(j++ * MipMap->Bpp) + c] + CurMipMap->Data[(j++ * MipMap->Bpp) + c]) >> 1;
+				(CurMipMap->Data[j * MipMap->Bpp + c]
+				 + CurMipMap->Data[(j + 1) * MipMap->Bpp + c]) >> 1;
+			j += 2;
 		}
 	}
 
@@ -239,10 +241,12 @@ ILboolean iBuild1DMipmapsVertical_(ILuint Height)
 	for (c = 0; c < CurMipMap->Bpp; c++) {  // 8-12-2001
 		//j = 0;
 		for (i = 0, j = 0; i < Height; i++) {
-			//the old code that was here had overflow problems...(result was clamped
-			//to byte before the shift)
+			//the old code that was here had overflow problems...
+			//(result was clamped to byte before the shift)
 			MipMap->Data[i * MipMap->Bpp + c] =
-				(CurMipMap->Data[(j++ * MipMap->Bpp) + c] + CurMipMap->Data[(j++ * MipMap->Bpp) + c]) >> 1;
+				(CurMipMap->Data[j * MipMap->Bpp + c]
+				 + CurMipMap->Data[(j + 1) * MipMap->Bpp + c]) >> 1;
+			j += 2;
 		}
 	}
 	// 8-11-2001
