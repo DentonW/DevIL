@@ -282,7 +282,7 @@ ILboolean XpmGetColour(char *Buffer, ILint Size, XpmPixel *Colours)
 
 ILboolean iLoadXpmInternal()
 {
-	char		Buffer[1024];
+	ILubyte		Buffer[1024];
 	ILint		Size, Pos, Width, Height, NumColours, i, x, y, Offset;
 	XpmPixel	*Colours;
 
