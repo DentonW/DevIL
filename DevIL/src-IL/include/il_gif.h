@@ -49,7 +49,8 @@ typedef struct GFXCONTROL
 	ILushort	Delay;
 	ILubyte		Transparent;
 	ILubyte		Terminator;
-	ILboolean	Used;
+	ILboolean	Used; //this stores if a gfxcontrol was read - it is IL_FALSE (!)
+			//if a gfxcontrol was read from the file, IL_TRUE otherwise
 } IL_PACKSTRUCT GFXCONTROL;
 #ifdef _WIN32
 	#pragma pack(pop, gif_struct)
@@ -60,10 +61,10 @@ ILboolean iLoadGifInternal(ILvoid);
 ILboolean ilLoadGifF(ILHANDLE File);
 ILboolean iIsValidGif(ILvoid);
 ILboolean iGetPalette(ILubyte Info, ILpal *Pal);
-ILboolean GetImages(ILpal *GlobalPal);
+ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead);
 ILboolean SkipExtensions(GFXCONTROL *Gfx);
-ILboolean GifGetData(ILubyte *Data, ILuint ImageSize);
-ILboolean RemoveInterlace(ILvoid);
+ILboolean GifGetData(ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Height, ILuint Stride, GFXCONTROL *Gfx);
+ILboolean RemoveInterlace(ILimage *image);
 ILboolean iCopyPalette(ILpal *Dest, ILpal *Src);
 ILboolean ConvertTransparent(ILimage *Image, ILubyte TransColour);
 
