@@ -134,22 +134,22 @@ typedef void			ILvoid;
 
 
 // Matches OpenGL's right now.
-#define IL_COLOUR_INDEX						0x1900
-#define IL_COLOR_INDEX						0x1900
+#define IL_COLOUR_INDEX							0x1900
+#define IL_COLOR_INDEX							0x1900
 #define IL_RGB								0x1907
 #define IL_RGBA								0x1908
 #define IL_BGR								0x80E0
 #define IL_BGRA								0x80E1
-#define IL_LUMINANCE						0x1909
-#define IL_LUMINANCE_ALPHA					0x190A
+#define IL_LUMINANCE							0x1909
+#define IL_LUMINANCE_ALPHA						0x190A
 
 
 #define IL_BYTE								0x1400
-#define IL_UNSIGNED_BYTE					0x1401
+#define IL_UNSIGNED_BYTE						0x1401
 #define IL_SHORT							0x1402
-#define IL_UNSIGNED_SHORT					0x1403
+#define IL_UNSIGNED_SHORT						0x1403
 #define IL_INT								0x1404
-#define IL_UNSIGNED_INT						0x1405
+#define IL_UNSIGNED_INT							0x1405
 #define IL_FLOAT							0x1406
 #define IL_DOUBLE							0x140A
 
@@ -163,24 +163,24 @@ typedef void			ILvoid;
 // IL-specific #define's
 //
 
-#define IL_VERSION_1_6_6					1
-#define IL_VERSION							166
+#define IL_VERSION_1_6_1					1
+#define IL_VERSION							161
 
 
 // Attribute Bits
 #define IL_ORIGIN_BIT						0x00000001
-#define IL_FILE_BIT							0x00000002
-#define IL_PAL_BIT							0x00000004
+#define IL_FILE_BIT						0x00000002
+#define IL_PAL_BIT						0x00000004
 #define IL_FORMAT_BIT						0x00000008
-#define IL_TYPE_BIT							0x00000010
+#define IL_TYPE_BIT						0x00000010
 #define IL_COMPRESS_BIT						0x00000020
 #define IL_LOADFAIL_BIT						0x00000040
-#define IL_FORMAT_SPECIFIC_BIT				0x00000080
+#define IL_FORMAT_SPECIFIC_BIT					0x00000080
 #define IL_ALL_ATTRIB_BITS					0x000FFFFF
 
 
 // Palette types
-#define IL_PAL_NONE							0x0400
+#define IL_PAL_NONE						0x0400
 #define IL_PAL_RGB24						0x0401
 #define IL_PAL_RGB32						0x0402
 #define IL_PAL_RGBA32						0x0403
@@ -397,7 +397,6 @@ typedef void			ILvoid;
 #define IL_IMAGE_OFFX						0x0DFB
 #define IL_IMAGE_OFFY						0x0DFC
 #define IL_IMAGE_CUBEFLAGS					0x0DFD
-#define IL_IMAGE_ORIGIN	    				0x0DFE
 
 
 //
@@ -493,16 +492,18 @@ ILAPI ILboolean		ILAPIENTRY ilEnable(ILenum Mode);
 ILAPI ILboolean		ILAPIENTRY ilFormatFunc(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilGenImages(ILsizei Num, ILuint *Images);
 ILAPI ILubyte*		ILAPIENTRY ilGetAlpha(ILenum Type);
+ILAPI ILvoid            ILAPIENTRY ilModAlpha( ILint AlphaValue );
+ILAPI ILvoid            ILAPIENTRY ilSetAlpha( ILuint AlphaValue );
 ILAPI ILboolean		ILAPIENTRY ilGetBoolean(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilGetBooleanv(ILenum Mode, ILboolean *Param);
 ILAPI ILubyte*		ILAPIENTRY ilGetData(ILvoid);
 ILAPI ILuint		ILAPIENTRY ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize, ILenum DXTCFormat);
 ILAPI ILenum		ILAPIENTRY ilGetError(ILvoid);
-ILAPI ILint			ILAPIENTRY ilGetInteger(ILenum Mode);
+ILAPI ILint             ILAPIENTRY ilGetInteger(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param);
 ILAPI ILuint		ILAPIENTRY ilGetLumpPos(ILvoid);
 ILAPI ILubyte*		ILAPIENTRY ilGetPalette(ILvoid);
-ILAPI const ILstring ILAPIENTRY ilGetString(ILenum StringName);
+ILAPI const ILstring    ILAPIENTRY ilGetString(ILenum StringName);
 ILAPI ILvoid		ILAPIENTRY ilHint(ILenum Target, ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilInit(ILvoid);
 ILAPI ILboolean		ILAPIENTRY ilIsDisabled(ILenum Mode);
@@ -564,6 +565,13 @@ ILAPI ILboolean		ILAPIENTRY ilSaveFromJpegStruct(ILvoid* JpegCompressorPtr);
 #define ilKeyColor		ilKeyColour
 
 
+#ifdef __cplusplus
+}
+#endif
+
+#endif // __IL_H__
+#endif // __il_h__
+
 #ifdef ALTIVEC
     #define imemclear(x,y) vec_memclear(x,y);
 #else
@@ -573,12 +581,3 @@ ILAPI ILboolean		ILAPIENTRY ilSaveFromJpegStruct(ILvoid* JpegCompressorPtr);
 #ifdef ALTIVEC
     void vec_memclear( ILvoid *, ILuint );
 #endif
-
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif // __IL_H__
-#endif // __il_h__
-
