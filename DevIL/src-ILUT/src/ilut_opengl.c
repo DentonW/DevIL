@@ -293,10 +293,12 @@ ILimage* MakeGLCompliant(ILimage *Src)
 		Dest = Temp;
 	}
 
-	if (Dest->Origin != (ILenum)ilGetInteger(IL_ORIGIN_MODE)) {
+	//changed 2003-08-25: images passed to opengl have to be upper-left
+	if (Dest->Origin != IL_ORIGIN_UPPER_LEFT) {
 		Flipped = iGetFlipped(Dest);
 		ifree(Dest->Data);
 		Dest->Data = Flipped;
+		Dest->Origin = IL_ORIGIN_UPPER_LEFT;
 	}
 
 	return Dest;
