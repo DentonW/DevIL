@@ -397,6 +397,7 @@ typedef void			ILvoid;
 #define IL_IMAGE_OFFX						0x0DFB
 #define IL_IMAGE_OFFY						0x0DFC
 #define IL_IMAGE_CUBEFLAGS					0x0DFD
+#define IL_IMAGE_ORIGIN						0x0DFE
 
 
 //
@@ -407,7 +408,7 @@ typedef void			ILvoid;
 #if (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED) || defined(__BORLANDC__) || defined(__LCC__)
 	#define ILAPIENTRY __stdcall
 	#define IL_PACKSTRUCT
-#elif defined(linux) || defined(MACOSX)
+#elif defined(linux) || defined(MACOSX) || defined(__CYGWIN__) //fix bug 840364
 	#define ILAPIENTRY
 	#define IL_PACKSTRUCT __attribute__ ((packed))
 #else
@@ -418,7 +419,7 @@ typedef void			ILvoid;
 // This is from Win32's <wingdi.h> and <winnt.h>
 #if defined(__LCC__)
 	#define ILAPI __stdcall
-#elif _WIN32
+#elif defined(_WIN32) //changed 20031221 to fix bug 840421
 	#ifdef IL_STATIC_LIB
 		#define ILAPI
 	#else
