@@ -413,6 +413,9 @@ ILuint GenBitMask(ILushort ex0, ILushort ex1, ILuint NumCols, ILushort *In, ILub
 		Colours[2].r = (Colours[0].r + Colours[1].r) / 2;
 		Colours[2].g = (Colours[0].g + Colours[1].g) / 2;
 		Colours[2].b = (Colours[0].b + Colours[1].b) / 2;
+		Colours[3].r = (Colours[0].r + Colours[1].r) / 2;
+		Colours[3].g = (Colours[0].g + Colours[1].g) / 2;
+		Colours[3].b = (Colours[0].b + Colours[1].b) / 2;
 	}
 	else {  // NumCols == 4
 		Colours[2].r = (2 * Colours[0].r + Colours[1].r + 1) / 3;
@@ -428,9 +431,9 @@ ILuint GenBitMask(ILushort ex0, ILushort ex1, ILuint NumCols, ILushort *In, ILub
 			if (Alpha[i] < 128) {
 				Mask[i] = 3;  // Transparent
 				if (OutCol) {
-					OutCol[i].r = Colours[j].r;
-					OutCol[i].g = Colours[j].g;
-					OutCol[i].b = Colours[j].b;
+					OutCol[i].r = Colours[3].r;
+					OutCol[i].g = Colours[3].g;
+					OutCol[i].b = Colours[3].b;
 				}
 				continue;
 			}
