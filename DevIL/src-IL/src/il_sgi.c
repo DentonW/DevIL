@@ -445,7 +445,10 @@ ILboolean iNewSgi(iSgiHeader *Head)
 		case 1:
 			iCurImage->Format = IL_LUMINANCE;
 			break;
-		case 3:
+		case 2: 
+                         iCurImage->Format = IL_LUMINANCE_ALPHA; 
+                         break;
+                case 3:
 			iCurImage->Format = IL_RGB;
 			break;
 		case 4:
