@@ -79,7 +79,8 @@ range.  ilGetError() will return 0 (IL_NO_ERROR) if no error has occurred.
 Installation:
 -------------
 
-If #make succeeded, just type #make install
+If #make succeeded, just type #make install, followed by #ldconfig
+(as su, of course)
 
 
 Usage:
