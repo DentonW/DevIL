@@ -33,6 +33,7 @@ ILboolean iluBuild2DMipmaps()
 	ILimage		*Temp;
 	ILboolean	Resized = IL_FALSE;
 	ILuint		Width, Height;
+	ILenum		OldFilter;
 
 	iluCurImage = Original = ilGetCurImage();
 	if (Original == NULL) {
@@ -53,9 +54,10 @@ ILboolean iluBuild2DMipmaps()
 		Resized = IL_TRUE;
 		Temp = ilCopyImage_(ilGetCurImage());
 		ilSetCurImage(Temp);
+		OldFilter = iluFilter;
 		iluImageParameter(ILU_FILTER, ILU_BILINEAR);
 		iluScale(Width, Height, 1);
-		iluImageParameter(ILU_FILTER, iluFilter);
+		iluImageParameter(ILU_FILTER, OldFilter);
 		iluCurImage = ilGetCurImage();
 	}
 
@@ -177,8 +179,8 @@ ILboolean iBuild1DMipmaps_(ILuint Width)
 	for (c = 0; c < CurMipMap->Bpp; c++) {  // 8-12-2001
 		for (i = 0, j = 0; i < Width; i++) {
 			MipMap->Data[i * MipMap->Bpp + c] =  CurMipMap->Data[(j++ * MipMap->Bpp) + c];
-                        MipMap->Data[i * MipMap->Bpp + c] += CurMipMap->Data[(j++ * MipMap->Bpp) + c];
-                        MipMap->Data[i * MipMap->Bpp + c] >>= 1;
+						MipMap->Data[i * MipMap->Bpp + c] += CurMipMap->Data[(j++ * MipMap->Bpp) + c];
+						MipMap->Data[i * MipMap->Bpp + c] >>= 1;
 		}
 	}
 	// 8-11-2001
@@ -235,8 +237,8 @@ ILboolean iBuild1DMipmapsVertical_(ILuint Height)
 		//j = 0;
 		for (i = 0, j = 0; i < Height; i++) {
 			MipMap->Data[i * MipMap->Bpp + c] =  CurMipMap->Data[(j++ * MipMap->Bpp) + c];
-                        MipMap->Data[i * MipMap->Bpp + c] += CurMipMap->Data[(j++ * MipMap->Bpp) + c];
-                        MipMap->Data[i * MipMap->Bpp + c] >>= 1;
+						MipMap->Data[i * MipMap->Bpp + c] += CurMipMap->Data[(j++ * MipMap->Bpp) + c];
+						MipMap->Data[i * MipMap->Bpp + c] >>= 1;
 		}
 	}
 	// 8-11-2001
@@ -315,15 +317,35 @@ ILboolean iBuild2DMipmaps_(ILuint Width, ILuint Height)
 		Src = CurMipMap;
 	}
 
-	for (y1 = 0; y1 < Height; y1++, y2 += 2) {
-		x1 = 0;  x2 = 0;
-		for (; x1 < Width; x1++, x2 += 2) {
-			for (c = 0; c < MipMap->Bpp; c++) {
-				MipMap->Data[y1 * MipMap->Bps + x1 * MipMap->Bpp + c] = (
-					Src->Data[y2 * Src->Bps + x2 * MipMap->Bpp + c] +
-					Src->Data[y2 * Src->Bps + (x2 + 1) * MipMap->Bpp + c] +
-					Src->Data[(y2 + 1) * Src->Bps + x2 * MipMap->Bpp + c] +
-					Src->Data[(y2 + 1) * Src->Bps + (x2 + 1) * MipMap->Bpp + c]) >> 2;
+	if (MipMap->Type == IL_FLOAT) {
+		ILfloat *DestFData = (ILfloat*)MipMap->Data;
+		ILfloat *SrcFData = (ILfloat*)Src->Data;
+		ILuint DestStride = MipMap->Bps / 4;
+		ILuint SrcStride = Src->Bps / 4;
+		for (y1 = 0; y1 < Height; y1++, y2 += 2) {
+			x1 = 0;  x2 = 0;
+			for (; x1 < Width; x1++, x2 += 2) {
+				for (c = 0; c < MipMap->Bpp; c++) {
+					DestFData[y1 * DestStride + x1 * MipMap->Bpp + c] = (
+						SrcFData[y2 * SrcStride + x2 * MipMap->Bpp + c] +
+						SrcFData[y2 * SrcStride + (x2 + 1) * MipMap->Bpp + c] +
+						SrcFData[(y2 + 1) * SrcStride + x2 * MipMap->Bpp + c] +
+						SrcFData[(y2 + 1) * SrcStride + (x2 + 1) * MipMap->Bpp + c]) * .25f;
+				}
+			}
+		}
+	}
+	else {
+		for (y1 = 0; y1 < Height; y1++, y2 += 2) {
+			x1 = 0;  x2 = 0;
+			for (; x1 < Width; x1++, x2 += 2) {
+				for (c = 0; c < MipMap->Bpp; c++) {
+					MipMap->Data[y1 * MipMap->Bps + x1 * MipMap->Bpp + c] = (
+						Src->Data[y2 * Src->Bps + x2 * MipMap->Bpp + c] +
+						Src->Data[y2 * Src->Bps + (x2 + 1) * MipMap->Bpp + c] +
+						Src->Data[(y2 + 1) * Src->Bps + x2 * MipMap->Bpp + c] +
+						Src->Data[(y2 + 1) * Src->Bps + (x2 + 1) * MipMap->Bpp + c]) >> 2;
+				}
 			}
 		}
 	}
