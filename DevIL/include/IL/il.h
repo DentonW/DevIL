@@ -91,11 +91,11 @@ extern "C" {
 	#ifndef IL_STATIC_LIB
 		#ifdef  _MSC_VER
 			#ifndef _IL_BUILD_LIBRARY
-				#ifdef IL_DEBUG
+				#ifdef  IL_DEBUG
 					#pragma comment(lib, "devil-d.lib")
 				#else
 					#pragma comment(lib, "devil.lib")
-				#endif//_DEBUG
+				#endif//IL_DEBUG
 			#endif//_IL_BUILD_LIBRARY
 		#endif//_MSC_VER
 	#endif//IL_STATIC_LIB

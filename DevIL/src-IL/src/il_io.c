@@ -1285,6 +1285,12 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size)
 			break;
 		#endif
 
+		#ifndef IL_NO_JPG
+		case IL_JPG:
+			Ret = ilSaveJpegL(Lump, Size);
+			break;
+		#endif
+
 		#ifndef IL_NO_PNM
 		case IL_PNM:
 			Ret = ilSavePnmL(Lump, Size);

@@ -168,9 +168,9 @@ const
   IL_PSD = $0439;
   IL_EXIF = $043A;
   IL_PSP = $043B;
-  IL_PIX = $043C
-  IL_PXR = $043D
-  IL_XPM = $043E
+  IL_PIX = $043C;
+  IL_PXR = $043D;
+  IL_XPM = $043E;
 
   IL_JASC_PAL = $0475;
 
@@ -194,7 +194,7 @@ const
   IL_STACK_UNDERFLOW = $050F;
   IL_INVALID_CONVERSION = $0510;
   IL_BAD_DIMENSIONS = $0511;
-  IL_FILE_READ_ERROR = $0512
+  IL_FILE_READ_ERROR = $0512;
 
   IL_LIB_GIF_ERROR = $05E1;
   IL_LIB_JPEG_ERROR = $05E2;
@@ -289,30 +289,30 @@ const
   IL_TIF_HOSTCOMPUTER_STRING = $071E;
   IL_TIF_DOCUMENTNAME_STRING = $071F;
   IL_TIF_AUTHNAME_STRING = $0720;
-  IL_JPG_SAVE_FORMAT = $0721
-  IL_CHEAD_HEADER_STRING = $0722
-  IL_PCD_PICNUM = $0723
+  IL_JPG_SAVE_FORMAT = $0721;
+  IL_CHEAD_HEADER_STRING = $0722;
+  IL_PCD_PICNUM = $0723;
 
 
 // DXTC definitions
-  IL_DXTC_FORMAT = $0705
-  IL_DXT1 = $0706
-  IL_DXT2 = $0707
-  IL_DXT3 = $0708
-  IL_DXT4 = $0709
-  IL_DXT5 = $070A
-  IL_DXT_NO_COMP = $070B
-  IL_KEEP_DXTC_DATA = $070C
-  IL_DXTC_DATA_FORMAT = $070D
+  IL_DXTC_FORMAT = $0705;
+  IL_DXT1 = $0706;
+  IL_DXT2 = $0707;
+  IL_DXT3 = $0708;
+  IL_DXT4 = $0709;
+  IL_DXT5 = $070A;
+  IL_DXT_NO_COMP = $070B;
+  IL_KEEP_DXTC_DATA = $070C;
+  IL_DXTC_DATA_FORMAT = $070D;
 
 
 // Cube map definitions
-  IL_CUBEMAP_POSITIVEX = $00000400
-  IL_CUBEMAP_NEGATIVEX = $00000800
-  IL_CUBEMAP_POSITIVEY = $00001000
-  IL_CUBEMAP_NEGATIVEY = $00002000
-  IL_CUBEMAP_POSITIVEZ = $00004000
-  IL_CUBEMAP_NEGATIVEZ = $00008000
+  IL_CUBEMAP_POSITIVEX = $00000400;
+  IL_CUBEMAP_NEGATIVEX = $00000800;
+  IL_CUBEMAP_POSITIVEY = $00001000;
+  IL_CUBEMAP_NEGATIVEY = $00002000;
+  IL_CUBEMAP_POSITIVEZ = $00004000;
+  IL_CUBEMAP_NEGATIVEZ = $00008000;
 
 
 // Values
@@ -420,12 +420,12 @@ function ilEnable(Mode: TILenum): TILboolean; stdcall; external OPENILDLL;
 function ilFormatFunc(Mode: TILenum): TILboolean; stdcall; external OPENILDLL;
 procedure ilGenImages(Num: TILsizei; Images: PILuint); stdcall; external
   OPENILDLL;
-procedure ilGetAlpha(Type: TILenum): PILubyte; stdcall; external OPENILDLL;
+function ilGetAlpha(_Type: TILenum): PILubyte; stdcall; external OPENILDLL;
 function ilGetBoolean(Mode: TILenum): TILboolean; stdcall; external OPENILDLL;
 procedure ilGetBooleanv(Mode: TILenum; Param: PILboolean); stdcall; external
   OPENILDLL;
 function ilGetData: PILubyte; stdcall; external OPENILDLL;
-function ilGetDXTCData(Buffer: Pointer; BufferSize: TILuint; TILenum DXTCFormat):
+function ilGetDXTCData(Buffer: PILubyte; BufferSize: TILuint; DXTCFormat: TILenum):
   TILuint; stdcall; external OPENILDLL;
 function ilGetError: TILenum; stdcall; external OPENILDLL;
 function ilGetInteger(Mode: TILenum): TILint; stdcall; external OPENILDLL;

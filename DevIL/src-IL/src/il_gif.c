@@ -211,8 +211,10 @@ ILboolean GetImages(ILpal *GlobalPal)
 	Gfx.Used = IL_TRUE;
 
 	while (!ieof()) {
+		i = itell();
 		if (!SkipExtensions(&Gfx))
 			return IL_FALSE;
+		i = itell();
 
 		// Either of these means that we've reached the end of the data stream.
 		if (iread(&ImageDesc, sizeof(ImageDesc), 1) != 1) {
@@ -320,8 +322,9 @@ ILboolean SkipExtensions(GFXCONTROL *Gfx)
 	static ILint	Label;
 	static ILint	Size;
 
-	if (GifType == GIF87A)
-		return IL_TRUE;  // No extensions in the GIF87a format.
+	// DW (06-03-2002):  Apparently there can be...
+	//if (GifType == GIF87A)
+	//	return IL_TRUE;  // No extensions in the GIF87a format.
 
 	do {
 		Code = igetc();

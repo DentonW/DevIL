@@ -7,6 +7,9 @@
 - Fixed a bug loading .gif files with "local palettes".
 - Fixed a problem loading .ico/.cur files with ColoursUsed set to 0 in their headers.
 - Fixed a bug loading 4-bit .bmp images.
+- Added a check to see if a .jpg is missing data at the end, so it does not loop infinitely.
+- Fixed the Delphi headers.
+- Added a check for extensions in GIF87A files.
 
 
 
