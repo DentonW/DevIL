@@ -761,7 +761,7 @@ ILboolean ILAPIENTRY iluEqualize()
 	memset(Histogram, 0, 256 * sizeof(ILuint));
 	memset(SumHistm, 0, 256 * sizeof(ILuint));
 
-	LumImage = iConvertImage(IL_LUMINANCE, IL_UNSIGNED_BYTE);
+	LumImage = iConvertImage(iluCurImage, IL_LUMINANCE, IL_UNSIGNED_BYTE);
 	if (LumImage == NULL)
 		return IL_FALSE;
 	for (i = 0; i < NumPixels; i++) {

@@ -402,7 +402,7 @@ ILimage *iNeuQuant(ILimage *Image)
 
 	NewImage = iCurImage;
 	iCurImage = Image;
-	TempImage = iConvertImage(IL_BGR, IL_UNSIGNED_BYTE);
+	TempImage = iConvertImage(iCurImage, IL_BGR, IL_UNSIGNED_BYTE);
 	iCurImage = NewImage;
 
 	if (TempImage == NULL)

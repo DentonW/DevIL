@@ -505,26 +505,26 @@ ILboolean iSavePcxInternal()
 	switch (iCurImage->Format)
 	{
 		case IL_LUMINANCE:
-			TempImage = iConvertImage(IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
+			TempImage = iConvertImage(iCurImage, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
 			if (TempImage == NULL)
 				return IL_FALSE;
 			break;
 
 		case IL_BGR:
-			TempImage = iConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+			TempImage = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
 			if (TempImage == NULL)
 				return IL_FALSE;
 			break;
 
 		case IL_BGRA:
-			TempImage = iConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+			TempImage = iConvertImage(iCurImage, IL_RGBA, IL_UNSIGNED_BYTE);
 			if (TempImage == NULL)
 				return IL_FALSE;
 			break;
 
 		default:
 			if (iCurImage->Bpc > 1) {
-				TempImage = iConvertImage(iCurImage->Format, IL_UNSIGNED_BYTE);
+				TempImage = iConvertImage(iCurImage, iCurImage->Format, IL_UNSIGNED_BYTE);
 				if (TempImage == NULL)
 					return IL_FALSE;
 			}

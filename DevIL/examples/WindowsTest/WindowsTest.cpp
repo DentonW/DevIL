@@ -297,6 +297,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	bool			userClickedOK;
 	ILclampf		Red, Green, Blue;
 	ILubyte			*AlphaChannel;
+	ILenum			Origin;
 
 	switch (message)
 	{
@@ -685,10 +686,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					break;
 
 				case ID_EDIT_VIEWALPHA:
+					Origin = ilGetInteger(IL_ORIGIN_MODE);
 					AlphaChannel = ilGetAlpha(IL_UNSIGNED_BYTE);
 					ilTexImage(ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
 						ilGetInteger(IL_IMAGE_DEPTH), 1, IL_LUMINANCE, IL_UNSIGNED_BYTE, AlphaChannel);
 					free(AlphaChannel);
+					ilRegisterOrigin(Origin);
 					break;
 
 				case ID_EFFECTS_FLIP:

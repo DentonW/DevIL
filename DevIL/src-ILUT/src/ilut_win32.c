@@ -44,9 +44,9 @@ HBITMAP ILAPIENTRY ilutConvertToHBitmap(HDC hDC)
 
 	// @TODO:  Add support for palette'd images.
 	if (ilutCurImage->Bpp < 3)
-		TempImage = iConvertImage(IL_BGR, IL_UNSIGNED_BYTE);
+		TempImage = iConvertImage(ilutCurImage, IL_BGR, IL_UNSIGNED_BYTE);
 	else if (ilutCurImage->Bpc > 1)
-		TempImage = iConvertImage(ilutCurImage->Format, IL_UNSIGNED_BYTE);
+		TempImage = iConvertImage(ilutCurImage, ilutCurImage->Format, IL_UNSIGNED_BYTE);
 	if (TempImage == NULL)
 		return 0;
 
@@ -391,7 +391,7 @@ ILboolean ILAPIENTRY ilutSetWinClipboard()
 	}
 
 	if (ilutCurImage->Format != IL_BGR || ilutCurImage->Bps > 1) {
-		TempImage = iConvertImage(IL_BGR, IL_UNSIGNED_BYTE);
+		TempImage = iConvertImage(ilutCurImage, IL_BGR, IL_UNSIGNED_BYTE);
 		if (TempImage == NULL)
 			return IL_FALSE;
 	}

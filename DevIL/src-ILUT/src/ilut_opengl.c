@@ -180,7 +180,7 @@ ILimage* MakeGLCompliant(ILimage *Src)
 
 	if (Src->Pal.Palette != NULL && Src->Pal.PalSize != 0 && Src->Pal.PalType != IL_PAL_NONE) {
 		//ilSetCurImage(Src);
-		Dest = iConvertImage(ilGetPalBaseType(Src->Pal.PalType), IL_UNSIGNED_BYTE);
+		Dest = iConvertImage(ilutCurImage, ilGetPalBaseType(Src->Pal.PalType), IL_UNSIGNED_BYTE);
 		//Dest = iConvertImage(IL_BGR);
 		//ilSetCurImage(ilutCurImage);
 		if (Dest == NULL)

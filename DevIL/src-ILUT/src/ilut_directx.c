@@ -209,7 +209,7 @@ ILimage *MakeD3D8Compliant(D3DFORMAT *DestFormat)
 
 	// Images must be in BGRA format.
 	if (ilutCurImage->Format != IL_BGRA) {
-		Converted = iConvertImage(IL_BGRA, IL_UNSIGNED_BYTE);
+		Converted = iConvertImage(ilutCurImage, IL_BGRA, IL_UNSIGNED_BYTE);
 		if (Converted == NULL)
 			return NULL;
 	}

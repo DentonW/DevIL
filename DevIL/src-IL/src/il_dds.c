@@ -346,6 +346,8 @@ ILboolean ReadData()
 	}
 
 	if (Head.Flags1 & DDS_LINEARSIZE) {
+		Head.LinearSize = Head.LinearSize * Depth;
+
 		CompData = (ILubyte*)ialloc(Head.LinearSize);
 		if (CompData == NULL) {
 			ilSetError(IL_OUT_OF_MEMORY);
@@ -620,7 +622,7 @@ ILboolean DecompressDXT1()
 						col = &colours[Select];
 
 						if (((x + i) < Width) && ((y + j) < Height)) {
-							Offset = (y + j) * Image->Bps + (x + i) * Image->Bpp;
+							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp;
 							Image->Data[Offset + 0] = col->r;
 							Image->Data[Offset + 1] = col->g;
 							Image->Data[Offset + 2] = col->b;
@@ -701,7 +703,7 @@ ILboolean DecompressDXT3()
 						col = &colours[Select];
 
 						if (((x + i) < Width) && ((y + j) < Height)) {
-							Offset = (y + j) * Image->Bps + (x + i) * Image->Bpp;
+							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp;
 							Image->Data[Offset + 0] = col->r;
 							Image->Data[Offset + 1] = col->g;
 							Image->Data[Offset + 2] = col->b;
@@ -713,7 +715,7 @@ ILboolean DecompressDXT3()
 					word = alpha->row[j];
 					for (i = 0; i < 4; i++) {
 						if (((x + i) < Width) && ((y + j) < Height)) {
-							Offset = (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
+							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
 							Image->Data[Offset] = word & 0x0F;
 							Image->Data[Offset] = Image->Data[Offset] | (Image->Data[Offset] << 4);
 						}
@@ -798,7 +800,7 @@ ILboolean DecompressDXT5()
 
 						// only put pixels out < width or height
 						if (((x + i) < Width) && ((y + j) < Height)) {
-							Offset = (y + j) * Image->Bps + (x + i) * Image->Bpp;
+							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp;
 							Image->Data[Offset + 0] = col->r;
 							Image->Data[Offset + 1] = col->g;
 							Image->Data[Offset + 2] = col->b;
@@ -837,7 +839,7 @@ ILboolean DecompressDXT5()
 					for (i = 0; i < 4; i++) {
 						// only put pixels out < width or height
 						if (((x + i) < Width) && ((y + j) < Height)) {
-							Offset = (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
+							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
 							Image->Data[Offset] = alphas[bits & 0x07];
 						}
 						bits >>= 3;
@@ -850,7 +852,7 @@ ILboolean DecompressDXT5()
 					for (i = 0; i < 4; i++) {
 						// only put pixels out < width or height
 						if (((x + i) < Width) && ((y + j) < Height)) {
-							Offset = (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
+							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
 							Image->Data[Offset] = alphas[bits & 0x07];
 						}
 						bits >>= 3;

@@ -114,7 +114,7 @@ extern ILimage *iluCurImage;
 // Internal library functions in DevIL
 ILAPI ILboolean		ILAPIENTRY ilClearImage_(ILimage *Image);
 ILAPI ILvoid		ILAPIENTRY ilCloseImage(ILimage *Image);
-ILAPI ILimage*		ILAPIENTRY iConvertImage(ILenum DestFormat, ILenum DestType);
+ILAPI ILimage*		ILAPIENTRY iConvertImage(ILimage *Image, ILenum DestFormat, ILenum DestType);
 ILAPI ILboolean		ILAPIENTRY ilCopyImageAttr(ILimage *Dest, ILimage *Src);
 ILAPI ILimage*		ILAPIENTRY ilCopyImage_(ILimage *Src);
 ILAPI ILvoid		ILAPIENTRY ilGetClear(ILvoid *Colours, ILenum Format, ILenum Type);

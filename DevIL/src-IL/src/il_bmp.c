@@ -821,7 +821,7 @@ ILboolean iSaveBitmapInternal()
 	SaveLittleUInt(0);  // Reserved
 
 	if (iCurImage->Format == IL_LUMINANCE) {
-		TempImage = iConvertImage(IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
+		TempImage = iConvertImage(iCurImage, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
 		if (TempImage == NULL)
 			return IL_FALSE;
 	}
@@ -870,15 +870,15 @@ ILboolean iSaveBitmapInternal()
 
 	if (TempImage->Format != IL_BGR && TempImage->Format != IL_BGRA && TempImage->Format != IL_COLOUR_INDEX) {
 		if (TempImage->Format == IL_RGBA)
-			TempImage = iConvertImage(IL_BGRA, IL_UNSIGNED_BYTE);
+			TempImage = iConvertImage(iCurImage, IL_BGRA, IL_UNSIGNED_BYTE);
 		else
-			TempImage = iConvertImage(IL_BGR, IL_UNSIGNED_BYTE);
+			TempImage = iConvertImage(iCurImage, IL_BGR, IL_UNSIGNED_BYTE);
 
 		if (TempImage == NULL)
 			return IL_FALSE;
 	}
 	else if (TempImage->Bpc > 1) {
-		TempImage = iConvertImage(TempImage->Format, IL_UNSIGNED_BYTE);
+		TempImage = iConvertImage(iCurImage, TempImage->Format, IL_UNSIGNED_BYTE);
 		if (TempImage == NULL)
 			return IL_FALSE;
 	}

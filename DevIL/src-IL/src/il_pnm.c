@@ -581,7 +581,7 @@ ILboolean iSavePnmInternal()
 		case IL_PBM_ASCII:
 			Bpp = 1;
 			ilprintf("P1\n");
-			TempImage = iConvertImage(IL_LUMINANCE, IL_UNSIGNED_BYTE);
+			TempImage = iConvertImage(iCurImage, IL_LUMINANCE, IL_UNSIGNED_BYTE);
 			break;
 		//case IL_PBM_BINARY:  // Don't want to mess with saving bits just yet...
 			//Bpp = 1;
@@ -593,22 +593,22 @@ ILboolean iSavePnmInternal()
 		case IL_PGM_ASCII:
 			Bpp = 1;
 			ilprintf("P2\n");
-			TempImage = iConvertImage(IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
+			TempImage = iConvertImage(iCurImage, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
 			break;
 		case IL_PGM_BINARY:
 			Bpp = 1;
 			ilprintf("P5\n");
-			TempImage = iConvertImage(IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
+			TempImage = iConvertImage(iCurImage, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
 			break;
 		case IL_PPM_ASCII:
 			Bpp = 3;
 			ilprintf("P3\n");
-			TempImage = iConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+			TempImage = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
 			break;
 		case IL_PPM_BINARY:
 			Bpp = 3;
 			ilprintf("P6\n");
-			TempImage = iConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+			TempImage = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
 			break;
 		default:
 			ilSetError(IL_INVALID_FILE_HEADER);

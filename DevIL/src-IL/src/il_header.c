@@ -58,7 +58,7 @@ ILboolean ilSaveCHeader(const ILstring FileName, const char *InternalName)
 	}
 
 	if (iCurImage->Bpc > 1) {
-		TempImage = iConvertImage(iCurImage->Format, IL_UNSIGNED_BYTE);
+		TempImage = iConvertImage(iCurImage, iCurImage->Format, IL_UNSIGNED_BYTE);
 		if (TempImage == NULL)
 			return IL_FALSE;
 	}

@@ -88,7 +88,7 @@ ILvoid	ilutDefaultStates(ILvoid);
 // Internal library functions in DevIL
 ILAPI ILvoid		ILAPIENTRY iBindImageTemp(ILvoid);
 ILAPI ILvoid		ILAPIENTRY ilCloseImage(ILimage *Image);
-ILAPI ILimage*		ILAPIENTRY iConvertImage(ILenum DestFormat, ILenum DestType);
+ILAPI ILimage*		ILAPIENTRY iConvertImage(ILimage *Image, ILenum DestFormat, ILenum DestType);
 ILAPI ILimage*		ILAPIENTRY ilCopyImage_(ILimage *Src);
 ILAPI ILboolean		ILAPIENTRY ilCopyImageAttr(ILimage *Dest, ILimage *Src);
 ILAPI ILpal*		ILAPIENTRY iCopyPal(ILvoid);

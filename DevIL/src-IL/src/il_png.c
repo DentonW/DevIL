@@ -500,7 +500,7 @@ ILboolean iSavePngInternal()
 			break;
 		case IL_INT:
 		case IL_UNSIGNED_INT:
-			Temp = iConvertImage(iCurImage->Format, IL_UNSIGNED_SHORT);
+			Temp = iConvertImage(iCurImage, iCurImage->Format, IL_UNSIGNED_SHORT);
 			if (Temp == NULL) {
 				png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
 				return IL_FALSE;

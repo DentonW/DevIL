@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 05/25/2002 <--Y2K Compliant! =]
 //
-// Filename: openilu/manip.c
+// Filename: openilu/ilu_rotate.c
 //
 // Description: Rotates an image.
 //
@@ -18,7 +18,8 @@
 
 ILboolean ILAPIENTRY iluRotate(ILfloat Angle)
 {
-	ILimage	*Temp;
+	ILimage	*Temp, *Temp1, *CurImage;
+	ILenum	PalType = 0;
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
@@ -26,11 +27,36 @@ ILboolean ILAPIENTRY iluRotate(ILfloat Angle)
 		return IL_FALSE;
 	}
 
+	if (iluCurImage->Format == IL_COLOUR_INDEX) {
+		PalType = iluCurImage->Pal.PalType;
+		CurImage = iluCurImage;
+		iluCurImage = iConvertImage(iluCurImage, ilGetPalBaseType(CurImage->Pal.PalType), IL_UNSIGNED_BYTE);
+	}
+
 	Temp = iluRotate_(iluCurImage, Angle);
 	if (Temp != NULL) {
+		if (PalType != 0) {
+			ilCloseImage(iluCurImage);
+			Temp1 = iConvertImage(Temp, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
+			ilCloseImage(Temp);
+			Temp = Temp1;
+			ilSetCurImage(CurImage);
+		}
 		ilTexImage(Temp->Width, Temp->Height, Temp->Depth, Temp->Bpp, Temp->Format, Temp->Type, Temp->Data);
+		if (PalType != 0) {
+			iluCurImage = ilGetCurImage();
+			iluCurImage->Pal.PalSize = Temp->Pal.PalSize;
+			iluCurImage->Pal.PalType = Temp->Pal.PalType;
+			iluCurImage->Pal.Palette = (ILubyte*)malloc(Temp->Pal.PalSize);
+			if (iluCurImage->Pal.Palette == NULL) {
+				ilSetError(ILU_OUT_OF_MEMORY);
+				ilCloseImage(Temp);
+				return IL_FALSE;
+			}
+			memcpy(iluCurImage->Pal.Palette, Temp->Pal.Palette, Temp->Pal.PalSize);
+		}
+
 		iluCurImage->Origin = Temp->Origin;
-		ilSetPal(&Temp->Pal);
 		ilCloseImage(Temp);
 		return IL_TRUE;
 	}
@@ -41,6 +67,9 @@ ILboolean ILAPIENTRY iluRotate(ILfloat Angle)
 ILboolean ILAPIENTRY iluRotate3D(ILfloat x, ILfloat y, ILfloat z, ILfloat Angle)
 {
 	ILimage *Temp;
+
+return IL_FALSE;
+
 	iluCurImage = ilGetCurImage();
 	Temp = iluRotate3D_(iluCurImage, x, y, z, Angle);
 	if (Temp != NULL) {

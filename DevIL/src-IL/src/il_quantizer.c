@@ -412,7 +412,7 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 
 	NewImage = iCurImage;
 	iCurImage = Image;
-	TempImage = iConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+	TempImage = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
 	iCurImage = NewImage;
 
 	if (TempImage == NULL)

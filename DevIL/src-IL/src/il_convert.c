@@ -191,31 +191,31 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols);
 ILimage *iNeuQuant(ILimage *Image);
 
 // Converts an image from one format to another
-ILAPI ILimage* ILAPIENTRY iConvertImage(ILenum DestFormat, ILenum DestType)
+ILAPI ILimage* ILAPIENTRY iConvertImage(ILimage *Image, ILenum DestFormat, ILenum DestType)
 {
 	static ILimage	*NewImage, *CurImage;
 	static ILuint	i;
 
-	CurImage = iCurImage;
-	if (iCurImage == NULL) {
+	CurImage = Image;
+	if (Image == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
 	// We don't support 16-bit color indices (or higher).
-	if (iCurImage->Format == IL_COLOUR_INDEX && DestType >= IL_SHORT) {
+	if (Image->Format == IL_COLOUR_INDEX && DestType >= IL_SHORT) {
 		ilSetError(IL_INVALID_CONVERSION);
 		return IL_FALSE;
 	}
 
-	if (iCurImage->Format == IL_COLOUR_INDEX) {
-		NewImage = iConvertPalette(iCurImage, DestFormat);
+	if (Image->Format == IL_COLOUR_INDEX) {
+		NewImage = iConvertPalette(Image, DestFormat);
 	}
-	else if (DestFormat == IL_COLOUR_INDEX && iCurImage->Format != IL_LUMINANCE) {
+	else if (DestFormat == IL_COLOUR_INDEX && Image->Format != IL_LUMINANCE) {
 		if (iGetInt(IL_QUANTIZATION_MODE) == IL_NEU_QUANT)
-			return iNeuQuant(iCurImage);
+			return iNeuQuant(Image);
 		else // Assume IL_WU_QUANT otherwise.
-			return iQuantizeImage(iCurImage, 256);
+			return iQuantizeImage(Image, 256);
 	}
 	else {
 		NewImage = (ILimage*)calloc(1, sizeof(ILimage));  // Much better to have it all set to 0.
@@ -230,7 +230,7 @@ ILAPI ILimage* ILAPIENTRY iConvertImage(ILenum DestFormat, ILenum DestType)
 			return NULL;
 		}
 
-		ilCopyImageAttr(NewImage, iCurImage);
+		ilCopyImageAttr(NewImage, Image);
 		NewImage->Format = DestFormat;
 		NewImage->Type = DestType;
 		NewImage->Bpc = ilGetBppType(DestType);
@@ -239,7 +239,7 @@ ILAPI ILimage* ILAPIENTRY iConvertImage(ILenum DestFormat, ILenum DestType)
 		NewImage->SizeOfPlane = NewImage->Bps * NewImage->Height;
 		NewImage->SizeOfData = NewImage->SizeOfPlane * NewImage->Depth;
 
-		if (DestFormat == IL_COLOUR_INDEX && iCurImage->Format == IL_LUMINANCE) {
+		if (DestFormat == IL_COLOUR_INDEX && Image->Format == IL_LUMINANCE) {
 			NewImage->Pal.PalSize = 768;
 			NewImage->Pal.PalType = IL_PAL_RGB24;
 			NewImage->Pal.Palette = (ILubyte*)ialloc(768);
@@ -248,11 +248,11 @@ ILAPI ILimage* ILAPIENTRY iConvertImage(ILenum DestFormat, ILenum DestType)
 				NewImage->Pal.Palette[i * 3 + 1] = i;
 				NewImage->Pal.Palette[i * 3 + 2] = i;
 			}
-			NewImage->Data = (ILubyte*)ialloc(iCurImage->SizeOfData);
-			memcpy(NewImage->Data, iCurImage->Data, iCurImage->SizeOfData);
+			NewImage->Data = (ILubyte*)ialloc(Image->SizeOfData);
+			memcpy(NewImage->Data, Image->Data, Image->SizeOfData);
 		}
 		else {
-			NewImage->Data = ilConvertBuffer(iCurImage->SizeOfData, iCurImage->Format, DestFormat, iCurImage->Type, DestType, iCurImage->Data);
+			NewImage->Data = ilConvertBuffer(Image->SizeOfData, Image->Format, DestFormat, Image->Type, DestType, Image->Data);
 			if (NewImage->Data == NULL) {
 				ifree(NewImage);
 				return NULL;
@@ -287,7 +287,7 @@ ILboolean ILAPIENTRY ilConvertImage(ILenum DestFormat, ILenum DestType)
 	if (ilIsEnabled(IL_USE_KEY_COLOUR)) {
 		ilAddAlphaKey(iCurImage);
 	}
-	Image = iConvertImage(DestFormat, DestType);
+	Image = iConvertImage(iCurImage, DestFormat, DestType);
 	if (Image == NULL)
 		return IL_FALSE;
 

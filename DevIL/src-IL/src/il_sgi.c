@@ -584,7 +584,7 @@ ILboolean iSaveSgiInternal()
 
 	// The sgi format does not accept palette'd images directly.
 	if (iCurImage->Format == IL_COLOUR_INDEX) {
-		Temp = iConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+		Temp = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
 		if (Temp == NULL)
 			return IL_FALSE;
 	}

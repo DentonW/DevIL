@@ -680,7 +680,7 @@ ILboolean iSaveTargaInternal()
 	iwrite(&PalEntSize, sizeof(ILubyte), 1);
 
 	if (iCurImage->Bpc > 1) {
-		TempImage = iConvertImage(iCurImage->Format, IL_UNSIGNED_BYTE);
+		TempImage = iConvertImage(iCurImage, iCurImage->Format, IL_UNSIGNED_BYTE);
 		if (TempImage == NULL)
 			return IL_FALSE;
 	}

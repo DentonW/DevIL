@@ -249,7 +249,7 @@ ILAPI ILboolean ILAPIENTRY	ilTexSubImage_(ILimage *Image, ILvoid *Data);
 ILboolean					ilAddAlpha(ILvoid);
 ILboolean					ilAddAlphaKey(ILimage *Image);
 ILAPI ILvoid*	ILAPIENTRY	ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, ILenum DestFormat, ILenum SrcType, ILenum DestType, ILvoid *Buffer);
-ILAPI ILimage*	ILAPIENTRY	iConvertImage(ILenum DestFormat, ILenum DestType);
+ILAPI ILimage*	ILAPIENTRY	iConvertImage(ILimage *Image, ILenum DestFormat, ILenum DestType);
 ILboolean					iFastConvert(ILenum DestFormat);
 ILAPI ILpal*	ILAPIENTRY	iConvertPal(ILpal *Pal, ILenum DestFormat);
 ILboolean					ilFixImage(ILvoid);

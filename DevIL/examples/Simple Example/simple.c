@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // DevIL Source Example
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified:  17/12/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified:  4/22/2002 <--Y2K Compliant! =]
 //
 // Filename: examples/Simple Example/simple.c
 //
@@ -19,7 +19,6 @@
 
 int main(int argc, char **argv)
 {
-
 	ILuint	ImgId;
 	ILenum	Error;
 
@@ -27,7 +26,7 @@ int main(int argc, char **argv)
 	if (argc < 2) {
 		fprintf(stderr, "DevIL_test : DevIL simple command line application.\n");
 		fprintf(stderr, "Usage : DevIL_test <file> [output]\n");
-		fprintf(stderr, "Default output is ./test.tga\n");
+		fprintf(stderr, "Default output is test.tga\n");
 		return 1;
 	}
 

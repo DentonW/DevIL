@@ -500,7 +500,7 @@ ILboolean ILAPIENTRY ilSaveFromJpegStruct(ILvoid* JpegCompressPtr)
 	}
 
 	if ((iCurImage->Format != IL_RGB && iCurImage->Format != IL_LUMINANCE) || iCurImage->Bpc != 1) {
-		Temp = iConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+		Temp = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
 		if (Temp == NULL) {
 			return IL_FALSE;
 		}
@@ -562,7 +562,7 @@ ILboolean iSaveJpegInternal()
 	}
 
 	if ((iCurImage->Format != IL_RGB && iCurImage->Format != IL_LUMINANCE) || iCurImage->Bpc != 1) {
-		Temp = iConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+		Temp = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
 		if (Temp == NULL) {
 			return IL_FALSE;
 		}

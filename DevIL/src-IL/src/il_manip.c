@@ -673,7 +673,7 @@ ILubyte* ILAPIENTRY ilGetAlpha(ILenum Type)
 		TempImage = iCurImage;
 	}
 	else {
-		TempImage = iConvertImage(iCurImage->Format, Type);
+		TempImage = iConvertImage(iCurImage, iCurImage->Format, Type);
 		if (TempImage == NULL)
 			return NULL;
 	}

@@ -413,9 +413,9 @@ ILboolean ilSaveTiff(const char *FileName)
 
 	if (iCurImage->Format == IL_COLOUR_INDEX) {
 		if (ilGetBppPal(iCurImage->Pal.PalType) == 4)  // Preserve the alpha.
-			TempImage = iConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+			TempImage = iConvertImage(iCurImage, IL_RGBA, IL_UNSIGNED_BYTE);
 		else
-			TempImage = iConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+			TempImage = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
 
 		if (TempImage == NULL) {
 			return IL_FALSE;

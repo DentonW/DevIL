@@ -92,7 +92,7 @@ ILAPI ILimage* ILAPIENTRY iluScale_(ILimage *Image, ILuint Width, ILuint Height,
 	if (Format == IL_COLOUR_INDEX) {
 		ilSetCurImage(Image);
 		PalType = Image->Pal.PalType;
-		ToScale = iConvertImage(ilGetPalBaseType(Image->Pal.PalType), iluCurImage->Type);
+		ToScale = iConvertImage(iluCurImage, ilGetPalBaseType(Image->Pal.PalType), iluCurImage->Type);
 	}
 	else {
 		ToScale = Image;
