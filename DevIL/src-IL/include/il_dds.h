@@ -107,22 +107,23 @@ typedef struct DXTAlphaBlock3BitLinear
 
 //Those 4 were added on 20040516 to make
 //the written dds files more standard compliant
-#define DDS_CAPS				0x00000001l
-#define DDS_HEIGHT				0x00000002l
-#define DDS_WIDTH				0x00000004l
-#define DDS_PIXELFORMAT			0x00001000l
+#define DDS_CAPS				0x00000001L
+#define DDS_HEIGHT				0x00000002L
+#define DDS_WIDTH				0x00000004L
+#define DDS_PIXELFORMAT			0x00001000L
+#define DDS_LUMINANCE			0x00020000L
 
-#define DDS_ALPHAPIXELS			0x00000001l
-#define DDS_ALPHA				0x00000002l
-#define DDS_FOURCC				0x00000004l
-#define DDS_PITCH				0x00000008l
-#define DDS_COMPLEX				0x00000008l
-#define DDS_TEXTURE				0x00001000l
-#define DDS_MIPMAPCOUNT			0x00020000l
-#define DDS_LINEARSIZE			0x00080000l
-#define DDS_VOLUME				0x00200000l
-#define DDS_MIPMAP				0x00400000l
-#define DDS_DEPTH				0x00800000l
+#define DDS_ALPHAPIXELS			0x00000001L
+#define DDS_ALPHA				0x00000002L
+#define DDS_FOURCC				0x00000004L
+#define DDS_PITCH				0x00000008L
+#define DDS_COMPLEX				0x00000008L
+#define DDS_TEXTURE				0x00001000L
+#define DDS_MIPMAPCOUNT			0x00020000L
+#define DDS_LINEARSIZE			0x00080000L
+#define DDS_VOLUME				0x00200000L
+#define DDS_MIPMAP				0x00400000L
+#define DDS_DEPTH				0x00800000L
 
 #define DDS_CUBEMAP				0x00000200L
 #define DDS_CUBEMAP_POSITIVEX	0x00000400L
@@ -133,9 +134,9 @@ typedef struct DXTAlphaBlock3BitLinear
 #define DDS_CUBEMAP_NEGATIVEZ	0x00008000L
 
 
-#define IL_MAKEFOURCC(ch0, ch1, ch2, ch3)                              \
-            ((ILint)(ILbyte)(ch0) | ((ILint)(ILbyte)(ch1) << 8) |   \
-            ((ILint)(ILbyte)(ch2) << 16) | ((ILint)(ILbyte)(ch3) << 24 ))
+#define IL_MAKEFOURCC(ch0, ch1, ch2, ch3) \
+			((ILint)(ILbyte)(ch0) | ((ILint)(ILbyte)(ch1) << 8) |	\
+			((ILint)(ILbyte)(ch2) << 16) | ((ILint)(ILbyte)(ch3) << 24 ))
 
 enum PixFormat
 {
@@ -147,6 +148,8 @@ enum PixFormat
 	PF_DXT4,
 	PF_DXT5,
 	PF_3DC,
+	PF_LUMINANCE,
+	PF_LUMINANCE_ALPHA,
 	PF_UNKNOWN = 0xFF
 };
 
