@@ -56,9 +56,9 @@ ILboolean ILAPIENTRY ilApplyProfile(const ILstring InProfile, const ILstring Out
 				case IL_RGBA:
 					Format = TYPE_RGBA_8;
 					break;
-				/*case IL_BGRA:
+				case IL_BGRA:
 					Format = TYPE_BGRA_8;
-					break;*/
+					break;
 				default:
 					ilSetError(IL_INTERNAL_ERROR);
 					return IL_FALSE;
@@ -81,9 +81,9 @@ ILboolean ILAPIENTRY ilApplyProfile(const ILstring InProfile, const ILstring Out
 				case IL_RGBA:
 					Format = TYPE_RGBA_16;
 					break;
-				/*case IL_BGRA:
+				case IL_BGRA:
 					Format = TYPE_BGRA_16;
-					break;*/
+					break;
 				default:
 					ilSetError(IL_INTERNAL_ERROR);
 					return IL_FALSE;

@@ -299,7 +299,7 @@ ILvoid ILAPIENTRY ilRegisterFormat(ILenum Format)
 
 ILboolean ILAPIENTRY ilRegisterMipNum(ILuint Num)
 {
-	ILimage *Next;
+	ILimage *Next, *Prev;
 
 	ilBindImage(ilGetCurName());  // Make sure the current image is actually bound.
 	ilCloseImage(iCurImage->Mipmaps);  // Close any current mipmaps.
@@ -308,7 +308,6 @@ ILboolean ILAPIENTRY ilRegisterMipNum(ILuint Num)
 	if (Num == 0)  // Just gets rid of all the mipmaps.
 		return IL_TRUE;
 
-	//iCurImage->Mipmaps = (ILimage*)ialloc(sizeof(ILimage));
 	iCurImage->Mipmaps = ilNewImage(1, 1, 1, 1, 1);
 	if (iCurImage->Mipmaps == NULL)
 		return IL_FALSE;
@@ -316,10 +315,17 @@ ILboolean ILAPIENTRY ilRegisterMipNum(ILuint Num)
 	Num--;
 
 	while (Num) {
-		//Next->Next = (ILimage*)ialloc(sizeof(ILimage));
 		Next->Next = ilNewImage(1, 1, 1, 1, 1);
-		if (Next->Next == NULL)
+		if (Next->Next == NULL) {
+			// Clean up before we error out.
+			Prev = iCurImage->Mipmaps;
+			while (Prev) {
+				Next = Prev->Next;
+				ilCloseImage(Prev);
+				Prev = Next;
+			}
 			return IL_FALSE;
+		}
 		Next = Next->Next;
 		Num--;
 	}
@@ -330,7 +336,7 @@ ILboolean ILAPIENTRY ilRegisterMipNum(ILuint Num)
 
 ILboolean ILAPIENTRY ilRegisterNumImages(ILuint Num)
 {
-	ILimage *Next;
+	ILimage *Next, *Prev;
 
 	ilBindImage(ilGetCurName());  // Make sure the current image is actually bound.
 	ilCloseImage(iCurImage->Next);  // Close any current "next" images.
@@ -339,7 +345,6 @@ ILboolean ILAPIENTRY ilRegisterNumImages(ILuint Num)
 	if (Num == 0)  // Just gets rid of all the "next" images.
 		return IL_TRUE;
 
-	//iCurImage->Next = (ILimage*)ialloc(sizeof(ILimage));
 	iCurImage->Next = ilNewImage(1, 1, 1, 1, 1);
 	if (iCurImage->Next == NULL)
 		return IL_FALSE;
@@ -347,9 +352,15 @@ ILboolean ILAPIENTRY ilRegisterNumImages(ILuint Num)
 	Num--;
 
 	while (Num) {
-		//Next->Next = (ILimage*)ialloc(sizeof(ILimage));
 		Next->Next = ilNewImage(1, 1, 1, 1, 1);
 		if (Next->Next == NULL) {
+			// Clean up before we error out.
+			Prev = iCurImage->Next;
+			while (Prev) {
+				Next = Prev->Next;
+				ilCloseImage(Prev);
+				Prev = Next;
+			}
 			return IL_FALSE;
 		}
 		Next = Next->Next;

@@ -64,8 +64,9 @@ ILboolean ilSaveDdsL(ILvoid *Lump, ILuint Size)
 // Internal function used to save the Dds.
 ILboolean iSaveDdsInternal()
 {
-	ILenum DXTCFormat, Origin;
-	ILuint counter, numMipMaps;
+	ILenum	DXTCFormat;
+	ILuint	counter, numMipMaps;
+	ILubyte	*CurData;
 
 	if (ilNextPower2(iCurImage->Width) != iCurImage->Width ||
 		ilNextPower2(iCurImage->Height) != iCurImage->Height ||
@@ -74,32 +75,32 @@ ILboolean iSaveDdsInternal()
 			return IL_FALSE;
 	}
 
-	Origin = iCurImage->Origin;
-	if (Origin != IL_ORIGIN_UPPER_LEFT)
-		ilFlipImage();
-
 	DXTCFormat = iGetInt(IL_DXTC_FORMAT);
 	WriteHeader(iCurImage, DXTCFormat);
 	
 	numMipMaps = ilGetInteger(IL_NUM_MIPMAPS);
 	for (counter = 0; counter < numMipMaps; counter++) {
 		ilActiveMipmap(counter);
-		
-		Origin = iCurImage->Origin;
-		if (Origin != IL_ORIGIN_UPPER_LEFT)
-			ilFlipImage();
-		
+
+		if (iCurImage->Origin != IL_ORIGIN_UPPER_LEFT) {
+			CurData = iCurImage->Data;
+			iCurImage->Data = iGetFlipped(iCurImage);
+			if (iCurImage->Data == NULL) {
+				iCurImage->Data = CurData;
+				return IL_FALSE;
+			}
+		}
+
 		if (!Compress(iCurImage, DXTCFormat))
 			return IL_FALSE;
 
-		if (Origin != IL_ORIGIN_UPPER_LEFT)
-			ilFlipImage();
+		if (iCurImage->Origin != IL_ORIGIN_UPPER_LEFT) {
+			ifree(iCurImage->Data);
+			iCurImage->Data = CurData;
+		}
 		
 		ilActiveMipmap(0);
 	}
-
-	if (Origin != IL_ORIGIN_UPPER_LEFT)
-		ilFlipImage();
 
 	return IL_TRUE;
 }
@@ -138,6 +139,7 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat)
 			break;
 		default:
 			// Error!
+			ilSetError(IL_INTERNAL_ERROR);  // Should never happen, though.
 			return IL_FALSE;
 	}
 

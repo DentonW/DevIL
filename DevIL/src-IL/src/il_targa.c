@@ -285,6 +285,7 @@ ILboolean iReadColMapTga(TARGAHEAD *Header)
 			return IL_FALSE;
 	}
 	else {
+		// 16 bit palette, so we have to break it up.
 		for (i = 0; i < iCurImage->Pal.PalSize; i += 4) {
 			Pixel = GetBigUShort();
 			if (ieof())

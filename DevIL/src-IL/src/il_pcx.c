@@ -512,19 +512,15 @@ ILboolean ilSavePcxL(ILvoid *Lump, ILuint Size)
 // Internal function used to save the .pcx.
 ILboolean iSavePcxInternal()
 {
-	ILenum	Origin;
 	ILuint	i, c, PalSize;
 	ILpal	*TempPal;
 	ILimage	*TempImage = iCurImage;
+	ILubyte	*TempData;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
-
-	Origin = iCurImage->Origin;
-	if (Origin == IL_ORIGIN_LOWER_LEFT)
-		ilFlipImage();
 
 	switch (iCurImage->Format)
 	{
@@ -553,6 +549,20 @@ ILboolean iSavePcxInternal()
 					return IL_FALSE;
 			}
 	}
+
+	if (TempImage->Origin != IL_ORIGIN_UPPER_LEFT) {
+		TempData = iGetFlipped(TempImage);
+		if (TempData == NULL) {
+			if (TempImage != iCurImage) {
+				ilCloseImage(TempImage);
+			}
+			return IL_FALSE;
+		}
+	}
+	else {
+		TempData = TempImage->Data;
+	}
+
 
 	iputc(0xA);  // Manufacturer - always 10
 	iputc(0x5);  // Version Number - always 5
@@ -584,7 +594,7 @@ ILboolean iSavePcxInternal()
 	// Output data
 	for (i = 0; i < TempImage->Height; i++) {
 		for (c = 0; c < TempImage->Bpp; c++) {
-			encLine(TempImage->Data + TempImage->Bps * i + c, TempImage->Width, (ILubyte)(TempImage->Bpp - 1));
+			encLine(TempData + TempImage->Bps * i + c, TempImage->Width, (ILubyte)(TempImage->Bpp - 1));
 		}
 	}
 
@@ -601,8 +611,10 @@ ILboolean iSavePcxInternal()
 		else {
 			TempPal = iConvertPal(&TempImage->Pal, IL_PAL_RGB24);
 			if (TempPal == NULL) {
-				ifree(TempPal->Palette);
-				ifree(TempPal);
+				if (TempImage->Origin == IL_ORIGIN_LOWER_LEFT)
+					ifree(TempData);
+				if (TempImage != iCurImage)
+					ilCloseImage(TempImage);
 				return IL_FALSE;
 			}
 
@@ -618,9 +630,8 @@ ILboolean iSavePcxInternal()
 		iputc(0x0);
 	}
 
-	if (Origin == IL_ORIGIN_LOWER_LEFT)
-		ilFlipImage();
-
+	if (TempImage->Origin == IL_ORIGIN_LOWER_LEFT)
+		ifree(TempData);
 	if (TempImage != iCurImage)
 		ilCloseImage(TempImage);
 

@@ -52,21 +52,20 @@ typedef struct Box
  * NB: these must start out 0!
  */
 
-static ILfloat	gm2[33][33][33];
-static ILint	wt[33][33][33], mr[33][33][33],	mg[33][33][33],	mb[33][33][33];
-static ILubyte	*Ir, *Ig, *Ib;
-static ILuint	size; /*image size*/
-static ILint	K;    /*color look-up table size*/
-static ILushort	*Qadd;
+ILfloat		gm2[33][33][33];
+ILint		wt[33][33][33], mr[33][33][33],	mg[33][33][33],	mb[33][33][33];
+ILuint		size; //image size
+ILint		K;    //colour look-up table size
+ILushort	*Qadd;
 
 
-static ILint	WindW, WindH, WindD;
-static ILint	i;
-static ILubyte	*buffer;
-static ILint	Width, Height, Depth, Comp;
-/*static ILint	TotalColors;
-static ILint	a, b;
-static ILubyte	*buf1, *buf2;*/
+ILint	WindW, WindH, WindD;
+ILint	i;
+ILubyte	*buffer;
+ILint	Width, Height, Depth, Comp;
+/*ILint	TotalColors;
+ILint	a, b;
+ILubyte	*buf1, *buf2;*/
 
 
 ILuint n2(ILint s)
@@ -84,7 +83,7 @@ ILuint n2(ILint s)
 
 
 // Build 3-D color histogram of counts, r/g/b, c^2
-ILvoid Hist3d(ILint *vwt, ILint *vmr, ILint *vmg, ILint *vmb, ILfloat *m2) 
+ILboolean Hist3d(ILubyte *Ir, ILubyte *Ig, ILubyte *Ib, ILint *vwt, ILint *vmr, ILint *vmg, ILint *vmb, ILfloat *m2)
 {
 	ILint	ind, r, g, b;
 	ILint	inr, ing, inb, table[2560];
@@ -95,7 +94,7 @@ ILvoid Hist3d(ILint *vwt, ILint *vmr, ILint *vmg, ILint *vmb, ILfloat *m2)
 	}
 	Qadd = (ILushort*)ialloc(sizeof(ILushort) * size);
 	if (Qadd == NULL) {
-		return;
+		return IL_FALSE;
 	}
 	memset(Qadd, 0, sizeof(ILushort) * size);
 	for (i = 0; i < size; i++) {
@@ -111,6 +110,7 @@ ILvoid Hist3d(ILint *vwt, ILint *vmr, ILint *vmg, ILint *vmb, ILfloat *m2)
 	    vmb[ind] += b;
 		m2[ind] += (ILfloat)(table[r]+table[g]+table[b]);
 	}
+	return IL_TRUE;
 }
 
 /* At conclusion of the histogram step, we can interpret
@@ -399,7 +399,7 @@ void Mark(struct Box *cube, int label, unsigned char *tag)
 ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 {
 	Box		cube[MAXCOLOR];
-	ILubyte	*tag;
+	ILubyte	*tag = NULL;
 	ILubyte	lut_r[MAXCOLOR], lut_g[MAXCOLOR], lut_b[MAXCOLOR];
 	ILint	next;
 	ILint	weight;
@@ -408,16 +408,12 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 	//ILint	color_num;
 	ILubyte	*NewData = NULL, *Palette = NULL;
 	ILimage	*TempImage = NULL, *NewImage = NULL;
+	ILubyte	*Ir = NULL, *Ig = NULL, *Ib = NULL;
 
 	NewImage = iCurImage;
 	iCurImage = Image;
 	TempImage = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
 	iCurImage = NewImage;
-
-	// @TODO:  Remove if we make these local.
-	Ir = NULL;
-	Ig = NULL;
-	Ib = NULL;
 
 	if (TempImage == NULL)
 		return NULL;
@@ -427,6 +423,7 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 	WindH = Height = Image->Height;
 	WindD = Depth = Image->Depth;
 	Comp = Image->Bpp;
+	Qadd = NULL;
 
 	//color_num = ImagePrecalculate(Image);
 
@@ -471,7 +468,8 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 		memset(mg,  0, 33 * 33 * 33 * sizeof(ILint));
 		memset(mb,  0, 33 * 33 * 33 * sizeof(ILint));
 
-		Hist3d((ILint*)wt, (ILint*)mr, (ILint*)mg, (ILint*)mb, (ILfloat*)gm2);
+		if (!Hist3d(Ir, Ig, Ib, (ILint*)wt, (ILint*)mr, (ILint*)mg, (ILint*)mb, (ILfloat*)gm2))
+			goto error_label;
 
 		M3d((ILint*)wt, (ILint*)mr, (ILint*)mg, (ILint*)mb, (ILfloat*)gm2);
 
@@ -534,6 +532,7 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 	else { // If colors more than 256
 		// Begin Octree quantization
 		//Quant_Octree(Image->Width, Image->Height, Image->Bpp, buffer2, NewData, Palette, K);
+		ilSetError(IL_INTERNAL_ERROR);  // Can't get much more specific than this.
 		goto error_label;
 	}
 
@@ -567,5 +566,7 @@ error_label:
 	ifree(Ig);
 	ifree(Ib);
 	ifree(Ir);
+	ifree(tag);
+	ifree(Qadd);
 	return NULL;
 }

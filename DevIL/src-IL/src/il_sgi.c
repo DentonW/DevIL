@@ -362,46 +362,32 @@ ILint iGetScanLine(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length)
 // Much easier to read - just assemble from planes, no decompression
 ILboolean iReadNonRleSgi(iSgiHeader *Head)
 {
-	ILubyte **Temp;
-	ILuint i, c, k;
-	ILint j, ChanInt = 0, ChanSize;
+	ILuint		i, c;
+	ILint		ChanInt = 0, ChanSize;
+	ILboolean	Cache = IL_FALSE;
 
 	if (!iNewSgi(Head)) {
 		return IL_FALSE;
 	}
 
 	if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST) {
+		Cache = IL_TRUE;
 		ChanSize = Head->XSize * Head->YSize * Head->Bpc;
-		Temp = (ILubyte**)ialloc(Head->ZSize * sizeof(ILubyte*));
-		for (i = 0; i < Head->ZSize; i++) {
-			Temp[i] = (ILubyte*)ialloc(ChanSize);
-			if (iread(Temp[i], 1, ChanSize) != (ILuint)ChanSize) {
-				for (k = 0; k < i; k++)
-					ifree(Temp[k]);
-				ifree(Temp);
+		iPreCache(ChanSize);
+	}
+
+	for (c = 0; c < iCurImage->Bpp; c++) {
+		for (i = c; i < iCurImage->SizeOfData; i += iCurImage->Bpp) {
+			if (iread(iCurImage->Data + i, 1, 1) != 1) {
+				if (Cache)
+					iUnCache();
 				return IL_FALSE;
 			}
 		}
-
-		// Assemble the image from its planes
-		for (i = 0; i < iCurImage->SizeOfData; i += Head->ZSize, ChanInt++) {
-			for (j = 0; j < Head->ZSize; j++) {
-				iCurImage->Data[i + j] = Temp[j][ChanInt];
-			}
-		}
-
-		for (i = 0; i < Head->ZSize; i++)
-			ifree(Temp[i]);
-		ifree(Temp);
 	}
-	else {  // Uses less mem but ?slower?
-		for (c = 0; c < iCurImage->Bpp; c++) {
-			for (i = c; i < iCurImage->SizeOfData; i += iCurImage->Bpp) {
-				if (iread(iCurImage->Data + i, 1, 1) != 1)
-					return IL_FALSE;
-			}
-		}
-	}
+
+	if (Cache)
+		iUnCache();
 
 	return IL_TRUE;
 }
@@ -517,6 +503,17 @@ ILboolean ilSaveSgiL(ILvoid *Lump, ILuint Size)
 	return iSaveSgiInternal();
 }
 
+
+ILenum DetermineSgiType(ILenum Type)
+{
+	if (Type > IL_UNSIGNED_SHORT) {
+		if (iCurImage->Type == IL_INT)
+			return IL_SHORT;
+		return IL_UNSIGNED_SHORT;
+	}
+	return Type;
+}
+
 /*----------------------------------------------------------------------------*/
 
 // Rle does NOT work yet.
@@ -524,10 +521,10 @@ ILboolean ilSaveSgiL(ILvoid *Lump, ILuint Size)
 // Internal function used to save the Sgi.
 ILboolean iSaveSgiInternal()
 {
-	ILenum		Format, Origin;
 	ILuint		i, c;
 	ILboolean	Compress;
-	ILimage		*Temp = NULL;
+	ILimage		*Temp = iCurImage;
+	ILubyte		*TempData;
 
 	Compress = iGetInt(IL_SGI_RLE);
 
@@ -536,24 +533,18 @@ ILboolean iSaveSgiInternal()
 		return IL_FALSE;
 	}
 
-	// The sgi format does not accept palette'd images directly.
-	if (iCurImage->Format == IL_COLOUR_INDEX) {
-		Temp = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
-		if (Temp == NULL)
-			return IL_FALSE;
+	if (iCurImage->Format != IL_RGB && iCurImage->Format != IL_RGBA) {
+		if (iCurImage->Format == IL_BGRA)
+			Temp = iConvertImage(iCurImage, IL_RGBA, DetermineSgiType(iCurImage->Type));
+		else
+			Temp = iConvertImage(iCurImage, IL_RGB, DetermineSgiType(iCurImage->Type));
 	}
 	else if (iCurImage->Type > IL_UNSIGNED_SHORT) {
-		if (iCurImage->Type == IL_INT)
-			Temp = iConvertImage(iCurImage, iCurImage->Format, IL_SHORT);
-		else
-			Temp = iConvertImage(iCurImage, iCurImage->Format, IL_UNSIGNED_SHORT);
+		Temp = iConvertImage(iCurImage, iCurImage->Format, DetermineSgiType(iCurImage->Type));
+	}
 
-		if (Temp == NULL)
-			return IL_FALSE;
-	}
-	else {
-		Temp = iCurImage;
-	}
+	if (Temp == NULL)
+		return IL_FALSE;
 
 	SaveBigUShort(SGI_MAGICNUM);  // 'Magic' number
 	if (Compress)
@@ -621,35 +612,33 @@ ILboolean iSaveSgiInternal()
 	}
 
 
-	Origin = iCurImage->Origin;
-	if (Origin == IL_ORIGIN_UPPER_LEFT) {
-		ilFlipImage();
+	if (iCurImage->Origin == IL_ORIGIN_UPPER_LEFT) {
+		TempData = iGetFlipped(Temp);
+		if (TempData == NULL) {
+			if (Temp!= iCurImage)
+				ilCloseImage(Temp);
+			return IL_FALSE;
+		}
 	}
-
-	Format = iCurImage->Format;
-	if (Format == IL_BGR || Format == IL_BGRA) {
-		ilSwapColours();
+	else {
+		TempData = Temp->Data;
 	}
 
 
 	if (!Compress) {
 		for (c = 0; c < Temp->Bpp; c++) {
 			for (i = c; i < Temp->SizeOfData; i += Temp->Bpp) {
-				iputc(Temp->Data[i]);  // Have to save each colour plane separately.
+				iputc(TempData[i]);  // Have to save each colour plane separately.
 			}
 		}
 	}
 	else {
-		iSaveRleSgi();
+		iSaveRleSgi(TempData);
 	}
 
-	if (Origin == IL_ORIGIN_UPPER_LEFT) {
-		ilFlipImage();
-	}
-	if (Format == IL_BGR || Format == IL_BGRA) {
-		ilSwapColours();
-	}
 
+	if (TempData != Temp->Data)
+		ifree(TempData);
 	if (Temp != iCurImage)
 		ilCloseImage(Temp);
 
@@ -658,7 +647,7 @@ ILboolean iSaveSgiInternal()
 
 /*----------------------------------------------------------------------------*/
 
-ILboolean iSaveRleSgi()
+ILboolean iSaveRleSgi(ILubyte *Data)
 {
 	ILuint	c, i, y, j;
 	ILubyte	*ScanLine = NULL, *CompLine = NULL;
@@ -688,7 +677,7 @@ ILboolean iSaveRleSgi()
 		for (y = 0; y < iCurImage->Height; y++) {
 			i = y * iCurImage->Bps + c;
 			for (j = 0; j < iCurImage->Width; j++, i += iCurImage->Bpp) {
-				ScanLine[j] = iCurImage->Data[i];
+				ScanLine[j] = Data[i];
 			}
 
 			ilRleCompressLine(ScanLine, iCurImage->Width, 1, CompLine, LenTable + iCurImage->Height * c + y, IL_SGICOMP);

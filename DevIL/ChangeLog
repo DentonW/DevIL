@@ -17,10 +17,16 @@
 - Merged in Ryan Butterfoss's changes to the DDS saving code.
 - Moved ilSetPal() from il_devil.c to il_pal.c.
 - Fixed potential memory leaks while loading a corrupt .gif file.
-- Added the IL_FILE_WRITE_ERRROR #define.
+- Added the IL_FILE_WRITE_ERROR #define.
 - Fixed double flipping in ilCopyPixels() and ilSetPixels(), along with some crashes.
 - Fixed a crash calling iluColoursUsed() when a 1x1 image was bound.
 - Fixed a leak if .dds mipmap reading failed.
+- Fixed leaks in ilRegisterMipNum() and ilRegisterNumImages() if they failed.
+- Sped up several aspects of loading and saving .sgi files.
+- Added ILUT_D3D_POOL for ilutSetInteger() and ilutGetInteger().
+- Changed ilGetString() to return an ILstring.
+- Added IL_BGRA support back in to ilApplyProfile().
+- Removed double flipping when saving .pcx and .jpg files.
 
 
 

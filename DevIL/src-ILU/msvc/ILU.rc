@@ -1,4 +1,4 @@
-// Microsoft Visual C++ generated resource script.
+//Microsoft Developer Studio generated resource script.
 //
 #include "resource.h"
 
@@ -30,7 +30,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // TEXTINCLUDE
 //
 
-2 TEXTINCLUDE 
+2 TEXTINCLUDE MOVEABLE PURE 
 BEGIN
     "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
     "#include ""windows.h""\r\n"
@@ -39,13 +39,13 @@ BEGIN
     "\0"
 END
 
-3 TEXTINCLUDE 
+3 TEXTINCLUDE MOVEABLE PURE 
 BEGIN
     "\r\n"
     "\0"
 END
 
-1 TEXTINCLUDE 
+1 TEXTINCLUDE MOVEABLE PURE 
 BEGIN
     "resource.h\0"
 END
@@ -53,14 +53,15 @@ END
 #endif    // APSTUDIO_INVOKED
 
 
+#ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
 //
 // Version
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,1,3,0
- PRODUCTVERSION 0,1,3,0
+ FILEVERSION 0,1,5,6
+ PRODUCTVERSION 0,1,5,6
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x29L
@@ -75,18 +76,18 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "Comments", "ILU:  A great portable image library in development"
-            VALUE "CompanyName", "Abysmal Software"
-            VALUE "FileDescription", "ILU:  A great portable image library in development"
-            VALUE "FileVersion", "1.5.6"
-            VALUE "InternalName", "ILU"
-            VALUE "LegalCopyright", "Copyright © 2000-2002"
-            VALUE "LegalTrademarks", "Under LGPL License"
-            VALUE "OriginalFilename", "ILU.dll"
-            VALUE "PrivateBuild", "Open Source"
-            VALUE "ProductName", "Developer's Image Utilities Library"
-            VALUE "ProductVersion", "1.5.6"
-            VALUE "SpecialBuild", "eh?"
+            VALUE "Comments", "ILU:  A great portable image library in development\0"
+            VALUE "CompanyName", "Abysmal Software\0"
+            VALUE "FileDescription", "ILU:  A great portable image library in development\0"
+            VALUE "FileVersion", "1.5.6\0"
+            VALUE "InternalName", "ILU\0"
+            VALUE "LegalCopyright", "Copyright © 2000-2002\0"
+            VALUE "LegalTrademarks", "Under LGPL License\0"
+            VALUE "OriginalFilename", "ILU.dll\0"
+            VALUE "PrivateBuild", "Open Source\0"
+            VALUE "ProductName", "Developer's Image Utilities Library\0"
+            VALUE "ProductVersion", "1.5.6\0"
+            VALUE "SpecialBuild", "eh?\0"
         END
     END
     BLOCK "VarFileInfo"
@@ -94,6 +95,8 @@ BEGIN
         VALUE "Translation", 0x409, 1200
     END
 END
+
+#endif    // !_MAC
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -103,14 +106,14 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_ICON1               ICON                    "resources\\IL Logo.ico"
+IDI_ICON1               ICON    DISCARDABLE     "resources\\IL Logo.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // String Table
 //
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     IDC_OPENILU             "Developer's Image Utilities Library, Version 1.2.4"
 END

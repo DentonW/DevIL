@@ -78,18 +78,11 @@ ILboolean iLoadDataInternal(ILuint Width, ILuint Height, ILuint Depth, ILubyte B
 	if (!ilTexImage(Width, Height, Depth, Bpp, 0, IL_UNSIGNED_BYTE, NULL)) {
 		return IL_FALSE;
 	}
-	iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
+	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 
 	// Tries to read the correct amount of data
-	if (iread(iCurImage->Data, 1, Width * Height * Depth * Bpp) < Width * Height * Depth * Bpp)
+	if (iread(iCurImage->Data, Width * Height * Depth * Bpp, 1) != 1)
 		return IL_FALSE;
-
-	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
-	if (ilIsEnabled(IL_ORIGIN_SET)) {
-		if (ilGetInteger(IL_ORIGIN_MODE) != IL_ORIGIN_UPPER_LEFT) {
-			ilFlipImage();
-		}
-	}
 
 	if (iCurImage->Bpp == 1)
 		iCurImage->Format = IL_LUMINANCE;

@@ -31,6 +31,7 @@ ILvoid ilutDefaultStates()
 	ilutStates[ilutCurrentPos].ilutUseS3TC = IL_FALSE;
 	ilutStates[ilutCurrentPos].ilutGenS3TC = IL_FALSE;
 	ilutStates[ilutCurrentPos].D3DMipLevels = 0;
+	ilutStates[ilutCurrentPos].D3DPool = 0;
 }
 
 
@@ -194,6 +195,9 @@ ILvoid ILAPIENTRY ilutGetIntegerv(ILenum Mode, ILint *Param)
 		case ILUT_D3D_MIPLEVELS:
 			*Param = ilutStates[ilutCurrentPos].D3DMipLevels;
 			break;
+		case ILUT_D3D_POOL:
+			*Param = ilutStates[ilutCurrentPos].D3DPool;
+			break;
 
 		default:
 			ilSetError(ILUT_INVALID_ENUM);
@@ -235,17 +239,26 @@ ILvoid ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param)
 				ilutStates[ilutCurrentPos].ilutUseS3TC = Param;
 				return;
 			}
+			break;
 		case ILUT_GL_GEN_S3TC:
 			if (Param == IL_TRUE || Param == IL_FALSE) {
 				ilutStates[ilutCurrentPos].ilutGenS3TC = Param;
 				return;
 			}
+			break;
 #endif//ILUT_USE_OPENGL
 
 #ifdef ILUT_USE_DIRECTX8
 		case ILUT_D3D_MIPLEVELS:
 			if (Param >= 0) {
 				ilutStates[ilutCurrentPos].D3DMipLevels = Param;
+				return;
+			}
+			break;
+
+		case ILUT_D3D_POOL:
+			if (Param >= 0 && Param <= 2) {
+				ilutStates[ilutCurrentPos].D3DPool = Param;
 				return;
 			}
 			break;

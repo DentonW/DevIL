@@ -75,6 +75,7 @@ extern "C" {
 #define ILUT_D3D_GEN_DXTC					0x0635
 #define ILUT_S3TC_FORMAT					0x0705
 #define ILUT_DXTC_FORMAT					0x0705
+#define ILUT_D3D_POOL						0x0706
 
 
 // Values

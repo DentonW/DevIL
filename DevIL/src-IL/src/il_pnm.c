@@ -516,8 +516,8 @@ ILboolean iSavePnmInternal()
 	ILenum		Type = 0;
 	ILuint		LinePos = 0;  // Cannot exceed 70 for pnm's!
 	ILboolean	Binary;
-	ILenum		Origin;
 	ILimage		*TempImage;
+	ILubyte		*TempData;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -545,10 +545,6 @@ ILboolean iSavePnmInternal()
 	else {
 		Binary = IL_FALSE;
 	}
-
-	Origin = iCurImage->Origin;
-	if (Origin == IL_ORIGIN_LOWER_LEFT)
-		ilFlipImage();
 
 	if (iCurImage->Type == IL_UNSIGNED_BYTE) {
 		MaxVal = UCHAR_MAX;
@@ -600,21 +596,27 @@ ILboolean iSavePnmInternal()
 			TempImage = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
 			break;
 		default:
-			ilSetError(IL_INVALID_FILE_HEADER);
-			if (Origin == IL_ORIGIN_LOWER_LEFT)
-				ilFlipImage();
+			ilSetError(IL_INTERNAL_ERROR);
 			return IL_FALSE;
 	}
 
-	if (TempImage == NULL) {
-		if (Origin == IL_ORIGIN_LOWER_LEFT)
-			ilFlipImage();
+	if (TempImage == NULL)
 		return IL_FALSE;
-	}
 
 	if (Bpp != TempImage->Bpp) {
 		ilSetError(IL_INVALID_CONVERSION);
 		return IL_FALSE;
+	}
+
+	if (TempImage->Origin != IL_ORIGIN_UPPER_LEFT) {
+		TempData = iGetFlipped(TempImage);
+		if (TempData == NULL) {
+			ilCloseImage(TempImage);
+			return IL_FALSE;
+		}
+	}
+	else {
+		TempData = TempImage->Data;
 	}
 
 	ilprintf("%d %d\n", TempImage->Width, TempImage->Height);
@@ -624,25 +626,23 @@ ILboolean iSavePnmInternal()
 	while (i < TempImage->SizeOfPlane) {
 		for (j = 0; j < Bpp; j++) {
 			if (Binary) {
-				if (Type < IL_PGM_ASCII) {
-					if (TempImage->Data[i] > 1) {
-						ilSetError(IL_INVALID_VALUE);
-						return IL_FALSE;
-					}
-				}
-				iputc(TempImage->Data[i]);
-			}
-			else {
-				// Skip the sprintf maybe?
-				if (TempImage->Type == IL_UNSIGNED_BYTE)
-					k = TempImage->Data[i];
-				else  // IL_UNSIGNED_SHORT
-					k = *((ILushort*)TempImage->Data + i);
-				if (Type == IL_PBM_ASCII) {
-					LinePos += ilprintf("%d ", TempImage->Data[i] > 127 ? 1 : 0);
+				if (Type == IL_PBM_BINARY) {
+					iputc((ILubyte)(TempData[i] > 127 ? 1 : 0));
 				}
 				else {
-					LinePos += ilprintf("%d ", TempImage->Data[i]);
+					iputc(TempData[i]);
+				}
+			}
+			else {
+				if (TempImage->Type == IL_UNSIGNED_BYTE)
+					k = TempData[i];
+				else  // IL_UNSIGNED_SHORT
+					k = *((ILushort*)TempData + i);
+				if (Type == IL_PBM_ASCII) {
+					LinePos += ilprintf("%d ", TempData[i] > 127 ? 1 : 0);
+				}
+				else {
+					LinePos += ilprintf("%d ", TempData[i]);
 				}
 			}
 
@@ -657,8 +657,8 @@ ILboolean iSavePnmInternal()
 		}
 	}
 
-	if (Origin == IL_ORIGIN_LOWER_LEFT)
-		ilFlipImage();
+	if (TempImage->Origin != IL_ORIGIN_UPPER_LEFT)
+		ifree(TempData);
 	ilCloseImage(TempImage);
 
 	return IL_TRUE;
@@ -671,7 +671,7 @@ ILvoid PbmMaximize(ILimage *Image)
 	ILuint i = 0;
 	for (i = 0; i < Image->SizeOfPlane; i++)
 		if (Image->Data[i] == 1)
-			Image->Data[i] = 255;
+			Image->Data[i] = 0xFF;
 	return;
 }
 

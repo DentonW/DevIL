@@ -437,8 +437,9 @@ ILboolean iSaveJpegInternal()
 	struct		jpeg_compress_struct JpegInfo;
 	struct		jpeg_error_mgr Error;
 	JSAMPROW	row_pointer[1];
-	ILimage		*Temp;
-	ILenum		Origin, Type=0;
+	ILimage		*TempImage;
+	ILubyte		*TempData;
+	ILenum		Type = 0;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -450,20 +451,28 @@ ILboolean iSaveJpegInternal()
 	else
 		Quality = 99;*/
 
-	Origin = iCurImage->Origin;
-	if (Origin == IL_ORIGIN_LOWER_LEFT) {
-		ilFlipImage();
-	}
-
 	if ((iCurImage->Format != IL_RGB && iCurImage->Format != IL_LUMINANCE) || iCurImage->Bpc != 1) {
-		Temp = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
-		if (Temp == NULL) {
+		TempImage = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
+		if (TempImage == NULL) {
 			return IL_FALSE;
 		}
 	}
 	else {
-		Temp = iCurImage;
+		TempImage = iCurImage;
 	}
+
+	if (TempImage->Origin == IL_ORIGIN_LOWER_LEFT) {
+		TempData = iGetFlipped(TempImage);
+		if (TempData == NULL) {
+			if (TempImage != iCurImage)
+				ilCloseImage(TempImage);
+			return IL_FALSE;
+		}
+	}
+	else {
+		TempData = TempImage->Data;
+	}
+
 
 	JpegInfo.err = jpeg_std_error(&Error);
 	// Now we can initialize the JPEG compression object.
@@ -472,12 +481,12 @@ ILboolean iSaveJpegInternal()
 	//jpeg_stdio_dest(&JpegInfo, JpegFile);
 	devil_jpeg_write_init(&JpegInfo);
 
-	JpegInfo.image_width = Temp->Width;  // image width and height, in pixels
-	JpegInfo.image_height = Temp->Height;
-	JpegInfo.input_components = Temp->Bpp;  // # of color components per pixel
+	JpegInfo.image_width = TempImage->Width;  // image width and height, in pixels
+	JpegInfo.image_height = TempImage->Height;
+	JpegInfo.input_components = TempImage->Bpp;  // # of color components per pixel
 
 	// John Villar's addition
-	if (Temp->Bpp == 1)
+	if (TempImage->Bpp == 1)
 		JpegInfo.in_color_space = JCS_GRAYSCALE;
 	else
 		JpegInfo.in_color_space = JCS_RGB;
@@ -487,11 +496,12 @@ ILboolean iSaveJpegInternal()
 #ifndef IL_USE_JPEGLIB_UNMODIFIED
 	Type = iGetInt(IL_JPG_SAVE_FORMAT);
 	if (Type == IL_EXIF) {
-	  JpegInfo.write_JFIF_header = FALSE;
-	  JpegInfo.write_EXIF_header = TRUE;
-	} else if (Type == IL_JFIF) {
-	  JpegInfo.write_JFIF_header = TRUE;
-	  JpegInfo.write_EXIF_header = FALSE;
+		JpegInfo.write_JFIF_header = FALSE;
+		JpegInfo.write_EXIF_header = TRUE;
+	}
+	else if (Type == IL_JFIF) {
+		JpegInfo.write_JFIF_header = TRUE;
+		JpegInfo.write_EXIF_header = FALSE;
 	}
 #else
 	Type = Type;
@@ -508,7 +518,7 @@ ILboolean iSaveJpegInternal()
 		// jpeg_write_scanlines expects an array of pointers to scanlines.
 		// Here the array is only one element long, but you could pass
 		// more than one scanline at a time if that's more convenient.
-		row_pointer[0] = &Temp->Data[JpegInfo.next_scanline * Temp->Bps];
+		row_pointer[0] = &TempData[JpegInfo.next_scanline * TempImage->Bps];
 		(ILvoid) jpeg_write_scanlines(&JpegInfo, row_pointer, 1);
 	}
 
@@ -520,13 +530,10 @@ ILboolean iSaveJpegInternal()
 	// This is an important step since it will release a good deal of memory.
 	jpeg_destroy_compress(&JpegInfo);
 
-	if (Origin == IL_ORIGIN_LOWER_LEFT) {
-		ilFlipImage();
-	}
-
-	if (Temp != iCurImage) {
-		ilCloseImage(Temp);
-	}
+	if (TempImage->Origin == IL_ORIGIN_LOWER_LEFT)
+		ifree(TempData);
+	if (TempImage != iCurImage)
+		ilCloseImage(TempImage);
 
 	return IL_TRUE;
 }
@@ -679,9 +686,9 @@ ILboolean ilSaveJpegL(ILvoid *Lump, ILuint Size)
 ILboolean iSaveJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size)
 {
     JPEG_CORE_PROPERTIES	Image;
-	ILuint					Quality;
-	ILimage					*Temp;
-	ILenum					Origin;
+	ILuint	Quality;
+	ILimage	*TempImage;
+	ILubyte	*TempData;
 
 	memset(&Image, 0, sizeof(JPEG_CORE_PROPERTIES));
 
@@ -698,11 +705,6 @@ ILboolean iSaveJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size)
 		Quality = 85;  // Not sure how low we should dare go...
 	else
 		Quality = 99;
-
-	Origin = iCurImage->Origin;
-	if (Origin == IL_ORIGIN_LOWER_LEFT) {
-		ilFlipImage();
-	}
 
 	if (ijlInit(&Image) != IJL_OK) {
 		ilSetError(IL_LIB_JPEG_ERROR);
@@ -723,17 +725,29 @@ ILboolean iSaveJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size)
 		Temp = iCurImage;
 	}
 
-    // Setup DIB
-    Image.DIBWidth		= Temp->Width;
-    Image.DIBHeight		= Temp->Height;
-	Image.DIBChannels	= Temp->Bpp;
-	Image.DIBBytes		= Temp->Data;
+	if (TempImage->Origin == IL_ORIGIN_LOWER_LEFT) {
+		TempData = iGetFlipped(TempImage);
+		if (TempData == NULL) {
+			if (TempImage != iCurImage)
+				ilCloseImage(TempImage);
+			return IL_FALSE;
+		}
+	}
+	else {
+		TempData = TempImage->Data;
+	}
+
+	// Setup DIB
+	Image.DIBWidth		= TempImage->Width;
+	Image.DIBHeight		= TempImage->Height;
+	Image.DIBChannels	= TempImage->Bpp;
+	Image.DIBBytes		= TempData;
 	Image.DIBPadBytes	= 0;
 
-    // Setup JPEG
-    Image.JPGWidth		= Temp->Width;
-    Image.JPGHeight		= Temp->Height;
-	Image.JPGChannels	= Temp->Bpp;
+	// Setup JPEG
+	Image.JPGWidth		= TempImage->Width;
+	Image.JPGHeight		= TempImage->Height;
+	Image.JPGChannels	= TempImage->Bpp;
 
 	switch (Temp->Bpp)
 	{
@@ -757,8 +771,8 @@ ILboolean iSaveJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size)
 	if (FileName != NULL) {
 		Image.JPGFile = FileName;
 		if (ijlWrite(&Image, IJL_JFILE_WRITEWHOLEIMAGE) != IJL_OK) {
-			if (Temp != iCurImage)
-				ilCloseImage(Temp);
+			if (TempImage != iCurImage)
+				ilCloseImage(TempImage);
 			ilSetError(IL_LIB_JPEG_ERROR);
 			return IL_FALSE;
 		}
@@ -767,8 +781,8 @@ ILboolean iSaveJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size)
 		Image.JPGBytes = Lump;
 		Image.JPGSizeBytes = Size;
 		if (ijlWrite(&Image, IJL_JBUFF_WRITEWHOLEIMAGE) != IJL_OK) {
-			if (Temp != iCurImage)
-				ilCloseImage(Temp);
+			if (TempImage != iCurImage)
+				ilCloseImage(TempImage);
 			ilSetError(IL_LIB_JPEG_ERROR);
 			return IL_FALSE;
 		}
@@ -776,13 +790,10 @@ ILboolean iSaveJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size)
 
 	ijlFree(&Image);
 
-	if (Origin == IL_ORIGIN_LOWER_LEFT) {
-		ilFlipImage();
-	}
-
-	if (Temp != iCurImage) {
+	if (TempImage->Origin == IL_ORIGIN_LOWER_LEFT)
+		ifree(TempData);
+	if (Temp != iCurImage)
 		ilCloseImage(Temp);
-	}
 
 	return IL_TRUE;
 }
@@ -873,8 +884,8 @@ ILboolean ILAPIENTRY ilSaveFromJpegStruct(ILvoid *_JpegInfo)
 #ifndef IL_USE_IJL
 	void (*errorHandler)(j_common_ptr);
 	JSAMPROW	row_pointer[1];
-	ILimage		*Temp;
-	ILenum		Origin;
+	ILimage		*TempImage;
+	ILubyte		*TempData;
 	j_compress_ptr JpegInfo = (j_compress_ptr)_JpegInfo;
 
 	if (iCurImage == NULL) {
@@ -886,24 +897,31 @@ ILboolean ILAPIENTRY ilSaveFromJpegStruct(ILvoid *_JpegInfo)
 	JpegInfo->err->error_exit = ExitErrorHandle;
 
 
-	Origin = iCurImage->Origin;
-	if (Origin == IL_ORIGIN_LOWER_LEFT) {
-		ilFlipImage();
-	}
-
 	if ((iCurImage->Format != IL_RGB && iCurImage->Format != IL_LUMINANCE) || iCurImage->Bpc != 1) {
-		Temp = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
-		if (Temp == NULL) {
+		TempImage = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
+		if (TempImage == NULL) {
 			return IL_FALSE;
 		}
 	}
 	else {
-		Temp = iCurImage;
+		TempImage = iCurImage;
 	}
 
-	JpegInfo->image_width = Temp->Width;  // image width and height, in pixels
-	JpegInfo->image_height = Temp->Height;
-	JpegInfo->input_components = Temp->Bpp;  // # of color components per pixel
+	if (TempImage->Origin == IL_ORIGIN_LOWER_LEFT) {
+		TempData = iGetFlipped(TempImage);
+		if (TempData == NULL) {
+			if (TempImage != iCurImage)
+				ilCloseImage(TempImage);
+			return IL_FALSE;
+		}
+	}
+	else {
+		TempData = TempImage->Data;
+	}
+
+	JpegInfo->image_width = TempImage->Width;  // image width and height, in pixels
+	JpegInfo->image_height = TempImage->Height;
+	JpegInfo->input_components = TempImage->Bpp;  // # of color components per pixel
 
 	jpeg_start_compress(JpegInfo, IL_TRUE);
 
@@ -913,17 +931,14 @@ ILboolean ILAPIENTRY ilSaveFromJpegStruct(ILvoid *_JpegInfo)
 		// jpeg_write_scanlines expects an array of pointers to scanlines.
 		// Here the array is only one element long, but you could pass
 		// more than one scanline at a time if that's more convenient.
-		row_pointer[0] = &Temp->Data[JpegInfo->next_scanline * Temp->Bps];
+		row_pointer[0] = &TempData[JpegInfo->next_scanline * TempImage->Bps];
 		(ILvoid) jpeg_write_scanlines(JpegInfo, row_pointer, 1);
 	}
 
-	if (Origin == IL_ORIGIN_LOWER_LEFT) {
-		ilFlipImage();
-	}
-
-	if (Temp != iCurImage) {
-		ilCloseImage(Temp);
-	}
+	if (TempImage->Origin == IL_ORIGIN_LOWER_LEFT)
+		ifree(TempData);
+	if (TempImage != iCurImage)
+		ilCloseImage(TempImage);
 
 	return (!jpgErrorOccured);
 #endif

@@ -57,6 +57,6 @@ ILvoid		sgiSwitchData(ILubyte *Data, ILuint SizeOfData);
 ILboolean	iNewSgi(iSgiHeader *Head);
 ILboolean	iReadNonRleSgi(iSgiHeader *Head);
 ILboolean	iReadRleSgi(iSgiHeader *Head);
-ILboolean	iSaveRleSgi(ILvoid);
+ILboolean	iSaveRleSgi(ILubyte *Data);
 
 #endif//SGI_H

@@ -600,7 +600,13 @@ ILint ILAPIENTRY iPutcLump(ILubyte Char)
 
 ILint ILAPIENTRY iWriteFile(const ILvoid *Buffer, ILuint Size, ILuint Number)
 {
-	return WriteProc(Buffer, Size, Number, FileWrite);
+	ILuint NumWritten;
+	NumWritten = WriteProc(Buffer, Size, Number, FileWrite);
+	if (NumWritten != Number) {
+		ilSetError(IL_FILE_WRITE_ERROR);
+		return 0;
+	}
+	return NumWritten;
 }
 
 
@@ -612,6 +618,7 @@ ILint ILAPIENTRY iWriteLump(const ILvoid *Buffer, ILuint Size, ILuint Number)
 	for (; i < SizeBytes; i++) {
 		if (WriteLumpSize > 0) {
 			if (WriteLumpPos + i >= WriteLumpSize) {  // Should we use > instead?
+				ilSetError(IL_FILE_WRITE_ERROR);
 				WriteLumpPos += i;
 				return i;
 			}
