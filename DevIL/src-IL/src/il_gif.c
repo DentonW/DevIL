@@ -211,6 +211,7 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 	ILboolean	BaseImage = IL_TRUE;
 	ILimage		*Image = iCurImage, *TempImage = NULL;
 	ILuint		NumImages = 0, i;
+	ILint		input;
 
 	Gfx.Used = IL_TRUE;
 
@@ -320,7 +321,10 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 		i = itell();
 
 		// Terminates each block.
-		if (igetc() != 0x00)
+		if((input = igetc()) == IL_EOF)
+			goto error_clean;
+
+		if (input != 0x00)
 			iseek(-1, IL_SEEK_CUR);
 		//	break;
 
@@ -363,13 +367,16 @@ ILboolean SkipExtensions(GFXCONTROL *Gfx)
 	//	return IL_TRUE;  // No extensions in the GIF87a format.
 
 	do {
-		Code = igetc();
+		if((Code = igetc()) == IL_EOF)
+			return IL_FALSE;
+
 		if (Code != 0x21) {
 			iseek(-1, IL_SEEK_CUR);
 			return IL_TRUE;
 		}
 
-		Label = igetc();
+		if((Label = igetc()) == IL_EOF)
+			return IL_FALSE;
 
 		switch (Label)
 		{
@@ -389,7 +396,9 @@ ILboolean SkipExtensions(GFXCONTROL *Gfx)
 
 			default:
 				do {
-					Size = igetc();
+					if((Size = igetc()) == IL_EOF)
+						return IL_FALSE;
+
 					iseek(Size, IL_SEEK_CUR);
 				} while (!ieof() && Size != 0);
 		}
@@ -414,6 +423,7 @@ ILubyte	*pbytes;
 ILubyte	*stack;
 ILubyte	*suffix;
 ILshort	*prefix;
+ILboolean success;
 
 ILuint code_mask[13] =
 {
@@ -429,16 +439,31 @@ ILuint code_mask[13] =
 
 ILint get_next_code(void)
 {
-	ILint	i;
+	ILint	i, t;
 	ILuint	ret;
+
+	//20050102: Tests for IL_EOF were added because this function
+	//crashed sometimes if igetc() returned IL_EOF
+	//(for example "table-add-column-before-active.gif" included in the
+	//mozilla source package)
 
 	if (!nbits_left) {
 		if (navail_bytes <= 0) {
 			pbytes = byte_buff;
 			navail_bytes = igetc();
+
+			if(navail_bytes == IL_EOF) {
+				success = IL_FALSE;
+				return ending;
+			}
+
 			if (navail_bytes) {
 				for (i = 0; i < navail_bytes; i++) {
-					byte_buff[i] = igetc();
+					if((t = igetc()) == IL_EOF) {
+						success = IL_FALSE;
+						return ending;
+					}
+					byte_buff[i] = t;
 				}
 			}
 		}
@@ -452,9 +477,19 @@ ILint get_next_code(void)
 		if (navail_bytes <= 0) {
 			pbytes = byte_buff;
 			navail_bytes = igetc();
+
+			if(navail_bytes == IL_EOF) {
+				success = IL_FALSE;
+				return ending;
+			}
+
 			if (navail_bytes) {
 				for (i = 0; i < navail_bytes; i++) {
-					byte_buff[i] = igetc();
+					if((t = igetc()) == IL_EOF) {
+						success = IL_FALSE;
+						return ending;
+					}
+					byte_buff[i] = t;
 				}
 			}
 		}
@@ -473,14 +508,16 @@ ILboolean GifGetData(ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Heigh
 {
 	ILubyte	*sp;
 	ILint	code, fc, oc;
-	ILubyte	size, DisposalMethod = 0;
-	ILint	c;
+	ILubyte	DisposalMethod = 0;
+	ILint	c, size;
 	ILuint	i = 0, Read = 0;
 
 	if (!Gfx->Used)
 		DisposalMethod = (Gfx->Packed & 0x1C) >> 2;
 
-	size = igetc();
+	if((size = igetc()) == IL_EOF)
+		return IL_FALSE;
+
 	if (size < 2 || 9 < size) {
 		return IL_FALSE;
 	}
@@ -503,6 +540,7 @@ ILboolean GifGetData(ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Heigh
 	navail_bytes = nbits_left = 0;
 	oc = fc = 0;
 	sp = stack;
+	success = IL_TRUE;
 
 	while ((c = get_next_code()) != ending && Read < Height) {
 		if (c == clear) {
@@ -570,7 +608,7 @@ ILboolean GifGetData(ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Heigh
 	ifree(suffix);
 	ifree(prefix);
 
-	return IL_TRUE;
+	return success;
 }
 
 
@@ -593,19 +631,25 @@ ILboolean RemoveInterlace(ILimage *image)
 	if (NewData == NULL)
 		return IL_FALSE;
 
-	for (i = 0; i < image->Height; i += 8, j++) {
+	//changed 20041230: images with offsety != 0 were not
+	//deinterlaced correctly before...
+	for (i = 0; i < image->OffY; i++, j++) {
 		memcpy(&NewData[i * image->Bps], &image->Data[j * image->Bps], image->Bps);
 	}
 
-	for (i = 4; i < image->Height; i += 8, j++) {
+	for (i = 0 + image->OffY; i < image->Height; i += 8, j++) {
 		memcpy(&NewData[i * image->Bps], &image->Data[j * image->Bps], image->Bps);
 	}
 
-	for (i = 2; i < image->Height; i += 4, j++) {
+	for (i = 4 + image->OffY; i < image->Height; i += 8, j++) {
 		memcpy(&NewData[i * image->Bps], &image->Data[j * image->Bps], image->Bps);
 	}
 
-	for (i = 1; i < image->Height; i += 2, j++) {
+	for (i = 2 + image->OffY; i < image->Height; i += 4, j++) {
+		memcpy(&NewData[i * image->Bps], &image->Data[j * image->Bps], image->Bps);
+	}
+
+	for (i = 1 + image->OffY; i < image->Height; i += 2, j++) {
 		memcpy(&NewData[i * image->Bps], &image->Data[j * image->Bps], image->Bps);
 	}
 
