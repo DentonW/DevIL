@@ -100,9 +100,7 @@ const ILstring ILAPIENTRY ilGetString(ILenum StringName)
 	{
 		case IL_VENDOR:
 			return (const ILstring)_ilVendor;
-		case IL_VERSION_NUM: //changed 2003-08-30: IL_VERSION changes
-												//to reflect the il version...not a good
-												//switch define ;-)
+		case IL_VERSION_NUM: //changed 2003-08-30: IL_VERSION changes									//switch define ;-)
 			return (const ILstring)_ilVersion;
 		case IL_LOAD_EXT:
 			return (const ILstring)_ilLoadExt;
@@ -435,6 +433,13 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 			//changed 20040610 to channel count (Bpp) times Byte per channel
 			*Param = (iCurImage->Bpp << 3)*iCurImage->Bpc;
 			break;
+                case IL_IMAGE_CHANNELS:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			*Param = iCurImage->Bpp / iCurImage->Bpc;
+			break;
 		case IL_IMAGE_SIZE_OF_DATA:
 			if (iCurImage == NULL) {
 				ilSetError(IL_ILLEGAL_OPERATION);
@@ -711,6 +716,7 @@ ILboolean ILAPIENTRY ilFormatFunc(ILenum Mode)
 		case IL_BGR:
 		case IL_BGRA:
 		case IL_LUMINANCE:
+                case IL_LUMINANCE_ALPHA:
 			ilStates[ilCurrentPos].ilFormatMode = Mode;
 			break;
 		default:
