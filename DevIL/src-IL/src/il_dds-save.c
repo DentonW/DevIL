@@ -311,7 +311,13 @@ ILushort *CompressTo565(ILimage *Image)
 			}
 			break;
 
-		//TODO: add IL_LUMINANCE_ALPHA
+		case IL_LUMINANCE_ALPHA:
+			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 2, j++) {
+				Data[j]  = (TempImage->Data[i] >> 3) << 11;
+				Data[j] |= (TempImage->Data[i] >> 2) << 5;
+				Data[j] |=  TempImage->Data[i] >> 3;
+			}
+			break;
 	}
 
 	if (TempImage != Image)
