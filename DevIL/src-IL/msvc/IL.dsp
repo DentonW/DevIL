@@ -287,6 +287,10 @@ SOURCE=..\src\il_pic.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\il_pix.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\il_png.c
 # End Source File
 # Begin Source File
@@ -304,6 +308,10 @@ SOURCE=..\src\il_psd.c
 # Begin Source File
 
 SOURCE=..\src\il_psp.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\il_pxr.c
 # End Source File
 # Begin Source File
 
@@ -352,6 +360,10 @@ SOURCE=..\src\il_utility.c
 # Begin Source File
 
 SOURCE=..\src\il_wal.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\il_xpm.c
 # End Source File
 # End Group
 # Begin Group "Header Files"

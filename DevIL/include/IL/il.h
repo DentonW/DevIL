@@ -37,10 +37,12 @@ extern "C" {
 //#define IL_NO_PCD
 //#define IL_NO_PCX
 //#define IL_NO_PIC
+//#define IL_NO_PIX
 //#define IL_NO_PNG
 //#define IL_NO_PNM
 //#define IL_NO_PSD
 //#define IL_NO_PSP
+//#define IL_NO_PXR
 //#define IL_NO_RAW
 //#define IL_NO_SGI
 //#define IL_NO_TGA
@@ -215,6 +217,8 @@ typedef void			ILvoid;
 #define IL_PSD								0x0439
 #define IL_EXIF								0x043A
 #define IL_PSP								0x043B
+#define IL_PIX								0x043C
+#define IL_PXR								0x043D
 
 #define IL_JASC_PAL							0x0475
 
@@ -347,6 +351,7 @@ typedef void			ILvoid;
 #define IL_DXT5								0x070A
 #define IL_DXT_NO_COMP						0x070B
 #define IL_KEEP_DXTC_DATA					0x070C
+#define IL_DXTC_DATA_FORMAT					0x070D
 
 
 // Cube map definitions

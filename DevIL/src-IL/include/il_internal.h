@@ -384,10 +384,6 @@ ILboolean ilSaveJpeg(const ILstring FileName);
 ILboolean ilSaveJpegF(ILHANDLE File);
 ILboolean ilSaveJpegL(ILvoid *Lump, ILuint Size);
 
-ILboolean ilLoadLbm(const ILstring FileName);
-ILboolean ilLoadLbmF(ILHANDLE File);
-ILboolean ilLoadLbmL(ILvoid *Lump, ILuint Size);
-
 ILboolean ilIsValidLif(const ILstring FileName);
 ILboolean ilIsValidLifF(ILHANDLE File);
 ILboolean ilIsValidLifL(ILvoid *Lump, ILuint Size);
@@ -399,9 +395,6 @@ ILboolean ilLoadMdl(const ILstring FileName);
 ILboolean ilLoadMdlF(ILHANDLE File);
 ILboolean ilLoadMdlL(ILvoid *Lump, ILuint Size);
 
-ILboolean ilIsValidMng(const ILstring FileName);
-ILboolean ilIsValidMngF(ILHANDLE File);
-ILboolean ilIsValidMngL(ILvoid *Lump, ILuint Size);
 ILboolean ilLoadMng(const ILstring FileName);
 ILboolean ilLoadMngF(ILHANDLE File);
 ILboolean ilLoadMngL(ILvoid *Lump, ILuint Size);
@@ -429,6 +422,10 @@ ILboolean ilIsValidPicL(ILvoid *Lump, ILuint Size);
 ILboolean ilLoadPic(const ILstring FileName);
 ILboolean ilLoadPicF(ILHANDLE File);
 ILboolean ilLoadPicL(ILvoid *Lump, ILuint Size);
+
+ILboolean ilLoadPix(const ILstring FileName);
+ILboolean ilLoadPixF(ILHANDLE File);
+ILboolean ilLoadPixL(ILvoid *Lump, ILuint Size);
 
 ILboolean ilIsValidPng(const ILstring FileName);
 ILboolean ilIsValidPngF(ILHANDLE File);
@@ -463,6 +460,10 @@ ILboolean ilIsValidPspL(ILvoid *Lump, ILuint Size);
 ILboolean ilLoadPsp(const ILstring FileName);
 ILboolean ilLoadPspF(ILHANDLE File);
 ILboolean ilLoadPspL(ILvoid *Lump, ILuint Size);
+
+ILboolean ilLoadPxr(const ILstring FileName);
+ILboolean ilLoadPxrF(ILHANDLE File);
+ILboolean ilLoadPxrL(ILvoid *Lump, ILuint Size);
 
 ILboolean ilLoadRaw(const ILstring FileName);
 ILboolean ilLoadRawF(ILHANDLE File);
@@ -502,6 +503,8 @@ ILboolean ilSaveTiff(const char *FileName);
 ILboolean ilLoadWal(const ILstring FileName);
 ILboolean ilLoadWalF(ILHANDLE File);
 ILboolean ilLoadWalL(ILvoid *Lump, ILuint Size);
+
+ILboolean ilLoadXpm(const ILstring FileName);
 
 
 #endif//INTERNAL_H

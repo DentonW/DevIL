@@ -42,7 +42,7 @@ ILboolean ilIsValidPsp(const ILstring FileName)
 	ILHANDLE	PspFile;
 	ILboolean	bPsp = IL_FALSE;
 
-	if (!iCheckExtension(FileName, IL_TEXT("Psp"))) {
+	if (!iCheckExtension(FileName, IL_TEXT("psp"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bPsp;
 	}

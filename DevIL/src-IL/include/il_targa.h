@@ -17,7 +17,7 @@
 #include "il_internal.h"
 
 #ifdef _MSC_VER
-#pragma pack(push, packed_struct, 1)
+#pragma pack(push, tga_struct, 1)
 #endif
 typedef struct TARGAHEAD
 {
@@ -45,7 +45,7 @@ typedef struct TARGAFOOTER
 	ILbyte NullChar;		// NULL
 } IL_PACKSTRUCT TARGAFOOTER;
 #ifdef _MSC_VER
-#pragma pack(pop,  packed_struct)
+#pragma pack(pop, tga_struct)
 #endif
 
 
@@ -89,7 +89,7 @@ typedef struct TARGAEXT
 
 // Internal functions
 ILboolean	iIsValidTarga();
-ILvoid		iGetTgaHead(TARGAHEAD *Header);
+ILboolean	iGetTgaHead(TARGAHEAD *Header);
 ILboolean	iCheckTarga(TARGAHEAD *Header);
 ILboolean	iLoadTargaInternal(ILvoid);
 ILboolean	iSaveTargaInternal(ILvoid);

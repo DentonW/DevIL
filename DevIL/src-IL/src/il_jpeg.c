@@ -2,9 +2,9 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/15/2002 <--Y2K Compliant! =]
+// Last modified: 05/26/2002 <--Y2K Compliant! =]
 //
-// Filename: il/il_jpeg.c
+// Filename: src-IL/src/il_jpeg.c
 //
 // Description: Jpeg (.jpg) functions
 //

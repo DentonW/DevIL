@@ -536,27 +536,47 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 					*Param = IL_BGRA;
 			}
 			break;
+		case IL_DXTC_DATA_FORMAT:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			if (iCurImage->DxtcData == NULL || iCurImage->DxtcSize == 0) {
+				*Param = IL_DXT_NO_COMP;
+				break;
+			}
+			*Param = iCurImage->DxtcFormat;
+			break;
 
 
 		// Format-specific values
 		case IL_TGA_CREATE_STAMP:
 			*Param = ilStates[ilCurrentPos].ilTgaCreateStamp;
+			break;
 		case IL_JPG_QUALITY:
 			*Param = ilStates[ilCurrentPos].ilJpgQuality;
+			break;
 		case IL_PNG_INTERLACE:
 			*Param = ilStates[ilCurrentPos].ilPngInterlace;
+			break;
 		case IL_TGA_RLE:
 			*Param = ilStates[ilCurrentPos].ilTgaRle;
+			break;
 		case IL_BMP_RLE:
 			*Param = ilStates[ilCurrentPos].ilBmpRle;
+			break;
 		case IL_SGI_RLE:
 			*Param = ilStates[ilCurrentPos].ilSgiRle;
+			break;
 		case IL_JPG_SAVE_FORMAT:
 			*Param = ilStates[ilCurrentPos].ilJpgFormat;
+			break;
 		case IL_DXTC_FORMAT:
 			*Param = ilStates[ilCurrentPos].ilDxtcFormat;
+			break;
 		case IL_PCD_PICNUM:
 			*Param = ilStates[ilCurrentPos].ilPcdPicNum;
+			break;
 
 
 		// Boolean values

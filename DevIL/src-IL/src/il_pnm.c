@@ -112,19 +112,19 @@ ILboolean iCheckPnm(char Header[2])
 // Reads a file
 ILboolean ilLoadPnm(const ILstring FileName)
 {
-	ILHANDLE	PmFile;
-	ILboolean	bPm = IL_FALSE;
+	ILHANDLE	PnmFile;
+	ILboolean	bPnm = IL_FALSE;
 
-	PmFile = iopenr(FileName);
-	if (PmFile == NULL) {
+	PnmFile = iopenr(FileName);
+	if (PnmFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
-		return bPm;
+		return bPnm;
 	}
 
-	bPm = ilLoadPnmF(PmFile);
-	icloser(PmFile);
+	bPnm = ilLoadPnmF(PnmFile);
+	icloser(PnmFile);
 
-	return bPm;
+	return bPnm;
 }
 
 

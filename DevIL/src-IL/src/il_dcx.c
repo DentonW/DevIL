@@ -231,7 +231,7 @@ ILboolean iLoadDcxInternal()
 ILimage *iUncompressDcx(DCXHEAD *Header)
 {
 	ILubyte		ByteHead, Colour, *ScanLine /* Only one plane */;
-	ILuint		c, i, x, y, Read = 0;
+	ILuint		c, i, x, y;//, Read = 0;
 	ILimage		*Image;
 
 	if (Header->Bpp < 8) {

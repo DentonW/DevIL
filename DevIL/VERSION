@@ -27,6 +27,11 @@
 - Fixed some RLE .sgi loading bugs.
 - Added direct S3TC/DXTC to OpenGL code.
 - Added ILUT_DIRECT3D8 for use with ilutRenderer.
+- Added direct DXTC to Direct3D 8 code.
+- Added IL_DXTC_DATA_FORMAT for use with ilGetInteger(v).
+- Added support for more formats with IL_TYPE_UNKNOWN.
+- Added .pix support.
+- Added .pxr support.
 
 
 

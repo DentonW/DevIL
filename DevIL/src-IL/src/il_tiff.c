@@ -48,15 +48,13 @@ ILboolean ilIsValidTiff(const ILstring FileName)
 	ILHANDLE	TiffFile;
 	ILboolean	bTiff = IL_FALSE;
 
-	if (!ilisValidTiffExtension((ILstring) FileName))
-	{
+	if (!ilisValidTiffExtension((ILstring) FileName)) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bTiff;
 	}
 
 	TiffFile = iopenr((ILstring)FileName);
-	if (TiffFile == NULL)
-	{
+	if (TiffFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
 		return bTiff;
 	}
@@ -69,9 +67,11 @@ ILboolean ilIsValidTiff(const ILstring FileName)
 
 /*----------------------------------------------------------------------------*/
 
-ILboolean ilisValidTiffFunc(ILushort Header1)
+ILboolean ilisValidTiffFunc()
 {
-	ILushort Header2;
+	ILushort Header1, Header2;
+
+	Header1 = GetLittleUShort();
 	
 	if (Header1 != MAGIC_HEADER1 && Header1 != MAGIC_HEADER2)
 		return IL_FALSE;
@@ -93,11 +93,15 @@ ILboolean ilisValidTiffFunc(ILushort Header1)
 //! Checks if the ILHANDLE contains a valid tiff file at the current position.
 ILboolean ilIsValidTiffF(ILHANDLE File)
 {
-	ILushort Header1;
+	ILuint		FirstPos;
+	ILboolean	bRet;
 
-	iread(&Header1, sizeof(ILushort), 1);
-	
-	return ilisValidTiffFunc(Header1);
+	iSetInputFile(File);
+	FirstPos = itell();
+	bRet = ilisValidTiffFunc();
+	iseek(FirstPos, IL_SEEK_SET);
+
+	return bRet;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -105,13 +109,8 @@ ILboolean ilIsValidTiffF(ILHANDLE File)
 //! Checks if Lump is a valid Tiff lump.
 ILboolean ilIsValidTiffL(ILvoid *Lump, ILuint Size)
 {
-    ILushort Header1;
-
 	iSetInputLump(Lump, Size);
-
-    Header1 = GetLittleUShort();
-    
-	return ilisValidTiffFunc(Header1);
+	return ilisValidTiffFunc();
 }
 
 /*----------------------------------------------------------------------------*/
@@ -123,12 +122,10 @@ ILboolean ilLoadTiff(const ILstring FileName)
 	ILboolean	bTiff = IL_FALSE;
 
 	TiffFile = iopenr(FileName);
-	if (TiffFile == NULL)
-	{
+	if (TiffFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
 	}
-	else
-	{
+	else {
 		bTiff = ilLoadTiffF(TiffFile);
 		icloser(TiffFile);
 	}

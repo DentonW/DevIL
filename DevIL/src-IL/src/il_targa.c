@@ -75,22 +75,19 @@ ILboolean ilIsValidTgaL(ILvoid *Lump, ILuint Size)
 
 
 // Internal function used to get the Targa header from the current file.
-ILvoid iGetTgaHead(TARGAHEAD *Header)
+ILboolean iGetTgaHead(TARGAHEAD *Header)
 {
-	Header->IDLen = igetc();
-	Header->ColMapPresent = igetc();
-	Header->ImageType = igetc();
-	Header->FirstEntry = GetLittleShort();
-	Header->ColMapLen = GetLittleShort();
-	Header->ColMapEntSize = igetc();
-	Header->OriginX = GetLittleShort();
-	Header->OriginY = GetLittleShort();
-	Header->Width = GetLittleUShort();
-	Header->Height = GetLittleUShort();
-	Header->Bpp = igetc();
-	Header->ImageDesc = igetc();
+	if (iread(Header, sizeof(TARGAHEAD), 1) != 1)
+		return IL_FALSE;
 
-	return;
+	Header->FirstEntry	= Short(Header->FirstEntry);
+	Header->ColMapLen	= Short(Header->ColMapLen);
+	Header->OriginX		= Short(Header->OriginX);
+	Header->OriginY		= Short(Header->OriginY);
+	Header->Width		= UShort(Header->Width);
+	Header->Height		= UShort(Header->Height);
+
+	return IL_TRUE;
 }
 
 
@@ -99,7 +96,8 @@ ILboolean iIsValidTarga()
 {
 	TARGAHEAD	Head;
 
-	iGetTgaHead(&Head);
+	if (!iGetTgaHead(&Head))
+		return IL_FALSE;
 	iseek(-(ILint)sizeof(TARGAHEAD), IL_SEEK_CUR);
 
 	return iCheckTarga(&Head);
@@ -179,7 +177,8 @@ ILboolean iLoadTargaInternal()
 		return IL_FALSE;
 	}
 
-	iGetTgaHead(&Header);
+	if (!iGetTgaHead(&Header))
+		return IL_FALSE;
 	if (!iCheckTarga(&Header)) {
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
@@ -297,12 +296,16 @@ ILboolean iReadColMapTga(TARGAHEAD *Header)
 		}
 	}
 
-	if (Header->ImageType == TGA_COLMAP_COMP)
-		if (!iUncompressTgaData(iCurImage))
+	if (Header->ImageType == TGA_COLMAP_COMP) {
+		if (!iUncompressTgaData(iCurImage)) {
 			return IL_FALSE;
-	else
-		if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) != iCurImage->SizeOfData)
+		}
+	}
+	else {
+		if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) != iCurImage->SizeOfData) {
 			return IL_FALSE;
+		}
+	}
 
 	return IL_TRUE;
 }

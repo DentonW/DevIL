@@ -195,7 +195,7 @@ ILboolean iLoadPicInternal()
 		Channels->Size = igetc();
 		Channels->Type = igetc();
 		Channels->Chan = igetc();
-		if (Channels->Chan == IL_EOF) {
+		if (ieof()) {
 			Read = IL_FALSE;
 			goto finish;
 		}

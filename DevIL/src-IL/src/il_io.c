@@ -55,6 +55,8 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 		return IL_PCX;
 	if (!iStrCmp(Ext, IL_TEXT("pic")))
 		return IL_PIC;
+	if (!iStrCmp(Ext, IL_TEXT("pix")))
+		return IL_PIX;
 	if (!iStrCmp(Ext, IL_TEXT("png")))
 		return IL_PNG;
 	if (!iStrCmp(Ext, IL_TEXT("pbm")) || !iStrCmp(Ext, IL_TEXT("pgm")) ||
@@ -64,6 +66,8 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 		return IL_PSD;
 	if (!iStrCmp(Ext, IL_TEXT("psp")))
 		return IL_PSP;
+	if (!iStrCmp(Ext, IL_TEXT("pxr")))
+		return IL_PXR;
 	if (!iStrCmp(Ext, IL_TEXT("sgi")) || !iStrCmp(Ext, IL_TEXT("bw")) ||
 		!iStrCmp(Ext, IL_TEXT("rgb")) || !iStrCmp(Ext, IL_TEXT("rgba")))
 		return IL_SGI;
@@ -88,16 +92,6 @@ ILenum ilDetermineType(const ILstring FileName)
 
 	if (FileName == NULL)
 		return IL_TYPE_UNKNOWN;
-
-	// LibTiff only works with filenames, not file streams.
-	#ifndef IL_NO_TIF
-	if (ilIsValidTiff(FileName))
-		return IL_TIF;
-	#endif
-	#ifndef IL_NO_GIF
-	if (ilIsValidGif(FileName))
-		return IL_GIF;
-	#endif
 
 	File = iopenr(FileName);
 	if (File == NULL) {
@@ -181,6 +175,11 @@ ILenum ilDetermineTypeF(ILHANDLE File)
 		return IL_TGA;
 	#endif
 
+	#ifndef IL_NO_TIF
+	if (ilIsValidTiffF(File))
+		return IL_TIF;
+	#endif
+	
 	return IL_TYPE_UNKNOWN;
 }
 
@@ -255,6 +254,11 @@ ILenum ilDetermineTypeL(ILvoid *Lump, ILuint Size)
 		return IL_TGA;
 	#endif
 
+	#ifndef IL_NO_TIF
+	if (ilIsValidTiffL(Lump, Size))
+		return IL_TIF;
+	#endif
+
 	return IL_TYPE_UNKNOWN;
 }
 
@@ -276,6 +280,11 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, const ILstring FileName)
 		#ifndef IL_NO_DDS
 		case IL_DDS:
 			return ilIsValidDds(FileName);
+		#endif
+
+		#ifndef IL_NO_GIF
+		case IL_GIF:
+			return ilIsValidGif(FileName);
 		#endif
 
 		#ifndef IL_NO_JPG
@@ -326,6 +335,11 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, const ILstring FileName)
 		#ifndef IL_NO_TGA
 		case IL_TGA:
 			return ilIsValidTga(FileName);
+		#endif
+
+		#ifndef IL_NO_TIF
+		case IL_TIF:
+			return ilIsValidTiff(FileName);
 		#endif
 	}
 
@@ -568,6 +582,11 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, const ILstring FileName)
 			return ilLoadPic(FileName);
 		#endif
 
+		#ifndef IL_NO_PIX
+		case IL_PIX:
+			return ilLoadPix(FileName);
+		#endif
+
 		#ifndef IL_NO_PNG
 		case IL_PNG:
 			return ilLoadPng(FileName);
@@ -586,6 +605,11 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, const ILstring FileName)
 		#ifndef IL_NO_PSP
 		case IL_PSP:
 			return ilLoadPsp(FileName);
+		#endif
+
+		#ifndef IL_NO_PXR
+		case IL_PXR:
+			return ilLoadPxr(FileName);
 		#endif
 
 		#ifndef IL_NO_RAW
@@ -704,6 +728,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadPicF(File);
 		#endif
 
+		#ifndef IL_NO_PIX
+		case IL_PIX:
+			return ilLoadPixF(File);
+		#endif
+
 		#ifndef IL_NO_PNG
 		case IL_PNG:
 			return ilLoadPngF(File);
@@ -722,6 +751,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 		#ifndef IL_NO_PSP
 		case IL_PSP:
 			return ilLoadPspF(File);
+		#endif
+
+		#ifndef IL_NO_PXR
+		case IL_PXR:
+			return ilLoadPxrF(File);
 		#endif
 
 		#ifndef IL_NO_RAW
@@ -827,6 +861,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, ILvoid *Lump, ILuint Size)
 			return ilLoadPicL(Lump, Size);
 		#endif
 
+		#ifndef IL_NO_PIX
+		case IL_PIX:
+			return ilLoadPixL(Lump, Size);
+		#endif
+
 		#ifndef IL_NO_PNG
 		case IL_PNG:
 			return ilLoadPngL(Lump, Size);
@@ -845,6 +884,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, ILvoid *Lump, ILuint Size)
 		#ifndef IL_NO_PSP
 		case IL_PSP:
 			return ilLoadPspL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_PXR
+		case IL_PXR:
+			return ilLoadPxrL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_RAW
@@ -982,6 +1026,12 @@ ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 		}
 		#endif
 
+		#ifndef IL_NO_PIX
+		if (!iStrCmp(Ext, IL_TEXT("pix"))) {
+			return ilLoadPix(FileName);
+		}
+		#endif
+
 		#ifndef IL_NO_PNG
 		if (!iStrCmp(Ext, IL_TEXT("png"))) {
 			return ilLoadPng(FileName);
@@ -1015,6 +1065,12 @@ ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 		}
 		#endif
 
+		#ifndef IL_NO_PXR
+		if (!iStrCmp(Ext, IL_TEXT("pxr"))) {
+			return ilLoadPxr(FileName);
+		}
+		#endif
+
 		#ifndef IL_NO_SGI
 		if (!iStrCmp(Ext, IL_TEXT("sgi")) || !iStrCmp(Ext, IL_TEXT("bw")) ||
 			!iStrCmp(Ext, IL_TEXT("rgb")) || !iStrCmp(Ext, IL_TEXT("rgba"))) {
@@ -1038,6 +1094,12 @@ ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 		#ifndef IL_NO_WAL
 		if (!iStrCmp(Ext, IL_TEXT("wal"))) {
 			return ilLoadWal(FileName);
+		}
+		#endif
+
+		#ifndef IL_NO_XPM
+		if (!iStrCmp(Ext, IL_TEXT("xpm"))) {
+			return ilLoadXpm(FileName);
 		}
 		#endif
 	}
