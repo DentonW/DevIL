@@ -68,7 +68,7 @@ ILboolean iGetHdrHead(HDRHEADER *Header)
 {
 	ILboolean done = IL_FALSE;
 	char a, b;
-	char x[2], y[2];
+	char x[3], y[3]; //changed 20050217: added space for the '\0' char
 	char buff[80];
 	ILuint count = 0;
 
@@ -112,6 +112,7 @@ ILboolean iGetHdrHead(HDRHEADER *Header)
 	//nothing that really changes the appearance of the loaded image...
 	//(The code as it is now assumes that y contains "-Y" and x contains
 	//"+X" after the following line)
+	//Furthermore, this crashes if the read strings are longer than 2 chars o_O
 	sscanf(buff, "%s %d %s %d", y, &Header->Height, x, &Header->Width);
 
 	return IL_TRUE;
