@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="ILUT"
+	RootNamespace="ILUT"
 	SccProjectName="ILUT"
 	SccLocalPath="..\..">
 	<Platforms>
@@ -23,7 +24,7 @@
 				Optimization="1"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="../include;../../include;../../../../PC/_inc/DX"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ILUT_EXPORTS;ILUT_USE_DIRECTX9"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;IL_STATIC_LIB"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
@@ -39,7 +40,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				OutputFile="$(OutDir)/DevILUT.lib"
-				IgnoreDefaultLibraryNames="DevIL.lib DevILU.lib"/>
+				IgnoreDefaultLibraryNames="DevIL.lib DevILU.lib lcms.lib libjpeg.lib libmng.lib libpng.lib libtiff.lib zlib.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
@@ -79,7 +80,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../include;../../include;../../../../PC/_inc/DX"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;ILUT_EXPORTS;ILUT_USE_DIRECTX9"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;IL_STATIC_LIB"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -136,7 +137,7 @@
 				Optimization="1"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="../include;../../include;../../../../PC/_inc/DX"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ILUT_EXPORTS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
@@ -151,14 +152,14 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="DevIL_DLL.lib DevILU_DLL.lib"
+				AdditionalDependencies="DevIL_DLL.lib DevILU_DLL.lib opengl32.lib  glu32.lib Wininet.lib"
 				ShowProgress="0"
 				OutputFile="$(OutDir)/DevILUT.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib"
 				ModuleDefinitionFile=".\ilut.def"
-				DelayLoadDLLs="OPENGL32.DLL;glu32.dll;ddraw.dll"
+				DelayLoadDLLs=""
 				ProgramDatabaseFile=".\../../lib/ilut-l.pdb"
 				ImportLibrary="$(OutDir)/DevILUT_DLL.lib"
 				TargetMachine="1"/>
