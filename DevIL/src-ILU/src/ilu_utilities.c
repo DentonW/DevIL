@@ -23,7 +23,7 @@ ILvoid ILAPIENTRY iluDeleteImage(ILuint Id)
 
 ILuint ILAPIENTRY iluGenImage()
 {
-	static ILuint Id;
+	ILuint Id;
 	ilGenImages(1, &Id);
 	ilBindImage(Id);
 	return Id;

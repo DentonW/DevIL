@@ -93,10 +93,11 @@ ILAPI ILimage* ILAPIENTRY iluRotate_(ILimage *Image, ILfloat Angle)
 	ILuint		*IntPtr;
 
 	Rotated = (ILimage*)calloc(1, sizeof(ILimage));
+	if (Rotated == NULL)
+		return NULL;
 	if (ilCopyImageAttr(Rotated, Image) == IL_FALSE) {
-		ilSetError(ILU_OUT_OF_MEMORY);
 		ilCloseImage(Rotated);
-		return IL_FALSE;
+		return NULL;
 	}
 	// Precalculate shit
 	HalfImgW = Image->Width / 2.0f;
@@ -123,7 +124,6 @@ ILAPI ILimage* ILAPIENTRY iluRotate_(ILimage *Image, ILfloat Angle)
 	}
 
 	if (ilResizeImage(Rotated, MaxX * 2, MaxY * 2, 1, Image->Bpp, Image->Bpc) == IL_FALSE) {
-		ilSetError(ILU_OUT_OF_MEMORY);
 		ilCloseImage(Rotated);
 		return IL_FALSE;
 	}

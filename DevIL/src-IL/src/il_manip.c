@@ -28,9 +28,8 @@ ILboolean ilFlipImage()
 	}
 
 	Flipped = (ILubyte*)ialloc(iCurImage->SizeOfData);
-	if (Flipped == NULL) {
+	if (Flipped == NULL)
 		return IL_FALSE;
-	}
 
 	iCurImage->Origin = (iCurImage->Origin == IL_ORIGIN_LOWER_LEFT) ?
 						IL_ORIGIN_UPPER_LEFT : IL_ORIGIN_LOWER_LEFT;
@@ -60,9 +59,9 @@ ILboolean ilFlipImage()
 // Just created for internal use.
 ILubyte* ILAPIENTRY iGetFlipped(ILimage *Image)
 {
-	static ILubyte *StartPtr, *EndPtr;
-	static ILuint /*x,*/ y, d;
-	static ILubyte *Flipped;
+	ILubyte	*StartPtr, *EndPtr;
+	ILuint	/*x,*/ y, d;
+	ILubyte	*Flipped;
 
 	if (Image == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -70,9 +69,8 @@ ILubyte* ILAPIENTRY iGetFlipped(ILimage *Image)
 	}
 
 	Flipped = (ILubyte*)ialloc(Image->SizeOfData);
-	if (Flipped == NULL) {
+	if (Flipped == NULL)
 		return NULL;
-	}
 
 	for (d = 0; d < Image->Depth; d++) {
 		StartPtr = Flipped + d * Image->SizeOfPlane;
@@ -109,9 +107,8 @@ ILboolean ilMirrorImage()
 	}
 
 	Data = (ILubyte*)ialloc(iCurImage->SizeOfData);
-	if (Data == NULL) {
+	if (Data == NULL)
 		return IL_FALSE;
-	}
 
 	PixLine = iCurImage->Bps / iCurImage->Bpc;
 	switch (iCurImage->Bpc)
@@ -363,7 +360,7 @@ ILuint ILAPIENTRY ilCopyPixels(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Wid
 	}
 
 	Converted = ilConvertBuffer(SrcSize, iCurImage->Format, Format, iCurImage->Type, Type, TempBuff);
-	if (!Converted) {
+	if (Converted == NULL) {
 		ifree(TempBuff);
 		return 0;
 	}

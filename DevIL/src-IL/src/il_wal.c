@@ -152,9 +152,7 @@ ILboolean iLoadWalInternal()
 
 cleanup_error:
 	for (i = 0; i < 3; i++) {
-		if (Mipmaps[i]) {
-			ilCloseImage(Mipmaps[i]);
-		}
+		ilCloseImage(Mipmaps[i]);
 	}
 	return IL_FALSE;
 }

@@ -264,7 +264,7 @@ ILvoid ILAPIENTRY ilGetBooleanv(ILenum Mode, ILboolean *Param)
 //! Returns the current value of the Mode
 ILboolean ILAPIENTRY ilGetBoolean(ILenum Mode)
 {
-	static ILboolean Temp;
+	ILboolean Temp;
 	Temp = IL_FALSE;
 	ilGetBooleanv(Mode, &Temp);
 	return Temp;
@@ -614,7 +614,7 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 //! Returns the current value of the Mode
 ILint ILAPIENTRY ilGetInteger(ILenum Mode)
 {
-	static ILint Temp;
+	ILint Temp;
 	Temp = 0;
 	ilGetIntegerv(Mode, &Temp);
 	return Temp;

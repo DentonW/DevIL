@@ -43,7 +43,6 @@ BITMAP* ILAPIENTRY ilutConvertToAlleg(PALETTE Pal)
 
 	Bitmap = create_bitmap_ex(ilutCurImage->Bpp * 8, ilutCurImage->Width, ilutCurImage->Height);
 	if (Bitmap == NULL) {
-		ilSetError(ILUT_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	memcpy(Bitmap->dat, ilutCurImage->Data, ilutCurImage->SizeOfData);

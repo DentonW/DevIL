@@ -280,7 +280,7 @@ devil_jpeg_read_init (j_decompress_ptr cinfo)
 }
 
 
-static jmp_buf	JpegJumpBuffer;
+jmp_buf	JpegJumpBuffer;
 
 static void iJpegErrorExit( j_common_ptr cinfo )
 {

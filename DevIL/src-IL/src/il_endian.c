@@ -83,7 +83,7 @@ ILdouble _SwapDouble(ILdouble d)
 
 ILvoid _SwapFloat(ILfloat *f)
 {
-	static ILubyte Temp[4];
+	ILubyte Temp[4];
 	*((ILfloat*)Temp) = *f;
 	((ILubyte*)f)[0] = Temp[3];
 	((ILubyte*)f)[1] = Temp[2];
@@ -93,7 +93,7 @@ ILvoid _SwapFloat(ILfloat *f)
 
 ILvoid _SwapDouble(ILdouble *d)
 {
-	static ILubyte Temp[8];
+	ILubyte Temp[8];
 	*((ILdouble*)Temp) = *d;
 	((ILubyte*)d)[0] = Temp[7];
 	((ILubyte*)d)[1] = Temp[6];
@@ -108,7 +108,7 @@ ILvoid _SwapDouble(ILdouble *d)
 
 ILushort GetLittleUShort()
 {
-	static ILushort s;
+	ILushort s;
 	iread(&s, sizeof(ILushort), 1);
 #ifdef __BIG_ENDIAN__
 	_SwapUShort(&s);
@@ -119,7 +119,7 @@ ILushort GetLittleUShort()
 
 ILshort GetLittleShort()
 {
-	static ILshort s;
+	ILshort s;
 	iread(&s, sizeof(ILshort), 1);
 #ifdef __BIG_ENDIAN__
 	_SwapShort(&s);
@@ -130,7 +130,7 @@ ILshort GetLittleShort()
 
 ILuint GetLittleUInt()
 {
-	static ILuint i;
+	ILuint i;
 	iread(&i, sizeof(ILuint), 1);
 #ifdef __BIG_ENDIAN__
 	_SwapUInt(&i);
@@ -141,7 +141,7 @@ ILuint GetLittleUInt()
 
 ILint GetLittleInt()
 {
-	static ILint i;
+	ILint i;
 	iread(&i, sizeof(ILint), 1);
 #ifdef __BIG_ENDIAN__
 	_SwapInt(&i);
@@ -152,7 +152,7 @@ ILint GetLittleInt()
 
 ILfloat GetLittleFloat()
 {
-	static ILfloat f;
+	ILfloat f;
 	iread(&f, sizeof(ILfloat), 1);
 #ifdef __BIG_ENDIAN__
 	_SwapFloat(&f);
@@ -163,7 +163,7 @@ ILfloat GetLittleFloat()
 
 ILdouble GetLittleDouble()
 {
-	static ILdouble d;
+	ILdouble d;
 	iread(&d, sizeof(ILdouble), 1);
 #ifdef __BIG_ENDIAN__
 	_SwapDouble(&d);
@@ -174,7 +174,7 @@ ILdouble GetLittleDouble()
 
 ILushort GetBigUShort()
 {
-	static ILushort s;
+	ILushort s;
 	iread(&s, sizeof(ILushort), 1);
 #ifdef __LITTLE_ENDIAN__
 	_SwapUShort(&s);
@@ -185,7 +185,7 @@ ILushort GetBigUShort()
 
 ILshort GetBigShort()
 {
-	static ILshort s;
+	ILshort s;
 	iread(&s, sizeof(ILshort), 1);
 #ifdef __LITTLE_ENDIAN__
 	_SwapShort(&s);
@@ -196,7 +196,7 @@ ILshort GetBigShort()
 
 ILuint GetBigUInt()
 {
-	static ILuint i;
+	ILuint i;
 	iread(&i, sizeof(ILuint), 1);
 #ifdef __LITTLE_ENDIAN__
 	_SwapUInt(&i);
@@ -207,7 +207,7 @@ ILuint GetBigUInt()
 
 ILint GetBigInt()
 {
-	static ILint i;
+	ILint i;
 	iread(&i, sizeof(ILint), 1);
 #ifdef __LITTLE_ENDIAN__
 	_SwapInt(&i);
@@ -218,7 +218,7 @@ ILint GetBigInt()
 
 ILfloat GetBigFloat()
 {
-	static ILfloat f;
+	ILfloat f;
 	iread(&f, sizeof(ILfloat), 1);
 #ifdef __LITTLE_ENDIAN__
 	_SwapFloat(&f);
@@ -229,7 +229,7 @@ ILfloat GetBigFloat()
 
 ILdouble GetBigDouble()
 {
-	static ILdouble d;
+	ILdouble d;
 	iread(&d, sizeof(ILdouble), 1);
 #ifdef __LITTLE_ENDIAN__
 	_SwapDouble(&d);
@@ -348,12 +348,12 @@ ILubyte SaveBigDouble(ILdouble d)
 
 ILvoid EndianSwapData(void *_Image)
 {
-	static ILuint	i;
-	static ILubyte	*temp, *s, *d;
-	static ILushort	*ShortS, *ShortD;
-	static ILuint	*IntS, *IntD;
-	static ILfloat	*FltS, *FltD;
-	static ILdouble	*DblS, *DblD;
+	ILuint		i;
+	ILubyte		*temp, *s, *d;
+	ILushort	*ShortS, *ShortD;
+	ILuint		*IntS, *IntD;
+	ILfloat		*FltS, *FltD;
+	ILdouble	*DblS, *DblD;
 
 	ILimage *Image = (ILimage*)_Image;
 
@@ -365,6 +365,8 @@ ILvoid EndianSwapData(void *_Image)
 			{
 				case 3:
 					temp = ialloc(Image->SizeOfData);
+					if (temp == NULL)
+						return;
 					s = Image->Data;
 					d = temp;
 
@@ -381,6 +383,8 @@ ILvoid EndianSwapData(void *_Image)
 
 				case 4:
 					temp = ialloc(Image->SizeOfData);
+					if (temp == NULL)
+						return;
 					s = Image->Data;
 					d = temp;
 
@@ -404,6 +408,8 @@ ILvoid EndianSwapData(void *_Image)
 			{
 				case 3:
 					temp = ialloc(Image->SizeOfData);
+					if (temp == NULL)
+						return;
 					ShortS = (ILushort*)Image->Data;
 					ShortD = (ILushort*)temp;
 
@@ -420,6 +426,8 @@ ILvoid EndianSwapData(void *_Image)
 
 				case 4:
 					temp = ialloc(Image->SizeOfData);
+					if (temp == NULL)
+						return;
 					ShortS = (ILushort*)Image->Data;
 					ShortD = (ILushort*)temp;
 
@@ -443,6 +451,8 @@ ILvoid EndianSwapData(void *_Image)
 			{
 				case 3:
 					temp = ialloc(Image->SizeOfData);
+					if (temp == NULL)
+						return;
 					IntS = (ILuint*)Image->Data;
 					IntD = (ILuint*)temp;
 
@@ -459,6 +469,8 @@ ILvoid EndianSwapData(void *_Image)
 
 				case 4:
 					temp = ialloc(Image->SizeOfData);
+					if (temp == NULL)
+						return;
 					IntS = (ILuint*)Image->Data;
 					IntD = (ILuint*)temp;
 
@@ -481,6 +493,8 @@ ILvoid EndianSwapData(void *_Image)
 			{
 				case 3:
 					temp = ialloc(Image->SizeOfData);
+					if (temp == NULL)
+						return;
 					FltS = (ILfloat*)Image->Data;
 					FltD = (ILfloat*)temp;
 
@@ -500,6 +514,8 @@ ILvoid EndianSwapData(void *_Image)
 
 				case 4:
 					temp = ialloc(Image->SizeOfData);
+					if (temp == NULL)
+						return;
 					FltS = (ILfloat*)Image->Data;
 					FltD = (ILfloat*)temp;
 
@@ -526,6 +542,8 @@ ILvoid EndianSwapData(void *_Image)
 			{
 				case 3:
 					temp = ialloc(Image->SizeOfData);
+					if (temp == NULL)
+						return;
 					DblS = (ILdouble*)Image->Data;
 					DblD = (ILdouble*)temp;
 
@@ -545,6 +563,8 @@ ILvoid EndianSwapData(void *_Image)
 
 				case 4:
 					temp = ialloc(Image->SizeOfData);
+					if (temp == NULL)
+						return;
 					DblS = (ILdouble*)Image->Data;
 					DblD = (ILdouble*)temp;
 
@@ -573,6 +593,8 @@ ILvoid EndianSwapData(void *_Image)
 			case IL_PAL_RGB24:
 			case IL_PAL_BGR24:
 				temp = ialloc(Image->Pal.PalSize);
+				if (temp == NULL)
+					return;
 				s = Image->Pal.Palette;
 				d = temp;
 
@@ -592,6 +614,8 @@ ILvoid EndianSwapData(void *_Image)
 			case IL_PAL_BGRA32:
 			case IL_PAL_BGR32:
 				temp = ialloc(Image->Pal.PalSize);
+				if (temp == NULL)
+					return;
 				s = Image->Pal.Palette;
 				d = temp;
 

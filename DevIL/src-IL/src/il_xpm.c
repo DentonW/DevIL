@@ -126,9 +126,9 @@ ILint XpmGets(char *Buffer, ILint MaxLen)
 
 ILint XpmGetInt(char *Buffer, ILint Size, ILint *Position)
 {
-	static char Buff[1024];
-	static ILint i, j;
-	ILboolean IsInNum = IL_FALSE;
+	char		Buff[1024];
+	ILint		i, j;
+	ILboolean	IsInNum = IL_FALSE;
 
 	for (i = *Position, j = 0; i < Size; i++) {
 		if (isdigit(Buffer[i])) {

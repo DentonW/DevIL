@@ -30,13 +30,13 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 	//static const	ILfloat LumFactor[3] = { 0.3086f, 0.6094f, 0.0820f };  // http://www.sgi.com/grafica/matrix/index.html
 	static const	ILfloat LumFactor[3] = { 0.212671f, 0.715160f, 0.072169f };  // http://www.inforamp.net/~poynton/ and libpng's libpng.txt
 
-	static ILubyte	*NewData;
-	static ILuint	i, j, c, Size;
-	static ILfloat	Resultf;
-	static ILdouble	Resultd;
-	static ILuint	NumPix;  // Really number of pixels * bpp.
-	static ILuint	BpcDest;
-	ILvoid *Data;
+	ILubyte		*NewData;
+	ILuint		i, j, c, Size;
+	ILfloat		Resultf;
+	ILdouble	Resultd;
+	ILuint		NumPix;  // Really number of pixels * bpp.
+	ILuint		BpcDest;
+	ILvoid		*Data;
 
 	if (SizeOfData == 0 || Buffer == NULL) {
 		ilSetError(IL_INVALID_PARAM);
@@ -679,7 +679,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 								for (c = 0; c < 3; c++, j--) {
 									Resultd += ((ILuint*)(Data))[i * 3 + c] * LumFactor[j];
 								}
-								((ILuint*)(NewData))[i] = (ILuint)Resultf;
+								((ILuint*)(NewData))[i] = (ILuint)Resultd;
 							}
 							break;
 						case IL_FLOAT:
@@ -895,7 +895,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_FLOAT:
 							for (i = 0; i < Size; i++) {
-								Resultf = 0.0f;  j = 2;
+								Resultd = 0.0f;  j = 2;
 								for (c = 0; c < 3; c++, j--) {
 									Resultd += ((ILfloat*)(Data))[i * 4 + c] * LumFactor[j];
 								}
@@ -1065,12 +1065,12 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 // Really shouldn't have to check for default, as in above ilConvertBuffer().
 ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestType, ILvoid *Buffer)
 {
-	static ILuint		BpcSrc, BpcDest, Size, i;
-	static ILubyte		*NewData, *BytePtr;
-	static ILushort		*ShortPtr;
-	static ILuint		*IntPtr;
-	static ILfloat		*FloatPtr;
-	static ILdouble		*DblPtr;
+	ILuint		BpcSrc, BpcDest, Size, i;
+	ILubyte		*NewData, *BytePtr;
+	ILushort	*ShortPtr;
+	ILuint		*IntPtr;
+	ILfloat		*FloatPtr;
+	ILdouble	*DblPtr;
 
 	BpcSrc = ilGetBppType(SrcType);
 	BpcDest = ilGetBppType(DestType);

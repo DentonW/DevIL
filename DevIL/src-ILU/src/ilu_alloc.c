@@ -20,7 +20,7 @@
 
 	void AddTrack(unsigned long addr, unsigned long size, const char *file, unsigned long line)
 	{
-		static ALLOC_INFO *Temp;
+		ALLOC_INFO *Temp;
 
 		if (AllocList == NULL) {
 			AllocList = (ALLOC_INFO*)malloc(sizeof(ALLOC_INFO));  // Just assume it succeeds.
@@ -46,7 +46,7 @@
 
 	void RemoveTrack(unsigned long addr)
 	{
-		static ALLOC_INFO *Temp, *Prev;
+		ALLOC_INFO *Temp, *Prev;
 		
 		Temp = AllocList;
 		Prev = NULL;
@@ -107,7 +107,7 @@
 
 	void *c_alloc(unsigned long size, unsigned long num, const char *file, unsigned long line)
 	{
-		static void *ptr;
+		ILvoid *ptr;
 		ptr = calloc(size, num);
 		if (!ptr)
 			return NULL;
@@ -119,7 +119,7 @@
 
 	void *m_alloc(unsigned long size, const char *file, unsigned long line)
 	{
-		static void *ptr;
+		ILvoid *ptr;
 		ptr = malloc(size);
 		if (!ptr)
 			return NULL;

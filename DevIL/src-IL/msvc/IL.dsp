@@ -541,10 +541,6 @@ SOURCE=..\..\README.unix
 
 SOURCE=..\..\README.win
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\VERSION
-# End Source File
 # End Group
 # End Target
 # End Project

@@ -56,7 +56,7 @@ ILvoid ILAPIENTRY iluGetIntegerv(ILenum Mode, ILint *Param)
 
 ILint ILAPIENTRY iluGetInteger(ILenum Mode)
 {
-	static ILint Temp;
+	ILint Temp;
 	Temp = 0;
 	iluGetIntegerv(Mode, &Temp);
 	return Temp;

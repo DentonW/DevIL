@@ -81,8 +81,11 @@ ILboolean iLoadIconInternal()
 
 	DirEntries = (ICODIRENTRY*)ialloc(sizeof(ICODIRENTRY) * IconDir.Count);
 	IconImages = (ICOIMAGE*)ialloc(sizeof(ICOIMAGE) * IconDir.Count);
-	if (DirEntries == NULL || IconImages == NULL)
+	if (DirEntries == NULL || IconImages == NULL) {
+		ifree(DirEntries);
+		ifree(IconImages);
 		return IL_FALSE;
+	}
 
 	// Make it easier for file_read_error.
 	for (i = 0; i < IconDir.Count; i++)
@@ -126,11 +129,15 @@ ILboolean iLoadIconInternal()
 				}
 			}
 			IconImages[i].Pal = (ILubyte*)ialloc(IconImages[i].Head.ColourUsed * 4);
+			if (IconImages[i].Pal == NULL)
+				goto file_read_error;  // @TODO: Rename the label.
 			if (iread(IconImages[i].Pal, IconImages[i].Head.ColourUsed * 4, 1) != 1)
 				goto file_read_error;
 		}
 		else if (IconImages[i].Head.BitCount == 8) {
 			IconImages[i].Pal = (ILubyte*)ialloc(256 * 4);
+			if (IconImages[i].Pal == NULL)
+				goto file_read_error;
 			if (iread(IconImages[i].Pal, 1, 256 * 4) != 256*4)
 				goto file_read_error;
 		}
@@ -147,12 +154,16 @@ ILboolean iLoadIconInternal()
 			Size = (IconImages[i].Head.Width * (IconImages[i].Head.Height / 2) * IconImages[i].Head.BitCount) >> 3;
 		}
 		IconImages[i].Data = (ILubyte*)ialloc(Size);
+		if (IconImages[i].Data == NULL)
+			goto file_read_error;
 		if (iread(IconImages[i].Data, 1, Size) != Size)
 			goto file_read_error;
 
 		//Size = (IconImages[i].Head.Width * (IconImages[i].Head.Height / 2)) >> 3;  // 1 bpp
 		Size = ((IconImages[i].Head.Width >> 3) + PadSize) * (IconImages[i].Head.Height / 2);
 		IconImages[i].AND = (ILubyte*)ialloc(Size);
+		if (IconImages[i].AND == NULL)
+			goto file_read_error;
 		if (iread(IconImages[i].AND, 1, Size) != Size)
 			goto file_read_error;
 	}

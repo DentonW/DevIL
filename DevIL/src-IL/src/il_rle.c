@@ -20,7 +20,7 @@
 
 ILuint GetPix(ILubyte *p, ILuint bpp)
 {
-	static ILuint Pixel;
+	ILuint Pixel;
 
 	Pixel = (ILuint)*p++;
 	while (bpp-- > 1) {
@@ -33,9 +33,9 @@ ILuint GetPix(ILubyte *p, ILuint bpp)
 
 ILint CountDiffPixels(ILubyte *p, ILuint bpp, ILuint pixCnt)
 {
-	static ILuint	pixel;
-	static ILuint	nextPixel;
-	static ILint	n;
+	ILuint	pixel;
+	ILuint	nextPixel;
+	ILint	n;
 
 	n = 0;
 	if (pixCnt == 1)
@@ -60,9 +60,9 @@ ILint CountDiffPixels(ILubyte *p, ILuint bpp, ILuint pixCnt)
 
 ILint CountSamePixels(ILubyte *p, ILuint bpp, ILuint pixCnt)
 {
-	static ILuint	pixel;
-	static ILuint	nextPixel;
-	static ILint	n;
+	ILuint	pixel;
+	ILuint	nextPixel;
+	ILint	n;
 
 	n = 1;
 	pixel = GetPix(p, bpp);
@@ -83,10 +83,10 @@ ILint CountSamePixels(ILubyte *p, ILuint bpp, ILuint pixCnt)
 
 ILboolean ilRleCompressLine(ILubyte *p, ILuint n, ILubyte bpp, ILubyte *q, ILuint *DestWidth, ILenum CompressMode)
 {
-	static ILint	DiffCount;		// pixel count until two identical
-	static ILint	SameCount;		// number of identical adjacent pixels
-	static ILint	RLEBufSize;		// count of number of bytes encoded
-	static ILint	MaxRun = SGI_MAX_RUN;
+	ILint	DiffCount;		// pixel count until two identical
+	ILint	SameCount;		// number of identical adjacent pixels
+	ILint	RLEBufSize;		// count of number of bytes encoded
+	ILint	MaxRun = SGI_MAX_RUN;
 
 	switch (CompressMode)
 	{

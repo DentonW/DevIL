@@ -166,8 +166,7 @@ ILboolean ilLoadPsdL(ILvoid *Lump, ILuint Size)
 // Internal function used to load the Psd.
 ILboolean iLoadPsdInternal()
 {
-	PSDHEAD		Header;
-	ILboolean	bPsd;
+	PSDHEAD	Header;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -180,12 +179,13 @@ ILboolean iLoadPsdInternal()
 		return IL_FALSE;
 	}
 
-	bPsd = ReadPsd(&Header);
+	if (!ReadPsd(&Header))
+		return IL_FALSE;
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 
 	ilFixImage();
 
-	return bPsd;
+	return IL_TRUE;
 }
 
 
@@ -335,10 +335,8 @@ ILboolean ReadIndexed(PSDHEAD *Head)
 	return IL_TRUE;
 
 cleanup_error:
-	if (Palette)
-		ifree(Palette);
-	if (Resources)
-		ifree(Resources);
+	ifree(Palette);
+	ifree(Resources);
 
 	return IL_FALSE;
 }
@@ -496,10 +494,8 @@ ILboolean ReadCMYK(PSDHEAD *Head)
 	return IL_TRUE;
 
 cleanup_error:
-	if (Resources)
-		ifree(Resources);
-	if (KChannel)
-		ifree(KChannel);
+	ifree(Resources);
+	ifree(KChannel);
 	return IL_FALSE;
 }
 
@@ -610,23 +606,15 @@ ILboolean PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 				if (HeadByte >= 0) {  //  && HeadByte <= 127
 					if (i + HeadByte > Size)
 						goto file_corrupt;
-					if (iread(Channel + i, HeadByte + 1, 1) != 1) {
-						ifree(Channel);
-						if (PreCache)
-							iUnCache();
-						return IL_FALSE;
-					}
+					if (iread(Channel + i, HeadByte + 1, 1) != 1)
+						goto file_read_error;
 
 					i += HeadByte + 1;
 				}
 				if (HeadByte >= -127 && HeadByte <= -1) {
 					Run = igetc();
-					if (Run == IL_EOF) {
-						ifree(Channel);
-						if (PreCache)
-							iUnCache();
-						return IL_FALSE;
-					}
+					if (Run == IL_EOF)
+						goto file_read_error;
 					if (i + (-HeadByte + 1) > Size)
 						goto file_corrupt;
 
@@ -655,13 +643,18 @@ ILboolean PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 	return IL_TRUE;
 
 file_corrupt:
-	if (ChanLen)
-		ifree(ChanLen);
-	if (Channel)
-		ifree(Channel);
+	ifree(ChanLen);
+	ifree(Channel);
 	if (PreCache)
 		iUnCache();
 	ilSetError(IL_ILLEGAL_FILE_VALUE);
+	return IL_FALSE;
+
+file_read_error:
+	ifree(ChanLen);
+	ifree(Channel);
+	if (PreCache)
+		iUnCache();
 	return IL_FALSE;
 }
 

@@ -106,7 +106,7 @@ ILvoid ILAPIENTRY iDefaultCloseR(ILHANDLE Handle)
 
 ILboolean ILAPIENTRY iDefaultEof(ILHANDLE Handle)
 {
-	static ILuint OrigPos, FileSize;
+	ILuint OrigPos, FileSize;
 
 	// Find out the filesize for checking for the end of file
 	OrigPos = itell();
@@ -122,7 +122,7 @@ ILboolean ILAPIENTRY iDefaultEof(ILHANDLE Handle)
 
 ILint ILAPIENTRY iDefaultGetc(ILHANDLE Handle)
 {
-	static ILint Val;
+	ILint Val;
 
 	if (!UseCache) {
 		Val = fgetc((FILE*)Handle);
@@ -308,9 +308,9 @@ ILuint ILAPIENTRY ilGetLumpPos()
 
 ILuint ILAPIENTRY ilprintf(const char *Line, ...)
 {
-	static char		Buffer[2048];  // Hope this is large enough
-	static va_list	VaLine;
-	static ILuint	i;
+	char	Buffer[2048];  // Hope this is large enough
+	va_list	VaLine;
+	ILuint	i;
 
 	va_start(VaLine, Line);
 	vsprintf(Buffer, Line, VaLine);
@@ -387,7 +387,7 @@ ILuint ILAPIENTRY iReadFile(ILvoid *Buffer, ILuint Size, ILuint Number)
 {
 	ILuint	TotalBytes = 0, BytesCopied;
 	ILuint	BuffSize = Size * Number;
-	static	ILuint NumRead;
+	ILuint NumRead;
 
 	if (!UseCache) {
 		NumRead = ReadProc(Buffer, Size, Number, FileRead);

@@ -492,6 +492,8 @@ ILubyte *GetChannel()
 	CompData = (ILubyte*)ialloc(Channel.CompLen);
 	Data = (ILubyte*)ialloc(AttChunk.Width * AttChunk.Height);
 	if (CompData == NULL || Data == NULL) {
+		ifree(Data);
+		ifree(CompData);
 		return NULL;
 	}
 
@@ -601,12 +603,11 @@ ILboolean ReadPalette(ILuint BlockLen)
 		PalCount = GetLittleUInt();
 	}
 
+	Pal.Palette = (ILubyte*)ialloc(Pal.PalSize);
+	if (Pal.Palette == NULL)
+		return IL_FALSE;
 	Pal.PalSize = PalCount * 4;
 	Pal.PalType = IL_PAL_BGRA32;
-	Pal.Palette = (ILubyte*)ialloc(Pal.PalSize);
-	if (Pal.Palette == NULL) {
-		return IL_FALSE;
-	}
 
 	for (i = 0; i < PalCount; i++) {
 		if (iread(Pal.Palette + i * 4, 1, 4) != 4) {

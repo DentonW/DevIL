@@ -344,6 +344,10 @@ ILboolean ilLoadHaloPal(const ILstring FileName)
 	iCurImage->Pal.PalType = IL_PAL_RGB24;
 	iCurImage->Pal.PalSize = Size;
 	iCurImage->Pal.Palette = (ILubyte*)ialloc(iCurImage->Pal.PalSize);
+	if (iCurImage->Pal.Palette == NULL) {
+		icloser(HaloFile);
+		return IL_FALSE;
+	}
 
 	for (i = 0; i < iCurImage->Pal.PalSize; i++, TempPal++) {
 		iCurImage->Pal.Palette[i] = (ILubyte)*TempPal;
@@ -525,6 +529,8 @@ ILboolean ilLoadPltPal(const ILstring FileName)
 	}
 
 	if (iread(iCurImage->Pal.Palette, iCurImage->Pal.PalSize, 1) != 1) {
+		ifree(iCurImage->Pal.Palette);
+		iCurImage->Pal.Palette = NULL;
 		icloser(PltFile);
 		return IL_FALSE;
 	}
@@ -551,6 +557,7 @@ ILAPI ILpal* ILAPIENTRY iCopyPal()
 	}
 	Pal->Palette = (ILubyte*)ialloc(iCurImage->Pal.PalSize);
 	if (Pal->Palette == NULL) {
+		ifree(Pal);
 		return NULL;
 	}
 
@@ -583,7 +590,8 @@ ILAPI ILpal* ILAPIENTRY iConvertPal(ILpal *Pal, ILenum DestFormat)
 		return NULL;
 	}
 	NewPal->Palette = (ILubyte*)ialloc(Pal->PalSize);
-	if (NewPal == NULL) {
+	if (NewPal->Palette == NULL) {
+		ifree(NewPal);
 		return IL_FALSE;
 	}
 	NewPal->PalSize = Pal->PalSize;
@@ -597,7 +605,10 @@ ILAPI ILpal* ILAPIENTRY iConvertPal(ILpal *Pal, ILenum DestFormat)
 			switch (Pal->PalType)
 			{
 				case IL_PAL_RGB24:
+					NewPal->Palette = (ILubyte*)ialloc(Pal->PalSize);
 					if (DestFormat == IL_PAL_BGR24) {
+						if (NewPal->Palette == NULL)
+							goto alloc_error;
 						j = ilGetBppPal(Pal->PalType);
 						for (i = 0; i < Pal->PalSize; i += j) {
 							NewPal->Palette[i] = Pal->Palette[i+2];
@@ -609,7 +620,10 @@ ILAPI ILpal* ILAPIENTRY iConvertPal(ILpal *Pal, ILenum DestFormat)
 					break;
 
 				case IL_PAL_BGR24:
+					NewPal->Palette = (ILubyte*)ialloc(Pal->PalSize);
 					if (DestFormat == IL_PAL_RGB24) {
+						if (NewPal->Palette == NULL)
+							goto alloc_error;
 						j = ilGetBppPal(Pal->PalType);
 						for (i = 0; i < Pal->PalSize; i += j) {
 							NewPal->Palette[i] = Pal->Palette[i+2];
@@ -623,9 +637,9 @@ ILAPI ILpal* ILAPIENTRY iConvertPal(ILpal *Pal, ILenum DestFormat)
 				case IL_PAL_BGR32:
 				case IL_PAL_BGRA32:
 					NewPalSize = (ILuint)((ILfloat)Pal->PalSize * 3.0f / 4.0f);
-					//realloc(NewPal, NewPalSize);
-					ifree(NewPal->Palette);
 					NewPal->Palette = (ILubyte*)ialloc(NewPalSize);
+					if (NewPal->Palette == NULL)
+						goto alloc_error;
 					if (DestFormat == IL_PAL_RGB24) {
 						for (i = 0, j = 0; i < Pal->PalSize; i += 4, j += 3) {
 							NewPal->Palette[j]   = Pal->Palette[i+2];
@@ -647,9 +661,9 @@ ILAPI ILpal* ILAPIENTRY iConvertPal(ILpal *Pal, ILenum DestFormat)
 				case IL_PAL_RGB32:
 				case IL_PAL_RGBA32:
 					NewPalSize = (ILuint)((ILfloat)Pal->PalSize * 3.0f / 4.0f);
-					//realloc(NewPal, NewPalSize);
-					ifree(NewPal->Palette);
 					NewPal->Palette = (ILubyte*)ialloc(NewPalSize);
+					if (NewPal->Palette == NULL)
+						goto alloc_error;
 					if (DestFormat == IL_PAL_RGB24) {
 						for (i = 0, j = 0; i < Pal->PalSize; i += 4, j += 3) {
 							NewPal->Palette[j]   = Pal->Palette[i];
@@ -683,9 +697,9 @@ ILAPI ILpal* ILAPIENTRY iConvertPal(ILpal *Pal, ILenum DestFormat)
 				case IL_PAL_RGB24:
 				case IL_PAL_BGR24:
 					NewPalSize = Pal->PalSize * 4 / 3;
-					//realloc(NewPal, NewPalSize);
-					ifree(NewPal->Palette);
 					NewPal->Palette = (ILubyte*)ialloc(NewPalSize);
+					if (NewPal->Palette == NULL)
+						goto alloc_error;
 					if ((Pal->PalType == IL_PAL_BGR24 && (DestFormat == IL_PAL_RGB32 || DestFormat == IL_PAL_RGBA32)) ||
 						(Pal->PalType == IL_PAL_RGB24 && (DestFormat == IL_PAL_BGR32 || DestFormat == IL_PAL_BGRA32))) {
 							for (i = 0, j = 0; i < Pal->PalSize; i += 3, j += 4) {
@@ -708,6 +722,10 @@ ILAPI ILpal* ILAPIENTRY iConvertPal(ILpal *Pal, ILenum DestFormat)
 					break;
 
 				case IL_PAL_RGB32:
+					NewPal->Palette = (ILubyte*)ialloc(Pal->PalSize);
+					if (NewPal->Palette == NULL)
+						goto alloc_error;
+
 					if (DestFormat == IL_PAL_BGR32 || DestFormat == IL_PAL_BGRA32) {
 						for (i = 0; i < Pal->PalSize; i += 4) {
 							NewPal->Palette[i]   = Pal->Palette[i+2];
@@ -728,6 +746,9 @@ ILAPI ILpal* ILAPIENTRY iConvertPal(ILpal *Pal, ILenum DestFormat)
 					break;
 
 				case IL_PAL_RGBA32:
+					NewPal->Palette = (ILubyte*)ialloc(Pal->PalSize);
+					if (NewPal->Palette == NULL)
+						goto alloc_error;
 					if (DestFormat == IL_PAL_BGR32 || DestFormat == IL_PAL_BGRA32) {
 						for (i = 0; i < Pal->PalSize; i += 4) {
 							NewPal->Palette[i]   = Pal->Palette[i+2];
@@ -740,6 +761,9 @@ ILAPI ILpal* ILAPIENTRY iConvertPal(ILpal *Pal, ILenum DestFormat)
 					break;
 				
 				case IL_PAL_BGR32:
+					NewPal->Palette = (ILubyte*)ialloc(Pal->PalSize);
+					if (NewPal->Palette == NULL)
+						goto alloc_error;
 					if (DestFormat == IL_PAL_RGB32 || DestFormat == IL_PAL_RGBA32) {
 						for (i = 0; i < Pal->PalSize; i += 4) {
 							NewPal->Palette[i]   = Pal->Palette[i+2];
@@ -756,11 +780,13 @@ ILAPI ILpal* ILAPIENTRY iConvertPal(ILpal *Pal, ILenum DestFormat)
 							NewPal->Palette[i+3] = 255;
 						}
 					}
-
 					NewPal->PalType = DestFormat;
 					break;
 
 				case IL_PAL_BGRA32:
+					NewPal->Palette = (ILubyte*)ialloc(Pal->PalSize);
+					if (NewPal->Palette == NULL)
+						goto alloc_error;
 					if (DestFormat == IL_PAL_RGB32 || DestFormat == IL_PAL_RGBA32) {
 						for (i = 0; i < Pal->PalSize; i += 4) {
 							NewPal->Palette[i]   = Pal->Palette[i+2];
@@ -787,6 +813,10 @@ ILAPI ILpal* ILAPIENTRY iConvertPal(ILpal *Pal, ILenum DestFormat)
 	NewPal->PalType = DestFormat;
 
 	return NewPal;
+
+alloc_error:
+	ifree(NewPal);
+	return NULL;
 }
 
 

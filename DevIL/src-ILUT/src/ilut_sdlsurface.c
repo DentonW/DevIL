@@ -75,7 +75,6 @@ SDL_Surface * ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags)
 					rmask,gmask,bmask,amask);
 
 	if (Bitmap == NULL) {
-		ilSetError(ILUT_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 

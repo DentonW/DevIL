@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 02/21/2002 <--Y2K Compliant! =]
 //
-// Filename: il/il_dds.c
+// Filename: src-IL/src/il_dds.c
 //
 // Description: Reads from a DirectDraw Surface (.dds) file.
 //
@@ -38,7 +38,7 @@ ILimage	*Image;
 ILint	Width, Height, Depth;
 ILuint	BlockSize;
 
-static ILuint CubemapDirections[CUBEMAP_SIDES] = {
+ILuint CubemapDirections[CUBEMAP_SIDES] = {
 	DDS_CUBEMAP_POSITIVEX,
 	DDS_CUBEMAP_NEGATIVEX,
 	DDS_CUBEMAP_POSITIVEY,
@@ -445,11 +445,11 @@ ILboolean AllocImage()
 			if (!ilTexImage(Width, Height, Depth, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL))
 				return IL_FALSE;
 			if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
-				iCurImage->DxtcFormat = CompFormat - PF_DXT1 + IL_DXT1;
-				iCurImage->DxtcSize = Head.LinearSize;
 				iCurImage->DxtcData = (ILubyte*)ialloc(Head.LinearSize);
 				if (iCurImage->DxtcData == NULL)
 					return IL_FALSE;
+				iCurImage->DxtcFormat = CompFormat - PF_DXT1 + IL_DXT1;
+				iCurImage->DxtcSize = Head.LinearSize;
 				memcpy(iCurImage->DxtcData, CompData, iCurImage->DxtcSize);
 			}
 			break;
@@ -925,7 +925,7 @@ ILboolean DecompressDXT5()
 
 ILvoid CorrectPreMult()
 {
-	static ILuint i;
+	ILuint i;
 
 	for (i = 0; i < Image->SizeOfData; i += 4) {
 		if (Image->Data[i+3] != 0) {  // Cannot divide by 0.

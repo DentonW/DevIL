@@ -1,10 +1,18 @@
 1.5.7
 -----
 
+- Removed the NeuQuant samples limit of 15.
 - Fixed conversion to IL_FLOAT and IL_DOUBLE types.
 - Rewrote a lot of the Endian conversion routines.
 - Added missing Endian conversion to .gif and .ico files.
 - Removed the unneeded il(u/t)_error.h files.
+- Added the devil_internal_exports.h file and moved lots of il(u/t)_internal.h in there.
+- Fixed a bug converting from IL_BGR to IL_LUMINANCE on IL_INT and IL_UNSIGNED_INT types.
+- Went through the code and fixed many possible problems if ialloc failed.
+- Fixed a possible memory leak in iGetPaddedData().
+- Removed a function not being used from the .sgi code.
+- Fixed several leaks and double allocations in iConvertPal().
+
 
 
 

@@ -189,8 +189,11 @@ ILAPI ILboolean ILAPIENTRY ilTexSubImage_(ILimage *Image, ILvoid *Data)
 		ilSetError(IL_INVALID_PARAM);
 		return IL_FALSE;
 	}
-	if (!Image->Data)
+	if (!Image->Data) {
 		Image->Data = (ILubyte*)ialloc(Image->SizeOfData);
+		if (Image->Data == NULL)
+			return IL_FALSE;
+	}
 	memcpy(Image->Data, Data, Image->SizeOfData);
 	return IL_TRUE;
 }
@@ -240,11 +243,11 @@ ILvoid ILAPIENTRY ilClearColour(ILclampf Red, ILclampf Green, ILclampf Blue, ILc
 
 ILAPI ILvoid ILAPIENTRY ilGetClear(ILvoid *Colours, ILenum Format, ILenum Type)
 {
-	static ILubyte	*BytePtr;
-	static ILushort	*ShortPtr;
-	static ILuint	*IntPtr;
-	static ILfloat	*FloatPtr;
-	static ILdouble	*DblPtr;
+	ILubyte		*BytePtr;
+	ILushort	*ShortPtr;
+	ILuint		*IntPtr;
+	ILfloat		*FloatPtr;
+	ILdouble	*DblPtr;
 
 	switch (Type)
 	{
@@ -499,13 +502,13 @@ ILboolean ILAPIENTRY ilClearImage()
 
 ILAPI ILboolean ILAPIENTRY ilClearImage_(ILimage *Image)
 {
-	static ILuint	i, c, NumBytes;
-	static ILubyte	Colours[32];  // Maximum is sizeof(double) * 4 = 32
-	static ILubyte	*BytePtr;
-	static ILushort	*ShortPtr;
-	static ILuint	*IntPtr;
-	static ILfloat	*FloatPtr;
-	static ILdouble	*DblPtr;
+	ILuint		i, c, NumBytes;
+	ILubyte		Colours[32];  // Maximum is sizeof(double) * 4 = 32
+	ILubyte		*BytePtr;
+	ILushort	*ShortPtr;
+	ILuint		*IntPtr;
+	ILfloat		*FloatPtr;
+	ILdouble	*DblPtr;
 
 	NumBytes = Image->Bpp * Image->Bpc;
 	ilGetClear(Colours, Image->Format, Image->Type);
@@ -568,7 +571,7 @@ ILAPI ILboolean ILAPIENTRY ilClearImage_(ILimage *Image)
 		if (Image->Pal.Palette)
 			ifree(Image->Pal.Palette);
 		Image->Pal.Palette = (ILubyte*)ialloc(4);
-		if (!Image->Pal.Palette) {
+		if (Image->Pal.Palette == NULL) {
 			return IL_FALSE;
 		}
 
@@ -588,14 +591,14 @@ ILAPI ILboolean ILAPIENTRY ilClearImage_(ILimage *Image)
 //! Overlays the image found in Src on top of the current bound image at the coords specified.
 ILboolean ILAPIENTRY ilOverlayImage(ILuint Src, ILint XCoord, ILint YCoord, ILint ZCoord)
 {
-	static	ILuint c, x, y, z, SrcIndex, DestIndex, ConvBps, ConvSizePlane;
-	static	ILimage *Dest;
-	static	ILubyte *Converted;
-	ILuint	DestName = ilGetCurName();
-	ILfloat	FrontPer, BackPer;
-	ILenum	DestOrigin, SrcOrigin;
-	ILuint	StartX, StartY, StartZ;
-	ILboolean SrcFlipped = IL_FALSE, DestFlipped = IL_FALSE;
+	ILuint		c, x, y, z, SrcIndex, DestIndex, ConvBps, ConvSizePlane;
+	ILimage		*Dest;
+	ILubyte		*Converted;
+	ILuint		DestName = ilGetCurName();
+	ILfloat		FrontPer, BackPer;
+	ILenum		DestOrigin, SrcOrigin;
+	ILuint		StartX, StartY, StartZ;
+	ILboolean	SrcFlipped = IL_FALSE, DestFlipped = IL_FALSE;
 
 
 	if (DestName == 0 || iCurImage == NULL) {
@@ -678,14 +681,14 @@ ILboolean ILAPIENTRY ilOverlayImage(ILuint Src, ILint XCoord, ILint YCoord, ILin
 
 ILboolean ILAPIENTRY ilBlit(ILuint Src, ILint DestX, ILint DestY, ILint DestZ, ILuint SrcX, ILuint SrcY, ILuint SrcZ, ILuint Width, ILuint Height, ILuint Depth)
 {
-	static	ILuint c, x, y, z, SrcIndex, DestIndex, ConvBps, ConvSizePlane;
-	static	ILimage *Dest;
-	static	ILubyte *Converted;
-	ILuint	DestName = ilGetCurName();
-	ILfloat	FrontPer, BackPer;
-	ILenum	DestOrigin, SrcOrigin;
-	ILuint	StartX, StartY, StartZ;
-	ILboolean SrcFlipped = IL_FALSE, DestFlipped = IL_FALSE;
+	ILuint		c, x, y, z, SrcIndex, DestIndex, ConvBps, ConvSizePlane;
+	ILimage		*Dest;
+	ILubyte		*Converted;
+	ILuint		DestName = ilGetCurName();
+	ILfloat		FrontPer, BackPer;
+	ILenum		DestOrigin, SrcOrigin;
+	ILuint		StartX, StartY, StartZ;
+	ILboolean	SrcFlipped = IL_FALSE, DestFlipped = IL_FALSE;
 
 
 	if (DestName == 0 || iCurImage == NULL) {
@@ -781,7 +784,7 @@ ILboolean iCopySubImage(ILimage *Dest, ILimage *Src)
 	do {
 		ilCopyImageAttr(DestTemp, SrcTemp);
 		DestTemp->Data = (ILubyte*)ialloc(SrcTemp->SizeOfData);
-		if (!DestTemp->Data) {
+		if (DestTemp->Data == NULL) {
 			return IL_FALSE;
 		}
 		memcpy(DestTemp->Data, SrcTemp->Data, SrcTemp->SizeOfData);
@@ -947,7 +950,7 @@ ILboolean ILAPIENTRY ilCopyImage(ILuint Src)
 // Creates a copy of Src and returns it.
 ILAPI ILimage* ILAPIENTRY ilCopyImage_(ILimage *Src)
 {
-	static ILimage *Dest;
+	ILimage *Dest;
 
 	if (Src == NULL) {
 		ilSetError(IL_INVALID_PARAM);
@@ -1003,6 +1006,8 @@ ILAPI ILvoid ILAPIENTRY ilSetPal(ILpal *Pal)
 
 	if (Pal->Palette && Pal->PalSize && Pal->PalType != IL_PAL_NONE) {
 		iCurImage->Pal.Palette = (ILubyte*)ialloc(Pal->PalSize);
+		if (iCurImage->Pal.Palette == NULL)
+			return IL_FALSE;
 		memcpy(iCurImage->Pal.Palette, Pal->Palette, Pal->PalSize);
 		iCurImage->Pal.PalSize = Pal->PalSize;
 		iCurImage->Pal.PalType = Pal->PalType;

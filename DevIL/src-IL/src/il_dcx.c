@@ -230,9 +230,9 @@ ILboolean iLoadDcxInternal()
 // Internal function to uncompress the .dcx (all .dcx files are rle compressed)
 ILimage *iUncompressDcx(DCXHEAD *Header)
 {
-	ILubyte		ByteHead, Colour, *ScanLine /* Only one plane */;
+	ILubyte		ByteHead, Colour, *ScanLine = NULL /* Only one plane */;
 	ILuint		c, i, x, y;//, Read = 0;
-	ILimage		*Image;
+	ILimage		*Image = NULL;
 
 	if (Header->Bpp < 8) {
 		/*ilSetError(IL_FORMAT_NOT_SUPPORTED);
@@ -249,10 +249,8 @@ ILimage *iUncompressDcx(DCXHEAD *Header)
 	Image->Origin = IL_ORIGIN_UPPER_LEFT;
 
 	ScanLine = (ILubyte*)ialloc(Header->Bps);
-	if (ScanLine == NULL) {
-		ilCloseImage(Image);
-		return NULL;
-	}
+	if (ScanLine == NULL)
+		goto dcx_error;
 
 	switch (Image->Bpp)
 	{
@@ -261,13 +259,10 @@ ILimage *iUncompressDcx(DCXHEAD *Header)
 			Image->Pal.PalType = IL_PAL_RGB24;
 			Image->Pal.PalSize = 256 * 3; // Need to find out for sure...
 			Image->Pal.Palette = (ILubyte*)ialloc(Image->Pal.PalSize);
-			if (Image->Pal.Palette == NULL) {
-				ilCloseImage(Image);
-				ifree(ScanLine);
-				return NULL;
-			}
+			if (Image->Pal.Palette == NULL)
+				goto dcx_error;
 			break;
-		//case 2:  // No 16-bit images in the pcx format!
+		//case 2:  // No 16-bit images in the dcx format!
 		case 3:
 			Image->Format = IL_RGB;
 			Image->Pal.Palette = NULL;
@@ -283,10 +278,7 @@ ILimage *iUncompressDcx(DCXHEAD *Header)
 
 		default:
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
-			ifree(ScanLine);
-			//ilCloseImage(iCurImage);
-			//ilSetCurImage(NULL);
-			return NULL;
+			goto dcx_error;
 	}
 
 
@@ -329,15 +321,13 @@ ILimage *iUncompressDcx(DCXHEAD *Header)
 				while (x < Header->Bps) {
 					if (iread(&ByteHead, 1, 1) != 1) {
 						iUnCache();
-						ilCloseImage(Image);
-						return NULL;
+						goto dcx_error;
 					}
 					if ((ByteHead & 0xC0) == 0xC0) {
 						ByteHead &= 0x3F;
 						if (iread(&Colour, 1, 1) != 1) {
 							iUnCache();
-							ilCloseImage(Image);
-							return NULL;
+							goto dcx_error;
 						}
 						for (i = 0; i < ByteHead; i++) {
 							ScanLine[x++] = Colour;
@@ -361,10 +351,9 @@ ILimage *iUncompressDcx(DCXHEAD *Header)
 			for (c = 0; c < Image->Bpp; c++) {
 				x = 0;
 				while (x < Header->Bps) {
-					if (iread(&ByteHead, 1, 1) != 1) {
-						ilCloseImage(Image);
-						return NULL;
-					}
+					if (iread(&ByteHead, 1, 1) != 1)
+						goto dcx_error;
+
 					/*if ((ByteHead & BIT_7) && (ByteHead & BIT_6)) {
 						ClearBits(ByteHead, BIT_7);
 						ClearBits(ByteHead, BIT_6);
@@ -376,10 +365,9 @@ ILimage *iUncompressDcx(DCXHEAD *Header)
 					}*/
 					if ((ByteHead & 0xC0) == 0xC0) {
 						ByteHead &= 0x3F;
-						if (iread(&Colour, 1, 1) != 1) {
-							ilCloseImage(Image);
-							return NULL;
-						}
+						if (iread(&Colour, 1, 1) != 1)
+							goto dcx_error;
+
 						for (i = 0; i < ByteHead; i++) {
 							ScanLine[x++] = Colour;
 						}
@@ -411,6 +399,11 @@ ILimage *iUncompressDcx(DCXHEAD *Header)
 	}
 
 	return Image;
+
+dcx_error:
+	ifree(ScanLine);
+	ilCloseImage(Image);
+	return NULL;
 }
 
 
@@ -477,15 +470,16 @@ ILimage *iUncompressDcxSmall(DCXHEAD *Header)
 	else {   // 4-bit images
 		Bps = Header->Bps * Header->NumPlanes * 2;
 		Image->Pal.Palette = (ILubyte*)ialloc(16 * 3);  // Size of palette always (48 bytes).
+		Image->Pal.PalSize = 16 * 3;
+		Image->Pal.PalType = IL_PAL_RGB24;
 		ScanLine = (ILubyte*)ialloc(Bps);
 		if (Image->Pal.Palette == NULL || ScanLine == NULL) {
+			ifree(ScanLine);
 			ilCloseImage(Image);
 			return NULL;
 		}
-		memcpy(Image->Pal.Palette, Header->ColMap, 16 * 3);
-		Image->Pal.PalSize = 16 * 3;
-		Image->Pal.PalType = IL_PAL_RGB24;
 
+		memcpy(Image->Pal.Palette, Header->ColMap, 16 * 3);
 		memset(Image->Data, 0, Image->SizeOfData);
 
 		for (y = 0; y < Image->Height; y++) {
@@ -526,8 +520,7 @@ ILimage *iUncompressDcxSmall(DCXHEAD *Header)
 	return Image;
 
 file_read_error:
-	if (ScanLine)
-		ifree(ScanLine);
+	ifree(ScanLine);
 	ilCloseImage(Image);
 	return NULL;
 }

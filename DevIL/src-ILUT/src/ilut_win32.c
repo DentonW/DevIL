@@ -85,9 +85,9 @@ HBITMAP ILAPIENTRY ilutConvertToHBitmap(HDC hDC)
 
 ILubyte* ILAPIENTRY iGetPaddedData(ILimage *Image)
 {
-	ILubyte	*NewData, *TempBuff;
+	ILubyte	*NewData = NULL, *TempBuff = NULL;
 	ILuint	i, CurPos = 0, PadSize;
-	ILubyte	*TempData;
+	ILubyte	*TempData = NULL;
 
 	if (Image == NULL) {
 		ilSetError(ILUT_INVALID_PARAM);
@@ -130,9 +130,9 @@ ILubyte* ILAPIENTRY iGetPaddedData(ILimage *Image)
 		CurPos += PadSize;
 	}
 
-	if (TempBuff != Image->Data)
-		ifree(TempBuff);
 	if (TempData != TempBuff && TempData != Image->Data)
+		ifree(TempData);
+	if (TempBuff != Image->Data)
 		ifree(TempBuff);
 
 	return NewData;
@@ -280,7 +280,7 @@ ILboolean ILAPIENTRY ilutSetHBitmap(HBITMAP Bitmap)
 	BITMAPINFO	Info[2];
 	HWND		hWnd;
 	HDC			hDC;
-	ILubyte		*Buffer1, *Buffer2;
+	ILubyte		*Buffer1 = NULL, *Buffer2 = NULL;
 	ILuint		i, j, PadSize, Bps;
 
 	ilutCurImage = ilGetCurImage();
@@ -304,7 +304,9 @@ ILboolean ILAPIENTRY ilutSetHBitmap(HBITMAP Bitmap)
 
 	Buffer1 = (ILubyte*)ialloc(Info[0].bmiHeader.biSizeImage);
 	Buffer2 = (ILubyte*)ialloc(Info[0].bmiHeader.biSizeImage);
-	if (!Buffer1 || !Buffer2) {
+	if (Buffer1 == NULL || Buffer2 == NULL) {
+		ifree(Buffer1);
+		ifree(Buffer2);
 		return IL_FALSE;
 	}
 
@@ -589,6 +591,7 @@ ILboolean ILAPIENTRY ilutWinLoadUrl(const ILstring Url)
 
 		TempBuff = (ILubyte*)ialloc(BufferSize + BytesRead);
 		if (TempBuff == NULL) {
+			ifree(Buffer);
 			return IL_FALSE;
 		}
 
@@ -614,6 +617,7 @@ ILboolean ILAPIENTRY ilutWinLoadUrl(const ILstring Url)
 	if (!Is404) {
 		if (!ilLoadL(ilTypeFromExt(Url), Buffer, BufferSize)) {
 			if (!ilLoadL(IL_TYPE_UNKNOWN, Buffer, BufferSize)) {
+				ifree(Buffer);
 				return IL_FALSE;
 			}
 		}

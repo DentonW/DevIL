@@ -16,7 +16,7 @@
 #include "il_manip.h"
 #include <limits.h>
 
-static char *FName = NULL;
+char *FName = NULL;
 
 /*----------------------------------------------------------------------------*/
 
@@ -208,13 +208,14 @@ ILboolean iReadRleSgi(iSgiHeader *Head)
 	ILuint		*OffTable=NULL, *LenTable=NULL, TableSize, Cur, ChanInt = 0;
 	ILubyte		**TempData=NULL;
 
-	if (!iNewSgi(Head)) {
+	if (!iNewSgi(Head))
 		return IL_FALSE;
-	}
 
 	TableSize = Head->YSize * Head->ZSize;
 	OffTable = (ILuint*)ialloc(TableSize * sizeof(ILuint));
 	LenTable = (ILuint*)ialloc(TableSize * sizeof(ILuint));
+	if (OffTable == NULL || LenTable == NULL)
+		goto cleanup_error;
 	if (iread(OffTable, TableSize * sizeof(ILuint), 1) != 1)
 		goto cleanup_error;
 	if (iread(LenTable, TableSize * sizeof(ILuint), 1) != 1)
@@ -226,13 +227,14 @@ ILboolean iReadRleSgi(iSgiHeader *Head)
 		*(OffTable + ixTable) = SwapInt(*(OffTable + ixTable));
 		*(LenTable + ixTable) = SwapInt(*(LenTable + ixTable));
 	}
-#endif /*__LITTLE_ENDIAN__*/
+#endif //__LITTLE_ENDIAN__
 
-	/* We have to create a temporary buffer for the image, because SGI */
-	/*	images are plane-separated. */
+	// We have to create a temporary buffer for the image, because SGI
+	//	images are plane-separated. */
 	TempData = (ILubyte**)ialloc(Head->ZSize * sizeof(ILubyte*));
 	if (TempData == NULL)
 		goto cleanup_error;
+	memset(TempData, 0, Head->ZSize * sizeof(ILubyte*));  // Just in case ialloc fails then cleanup_error.
 	for (ixPlane = 0; ixPlane < Head->ZSize; ixPlane++) {
 		TempData[ixPlane] = (ILubyte*)ialloc(Head->XSize * Head->YSize * Head->Bpc);
 		if (TempData[ixPlane] == NULL)
@@ -289,15 +291,11 @@ ILboolean iReadRleSgi(iSgiHeader *Head)
 	return IL_TRUE;
 
 cleanup_error:
-	if (OffTable)
-		ifree(OffTable);
-	if (LenTable)
-		ifree(LenTable);
+	ifree(OffTable);
+	ifree(LenTable);
 	if (TempData) {
 		for (ixPlane = 0; ixPlane < Head->ZSize; ixPlane++) {
-			if (TempData[ixPlane]) {
-				ifree(TempData[ixPlane]);
-			}
+			ifree(TempData[ixPlane]);
 		}
 		ifree(TempData);
 	}
@@ -358,50 +356,6 @@ ILint iGetScanLine(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length)
 	return CurPos;
 }
 
-/*----------------------------------------------------------------------------*/
-
-// @TODO: Figure out why exactly I have this...
-
-ILint iGetScanLineFast(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length, ILubyte *FileData)
-{
-	ILushort Pixel, Count;  // For current pixel
-	ILuint	 BppRead = 0, CurPos = 0, Bps = Head->XSize * Head->Bpc;
-
-	while (BppRead < Length && CurPos < Bps) {
-		Pixel = (*FileData += Head->Bpc);
-		if (!(Count = (Pixel & 0x7f)))  // If 0, line ends
-			return CurPos;
-		if (Pixel & 0x80) {  // If top bit set, then it is a "run"
-			memcpy(ScanLine, FileData, Count * Head->Bpc);
-			FileData += Head->Bpc * Count;
-			BppRead += Head->Bpc * Count + Head->Bpc;
-			ScanLine += Head->Bpc * Count;
-			CurPos += Head->Bpc * Count;
-		}
-		else {
-			//iread(&Pixel, Head->Bpc, 1);
-			memcpy(&Pixel, FileData, Head->Bpc);
-			FileData += Head->Bpc;
-			if (Head->Bpc == 1) {
-				while (Count--) {
-					*ScanLine = (ILubyte)Pixel;
-					ScanLine++;
-					CurPos++;
-				}
-			}
-			else {
-				while (Count--) {
-					*(ILushort*)ScanLine = Pixel;
-					ScanLine += 2;
-					ScanLine += 2;
-				}
-			}
-			BppRead += Head->Bpc + Head->Bpc;
-		}
-	}
-
-	return CurPos;
-}
 
 /*----------------------------------------------------------------------------*/
 
@@ -707,8 +661,8 @@ ILboolean iSaveSgiInternal()
 ILboolean iSaveRleSgi()
 {
 	ILuint	c, i, y, j;
-	ILubyte	*ScanLine, *CompLine;
-	ILuint	*StartTable, *LenTable;
+	ILubyte	*ScanLine = NULL, *CompLine = NULL;
+	ILuint	*StartTable = NULL, *LenTable = NULL;
 	ILuint	TableOff, DataOff = 0;
 
 
@@ -717,6 +671,10 @@ ILboolean iSaveRleSgi()
 	StartTable = (ILuint*)ialloc(iCurImage->Height * iCurImage->Bpp * sizeof(ILuint));
 	LenTable = (ILuint*)ialloc(iCurImage->Height * iCurImage->Bpp * sizeof(ILuint));
 	if (!ScanLine || !StartTable || !LenTable) {
+		ifree(ScanLine);
+		ifree(CompLine);
+		ifree(StartTable);
+		ifree(LenTable);
 		return IL_FALSE;
 	}
 

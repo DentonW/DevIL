@@ -10,7 +10,7 @@
 
 #include "ilu_internal.h"
 
-static char	_Copyright[] = "Public Domain 1991 by Dale Schumacher";
+char _Copyright[] = "Public Domain 1991 by Dale Schumacher";
 
 #define	WHITE_PIXEL	(255)
 #define	BLACK_PIXEL	(0)
@@ -22,9 +22,9 @@ static char	_Copyright[] = "Public Domain 1991 by Dale Schumacher";
 
 ILubyte get_pixel(ILuint x, ILuint y)
 {
-	static Image *im = NULL;
-	static int yy = -1;
-	static Pixel *p = NULL;
+	Image	*im = NULL;
+	int		yy = -1;
+	Pixel	*p = NULL;
 
 	if((x < 0) || (x >= image->xsize) || (y < 0) || (y >= image->ysize)) {
 		return(0);
@@ -75,9 +75,9 @@ Image *image;
 int x, y;
 Pixel data;
 {
-	static Image *im = NULL;
-	static int yy = -1;
-	static Pixel *p = NULL;
+	Image	*im = NULL;
+	ILint	yy = -1;
+	Pixel	*p = NULL;
 
 	if((x < 0) || (x >= image->xsize) || (y < 0) || (y >= image->ysize)) {
 		return(0);

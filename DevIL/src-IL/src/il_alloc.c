@@ -28,7 +28,7 @@ ILvoid* ILAPIENTRY DefaultAllocFunc(ILuint Size)
 
 ILvoid* ILAPIENTRY ialloc(ILuint Size)
 {
-	static ILvoid *Ptr;
+	ILvoid *Ptr;
 
 	Ptr = ialloc_ptr(Size);
 	if (Ptr == NULL)
@@ -47,7 +47,8 @@ ILvoid ILAPIENTRY ifree(ILvoid *Ptr)
 
 ILvoid ILAPIENTRY DefaultFreeFunc(ILvoid *Ptr)
 {
-	free(Ptr);
+	if (Ptr)
+		free(Ptr);
 	return;
 }
 
@@ -91,7 +92,7 @@ ILvoid ILAPIENTRY ilSetMemory(mAlloc AllocFunc, mFree FreeFunc)
 
 	void AddTrack(unsigned long addr, unsigned long size, const char *file, unsigned long line)
 	{
-		static ALLOC_INFO *Temp;
+		ALLOC_INFO *Temp;
 
 		if (AllocList == NULL) {
 			AllocList = (ALLOC_INFO*)malloc(sizeof(ALLOC_INFO));  // Just assume it succeeds.
@@ -117,7 +118,7 @@ ILvoid ILAPIENTRY ilSetMemory(mAlloc AllocFunc, mFree FreeFunc)
 
 	void RemoveTrack(unsigned long addr)
 	{
-		static ALLOC_INFO *Temp, *Prev;
+		ALLOC_INFO *Temp, *Prev;
 		
 		Temp = AllocList;
 		Prev = NULL;
@@ -178,7 +179,7 @@ ILvoid ILAPIENTRY ilSetMemory(mAlloc AllocFunc, mFree FreeFunc)
 
 	void *c_alloc(unsigned long size, unsigned long num, const char *file, unsigned long line)
 	{
-		static void *ptr;
+		void *ptr;
 		ptr = calloc(size, num);
 		if (!ptr)
 			return NULL;
@@ -190,7 +191,7 @@ ILvoid ILAPIENTRY ilSetMemory(mAlloc AllocFunc, mFree FreeFunc)
 
 	void *m_alloc(unsigned long size, const char *file, unsigned long line)
 	{
-		static void *ptr;
+		void *ptr;
 		ptr = malloc(size);
 		if (!ptr)
 			return NULL;

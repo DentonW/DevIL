@@ -324,9 +324,9 @@ ILboolean GetImages(ILpal *GlobalPal)
 
 ILboolean SkipExtensions(GFXCONTROL *Gfx)
 {
-	static ILint	Code;
-	static ILint	Label;
-	static ILint	Size;
+	ILint	Code;
+	ILint	Label;
+	ILint	Size;
 
 	// DW (06-03-2002):  Apparently there can be...
 	//if (GifType == GIF87A)
@@ -385,7 +385,7 @@ ILubyte	*stack;
 ILubyte	*suffix;
 ILshort	*prefix;
 
-static unsigned long code_mask[13] =
+ILuint code_mask[13] =
 {
    0L,
    0x0001L, 0x0003L,
@@ -399,8 +399,8 @@ static unsigned long code_mask[13] =
 
 ILint get_next_code(void)
 {
-	ILint  i;
-	static ILuint ret;
+	ILint	i;
+	ILuint	ret;
 
 	if (!nbits_left) {
 		if (navail_bytes <= 0) {
@@ -454,8 +454,12 @@ ILboolean GifGetData(ILubyte *Data)
 	stack  = (ILubyte*)ialloc(MAX_CODES + 1);
 	suffix = (ILubyte*)ialloc(MAX_CODES + 1);
 	prefix = (ILshort*)ialloc(sizeof(*prefix) * (MAX_CODES + 1));
-	if (!stack || !suffix || !prefix)
+	if (!stack || !suffix || !prefix) {
+		ifree(stack);
+		ifree(suffix);
+		ifree(prefix);
 		return IL_FALSE;
+	}
 
 	curr_size = size + 1;
 	top_slot = 1 << curr_size;

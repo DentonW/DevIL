@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 12/16/2001 <--Big Endian Changes =]
+// Last modified: 06/13/2002 <--Y2K Compliant! =]
 //
 // Filename: src-IL/src/il_tiff.c
 //
@@ -10,8 +10,6 @@
 //
 //-----------------------------------------------------------------------------
 
-
-// No way I know of with libtiff to use already-opened files or memory lumps...
 
 #include "il_internal.h"
 #ifndef IL_NO_TIF
@@ -172,7 +170,10 @@ ILboolean iLoadTiffInternal()
 	ILvoid		*Buffer;
 	ILimage		*Image;
 	ILushort	si;
-	
+//TIFFRGBAImage img;
+//char emsg[1024];
+
+
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
@@ -235,6 +236,28 @@ ILboolean iLoadTiffInternal()
 			ilSetError(IL_LIB_TIFF_ERROR);
 			return IL_FALSE;
 		}
+
+
+	/*if (TIFFRGBAImageBegin(&img, tif, 0, emsg)) {
+	    size_t npixels;
+	    uint32* raster;
+
+	    npixels = img.width * img.height;
+	    raster = (uint32*) _TIFFmalloc(npixels * sizeof (uint32));
+	    if (raster != NULL) {
+			if (TIFFRGBAImageGet(&img, raster, img.width, img.height)) {
+				//...process raster data...
+			}
+			_TIFFfree(raster);
+	    }
+	    TIFFRGBAImageEnd(&img);
+	}
+	else {
+		TIFFClose(tif);
+		ilSetError(IL_LIB_TIFF_ERROR);
+		return IL_FALSE;
+	}*/
+
 
 		if (TIFFGetField(tif, TIFFTAG_ICCPROFILE, &ProfileLen, &Buffer)) {
 			if (Image->Profile && Image->ProfileSize)

@@ -274,7 +274,7 @@ ILboolean iReadColMapTga(TARGAHEAD *Header)
 	}
 
 	iCurImage->Pal.Palette = (ILubyte*)ialloc(iCurImage->Pal.PalSize);
-	if (!iCurImage->Pal.Palette) {
+	if (iCurImage->Pal.Palette == NULL) {
 		return IL_FALSE;
 	}
 

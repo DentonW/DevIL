@@ -13,7 +13,7 @@
 
 #include "ilu_internal.h"
 
-static const ILstring iluErrorStrings[IL_FILE_READ_ERROR - IL_INVALID_ENUM + 1] = {
+const ILstring iluErrorStrings[IL_FILE_READ_ERROR - IL_INVALID_ENUM + 1] = {
 	IL_TEXT("invalid enumerant"),
     IL_TEXT("out of memory"),
 	IL_TEXT("format not supported yet"),
@@ -34,7 +34,7 @@ static const ILstring iluErrorStrings[IL_FILE_READ_ERROR - IL_INVALID_ENUM + 1] 
 	IL_TEXT("file read error")
 };
 
-static const ILstring iluLibErrorStrings[IL_LIB_MNG_ERROR - IL_LIB_GIF_ERROR + 1] = {
+const ILstring iluLibErrorStrings[IL_LIB_MNG_ERROR - IL_LIB_GIF_ERROR + 1] = {
 	IL_TEXT("gif library error"),
 	IL_TEXT("jpeg library error"),
 	IL_TEXT("png library error"),

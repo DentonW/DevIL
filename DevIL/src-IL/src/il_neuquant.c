@@ -90,15 +90,15 @@ ILint	alphadec;								// biased by 10 bits
 // Types and Global Variables
 // --------------------------
    
-static unsigned char	*thepicture;			// the input image itself
-static int				lengthcount;			// lengthcount = H*W*3
-static int				samplefac;				// sampling factor 1..30
-typedef int				pixel[4];				// BGRc
-static pixel			network[netsize];		// the network itself
-static int				netindex[256];			// for network lookup - really 256
-static int				bias [netsize];			// bias and freq arrays for learning
-static int				freq [netsize];
-static int				radpower[initrad];		// radpower for precomputation
+unsigned char	*thepicture;			// the input image itself
+int				lengthcount;			// lengthcount = H*W*3
+int				samplefac;				// sampling factor 1..30
+typedef int		pixel[4];				// BGRc
+static pixel	network[netsize];		// the network itself
+int				netindex[256];			// for network lookup - really 256
+int				bias [netsize];			// bias and freq arrays for learning
+int				freq [netsize];
+int				radpower[initrad];		// radpower for precomputation
 
 
 // Initialise network in range (0,0,0) to (255,255,255) and set parameters
@@ -437,7 +437,7 @@ ILimage *iNeuQuant(ILimage *Image)
 	NewImage->Pal.Palette = (ILubyte*)ialloc(NewImage->Pal.PalSize);
 	if (NewImage->Pal.Palette == NULL) {
 		ilCloseImage(TempImage);
-		ifree(NewImage);
+		ilCloseImage(NewImage);
 		return NULL;
 	}
 

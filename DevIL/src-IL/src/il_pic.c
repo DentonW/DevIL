@@ -183,10 +183,15 @@ ILboolean iLoadPicInternal()
 
 	// Read channels
 	do {
-		if (Channel == NULL)
+		if (Channel == NULL) {
 			Channel = Channels = (CHANNEL*)ialloc(sizeof(CHANNEL));
+			if (Channels == NULL)
+				return IL_FALSE;
+		}
 		else {
 			Channels->Next = (CHANNEL*)ialloc(sizeof(CHANNEL));
+			if (Channels->Next == NULL)
+				return IL_FALSE;
 			Channels = Channels->Next;
 		}
 		Channels->Next = NULL;

@@ -406,13 +406,18 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 	ILuint	k;
 	ILfloat	vv[MAXCOLOR], temp;
 	//ILint	color_num;
-	ILubyte	*NewData, *Palette;
-	ILimage	*TempImage, *NewImage;
+	ILubyte	*NewData = NULL, *Palette = NULL;
+	ILimage	*TempImage = NULL, *NewImage = NULL;
 
 	NewImage = iCurImage;
 	iCurImage = Image;
 	TempImage = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
 	iCurImage = NewImage;
+
+	// @TODO:  Remove if we make these local.
+	Ir = NULL;
+	Ig = NULL;
+	Ib = NULL;
 
 	if (TempImage == NULL)
 		return NULL;
@@ -428,6 +433,8 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 	NewData = (ILubyte*)ialloc(Image->Width * Image->Height * Image->Depth);
 	Palette = (ILubyte*)ialloc(3 * NumCols);
 	if (!NewData || !Palette) {
+		ifree(NewData);
+		ifree(Palette);
 		return NULL;
 	}
 
@@ -435,6 +442,9 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 	Ig = ialloc(Width * Height * Depth);
 	Ib = ialloc(Width * Height * Depth);
 	if (!Ir || !Ig || !Ib) {
+		ifree(Ir);
+		ifree(Ig);
+		ifree(Ib);
 		ifree(NewData);
 		ifree(Palette);
 		return NULL;
@@ -493,14 +503,8 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 		}
 
 		tag = (ILubyte*)ialloc(33 * 33 * 33 * sizeof(ILubyte));
-		if (tag == NULL) {
-			ifree(NewData);
-			ifree(Palette);
-			ifree(Ig);
-			ifree(Ib);
-			ifree(Ir);
-			return NULL;
-		}
+		if (tag == NULL)
+			goto error_label;
 		for (k = 0; (ILint)k < K; k++) {
 			Mark(&cube[k], k, tag);
 			weight = Vol(&cube[k], wt);
@@ -530,12 +534,7 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 	else { // If colors more than 256
 		// Begin Octree quantization
 		//Quant_Octree(Image->Width, Image->Height, Image->Bpp, buffer2, NewData, Palette, K);
-		ifree(NewData);
-		ifree(Palette);
-		ifree(Ig);
-		ifree(Ib);
-		ifree(Ir);
-		return NULL;
+		goto error_label;
 	}
 
 	ifree(Ig);
@@ -561,4 +560,12 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 	NewImage->Data = NewData;
 
 	return NewImage;
+
+error_label:
+	ifree(NewData);
+	ifree(Palette);
+	ifree(Ig);
+	ifree(Ib);
+	ifree(Ir);
+	return NULL;
 }

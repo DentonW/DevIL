@@ -114,8 +114,8 @@ ILboolean ILAPIENTRY ilutD3D8VolTexFromFileInMemory(IDirect3DDevice8 *Device, IL
 
 ILboolean ILAPIENTRY ilutD3D8TexFromResource(IDirect3DDevice8 *Device, HMODULE SrcModule, char *SrcResource, IDirect3DTexture8 **Texture)
 {
-	static HRSRC Resource;
-	static ILubyte *Data;
+	HRSRC	Resource;
+	ILubyte	*Data;
 
 	iBindImageTemp();
 
@@ -132,8 +132,8 @@ ILboolean ILAPIENTRY ilutD3D8TexFromResource(IDirect3DDevice8 *Device, HMODULE S
 
 ILboolean ILAPIENTRY ilutD3D8VolTexFromResource(IDirect3DDevice8 *Device, HMODULE SrcModule, char *SrcResource, IDirect3DVolumeTexture8 **Texture)
 {
-	static HRSRC Resource;
-	static ILubyte *Data;
+	HRSRC	Resource;
+	ILubyte	*Data;
 
 	iBindImageTemp();
 
@@ -284,10 +284,10 @@ success:
 
 IDirect3DVolumeTexture8* ILAPIENTRY ilutD3D8VolumeTexture(IDirect3DDevice8 *Device)
 {
-	static IDirect3DVolumeTexture8 *Texture;
-	static D3DLOCKED_BOX Box;
-	static D3DFORMAT Format;
-	static ILimage *Image;
+	IDirect3DVolumeTexture8	*Texture;
+	D3DLOCKED_BOX	Box;
+	D3DFORMAT		Format;
+	ILimage			*Image;
 
 	ilutCurImage = ilGetCurImage();
 	if (ilutCurImage == NULL) {
@@ -321,8 +321,7 @@ IDirect3DVolumeTexture8* ILAPIENTRY ilutD3D8VolumeTexture(IDirect3DDevice8 *Devi
 
 ILimage *MakeD3D8Compliant(IDirect3DDevice8 *Device, D3DFORMAT *DestFormat)
 {
-	static ILubyte *Data;
-	static ILimage *Converted, *Scaled, *CurImage;
+	ILimage	*Converted, *Scaled, *CurImage;
 
 	*DestFormat = D3DFMT_A8R8G8B8;
 

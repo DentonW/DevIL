@@ -1045,7 +1045,6 @@ ILvoid iIntExtImg(ILimage *Image1, ILimage *Image2, ILfloat a)
 
 	Black = ilNewImage(iluCurImage->Width, iluCurImage->Height, iluCurImage->Depth, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (Black == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -1075,7 +1074,6 @@ ILboolean ILAPIENTRY iluContrast(ILfloat Contrast)
 
 	Grey = ilNewImage(iluCurImage->Width, iluCurImage->Height, iluCurImage->Depth, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (Grey == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -1106,7 +1104,6 @@ ILboolean ILAPIENTRY iluSharpen(ILfloat Factor, ILuint Iter)
 
 	Blur = ilNewImage(CurImage->Width, CurImage->Height, CurImage->Depth, CurImage->Bpp, CurImage->Bpc);
 	if (Blur == NULL) {
-		ilSetError(ILU_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	ilCopyImageAttr(Blur, CurImage);

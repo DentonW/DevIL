@@ -1222,7 +1222,7 @@ ILboolean ILAPIENTRY ilSave(ILenum Type, const ILstring FileName)
 
 ILuint ILAPIENTRY ilSaveF(ILenum Type, ILHANDLE File)
 {
-	static ILboolean Ret;
+	ILboolean Ret;
 
 	if (File == NULL) {
 		ilSetError(IL_INVALID_PARAM);
@@ -1295,7 +1295,7 @@ ILuint ILAPIENTRY ilSaveF(ILenum Type, ILHANDLE File)
 
 ILuint ILAPIENTRY ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size)
 {
-	static ILboolean Ret;
+	ILboolean Ret;
 
 	if (Lump == NULL) {
 		ilSetError(IL_INVALID_PARAM);

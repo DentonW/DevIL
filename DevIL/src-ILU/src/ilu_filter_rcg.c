@@ -64,9 +64,9 @@
 #include "ilu_internal.h"
 #include "ilu_states.h"
 
-/*static char	_Program[] = "fzoom";
-static char	_Version[] = "0.30";
-static char	_Copyright[] = "Public Domain 1991 by Dale Schumacher. Mods by Ray Gardener";*/
+/*char	_Program[] = "fzoom";
+char	_Version[] = "0.30";
+char	_Copyright[] = "Public Domain 1991 by Dale Schumacher. Mods by Ray Gardener";*/
 
 
 /* Note: if you define ILubyte to something bigger than char, 
@@ -91,9 +91,9 @@ get_pixel(image, x, y)
 Image *image;
 int x, y;
 {
-	static Image *im = NULL;
-	static int yy = -1;
-	static ILubyte *p = NULL;
+	Image *im = NULL;
+	int yy = -1;
+	ILubyte *p = NULL;
 
 	if((x < 0) || (x >= image->xsize) || (y < 0) || (y >= image->ysize)) {
 		return(0);
@@ -148,9 +148,9 @@ ILimage *Image;
 int x, y;
 ILubyte data;
 {
-	static ILimage *im = NULL;
-	static int yy = -1;
-	static ILubyte *p = NULL;
+	ILimage *im = NULL;
+	int yy = -1;
+	ILubyte *p = NULL;
 
 	if((x < 0) || (x >= image->xsize) || (y < 0) || (y >= image->ysize)) {
 		return(0);
@@ -371,7 +371,6 @@ int i;						/* ILubyte column in source bitmap being processed */
 		contribX->p = (CONTRIB *)calloc((int) (width * 2 + 1),
 				sizeof(CONTRIB));
 		if (contribX->p == NULL) {
-			ilSetError(ILU_OUT_OF_MEMORY);
 			return -1;
 		}
 
@@ -401,8 +400,7 @@ int i;						/* ILubyte column in source bitmap being processed */
 		contribX->n = 0;
 		contribX->p = (CONTRIB *)calloc((int) (fwidth * 2 + 1),
 				sizeof(CONTRIB));
-		if(contribX->p == NULL) {
-			ilSetError(ILU_OUT_OF_MEMORY);
+		if (contribX->p == NULL) {
 			return -1;
 		}
 		center = (double) i / xscale;
@@ -466,7 +464,6 @@ double fwidth;
 	contribY = (CLIST *)calloc(dst->Height, sizeof(CLIST));
 	if (contribY == NULL) {
 		ifree(tmp);
-		ilSetError(ILU_OUT_OF_MEMORY);
 		return -1;
 	}
 
@@ -484,7 +481,6 @@ double fwidth;
 			if(contribY[i].p == NULL) {
 				ifree(tmp);
 				ifree(contribY);
-				ilSetError(ILU_OUT_OF_MEMORY);
 				return -1;
 			}
 			center = (double) i / yscale;
@@ -513,7 +509,6 @@ double fwidth;
 			if (contribY[i].p == NULL) {
 				ifree(tmp);
 				ifree(contribY);
-				ilSetError(ILU_OUT_OF_MEMORY);
 				return -1;
 			}
 			center = (double) i / yscale;
@@ -595,8 +590,8 @@ double fwidth;
 __zoom_cleanup:
 	ifree(tmp);
 
-	/* free the memory allocated for vertical filter weights */
-	for(i = 0; i < (ILint)dst->Height; ++i)
+	// Free the memory allocated for vertical filter weights
+	for (i = 0; i < (ILint)dst->Height; ++i)
 		ifree(contribY[i].p);
 	ifree(contribY);
 

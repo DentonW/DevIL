@@ -462,7 +462,7 @@ ILboolean iGetWord(ILvoid)
 }
 
 
-static ILstring FName;
+ILstring FName;
 
 //! Writes a Pnm file
 ILboolean ilSavePnm(const ILstring FileName)
@@ -521,7 +521,7 @@ ILboolean iSavePnmInternal()
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
-		return IL_FALSE;		
+		return IL_FALSE;
 	}
 
 	if (iCheckExtension(FName, IL_TEXT("pbm")))

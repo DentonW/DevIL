@@ -35,10 +35,10 @@ ILimage *iluScale3D_(ILimage *Image, ILimage *Scaled, ILuint Width, ILuint Heigh
 
 ILboolean ILAPIENTRY iluScale(ILuint Width, ILuint Height, ILuint Depth)
 {
-	static ILimage		*Temp;
-	static ILboolean	UsePal;
-	static ILenum		PalType;
-	static ILenum		Origin;
+	ILimage		*Temp;
+	ILboolean	UsePal;
+	ILenum		PalType;
+	ILenum		Origin;
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
@@ -83,8 +83,8 @@ ILboolean ILAPIENTRY iluScale(ILuint Width, ILuint Height, ILuint Depth)
 
 ILAPI ILimage* ILAPIENTRY iluScale_(ILimage *Image, ILuint Width, ILuint Height, ILuint Depth)
 {
-	static ILimage		*Scaled, *CurImage, *ToScale;
-	static ILenum		Format, PalType;
+	ILimage	*Scaled, *CurImage, *ToScale;
+	ILenum	Format, PalType;
 
 	CurImage = ilGetCurImage();
 	Format = Image->Format;
@@ -100,7 +100,6 @@ ILAPI ILimage* ILAPIENTRY iluScale_(ILimage *Image, ILuint Width, ILuint Height,
 	// So we don't replicate this 3 times (one in each iluScalexD_() function.
 	Scaled = (ILimage*)calloc(1, sizeof(ILimage));
 	if (ilCopyImageAttr(Scaled, ToScale) == IL_FALSE) {
-		ilSetError(ILU_OUT_OF_MEMORY);
 		ilCloseImage(Scaled);
 		if (ToScale != Image)
 			ilCloseImage(ToScale);
@@ -108,7 +107,6 @@ ILAPI ILimage* ILAPIENTRY iluScale_(ILimage *Image, ILuint Width, ILuint Height,
 		return NULL;
 	}
 	if (ilResizeImage(Scaled, Width, Height, Depth, ToScale->Bpp, ToScale->Bpc) == IL_FALSE) {
-		ilSetError(ILU_OUT_OF_MEMORY);
 		ilCloseImage(Scaled);
 		if (ToScale != Image)
 			ilCloseImage(ToScale);
@@ -139,11 +137,11 @@ ILAPI ILimage* ILAPIENTRY iluScale_(ILimage *Image, ILuint Width, ILuint Height,
 
 ILimage *iluScale1D_(ILimage *Image, ILimage *Scaled, ILuint Width)
 {
-	static ILuint	x1, x2;
-	static ILuint	NewX1, NewX2, NewX3, x, c;
-	static ILdouble	ScaleX, t1, t2, f;
-	static ILushort	*ShortPtr, *SShortPtr;
-	static ILuint	*IntPtr, *SIntPtr;
+	ILuint		x1, x2;
+	ILuint		NewX1, NewX2, NewX3, x, c;
+	ILdouble	ScaleX, t1, t2, f;
+	ILushort	*ShortPtr, *SShortPtr;
+	ILuint		*IntPtr, *SIntPtr;
 
 	if (Image == NULL) {
 		ilSetError(ILU_ILLEGAL_OPERATION);

@@ -310,15 +310,16 @@ ILboolean ILAPIENTRY ilRegisterMipNum(ILuint Num)
 
 	//iCurImage->Mipmaps = (ILimage*)ialloc(sizeof(ILimage));
 	iCurImage->Mipmaps = ilNewImage(1, 1, 1, 1, 1);
+	if (iCurImage->Mipmaps == NULL)
+		return IL_FALSE;
 	Next = iCurImage->Mipmaps;
 	Num--;
 
 	while (Num) {
 		//Next->Next = (ILimage*)ialloc(sizeof(ILimage));
 		Next->Next = ilNewImage(1, 1, 1, 1, 1);
-		if (Next->Next == NULL) {
+		if (Next->Next == NULL)
 			return IL_FALSE;
-		}
 		Next = Next->Next;
 		Num--;
 	}
@@ -340,6 +341,8 @@ ILboolean ILAPIENTRY ilRegisterNumImages(ILuint Num)
 
 	//iCurImage->Next = (ILimage*)ialloc(sizeof(ILimage));
 	iCurImage->Next = ilNewImage(1, 1, 1, 1, 1);
+	if (iCurImage->Next == NULL)
+		return IL_FALSE;
 	Next = iCurImage->Next;
 	Num--;
 
@@ -388,6 +391,9 @@ ILvoid ILAPIENTRY ilRegisterPal(ILvoid *Pal, ILuint Size, ILenum Type)
 	iCurImage->Pal.PalSize = Size;
 	iCurImage->Pal.PalType = Type;
 	iCurImage->Pal.Palette = (ILubyte*)ialloc(Size);
+	if (iCurImage->Pal.Palette == NULL)
+		return;
+
 	if (Pal != NULL) {
 		memcpy(iCurImage->Pal.Palette, Pal, Size);
 	}

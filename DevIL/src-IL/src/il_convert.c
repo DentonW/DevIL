@@ -18,12 +18,12 @@
 
 ILimage *iConvertPalette(ILimage *Image, ILenum DestFormat)
 {
-	static const	ILfloat LumFactor[3] = { 0.212671f, 0.715160f, 0.072169f };  // http://www.inforamp.net/~poynton/ and libpng's libpng.txt - Used for conversion to luminance.
-	static ILimage	*NewImage, *CurImage;
-	static ILuint	i, j, c, Size;
-	static ILfloat	Resultf;
-	static ILubyte	*Temp;
-	static ILboolean Converted;
+	static const ILfloat LumFactor[3] = { 0.212671f, 0.715160f, 0.072169f };  // http://www.inforamp.net/~poynton/ and libpng's libpng.txt - Used for conversion to luminance.
+	ILimage		*NewImage = NULL, *CurImage = NULL;
+	ILuint		i, j, c, Size;
+	ILfloat		Resultf;
+	ILubyte		*Temp = NULL;
+	ILboolean	Converted;
 
 	NewImage = (ILimage*)calloc(1, sizeof(ILimage));  // Much better to have it all set to 0.
 	if (NewImage == NULL) {
@@ -48,10 +48,8 @@ ILimage *iConvertPalette(ILimage *Image, ILenum DestFormat)
 			case IL_PAL_RGB32:
 			case IL_PAL_RGBA32:
 				Temp = (ILubyte*)ialloc(Image->Pal.PalSize / ilGetBppPal(Image->Pal.PalType));
-				if (Temp == NULL) {
-					ifree(NewImage);
-					return IL_FALSE;
-				}
+				if (Temp == NULL)
+					goto alloc_error;
 
 				Size = ilGetBppPal(Image->Pal.PalType);
 				for (i = 0; i < Image->Pal.PalSize; i += Size) {
@@ -68,10 +66,8 @@ ILimage *iConvertPalette(ILimage *Image, ILenum DestFormat)
 			case IL_PAL_BGR32:
 			case IL_PAL_BGRA32:
 				Temp = (ILubyte*)ialloc(Image->Pal.PalSize / ilGetBppPal(Image->Pal.PalType));
-				if (Temp == NULL) {
-					ifree(NewImage);
-					return IL_FALSE;
-				}
+				if (Temp == NULL)
+					goto alloc_error;
 
 				Size = ilGetBppPal(Image->Pal.PalType);
 				for (i = 0; i < Image->Pal.PalSize; i += Size) {
@@ -86,6 +82,8 @@ ILimage *iConvertPalette(ILimage *Image, ILenum DestFormat)
 		}
 
 		NewImage->Data = (ILubyte*)ialloc(Image->SizeOfData);
+		if (NewImage->Data == NULL)
+			goto alloc_error;
 		for (i = 0; i < Image->SizeOfData; i++) {
 			NewImage->Data[i] = Temp[Image->Data[i]];
 		}
@@ -133,12 +131,11 @@ ILimage *iConvertPalette(ILimage *Image, ILenum DestFormat)
 		case IL_COLOUR_INDEX:
 			// Just copy the original image over.
 			NewImage->Data = (ILubyte*)ialloc(CurImage->SizeOfData);
+			if (NewImage->Data == NULL)
+				goto alloc_error;
 			NewImage->Pal.Palette = (ILubyte*)ialloc(iCurImage->Pal.PalSize);
-			if (!NewImage->Data || !NewImage->Pal.Palette) {
-				ilCloseImage(NewImage);
-				ilSetCurImage(CurImage);
-				return IL_FALSE;
-			}
+			if (NewImage->Pal.Palette == NULL)
+				goto alloc_error;
 			memcpy(NewImage->Data, CurImage->Data, CurImage->SizeOfData);
 			memcpy(NewImage->Pal.Palette, Image->Pal.Palette, Image->Pal.PalSize);
 			NewImage->Pal.PalSize = Image->Pal.PalSize;
@@ -178,6 +175,14 @@ ILimage *iConvertPalette(ILimage *Image, ILenum DestFormat)
 	ilSetCurImage(CurImage);
 
 	return NewImage;
+
+alloc_error:
+	ifree(Temp);
+	if (NewImage)
+		ilCloseImage(NewImage);
+	if (CurImage != iCurImage)
+		ilSetCurImage(CurImage);
+	return NULL;
 }
 
 
@@ -189,8 +194,8 @@ ILimage *iNeuQuant(ILimage *Image);
 // Converts an image from one format to another
 ILAPI ILimage* ILAPIENTRY iConvertImage(ILimage *Image, ILenum DestFormat, ILenum DestType)
 {
-	static ILimage	*NewImage, *CurImage;
-	static ILuint	i;
+	ILimage	*NewImage, *CurImage;
+	ILuint	i;
 
 	CurImage = Image;
 	if (Image == NULL) {
@@ -201,7 +206,7 @@ ILAPI ILimage* ILAPIENTRY iConvertImage(ILimage *Image, ILenum DestFormat, ILenu
 	// We don't support 16-bit color indices (or higher).
 	if (Image->Format == IL_COLOUR_INDEX && DestType >= IL_SHORT) {
 		ilSetError(IL_INVALID_CONVERSION);
-		return IL_FALSE;
+		return NULL;
 	}
 
 	if (Image->Format == IL_COLOUR_INDEX) {
@@ -216,7 +221,7 @@ ILAPI ILimage* ILAPIENTRY iConvertImage(ILimage *Image, ILenum DestFormat, ILenu
 	else {
 		NewImage = (ILimage*)calloc(1, sizeof(ILimage));  // Much better to have it all set to 0.
 		if (NewImage == NULL) {
-			return IL_FALSE;
+			return NULL;
 		}
 
 		if (ilGetBppFormat(DestFormat) == 0) {
@@ -244,12 +249,16 @@ ILAPI ILimage* ILAPIENTRY iConvertImage(ILimage *Image, ILenum DestFormat, ILenu
 				NewImage->Pal.Palette[i * 3 + 2] = i;
 			}
 			NewImage->Data = (ILubyte*)ialloc(Image->SizeOfData);
+			if (NewImage->Data == NULL) {
+				ilCloseImage(NewImage);
+				return NULL;
+			}
 			memcpy(NewImage->Data, Image->Data, Image->SizeOfData);
 		}
 		else {
 			NewImage->Data = ilConvertBuffer(Image->SizeOfData, Image->Format, DestFormat, Image->Type, DestType, Image->Data);
 			if (NewImage->Data == NULL) {
-				ifree(NewImage);
+				ifree(NewImage);  // ilCloseImage not needed.
 				return NULL;
 			}
 		}
@@ -505,6 +514,7 @@ ILboolean ilAddAlpha()
 			break;
 
 		default:
+			ifree(NewData);
 			ilSetError(IL_INTERNAL_ERROR);
 			return IL_FALSE;
 	}
@@ -679,6 +689,7 @@ ILboolean ilAddAlphaKey(ILimage *Image)
 				break;
 
 			default:
+				ifree(NewData);
 				ilSetError(IL_INTERNAL_ERROR);
 				return IL_FALSE;
 		}
@@ -739,6 +750,8 @@ ILboolean ilAddAlphaKey(ILimage *Image)
 
 		// Set the colour index to be transparent.
 		Image->Pal.Palette[(ILuint)(KeyAlpha * UCHAR_MAX) * 4 + 3] = 0;
+
+		// @TODO: Check if this is the required behaviour.
 
 		if (Image->Pal.PalType == IL_PAL_RGBA32)
 			ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
@@ -821,6 +834,7 @@ ILboolean ilRemoveAlpha()
 			break;
 
 		default:
+			ifree(NewData);
 			ilSetError(IL_INTERNAL_ERROR);
 			return IL_FALSE;
 	}
@@ -891,7 +905,7 @@ ILboolean ilFixCur()
 
 ILboolean ilFixImage()
 {
-	static ILuint NumImages, i;
+	ILuint NumImages, i;
 
 	NumImages = ilGetInteger(IL_NUM_IMAGES);
 	for (i = 0; i < NumImages; i++) {

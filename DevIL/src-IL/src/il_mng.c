@@ -97,7 +97,7 @@ mng_bool MNG_DECL mymngwritedata(mng_handle mng, mng_ptr buffer, mng_size_t size
 //---------------------------------------------------------------------------------------------
 mng_bool MNG_DECL mymngprocessheader(mng_handle mng, mng_uint32 width, mng_uint32 height)
 {
-	static ILuint AlphaDepth;
+	ILuint	AlphaDepth;
 
 	AlphaDepth = mng_get_alphadepth(mng);
 

@@ -147,7 +147,6 @@ ILboolean iBuild1DMipmaps_(ILuint Width)
 
 	MipMap = ilNewImage(Width, 1, 1, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (MipMap == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		if (CurMipMap != NULL)
 			CurMipMap->Next = NULL;
 		return IL_FALSE;
@@ -204,7 +203,6 @@ ILboolean iBuild1DMipmapsVertical_(ILuint Height)
 
 	MipMap = ilNewImage(1, Height, 1, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (MipMap == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		if (CurMipMap != NULL)
 			CurMipMap->Next = NULL;
 		return IL_FALSE;
@@ -289,7 +287,6 @@ ILboolean iBuild2DMipmaps_(ILuint Width, ILuint Height)
 
 	MipMap = ilNewImage(Width, Height, 1, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (MipMap == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		if (CurMipMap != NULL)
 			CurMipMap->Next = NULL;
 		return IL_FALSE;
@@ -384,7 +381,6 @@ ILboolean iBuild3DMipmaps_(ILuint Width, ILuint Height, ILuint Depth)
 
 	MipMap = ilNewImage(Width, Height, Depth, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (MipMap == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		if (CurMipMap != NULL)
 			CurMipMap->Next = NULL;
 		return IL_FALSE;
@@ -477,7 +473,6 @@ ILboolean iBuild3DMipmapsVertical_(ILuint Height, ILuint Depth)
 
 	MipMap = ilNewImage(1, Height, Depth, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (MipMap == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		if (CurMipMap != NULL)
 			CurMipMap->Next = NULL;
 		return IL_FALSE;
@@ -561,7 +556,6 @@ ILboolean iBuild3DMipmapsHorizontal_(ILuint Width, ILuint Depth)
 
 	MipMap = ilNewImage(Width, 1, Depth, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (MipMap == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		if (CurMipMap != NULL)
 			CurMipMap->Next = NULL;
 		return IL_FALSE;

@@ -30,8 +30,8 @@ ILint		readpng_init(ILvoid);
 ILboolean	readpng_get_image(ILdouble display_exponent);
 ILvoid		readpng_cleanup(ILvoid);
 
-static png_structp png_ptr = NULL;
-static png_infop info_ptr = NULL;
+png_structp png_ptr = NULL;
+png_infop info_ptr = NULL;
 ILuint color_type;
 
 #define GAMMA_CORRECTION 1.0  // Doesn't seem to be doing anything...
@@ -323,14 +323,13 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 	}
 
 
-	/* set the individual row_pointers to point at the correct offsets */
+	// Set the individual row_pointers to point at the correct offsets */
 
 	for (i = 0; i < height; i++)
 		row_pointers[i] = iCurImage->Data + i * iCurImage->Bps;
 
 
-    /* now we can go ahead and just read the whole image */
-
+    // Now we can go ahead and just read the whole image
     png_read_image(png_ptr, row_pointers);
 
 
@@ -468,9 +467,8 @@ ILboolean iSavePngInternal()
 	// Allocate/initialize the image information data.  REQUIRED
 	info_ptr = png_create_info_struct(png_ptr);
 	if (info_ptr == NULL) {
-		png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
 		ilSetError(IL_LIB_PNG_ERROR);
-		return IL_FALSE;
+		goto error_label;
 	}
 
 	/*// Set error handling.  REQUIRED if you aren't supplying your own
@@ -507,9 +505,8 @@ ILboolean iSavePngInternal()
 			BitDepth = 16;
 			break;
 		default:
-			png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
 			ilSetError(IL_INTERNAL_ERROR);
-			return IL_FALSE;
+			goto error_label;
 	}
 
 	switch (iCurImage->Format)
@@ -529,9 +526,8 @@ ILboolean iSavePngInternal()
 			PngType = PNG_COLOR_TYPE_RGB_ALPHA;
 			break;
 		default:
-			png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
-			ilSetError(IL_ILLEGAL_OPERATION);  // correct?
-			return IL_FALSE;
+			ilSetError(IL_INTERNAL_ERROR);
+			goto error_label;
 	}
 
 	// Set the image information here.  Width and height are up to 2^31,
@@ -618,6 +614,8 @@ ILboolean iSavePngInternal()
 	#endif//__LITTLE_ENDIAN__
 
 	RowPtr = (ILubyte**)ialloc(iCurImage->Height * sizeof(ILubyte*));
+	if (RowPtr == NULL)
+		goto error_label;
 	if (iCurImage->Origin == IL_ORIGIN_UPPER_LEFT) {
 		for (i = 0; i < iCurImage->Height; i++) {
 			RowPtr[i] = Temp->Data + i * Temp->Bps;
@@ -646,6 +644,14 @@ ILboolean iSavePngInternal()
 	ilClosePal(TempPal);
 
 	return IL_TRUE;
+
+error_label:
+	png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
+	ifree(RowPtr);
+	if (Temp != iCurImage)
+		ilCloseImage(Temp);
+	ilClosePal(TempPal);
+	return IL_FALSE;
 }
 
 

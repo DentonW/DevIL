@@ -677,7 +677,7 @@ ILuint ILAPIENTRY iluColoursUsed()
 			if (HeapPtr >= HeapSize) {
 				Heap[++HeapPos] = (BUCKET*)ialloc(HeapSize * sizeof(BUCKET));
 				if (Heap[HeapPos] == NULL)
-					return IL_FALSE;
+					goto alloc_error;
 				HeapPtr = 0;
 			}
 			*(ILuint*)Buckets[BucketPos].Next->Colours = *(ILuint*)ColTemp;
@@ -704,7 +704,7 @@ ILuint ILAPIENTRY iluColoursUsed()
 					if (HeapPtr >= HeapSize) {
 						Heap[++HeapPos] = (BUCKET*)ialloc(HeapSize * sizeof(BUCKET));
 						if (Heap[HeapPos] == NULL)
-							return IL_FALSE;
+							goto alloc_error;
 						HeapPtr = 0;
 					}
 					Buckets[BucketPos].Next->Next = Temp;
@@ -722,6 +722,13 @@ ILuint ILAPIENTRY iluColoursUsed()
 	}
 
 	return NumCols;
+
+alloc_error:
+	for (i = 0; i < 9; i++) {
+		ifree(Heap[i]);
+	}
+
+	return 0;
 }
 
 

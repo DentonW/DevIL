@@ -202,8 +202,8 @@ ILboolean iLoadPcxInternal()
 // Internal function to uncompress the .pcx (all .pcx files are rle compressed)
 ILboolean iUncompressPcx(PCXHEAD *Header)
 {
-	ILubyte		ByteHead, Colour, *ScanLine /* Only one plane */;
-	ILuint		c, i, x, y;
+	ILubyte	ByteHead, Colour, *ScanLine /* Only one plane */;
+	ILuint	c, i, x, y;
 
 	if (Header->Bpp < 8) {
 		/*ilSetError(IL_FORMAT_NOT_SUPPORTED);
@@ -225,7 +225,7 @@ ILboolean iUncompressPcx(PCXHEAD *Header)
 		case 1:
 			iCurImage->Format = IL_COLOUR_INDEX;
 			iCurImage->Pal.PalType = IL_PAL_RGB24;
-			iCurImage->Pal.PalSize = 256 * 3; // Need to find out for sure...
+			iCurImage->Pal.PalSize = 256 * 3;  // Need to find out for sure...
 			iCurImage->Pal.Palette = (ILubyte*)ialloc(iCurImage->Pal.PalSize);
 			if (iCurImage->Pal.Palette == NULL) {
 				ifree(ScanLine);
@@ -418,6 +418,8 @@ ILboolean iUncompressSmall(PCXHEAD *Header)
 		iCurImage->Pal.Palette = (ILubyte*)ialloc(16 * 3);  // Size of palette always (48 bytes).
 		ScanLine = (ILubyte*)ialloc(Bps);
 		if (iCurImage->Pal.Palette == NULL || ScanLine == NULL) {
+			ifree(ScanLine);
+			ifree(iCurImage->Pal.Palette);
 			return IL_FALSE;
 		}
 		memcpy(iCurImage->Pal.Palette, Header->ColMap, 16 * 3);

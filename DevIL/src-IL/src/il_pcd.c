@@ -73,7 +73,7 @@ ILvoid YCbCr2RGB(ILubyte Y, ILubyte Cb, ILubyte Cr, ILubyte *r, ILubyte *g, ILub
 	static const ILdouble c31 = 0.0054980*256;
 	static const ILdouble c32 = 0.0079533*256;
 	static const ILdouble c33 = 0.0000000*256;
-	static ILint r1, g1, b1;
+	ILint r1, g1, b1;
 
 	r1 = (ILint)(c11*Y + c12*(Cb-156) + c13*(Cr-137));
 	g1 = (ILint)(c21*Y + c22*(Cb-156) + c23*(Cr-137));
@@ -150,6 +150,9 @@ ILboolean iLoadPcdInternal()
 	Y2 = (ILubyte*)ialloc(Width);
 	CbCr = (ILubyte*)ialloc(Width);
 	if (Y1 == NULL || Y2 == NULL || CbCr == NULL) {
+		ifree(Y1);
+		ifree(Y2);
+		ifree(CbCr);
 		return IL_FALSE;
 	}
 

@@ -393,7 +393,6 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 			break;
 	}
 
-
 	ifree(Data);
 
 	return Count;

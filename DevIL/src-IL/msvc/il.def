@@ -119,6 +119,8 @@ ilResizeImage
 ilSetCurImage
 ilTexImage_
 ilTexSubImage_
+ialloc
+ifree
 
 
 ; Export the API of the included libjpeg so that applications
