@@ -34,8 +34,7 @@
 - Added .pxr support.
 - Added .xpm support.
 - Fixed MSVC++ post-build, thanks to Nick Marley.
-
-
+- Changed the load order to check for popular image formats first.
 
 
 1.4.2

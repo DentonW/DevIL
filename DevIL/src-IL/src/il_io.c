@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 05/21/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 05/28/2002 <--Y2K Compliant! =]
 //
 // Filename: il/il_io.c
 //
@@ -29,18 +29,23 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 		return IL_FALSE;
 	}
 
-	if (!iStrCmp(Ext, IL_TEXT("bmp")))
-		return IL_BMP;
-	if (!iStrCmp(Ext, IL_TEXT("cut")))
-		return IL_CUT;
-	if (!iStrCmp(Ext, IL_TEXT("dds")))
-		return IL_DDS;
-	if (!iStrCmp(Ext, IL_TEXT("gif")))
-		return IL_GIF;
-	if (!iStrCmp(Ext, IL_TEXT("ico")) || !iStrCmp(Ext, IL_TEXT("cur")))
-		return IL_ICO;
+	if (!iStrCmp(Ext, IL_TEXT("tga")) || !iStrCmp(Ext, IL_TEXT("vda")) ||
+		!iStrCmp(Ext, IL_TEXT("icb")) || !iStrCmp(Ext, IL_TEXT("vst")))
+		return IL_TGA;
 	if (!iStrCmp(Ext, IL_TEXT("jpg")) || !iStrCmp(Ext, IL_TEXT("jpe")) || !iStrCmp(Ext, IL_TEXT("jpeg")))
 		return IL_JPG;
+	if (!iStrCmp(Ext, IL_TEXT("dds")))
+		return IL_DDS;
+	if (!iStrCmp(Ext, IL_TEXT("png")))
+		return IL_PNG;
+	if (!iStrCmp(Ext, IL_TEXT("bmp")))
+		return IL_BMP;
+	if (!iStrCmp(Ext, IL_TEXT("gif")))
+		return IL_GIF;
+	if (!iStrCmp(Ext, IL_TEXT("cut")))
+		return IL_CUT;
+	if (!iStrCmp(Ext, IL_TEXT("ico")) || !iStrCmp(Ext, IL_TEXT("cur")))
+		return IL_ICO;
 	if (!iStrCmp(Ext, IL_TEXT("jng")))
 		return IL_JNG;
 	if (!iStrCmp(Ext, IL_TEXT("lif")))
@@ -57,8 +62,6 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 		return IL_PIC;
 	if (!iStrCmp(Ext, IL_TEXT("pix")))
 		return IL_PIX;
-	if (!iStrCmp(Ext, IL_TEXT("png")))
-		return IL_PNG;
 	if (!iStrCmp(Ext, IL_TEXT("pbm")) || !iStrCmp(Ext, IL_TEXT("pgm")) ||
 		!iStrCmp(Ext, IL_TEXT("pnm")) || !iStrCmp(Ext, IL_TEXT("ppm")))
 		return IL_PNM;
@@ -71,9 +74,6 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 	if (!iStrCmp(Ext, IL_TEXT("sgi")) || !iStrCmp(Ext, IL_TEXT("bw")) ||
 		!iStrCmp(Ext, IL_TEXT("rgb")) || !iStrCmp(Ext, IL_TEXT("rgba")))
 		return IL_SGI;
-	if (!iStrCmp(Ext, IL_TEXT("tga")) || !iStrCmp(Ext, IL_TEXT("vda")) ||
-		!iStrCmp(Ext, IL_TEXT("icb")) || !iStrCmp(Ext, IL_TEXT("vst")))
-		return IL_TGA;
 	if (!iStrCmp(Ext, IL_TEXT("tif")) || !iStrCmp(Ext, IL_TEXT("tiff")))
 		return IL_TIF;
 	if (!iStrCmp(Ext, IL_TEXT("wal")))
@@ -112,9 +112,14 @@ ILenum ilDetermineTypeF(ILHANDLE File)
 	if (File == NULL)
 		return IL_TYPE_UNKNOWN;
 
-	#ifndef IL_NO_BMP
-	if (ilIsValidBmpF(File))
-		return IL_BMP;
+	#ifndef IL_NO_TGA
+	if (ilIsValidTgaF(File))
+		return IL_TGA;
+	#endif
+
+	#ifndef IL_NO_JPG
+	if (ilIsValidJpgF(File))
+		return IL_JPG;
 	#endif
 
 	#ifndef IL_NO_DDS
@@ -122,14 +127,19 @@ ILenum ilDetermineTypeF(ILHANDLE File)
 		return IL_DDS;
 	#endif
 
+	#ifndef IL_NO_PNG
+	if (ilIsValidPngF(File))
+		return IL_PNG;
+	#endif
+
+	#ifndef IL_NO_BMP
+	if (ilIsValidBmpF(File))
+		return IL_BMP;
+	#endif
+
 	#ifndef IL_NO_GIF
 	if (ilIsValidGifF(File))
 		return IL_GIF;
-	#endif
-
-	#ifndef IL_NO_JPG
-	if (ilIsValidJpgF(File))
-		return IL_JPG;
 	#endif
 
 	#ifndef IL_NO_LIF
@@ -145,11 +155,6 @@ ILenum ilDetermineTypeF(ILHANDLE File)
 	#ifndef IL_NO_PIC
 	if (ilIsValidPicF(File))
 		return IL_PIC;
-	#endif
-
-	#ifndef IL_NO_PNG
-	if (ilIsValidPngF(File))
-		return IL_PNG;
 	#endif
 
 	#ifndef IL_NO_PNM
@@ -172,11 +177,6 @@ ILenum ilDetermineTypeF(ILHANDLE File)
 		return IL_SGI;
 	#endif
 
-	#ifndef IL_NO_TGA
-	if (ilIsValidTgaF(File))
-		return IL_TGA;
-	#endif
-
 	#ifndef IL_NO_TIF
 	if (ilIsValidTiffF(File))
 		return IL_TIF;
@@ -191,9 +191,14 @@ ILenum ilDetermineTypeL(ILvoid *Lump, ILuint Size)
 	if (Lump == NULL)
 		return IL_TYPE_UNKNOWN;
 
-	#ifndef IL_NO_BMP
-	if (ilIsValidBmpL(Lump, Size))
-		return IL_BMP;
+	#ifndef IL_NO_TGA
+	if (ilIsValidTgaL(Lump, Size))
+		return IL_TGA;
+	#endif
+
+	#ifndef IL_NO_JPG
+	if (ilIsValidJpgL(Lump, Size))
+		return IL_JPG;
 	#endif
 
 	#ifndef IL_NO_DDS
@@ -201,14 +206,19 @@ ILenum ilDetermineTypeL(ILvoid *Lump, ILuint Size)
 		return IL_DDS;
 	#endif
 
+	#ifndef IL_NO_PNG
+	if (ilIsValidPngL(Lump, Size))
+		return IL_PNG;
+	#endif
+
+	#ifndef IL_NO_BMP
+	if (ilIsValidBmpL(Lump, Size))
+		return IL_BMP;
+	#endif
+
 	#ifndef IL_NO_GIF
 	if (ilIsValidGifL(Lump, Size))
 		return IL_GIF;
-	#endif
-
-	#ifndef IL_NO_JPG
-	if (ilIsValidJpgL(Lump, Size))
-		return IL_JPG;
 	#endif
 
 	#ifndef IL_NO_LIF
@@ -224,11 +234,6 @@ ILenum ilDetermineTypeL(ILvoid *Lump, ILuint Size)
 	#ifndef IL_NO_PIC
 	if (ilIsValidPicL(Lump, Size))
 		return IL_PIC;
-	#endif
-
-	#ifndef IL_NO_PNG
-	if (ilIsValidPngL(Lump, Size))
-		return IL_PNG;
 	#endif
 
 	#ifndef IL_NO_PNM
@@ -251,11 +256,6 @@ ILenum ilDetermineTypeL(ILvoid *Lump, ILuint Size)
 		return IL_SGI;
 	#endif
 
-	#ifndef IL_NO_TGA
-	if (ilIsValidTgaL(Lump, Size))
-		return IL_TGA;
-	#endif
-
 	#ifndef IL_NO_TIF
 	if (ilIsValidTiffL(Lump, Size))
 		return IL_TIF;
@@ -274,9 +274,14 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, const ILstring FileName)
 
 	switch (Type)
 	{
-		#ifndef IL_NO_BMP
-		case IL_BMP:
-			return ilIsValidBmp(FileName);
+		#ifndef IL_NO_TGA
+		case IL_TGA:
+			return ilIsValidTga(FileName);
+		#endif
+
+		#ifndef IL_NO_JPG
+		case IL_JPG:
+			return ilIsValidJpg(FileName);
 		#endif
 
 		#ifndef IL_NO_DDS
@@ -284,14 +289,19 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, const ILstring FileName)
 			return ilIsValidDds(FileName);
 		#endif
 
+		#ifndef IL_NO_PNG
+		case IL_PNG:
+			return ilIsValidPng(FileName);
+		#endif
+
+		#ifndef IL_NO_BMP
+		case IL_BMP:
+			return ilIsValidBmp(FileName);
+		#endif
+
 		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilIsValidGif(FileName);
-		#endif
-
-		#ifndef IL_NO_JPG
-		case IL_JPG:
-			return ilIsValidJpg(FileName);
 		#endif
 
 		#ifndef IL_NO_LIF
@@ -307,11 +317,6 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, const ILstring FileName)
 		#ifndef IL_NO_PIC
 		case IL_PIC:
 			return ilIsValidPic(FileName);
-		#endif
-
-		#ifndef IL_NO_PNG
-		case IL_PNG:
-			return ilIsValidPng(FileName);
 		#endif
 
 		#ifndef IL_NO_PNM
@@ -334,11 +339,6 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, const ILstring FileName)
 			return ilIsValidSgi(FileName);
 		#endif
 
-		#ifndef IL_NO_TGA
-		case IL_TGA:
-			return ilIsValidTga(FileName);
-		#endif
-
 		#ifndef IL_NO_TIF
 		case IL_TIF:
 			return ilIsValidTiff(FileName);
@@ -359,9 +359,14 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 
 	switch (Type)
 	{
-		#ifndef IL_NO_BMP
-		case IL_BMP:
-			return ilIsValidBmpF(File);
+		#ifndef IL_NO_TGA
+		case IL_TGA:
+			return ilIsValidTgaF(File);
+		#endif
+
+		#ifndef IL_NO_JPG
+		case IL_JPG:
+			return ilIsValidJpgF(File);
 		#endif
 
 		#ifndef IL_NO_DDS
@@ -369,9 +374,19 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 			return ilIsValidDdsF(File);
 		#endif
 
-		#ifndef IL_NO_JPG
-		case IL_JPG:
-			return ilIsValidJpgF(File);
+		#ifndef IL_NO_PNG
+		case IL_PNG:
+			return ilIsValidPngF(File);
+		#endif
+
+		#ifndef IL_NO_BMP
+		case IL_BMP:
+			return ilIsValidBmpF(File);
+		#endif
+
+		#ifndef IL_NO_GIF
+		case IL_GIF:
+			return ilIsValidGifF(File);
 		#endif
 
 		#ifndef IL_NO_LIF
@@ -387,11 +402,6 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 		#ifndef IL_NO_PIC
 		case IL_PIC:
 			return ilIsValidPicF(File);
-		#endif
-
-		#ifndef IL_NO_PNG
-		case IL_PNG:
-			return ilIsValidPngF(File);
 		#endif
 
 		#ifndef IL_NO_PNM
@@ -413,11 +423,6 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 		case IL_SGI:
 			return ilIsValidSgiF(File);
 		#endif
-
-		#ifndef IL_NO_TGA
-		case IL_TGA:
-			return ilIsValidTgaF(File);
-		#endif
 	}
 
 	ilSetError(IL_INVALID_ENUM);
@@ -434,9 +439,14 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, ILvoid *Lump, ILuint Size)
 
 	switch (Type)
 	{
-		#ifndef IL_NO_BMP
-		case IL_BMP:
-			return ilIsValidBmpL(Lump, Size);
+		#ifndef IL_NO_TGA
+		case IL_TGA:
+			return ilIsValidTgaL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_JPG
+		case IL_JPG:
+			return ilIsValidJpgL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_DDS
@@ -444,9 +454,19 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, ILvoid *Lump, ILuint Size)
 			return ilIsValidDdsL(Lump, Size);
 		#endif
 
-		#ifndef IL_NO_JPG
-		case IL_JPG:
-			return ilIsValidJpgL(Lump, Size);
+		#ifndef IL_NO_PNG
+		case IL_PNG:
+			return ilIsValidPngL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_BMP
+		case IL_BMP:
+			return ilIsValidBmpL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_GIF
+		case IL_GIF:
+			return ilIsValidGifL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_LIF
@@ -462,11 +482,6 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, ILvoid *Lump, ILuint Size)
 		#ifndef IL_NO_PIC
 		case IL_PIC:
 			return ilIsValidPicL(Lump, Size);
-		#endif
-
-		#ifndef IL_NO_PNG
-		case IL_PNG:
-			return ilIsValidPngL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_PNM
@@ -487,11 +502,6 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, ILvoid *Lump, ILuint Size)
 		#ifndef IL_NO_SGI
 		case IL_SGI:
 			return ilIsValidSgiL(Lump, Size);
-		#endif
-
-		#ifndef IL_NO_TGA
-		case IL_TGA:
-			return ilIsValidTgaL(Lump, Size);
 		#endif
 	}
 
@@ -517,19 +527,39 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, const ILstring FileName)
 		case IL_TYPE_UNKNOWN:
 			return ilLoadImage(FileName);
 
-		#ifndef IL_NO_BMP
-		case IL_BMP:
-			return ilLoadBmp(FileName);
+		#ifndef IL_NO_TGA
+		case IL_TGA:
+			return ilLoadTarga(FileName);
 		#endif
 
-		#ifndef IL_NO_CUT
-		case IL_CUT:
-			return ilLoadCut(FileName);
+		#ifndef IL_NO_JPG
+		case IL_JPG:
+			return ilLoadJpeg(FileName);
 		#endif
 
 		#ifndef IL_NO_DDS
 		case IL_DDS:
 			return ilLoadDds(FileName);
+		#endif
+
+		#ifndef IL_NO_PNG
+		case IL_PNG:
+			return ilLoadPng(FileName);
+		#endif
+
+		#ifndef IL_NO_BMP
+		case IL_BMP:
+			return ilLoadBmp(FileName);
+		#endif
+
+		#ifndef IL_NO_GIF
+		case IL_GIF:
+			return ilLoadGif(FileName);
+		#endif
+
+		#ifndef IL_NO_CUT
+		case IL_CUT:
+			return ilLoadCut(FileName);
 		#endif
 
 		#ifndef IL_NO_DOOM
@@ -539,19 +569,9 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, const ILstring FileName)
 			return ilLoadDoomFlat(FileName);
 		#endif
 
-		#ifndef IL_NO_GIF
-		case IL_GIF:
-			return ilLoadGif(FileName);
-		#endif
-
 		#ifndef IL_NO_ICO
 		case IL_ICO:
 			return ilLoadIcon(FileName);
-		#endif
-
-		#ifndef IL_NO_JPG
-		case IL_JPG:
-			return ilLoadJpeg(FileName);
 		#endif
 
 		#ifndef IL_NO_LIF
@@ -589,11 +609,6 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, const ILstring FileName)
 			return ilLoadPix(FileName);
 		#endif
 
-		#ifndef IL_NO_PNG
-		case IL_PNG:
-			return ilLoadPng(FileName);
-		#endif
-
 		#ifndef IL_NO_PNM
 		case IL_PNM:
 			return ilLoadPnm(FileName);
@@ -622,11 +637,6 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, const ILstring FileName)
 		#ifndef IL_NO_SGI
 		case IL_SGI:
 			return ilLoadSgi(FileName);
-		#endif
-
-		#ifndef IL_NO_TGA
-		case IL_TGA:
-			return ilLoadTarga(FileName);
 		#endif
 
 		#ifndef IL_NO_TIF
@@ -671,19 +681,41 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 		case IL_TYPE_UNKNOWN:
 			return IL_FALSE;
 
-		#ifndef IL_NO_BMP
-		case IL_BMP:
-			return ilLoadBmpF(File);
+		#ifndef IL_NO_TGA
+		case IL_TGA:
+			return ilLoadTargaF(File);
 		#endif
 
-		#ifndef IL_NO_CUT
-		case IL_CUT:
-			return ilLoadCutF(File);
+		#ifndef IL_NO_JPG
+			#ifndef IL_USE_IJL
+			case IL_JPG:
+				return ilLoadJpegF(File);
+			#endif
 		#endif
 
 		#ifndef IL_NO_DDS
 		case IL_DDS:
 			return ilLoadDdsF(File);
+		#endif
+
+		#ifndef IL_NO_PNG
+		case IL_PNG:
+			return ilLoadPngF(File);
+		#endif
+
+		#ifndef IL_NO_BMP
+		case IL_BMP:
+			return ilLoadBmpF(File);
+		#endif
+
+		#ifndef IL_NO_GIF
+		case IL_GIF:
+			return ilLoadGifF(File);
+		#endif
+
+		#ifndef IL_NO_CUT
+		case IL_CUT:
+			return ilLoadCutF(File);
 		#endif
 
 		#ifndef IL_NO_DOOM
@@ -696,13 +728,6 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 		#ifndef IL_NO_ICO
 		case IL_ICO:
 			return ilLoadIconF(File);
-		#endif
-
-		#ifndef IL_NO_JPG
-			#ifndef IL_USE_IJL
-			case IL_JPG:
-				return ilLoadJpegF(File);
-			#endif
 		#endif
 
 		#ifndef IL_NO_LIF
@@ -740,11 +765,6 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadPixF(File);
 		#endif
 
-		#ifndef IL_NO_PNG
-		case IL_PNG:
-			return ilLoadPngF(File);
-		#endif
-
 		#ifndef IL_NO_PNM
 		case IL_PNM:
 			return ilLoadPnmF(File);
@@ -773,11 +793,6 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 		#ifndef IL_NO_SGI
 		case IL_SGI:
 			return ilLoadSgiF(File);
-		#endif
-
-		#ifndef IL_NO_TGA
-		case IL_TGA:
-			return ilLoadTargaF(File);
 		#endif
 
 		#ifndef IL_NO_WAL
@@ -811,19 +826,39 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, ILvoid *Lump, ILuint Size)
 		case IL_TYPE_UNKNOWN:
 			return IL_FALSE;
 
-		#ifndef IL_NO_BMP
-		case IL_BMP:
-			return ilLoadBmpL(Lump, Size);
+		#ifndef IL_NO_TGA
+		case IL_TGA:
+			return ilLoadTargaL(Lump, Size);
 		#endif
 
-		#ifndef IL_NO_CUT
-		case IL_CUT:
-			return ilLoadCutL(Lump, Size);
+		#ifndef IL_NO_JPG
+		case IL_JPG:
+			return ilLoadJpegL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_DDS
 		case IL_DDS:
 			return ilLoadDdsL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_PNG
+		case IL_PNG:
+			return ilLoadPngL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_BMP
+		case IL_BMP:
+			return ilLoadBmpL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_GIF
+		case IL_GIF:
+			return ilLoadGifL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_CUT
+		case IL_CUT:
+			return ilLoadCutL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_DOOM
@@ -836,11 +871,6 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, ILvoid *Lump, ILuint Size)
 		#ifndef IL_NO_ICO
 		case IL_ICO:
 			return ilLoadIconL(Lump, Size);
-		#endif
-
-		#ifndef IL_NO_JPG
-		case IL_JPG:
-			return ilLoadJpegL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_LIF
@@ -878,11 +908,6 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, ILvoid *Lump, ILuint Size)
 			return ilLoadPixL(Lump, Size);
 		#endif
 
-		#ifndef IL_NO_PNG
-		case IL_PNG:
-			return ilLoadPngL(Lump, Size);
-		#endif
-
 		#ifndef IL_NO_PNM
 		case IL_PNM:
 			return ilLoadPnmL(Lump, Size);
@@ -911,11 +936,6 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, ILvoid *Lump, ILuint Size)
 		#ifndef IL_NO_SGI
 		case IL_SGI:
 			return ilLoadSgiL(Lump, Size);
-		#endif
-
-		#ifndef IL_NO_TGA
-		case IL_TGA:
-			return ilLoadTargaL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_TIF
@@ -964,9 +984,41 @@ ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 		if (iRegisterLoad(FileName))
 			return IL_TRUE;
 
+		#ifndef IL_NO_TGA
+		if (!iStrCmp(Ext, IL_TEXT("tga")) || !iStrCmp(Ext, IL_TEXT("vda")) ||
+			!iStrCmp(Ext, IL_TEXT("icb")) || !iStrCmp(Ext, IL_TEXT("vst"))) {
+			return ilLoadTarga(FileName);
+		}
+		#endif
+
+		#ifndef IL_NO_JPG
+		if (!iStrCmp(Ext, IL_TEXT("jpg")) || !iStrCmp(Ext, IL_TEXT("jpe")) ||
+			!iStrCmp(Ext, IL_TEXT("jpeg"))) {
+			return ilLoadJpeg(FileName);
+		}
+		#endif
+
+		#ifndef IL_NO_DDS
+		if (!iStrCmp(Ext, IL_TEXT("dds"))) {
+			return ilLoadDds(FileName);
+		}
+		#endif
+
+		#ifndef IL_NO_PNG
+		if (!iStrCmp(Ext, IL_TEXT("png"))) {
+			return ilLoadPng(FileName);
+		}
+		#endif
+
 		#ifndef IL_NO_BMP
 		if (!iStrCmp(Ext, IL_TEXT("bmp"))) {
 			return ilLoadBmp(FileName);
+		}
+		#endif
+
+		#ifndef IL_NO_GIF
+		if (!iStrCmp(Ext, IL_TEXT("gif"))) {
+			return ilLoadGif(FileName);
 		}
 		#endif
 
@@ -982,28 +1034,9 @@ ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 		}
 		#endif
 
-		#ifndef IL_NO_DDS
-		if (!iStrCmp(Ext, IL_TEXT("dds"))) {
-			return ilLoadDds(FileName);
-		}
-		#endif
-
-		#ifndef IL_NO_GIF
-		if (!iStrCmp(Ext, IL_TEXT("gif"))) {
-			return ilLoadGif(FileName);
-		}
-		#endif
-
 		#ifndef IL_NO_ICO
 		if (!iStrCmp(Ext, IL_TEXT("ico")) || !iStrCmp(Ext, IL_TEXT("cur"))) {
 			return ilLoadIcon(FileName);
-		}
-		#endif
-
-		#ifndef IL_NO_JPG
-		if (!iStrCmp(Ext, IL_TEXT("jpg")) || !iStrCmp(Ext, IL_TEXT("jpe")) ||
-			!iStrCmp(Ext, IL_TEXT("jpeg"))) {
-			return ilLoadJpeg(FileName);
 		}
 		#endif
 
@@ -1049,12 +1082,6 @@ ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 		}
 		#endif
 
-		#ifndef IL_NO_PNG
-		if (!iStrCmp(Ext, IL_TEXT("png"))) {
-			return ilLoadPng(FileName);
-		}
-		#endif
-
 		#ifndef IL_NO_PNM
 		if (!iStrCmp(Ext, IL_TEXT("pbm"))) {
 			return ilLoadPnm(FileName);
@@ -1092,13 +1119,6 @@ ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 		if (!iStrCmp(Ext, IL_TEXT("sgi")) || !iStrCmp(Ext, IL_TEXT("bw")) ||
 			!iStrCmp(Ext, IL_TEXT("rgb")) || !iStrCmp(Ext, IL_TEXT("rgba"))) {
 			return ilLoadSgi(FileName);
-		}
-		#endif
-
-		#ifndef IL_NO_TGA
-		if (!iStrCmp(Ext, IL_TEXT("tga")) || !iStrCmp(Ext, IL_TEXT("vda")) ||
-			!iStrCmp(Ext, IL_TEXT("icb")) || !iStrCmp(Ext, IL_TEXT("vst"))) {
-			return ilLoadTarga(FileName);
 		}
 		#endif
 

@@ -132,9 +132,11 @@ ILuint GLGetDXTCNum(ILenum DXTCFormat)
 ILboolean ILAPIENTRY ilutGLTexImage(GLuint Level)
 {
 	ILimage	*Image;
+#ifdef _MSC_VER
 	ILenum	DXTCFormat;
 	ILuint	Size;
 	ILubyte	*Buffer;
+#endif
 
 	ilutCurImage = ilGetCurImage();
 	if (ilutCurImage == NULL) {
