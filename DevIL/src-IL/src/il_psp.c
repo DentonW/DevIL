@@ -252,8 +252,10 @@ ILboolean ParseChunks()
 	ILuint		Pos;
 
 	do {
-		if (iread(&Block, 1, sizeof(Block)) != sizeof(Block))
+		if (iread(&Block, 1, sizeof(Block)) != sizeof(Block)) {
+			ilGetError();  // Get rid of the erroneous IL_FILE_READ_ERROR.
 			return IL_TRUE;
+		}
 		if (Header.MajorVersion == 3)
 			Block.BlockLen = GetLittleUInt();
 		else
@@ -285,8 +287,9 @@ ILboolean ParseChunks()
 					return IL_FALSE;
 				break;
 
-			default:
-				iseek(Block.BlockLen, IL_SEEK_CUR);
+			// Gets done in the next iseek, so this is now commented out.
+			//default:
+				//iseek(Block.BlockLen, IL_SEEK_CUR);
 		}
 
 		// Skip to next block just in case we didn't read the entire block.
@@ -590,7 +593,7 @@ ILboolean UncompRLE(ILubyte *CompData, ILubyte *Data, ILuint CompLen)
 
 ILboolean ReadPalette(ILuint BlockLen)
 {
-	ILuint ChunkSize, PalCount, Padding, i;
+	ILuint ChunkSize, PalCount, Padding;
 
 	if (Header.MajorVersion >= 4) {
 		ChunkSize = GetLittleUInt();
@@ -603,17 +606,15 @@ ILboolean ReadPalette(ILuint BlockLen)
 		PalCount = GetLittleUInt();
 	}
 
+	Pal.PalSize = PalCount * 4;
+	Pal.PalType = IL_PAL_BGRA32;
 	Pal.Palette = (ILubyte*)ialloc(Pal.PalSize);
 	if (Pal.Palette == NULL)
 		return IL_FALSE;
-	Pal.PalSize = PalCount * 4;
-	Pal.PalType = IL_PAL_BGRA32;
 
-	for (i = 0; i < PalCount; i++) {
-		if (iread(Pal.Palette + i * 4, 1, 4) != 4) {
-			ifree(Pal.Palette);
-			return IL_FALSE;
-		}
+	if (iread(Pal.Palette, Pal.PalSize, 1) != 1) {
+		ifree(Pal.Palette);
+		return IL_FALSE;
 	}
 
 	return IL_TRUE;

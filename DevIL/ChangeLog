@@ -27,6 +27,7 @@
 - Changed ilGetString() to return an ILstring.
 - Added IL_BGRA support back in to ilApplyProfile().
 - Removed double flipping when saving .pcx and .jpg files.
+- Fixed a bug loading 8-bit .psp files.
 
 
 1.5.6
