@@ -1013,7 +1013,7 @@ ILboolean ilFixImage()
 		if (!ilActiveImage(i))
 			return IL_FALSE;
 
-		NumLayers  = 0;//ilGetInteger(IL_NUM_LAYERS);
+		NumLayers = ilGetInteger(IL_NUM_LAYERS);
 		for (k = 0; k <= NumLayers; k++) {
 			ilBindImage(ilGetCurName());  // Set to parent image first.
 			if (!ilActiveImage(i))
