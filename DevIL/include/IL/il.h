@@ -51,7 +51,9 @@ extern "C" {
 //#define IL_DEBUG
 //#define IL_STATIC_LIB
 //#define IL_NO_LCMS
-#define IL_USE_JPEGLIB_UNMODIFIED
+#ifdef _WIN32
+	#define IL_USE_JPEGLIB_UNMODIFIED
+#endif
 
 #ifdef _WIN32_WCE
 	#define IL_NO_GIF
