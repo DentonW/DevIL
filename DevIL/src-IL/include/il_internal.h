@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 12/04/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 02/19/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/internal.h
+// Filename: il/il_internal.h
 //
 // Description: Internal stuff for DevIL
 //
@@ -345,6 +345,9 @@ ILboolean ilIsValidDdsL(ILvoid *Lump, ILuint Size);
 ILboolean ilLoadDds(const ILstring FileName);
 ILboolean ilLoadDdsF(ILHANDLE File);
 ILboolean ilLoadDdsL(ILvoid *Lump, ILuint Size);
+ILboolean ilSaveDds(const ILstring FileName);
+ILboolean ilSaveDdsF(ILHANDLE File);
+ILboolean ilSaveDdsL(ILvoid *Lump, ILuint Size);
 
 ILboolean ilLoadDoom(const ILstring FileName);
 ILboolean ilLoadDoomF(ILHANDLE File);

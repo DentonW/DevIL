@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2001 by Denton Woods
 // Last modified: 05/25/2001 <--Y2K Compliant! =]
 //
-// Filename: openil/mng.c
+// Filename: il/il_mng.c
 //
 // Description: .mng functions
 //
@@ -22,7 +22,7 @@
 //---------------------------------------------------------------------------------------------
 // memory allocation; data must be zeroed
 //---------------------------------------------------------------------------------------------
-mng_ptr mymngalloc(mng_uint32 size)
+mng_ptr MNG_DECL mymngalloc(mng_size_t size)
 {
 	return (mng_ptr)calloc(1, size);
 }
@@ -31,7 +31,7 @@ mng_ptr mymngalloc(mng_uint32 size)
 //---------------------------------------------------------------------------------------------
 // memory deallocation
 //---------------------------------------------------------------------------------------------
-void mymngfree(mng_ptr p, mng_uint32 size)
+void MNG_DECL mymngfree(mng_ptr p, mng_size_t size)
 {
 	ifree(p);
 }
@@ -40,7 +40,7 @@ void mymngfree(mng_ptr p, mng_uint32 size)
 //---------------------------------------------------------------------------------------------
 // Stream open:
 //---------------------------------------------------------------------------------------------
-mng_bool mymngopenstream(mng_handle mng)
+mng_bool MNG_DECL mymngopenstream(mng_handle mng)
 {
 	return MNG_TRUE;
 }
@@ -49,7 +49,7 @@ mng_bool mymngopenstream(mng_handle mng)
 //---------------------------------------------------------------------------------------------
 // Stream open for Writing:
 //---------------------------------------------------------------------------------------------
-mng_bool mymngopenstreamwrite(mng_handle mng)
+mng_bool MNG_DECL mymngopenstreamwrite(mng_handle mng)
 {
 	return MNG_TRUE;
 }
@@ -58,7 +58,7 @@ mng_bool mymngopenstreamwrite(mng_handle mng)
 //---------------------------------------------------------------------------------------------
 // Stream close:
 //---------------------------------------------------------------------------------------------
-mng_bool mymngclosestream(mng_handle mng)
+mng_bool MNG_DECL mymngclosestream(mng_handle mng)
 {
 	return MNG_TRUE; // We close the file ourself, mng_cleanup doesnt seem to do it...
 }
@@ -67,7 +67,7 @@ mng_bool mymngclosestream(mng_handle mng)
 //---------------------------------------------------------------------------------------------
 // feed data to the decoder
 //---------------------------------------------------------------------------------------------
-mng_bool mymngreadstream(mng_handle mng, mng_ptr buffer, mng_uint32 size, mng_uint32 *bytesread)
+mng_bool MNG_DECL mymngreadstream(mng_handle mng, mng_ptr buffer, mng_size_t size, mng_uint32 *bytesread)
 {
 	// read the requested amount of data from the file
 	*bytesread = iread(buffer, 1, size);
@@ -79,7 +79,7 @@ mng_bool mymngreadstream(mng_handle mng, mng_ptr buffer, mng_uint32 size, mng_ui
 //---------------------------------------------------------------------------------------------
 // callback for writing data
 //---------------------------------------------------------------------------------------------
-mng_bool mymngwritedata(mng_handle mng, mng_ptr buffer, mng_uint32 size, mng_uint32 *byteswritten)
+mng_bool MNG_DECL mymngwritedata(mng_handle mng, mng_ptr buffer, mng_size_t size, mng_uint32 *byteswritten)
 {
 	*byteswritten = iwrite(buffer, 1, size);
 
@@ -95,7 +95,7 @@ mng_bool mymngwritedata(mng_handle mng, mng_ptr buffer, mng_uint32 size, mng_uin
 //---------------------------------------------------------------------------------------------
 // the header's been read. set up the display stuff
 //---------------------------------------------------------------------------------------------
-mng_bool mymngprocessheader(mng_handle mng, mng_uint32 width, mng_uint32 height)
+mng_bool MNG_DECL mymngprocessheader(mng_handle mng, mng_uint32 width, mng_uint32 height)
 {
 	static ILuint AlphaDepth;
 
@@ -121,7 +121,7 @@ mng_bool mymngprocessheader(mng_handle mng, mng_uint32 width, mng_uint32 height)
 //---------------------------------------------------------------------------------------------
 // return a row pointer for the decoder to fill
 //---------------------------------------------------------------------------------------------
-mng_ptr mymnggetcanvasline(mng_handle mng, mng_uint32 line)
+mng_ptr MNG_DECL mymnggetcanvasline(mng_handle mng, mng_uint32 line)
 {
 	return (mng_ptr)(iCurImage->Data + iCurImage->Bps * line);
 }
@@ -130,7 +130,7 @@ mng_ptr mymnggetcanvasline(mng_handle mng, mng_uint32 line)
 //---------------------------------------------------------------------------------------------
 // timer
 //---------------------------------------------------------------------------------------------
-mng_uint32 mymnggetticks(mng_handle mng)
+mng_uint32 MNG_DECL mymnggetticks(mng_handle mng)
 {
 	return 0;
 }
@@ -139,7 +139,7 @@ mng_uint32 mymnggetticks(mng_handle mng)
 //---------------------------------------------------------------------------------------------
 // Refresh:
 //---------------------------------------------------------------------------------------------
-mng_bool mymngrefresh(mng_handle mng, mng_uint32 x, mng_uint32 y, mng_uint32 w, mng_uint32 h)
+mng_bool MNG_DECL mymngrefresh(mng_handle mng, mng_uint32 x, mng_uint32 y, mng_uint32 w, mng_uint32 h)
 {
 	return MNG_TRUE;
 }
@@ -148,7 +148,7 @@ mng_bool mymngrefresh(mng_handle mng, mng_uint32 x, mng_uint32 y, mng_uint32 w, 
 //---------------------------------------------------------------------------------------------
 // interframe delay callback
 //---------------------------------------------------------------------------------------------
-mng_bool mymngsettimer(mng_handle mng, mng_uint32 msecs)
+mng_bool MNG_DECL mymngsettimer(mng_handle mng, mng_uint32 msecs)
 {
 	return MNG_TRUE;
 }
@@ -160,7 +160,7 @@ mng_bool mymngsettimer(mng_handle mng, mng_uint32 msecs)
 //---------------------------------------------------------------------------------------------
 // Error Callback;
 //---------------------------------------------------------------------------------------------
-mng_bool mymngerror(
+mng_bool MNG_DECL mymngerror(
 	mng_handle mng, mng_int32 code, mng_int8 severity,
 	mng_chunkid chunktype, mng_uint32 chunkseq,
 	mng_int32 extra1, mng_int32 extra2, mng_pchar text

@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 12/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 02/21/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/il_dds.c
+// Filename: il/il_dds.c
 //
 // Description: Reads from a DirectDraw Surface (.dds) file.
 //
@@ -16,7 +16,8 @@
 // Note:  Almost all this code is from nVidia's DDS-loading example at
 //	http://www.nvidia.com/view.asp?IO=dxtc_decompression_code
 //	and from the specs at
-//	http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dx8_c/hh/dx8_c/graphics_using_0j03.asp
+//	http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dx8_c/hh/dx8_c/graphics_using_0j03.asp and
+//	http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dx8_c/directx_cpp/Graphics/ProgrammersGuide/Appendix/DDSFileFormat/ovwDDSFileFormat.asp
 //
 //
 
@@ -24,6 +25,16 @@
 #include "il_internal.h"
 #ifndef IL_NO_DDS
 #include "il_dds.h"
+
+
+ILuint CubemapDirections[CUBEMAP_SIDES] = {
+	DDS_CUBEMAP_POSITIVEX,
+	DDS_CUBEMAP_NEGATIVEX,
+	DDS_CUBEMAP_POSITIVEY,
+	DDS_CUBEMAP_NEGATIVEY,
+	DDS_CUBEMAP_POSITIVEZ,
+	DDS_CUBEMAP_NEGATIVEZ
+};
 
 
 //! Checks if the file specified in FileName is a valid .bmp file.
@@ -104,9 +115,8 @@ ILvoid iGetDdsHead(DDSHEAD *Header)
 		Head.Depth = 1;
 	
 	DecodePixelFormat();
-	// Microsoft bug, they're not following thier own documentation.
-	if (!(Head.Flags1 & (DDS_LINEARSIZE | DDS_PITCH)))
-	{
+	// Microsoft bug, they're not following their own documentation.
+	if (!(Head.Flags1 & (DDS_LINEARSIZE | DDS_PITCH))) {
 		Head.Flags1 |= DDS_LINEARSIZE;
 		Head.LinearSize = BlockSize;
 	}
@@ -229,19 +239,19 @@ ILboolean iLoadDdsCubemapInternal()
 
 			if (!AllocImage()) {
 				if (CompData)
-					free(CompData);
+					ifree(CompData);
 				return IL_FALSE;
 			}
 
 			if (!Decompress()) {
 				if (CompData)
-					free(CompData);
+					ifree(CompData);
 				return IL_FALSE;
 			}
 
 			if (!ReadMipmaps()) {
 				if (CompData)
-					free(CompData);
+					ifree(CompData);
 				return IL_FALSE;
 			}
 		}
@@ -249,7 +259,7 @@ ILboolean iLoadDdsCubemapInternal()
 
 	if (CompData)
 	{
-		free(CompData);
+		ifree(CompData);
 		CompData = NULL;
 	}
 
@@ -284,22 +294,22 @@ ILboolean iLoadDdsInternal()
 		return IL_FALSE;
 	if (!AllocImage()) {
 		if (CompData)
-			free(CompData);
+			ifree(CompData);
 		return IL_FALSE;
 	}
 	if (!Decompress()) {
 		if (CompData)
-			free(CompData);
+			ifree(CompData);
 		return IL_FALSE;
 	}
 	if (!ReadMipmaps()) {
 		if (CompData)
-			free(CompData);
+			ifree(CompData);
 		return IL_FALSE;
 	}
 
 	if (CompData)
-		free(CompData);
+		ifree(CompData);
 
 	ilBindImage(ilGetCurName());  // Set to parent image first.
 	return ilFixImage();
@@ -312,7 +322,7 @@ ILboolean ReadData()
 	ILuint	Bps;
 	ILint	y, z;
 	ILubyte	*Temp;
-	ILuint Bpp;
+	ILuint	Bpp;
 
 	if (CompFormat == PF_RGB)
 		Bpp = 3;
@@ -325,7 +335,7 @@ ILboolean ReadData()
 	}
 
 	if (Head.Flags1 & DDS_LINEARSIZE) {
-		CompData = (ILubyte*)malloc(Head.LinearSize);
+		CompData = (ILubyte*)ialloc(Head.LinearSize);
 		if (CompData == NULL) {
 			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
@@ -337,7 +347,7 @@ ILboolean ReadData()
 		CompSize = Bps * Height * Depth;
 		CompLineSize = Bps;
 
-		CompData = (ILubyte*)malloc(CompSize);
+		CompData = (ILubyte*)ialloc(CompSize);
 		if (CompData == NULL) {
 			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
@@ -350,7 +360,6 @@ ILboolean ReadData()
 				Temp += Bps;
 			}
 		}
-
     }
 
 	return IL_TRUE;
@@ -362,14 +371,14 @@ ILboolean AllocImage()
 	switch (CompFormat) {
 		case PF_RGB:
 			if (!ilTexImage(Width, Height, Depth, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL)) {
-				free(CompData);
+				ifree(CompData);
 				return IL_FALSE;
 			}
 			break;
 		case PF_ARGB:
 		default:
 			if (!ilTexImage(Width, Height, Depth, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL)) {
-				free(CompData);
+				ifree(CompData);
 				return IL_FALSE;
 			}
 	}
@@ -732,7 +741,7 @@ ILboolean DecompressDXT5()
 
 
 	Temp = CompData;
-	for (z = 0; z < Height; z ++) {
+	for (z = 0; z < Height; z++) {
 		for (y = 0; y < Height; y += 4) {
 			for (x = 0; x < Width; x += 4) {
 				if (y >= Height || x >= Width)

@@ -53,6 +53,12 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name libjpeg
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name lcmsdll
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Libtiff
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -81,11 +87,23 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name IL
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name ILU
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name IL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "Libtiff"="..\..\extlibs\tiff-v3.5.4\libtiff\Libtiff\Libtiff.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################
@@ -98,6 +116,9 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name IL
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -111,19 +132,19 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
+    Project_Dep_Name ILUT
+    End Project Dependency
+    Begin Project Dependency
     Project_Dep_Name IL
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name ILU
     End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name ILUT
-    End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "jpegtran"=..\..\extlibs\libjpeg\jpegtran.dsp - Package Owner=<4>
+Project: "lcmsdll"=..\..\extlibs\LittleCMS\Projects\VC6\lcmsdll.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -131,14 +152,23 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name libjpeg
-    End Project Dependency
 }}}
 
 ###############################################################################
 
 Project: "libjpeg"=..\..\extlibs\libjpeg\LibJpeg.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "libmng"=..\..\extlibs\LibMNG\libmng\contrib\msvc\win32dll\libmng.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

@@ -77,7 +77,7 @@ PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W3 /GX /O1 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O1 /I "../include" /I "../../extlibs/libjpeg" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O1 /I "../include" /I "../../extlibs/libjpeg" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /D "MNG_USE_DLL" /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -88,7 +88,7 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 delayimp.lib user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /machine:I386 /def:".\il.def" /out:"../../lib/DevIL-l.dll" /OPT:NOWIN98 /delayload:libpng3.dll /delayload:lcms.dll
 # SUBTRACT BASE LINK32 /pdb:none
-# ADD LINK32 delayimp.lib user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /machine:I386 /def:".\il.def" /out:"../../lib/DevIL-l.dll" /libpath:"../../extlibs/lib" /OPT:NOWIN98 /delayload:libpng3.dll /delayload:lcms.dll
+# ADD LINK32 delayimp.lib user32.lib gdi32.lib comdlg32.lib shell32.lib C:\DevIL\extlibs\lib\libmng.lib /nologo /dll /machine:I386 /def:".\il.def" /out:"../../lib/DevIL-l.dll" /libpath:"../../extlibs/lib" /OPT:NOWIN98 /delayload:libpng3.dll /delayload:lcms.dll
 # SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
 TargetPath=\DevIL\lib\DevIL-l.dll
@@ -111,7 +111,7 @@ PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W3 /GX /O1 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /D "IL_STATIC_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O1 /I "../include" /I "../../extlibs/libjpeg" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /D "IL_STATIC_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O1 /I "../include" /I "../../extlibs/libjpeg" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /D "IL_STATIC_LIB" /D "MNG_USE_DLL" /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -188,6 +188,10 @@ SOURCE=..\src\il_cut.c
 # Begin Source File
 
 SOURCE=..\src\il_dcx.c
+# End Source File
+# Begin Source File
+
+SOURCE="..\src\il_dds-save.c"
 # End Source File
 # Begin Source File
 
@@ -368,6 +372,10 @@ SOURCE=..\include\il_bmp.h
 # Begin Source File
 
 SOURCE=..\include\il_dcx.h
+# End Source File
+# Begin Source File
+
+SOURCE="..\include\il_dds-save.h"
 # End Source File
 # Begin Source File
 

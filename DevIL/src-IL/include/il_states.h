@@ -66,6 +66,7 @@ typedef struct IL_STATES
 	ILboolean	ilBmpRle;
 	ILboolean	ilSgiRle;
 	ILenum		ilJpgFormat;
+	ILenum		ilDxtcFormat;
 
 
 	//
@@ -78,6 +79,7 @@ typedef struct IL_STATES
 	char		*ilPngAuthName;
 	char		*ilPngTitle;
 	char		*ilPngDescription;
+	char		*ilCHeader;
 
 
 

@@ -41,6 +41,8 @@ ILvoid ilDefaultStates()
 	ilStates[ilCurrentPos].ilTgaRle = IL_FALSE;
 	ilStates[ilCurrentPos].ilBmpRle = IL_FALSE;
 	ilStates[ilCurrentPos].ilSgiRle = IL_FALSE;
+	ilStates[ilCurrentPos].ilJpgFormat = IL_JFIF;
+	ilStates[ilCurrentPos].ilDxtcFormat = IL_DXT1;
 
 	ilStates[ilCurrentPos].ilTgaId = NULL;
 	ilStates[ilCurrentPos].ilTgaAuthName = NULL;
@@ -48,6 +50,7 @@ ILvoid ilDefaultStates()
 	ilStates[ilCurrentPos].ilPngAuthName = NULL;
 	ilStates[ilCurrentPos].ilPngTitle = NULL;
 	ilStates[ilCurrentPos].ilPngDescription = NULL;
+	ilStates[ilCurrentPos].ilCHeader = NULL;
 
 	ilStates[ilCurrentPos].ilQuantMode = IL_WU_QUANT;
 	ilStates[ilCurrentPos].ilNeuSample = 15;
@@ -84,6 +87,8 @@ const char* ILAPIENTRY ilGetString(ILenum StringName)
 			return (const char*)ilStates[ilCurrentPos].ilPngTitle;
 		case IL_PNG_DESCRIPTION_STRING:
 			return (const char*)ilStates[ilCurrentPos].ilPngDescription;
+		case IL_CHEAD_HEADER_STRING:
+			return (const char*)ilStates[ilCurrentPos].ilCHeader;
 		default:
 			ilSetError(IL_INVALID_ENUM);
 			break;
@@ -141,6 +146,8 @@ char *iGetString(ILenum StringName)
 			return iClipString(ilStates[ilCurrentPos].ilPngDescription, 255);
 		case IL_TIF_AUTHNAME_STRING:
 			return iClipString(ilStates[ilCurrentPos].ilPngDescription, 255);
+		case IL_CHEAD_HEADER_STRING:
+			return iClipString(ilStates[ilCurrentPos].ilPngDescription, 32);
 		default:
 			ilSetError(IL_INVALID_ENUM);
 	}
@@ -539,6 +546,8 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 			*Param = ilStates[ilCurrentPos].ilSgiRle;
 		case IL_JPG_SAVE_FORMAT:
 			*Param = ilStates[ilCurrentPos].ilJpgFormat;
+		case IL_DXTC_FORMAT:
+			*Param = ilStates[ilCurrentPos].ilDxtcFormat;
 
 
 		// Boolean values
@@ -710,6 +719,8 @@ ILvoid ILAPIENTRY ilPushAttrib(ILuint Bits)
 		ilStates[ilCurrentPos].ilTgaRle = ilStates[ilCurrentPos-1].ilTgaRle;
 		ilStates[ilCurrentPos].ilBmpRle = ilStates[ilCurrentPos-1].ilBmpRle;
 		ilStates[ilCurrentPos].ilSgiRle = ilStates[ilCurrentPos-1].ilSgiRle;
+		ilStates[ilCurrentPos].ilJpgFormat = ilStates[ilCurrentPos-1].ilJpgFormat;
+		ilStates[ilCurrentPos].ilDxtcFormat = ilStates[ilCurrentPos-1].ilDxtcFormat;
 
 		// Strings
 		if (ilStates[ilCurrentPos].ilTgaId)
@@ -724,12 +735,15 @@ ILvoid ILAPIENTRY ilPushAttrib(ILuint Bits)
 			ifree(ilStates[ilCurrentPos].ilPngTitle);
 		if (ilStates[ilCurrentPos].ilPngDescription)
 			ifree(ilStates[ilCurrentPos].ilPngDescription);
+		if (ilStates[ilCurrentPos].ilCHeader)
+			ifree(ilStates[ilCurrentPos].ilCHeader);
 		ilStates[ilCurrentPos].ilTgaId = ilStrDup(ilStates[ilCurrentPos-1].ilTgaId);
 		ilStates[ilCurrentPos].ilTgaAuthName = ilStrDup(ilStates[ilCurrentPos-1].ilTgaAuthName);
 		ilStates[ilCurrentPos].ilTgaAuthComment = ilStrDup(ilStates[ilCurrentPos-1].ilTgaAuthComment);
 		ilStates[ilCurrentPos].ilPngAuthName = ilStrDup(ilStates[ilCurrentPos-1].ilPngAuthName);
 		ilStates[ilCurrentPos].ilPngTitle = ilStrDup(ilStates[ilCurrentPos-1].ilPngTitle);
 		ilStates[ilCurrentPos].ilPngDescription = ilStrDup(ilStates[ilCurrentPos-1].ilPngDescription);
+		ilStates[ilCurrentPos].ilCHeader = ilStrDup(ilStates[ilCurrentPos-1].ilCHeader);
 	}
 
 	return;
@@ -844,6 +858,26 @@ ILvoid ILAPIENTRY ilSetString(ILenum Mode, const char *String)
 				ifree(ilStates[ilCurrentPos].ilTgaAuthComment);
 			ilStates[ilCurrentPos].ilTgaAuthComment = ilStrDup(String);
 			break;
+		case IL_PNG_AUTHNAME_STRING:
+			if (ilStates[ilCurrentPos].ilPngAuthName)
+				ifree(ilStates[ilCurrentPos].ilPngAuthName);
+			ilStates[ilCurrentPos].ilPngAuthName = ilStrDup(String);
+			break;
+		case IL_PNG_TITLE_STRING:
+			if (ilStates[ilCurrentPos].ilPngTitle)
+				ifree(ilStates[ilCurrentPos].ilPngTitle);
+			ilStates[ilCurrentPos].ilPngTitle = ilStrDup(String);
+			break;
+		case IL_PNG_DESCRIPTION_STRING:
+			if (ilStates[ilCurrentPos].ilPngDescription)
+				ifree(ilStates[ilCurrentPos].ilPngDescription);
+			ilStates[ilCurrentPos].ilPngDescription = ilStrDup(String);
+			break;
+		case IL_CHEAD_HEADER_STRING:
+			if (ilStates[ilCurrentPos].ilCHeader)
+				ifree(ilStates[ilCurrentPos].ilCHeader);
+			ilStates[ilCurrentPos].ilCHeader = ilStrDup(String);
+			break;
 
 
 
@@ -899,6 +933,12 @@ ILvoid ILAPIENTRY ilSetInteger(ILenum Mode, ILint Param)
 		case IL_JPG_SAVE_FORMAT:
 			if (Param == IL_JFIF || Param == IL_EXIF) {
 				ilStates[ilCurrentPos].ilJpgFormat = Param;
+				return;
+			}
+			break;
+		case IL_DXTC_FORMAT:
+			if (Param >= IL_DXT1 || Param <= IL_DXT5) {
+				ilStates[ilCurrentPos].ilDxtcFormat = Param;
 				return;
 			}
 			break;
@@ -974,6 +1014,8 @@ ILint iGetInt(ILenum Mode)
 			return ilStates[ilCurrentPos].ilSgiRle;
 		case IL_JPG_SAVE_FORMAT:
 			return ilStates[ilCurrentPos].ilJpgFormat;
+		case IL_DXTC_FORMAT:
+			return ilStates[ilCurrentPos].ilDxtcFormat;
 		case IL_QUANTIZATION_MODE:
 			return ilStates[ilCurrentPos].ilQuantMode;
 		case IL_NEU_QUANT_SAMPLE:

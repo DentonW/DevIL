@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 02/19/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/header.c
+// Filename: il/il_header.c
 //
 // Description: Generates a C-style header file for the current image.
 //
@@ -24,15 +24,20 @@ ILboolean ilSaveCHeader(const ILstring FileName, const char *InternalName)
 	FILE	*HeadFile;
 	ILuint	i = 0, j;
 	ILimage	*TempImage;
+	char	*Name;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
-	if (FileName == NULL || InternalName == NULL ||
+	Name = iGetString(IL_CHEAD_HEADER_STRING);
+	if (Name == NULL)
+		Name = (char*)InternalName;
+
+	if (FileName == NULL || Name == NULL ||
 #ifndef _UNICODE
-		strlen(FileName) < 1 ||	strlen(InternalName) < 1) {
+		strlen(FileName) < 1 ||	strlen(Name) < 1) {
 #else
 		wcslen(FileName) < 1 || wcslen(FileName) < 1) {
 #endif//_UNICODE
@@ -95,7 +100,7 @@ ILboolean ilSaveCHeader(const ILstring FileName, const char *InternalName)
 	fprintf(HeadFile, "#define IMAGE_WIDTH   %d\n", iCurImage->Width);
 	fprintf(HeadFile, "#define IMAGE_HEIGHT  %d\n", iCurImage->Height);	
 	fprintf(HeadFile, "#define IMAGE_DEPTH   %d\n\n\n", iCurImage->Depth);
-	fprintf(HeadFile, "ILubyte %s[] = {\n", InternalName);
+	fprintf(HeadFile, "ILubyte %s[] = {\n", Name);
 
 
 	for (; i < TempImage->SizeOfData; i += MAX_LINE_WIDTH) {
@@ -119,7 +124,7 @@ ILboolean ilSaveCHeader(const ILstring FileName, const char *InternalName)
 	if (iCurImage->Pal.Palette && iCurImage->Pal.PalSize && iCurImage->Pal.PalType != IL_PAL_NONE) {
 		fprintf(HeadFile, "\n\n");
 		fprintf(HeadFile, "#define IMAGE_PALSIZE %d\n\n", iCurImage->Pal.PalSize);
-		fprintf(HeadFile, "ILubyte %sPal[] = {\n", InternalName);
+		fprintf(HeadFile, "ILubyte %sPal[] = {\n", Name);
 		for (i = 0; i < iCurImage->Pal.PalSize; i += MAX_LINE_WIDTH) {
 			fprintf(HeadFile, "\t");
 			for (j = 0; j < MAX_LINE_WIDTH; j++) {

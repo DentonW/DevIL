@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2001 by Denton Woods
 // Last modified: 05/21/2001 <--Y2K Compliant! =]
 //
-// Filename: openil/io.c
+// Filename: il/il_io.c
 //
 // Description: Determines image types and loads images
 //
@@ -1197,6 +1197,12 @@ ILboolean ILAPIENTRY ilSaveImage(const ILstring FileName)
 	#ifndef IL_NO_CHEAD
 	if (!iStrCmp(Ext, IL_TEXT("h"))) {
 		return ilSaveCHeader(FileName, "IL_IMAGE");
+	}
+	#endif
+
+	#ifndef IL_NO_DDS
+	if (!iStrCmp(Ext, IL_TEXT("dds"))) {
+		return ilSaveDds(FileName);
 	}
 	#endif
 

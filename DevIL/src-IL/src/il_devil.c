@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 10/06/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 02/19/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/devil.c
+// Filename: il/il_devil.c
 //
 // Description: Functions for working with the ILimage's and the current image
 //
@@ -886,6 +886,7 @@ ILAPI ILboolean ILAPIENTRY ilCopyImageAttr(ILimage *Dest, ILimage *Src)
 	Dest->Type = Src->Type;
 	Dest->Origin = Src->Origin;
 	Dest->Duration = Src->Duration;
+	Dest->CubeFlags = Src->CubeFlags;
 	Dest->AnimSize = Src->AnimSize;
 	Dest->OffX = Src->OffX;
 	Dest->OffY = Src->OffY;

@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 02/20/2002 <--Y2K Compliant! =]
 //
-// Filename: openilu/error.c
+// Filename: ilu/ilu_error.c
 //
 // Description: Error functions
 //
@@ -15,9 +15,9 @@
 #include "ilu_alloc.h"
 
 // We can use ilSetError() in ILU, because it *is* exported, but there is
-//	no prototype in il.h, so we define it in error.h of ILU
+//	no prototype in il.h, so we define it in il_error.h of ILU
 
-static const ILstring iluErrorStrings[IL_INVALID_CONVERSION - IL_INVALID_ENUM + 1] = {
+static const ILstring iluErrorStrings[IL_BAD_DIMENSIONS - IL_INVALID_ENUM + 1] = {
 	IL_TEXT("invalid enumerant"),
     IL_TEXT("out of memory"),
 	IL_TEXT("format not supported yet"),
@@ -33,7 +33,8 @@ static const ILstring iluErrorStrings[IL_INVALID_CONVERSION - IL_INVALID_ENUM + 
 	IL_TEXT("out format equivalent"),
 	IL_TEXT("stack overflow"),
     IL_TEXT("stack underflow"),
-	IL_TEXT("invalid conversion")
+	IL_TEXT("invalid conversion"),
+	IL_TEXT("bad dimensions")
 };
 
 static const ILstring iluLibErrorStrings[IL_LIB_MNG_ERROR - IL_LIB_GIF_ERROR + 1] = {

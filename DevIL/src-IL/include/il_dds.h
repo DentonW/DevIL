@@ -2,9 +2,9 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 12/25/2001 <--Y2K Compliant! =]
+// Last modified: 02/21/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/il_dds.h
+// Filename: il/il_dds.h
 //
 // Description: Reads from a DirectDraw Surface (.dds) file.
 //
@@ -62,6 +62,14 @@ typedef struct Color8888
 	ILubyte b;		//  Last one is MSB, 1st is LSB.
 	ILubyte a;
 } Color8888;
+
+
+typedef struct Color888
+{
+	ILubyte r;		// change the order of names to change the 
+	ILubyte g;		//  order of the output ARGB or BGRA, etc...
+	ILubyte b;		//  Last one is MSB, 1st is LSB.
+} Color888;
 
 
 typedef struct Color565
@@ -149,15 +157,6 @@ ILuint	BlockSize;
 
 #define CUBEMAP_SIDES 6
 
-ILuint CubemapDirections[CUBEMAP_SIDES] = {
-		DDS_CUBEMAP_POSITIVEX,
-		DDS_CUBEMAP_NEGATIVEX,
-		DDS_CUBEMAP_POSITIVEY,
-		DDS_CUBEMAP_NEGATIVEY,
-		DDS_CUBEMAP_POSITIVEZ,
-		DDS_CUBEMAP_NEGATIVEZ
-};
-
 // Internal functions
 ILboolean	iLoadDdsInternal(ILvoid);
 ILboolean	iIsValidDds(ILvoid);
@@ -175,6 +174,19 @@ ILboolean	DecompressDXT4(ILvoid);
 ILboolean	DecompressDXT5(ILvoid);
 ILvoid		CorrectPreMult(ILvoid);
 ILvoid		GetBitsFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight);
+ILboolean	iSaveDdsInternal(ILvoid);
+ILboolean	WriteHeader(ILimage *Image, ILenum DXTCFormat);
+ILushort	*CompressTo565(ILimage *Image);
+ILboolean	Compress(ILimage *Image, ILenum DXTCFormat);
+ILboolean	GetBlock(ILushort *Block, ILushort *Data, ILimage *Image, ILuint XPos, ILuint YPos);
+ILvoid		ShortToColor565(ILushort Pixel, Color565 *Colour);
+ILvoid		ShortToColor888(ILushort Pixel, Color888 *Colour);
+ILushort	Color565ToShort(Color565 *Colour);
+ILushort	Color888ToShort(Color888 *Colour);
+ILuint		GenBitMask(ILushort ex0, ILushort ex1, ILuint NumCols, ILushort *In, Color888 *OutCol);
+ILuint		Distance(Color888 *c1, Color888 *c2);
+ILvoid		ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1);
+ILvoid		RMS(Color888 *Block, ILuint *Values);
 
 
 #endif//DDS_H
