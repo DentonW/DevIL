@@ -10,4 +10,4 @@ noinst_HEADERS  = il_targa.h    il_doompal.h \
                   il_sgi.h      il_dcx.h \
                   il_internal.h il_pcx.h \
                   il_states.h   il_dds.h \
-                  il_istack.h   il_pic.h
+                  il_stack.h    il_pic.h

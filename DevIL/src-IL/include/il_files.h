@@ -67,7 +67,7 @@ __FILES_EXTERN ILint		(ILAPIENTRY *iwrite)(const ILvoid *Buffer, ILuint Size, IL
 __FILES_EXTERN ILHANDLE		ILAPIENTRY iGetFile(ILvoid);
 __FILES_EXTERN ILubyte*		ILAPIENTRY iGetLump(ILvoid);
 
-__FILES_EXTERN ILuint		ILAPIENTRY iprintf(const char *, ...);
+__FILES_EXTERN ILuint		ILAPIENTRY ilprintf(const char *, ...);
 __FILES_EXTERN ILvoid		ipad(ILuint NumZeros);
 
 __FILES_EXTERN ILboolean	iPreCache(ILuint Size);

@@ -1,6 +1,6 @@
 lib_LTLIBRARIES = libIL.la
 
-libIL_la_SOURCES = il_alloc.c     il_doom.c      il_istack.c  il_pcx.c        il_rle.c \
+libIL_la_SOURCES = il_alloc.c     il_doom.c      il_stack.c   il_pcx.c        il_rle.c \
                    il_bits.c      il_endian.c    il_jpeg.c    il_pic.c        il_sgi.c \
                    il_bmp.c       il_error.c     il_lif.c     il_png.c        il_states.c \
                    il_convbuff.c  il_files.c     il_main.c    il_pnm.c        il_targa.c \

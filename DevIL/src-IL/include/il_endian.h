@@ -15,9 +15,7 @@
 
 #include "il_internal.h"
 
-#ifdef WORDS_BIGENDIAN
-/* #ifdef __BIG_ENDIAN__ */
-	#define __BIG_ENDIAN__
+#ifdef __BIG_ENDIAN__
 	#define Short(s) _SwapShort(s)
 	#define Int(i) _SwapInt(i)
 	#define Float(f) _SwapFloat(f)

@@ -44,6 +44,9 @@
 			#pragma intrinsic(strcmp)
 			#pragma intrinsic(strlen)
 			#pragma intrinsic(strcpy)
+			#if _MSC_VER >= 1300  // Erroneous size_t conversion warnings
+				#pragma warning(disable : 4267)
+			#endif
 			#pragma comment(linker, "/NODEFAULTLIB:libc")
 			#pragma comment(linker, "/NODEFAULTLIB:libcd")
 			#pragma comment(linker, "/NODEFAULTLIB:libcmt.lib")
@@ -62,15 +65,24 @@
 	#define IL_TEXT(s) s
 #endif*/
 
-#ifdef _WIN32_WCE
+/*#ifdef _WIN32_WCE
 	#define IL_TEXT(s) ((char*)TEXT(s))
 #elif _WIN32
 	#define IL_TEXT(s) (s)
 #else
 	#define IL_TEXT(s) (s)
 	#define TEXT(s) (s)
+#endif*/
+
+#ifdef _UNICODE
+	#define IL_TEXT(s) L##s
+#else
+	#define IL_TEXT(s) (s)
 #endif
-	
+
+
+
+#define IL_MAX(a,b) (((a) > (b)) ? (a) : (b))
 
 
 // Basic Palette struct

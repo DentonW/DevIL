@@ -91,7 +91,7 @@ VERSION = @VERSION@
 allegro_config = @allegro_config@
 sdl_config = @sdl_config@
 
-noinst_HEADERS = il_targa.h    il_doompal.h                   il_jpeg.h     il_pnm.h                   il_endian.h   il_lif.h                   il_q2pal.h    il_alloc.h                   il_error.h    il_manip.h                   il_register.h il_bits.h                   il_files.h    il_mdl.h                   il_rle.h      il_bmp.h                   il_icon.h     il_pal.h                   il_sgi.h      il_dcx.h                   il_internal.h il_pcx.h                   il_states.h   il_dds.h                   il_istack.h   il_pic.h
+noinst_HEADERS = il_targa.h    il_doompal.h                   il_jpeg.h     il_pnm.h                   il_endian.h   il_lif.h                   il_q2pal.h    il_alloc.h                   il_error.h    il_manip.h                   il_register.h il_bits.h                   il_files.h    il_mdl.h                   il_rle.h      il_bmp.h                   il_icon.h     il_pal.h                   il_sgi.h      il_dcx.h                   il_internal.h il_pcx.h                   il_states.h   il_dds.h                   il_stack.h    il_pic.h
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/libtools/mkinstalldirs
 CONFIG_HEADER = ../../include/IL/config.h
@@ -108,9 +108,9 @@ GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps src-IL/include/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu src-IL/include/Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -149,6 +149,11 @@ distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 subdir = src-IL/include
 
 distdir: $(DISTFILES)
+	here=`cd $(top_builddir) && pwd`; \
+	top_distdir=`cd $(top_distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
+	cd $(top_srcdir) \
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu src-IL/include/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \

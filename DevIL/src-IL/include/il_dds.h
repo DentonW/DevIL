@@ -1,12 +1,12 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 11/28/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 12/25/2001 <--Y2K Compliant! =]
 //
-// Filename: openil/bmp.h
+// Filename: openil/il_dds.h
 //
-// Description: Reads and writes to a bitmap (.bmp) file.
+// Description: Reads from a DirectDraw Surface (.dds) file.
 //
 //-----------------------------------------------------------------------------
 
@@ -96,11 +96,15 @@ typedef struct DXTAlphaBlock3BitLinear
 
 
 // Defines
-#define DDS_LINEARSIZE	0x00080000l
-#define DDS_VOLUME		0x00200000L
+#define DDS_FOURCC		0x00000004l
+#define DDS_PITCH		0x00000008l
 #define DDS_COMPLEX		0x00000008l
+#define DDS_TEXTURE		0x00001000l
+#define DDS_MIPMAPCOUNT	0x00020000l
+#define DDS_LINEARSIZE	0x00080000l
+#define DDS_VOLUME		0x00200000l
+#define DDS_MIPMAP		0x00400000l
 #define DDS_DEPTH		0x00800000l
-
 
 
 // Remove!
@@ -125,10 +129,11 @@ enum PixFormat
 // Global variables
 DDSHEAD	Head;			// Image header
 ILubyte	*CompData;		// Compressed data
-ILubyte	*DecompData;	// Decompressed data
 ILuint	CompSize;		// Compressed size
 ILuint	CompLineSize;	// Compressed line size
 ILuint	CompFormat;		// Compressed format
+ILimage	*Image;
+ILint	Width, Height;
 
 
 // Internal functions
@@ -136,13 +141,18 @@ ILboolean	iLoadDdsInternal(ILvoid);
 ILboolean	iIsValidDds(ILvoid);
 ILboolean	iCheckDds(DDSHEAD *Head);
 ILboolean	ReadData(ILvoid);
+ILboolean	AllocImage(ILvoid);
 ILboolean	Decompress(ILvoid);
+ILboolean	ReadMipmaps(ILvoid);
 ILvoid		DecodePixelFormat(ILvoid);
+ILboolean	DecompressARGB(ILvoid);
 ILboolean	DecompressDXT1(ILvoid);
 ILboolean	DecompressDXT2(ILvoid);
 ILboolean	DecompressDXT3(ILvoid);
 ILboolean	DecompressDXT4(ILvoid);
 ILboolean	DecompressDXT5(ILvoid);
+ILvoid		CorrectPreMult(ILvoid);
+ILvoid		GetBitsFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight);
 
 
 #endif//DDS_H
