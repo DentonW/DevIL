@@ -1,105 +1,88 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<html>
-<head>
-<meta name="generator" content="HTML Tidy, see www.w3.org">
-<title>DevIL Documentation, iluSaturate1f, iluSaturate4f</title>
-<style type="text/css">
-    A:link      {color: 0000FF;}
-    A:link      {text-decoration: none;}
-    A:visited   {color: 000080;}
-    A:visited   {text-decoration: none;}
-    A:active    {color: 000080;}
-    A:active    {text-decoration: none;}
-    A:hover     {color: 000080;}
-    A:hover     {text-decoration: underline;}
-</style>
-</head>
-<body topmargin="0" bgcolor="white">
-<font face="verdana"><img src="../images/DevIL.gif"><br>
-</font>
-<table width="100%" cols="2" border="0" bgcolor="navy">
-<tr align="RIGHT">
-<td align="LEFT"><font color="white">DevIL Documentation</font>
-</td>
-<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
-<font color="white">|</font> <a href="./f00098.html"><font color=
-"gray">Previous</font></a> <font color="white">|</font> <a href=
-"./f00099.html">Next</a> </td>
-</tr>
-</table>
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, iluSaturate1f, iluSaturate4f</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
 
-<h2><font face="verdana">iluSaturate1f, iluSaturate4f</font></h2>
+</HEAD>
 
-<p><font face="verdana"><font size="-1">These functions modify the
-saturation of an image.</font></font></p>
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
 
-<pre>
-<font face="verdana"><code><b>ILboolean iluSaturate1f(
-  ILfloat</b> <i>Saturation</i><b>);
+<IMG SRC="..\images\devil.gif">
 <br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../ilu/f00098.htm">Previous</A></font> <font color="white">|</font> <A HREF="../ilu/f00099.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>iluSaturate1f, iluSaturate4f</h2>
+<font size=-1>
+<p>These functions modify the saturation of an image.</p>
+</font>
+<pre><code>
+<b>ILboolean iluSaturate1f(
+  ILfloat</b><i> Saturation</i><b>
+);
+<p>
 ILboolean iluSaturate4f(
-  ILfloat</b> <i>r,</i> <b> ILfloat</b> <i>g,</i> <b> ILfloat</b> <i>b,</i> <b> ILfloat</b> <i>Saturation</i><b>);</b>
-</code></font>
-</pre>
-
-<font face="verdana"><br>
-</font>
-<h4><font face="verdana">Parameters</font></h4>
-
+  ILfloat</b><i> r,</i><b>
+  ILfloat</b><i> g,</i><b>
+  ILfloat</b><i> b,</i><b>
+  ILfloat</b><i> Saturation</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
 <dl>
-<dt><font face="verdana"><font size=
-"-1"><i>Saturation</i></font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Amount of saturation to
-apply to the current bound image.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1"><i>r</i></font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Amount of red to
-saturate.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1"><i>g</i></font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Amount of green to
-saturate.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1"><i>b</i></font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Amount of blue to
-saturate.</font></font></dd>
+<dt><i>Saturation</i></dt>
+<dd>Amount of saturation to apply to the current bound image.</dd>
+<dt><i>r</i></dt>
+<dd>Amount of red to saturate.</dd>
+<dt><i>g</i></dt>
+<dd>Amount of green to saturate.</dd>
+<dt><i>b</i></dt>
+<dd>Amount of blue to saturate.</dd>
 </dl>
-
-<br>
-<br>
-<font face="verdana"><font size="-1"></font></font>
-<h4><font face="verdana">Remarks</font></h4>
-
-<p><font face="verdana"><font size="-1"><b>iluSaturate1f</b>
-applies a saturation consistent with the IL_LUMINANCE conversion
-values to red, green and blue. <b>iluSaturate4f</b> applies
-saturation to the colour components in the amounts specified. All
-parameters go from -1.0 to 1.0.</font></font></p>
-
-<h4><font face="verdana">Error Codes</font></h4>
-
-<p><font face="verdana"><font size="-1">ILU_ILLEGAL_OPERATION -
-There is currently no image bound. Use <a href=
-"../IL/f00026.html">ilGenImages</a> and <a href=
-"../IL/f00013.html">ilBindImage</a> before calling this
-function.</font></font></p>
-
-<h4><font face="verdana">See Also</font></h4>
-
-<p><font face="verdana"><font size="-1"><a href=
-"../IL/f00026.html">ilGenImages</a>, <a href=
-"../IL/f00013.html">ilBindImage</a></font></font></p>
-
-<font face="verdana"><font size="-1"><br>
-</font></font>
-</body>
-</html>
-
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>iluSaturate1f</b> applies a saturation consistent with the IL_LUMINANCE conversion values to red, green and blue.  <b>iluSaturate4f</b> applies saturation to the colour components in the amounts specified.  All parameters go from -1.0 to 1.0.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+ILU_ILLEGAL_OPERATION - There is currently no image bound.  Use <a href="../il/f00026.htm">ilGenImages</a> and <a href="../il/f00013.htm">ilBindImage</a> before calling this function.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00026.htm">ilGenImages</a>, <a href="../il/f00013.htm">ilBindImage</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

@@ -1,102 +1,79 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<html>
-<head>
-<meta name="generator" content="HTML Tidy, see www.w3.org">
-<title>DevIL Documentation, iluBlurAvg</title>
-<style type="text/css">
-    A:link      {color: 0000FF;}
-    A:link      {text-decoration: none;}
-    A:visited   {color: 000080;}
-    A:visited   {text-decoration: none;}
-    A:active    {color: 000080;}
-    A:active    {text-decoration: none;}
-    A:hover     {color: 000080;}
-    A:hover     {text-decoration: underline;}
-</style>
-</head>
-<body topmargin="0" bgcolor="white">
-<font face="verdana"><img src="../images/DevIL.gif"><br>
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, iluBlurAvg</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../ilu/f00167.htm">Previous</A></font> <font color="white">|</font> <A HREF="../ilu/f00131.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>iluBlurAvg</h2>
+<font size=-1>
+<p>The <b>iluBlurAvg</b> function blurs an image.</p>
 </font>
-<table width="100%" cols="2" border="0" bgcolor="navy">
-<tr align="RIGHT">
-<td align="LEFT"><font color="white">DevIL Documentation</font>
-</td>
-<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
-<font color="white">|</font> <a href="./f00167.html"><font color=
-"gray">Previous</font></a> <font color="white">|</font> <a href=
-"./f00131.html">Next</a> </td>
-</tr>
-</table>
-
-<h2><font face="verdana">iluBlurAvg</font></h2>
-
-<p><font face="verdana"><font size="-1">The <b>iluBlurAvg</b>
-function blurs an image.</font></font></p>
-
-<pre>
-<font face="verdana"><code><b>ILboolean iluBlurAvg(
-  ILuint</b> <i>Iter</i><b>);</b>
-</code></font>
-</pre>
-
-<font face="verdana"><br>
+<pre><code>
+<b>ILboolean iluBlurAvg(
+  ILuint</b><i> Iter</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Iter</i></dt>
+<dd>Number of iterations of blurring to perform.</dd>
+</dl>
+</p>
 </font>
-<h4><font face="verdana">Parameters</font></h4>
-
-<dl>
-<dt><font face="verdana"><font size=
-"-1"><i>Iter</i></font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Number of iterations of
-blurring to perform.</font></font></dd>
-</dl>
-
-<br>
-<br>
-<font face="verdana"><font size="-1"></font></font>
-<h4><font face="verdana">Remarks</font></h4>
-
-<p><font face="verdana"><font size="-1"><b>iluBlurAvg</b> blurs an
-image using an averaging convolution filter. The filter is applied
-up to <i>Iter</i> number of times, giving more of a blurring effect
-the higher <i>Iter</i> is. The 3x3 convolution filter used to do
-the average blur is:</font></font></p>
-
-<dl>
-<dd><font face="verdana"><font size="-1">1, 1,
-1,</font></font></dd>
-
-<dd><font face="verdana"><font size="-1"><br>
-</font></font></dd>
-
-<dd><font face="verdana"><font size="-1">1, 1,
-1,</font></font></dd>
-
-<dd><font face="verdana"><font size="-1"><br>
-&lt;
-<br>
-</font></font></dd>
-</dl>
-
-<h4><font face="verdana">Error Codes</font></h4>
-
-<p><font face="verdana"><font size="-1">ILU_ILLEGAL_OPERATION -
-There is currently no image bound. Use <a href=
-"../IL/f00026.html">ilGenImages</a> and <a href=
-"../IL/f00013.html">ilBindImage</a> before calling this
-function.</font></font></p>
-
-<h4><font face="verdana">See Also</font></h4>
-
-<p><font face="verdana"><font size="-1"><a href=
-"../IL/f00026.html">ilGenImages</a>, <a href=
-"../IL/f00013.html">ilBindImage</a>, <a href=
-"./f00131.html">iluBlurGaussian</a>, <a href=
-"./f00144.html">iluSharpen</a></font></font></p>
-
-<font face="verdana"><font size="-1"><br>
-</font></font>
-</body>
-</html>
-
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>iluBlurAvg</b> blurs an image using an averaging convolution filter.  The filter is applied up to <i>Iter</i> number of times, giving more of a blurring effect the higher <i>Iter</i> is.  The 3x3 convolution filter used to do the average blur is:
+<p>
+<dd>1, 1, 1,</dd><br>
+<dd>1, 1, 1,</dd><br>
+<
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+ILU_ILLEGAL_OPERATION - There is currently no image bound.  Use <a href="../il/f00026.htm">ilGenImages</a> and <a href="../il/f00013.htm">ilBindImage</a> before calling this function.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00026.htm">ilGenImages</a>, <a href="../il/f00013.htm">ilBindImage</a>, <a href="../ilu/f00131.htm">iluBlurGaussian</a>, <a href="../ilu/f00144.htm">iluSharpen</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

@@ -1,227 +1,123 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<html>
-<head>
-<meta name="generator" content="HTML Tidy, see www.w3.org">
-<title>DevIL Documentation, ilGetError</title>
-<style type="text/css">
-    A:link      {color: 0000FF;}
-    A:link      {text-decoration: none;}
-    A:visited   {color: 000080;}
-    A:visited   {text-decoration: none;}
-    A:active    {color: 000080;}
-    A:active    {text-decoration: none;}
-    A:hover     {color: 000080;}
-    A:hover     {text-decoration: underline;}
-</style>
-</head>
-<body topmargin="0" bgcolor="white">
-<font face="verdana"><img src="../images/DevIL.gif"><br>
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilGetError</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00125.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00165.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilGetError</h2>
+<font size=-1>
+<p>The <b>ilGetError</b> function returns error information.</p>
 </font>
-<table width="100%" cols="2" border="0" bgcolor="navy">
-<tr align="RIGHT">
-<td align="LEFT"><font color="white">DevIL Documentation</font>
-</td>
-<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
-<font color="white">|</font> <a href="./f00125.html"><font color=
-"gray">Previous</font></a> <font color="white">|</font> <a href=
-"./f00165.html">Next</a> </td>
-</tr>
-</table>
-
-<h2><font face="verdana">ilGetError</font></h2>
-
-<p><font face="verdana"><font size="-1">The <b>ilGetError</b>
-function returns error information.</font></font></p>
-
-<pre>
-<font face="verdana"><code><b>ILenum ilGetError(
+<pre><code>
+<b>ILenum ilGetError(
   ILvoid
 );</b>
-</code></font>
-</pre>
-
-<font face="verdana"><br>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<i>None</i>
+</p>
 </font>
-<h4><font face="verdana">Parameters</font></h4>
-
-<p><font face="verdana"><font size=
-"-1"><i>None</i></font></font></p>
-
-<h4><font face="verdana">Remarks</font></h4>
-
-<p><font face="verdana"><font size="-1"><b>ilGetError</b> returns
-the value of the last error on the error stack. If no error has
-occurred, IL_NO_ERROR is returned. Initially, the error stack is
-set to IL_NO_ERROR. When <b>ilGetError</b> is called, the last
-error on the error stack is "popped off". Errors that occur in ILU
-and ILUT are also reported through <b>ilGetError</b>.
-<b>ilGetError</b> only returns something other than IL_NO_ERROR if
-detectable errors have occurred. A simple (but potentially deadly)
-use of <b>ilGetError</b> could be:</font></font></p>
-
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>ilGetError</b> returns the value of the last error on the error stack.  If no error has occurred, IL_NO_ERROR is returned.  Initially, the error stack is set to IL_NO_ERROR.  When <b>ilGetError</b> is called, the last error on the error stack is "popped off".  Errors that occur in ILU and ILUT are also reported through <b>ilGetError</b>.  <b>ilGetError</b> only returns something other than IL_NO_ERROR if detectable errors have occurred.  A simple (but potentially deadly) use of <b>ilGetError</b> could be:
+<p>
 <dl>
-<dt><font face="verdana"><font size="-1">while (ilGetError() !=
-IL_NO_ERROR);</font></font></dt>
+<dt>while (ilGetError() != IL_NO_ERROR);</dd>
 </dl>
-
-<p><font face="verdana"><font size="-1">This is alright when very
-simple operations have been performed, but a more robust solution
-is needed to check for harmful errors, such as IL_OUT_OF_MEMORY. A
-list of errors that may be returned follow:</font></font></p>
-
+<p>
+This is alright when very simple operations have been performed, but a more robust solution is needed to check for harmful errors, such as IL_OUT_OF_MEMORY.  A list of errors that may be returned follow:
+<p>
 <dl>
-<dt><font face="verdana"><font size=
-"-1">IL_NO_ERROR</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">No detectable error has
-occured.</font></font></dd>
-
-<dt><font face="verdana"><font size="-1">IL_INVALID_ENUM,
-ILU_INVALID_ENUM, ILUT_INVALID_ENUM</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">An unacceptable enumerated
-value was passed to a function.</font></font></dd>
-
-<dt><font face="verdana"><font size="-1">IL_OUT_OF_MEMORY,
-ILU_OUT_OF_MEMORY, ILUT_OUT_OF_MEMORY</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Could not allocate enough
-memory in an operation.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_FORMAT_NOT_SUPPORTED</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">The format a function
-tried to use was not able to be used by that
-function.</font></font></dd>
-
-<dt><font face="verdana"><font size="-1">IL_INTERNAL_ERROR,
-ILU_INTERNAL_ERROR</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">A serious error has
-occurred. Please e-mail <a href=
-"mailto:doomwiz@ticnet.com">DooMWiz</a> with the conditions leading
-up to this error being reported.</font></font></dd>
-
-<dt><font face="verdana"><font size="-1">IL_INVALID_VALUE,
-ILU_INVALID_VALUE, ILUT_INVALID_VALUE</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">An invalid value was
-passed to a function or was in a file.</font></font></dd>
-
-<dt><font face="verdana"><font size="-1">IL_ILLEGAL_OPERATION,
-ILU_ILLEGAL_OPERATION, ILUT_ILLEGAL_OPERATION</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">The operation attempted is
-not allowable in the current state. The function returns with no
-ill side effects.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_ILLEGAL_FILE_VALUE</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">An illegal value was found
-in a file trying to be loaded.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_INVALID_FILE_HEADER</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">A file's header was
-incorrect.</font></font></dd>
-
-<dt><font face="verdana"><font size="-1">IL_INVALID_PARAM,
-ILU_INVALID_PARAM, ILUT_INVALID_PARAM</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">An invalid parameter was
-passed to a function, such as a NULL pointer.</font></font></dd>
-
-<dt><font face="verdana"><font size="-1">IL_COULD_NOT_OPEN_FILE,
-ILUT_COULD_NOT_OPEN_FILE</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Could not open the file
-specified. The file may already be open by another app or may not
-exist.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_INVALID_EXTENSION</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">The extension of the
-specified filename was not correct for the type of image-loading
-function.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_FILE_ALREADY_EXISTS</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">The filename specified
-already belongs to another file. To overwrite files by default,
-call <a href="./f00024.html">ilEnable</a> with the
-IL_FILE_OVERWRITE parameter.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_OUT_FORMAT_SAME</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Tried to convert an image
-from its format to the same format.</font></font></dd>
-
-<dt><font face="verdana"><font size="-1">IL_STACK_OVERFLOW,
-ILUT_STACK_OVERFLOW</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">One of the internal stacks
-was already filled, and the user tried to add on to the full
-stack.</font></font></dd>
-
-<dt><font face="verdana"><font size="-1">IL_STACK_UNDERFLOW,
-ILUT_STACK_UNDERFLOW</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">One of the internal stacks
-was empty, and the user tried to empty the already empty
-stack.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_INVALID_CONVERSION</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">An invalid conversion
-attempt was tried.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_LIB_JPEG_ERROR</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">An error occurred in the
-libjpeg library.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_LIB_PNG_ERROR</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">An error occurred in the
-libpng library.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_UNKNOWN_ERROR</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">No function sets this yet,
-but it is possible (not probable) it may be used in the
-future.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">ILUT_NOT_SUPPORTED</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">A type is valid but not
-supported in the current build.</font></font></dd>
+<dt>IL_NO_ERROR</dt>
+<dd>No detectable error has occured.</dd>
+<dt>IL_INVALID_ENUM, ILU_INVALID_ENUM, ILUT_INVALID_ENUM</dt>
+<dd>An unacceptable enumerated value was passed to a function.</dd>
+<dt>IL_OUT_OF_MEMORY, ILU_OUT_OF_MEMORY, ILUT_OUT_OF_MEMORY</dt>
+<dd>Could not allocate enough memory in an operation.</dd>
+<dt>IL_FORMAT_NOT_SUPPORTED</dt>
+<dd>The format a function tried to use was not able to be used by that function.</dd>
+<dt>IL_INTERNAL_ERROR, ILU_INTERNAL_ERROR</dt>
+<dd>A serious error has occurred.  Please e-mail <a href="mailto:doomwiz@ticnet.com">DooMWiz</a> with the conditions leading up to this error being reported.</dd>
+<dt>IL_INVALID_VALUE, ILU_INVALID_VALUE, ILUT_INVALID_VALUE</dt>
+<dd>An invalid value was passed to a function or was in a file.</dd>
+<dt>IL_ILLEGAL_OPERATION, ILU_ILLEGAL_OPERATION, ILUT_ILLEGAL_OPERATION</dt>
+<dd>The operation attempted is not allowable in the current state.  The function returns with no ill side effects.</dd>
+<dt>IL_ILLEGAL_FILE_VALUE</dt>
+<dd>An illegal value was found in a file trying to be loaded.</dd>
+<dt>IL_INVALID_FILE_HEADER</dt>
+<dd>A file's header was incorrect.</dd>
+<dt>IL_INVALID_PARAM, ILU_INVALID_PARAM, ILUT_INVALID_PARAM</dt>
+<dd>An invalid parameter was passed to a function, such as a NULL pointer.</dd>
+<dt>IL_COULD_NOT_OPEN_FILE, ILUT_COULD_NOT_OPEN_FILE</dt>
+<dd>Could not open the file specified.  The file may already be open by another app or may not exist.</dd>
+<dt>IL_INVALID_EXTENSION</dt>
+<dd>The extension of the specified filename was not correct for the type of image-loading function.</dd>
+<dt>IL_FILE_ALREADY_EXISTS</dt>
+<dd>The filename specified already belongs to another file.  To overwrite files by default, call <a href="../il/f00024.htm">ilEnable</a> with the IL_FILE_OVERWRITE parameter.</dd>
+<dt>IL_OUT_FORMAT_SAME</dt>
+<dd>Tried to convert an image from its format to the same format.</dd>
+<dt>IL_STACK_OVERFLOW, ILUT_STACK_OVERFLOW</dt>
+<dd>One of the internal stacks was already filled, and the user tried to add on to the full stack.</dd>
+<dt>IL_STACK_UNDERFLOW, ILUT_STACK_UNDERFLOW</dt>
+<dd>One of the internal stacks was empty, and the user tried to empty the already empty stack.</dd>
+<dt>IL_INVALID_CONVERSION</dt>
+<dd>An invalid conversion attempt was tried.</dd>
+<dt>IL_LIB_JPEG_ERROR</dt>
+<dd>An error occurred in the libjpeg library.</dd>
+<dt>IL_LIB_PNG_ERROR</dt>
+<dd>An error occurred in the libpng library.</dd>
+<dt>IL_UNKNOWN_ERROR</dt>
+<dd>No function sets this yet, but it is possible (not probable) it may be used in the future.</dd>
+<dt>ILUT_NOT_SUPPORTED</dt>
+<dd>A type is valid but not supported in the current build.</dd>
 </dl>
-
-<br>
-<br>
-<font face="verdana"><font size="-1"></font></font>
-<h4><font face="verdana">Error Codes</font></h4>
-
-<p><font face="verdana"><font size="-1">None</font></font></p>
-
-<h4><font face="verdana">See Also</font></h4>
-
-<p><font face="verdana"><font size="-1">Nothing</font></font></p>
-
-<font face="verdana"><font size="-1"><br>
-</font></font>
-</body>
-</html>
-
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+None
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+Nothing
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

@@ -1,78 +1,74 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<html>
-<head>
-<meta name="generator" content="HTML Tidy, see www.w3.org">
-<title>DevIL Documentation, ilutGetHPal</title>
-<style type="text/css">
-    A:link      {color: 0000FF;}
-    A:link      {text-decoration: none;}
-    A:visited   {color: 000080;}
-    A:visited   {text-decoration: none;}
-    A:active    {color: 000080;}
-    A:active    {text-decoration: none;}
-    A:hover     {color: 000080;}
-    A:hover     {text-decoration: underline;}
-</style>
-</head>
-<body topmargin="0" bgcolor="white">
-<font face="verdana"><img src="../images/DevIL.gif"><br>
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilutGetHPal</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../ilut/f00104.htm">Previous</A></font> <font color="white">|</font> <A HREF="../ilut/f00187.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilutGetHPal</h2>
+<font size=-1>
+<p>The <b>ilutGetHPal</b> function returns a Windows-friendly palette.</p>
 </font>
-<table width="100%" cols="2" border="0" bgcolor="navy">
-<tr align="RIGHT">
-<td align="LEFT"><font color="white">DevIL Documentation</font>
-</td>
-<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
-<font color="white">|</font> <a href="./f00104.html"><font color=
-"gray">Previous</font></a> <font color="white">|</font> <a href=
-"./f00187.html">Next</a> </td>
-</tr>
-</table>
-
-<h2><font face="verdana">ilutGetHPal</font></h2>
-
-<p><font face="verdana"><font size="-1">The <b>ilutGetHPal</b>
-function returns a Windows-friendly palette.</font></font></p>
-
-<pre>
-<font face="verdana"><code><b>HPALETTE ilutGetHPal(
+<pre><code>
+<b>HPALETTE ilutGetHPal(
   ILvoid
 );</b>
-</code></font>
-</pre>
-
-<font face="verdana"><br>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<i>None</i>
+</p>
 </font>
-<h4><font face="verdana">Parameters</font></h4>
-
-<p><font face="verdana"><font size=
-"-1"><i>None</i></font></font></p>
-
-<h4><font face="verdana">Remarks</font></h4>
-
-<p><font face="verdana"><font size="-1">If the current bound image
-has a palette, <b>ilutGetHPal</b> returns a Windows-compatible copy
-of the current image's palette in HPAL format.</font></font></p>
-
-<h4><font face="verdana">Error Codes</font></h4>
-
-<p><font face="verdana"><font size="-1">ILUT_ILLEGAL_OPERATION -
-There is currently no image bound. Use <a href=
-"../IL/f00026.html">ilGenImages</a> and <a href=
-"../IL/f00013.html">ilBindImage</a> before calling this
-function.<br>
- ILUT_OUT_OF_MEMORY - Could not allocate enough memory for the
-palette.</font></font></p>
-
-<h4><font face="verdana">See Also</font></h4>
-
-<p><font face="verdana"><font size="-1"><a href=
-"../IL/f00026.html">ilGenImages</a>, <a href=
-"../IL/f00013.html">ilBindImage</a>, <a href=
-"./f00122.html">ilutConvertToHBitmap</a></font></font></p>
-
-<font face="verdana"><font size="-1"><br>
-</font></font>
-</body>
-</html>
-
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+If the current bound image has a palette, <b>ilutGetHPal</b> returns a Windows-compatible copy of the current image's palette in HPAL format.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+ILUT_ILLEGAL_OPERATION - There is currently no image bound.  Use <a href="../il/f00026.htm">ilGenImages</a> and <a href="../il/f00013.htm">ilBindImage</a> before calling this function.
+<br>
+ILUT_OUT_OF_MEMORY - Could not allocate enough memory for the palette.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00026.htm">ilGenImages</a>, <a href="../il/f00013.htm">ilBindImage</a>, <a href="../ilut/f00122.htm">ilutConvertToHBitmap</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

@@ -1,183 +1,46 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-<head>
-<meta name="generator" content="HTML Tidy, see www.w3.org">
-<title>DevIL Documentation</title>
-<style type="text/css">
-    A:link      {color: 0000FF;}
-    A:link      {text-decoration: none;}
-    A:visited   {color: 000080;}
-    A:visited   {text-decoration: none;}
-    A:active    {color: 000080;}
-    A:active    {text-decoration: none;}
-    A:hover     {color: 000080;}
-    A:hover     {text-decoration: underline;}
-</style>
-</head>
-<body topmargin="0" bgcolor="white">
-<font face="verdana"><img src="images/DevIL.gif"><br>
-</font>
-<table width="100%" cols="2" border="0" bgcolor="navy">
-<tr align="RIGHT">
-<td align="LEFT"><font color="white">DevIL Documentation</font>
-</td>
-<td align="RIGHT" valign="TOP"><a href="index.html">Home</a> <font
-color="white">|</font> <font color="gray">Previous</font> <font
-color="white">|</font> <a href="./IL/f00008.html">Next</a> </td>
-</tr>
-</table>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation</TITLE>
 
-<h2><font face="verdana"><b>DevIL API Reference</b></font></h2>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
 
-<h3><font face="verdana">Function Index</font></h3>
+</HEAD>
 
-<h4><font face="verdana">OpenIL</font></h4>
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
 
-<p><font face="verdana">&nbsp;&nbsp;<a href=
-"IL/f00008.html">ilActiveImage</a><br>
-&nbsp;&nbsp;<a href="IL/f00190.html">ilActiveLayer</a><br>
-&nbsp;&nbsp;<a href="IL/f00009.html">ilActiveMipmap</a><br>
-&nbsp;&nbsp;<a href="IL/f00208.html">ilApplyProfile</a><br>
-&nbsp;&nbsp;<a href="IL/f00013.html">ilBindImage</a><br>
-&nbsp;&nbsp;<a href="IL/f00124.html">ilClearColour</a><br>
-&nbsp;&nbsp;<a href="IL/f00014.html">ilClearImage</a><br>
-&nbsp;&nbsp;<a href="IL/f00192.html">ilCloneCurImage</a><br>
-&nbsp;&nbsp;<a href="IL/f00016.html">ilConvertImage</a><br>
-&nbsp;&nbsp;<a href="IL/f00148.html">ilConvertPal</a><br>
-&nbsp;&nbsp;<a href="IL/f00017.html">ilCopyImage</a><br>
-&nbsp;&nbsp;<a href="IL/f00018.html">ilCopyPixels</a><br>
-&nbsp;&nbsp;<a href="IL/f00021.html">ilDefaultImage</a><br>
-&nbsp;&nbsp;<a href="IL/f00023.html">ilDeleteImages</a><br>
-&nbsp;&nbsp;<a href="IL/f00024.html">ilEnable, ilDisable</a><br>
-&nbsp;&nbsp;<a href="IL/f00026.html">ilGenImages</a><br>
-&nbsp;&nbsp;<a href="IL/f00027.html">ilGetBoolean, ilGetBooleanv,
-ilGetInteger, ilGetIntegerv</a><br>
-&nbsp;&nbsp;<a href="IL/f00125.html">ilGetData</a><br>
-&nbsp;&nbsp;<a href="IL/f00032.html">ilGetError</a><br>
-&nbsp;&nbsp;<a href="IL/f00165.html">ilGetPalette</a><br>
-&nbsp;&nbsp;<a href="IL/f00036.html">ilGetString</a><br>
-&nbsp;&nbsp;<a href="IL/f00126.html">ilHint</a><br>
-&nbsp;&nbsp;<a href="IL/f00057.html">ilInit</a><br>
-&nbsp;&nbsp;<a href="IL/f00038.html">ilIsEnabled,
-ilIsDisabled</a><br>
-&nbsp;&nbsp;<a href="IL/f00127.html">ilIsImage</a><br>
-&nbsp;&nbsp;<a href="IL/f00152.html">ilLoad, ilLoadF,
-ilLoadL</a><br>
-&nbsp;&nbsp;<a href="IL/f00039.html">ilLoadImage</a><br>
-&nbsp;&nbsp;<a href="IL/f00179.html">ilLoadPal</a><br>
-&nbsp;&nbsp;<a href="IL/f00046.html">ilOriginFunc</a><br>
-&nbsp;&nbsp;<a href="IL/f00191.html">ilOverlayImage</a><br>
-&nbsp;&nbsp;<a href="IL/f00048.html">ilPopAttrib</a><br>
-&nbsp;&nbsp;<a href="IL/f00049.html">ilPushAttrib</a><br>
-&nbsp;&nbsp;<a href="IL/f00154.html">ilRegisterFormat</a><br>
-&nbsp;&nbsp;<a href="IL/f00153.html">ilRegisterLoad</a><br>
-&nbsp;&nbsp;<a href="IL/f00184.html">ilRegisterMipNum</a><br>
-&nbsp;&nbsp;<a href="IL/f00185.html">ilRegisterNumImages</a><br>
-&nbsp;&nbsp;<a href="IL/f00155.html">ilRegisterOrigin</a><br>
-&nbsp;&nbsp;<a href="IL/f00156.html">ilRegisterPal</a><br>
-&nbsp;&nbsp;<a href="IL/f00158.html">ilRegisterSave</a><br>
-&nbsp;&nbsp;<a href="IL/f00157.html">ilRegisterType</a><br>
-&nbsp;&nbsp;<a href="IL/f00159.html">ilRemoveLoad</a><br>
-&nbsp;&nbsp;<a href="IL/f00160.html">ilRemoveSave</a><br>
-&nbsp;&nbsp;<a href="IL/f00205.html">ilResetRead,
-ilResetWrite</a><br>
-&nbsp;&nbsp;<a href="IL/f00164.html">ilSave</a><br>
-&nbsp;&nbsp;<a href="IL/f00053.html">ilSaveImage</a><br>
-&nbsp;&nbsp;<a href="IL/f00163.html">ilSavePal</a><br>
-&nbsp;&nbsp;<a href="IL/f00060.html">ilSetData</a><br>
-&nbsp;&nbsp;<a href="IL/f00072.html">ilSetDoomPal</a><br>
-&nbsp;&nbsp;<a href="IL/f00206.html">ilSetDuration</a><br>
-&nbsp;&nbsp;<a href="IL/f00207.html">ilSetInteger</a><br>
-&nbsp;&nbsp;<a href="IL/f00203.html">ilSetMemory</a><br>
-&nbsp;&nbsp;<a href="IL/f00180.html">ilSetPixels</a><br>
-&nbsp;&nbsp;<a href="IL/f00056.html">ilSetRead</a><br>
-&nbsp;&nbsp;<a href="IL/f00161.html">ilSetSharedPal</a><br>
-&nbsp;&nbsp;<a href="IL/f00202.html">ilSetString</a><br>
-&nbsp;&nbsp;<a href="IL/f00204.html">ilSetWrite</a><br>
-&nbsp;&nbsp;<a href="IL/f00209.html">ilShutDown</a><br>
-&nbsp;&nbsp;<a href="IL/f00059.html">ilTexImage</a><br>
-</font></p>
+<IMG SRC="images\devil.gif">
+<br>
 
-<h4><font face="verdana">OpenILU</font></h4>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR  ALIGN=RIGHT>
 
-<p><font face="verdana">&nbsp;&nbsp;<a href=
-"ILU/f00129.html">iluAlienify</a><br>
-&nbsp;&nbsp;<a href="ILU/f00167.html">iluBitFilter1, iluBitFilter2,
-iluBitFilter3</a><br>
-&nbsp;&nbsp;<a href="ILU/f00130.html">iluBlurAvg</a><br>
-&nbsp;&nbsp;<a href="ILU/f00131.html">iluBlurGaussian</a><br>
-&nbsp;&nbsp;<a href="ILU/f00094.html">iluBuildMipmaps</a><br>
-&nbsp;&nbsp;<a href="ILU/f00162.html">iluColoursUsed</a><br>
-&nbsp;&nbsp;<a href="ILU/f00147.html">iluCompareImage</a><br>
-&nbsp;&nbsp;<a href="ILU/f00133.html">iluContrast</a><br>
-&nbsp;&nbsp;<a href="ILU/f00134.html">iluCrop</a><br>
-&nbsp;&nbsp;<a href="ILU/f00198.html">iluDeleteImage</a><br>
-&nbsp;&nbsp;<a href="ILU/f00136.html">iluEdgeDetectP</a><br>
-&nbsp;&nbsp;<a href="ILU/f00137.html">iluEdgeDetectS</a><br>
-&nbsp;&nbsp;<a href="ILU/f00181.html">iluEmboss</a><br>
-&nbsp;&nbsp;<a href="ILU/f00138.html">iluEnlargeCanvas</a><br>
-&nbsp;&nbsp;<a href="ILU/f00193.html">iluEnlargeImage</a><br>
-&nbsp;&nbsp;<a href="ILU/f00096.html">iluErrorString</a><br>
-&nbsp;&nbsp;<a href="ILU/f00025.html">iluFlipImage</a><br>
-&nbsp;&nbsp;<a href="ILU/f00139.html">iluGammaCorrectInter,
-iluGammaCorrectScale</a><br>
-&nbsp;&nbsp;<a href="ILU/f00199.html">iluGenImage</a><br>
-&nbsp;&nbsp;<a href="ILU/f00200.html">iluGetImageInfo</a><br>
-&nbsp;&nbsp;<a href="ILU/f00150.html">iluGetInteger,
-iluGetIntegerv</a><br>
-&nbsp;&nbsp;<a href="ILU/f00095.html">iluGetString</a><br>
-&nbsp;&nbsp;<a href="ILU/f00166.html">iluImageParameter</a><br>
-&nbsp;&nbsp;<a href="ILU/f00168.html">iluInit</a><br>
-&nbsp;&nbsp;<a href="ILU/f00043.html">iluMirror</a><br>
-&nbsp;&nbsp;<a href="ILU/f00044.html">iluNegative</a><br>
-&nbsp;&nbsp;<a href="ILU/f00183.html">iluNoisify</a><br>
-&nbsp;&nbsp;<a href="ILU/f00141.html">iluPixelize</a><br>
-&nbsp;&nbsp;<a href="ILU/f00097.html">iluRotate</a><br>
-&nbsp;&nbsp;<a href="ILU/f00098.html">iluRotate3D</a><br>
-&nbsp;&nbsp;<a href="ILU/f00142.html">iluSaturate1f,
-iluSaturate4f</a><br>
-&nbsp;&nbsp;<a href="ILU/f00099.html">iluScale</a><br>
-&nbsp;&nbsp;<a href="ILU/f00151.html">iluScaleColours</a><br>
-&nbsp;&nbsp;<a href="ILU/f00144.html">iluSharpen</a><br>
-&nbsp;&nbsp;<a href="ILU/f00058.html">iluSwapColours</a><br>
-</font></p>
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
 
-<h4><font face="verdana">OpenILUT</font></h4>
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="index.htm">Home</A> <font color="white">|</font> <font color="gray">Previous</font> <font color="white">|</font> <A HREF="./il/f00008.htm">Next</A>
+</TD>
 
-<p><font face="verdana">&nbsp;&nbsp;<a href=
-"ILUT/f00121.html">ilutConvertToAlleg</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00122.html">ilutConvertToHBitmap</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00103.html">ilutEnable,
-ilutDisable</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00186.html">ilutGetBmpInfo</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00104.html">ilutGetBoolean,
-ilutGetBooleanv, ilutGetInteger, ilutGetIntegerv</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00128.html">ilutGetHPal</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00187.html">ilutGetPaddedData</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00107.html">ilutGetString</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00176.html">ilutGetWinClipboard</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00173.html">ilutGLBindMipmaps</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00171.html">ilutGLBindTexImage</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00201.html">ilutGLBuildMipmaps</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00194.html">ilutGLLoadImage</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00174.html">ilutGLScreen</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00175.html">ilutGLScreenie</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00172.html">ilutGLTexImage</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00109.html">ilutIsEnabled,
-ilutIsDisabled</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00189.html">ilutLoadResource</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00178.html">ilutPopAttrib</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00111.html">ilutPushAttrib</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00113.html">ilutRenderer</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00196.html">ilutSetHBitmap</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00188.html">ilutSetHPal</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00177.html">ilutSetWinClipboard</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00169.html">ilutStartup</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00195.html">ilutWinLoadImage</a><br>
-&nbsp;&nbsp;<a href="ILUT/f00197.html">ilutWinSaveImage</a><br>
-</font></p>
+</TR>
+</TABLE>
 
-<p><br>
-</p>
-</body>
-</html>
+<h2><b>DevIL API Reference</b></h2>
+<h3>Function Index</h3>
+<h4>OpenIL</h4><p>&nbsp;&nbsp;<a href="il/f00008.htm">ilActiveImage</a><br>&nbsp;&nbsp;<a href="il/f00190.htm">ilActiveLayer</a><br>&nbsp;&nbsp;<a href="il/f00009.htm">ilActiveMipmap</a><br>&nbsp;&nbsp;<a href="il/f00208.htm">ilApplyProfile</a><br>&nbsp;&nbsp;<a href="il/f00013.htm">ilBindImage</a><br>&nbsp;&nbsp;<a href="il/f00124.htm">ilClearColour</a><br>&nbsp;&nbsp;<a href="il/f00014.htm">ilClearImage</a><br>&nbsp;&nbsp;<a href="il/f00192.htm">ilCloneCurImage</a><br>&nbsp;&nbsp;<a href="il/f00016.htm">ilConvertImage</a><br>&nbsp;&nbsp;<a href="il/f00148.htm">ilConvertPal</a><br>&nbsp;&nbsp;<a href="il/f00017.htm">ilCopyImage</a><br>&nbsp;&nbsp;<a href="il/f00018.htm">ilCopyPixels</a><br>&nbsp;&nbsp;<a href="il/f00021.htm">ilDefaultImage</a><br>&nbsp;&nbsp;<a href="il/f00023.htm">ilDeleteImages</a><br>&nbsp;&nbsp;<a href="il/f00024.htm">ilEnable, ilDisable</a><br>&nbsp;&nbsp;<a href="il/f00026.htm">ilGenImages</a><br>&nbsp;&nbsp;<a href="il/f00027.htm">ilGetBoolean, ilGetBooleanv, ilGetInteger, ilGetIntegerv</a><br>&nbsp;&nbsp;<a href="il/f00125.htm">ilGetData</a><br>&nbsp;&nbsp;<a href="il/f00032.htm">ilGetError</a><br>&nbsp;&nbsp;<a href="il/f00165.htm">ilGetPalette</a><br>&nbsp;&nbsp;<a href="il/f00036.htm">ilGetString</a><br>&nbsp;&nbsp;<a href="il/f00126.htm">ilHint</a><br>&nbsp;&nbsp;<a href="il/f00057.htm">ilInit</a><br>&nbsp;&nbsp;<a href="il/f00038.htm">ilIsEnabled, ilIsDisabled</a><br>&nbsp;&nbsp;<a href="il/f00127.htm">ilIsImage</a><br>&nbsp;&nbsp;<a href="il/f00152.htm">ilLoad, ilLoadF, ilLoadL</a><br>&nbsp;&nbsp;<a href="il/f00039.htm">ilLoadImage</a><br>&nbsp;&nbsp;<a href="il/f00179.htm">ilLoadPal</a><br>&nbsp;&nbsp;<a href="il/f00046.htm">ilOriginFunc</a><br>&nbsp;&nbsp;<a href="il/f00191.htm">ilOverlayImage</a><br>&nbsp;&nbsp;<a href="il/f00048.htm">ilPopAttrib</a><br>&nbsp;&nbsp;<a href="il/f00049.htm">ilPushAttrib</a><br>&nbsp;&nbsp;<a href="il/f00154.htm">ilRegisterFormat</a><br>&nbsp;&nbsp;<a href="il/f00153.htm">ilRegisterLoad</a><br>&nbsp;&nbsp;<a href="il/f00184.htm">ilRegisterMipNum</a><br>&nbsp;&nbsp;<a href="il/f00185.htm">ilRegisterNumImages</a><br>&nbsp;&nbsp;<a href="il/f00155.htm">ilRegisterOrigin</a><br>&nbsp;&nbsp;<a href="il/f00156.htm">ilRegisterPal</a><br>&nbsp;&nbsp;<a href="il/f00158.htm">ilRegisterSave</a><br>&nbsp;&nbsp;<a href="il/f00157.htm">ilRegisterType</a><br>&nbsp;&nbsp;<a href="il/f00159.htm">ilRemoveLoad</a><br>&nbsp;&nbsp;<a href="il/f00160.htm">ilRemoveSave</a><br>&nbsp;&nbsp;<a href="il/f00205.htm">ilResetRead, ilResetWrite</a><br>&nbsp;&nbsp;<a href="il/f00164.htm">ilSave</a><br>&nbsp;&nbsp;<a href="il/f00053.htm">ilSaveImage</a><br>&nbsp;&nbsp;<a href="il/f00163.htm">ilSavePal</a><br>&nbsp;&nbsp;<a href="il/f00060.htm">ilSetData</a><br>&nbsp;&nbsp;<a href="il/f00072.htm">ilSetDoomPal</a><br>&nbsp;&nbsp;<a href="il/f00206.htm">ilSetDuration</a><br>&nbsp;&nbsp;<a href="il/f00207.htm">ilSetInteger</a><br>&nbsp;&nbsp;<a href="il/f00203.htm">ilSetMemory</a><br>&nbsp;&nbsp;<a href="il/f00180.htm">ilSetPixels</a><br>&nbsp;&nbsp;<a href="il/f00056.htm">ilSetRead</a><br>&nbsp;&nbsp;<a href="il/f00161.htm">ilSetSharedPal</a><br>&nbsp;&nbsp;<a href="il/f00202.htm">ilSetString</a><br>&nbsp;&nbsp;<a href="il/f00204.htm">ilSetWrite</a><br>&nbsp;&nbsp;<a href="il/f00209.htm">ilShutDown</a><br>&nbsp;&nbsp;<a href="il/f00059.htm">ilTexImage</a><br></p><h4>OpenILU</h4><p>&nbsp;&nbsp;<a href="ilu/f00129.htm">iluAlienify</a><br>&nbsp;&nbsp;<a href="ilu/f00167.htm">iluBitFilter1, iluBitFilter2, iluBitFilter3</a><br>&nbsp;&nbsp;<a href="ilu/f00130.htm">iluBlurAvg</a><br>&nbsp;&nbsp;<a href="ilu/f00131.htm">iluBlurGaussian</a><br>&nbsp;&nbsp;<a href="ilu/f00094.htm">iluBuildMipmaps</a><br>&nbsp;&nbsp;<a href="ilu/f00162.htm">iluColoursUsed</a><br>&nbsp;&nbsp;<a href="ilu/f00147.htm">iluCompareImage</a><br>&nbsp;&nbsp;<a href="ilu/f00133.htm">iluContrast</a><br>&nbsp;&nbsp;<a href="ilu/f00134.htm">iluCrop</a><br>&nbsp;&nbsp;<a href="ilu/f00198.htm">iluDeleteImage</a><br>&nbsp;&nbsp;<a href="ilu/f00136.htm">iluEdgeDetectP</a><br>&nbsp;&nbsp;<a href="ilu/f00137.htm">iluEdgeDetectS</a><br>&nbsp;&nbsp;<a href="ilu/f00181.htm">iluEmboss</a><br>&nbsp;&nbsp;<a href="ilu/f00138.htm">iluEnlargeCanvas</a><br>&nbsp;&nbsp;<a href="ilu/f00193.htm">iluEnlargeImage</a><br>&nbsp;&nbsp;<a href="ilu/f00096.htm">iluErrorString</a><br>&nbsp;&nbsp;<a href="ilu/f00025.htm">iluFlipImage</a><br>&nbsp;&nbsp;<a href="ilu/f00139.htm">iluGammaCorrectInter, iluGammaCorrectScale</a><br>&nbsp;&nbsp;<a href="ilu/f00199.htm">iluGenImage</a><br>&nbsp;&nbsp;<a href="ilu/f00200.htm">iluGetImageInfo</a><br>&nbsp;&nbsp;<a href="ilu/f00150.htm">iluGetInteger, iluGetIntegerv</a><br>&nbsp;&nbsp;<a href="ilu/f00095.htm">iluGetString</a><br>&nbsp;&nbsp;<a href="ilu/f00166.htm">iluImageParameter</a><br>&nbsp;&nbsp;<a href="ilu/f00168.htm">iluInit</a><br>&nbsp;&nbsp;<a href="ilu/f00043.htm">iluMirror</a><br>&nbsp;&nbsp;<a href="ilu/f00044.htm">iluNegative</a><br>&nbsp;&nbsp;<a href="ilu/f00183.htm">iluNoisify</a><br>&nbsp;&nbsp;<a href="ilu/f00141.htm">iluPixelize</a><br>&nbsp;&nbsp;<a href="ilu/f00097.htm">iluRotate</a><br>&nbsp;&nbsp;<a href="ilu/f00098.htm">iluRotate3D</a><br>&nbsp;&nbsp;<a href="ilu/f00142.htm">iluSaturate1f, iluSaturate4f</a><br>&nbsp;&nbsp;<a href="ilu/f00099.htm">iluScale</a><br>&nbsp;&nbsp;<a href="ilu/f00151.htm">iluScaleColours</a><br>&nbsp;&nbsp;<a href="ilu/f00144.htm">iluSharpen</a><br>&nbsp;&nbsp;<a href="ilu/f00058.htm">iluSwapColours</a><br></p><h4>OpenILUT</h4><p>&nbsp;&nbsp;<a href="ilut/f00121.htm">ilutConvertToAlleg</a><br>&nbsp;&nbsp;<a href="ilut/f00122.htm">ilutConvertToHBitmap</a><br>&nbsp;&nbsp;<a href="ilut/f00103.htm">ilutEnable, ilutDisable</a><br>&nbsp;&nbsp;<a href="ilut/f00186.htm">ilutGetBmpInfo</a><br>&nbsp;&nbsp;<a href="ilut/f00104.htm">ilutGetBoolean, ilutGetBooleanv, ilutGetInteger, ilutGetIntegerv</a><br>&nbsp;&nbsp;<a href="ilut/f00128.htm">ilutGetHPal</a><br>&nbsp;&nbsp;<a href="ilut/f00187.htm">ilutGetPaddedData</a><br>&nbsp;&nbsp;<a href="ilut/f00107.htm">ilutGetString</a><br>&nbsp;&nbsp;<a href="ilut/f00176.htm">ilutGetWinClipboard</a><br>&nbsp;&nbsp;<a href="ilut/f00173.htm">ilutGLBindMipmaps</a><br>&nbsp;&nbsp;<a href="ilut/f00171.htm">ilutGLBindTexImage</a><br>&nbsp;&nbsp;<a href="ilut/f00201.htm">ilutGLBuildMipmaps</a><br>&nbsp;&nbsp;<a href="ilut/f00194.htm">ilutGLLoadImage</a><br>&nbsp;&nbsp;<a href="ilut/f00174.htm">ilutGLScreen</a><br>&nbsp;&nbsp;<a href="ilut/f00175.htm">ilutGLScreenie</a><br>&nbsp;&nbsp;<a href="ilut/f00172.htm">ilutGLTexImage</a><br>&nbsp;&nbsp;<a href="ilut/f00109.htm">ilutIsEnabled, ilutIsDisabled</a><br>&nbsp;&nbsp;<a href="ilut/f00189.htm">ilutLoadResource</a><br>&nbsp;&nbsp;<a href="ilut/f00178.htm">ilutPopAttrib</a><br>&nbsp;&nbsp;<a href="ilut/f00111.htm">ilutPushAttrib</a><br>&nbsp;&nbsp;<a href="ilut/f00113.htm">ilutRenderer</a><br>&nbsp;&nbsp;<a href="ilut/f00196.htm">ilutSetHBitmap</a><br>&nbsp;&nbsp;<a href="ilut/f00188.htm">ilutSetHPal</a><br>&nbsp;&nbsp;<a href="ilut/f00177.htm">ilutSetWinClipboard</a><br>&nbsp;&nbsp;<a href="ilut/f00169.htm">ilutStartup</a><br>&nbsp;&nbsp;<a href="ilut/f00195.htm">ilutWinLoadImage</a><br>&nbsp;&nbsp;<a href="ilut/f00197.htm">ilutWinSaveImage</a><br></p>
+</FONT> 
+<p>
+<br>
+<p>
+</BODY>
+</HTML>

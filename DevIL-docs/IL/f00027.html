@@ -1,274 +1,153 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<html>
-<head>
-<meta name="generator" content="HTML Tidy, see www.w3.org">
-<title>DevIL Documentation, ilGetBoolean, ilGetBooleanv,
-ilGetInteger, ilGetIntegerv</title>
-<style type="text/css">
-    A:link      {color: 0000FF;}
-    A:link      {text-decoration: none;}
-    A:visited   {color: 000080;}
-    A:visited   {text-decoration: none;}
-    A:active    {color: 000080;}
-    A:active    {text-decoration: none;}
-    A:hover     {color: 000080;}
-    A:hover     {text-decoration: underline;}
-</style>
-</head>
-<body topmargin="0" bgcolor="white">
-<font face="verdana"><img src="../images/DevIL.gif"><br>
-</font>
-<table width="100%" cols="2" border="0" bgcolor="navy">
-<tr align="RIGHT">
-<td align="LEFT"><font color="white">DevIL Documentation</font>
-</td>
-<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
-<font color="white">|</font> <a href="./f00026.html"><font color=
-"gray">Previous</font></a> <font color="white">|</font> <a href=
-"./f00125.html">Next</a> </td>
-</tr>
-</table>
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilGetBoolean, ilGetBooleanv, ilGetInteger, ilGetIntegerv</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
 
-<h2><font face="verdana">ilGetBoolean, ilGetBooleanv, ilGetInteger,
-ilGetIntegerv</font></h2>
+</HEAD>
 
-<p><font face="verdana"><font size="-1">These functions return the
-value of a selected mode.</font></font></p>
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
 
-<pre>
-<font face="verdana"><code><b>ILboolean ilGetBoolean(
-  ILenum</b> <i>Mode</i><b>);</b>
+<IMG SRC="..\images\devil.gif">
 <br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00026.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00125.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilGetBoolean, ilGetBooleanv, ilGetInteger, ilGetIntegerv</h2>
+<font size=-1>
+<p>These functions return the value of a selected mode.</p>
+</font>
+<pre><code>
+<b>ILboolean ilGetBoolean(
+  ILenum</b><i> Mode</i><b>
+);</b>
+<p>
 <b>ILvoid ilGetBooleanv(
-  ILenum</b> <i>Mode,</i> <b> ILboolean</b> <i>*Param</i><b>);</b>
-<br>
+  ILenum</b><i> Mode,</i><b>
+  ILboolean</b><i> *Param</i><b>
+);</b>
+<p>
 <b>ILint ilGetInteger(
-  ILenum</b> <i>Mode</i><b>);</b>
-<br>
+  ILenum</b><i> Mode</i><b>
+);</b>
+<p>
 <b>ILvoid ilGetIntegerv(
-  ILenum</b> <i>Mode,</i> <b> ILint</b> <i>*Param</i><b>);</b>
-</code></font>
-</pre>
-
-<font face="verdana"><br>
+  ILenum</b><i> Mode,</i><b>
+  ILint</b><i> *Param</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Mode</i></dt>
+<dd>The mode value to be returned.  The following values are accepted:</dd>
+<p>
+<dl>
+<dt>IL_FILE_MODE</dt>
+<dd>Returns whether file overwriting when saving is enabled.</dd>
+<dt>IL_CONV_PAL</dt>
+<dd>Returns whether palette'd images are converted to their base palettes types on load - e.g. converted to a bgra image.</dd>
+<dt>IL_ORIGIN_SET</dt>
+<dd>Returns whether all images loaded and saved adhere to a specific origin.</dd>
+<dt>IL_ORIGIN_MODE</dt>
+<dd>Returns the current origin position.  Returned values can be:</dd>
+<dl>
+<dt>IL_ORIGIN_LOWER_LEFT</dt>
+<dd>The origin is in the lower left corner.</dd>
+<dt>IL_ORIGIN_UPPER_LEFT</dt>
+<dd>The origin is in the upper left corner.</dd>
+</dl>
+<dt>IL_FORMAT_SET</dt>
+<dd>Returns whether all images loaded are converted to a specific format.</dd>
+<dt>IL_FORMAT_MODE</dt>
+<dd>Returns the format images are converted to upon loading.</dd>
+<dt>IL_TYPE_SET</dt>
+<dd>Returns whether all images loaded are converted to a specific type.</dd>
+<dt>IL_TYPE_MODE</dt>
+<dd>Returns the type images are converted to upon loading.</dd>
+<dt>IL_VERSION_NUM</dt>
+<dd>Returns the version number of the shared library.  This can be checked against the IL_VERSION #define.</dd>
+<dt>IL_IMAGE_WIDTH</dt>
+<dd>Returns the current image's width.</dd>
+<dt>IL_IMAGE_HEIGHT</dt>
+<dd>Returns the current image's height.</dd>
+<dt>IL_IMAGE_BYTES_PER_PIXEL</dt>
+<dd>Returns the bytes per pixel of the current image's data.</dd>
+<dt>IL_IMAGE_BITS_PER_PIXEL</dt>
+<dd>Returns the bits per pixel of the current image's data.</dd>
+<dt>IL_IMAGE_FORMAT</dt>
+<dd>Returns the current image's format.</dd>
+<dt>IL_IMAGE_TYPE</dt>
+<dd>Returns the current image's type.</dd>
+<dt>IL_NUM_IMAGES</dt>
+<dd>Returns the number of images in the current image animation chain.</dd>
+<dt>IL_NUM_MIPMAPS</dt>
+<dd>Returns the number of mipmaps of the current image.</dd>
+<dt>IL_PALETTE_TYPE</dt>
+<dd>Returns the palette type of the current image.</dd>
+<dt>IL_PALETTE_BPP</dt>
+<dd>Returns the bytes per pixel of the current image's palette.</dd>
+<dt>IL_PALETTE_NUM_COLS</dt>
+<dd>Returns the number of colours of the current image's palette.</dd>
+<dt>IL_ACTIVE_IMAGE</dt>
+<dd>Returns the current image number.</dd>
+<dt>IL_ACTIVE_LAYER</dt>
+<dd>Returns the current layer number.</dd>
+<dt>IL_ACTIVE_MIPMAP</dt>
+<dd>Returns the current mipmap number.</dd>
+<dt>IL_CUR_IMAGE</dt>
+<dd>Returns the current bound image name.</dd>
+<dt>IL_USE_KEY_COLOUR</dt>
+<dd>Returns whether OpenIL uses a key colour (not used yet).</dd>
+</dl>
+<p>
+<dt><i>Param</i></dt>
+<dd>When used, the value is stored here instead of returned.</dd>
+</dl>
+</p>
 </font>
-<h4><font face="verdana">Parameters</font></h4>
-
-<dl>
-<dt><font face="verdana"><font size=
-"-1"><i>Mode</i></font></font></dt>
-
-<dd><font face="verdana"><font size="-1">The mode value to be
-returned. The following values are accepted:</font></font></dd>
-
-<dd>
-<dl>
-<dt><font face="verdana"><font size=
-"-1">IL_FILE_MODE</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns whether file
-overwriting when saving is enabled.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_CONV_PAL</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns whether palette'd
-images are converted to their base palettes types on load - e.g.
-converted to a bgra image.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_ORIGIN_SET</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns whether all images
-loaded and saved adhere to a specific origin.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_ORIGIN_MODE</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns the current origin
-position. Returned values can be:</font></font></dd>
-
-<dd>
-<dl>
-<dt><font face="verdana"><font size=
-"-1">IL_ORIGIN_LOWER_LEFT</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">The origin is in the lower
-left corner.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_ORIGIN_UPPER_LEFT</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">The origin is in the upper
-left corner.</font></font></dd>
-</dl>
-</dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_FORMAT_SET</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns whether all images
-loaded are converted to a specific format.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_FORMAT_MODE</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns the format images
-are converted to upon loading.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_TYPE_SET</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns whether all images
-loaded are converted to a specific type.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_TYPE_MODE</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns the type images
-are converted to upon loading.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_VERSION_NUM</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns the version number
-of the shared library. This can be checked against the IL_VERSION
-#define.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_IMAGE_WIDTH</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns the current
-image's width.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_IMAGE_HEIGHT</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns the current
-image's height.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_IMAGE_BYTES_PER_PIXEL</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns the bytes per
-pixel of the current image's data.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_IMAGE_BITS_PER_PIXEL</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns the bits per pixel
-of the current image's data.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_IMAGE_FORMAT</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns the current
-image's format.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_IMAGE_TYPE</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns the current
-image's type.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_NUM_IMAGES</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns the number of
-images in the current image animation chain.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_NUM_MIPMAPS</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns the number of
-mipmaps of the current image.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_PALETTE_TYPE</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns the palette type
-of the current image.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_PALETTE_BPP</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns the bytes per
-pixel of the current image's palette.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_PALETTE_NUM_COLS</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns the number of
-colours of the current image's palette.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_ACTIVE_IMAGE</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns the current image
-number.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_ACTIVE_LAYER</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns the current layer
-number.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_ACTIVE_MIPMAP</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns the current mipmap
-number.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_CUR_IMAGE</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns the current bound
-image name.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_USE_KEY_COLOUR</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Returns whether OpenIL
-uses a key colour (not used yet).</font></font></dd>
-</dl>
-</dd>
-
-<dt><font face="verdana"><font size=
-"-1"><i>Param</i></font></font></dt>
-
-<dd><font face="verdana"><font size="-1">When used, the value is
-stored here instead of returned.</font></font></dd>
-</dl>
-
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+The <b>ilGetBoolean</b> and <b>ilGetInteger</b> functions return the value of a selected mode.  The <b>ilGetBooleanv</b> and <b>ilGetIntegerv</b> functions return the mode value in the <i>Param</i> parameter.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+IL_INVALID_ENUM - <i>Mode</i> was an invalid enum.
 <br>
-<br>
-<font face="verdana"><font size="-1"></font></font>
-<h4><font face="verdana">Remarks</font></h4>
-
-<p><font face="verdana"><font size="-1">The <b>ilGetBoolean</b> and
-<b>ilGetInteger</b> functions return the value of a selected mode.
-The <b>ilGetBooleanv</b> and <b>ilGetIntegerv</b> functions return
-the mode value in the <i>Param</i> parameter.</font></font></p>
-
-<h4><font face="verdana">Error Codes</font></h4>
-
-<p><font face="verdana"><font size="-1">IL_INVALID_ENUM -
-<i>Mode</i> was an invalid enum.<br>
- IL_INVALID_PARAM - <i>Param</i> was NULL.</font></font></p>
-
-<h4><font face="verdana">See Also</font></h4>
-
-<p><font face="verdana"><font size="-1"><a href=
-"./f00024.html">ilEnable, ilDisable</a>, <a href=
-"./f00046.html">ilOriginFunc</a>, <a href=
-"../ILU/f00150.html">iluGetInteger, iluGetIntegerv</a>, <a href=
-"../ILUT/f00104.html">ilutGetBoolean, ilutGetBooleanv,
-ilutGetInteger, ilutGetIntegerv</a>, <a href=
-"./f00207.html">ilSetInteger</a></font></font></p>
-
-<font face="verdana"><font size="-1"><br>
-</font></font>
-</body>
-</html>
-
+IL_INVALID_PARAM - <i>Param</i> was NULL.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00024.htm">ilEnable, ilDisable</a>, <a href="../il/f00046.htm">ilOriginFunc</a>, <a href="../ilu/f00150.htm">iluGetInteger, iluGetIntegerv</a>, <a href="../ilut/f00104.htm">ilutGetBoolean, ilutGetBooleanv, ilutGetInteger, ilutGetIntegerv</a>, <a href="../il/f00207.htm">ilSetInteger</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

@@ -1,74 +1,72 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<html>
-<head>
-<meta name="generator" content="HTML Tidy, see www.w3.org">
-<title>DevIL Documentation, ilPopAttrib</title>
-<style type="text/css">
-    A:link      {color: 0000FF;}
-    A:link      {text-decoration: none;}
-    A:visited   {color: 000080;}
-    A:visited   {text-decoration: none;}
-    A:active    {color: 000080;}
-    A:active    {text-decoration: none;}
-    A:hover     {color: 000080;}
-    A:hover     {text-decoration: underline;}
-</style>
-</head>
-<body topmargin="0" bgcolor="white">
-<font face="verdana"><img src="../images/DevIL.gif"><br>
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilPopAttrib</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00191.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00049.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilPopAttrib</h2>
+<font size=-1>
+<p>The <b>ilPopAttrib</b> function "pops" the last entry off the state stack into the current states.</p>
 </font>
-<table width="100%" cols="2" border="0" bgcolor="navy">
-<tr align="RIGHT">
-<td align="LEFT"><font color="white">DevIL Documentation</font>
-</td>
-<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
-<font color="white">|</font> <a href="./f00191.html"><font color=
-"gray">Previous</font></a> <font color="white">|</font> <a href=
-"./f00049.html">Next</a> </td>
-</tr>
-</table>
-
-<h2><font face="verdana">ilPopAttrib</font></h2>
-
-<p><font face="verdana"><font size="-1">The <b>ilPopAttrib</b>
-function "pops" the last entry off the state stack into the current
-states.</font></font></p>
-
-<pre>
-<font face="verdana"><code><b>ILvoid ilPopAttrib(
+<pre><code>
+<b>ILvoid ilPopAttrib(
   ILvoid
 );</b>
-</code></font>
-</pre>
-
-<font face="verdana"><br>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<i>None</i>
+</p>
 </font>
-<h4><font face="verdana">Parameters</font></h4>
-
-<p><font face="verdana"><font size=
-"-1"><i>None</i></font></font></p>
-
-<h4><font face="verdana">Remarks</font></h4>
-
-<p><font face="verdana"><font size="-1"><b>ilPopAttrib</b> pops the
-last pushed stack entry off the stack and copies the bits specified
-when pushed by <a href="./f00049.html">ilPushAttrib</a> to the
-previous set of states.</font></font></p>
-
-<h4><font face="verdana">Error Codes</font></h4>
-
-<p><font face="verdana"><font size="-1">IL_STACK_UNDERFLOW - The
-stack was popped without being pushed by <a href=
-"./f00049.html">ilPushAttrib</a>.</font></font></p>
-
-<h4><font face="verdana">See Also</font></h4>
-
-<p><font face="verdana"><font size="-1"><a href=
-"./f00049.html">ilPushAttrib</a></font></font></p>
-
-<font face="verdana"><font size="-1"><br>
-</font></font>
-</body>
-</html>
-
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>ilPopAttrib</b> pops the last pushed stack entry off the stack and copies the bits specified when pushed by <a href="../il/f00049.htm">ilPushAttrib</a> to the previous set of states.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+IL_STACK_UNDERFLOW - The stack was popped without being pushed by <a href="../il/f00049.htm">ilPushAttrib</a>.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00049.htm">ilPushAttrib</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

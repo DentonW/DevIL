@@ -1,82 +1,74 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<html>
-<head>
-<meta name="generator" content="HTML Tidy, see www.w3.org">
-<title>DevIL Documentation, ilDefaultImage</title>
-<style type="text/css">
-    A:link      {color: 0000FF;}
-    A:link      {text-decoration: none;}
-    A:visited   {color: 000080;}
-    A:visited   {text-decoration: none;}
-    A:active    {color: 000080;}
-    A:active    {text-decoration: none;}
-    A:hover     {color: 000080;}
-    A:hover     {text-decoration: underline;}
-</style>
-</head>
-<body topmargin="0" bgcolor="white">
-<font face="verdana"><img src="../images/DevIL.gif"><br>
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilDefaultImage</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00018.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00023.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilDefaultImage</h2>
+<font size=-1>
+<p><b>ilDefaultImage</b> creates an ugly 64x64 black and yellow checkerboard image.</p>
 </font>
-<table width="100%" cols="2" border="0" bgcolor="navy">
-<tr align="RIGHT">
-<td align="LEFT"><font color="white">DevIL Documentation</font>
-</td>
-<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
-<font color="white">|</font> <a href="./f00018.html"><font color=
-"gray">Previous</font></a> <font color="white">|</font> <a href=
-"./f00023.html">Next</a> </td>
-</tr>
-</table>
-
-<h2><font face="verdana">ilDefaultImage</font></h2>
-
-<p><font face="verdana"><font size="-1"><b>ilDefaultImage</b>
-creates an ugly 64x64 black and yellow checkerboard
-image.</font></font></p>
-
-<pre>
-<font face="verdana"><code><b>ILboolean ilDefaultImage(
+<pre><code>
+<b>ILboolean ilDefaultImage(
   ILvoid
 );</b>
-</code></font>
-</pre>
-
-<font face="verdana"><br>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<i>None</i>
+</p>
 </font>
-<h4><font face="verdana">Parameters</font></h4>
-
-<p><font face="verdana"><font size=
-"-1"><i>None</i></font></font></p>
-
-<h4><font face="verdana">Remarks</font></h4>
-
-<p><font face="verdana"><font size="-1"><b>ilDefaultImage</b>
-creates an ugly 64x64 image of 8x8 black and yellow squares to form
-a checkerboard pattern. In future versions of OpenIL, there may be
-an option that will load this image if an image-loading function
-failed (unless memory could not be allocated). This way, the user
-can easily tell if an image was not loaded. Plus, the calling
-program can continue normally, even though it will have an ugly
-image. ;-)</font></font></p>
-
-<h4><font face="verdana">Error Codes</font></h4>
-
-<p><font face="verdana"><font size="-1">IL_ILLEGAL_OPERATION -
-There is currently no image bound. Use <a href=
-"./f00026.html">ilGenImages</a> and <a href=
-"./f00013.html">ilBindImage</a> before calling this function.<br>
- IL_OUT_OF_MEMORY - Could not allocate memory for the new image
-data.</font></font></p>
-
-<h4><font face="verdana">See Also</font></h4>
-
-<p><font face="verdana"><font size="-1"><a href=
-"./f00026.html">ilGenImages</a>, <a href=
-"./f00013.html">ilBindImage</a></font></font></p>
-
-<font face="verdana"><font size="-1"><br>
-</font></font>
-</body>
-</html>
-
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>ilDefaultImage</b> creates an ugly 64x64 image of 8x8 black and yellow squares to form a checkerboard pattern.  In future versions of OpenIL, there may be an option that will load this image if an image-loading function failed (unless memory could not be allocated).  This way, the user can easily tell if an image was not loaded.  Plus, the calling program can continue normally, even though it will have an ugly image.  ;-)
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+IL_ILLEGAL_OPERATION - There is currently no image bound.  Use <a href="../il/f00026.htm">ilGenImages</a> and <a href="../il/f00013.htm">ilBindImage</a> before calling this function.
+<br>
+IL_OUT_OF_MEMORY - Could not allocate memory for the new image data.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00026.htm">ilGenImages</a>, <a href="../il/f00013.htm">ilBindImage</a> 
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

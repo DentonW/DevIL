@@ -1,105 +1,84 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<html>
-<head>
-<meta name="generator" content="HTML Tidy, see www.w3.org">
-<title>DevIL Documentation, ilRegisterType</title>
-<style type="text/css">
-    A:link      {color: 0000FF;}
-    A:link      {text-decoration: none;}
-    A:visited   {color: 000080;}
-    A:visited   {text-decoration: none;}
-    A:active    {color: 000080;}
-    A:active    {text-decoration: none;}
-    A:hover     {color: 000080;}
-    A:hover     {text-decoration: underline;}
-</style>
-</head>
-<body topmargin="0" bgcolor="white">
-<font face="verdana"><img src="../images/DevIL.gif"><br>
-</font>
-<table width="100%" cols="2" border="0" bgcolor="navy">
-<tr align="RIGHT">
-<td align="LEFT"><font color="white">DevIL Documentation</font>
-</td>
-<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
-<font color="white">|</font> <a href="./f00158.html"><font color=
-"gray">Previous</font></a> <font color="white">|</font> <a href=
-"./f00159.html">Next</a> </td>
-</tr>
-</table>
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilRegisterType</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
 
-<h2><font face="verdana">ilRegisterType</font></h2>
+</HEAD>
 
-<p><font face="verdana"><font size="-1">The <b>ilRegisterType</b>
-function registers the current image's datatype.</font></font></p>
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
 
-<pre>
-<font face="verdana"><code><b>ILvoid ilRegisterType(
-  ILenum</b> <i>Type</i><b>);</b>
-</code></font>
-</pre>
-
-<font face="verdana"><br>
-</font>
-<h4><font face="verdana">Parameters</font></h4>
-
-<dl>
-<dt><font face="verdana"><font size=
-"-1"><i>Type</i></font></font></dt>
-
-<dd><font face="verdana"><font size="-1">The datatype that the
-registered image uses. Accepted values are:</font></font></dd>
-
-<dd>
-<dl>
-<dd><font face="verdana"><font size="-1">IL_BYTE</font></font></dd>
-
-<dd><font face="verdana"><font size=
-"-1">IL_UNSIGNED_BYTE</font></font></dd>
-
-<dd><font face="verdana"><font size=
-"-1">IL_SHORT</font></font></dd>
-
-<dd><font face="verdana"><font size=
-"-1">IL_UNSIGNED_SHORT</font></font></dd>
-
-<dd><font face="verdana"><font size="-1">IL_INT</font></font></dd>
-
-<dd><font face="verdana"><font size=
-"-1">IL_UNSIGNED_INT</font></font></dd>
-
-<dd><font face="verdana"><font size=
-"-1">IL_FLOAT</font></font></dd>
-</dl>
-</dd>
-</dl>
-
+<IMG SRC="..\images\devil.gif">
 <br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00158.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00159.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilRegisterType</h2>
+<font size=-1>
+<p>The <b>ilRegisterType</b> function registers the current image's datatype.</p>
+</font>
+<pre><code>
+<b>ILvoid ilRegisterType(
+  ILenum</b><i> Type</i><b>
+);</b>
+</code></pre>
 <br>
-<font face="verdana"><font size="-1"></font></font>
-<h4><font face="verdana">Remarks</font></h4>
-
-<p><font face="verdana"><font size="-1"><b>ilRegisterType</b> tells
-OpenIL what datatype the current registered image uses. This
-function is to be used from within functions that have been
-registered via <a href=
-"./f00153.html">ilRegisterLoad</a>.</font></font></p>
-
-<h4><font face="verdana">Error Codes</font></h4>
-
-<p><font face="verdana"><font size="-1">None</font></font></p>
-
-<h4><font face="verdana">See Also</font></h4>
-
-<p><font face="verdana"><font size="-1"><a href=
-"./f00153.html">ilRegisterLoad</a>, <a href=
-"./f00154.html">ilRegisterFormat</a>, <a href=
-"./f00155.html">ilRegisterOrigin</a>, <a href=
-"./f00156.html">ilRegisterPal</a></font></font></p>
-
-<font face="verdana"><font size="-1"><br>
-</font></font>
-</body>
-</html>
-
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Type</i></dt>
+<dd>The datatype that the registered image uses.  Accepted values are:</dd>
+<dl>
+<dd>IL_BYTE</dd>
+<dd>IL_UNSIGNED_BYTE</dd>
+<dd>IL_SHORT</dd>
+<dd>IL_UNSIGNED_SHORT</dd>
+<dd>IL_INT</dd>
+<dd>IL_UNSIGNED_INT</dd>
+<dd>IL_FLOAT</dd>
+</dl>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>ilRegisterType</b> tells OpenIL what datatype the current registered image uses.  This function is to be used from within functions that have been registered via <a href="../il/f00153.htm">ilRegisterLoad</a>.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+None
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00153.htm">ilRegisterLoad</a>, <a href="../il/f00154.htm">ilRegisterFormat</a>, <a href="../il/f00155.htm">ilRegisterOrigin</a>, <a href="../il/f00156.htm">ilRegisterPal</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

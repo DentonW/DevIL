@@ -1,130 +1,97 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<html>
-<head>
-<meta name="generator" content="HTML Tidy, see www.w3.org">
-<title>DevIL Documentation, ilSetInteger</title>
-<style type="text/css">
-    A:link      {color: 0000FF;}
-    A:link      {text-decoration: none;}
-    A:visited   {color: 000080;}
-    A:visited   {text-decoration: none;}
-    A:active    {color: 000080;}
-    A:active    {text-decoration: none;}
-    A:hover     {color: 000080;}
-    A:hover     {text-decoration: underline;}
-</style>
-</head>
-<body topmargin="0" bgcolor="white">
-<font face="verdana"><img src="../images/DevIL.gif"><br>
-</font>
-<table width="100%" cols="2" border="0" bgcolor="navy">
-<tr align="RIGHT">
-<td align="LEFT"><font color="white">DevIL Documentation</font>
-</td>
-<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
-<font color="white">|</font> <a href="./f00206.html"><font color=
-"gray">Previous</font></a> <font color="white">|</font> <a href=
-"./f00203.html">Next</a> </td>
-</tr>
-</table>
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilSetInteger</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
 
-<h2><font face="verdana">ilSetInteger</font></h2>
+</HEAD>
 
-<p><font face="verdana"><font size="-1">The <b>ilSetInteger</b>
-function sets the value of a selected mode.</font></font></p>
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
 
-<pre>
-<font face="verdana"><code><b>ILvoid ilSetInteger(
-  ILenum</b> <i>Mode,</i> <b> ILint</b> <i>Param</i><b>);</b>
-</code></font>
-</pre>
-
-<font face="verdana"><br>
-</font>
-<h4><font face="verdana">Parameters</font></h4>
-
-<dl>
-<dt><font face="verdana"><font size=
-"-1"><i>Mode</i></font></font></dt>
-
-<dd><font face="verdana"><font size="-1">The mode value to be
-returned. The following values are accepted:</font></font></dd>
-
-<dd>
-<p><font face="verdana"><font size="-1"></font></font></p>
-
-<dl>
-<dt><font face="verdana"><font size=
-"-1">IL_TGA_CREATE_STAMP</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Sets whether .tga files
-are saved with a "postage stamp" in their extension fields (IL_TRUE
-or IL_FALSE accepted).</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_JPG_QUALITY</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Sets the quality .jpg
-files are saved at. Valid values are in the 0-99 range, with 99
-being the best quality.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_PNG_INTERLACE</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Tells DevIL to save .png
-files interlaced.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_TGA_RLE</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Tells DevIL to save .tga
-files with RLE-compressed data.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_BMP_RLE</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Tells DevIL to save .bmp
-files with RLE-compressed data.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1">IL_SGI_RLE</font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Tells DevIL to save .sgi
-files with RLE-compressed data.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1"><i>Param</i></font></font></dt>
-
-<dd><font face="verdana"><font size="-1">The value to set the mode
-with.</font></font></dd>
-</dl>
-
+<IMG SRC="..\images\devil.gif">
 <br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00206.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00203.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilSetInteger</h2>
+<font size=-1>
+<p>The <b>ilSetInteger</b> function sets the value of a selected mode.</p>
+</font>
+<pre><code>
+<b>ILvoid ilSetInteger(
+  ILenum</b><i> Mode,</i><b>
+  ILint</b><i> Param</i><b>
+);</b>
+</code></pre>
 <br>
-<font face="verdana"><font size="-1"></font></font>
-<h4><font face="verdana">Remarks</font></h4>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Mode</i></dt>
+<dd>The mode value to be returned.  The following values are accepted:</dd>
+<p>
 
-<p><font face="verdana"><font size="-1"><b>ilSetInteger</b> is <a
-href="./f00027.html">ilGetInteger</a>'s
-counterpart.</font></font></p>
-
-<h4><font face="verdana">Error Codes</font></h4>
-
-<p><font face="verdana"><font size="-1">IL_INVALID_ENUM -
-<i>Mode</i> was an invalid enum.<br>
- IL_INVALID_PARAM - <i>Param</i> was not in
-range.</font></font></p>
-
-<h4><font face="verdana">See Also</font></h4>
-
-<p><font face="verdana"><font size="-1"><a href=
-"./f00027.html">ilGetBoolean, ilGetBooleanv, ilGetInteger,
-ilGetIntegerv</a></font></font></p>
-
-<font face="verdana"><font size="-1"><br>
-</font></font>  </dd>
+<p>
+<dl>
+<dt>IL_TGA_CREATE_STAMP</dt>
+<dd>Sets whether .tga files are saved with a "postage stamp" in their extension fields (IL_TRUE or IL_FALSE accepted).</dd>
+<dt>IL_JPG_QUALITY</dt>
+<dd>Sets the quality .jpg files are saved at.  Valid values are in the 0-99 range, with 99 being the best quality.</dd>
+<dt>IL_PNG_INTERLACE</dt>
+<dd>Tells DevIL to save .png files interlaced.</dd>
+<dt>IL_TGA_RLE</dt>
+<dd>Tells DevIL to save .tga files with RLE-compressed data.</dd>
+<dt>IL_BMP_RLE</dt>
+<dd>Tells DevIL to save .bmp files with RLE-compressed data.</dd>
+<dt>IL_SGI_RLE</dt>
+<dd>Tells DevIL to save .sgi files with RLE-compressed data.</dd>
+<p>
+<dt><i>Param</i></dt>
+<dd>The value to set the mode with.</dd>
 </dl>
-</body>
-</html>
-
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>ilSetInteger</b> is <a href="../il/f00027.htm">ilGetInteger</a>'s counterpart.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+IL_INVALID_ENUM - <i>Mode</i> was an invalid enum.
+<br>
+IL_INVALID_PARAM - <i>Param</i> was not in range.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00027.htm">ilGetBoolean, ilGetBooleanv, ilGetInteger, ilGetIntegerv</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

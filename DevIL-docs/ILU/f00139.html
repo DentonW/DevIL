@@ -1,88 +1,78 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<html>
-<head>
-<meta name="generator" content="HTML Tidy, see www.w3.org">
-<title>DevIL Documentation, iluGammaCorrectInter,
-iluGammaCorrectScale</title>
-<style type="text/css">
-    A:link      {color: 0000FF;}
-    A:link      {text-decoration: none;}
-    A:visited   {color: 000080;}
-    A:visited   {text-decoration: none;}
-    A:active    {color: 000080;}
-    A:active    {text-decoration: none;}
-    A:hover     {color: 000080;}
-    A:hover     {text-decoration: underline;}
-</style>
-</head>
-<body topmargin="0" bgcolor="white">
-<font face="verdana"><img src="../images/DevIL.gif"><br>
-</font>
-<table width="100%" cols="2" border="0" bgcolor="navy">
-<tr align="RIGHT">
-<td align="LEFT"><font color="white">DevIL Documentation</font>
-</td>
-<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
-<font color="white">|</font> <a href="./f00025.html"><font color=
-"gray">Previous</font></a> <font color="white">|</font> <a href=
-"./f00199.html">Next</a> </td>
-</tr>
-</table>
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, iluGammaCorrectInter, iluGammaCorrectScale</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
 
-<h2><font face="verdana">iluGammaCorrectInter,
-iluGammaCorrectScale</font></h2>
+</HEAD>
 
-<p><font face="verdana"><font size="-1">These two functions adjust
-the gamma of an image.</font></font></p>
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
 
-<pre>
-<font face="verdana"><code><b>ILboolean iluGammaCorrectInter(
-  ILfloat</b> <i>Gamma</i><b>);</b>
+<IMG SRC="..\images\devil.gif">
 <br>
-<b>ILboolean iluGammaCorrectScale(
-  ILfloat</b> <i>Gamma</i><b>);</b>
-</code></font>
-</pre>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
 
-<font face="verdana"><br>
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../ilu/f00025.htm">Previous</A></font> <font color="white">|</font> <A HREF="../ilu/f00199.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>iluGammaCorrectInter, iluGammaCorrectScale</h2>
+<font size=-1>
+<p>These two functions adjust the gamma of an image.</p>
 </font>
-<h4><font face="verdana">Parameters</font></h4>
-
+<pre><code>
+<b>ILboolean iluGammaCorrectInter(
+  ILfloat</b><i> Gamma</i><b>
+);</b>
+<p>
+<b>ILboolean iluGammaCorrectScale(
+  ILfloat</b><i> Gamma</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
 <dl>
-<dt><font face="verdana"><font size=
-"-1"><i>Gamma</i></font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Gamma correcti<br>
-</font></font>
-<h4><font face="verdana">Remarks</font></h4>
-
-<p><font face="verdana"><font size="-1">These two functions adjust
-the gamma of the current image. If <i>Gamma</i> is less than 1.0,
-the image is darkened. If <i>Gamma</i> is greater than 1.0, the
-image is brightened. <b>iluGammaCorrectInter</b> is a slower
-function and uses interpolation to achieve this effect.
-<b>iluGammaCorrectScale</b> achieves this effect by scaling the
-colours via <a href=
-"./f00151.html">iluScaleColours</a>.</font></font></p>
-
-<h4><font face="verdana">Error Codes</font></h4>
-
-<p><font face="verdana"><font size="-1">ILU_ILLEGAL_OPERATION -
-There is currently no image bound. Use <a href=
-"../IL/f00026.html">ilGenImages</a> and <a href=
-"../IL/f00013.html">ilBindImage</a> before calling this
-function.</font></font></p>
-
-<h4><font face="verdana">See Also</font></h4>
-
-<p><font face="verdana"><font size="-1"><a href=
-"../IL/f00026.html">ilGenImages</a>, <a href=
-"../IL/f00013.html">ilBindImage</a></font></font></p>
-
-<font face="verdana"><font size="-1"><br>
-</font></font>  </dd>
-</dl>
-</body>
-</html>
-
+<dt><i>Gamma</i></dt>
+<dd>Gamma correcti
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+These two functions adjust the gamma of the current image.  If <i>Gamma</i> is less than 1.0, the image is darkened.  If <i>Gamma</i> is greater than 1.0, the image is brightened.  <b>iluGammaCorrectInter</b> is a slower function and uses interpolation to achieve this effect.  <b>iluGammaCorrectScale</b> achieves this effect by scaling the colours via <a href="../ilu/f00151.htm">iluScaleColours</a>.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+ILU_ILLEGAL_OPERATION - There is currently no image bound.  Use <a href="../il/f00026.htm">ilGenImages</a> and <a href="../il/f00013.htm">ilBindImage</a> before calling this function.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00026.htm">ilGenImages</a>, <a href="../il/f00013.htm">ilBindImage</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

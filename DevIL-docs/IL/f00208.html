@@ -1,96 +1,83 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<html>
-<head>
-<meta name="generator" content="HTML Tidy, see www.w3.org">
-<title>DevIL Documentation, ilApplyProfile</title>
-<style type="text/css">
-    A:link      {color: 0000FF;}
-    A:link      {text-decoration: none;}
-    A:visited   {color: 000080;}
-    A:visited   {text-decoration: none;}
-    A:active    {color: 000080;}
-    A:active    {text-decoration: none;}
-    A:hover     {color: 000080;}
-    A:hover     {text-decoration: underline;}
-</style>
-</head>
-<body topmargin="0" bgcolor="white">
-<font face="verdana"><img src="../images/DevIL.gif"><br>
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilApplyProfile</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00009.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00013.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilApplyProfile</h2>
+<font size=-1>
+<p>The <b>ilApplyProfile</b> function applies a colour profile to the currently bound image.</p>
 </font>
-<table width="100%" cols="2" border="0" bgcolor="navy">
-<tr align="RIGHT">
-<td align="LEFT"><font color="white">DevIL Documentation</font>
-</td>
-<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
-<font color="white">|</font> <a href="./f00009.html"><font color=
-"gray">Previous</font></a> <font color="white">|</font> <a href=
-"./f00013.html">Next</a> </td>
-</tr>
-</table>
+<pre><code>
+<b>ILboolean ilApplyProfile(
+  const ILstring</b><i> InProfile,</i><b>
+  const ILstring</b><i> OutProfile</i><b>
+);</b>
 
-<h2><font face="verdana">ilApplyProfile</font></h2>
-
-<p><font face="verdana"><font size="-1">The <b>ilApplyProfile</b>
-function applies a colour profile to the currently bound
-image.</font></font></p>
-
-<pre>
-<font face="verdana"><code><b>ILboolean ilApplyProfile(
-  const ILstring</b> <i>InProfile,</i> <b> const ILstring</b> <i>OutProfile</i><b>);</b>
-
-</code></font>
-</pre>
-
-<font face="verdana"><br>
-</font>
-<h4><font face="verdana">Parameters</font></h4>
-
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
 <dl>
-<dt><font face="verdana"><font size=
-"-1"><i>InProfile</i></font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Profile file describing
-the colour space the image is in.</font></font></dd>
-
-<dt><font face="verdana"><font size=
-"-1"><i>OutProfile</i></font></font></dt>
-
-<dd><font face="verdana"><font size="-1">Profile file describing
-the colour space to convert the image to.</font></font></dd>
+<dt><i>InProfile</i></dt>
+<dd>Profile file describing the colour space the image is in.</dd>
+<dt><i>OutProfile</i></dt>
+<dd>Profile file describing the colour space to convert the image to.</dd>
 </dl>
-
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>iluApplyProfile</b> applies a colour profile (files with extension .icm) to the currently bound image.  <i>InProfile</i> describes the current image's colour space, and <i>OutProfile</i> describes the colour space to convert the currently bound image to.  If <i>InProfile</i> is NULL, DevIL attempts to use the colour profile present in the image, if one is present, else it returns IL_FALSE.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+IL_ILLEGAL_OPERATION - There is currently no image bound.  Use <a href="../il/f00026.htm">ilGenImages</a> and <a href="../il/f00013.htm">ilBindImage</a> before calling this function.
 <br>
+IL_OUT_OF_MEMORY - Could not allocate memory for the new image data.
 <br>
-<font face="verdana"><font size="-1"></font></font>
-<h4><font face="verdana">Remarks</font></h4>
+IL_INVALID_PARAM - <i>InProfile</i> and/or <i>OutProfile</i> was NULL.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
 
-<p><font face="verdana"><font size="-1"><b>iluApplyProfile</b>
-applies a colour profile (files with extension .icm) to the
-currently bound image. <i>InProfile</i> describes the current
-image's colour space, and <i>OutProfile</i> describes the colour
-space to convert the currently bound image to. If <i>InProfile</i>
-is NULL, DevIL attempts to use the colour profile present in the
-image, if one is present, else it returns
-IL_FALSE.</font></font></p>
-
-<h4><font face="verdana">Error Codes</font></h4>
-
-<p><font face="verdana"><font size="-1">IL_ILLEGAL_OPERATION -
-There is currently no image bound. Use <a href=
-"./f00026.html">ilGenImages</a> and <a href=
-"./f00013.html">ilBindImage</a> before calling this function.<br>
- IL_OUT_OF_MEMORY - Could not allocate memory for the new image
-data.<br>
- IL_INVALID_PARAM - <i>InProfile</i> and/or <i>OutProfile</i> was
-NULL.</font></font></p>
-
-<h4><font face="verdana">See Also</font></h4>
-
-<p><font face="verdana"><font size="-1"></font></font></p>
-
-<font face="verdana"><font size="-1"><br>
-</font></font>
-</body>
-</html>
-
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

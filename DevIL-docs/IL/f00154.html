@@ -1,100 +1,83 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<html>
-<head>
-<meta name="generator" content="HTML Tidy, see www.w3.org">
-<title>DevIL Documentation, ilRegisterFormat</title>
-<style type="text/css">
-    A:link      {color: 0000FF;}
-    A:link      {text-decoration: none;}
-    A:visited   {color: 000080;}
-    A:visited   {text-decoration: none;}
-    A:active    {color: 000080;}
-    A:active    {text-decoration: none;}
-    A:hover     {color: 000080;}
-    A:hover     {text-decoration: underline;}
-</style>
-</head>
-<body topmargin="0" bgcolor="white">
-<font face="verdana"><img src="../images/DevIL.gif"><br>
-</font>
-<table width="100%" cols="2" border="0" bgcolor="navy">
-<tr align="RIGHT">
-<td align="LEFT"><font color="white">DevIL Documentation</font>
-</td>
-<td align="RIGHT" valign="TOP"><a href="../index.html">Home</a>
-<font color="white">|</font> <a href="./f00049.html"><font color=
-"gray">Previous</font></a> <font color="white">|</font> <a href=
-"./f00153.html">Next</a> </td>
-</tr>
-</table>
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilRegisterFormat</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
 
-<h2><font face="verdana">ilRegisterFormat</font></h2>
+</HEAD>
 
-<p><font face="verdana"><font size="-1">The <b>ilRegisterFormat</b>
-function registers the current image's format.</font></font></p>
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
 
-<pre>
-<font face="verdana"><code><b>ILvoid ilRegisterFormat(
-  ILenum</b> <i>Format</i><b>);</b>
-</code></font>
-</pre>
-
-<font face="verdana"><br>
-</font>
-<h4><font face="verdana">Parameters</font></h4>
-
-<dl>
-<dt><font face="verdana"><font size=
-"-1"><i>Format</i></font></font></dt>
-
-<dd><font face="verdana"><font size="-1">The format that the
-registered image is in. Accepted values are:</font></font></dd>
-
-<dd>
-<dl>
-<dd><font face="verdana"><font size="-1">IL_RGB</font></font></dd>
-
-<dd><font face="verdana"><font size="-1">IL_RGBA</font></font></dd>
-
-<dd><font face="verdana"><font size="-1">IL_BGR</font></font></dd>
-
-<dd><font face="verdana"><font size="-1">IL_BGRA</font></font></dd>
-
-<dd><font face="verdana"><font size=
-"-1">IL_LUMINANCE</font></font></dd>
-
-<dd><font face="verdana"><font size=
-"-1">IL_COLOR_INDEX</font></font></dd>
-</dl>
-</dd>
-</dl>
-
+<IMG SRC="..\images\devil.gif">
 <br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00049.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00153.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilRegisterFormat</h2>
+<font size=-1>
+<p>The <b>ilRegisterFormat</b> function registers the current image's format.</p>
+</font>
+<pre><code>
+<b>ILvoid ilRegisterFormat(
+  ILenum</b><i> Format</i><b>
+);</b>
+</code></pre>
 <br>
-<font face="verdana"><font size="-1"></font></font>
-<h4><font face="verdana">Remarks</font></h4>
-
-<p><font face="verdana"><font size="-1"><b>ilRegisterFormat</b>
-tells OpenIL what format the current registered image is in. This
-function is to be used from within functions that have been
-registered via <a href=
-"./f00153.html">ilRegisterLoad</a>.</font></font></p>
-
-<h4><font face="verdana">Error Codes</font></h4>
-
-<p><font face="verdana"><font size="-1">None</font></font></p>
-
-<h4><font face="verdana">See Also</font></h4>
-
-<p><font face="verdana"><font size="-1"><a href=
-"./f00153.html">ilRegisterLoad</a>, <a href=
-"./f00157.html">ilRegisterType</a>, <a href=
-"./f00155.html">ilRegisterOrigin</a>, <a href=
-"./f00156.html">ilRegisterPal</a></font></font></p>
-
-<font face="verdana"><font size="-1"><br>
-</font></font>
-</body>
-</html>
-
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Format</i></dt>
+<dd>The format that the registered image is in.  Accepted values are:</dd>
+<dl>
+<dd>IL_RGB</dd>
+<dd>IL_RGBA</dd>
+<dd>IL_BGR</dd>
+<dd>IL_BGRA</dd>
+<dd>IL_LUMINANCE</dd>
+<dd>IL_COLOR_INDEX</dd>
+</dl>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>ilRegisterFormat</b> tells OpenIL what format the current registered image is in.  This function is to be used from within functions that have been registered via <a href="../il/f00153.htm">ilRegisterLoad</a>.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+None
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00153.htm">ilRegisterLoad</a>, <a href="../il/f00157.htm">ilRegisterType</a>, <a href="../il/f00155.htm">ilRegisterOrigin</a>, <a href="../il/f00156.htm">ilRegisterPal</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>
