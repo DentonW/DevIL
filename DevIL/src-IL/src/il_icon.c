@@ -89,8 +89,7 @@ ILboolean iLoadIconInternal()
 
 	// Make it easier for file_read_error.
 	for (i = 0; i < IconDir.Count; i++)
-		memset(&IconImages[i], 0, sizeof(ICOIMAGE));
-
+		imemclear(&IconImages[i], sizeof(ICOIMAGE));
 	if (iread(DirEntries, sizeof(ICODIRENTRY), IconDir.Count) != (ILuint)IconDir.Count)
 		goto file_read_error;
 

@@ -252,7 +252,7 @@ ILubyte *iScanFill()
 	iRegionMask = (ILubyte*)ialloc(iluCurImage->Width * iluCurImage->Height * iluCurImage->Depth);
 	if (edges == NULL || iRegionMask == NULL)
 		goto error;
-	memset(iRegionMask, 0, iluCurImage->Width * iluCurImage->Height * iluCurImage->Depth);
+	imemclear(iRegionMask, iluCurImage->Width * iluCurImage->Height * iluCurImage->Depth);
 
 	for (i = 0; i < iluCurImage->Height; i++) {
 		edges[i] = (Edge*)ialloc(sizeof(Edge));

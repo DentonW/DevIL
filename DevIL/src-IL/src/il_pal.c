@@ -913,7 +913,7 @@ ILboolean ILAPIENTRY ilApplyPal(const ILstring FileName)
 	}
 
 	iCurImage = &Image;
-	memset(&Image, 0, sizeof(ILimage));
+	imemclear(&Image, sizeof(ILimage));
 	// IL_PAL_RGB24, because we don't want to make parts transparent that shouldn't be.
 	if (!ilLoadPal(FileName) || !ilConvertPal(IL_PAL_RGB24)) {
 		ifree(NewData);

@@ -602,8 +602,8 @@ ILAPI ILboolean ILAPIENTRY ilClearImage_(ILimage *Image)
 		}
 	}
 	else {
-		memset(Image->Data, 0, Image->SizeOfData);
-
+                imemclear(Image->Data, Image->SizeOfData);
+                
 		if (Image->Pal.Palette)
 			ifree(Image->Pal.Palette);
 		Image->Pal.Palette = (ILubyte*)ialloc(4);
@@ -734,7 +734,7 @@ ILboolean ILAPIENTRY ilOverlayImage(ILuint Source, ILint XCoord, ILint YCoord, I
 
 ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX, ILint DestY, ILint DestZ, ILuint SrcX, ILuint SrcY, ILuint SrcZ, ILuint Width, ILuint Height, ILuint Depth)
 {
-	ILuint		x, y, z, SrcIndex, DestIndex, ConvBps, ConvSizePlane;
+	register ILuint		x, y, z, SrcIndex, DestIndex, ConvBps, ConvSizePlane;
 	ILimage		*Dest;
 	ILubyte		*Converted;
 	ILuint		DestName = ilGetCurName();

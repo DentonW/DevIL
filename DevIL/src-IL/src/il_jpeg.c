@@ -19,18 +19,21 @@
 #include "il_internal.h"
 #ifndef IL_NO_JPG
 	#ifndef IL_USE_IJL
-		#ifdef RGB_RED
+                #ifdef RGB_RED
 			#undef RGB_RED
 			#undef RGB_GREEN
 			#undef RGB_BLUE
 		#endif
-
 		#define RGB_RED		0
 		#define RGB_GREEN	1
 		#define RGB_BLUE	2
-
-		#include "jpeglib.h"
-
+                
+                #ifdef MACOSX
+                #include <libjpeg/jpeglib.h>
+                #else
+                #include "jpeglib.h"
+                #endif
+                
 		#if JPEG_LIB_VERSION < 62
 			#warning DevIL was designed with libjpeg 6b or higher in mind.  Consider upgrading at www.ijg.org
 		#endif
@@ -42,7 +45,7 @@
 #include "il_manip.h"
 #include <setjmp.h>
 
-ILboolean jpgErrorOccured = IL_FALSE;
+static ILboolean jpgErrorOccured = IL_FALSE;
 
 
 // Internal function used to get the .jpg header from the current file.
@@ -691,7 +694,7 @@ ILboolean iSaveJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size)
 	ILimage	*TempImage;
 	ILubyte	*TempData;
 
-	memset(&Image, 0, sizeof(JPEG_CORE_PROPERTIES));
+        imemclear(&Image, sizeof(JPEG_CORE_PROPERTIES));
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);

@@ -62,11 +62,10 @@ ILushort	*Qadd;
 ILint	WindW, WindH, WindD;
 ILint	i;
 ILubyte	*buffer;
-ILint	Width, Height, Depth, Comp;
+static ILint	Width, Height, Depth, Comp;
 /*ILint	TotalColors;
 ILint	a, b;
 ILubyte	*buf1, *buf2;*/
-
 
 ILuint n2(ILint s)
 {
@@ -96,8 +95,10 @@ ILboolean Hist3d(ILubyte *Ir, ILubyte *Ig, ILubyte *Ib, ILint *vwt, ILint *vmr, 
 	if (Qadd == NULL) {
 		return IL_FALSE;
 	}
-	memset(Qadd, 0, sizeof(ILushort) * size);
-	for (i = 0; i < size; i++) {
+	
+        imemclear(Qadd, sizeof(ILushort) * size);
+        
+        for (i = 0; i < size; i++) {
 	    r = Ir[i]; g = Ig[i]; b = Ib[i];
 	    inr = (r>>3) + 1; 
 	    ing = (g>>3) + 1; 
@@ -448,13 +449,67 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 	}
 
 	size = Width * Height * Depth;
+        
+        #ifdef ALTIVEC
+            register ILuint v_size = size>>4;
+            register ILuint pos = 0;
+            v_size = v_size /3;
+            register vector unsigned char d0,d1,d2;
+            register vector unsigned char red[3],blu[3],green[3];
+            
+            register union{
+                vector unsigned char vec;
+                vector unsigned int load;
+            } mask_1, mask_2, mask_3;
+            
+            mask_1.load = (vector unsigned int){0xFF0000FF,0x0000FF00,0x00FF0000,0xFF0000FF};
+            mask_2.load = (vector unsigned int){0x00FF0000,0xFF0000FF,0x0000FF00,0x00FF0000};
+            mask_2.load = (vector unsigned int){0x0000FF00,0x00FF0000,0xFF0000FF,0x0000FF00};
+            
+            while( v_size >= 0 ) {
+                d0 = vec_ld(pos,TempImage->Data);
+                d1 = vec_ld(pos+16,TempImage->Data);
+                d2 = vec_ld(pos+32,TempImage->Data);
+                
+                red[0] =   vec_and(d0,mask_1.vec);
+                green[0] = vec_and(d0,mask_2.vec);
+                blu[0] =   vec_and(d0,mask_3.vec);
+                
+                red[1] =   vec_and(d1,mask_3.vec);
+                green[1] = vec_and(d1,mask_1.vec);
+                blu[1] =   vec_and(d1,mask_2.vec);
+                
+                red[2] =   vec_and(d2,mask_2.vec);
+                green[2] = vec_and(d2,mask_3.vec);
+                blu[2] =   vec_and(d2,mask_1.vec);
+                
+                vec_st(red[0],pos,Ir);
+                vec_st(red[1],pos+16,Ir);
+                vec_st(red[2],pos+32,Ir);
+                
+                vec_st(blu[0],pos,Ib);
+                vec_st(blu[1],pos+16,Ib);
+                vec_st(blu[2],pos+32,Ib);
+                
+                vec_st(green[0],pos,Ig);
+                vec_st(green[1],pos+16,Ig);
+                vec_st(green[2],pos+32,Ig);
+                
+                pos += 48;
+            }
+            size -= pos;
+        #endif
 
 	for (k = 0; k < size; k++) {
-		Ir[k] = TempImage->Data[k * 3];
+                Ir[k] = TempImage->Data[k * 3];
 		Ig[k] = TempImage->Data[k * 3 + 1];
 		Ib[k] = TempImage->Data[k * 3 + 2];
 	}
-
+        
+        #ifdef ALTIVEC
+           size = Width * Height * Depth;
+        #endif
+        
 	// Set new colors number
 	K = NumCols;
 
@@ -462,12 +517,13 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 		// Begin Wu's color quantization algorithm
 
 		// May have "leftovers" from a previous run.
-		memset(gm2, 0, 33 * 33 * 33 * sizeof(ILfloat));
-		memset(wt,  0, 33 * 33 * 33 * sizeof(ILint));
-		memset(mr,  0, 33 * 33 * 33 * sizeof(ILint));
-		memset(mg,  0, 33 * 33 * 33 * sizeof(ILint));
-		memset(mb,  0, 33 * 33 * 33 * sizeof(ILint));
-
+		
+                imemclear(gm2, 33 * 33 * 33 * sizeof(ILfloat));
+                imemclear(wt, 33 * 33 * 33 * sizeof(ILint));
+                imemclear(mr, 33 * 33 * 33 * sizeof(ILint));
+                imemclear(mg, 33 * 33 * 33 * sizeof(ILint));
+                imemclear(mb, 33 * 33 * 33 * sizeof(ILint));
+                
 		if (!Hist3d(Ir, Ig, Ib, (ILint*)wt, (ILint*)mr, (ILint*)mg, (ILint*)mb, (ILfloat*)gm2))
 			goto error_label;
 

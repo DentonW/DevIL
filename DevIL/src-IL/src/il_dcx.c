@@ -480,7 +480,7 @@ ILimage *iUncompressDcxSmall(DCXHEAD *Header)
 		}
 
 		memcpy(Image->Pal.Palette, Header->ColMap, 16 * 3);
-		memset(Image->Data, 0, Image->SizeOfData);  // Since we do a += later.
+		imemclear(Image->Data, Image->SizeOfData);  // Since we do a += later.
 
 		for (y = 0; y < Image->Height; y++) {
 			for (c = 0; c < Header->NumPlanes; c++) {

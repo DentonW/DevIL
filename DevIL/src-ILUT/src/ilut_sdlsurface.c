@@ -89,7 +89,7 @@ SDL_Surface * ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags)
 		Dest = Bitmap->pixels;
 		for (i = 0; i < ilutCurImage->Height; i++) {
 			memcpy(Dest, ilutCurImage->Data + i * ilutCurImage->Bps, ilutCurImage->Bps);
-			memset(Dest + ilutCurImage->Bps, 0, Pad);
+			imemclear(Dest + ilutCurImage->Bps, Pad);
 			Dest += Bitmap->pitch;
 		}
 	}

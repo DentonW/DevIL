@@ -16,7 +16,7 @@
 #include "il_manip.h"
 #include <limits.h>
 
-char *FName = NULL;
+static char *FName = NULL;
 
 /*----------------------------------------------------------------------------*/
 
@@ -203,9 +203,13 @@ ILboolean iLoadSgiInternal()
 /*----------------------------------------------------------------------------*/
 
 ILboolean iReadRleSgi(iSgiHeader *Head)
-{
-	ILuint  	ixTable, ixPlane, ixHeight,ixPixel, RleOff, RleLen;
-	ILuint		*OffTable=NULL, *LenTable=NULL, TableSize, Cur, ChanInt = 0;
+{       
+        #ifdef __LITTLE_ENDIAN__
+        ILuint ixTable;
+        #endif
+        ILuint 		ChanInt = 0;
+        ILuint  	ixPlane, ixHeight,ixPixel, RleOff, RleLen;
+	ILuint		*OffTable=NULL, *LenTable=NULL, TableSize, Cur;
 	ILubyte		**TempData=NULL;
 
 	if (!iNewSgi(Head))
@@ -234,8 +238,8 @@ ILboolean iReadRleSgi(iSgiHeader *Head)
 	TempData = (ILubyte**)ialloc(Head->ZSize * sizeof(ILubyte*));
 	if (TempData == NULL)
 		goto cleanup_error;
-	memset(TempData, 0, Head->ZSize * sizeof(ILubyte*));  // Just in case ialloc fails then cleanup_error.
-	for (ixPlane = 0; ixPlane < Head->ZSize; ixPlane++) {
+	imemclear(TempData, Head->ZSize * sizeof(ILubyte*));  // Just in case ialloc fails then cleanup_error.
+        for (ixPlane = 0; ixPlane < Head->ZSize; ixPlane++) {
 		TempData[ixPlane] = (ILubyte*)ialloc(Head->XSize * Head->YSize * Head->Bpc);
 		if (TempData[ixPlane] == NULL)
 			goto cleanup_error;
@@ -276,10 +280,12 @@ ILboolean iReadRleSgi(iSgiHeader *Head)
 				iCurImage->Data[ixPixel + ixPlane + 1] = TempData[ixPlane][ChanInt + 1];
 		}
 	}
-
+        
+        #ifdef __LITTLE_ENDIAN__
 	if (Head->Bpc == 2)
 		sgiSwitchData(iCurImage->Data, iCurImage->SizeOfData);
-
+        #endif
+        
 	ifree(OffTable);
 	ifree(LenTable);
 
@@ -363,7 +369,8 @@ ILint iGetScanLine(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length)
 ILboolean iReadNonRleSgi(iSgiHeader *Head)
 {
 	ILuint		i, c;
-	ILint		ChanInt = 0, ChanSize;
+	// ILint		ChanInt = 0; Unused
+        ILint 		ChanSize;
 	ILboolean	Cache = IL_FALSE;
 
 	if (!iNewSgi(Head)) {
@@ -395,17 +402,32 @@ ILboolean iReadNonRleSgi(iSgiHeader *Head)
 /*----------------------------------------------------------------------------*/
 
 ILvoid sgiSwitchData(ILubyte *Data, ILuint SizeOfData)
-{
+{	
 	ILubyte	Temp;
 	ILuint	i;
-#ifdef __LITTLE_ENDIAN__
-	for (i = 0; i < SizeOfData; i += 2) {
-		Temp = Data[i];
-		Data[i] = Data[i+1];
-		Data[i+1] = Temp;
-	}
-	return;
-#endif
+        #ifdef ALTIVEC
+            i = 0;
+            union {
+                vector unsigned char vec;
+                vector unsigned int load;
+            }inversion_vector;
+            
+            inversion_vector.load  = (vector unsigned int)\
+                {0x01000302,0x05040706,0x09080B0A,0x0D0C0F0E};
+            while( i <= SizeOfData-16 ) {
+                vector unsigned char data = vec_ld(i,Data);
+                vec_perm(data,data,inversion_vector.vec);
+                vec_st(data,i,Data);
+                i+=16;
+            }
+            SizeOfData -= i;
+        #endif
+        for (i = 0; i < SizeOfData; i += 2) {
+                Temp = Data[i];
+                Data[i] = Data[i+1];
+                Data[i+1] = Temp;
+        }
+        return;
 }
 
 /*----------------------------------------------------------------------------*/

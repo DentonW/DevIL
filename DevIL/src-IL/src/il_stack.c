@@ -499,7 +499,7 @@ ILvoid* ILAPIENTRY ilRecalloc(ILvoid *Ptr, ILuint OldSize, ILuint NewSize)
 		Ptr = Temp;
 
 		if (OldSize < NewSize)
-			memset((ILubyte*)Temp + OldSize, 0, NewSize - OldSize);
+			imemclear((ILubyte*)Temp + OldSize, NewSize - OldSize);
 	}
 
 	return Temp;

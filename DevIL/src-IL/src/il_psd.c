@@ -522,7 +522,7 @@ ILuint *GetCompChanLen(PSDHEAD *Head)
 	}
 #endif
 
-	memset(ChanLen, 0, ChannelNum * sizeof(ILuint));
+	imemclear(ChanLen, ChannelNum * sizeof(ILuint));
 	for (c = 0; c < ChannelNum; c++) {
 		j = c * Head->Height;
 		for (i = 0; i < Head->Height; i++) {

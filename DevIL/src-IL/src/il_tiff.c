@@ -13,11 +13,13 @@
 
 #include "il_internal.h"
 #ifndef IL_NO_TIF
+
 #ifdef MACOSX
 #include <libtiff/tiffio.h>
 #else
 #include <tiffio.h>
 #endif
+
 #include <time.h>
 #include "il_manip.h"
 
@@ -481,10 +483,11 @@ ILboolean iSaveTiffInternal(char *Filename)
 		return IL_FALSE;
 	}
 
-	if (iGetHint(IL_COMPRESSION_HINT) == IL_USE_COMPRESSION)
+        // Packbits makes file bigger
+	/*if (iGetHint(IL_COMPRESSION_HINT) == IL_USE_COMPRESSION)
 		Compression = COMPRESSION_PACKBITS;
-	else
-		Compression = COMPRESSION_NONE;
+	else*/
+        Compression = COMPRESSION_NONE;
 
 	if (iCurImage->Format == IL_COLOUR_INDEX) {
 		if (ilGetBppPal(iCurImage->Pal.PalType) == 4)  // Preserve the alpha.
@@ -567,9 +570,9 @@ char *iMakeString()
 	static char TimeStr[255];
 	time_t		Time;
 	struct tm	*CurTime;
-
-	memset(TimeStr, 0, 255);
-
+    
+        imemclear(TimeStr, 255);
+        
 	time(&Time);
 #ifdef _WIN32
 	_tzset();

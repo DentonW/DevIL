@@ -673,7 +673,7 @@ ILuint ILAPIENTRY iluColoursUsed()
 	BUCKET *Heap[9];
 	ILuint HeapPos = 0, HeapPtr = 0, HeapSize;
 
-	memset(Buckets, 0, sizeof(BUCKET) * 8192);
+	imemclear(Buckets, sizeof(BUCKET) * 8192);
 	for (c = 0; c < 9; c++) {
 		Heap[c] = 0;
 	}
@@ -922,8 +922,8 @@ ILboolean ILAPIENTRY iluEqualize()
 	}
 
 	// Clear the tables.
-	memset(Histogram, 0, 256 * sizeof(ILuint));
-	memset(SumHistm, 0, 256 * sizeof(ILuint));
+	imemclear(Histogram, 256 * sizeof(ILuint));
+	imemclear(SumHistm, 256 * sizeof(ILuint));
 
 	LumImage = iConvertImage(iluCurImage, IL_LUMINANCE, IL_UNSIGNED_BYTE);
 	if (LumImage == NULL)
