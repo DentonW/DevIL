@@ -21,7 +21,7 @@
 //! Loads a palette from FileName into the current image's palette.
 ILboolean ILAPIENTRY ilLoadPal(const ILstring FileName)
 {
-	ILHANDLE	f;
+	FILE		*f;
 	ILboolean	IsPsp;
 	char		Head[8];
 
@@ -34,19 +34,23 @@ ILboolean ILAPIENTRY ilLoadPal(const ILstring FileName)
 		return ilLoadColPal(FileName);
 	}
 
-	f = iopenr(FileName);
+#ifndef _WIN32_WCE
+	PalFile = fopen(FileName, "rt");
+#else
+	PalFile = _wfopen(FileName, L"rt");
+#endif//_WIN32_WCE
 	if (f == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
 		return IL_FALSE;
 	}
 
-	iread(Head, 1, 8);
+	fread(Head, 1, 8, f);
 	if (!strncmp(Head, "JASC-PAL", 8))
 		IsPsp = IL_TRUE;
 	else
 		IsPsp = IL_FALSE;
 
-	icloser(f);
+	fclose(f);
 
 	if (IsPsp)
 		return ilLoadJascPal(FileName);
