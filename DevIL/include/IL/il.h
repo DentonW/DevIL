@@ -385,17 +385,18 @@ typedef void			ILvoid;
 #define IL_IMAGE_WIDTH						0x0DE4
 #define IL_IMAGE_HEIGHT						0x0DE5
 #define IL_IMAGE_DEPTH						0x0DE6
-#define IL_IMAGE_SIZE_OF_DATA				0x0DE7
+#define IL_IMAGE_SIZE_OF_DATA                                   0x0DE7
 #define IL_IMAGE_BPP						0x0DE8
-#define IL_IMAGE_BYTES_PER_PIXEL			0x0DE8
-#define IL_IMAGE_BITS_PER_PIXEL				0x0DE9
+#define IL_IMAGE_BYTES_PER_PIXEL                                0x0DE8
+#define IL_IMAGE_BPP                                            0x0DE8
+#define IL_IMAGE_BITS_PER_PIXEL                                 0x0DE9
 #define IL_IMAGE_FORMAT						0x0DEA
 #define IL_IMAGE_TYPE						0x0DEB
 #define IL_PALETTE_TYPE						0x0DEC
 #define IL_PALETTE_SIZE						0x0DED
 #define IL_PALETTE_BPP						0x0DEE
 #define IL_PALETTE_NUM_COLS					0x0DEF
-#define IL_PALETTE_BASE_TYPE				0x0DF0
+#define IL_PALETTE_BASE_TYPE                                    0x0DF0
 #define IL_NUM_IMAGES						0x0DF1
 #define IL_NUM_MIPMAPS						0x0DF2
 #define IL_NUM_LAYERS						0x0DF3
@@ -410,7 +411,7 @@ typedef void			ILvoid;
 #define IL_IMAGE_OFFY						0x0DFC
 #define IL_IMAGE_CUBEFLAGS					0x0DFD
 #define IL_IMAGE_ORIGIN						0x0DFE
-
+#define IL_IMAGE_CHANNELS                                       0x0DFF
 
 //
 // Section shamelessly modified from the glut header.
