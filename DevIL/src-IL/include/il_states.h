@@ -82,6 +82,10 @@ typedef struct IL_STATES
 	char		*ilPngAuthName;
 	char		*ilPngTitle;
 	char		*ilPngDescription;
+	char		*ilTifDescription;
+	char		*ilTifHostComputer;
+	char		*ilTifDocumentName;
+	char		*ilTifAuthName;
 	char		*ilCHeader;
 
 
