@@ -24,7 +24,7 @@
 				Optimization="0"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\libjpeg___Win32_Debug/LibJpeg.pch"
 				AssemblerListingLocation=".\libjpeg___Win32_Debug/"
@@ -75,7 +75,7 @@
 				InlineFunctionExpansion="1"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="TRUE"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\libjpeg___Win32_Dynamic/LibJpeg.pch"
@@ -127,7 +127,7 @@
 				InlineFunctionExpansion="1"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="TRUE"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\libjpeg___Win32_Release/LibJpeg.pch"
@@ -1379,21 +1379,24 @@
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\include"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\include
+"
 						Outputs="..\include\$(InputName).h"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Dynamic|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\include"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\include
+"
 						Outputs="..\include\$(InputName).h"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\include"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\include
+"
 						Outputs="..\include\$(InputName).h"/>
 				</FileConfiguration>
 			</File>
@@ -1418,21 +1421,24 @@
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\include"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\include
+"
 						Outputs="..\include\$(InputName).h"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Dynamic|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\include"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\include
+"
 						Outputs="..\include\$(InputName).h"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\include"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\include
+"
 						Outputs="..\include\$(InputName).h"/>
 				</FileConfiguration>
 			</File>
@@ -1445,21 +1451,24 @@
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\include"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\include
+"
 						Outputs="..\include\$(InputName).h"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Dynamic|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\include"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\include
+"
 						Outputs="..\include\$(InputName).h"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\include"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\include
+"
 						Outputs="..\include\$(InputName).h"/>
 				</FileConfiguration>
 			</File>

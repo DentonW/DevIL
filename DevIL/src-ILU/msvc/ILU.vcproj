@@ -26,7 +26,7 @@
 				AdditionalIncludeDirectories="../include;../../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ILU_EXPORTS"
 				StringPooling="TRUE"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\../src/obj/dynamic/ILU.pch"
@@ -39,10 +39,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="DevIL_DLL.lib"
 				OutputFile="$(OutDir)/DevILU.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="E:\XIX\S\sourceforge\DevIL\lib"
+				AdditionalLibraryDirectories="..\..\lib"
 				ModuleDefinitionFile=".\ilu.def"
 				ProgramDatabaseFile=".\../../lib/ilu-l.pdb"
 				ImportLibrary="$(OutDir)/DevILU_DLL.lib"
@@ -90,7 +91,7 @@
 				AdditionalIncludeDirectories="../include;../../include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;ILU_EXPORTS"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\../src/obj/debug/ILU.pch"
 				AssemblerListingLocation=".\../src/obj/debug/"
@@ -103,7 +104,8 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/DevILU_DBG.lib"/>
+				OutputFile="$(OutDir)/DevILU_DBG.lib"
+				IgnoreDefaultLibraryNames=""/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
@@ -146,7 +148,7 @@
 				AdditionalIncludeDirectories="../include;../../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ILU_EXPORTS"
 				StringPooling="TRUE"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\../src/obj/ILU.pch"
@@ -159,7 +161,8 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/DevILU.lib"/>
+				OutputFile="$(OutDir)/DevILU.lib"
+				IgnoreDefaultLibraryNames="DevIL.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
