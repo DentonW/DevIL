@@ -31,12 +31,12 @@ ILboolean ilutWin32Init()
 }
 
 
-HBITMAP ILAPIENTRY ilutConvertToHBitmap(HDC hDC)
+ILAPI HBITMAP	ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 {
-	ILubyte		*Data;
+	ILubyte		*Data, *DataBackup;
 	HBITMAP		hBitmap;
 	ILimage		*TempImage;
-	ILuint		pad, i, j, k, l, m, n;
+	ILuint		pad, i, j, k, l, m, n, DepthBackup;
 	ILpal		*palImg;
 	ILboolean	alloc_buffer;
 
@@ -50,6 +50,19 @@ HBITMAP ILAPIENTRY ilutConvertToHBitmap(HDC hDC)
 		ilSetError(ILUT_ILLEGAL_OPERATION);
 		return NULL;
 	}
+
+	//check if the image has the wanted slice
+	if (slice < 0 || slice >= ilutCurImage->Depth) {
+		ilSetError(ILUT_INVALID_PARAM);
+		return NULL;
+	}
+
+	//fool iConvertImage into thinking that the current image has
+	//only one slice, the one we want:
+	DepthBackup = ilutCurImage->Depth;
+	DataBackup = ilutCurImage->Data;
+	ilutCurImage->Depth = 1;
+	ilutCurImage->Data += ilutCurImage->SizeOfPlane*slice;
 
 	if (ilutCurImage->Type != IL_UNSIGNED_BYTE)
 		TempImage = iConvertImage(ilutCurImage, ilutCurImage->Format, IL_UNSIGNED_BYTE);
@@ -183,6 +196,10 @@ HBITMAP ILAPIENTRY ilutConvertToHBitmap(HDC hDC)
 		ilCloseImage(TempImage);
 	}
 
+	//restore original data
+	ilutCurImage->Data = DataBackup;
+	ilutCurImage->Depth = DepthBackup;
+
 	SetDIBits(hDC, hBitmap, 0, ilutCurImage->Height, Data, info, DIB_RGB_COLORS);
 
 	if(alloc_buffer)
@@ -191,6 +208,10 @@ HBITMAP ILAPIENTRY ilutConvertToHBitmap(HDC hDC)
 	return hBitmap;
 }
 
+HBITMAP ILAPIENTRY ilutConvertToHBitmap(HDC hDC)
+{
+	return ilutConvertSliceToHBitmap(hDC, 0);
+}
 
 ILubyte* ILAPIENTRY iGetPaddedData(ILimage *Image)
 {
