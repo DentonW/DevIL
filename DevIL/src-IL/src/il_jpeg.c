@@ -283,14 +283,15 @@ devil_jpeg_read_init (j_decompress_ptr cinfo)
 // this function is called. The caller must call jpeg_finish_decompress because
 // the caller may still need decompressor after calling this for e.g. examining
 // saved markers.
-ILboolean ILAPIENTRY ilLoadFromJpegStruct(j_decompress_ptr JpegInfo)
+ILboolean ILAPIENTRY ilLoadFromJpegStruct(ILvoid *_JpegInfo)
 {
 	// sam. void (*errorHandler)(j_common_ptr);
 	ILubyte *TempPtr[1];
+	j_decompress_ptr JpegInfo = (j_decompress_ptr)_JpegInfo;
 
 	// sam. errorHandler = JpegInfo->err->error_exit;
 	// sam. JpegInfo->err->error_exit = ExitErrorHandle;
-	jpeg_start_decompress(JpegInfo);
+	jpeg_start_decompress((j_decompress_ptr)JpegInfo);
 
 	if (!ilTexImage(JpegInfo->output_width, JpegInfo->output_height, 1, (ILubyte)JpegInfo->output_components, 0, IL_UNSIGNED_BYTE, NULL)) {
 		return IL_FALSE;
@@ -488,12 +489,13 @@ ILboolean ilSaveJpegL(ILvoid *Lump, ILuint Size)
 // is also responsible for calling jpeg_finish_compress in case the
 // caller still needs to compressor for something.
 // 
-ILboolean ILAPIENTRY ilSaveFromJpegStruct(j_compress_ptr JpegInfo)
+ILboolean ILAPIENTRY ilSaveFromJpegStruct(ILvoid *_JpegInfo)
 {
 	void (*errorHandler)(j_common_ptr);
 	JSAMPROW	row_pointer[1];
 	ILimage		*Temp;
 	ILenum		Origin;
+	j_compress_ptr JpegInfo = (j_compress_ptr)_JpegInfo;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
