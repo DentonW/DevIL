@@ -72,7 +72,25 @@ range.  ilGetError() will return 0 (IL_NO_ERROR) if no error has occurred.
 Installation:
 -------------
 
-Copy this Framework inside the /Library/Framework folder and all the other framework inside a the folder /Library/Framework/IL.framework/Frameworks
+Copy this Framework inside the /Library/Framework folder.
+Then you will need to install the proper libraries.
+If you whish to build a framework all the libraries must be installed,if the 
+make script is used as build tool a selection of the supported formats can be
+done. All the libraries can be found in a binary pkg or downloaded from
+the respective sites. omore info at http://openil.sourceforge.net/download.php.
+libmng and liblcms aren't still available in binary version due to linker problem.
+to install lcms use:
+
+./configure --prefix=/usr/local
+make
+sudo make install
+
+for libmng:
+sh autogen.sh --enable-PIC --enable-shared --enable-static --prefix=/usr/local
+make
+sudo make install
+
+
 
 
 Usage:
