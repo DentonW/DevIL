@@ -724,7 +724,7 @@ ILboolean iSaveTargaInternal()
 	ipad(324 - ilStrLen(AuthComment));
 
 	// Write time/date
-	GetDateTime(&Month, &Day, &Year, &Hour, &Minute, &Second);
+	iGetDateTime(&Month, &Day, &Year, &Hour, &Minute, &Second);
 	SaveLittleUShort((ILushort)Month);
 	SaveLittleUShort((ILushort)Day);
 	SaveLittleUShort((ILushort)Year);
@@ -804,7 +804,8 @@ ILvoid iMakeString(char *Str)
 }*/
 
 
-ILvoid GetDateTime(ILuint *Month, ILuint *Day, ILuint *Yr, ILuint *Hr, ILuint *Min, ILuint *Sec)
+//changed name to iGetDateTime on 20031221 to fix bug 830196
+ILvoid iGetDateTime(ILuint *Month, ILuint *Day, ILuint *Yr, ILuint *Hr, ILuint *Min, ILuint *Sec)
 {
 #ifdef DJGPP	
 	struct date day;
