@@ -42,7 +42,7 @@ __inline__ ILvoid *vec_calloc( ILuint count, ILuint size ) {
     return (void*)b;
 }
 
-ILvoid *vec_align_buffer( ILvoid *buffer, ILuint size ) {
+ILvoid *ivec_align_buffer( ILvoid *buffer, ILuint size ) {
     if( (size_t)buffer % 16 != 0 ) {
         void *aligned_buffer = vec_malloc( size );
         memcpy( aligned_buffer, buffer, size );

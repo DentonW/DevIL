@@ -70,7 +70,7 @@ ILAPI ILvoid*	ILAPIENTRY ialloc(ILuint Size);
 ILAPI ILvoid	ILAPIENTRY ifree(ILvoid *Ptr);
 ILAPI ILvoid*	ILAPIENTRY icalloc(ILuint Size, ILuint Num);
 #ifdef ALTIVEC_GCC
-ILAPI ILvoid*	ILAPIENTRY vec_align_buffer(ILvoid *buffer, ILuint size);
+ILAPI ILvoid*	ILAPIENTRY ivec_align_buffer(ILvoid *buffer, ILuint size);
 #endif
 
 // Internal library functions in IL
