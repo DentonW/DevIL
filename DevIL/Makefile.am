@@ -4,8 +4,8 @@ SUBDIRS      = src-IL src-ILU src-ILUT include
 DIST_SUBDIRS = src-IL src-ILU src-ILUT include
 EXTRA_DIST = README.unix   README.win \
              Libraries.txt CREDITS \
-             VERSION BUGS  MSVC++.txt \
-	     DevIL.dsw
+             VERSION       BUGS \
+             MSVC++.txt
 
 dist-hook:
 	cp -Rf "libtools"      $(distdir)
