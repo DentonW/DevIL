@@ -169,8 +169,8 @@ jpeg_abort_decompress
 jpeg_abort
 jpeg_destroy
 jpeg_resync_to_restart
-jpeg_copy_key_exif_parameters
-jpeg_extract_exif_entries
-jpeg_init_exif_field
-jpeg_build_exif_marker
-jpeg_init_exif_field_table
+;jpeg_copy_key_exif_parameters
+;jpeg_extract_exif_entries
+;jpeg_init_exif_field
+;jpeg_build_exif_marker
+;jpeg_init_exif_field_table
