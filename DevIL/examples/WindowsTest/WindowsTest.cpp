@@ -6,7 +6,7 @@
 //
 // Filename: testil/windowstest/windowstest.c
 //
-// Description:  Full GDI test application for DevIL.
+// Description: Full GDI test application for DevIL.
 //
 // Note:  This requires FluidStudio's Colour Picker library to compile
 //			properly (available at http://www.fluidstudios.com/publications.html).
@@ -294,8 +294,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	unsigned int	currentColor = 0x80000000;
 	unsigned int	originalColor = 0x80000000;
-	bool		userClickedOK;
-	ILclampf	Red, Green, Blue;
+	bool			userClickedOK;
+	ILclampf		Red, Green, Blue;
+	ILubyte			*AlphaChannel;
 
 	switch (message)
 	{
@@ -681,6 +682,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 				case ID_CONVERT_LUMINANCE:
 					ilConvertImage(IL_LUMINANCE, ilGetInteger(IL_IMAGE_TYPE));
+					break;
+
+				case ID_EDIT_VIEWALPHA:
+					AlphaChannel = ilGetAlpha(IL_UNSIGNED_BYTE);
+					ilTexImage(ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
+						ilGetInteger(IL_IMAGE_DEPTH), 1, IL_LUMINANCE, IL_UNSIGNED_BYTE, AlphaChannel);
+					free(AlphaChannel);
 					break;
 
 				case ID_EFFECTS_FLIP:

@@ -149,6 +149,7 @@ BEGIN
         MENUITEM "Rgba",                        ID_CONVERT_RGBA
         MENUITEM "&Bgr",                        ID_CONVERT_BGR
         MENUITEM "Bgra",                        ID_CONVERT_BGRA
+        MENUITEM "&Alpha",                      ID_EDIT_VIEWALPHA
         MENUITEM "Batch Convert",               ID_BATCHCONVERT
     END
     POPUP "&Edit"

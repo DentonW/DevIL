@@ -22,6 +22,8 @@
 
 int isBigEndian;
 
+ILvoid InitSDL()
+{
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 	isBigEndian = 1;
 	rmask = 0x000000FF;
@@ -34,8 +36,9 @@ int isBigEndian;
 	gmask = 0x0000FF00;
 	bmask = 0x000000FF;
 	amask = 0;
-
 #endif
+	return;
+}
 
 //ILboolean ilConvertPal(ILenum DestFormat);
 
@@ -49,11 +52,12 @@ SDL_Surface * ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags)
 	ILubyte	*Dest;
 
 	ilutCurImage = ilGetCurImage();
-
 	if (ilutCurImage == NULL) {
 		ilSetError(ILUT_ILLEGAL_OPERATION);
 		return NULL;
 	}
+
+	InitSDL();
 
 	// Should be IL_BGR(A).
 	if (ilutCurImage->Format == IL_RGB || ilutCurImage->Format == IL_RGBA) {
@@ -133,7 +137,6 @@ SDL_Surface* ILAPIENTRY ilutSDLSurfaceLoadImage(char *FileName)
 
 	iBindImageTemp();
 	if (!ilLoadImage(FileName)) {
-		ilDeleteImages(1, &ImgId);
 		return NULL;
 	}
 
