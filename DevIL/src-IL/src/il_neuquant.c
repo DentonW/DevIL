@@ -398,12 +398,13 @@ ILvoid learn()
 ILimage *iNeuQuant(ILimage *Image)
 {
 	ILimage	*TempImage, *NewImage;
-	ILuint	sample = 15, i, j;
+	ILuint	sample, i, j;
 
 	NewImage = iCurImage;
 	iCurImage = Image;
 	TempImage = iConvertImage(iCurImage, IL_BGR, IL_UNSIGNED_BYTE);
 	iCurImage = NewImage;
+	sample = ilGetInteger(IL_NEU_QUANT_SAMPLE);
 
 	if (TempImage == NULL)
 		return NULL;
