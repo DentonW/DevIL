@@ -599,6 +599,16 @@ ILboolean ReadMipmaps()
 
 		if (!ReadData())
 			goto mip_fail;
+
+		if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
+			Image->DxtcData = (ILubyte*)ialloc(Head.LinearSize);
+			if (Image->DxtcData != NULL) {
+				Image->DxtcFormat = CompFormat - PF_DXT1 + IL_DXT1;
+				Image->DxtcSize = Head.LinearSize;
+				memcpy(Image->DxtcData, CompData, Image->DxtcSize);
+			}
+		}
+		
 		if (!Decompress())
 			goto mip_fail;
 	}
@@ -627,7 +637,8 @@ ILboolean DecompressDXT1()
 {
 	int			x, y, z, i, j, k, Select;
 	ILubyte		*Temp;
-	Color565	*color_0, *color_1;
+//	Color565	*color_0, *color_1;
+	ILushort	*color_0, *color_1;
 	Color8888	colours[4], *col;
 	ILuint		bitmask, Offset;
 
@@ -637,19 +648,21 @@ ILboolean DecompressDXT1()
 		for (y = 0; y < Height; y += 4) {
 			for (x = 0; x < Width; x += 4) {
 
-				color_0 = ((Color565*)Temp);
-				color_1 = ((Color565*)(Temp+2));
+//				color_0 = ((Color565*)Temp);
+//				color_1 = ((Color565*)(Temp+2));
+				color_0 = ((ILushort*)Temp);
+				color_1 = ((ILushort*)(Temp+2));
 				bitmask = ((ILuint*)Temp)[1];
 				Temp += 8;
 
-				colours[0].r = color_0->nRed << 3;
-				colours[0].g = color_0->nGreen << 2;
-				colours[0].b = color_0->nBlue << 3;
+				colours[0].r = ((*color_0 & 0xf800) >> 8);
+				colours[0].g = ((*color_0 & 0x07e0) >> 3);
+				colours[0].b = (*color_0 & 0x001f) << 3;
 				colours[0].a = 0xFF;
 
-				colours[1].r = color_1->nRed << 3;
-				colours[1].g = color_1->nGreen << 2;
-				colours[1].b = color_1->nBlue << 3;
+				colours[1].r = ((*color_1 & 0xf800) >> 8);
+				colours[1].g = ((*color_1 & 0x07e0) >> 3);
+				colours[1].b = (*color_1 & 0x001f) << 3;
 				colours[1].a = 0xFF;
 
 
@@ -724,7 +737,8 @@ ILboolean DecompressDXT3()
 {
 	int			x, y, z, i, j, k, Select;
 	ILubyte		*Temp;
-	Color565	*color_0, *color_1;
+//	Color565	*color_0, *color_1;
+	ILushort	*color_0, *color_1;
 	Color8888	colours[4], *col;
 	ILuint		bitmask, Offset;
 	ILushort	word;
@@ -737,19 +751,19 @@ ILboolean DecompressDXT3()
 			for (x = 0; x < Width; x += 4) {
 				alpha = (DXTAlphaBlockExplicit*)Temp;
 				Temp += 8;
-				color_0 = ((Color565*)Temp);
-				color_1 = ((Color565*)(Temp+2));
+				color_0 = ((ILushort*)Temp);
+				color_1 = ((ILushort*)(Temp+2));
 				bitmask = ((ILuint*)Temp)[1];
 				Temp += 8;
 
-				colours[0].r = color_0->nRed << 3;
-				colours[0].g = color_0->nGreen << 2;
-				colours[0].b = color_0->nBlue << 3;
+				colours[0].r = ((*color_0 & 0xf800) >> 8);
+				colours[0].g = ((*color_0 & 0x07e0) >> 3);
+				colours[0].b = (*color_0 & 0x001f) << 3;
 				colours[0].a = 0xFF;
 
-				colours[1].r = color_1->nRed << 3;
-				colours[1].g = color_1->nGreen << 2;
-				colours[1].b = color_1->nBlue << 3;
+				colours[1].r = ((*color_1 & 0xf800) >> 8);
+				colours[1].g = ((*color_1 & 0x07e0) >> 3);
+				colours[1].b = (*color_1 & 0x001f) << 3;
 				colours[1].a = 0xFF;
 
 				// Four-color block: derive the other two colors.    
@@ -818,7 +832,8 @@ ILboolean DecompressDXT5()
 {
 	int			x, y, z, i, j, k, Select;
 	ILubyte		*Temp;
-	Color565	*color_0, *color_1;
+//	Color565	*color_0, *color_1;
+	ILushort	*color_0, *color_1;
 	Color8888	colours[4], *col;
 	ILuint		bitmask, Offset;
 	ILubyte		alphas[8], *alphamask;
@@ -834,19 +849,19 @@ ILboolean DecompressDXT5()
 				alphas[1] = Temp[1];
 				alphamask = Temp + 2;
 				Temp += 8;
-				color_0 = ((Color565*)Temp);
-				color_1 = ((Color565*)(Temp+2));
+				color_0 = ((ILushort*)Temp);
+				color_1 = ((ILushort*)(Temp+2));
 				bitmask = ((ILuint*)Temp)[1];
 				Temp += 8;
 
-				colours[0].r = color_0->nRed << 3;
-				colours[0].g = color_0->nGreen << 2;
-				colours[0].b = color_0->nBlue << 3;
+				colours[0].r = ((*color_0 & 0xf800) >> 8);
+				colours[0].g = ((*color_0 & 0x07e0) >> 3);
+				colours[0].b = (*color_0 & 0x001f) << 3;
 				colours[0].a = 0xFF;
 
-				colours[1].r = color_1->nRed << 3;
-				colours[1].g = color_1->nGreen << 2;
-				colours[1].b = color_1->nBlue << 3;
+				colours[1].r = ((*color_1 & 0xf800) >> 8);
+				colours[1].g = ((*color_1 & 0x07e0) >> 3);
+				colours[1].b = (*color_1 & 0x001f) << 3;
 				colours[1].a = 0xFF;
 
 				// Four-color block: derive the other two colors.    

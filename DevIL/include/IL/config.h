@@ -9,7 +9,7 @@
 //#define IL_NO_LCMS
 
 #define ILUT_USE_OPENGL
-//#define ILUT_USE_DIRECTX8
+#define ILUT_USE_DIRECTX8
 #define ILUT_USE_WIN32
 
 #endif /* __CONFIG_H__ */

@@ -66,7 +66,7 @@ ILboolean iSaveDdsInternal()
 {
 	ILenum	DXTCFormat;
 	ILuint	counter, numMipMaps;
-	ILubyte	*CurData = NULL;
+	ILubyte	*CurData;
 
 	if (ilNextPower2(iCurImage->Width) != iCurImage->Width ||
 		ilNextPower2(iCurImage->Height) != iCurImage->Height ||
@@ -186,6 +186,9 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat)
 
 ILuint ILAPIENTRY ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize, ILenum DXTCFormat)
 {
+	ILubyte	*CurData;
+	ILuint	retVal;
+
 	if (Buffer == NULL) {  // Return the number that will be written with a subsequent call.
 		if (ilNextPower2(iCurImage->Width) != iCurImage->Width ||
 			ilNextPower2(iCurImage->Height) != iCurImage->Height ||
@@ -211,8 +214,25 @@ ILuint ILAPIENTRY ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize, ILenum DXTCFo
 		return IL_MIN(BufferSize, iCurImage->DxtcSize);
 	}
 
+	if (iCurImage->Origin != IL_ORIGIN_UPPER_LEFT) {
+		CurData = iCurImage->Data;
+		iCurImage->Data = iGetFlipped(iCurImage);
+		if (iCurImage->Data == NULL) {
+			iCurImage->Data = CurData;
+			return 0;
+		}
+		ifree(CurData);
+	}
+
 	iSetOutputLump(Buffer, BufferSize);
-	return Compress(iCurImage, DXTCFormat);
+	retVal = Compress(iCurImage, DXTCFormat);
+
+	if (iCurImage->Origin != IL_ORIGIN_UPPER_LEFT) {
+		ifree(iCurImage->Data);
+		iCurImage->Data = CurData;
+	}
+
+	return retVal;
 }
 
 

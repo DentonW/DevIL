@@ -103,6 +103,7 @@ ILAPI ILvoid		ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param);
 #define ILUT_ALLEGRO	1
 #define ILUT_WIN32		2
 #define ILUT_DIRECT3D8	3
+#define	ILUT_DIRECT3D9	4
 
 
 ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
@@ -142,7 +143,7 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 
 // ImageLib Utility Toolkit's OpenGL Functions
 #ifdef ILUT_USE_OPENGL
-	#ifdef _MSC_VER
+	#if defined(_MSC_VER) || defined(_WIN32)
 		//#define WIN32_LEAN_AND_MEAN
 		#include <windows.h>
 	#endif//_MSC_VER
@@ -178,7 +179,7 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 
 // ImageLib Utility Toolkit's SDL Functions
 #ifdef ILUT_USE_SDL
-	#include <SDL/SDL.h>
+	#include <SDL.h>
 	ILAPI SDL_Surface*	ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags);
 	ILAPI SDL_Surface*	ILAPIENTRY ilutSDLSurfaceLoadImage(const ILstring FileName);
 	ILAPI ILboolean		ILAPIENTRY ilutSDLSurfaceFromBitmap(SDL_Surface *Bitmap);
@@ -194,7 +195,7 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 // ImageLib Utility Toolkit's Win32 GDI Functions
 #ifdef ILUT_USE_WIN32
 	#ifdef _WIN32
-		#define WIN32_LEAN_AND_MEAN
+		//#define WIN32_LEAN_AND_MEAN
 		#include <windows.h>
 		ILAPI HBITMAP	ILAPIENTRY ilutConvertToHBitmap(HDC hDC);
 		ILAPI ILvoid	ILAPIENTRY ilutFreePaddedData(ILubyte *Data);
@@ -215,11 +216,33 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 #endif//ILUT_USE_WIN32
 
 
+#ifdef ILUT_USE_DIRECTX9
+	#ifdef _WIN32
+		#include <d3d9.h>
+//		ILAPI ILvoid	ILAPIENTRY ilutD3D9MipFunc(ILuint NumLevels);
+		ILAPI IDirect3DTexture9* ILAPIENTRY ilutD3D9Texture(IDirect3DDevice9 *Device);
+		ILAPI IDirect3DVolumeTexture9* ILAPIENTRY ilutD3D9VolumeTexture(IDirect3DDevice9 *Device);
+		ILAPI ILboolean	ILAPIENTRY ilutD3D9TexFromFile(IDirect3DDevice9 *Device, char *FileName, IDirect3DTexture9 **Texture);
+		ILAPI ILboolean	ILAPIENTRY ilutD3D9VolTexFromFile(IDirect3DDevice9 *Device, char *FileName, IDirect3DVolumeTexture9 **Texture);
+		ILAPI ILboolean	ILAPIENTRY ilutD3D9TexFromFileInMemory(IDirect3DDevice9 *Device, ILvoid *Lump, ILuint Size, IDirect3DTexture9 **Texture);
+		ILAPI ILboolean	ILAPIENTRY ilutD3D9VolTexFromFileInMemory(IDirect3DDevice9 *Device, ILvoid *Lump, ILuint Size, IDirect3DVolumeTexture9 **Texture);
+		ILAPI ILboolean	ILAPIENTRY ilutD3D9TexFromFileHandle(IDirect3DDevice9 *Device, ILHANDLE File, IDirect3DTexture9 **Texture);
+		ILAPI ILboolean	ILAPIENTRY ilutD3D9VolTexFromFileHandle(IDirect3DDevice9 *Device, ILHANDLE File, IDirect3DVolumeTexture9 **Texture);
+		// These two are not tested yet.
+		ILAPI ILboolean ILAPIENTRY ilutD3D9TexFromResource(IDirect3DDevice9 *Device, HMODULE SrcModule, char *SrcResource, IDirect3DTexture9 **Texture);
+		ILAPI ILboolean ILAPIENTRY ilutD3D9VolTexFromResource(IDirect3DDevice9 *Device, HMODULE SrcModule, char *SrcResource, IDirect3DVolumeTexture9 **Texture);
+
+		ILAPI ILboolean ILAPIENTRY ilutD3D9LoadSurface(IDirect3DDevice9 *Device, IDirect3DSurface9 *Surface);
+	#endif//_WIN32
+#endif//ILUT_USE_DIRECTX9
+
 // ImageLib Utility Toolkit's DirectX 8 Functions
 #ifdef ILUT_USE_DIRECTX8
 	#ifdef _WIN32
+		#ifndef	_D3D8_H_
 		#include <d3d8.h>
-		ILAPI ILvoid	ILAPIENTRY ilutD3D8MipFunc(ILuint NumLevels);
+		#endif
+//		ILAPI ILvoid	ILAPIENTRY ilutD3D8MipFunc(ILuint NumLevels);
 		ILAPI IDirect3DTexture8* ILAPIENTRY ilutD3D8Texture(IDirect3DDevice8 *Device);
 		ILAPI IDirect3DVolumeTexture8* ILAPIENTRY ilutD3D8VolumeTexture(IDirect3DDevice8 *Device);
 		ILAPI ILboolean	ILAPIENTRY ilutD3D8TexFromFile(IDirect3DDevice8 *Device, char *FileName, IDirect3DTexture8 **Texture);
