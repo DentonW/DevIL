@@ -37,7 +37,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.39 $)
+AC_REVISION($Revision: 1.40 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -56,10 +56,20 @@ AM_DISABLE_STATIC
 AM_PROG_LIBTOOL
 AM_MAINTAINER_MODE
 
+
 dnl
 dnl Altives Check
 dnl
-AC_MSG_CHECKING(Altivec)
+AC_MSG_CHECKING(Altivec) 
+CFLAGS_TMP=$CFLAGS
+CFLAGS="-force_cpusubtype_ALL"
+AC_COMPILE_IFELSE([
+int main() {
+	asm("vspltisw v0,0");
+}], [AC_DEFINE([ALTIVEC])] [CFLAGS="$CFLAGS_TMP -force_cpusubtype_ALL";] [AC_MSG_RESULT(yes)], [CFLAGS="$CFLAGS_TMP";] [AC_MSG_RESULT(no)] );
+
+
+AC_MSG_CHECKING(Altivec gcc extension)
 CFLAGS_TMP=$CFLAGS
 CFLAGS="-faltivec"
 AC_COMPILE_IFELSE([
@@ -67,9 +77,9 @@ int main() {
 	vector unsigned int vec;
 	vec = vec_splat_u32(0);
 	return 0;
-}], [AC_DEFINE([ALTIVEC])]
-	[CFLAGS="$CFLAGS_TMP -faltivec";]
-	[AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)] );
+}], [AC_DEFINE([ALTIVEC_GCC])] [CFLAGS="$CFLAGS_TMP -faltivec";] [AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)] );
+ 
+
 
 CFLAGS="-Wall -funroll-loops -ffast-math -fomit-frame-pointer -fexpensive-optimizations $CFLAGS"
 LIBIL_CFLAGS="$CFLAGS"
@@ -529,6 +539,7 @@ AC_SUBST(LIBJPG)
 case "$target" in
 *-apple-darwin*)
     AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED)
+    AC_DEFINE(MAX_OS_X)
 esac
 
 if test "$no_tiff" = "no" ; then
