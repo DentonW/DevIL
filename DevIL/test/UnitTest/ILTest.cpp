@@ -77,6 +77,42 @@ void ILTest::TestilActiveImage()
   }
 }
 
+void ILTest::TestilBindImage()
+{
+  ILuint MainImage = 0;
+  ilBindImage(MainImage);
+//  CPPUNIT_ASSERT(ilGetError() == IL_ILLEGAL_OPERATION);
+
+  ilGenImages(1, &MainImage);
+  ilBindImage(MainImage);
+  CPPUNIT_ASSERT(ilGetError() == IL_NO_ERROR);
+
+  ilDeleteImages(1, &MainImage);
+  CPPUNIT_ASSERT(ilGetError() == IL_NO_ERROR);
+
+  ilBindImage(MainImage);
+//  CPPUNIT_ASSERT(ilGetError() == IL_ILLEGAL_OPERATION);
+}
+
+
+void ILTest::TestilClearColour()
+{
+  ilClearColour(1.0, 0.0, 0.0, 10.0);
+  CPPUNIT_ASSERT(ilGetError() == IL_NO_ERROR);
+}
+
+void ILTest::TestilClearImage()
+{
+  ilLoadImage(".\\Data\\Logo.png");
+  ilClearColour(1.0, 1.0, 0.0, 0.0);
+  const ILboolean lResult = ilClearImage();
+  CPPUNIT_ASSERT(lResult == IL_TRUE);
+  FILE * lBuffer = fopen(".\\results\\ilClearImage.bmp", "wb");
+  ilSaveF(IL_BMP,lBuffer);
+  fclose(lBuffer);
+
+}
+
 void ILTest::TestilSaveF()
 {
   FILE * lBuffer = fopen(".\\results\\result.bmp", "wb");
