@@ -176,12 +176,11 @@ ILboolean iBuild1DMipmaps_(ILuint Width)
 
 	for (c = 0; c < CurMipMap->Bpp; c++) {  // 8-12-2001
 		for (i = 0, j = 0; i < Width; i++) {
-			MipMap->Data[i * MipMap->Bpp + c] =
-				(CurMipMap->Data[j++ * MipMap->Bpp + c] +
-				 CurMipMap->Data[j++ * MipMap->Bpp + c]) >> 1;
+			MipMap->Data[i * MipMap->Bpp + c] =  CurMipMap->Data[(j++ * MipMap->Bpp) + c];
+                        MipMap->Data[i * MipMap->Bpp + c] += CurMipMap->Data[(j++ * MipMap->Bpp) + c];
+                        MipMap->Data[i * MipMap->Bpp + c] >>= 1;
 		}
 	}
-	
 	// 8-11-2001
 	CurMipMap = MipMap;
 	iBuild1DMipmaps_(MipMap->Width >> 1);
@@ -235,9 +234,9 @@ ILboolean iBuild1DMipmapsVertical_(ILuint Height)
 	for (c = 0; c < CurMipMap->Bpp; c++) {  // 8-12-2001
 		//j = 0;
 		for (i = 0, j = 0; i < Height; i++) {
-			MipMap->Data[i * MipMap->Bpp + c] =
-				(CurMipMap->Data[j++ * MipMap->Bpp + c] +
-				 CurMipMap->Data[j++ * MipMap->Bpp + c]) >> 1;
+			MipMap->Data[i * MipMap->Bpp + c] =  CurMipMap->Data[(j++ * MipMap->Bpp) + c];
+                        MipMap->Data[i * MipMap->Bpp + c] += CurMipMap->Data[(j++ * MipMap->Bpp) + c];
+                        MipMap->Data[i * MipMap->Bpp + c] >>= 1;
 		}
 	}
 	// 8-11-2001

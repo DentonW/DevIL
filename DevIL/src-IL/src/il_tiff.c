@@ -13,7 +13,11 @@
 
 #include "il_internal.h"
 #ifndef IL_NO_TIF
+#ifdef MACOSX
+#include <libtiff/tiffio.h>
+#else
 #include <tiffio.h>
+#endif
 #include <time.h>
 #include "il_manip.h"
 
@@ -557,7 +561,6 @@ ILboolean iSaveTiffInternal(char *Filename)
 }
 
 /*----------------------------------------------------------------------------*/
-
 // Makes a neat date string for the date field.
 char *iMakeString()
 {
@@ -573,7 +576,7 @@ char *iMakeString()
 #endif
 	CurTime = localtime(&Time);
 
-	strftime(TimeStr, 255, "%#c (%z)", CurTime);
+	strftime(TimeStr, 255, "%s (%z)", CurTime); // "%#c (%z)"	// %s was %c
 
 	return TimeStr;
 }
