@@ -52,8 +52,15 @@ HBITMAP ILAPIENTRY ilutConvertToHBitmap(HDC hDC)
 	if (TempImage == NULL)
 		return 0;
 
+	//changed 2003-09-09: use Temp!
+	ilSetCurImage(TempImage);
+
 	Data = ilutGetPaddedData();
 	if (Data == NULL) {
+		//added 2003-09-09: clean up
+		ilSetCurImage(ilutCurImage);
+		if (TempImage != ilutCurImage)
+			ilCloseImage(TempImage);
 		return 0;
 	}
 
@@ -62,6 +69,7 @@ HBITMAP ILAPIENTRY ilutConvertToHBitmap(HDC hDC)
 	/*DIB_PAL_COLORS*/
 	hBitmap = CreateDIBSection(hDC, &bmi, DIB_RGB_COLORS, (void**)&BmpBits, NULL, 0);
 	if (!hBitmap || !BmpBits) {
+		ilSetCurImage(ilutCurImage);
 		if (TempImage != ilutCurImage)
 			ilCloseImage(TempImage);
 		ilSetError(ILUT_ILLEGAL_OPERATION);
@@ -75,6 +83,9 @@ HBITMAP ILAPIENTRY ilutConvertToHBitmap(HDC hDC)
 	//SetBitmapBits(Bitmap, ilutCurImage->SizeOfData, ilutCurImage->Data);
 
 	ifree(Data);
+
+	//changed 2003-09-09: re-set the original current image
+	ilSetCurImage(ilutCurImage);
 
 	if (TempImage != ilutCurImage)
 		ilCloseImage(TempImage);
