@@ -165,11 +165,23 @@ ILboolean ilLoadTiffL(ILvoid *Lump, ILuint Size)
 
 /*----------------------------------------------------------------------------*/
 
+void warningHandler(const char* mod, const char* fmt, va_list ap)
+{
+	char buff[1024];
+	_vsnprintf(buff, 1024, fmt, ap);
+}
+
+void errorHandler(const char* mod, const char* fmt, va_list ap)
+{
+	char buff[1024];
+	_vsnprintf(buff, 1024, fmt, ap);
+}
+
 // Internal function used to load the Tiff.
 ILboolean iLoadTiffInternal()
 {
 	TIFF		*tif;
-	ILushort	bpp;
+	ILushort	bpp, photometric;
 	ILushort	*sampleinfo, extrasamples;
 	ILubyte		*pImageData;
 	ILuint		i, ProfileLen, DirCount = 0;
@@ -188,8 +200,12 @@ ILboolean iLoadTiffInternal()
 	TIFFSetWarningHandler(NULL);
 	TIFFSetErrorHandler(NULL);
 
-    tif = iTIFFOpen("r");
-    if (tif == NULL) {
+	//for debugging only
+	TIFFSetWarningHandler(warningHandler);
+	TIFFSetErrorHandler(errorHandler);
+
+		tif = iTIFFOpen("r");
+		if (tif == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
 		return IL_FALSE;
 	}
@@ -221,6 +237,11 @@ ILboolean iLoadTiffInternal()
 		TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &Image->Height);
 		TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &bpp);
 
+		//added 2003-08-31
+		//1 bpp tiffs are not neccessarily greyscale, they can
+		//have a palette (photometric == 3)...get this information
+		TIFFGetFieldDefaulted(tif, TIFFTAG_PHOTOMETRIC, &photometric);
+
 		if (bpp == 4) {
 			TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES, &extrasamples, &sampleinfo); 
 			if (!sampleinfo || sampleinfo[0] == EXTRASAMPLE_UNSPECIFIED) {
@@ -237,33 +258,16 @@ ILboolean iLoadTiffInternal()
 		Image->Type = IL_UNSIGNED_BYTE;
 
 		// Siigron: added u_long cast to shut up compiler warning
+		//TODO: get paletted tiffs as not-rgba-data??
+		//2003-08-31: changed flag from 1 (exit on error) to 0 (keep decoding)
+		//this lets me view text.tif, but can give crashes with unsupported
+		//tiffs...
+		//2003-09-04: keep flag 1 for official version for now
 		if (!TIFFReadRGBAImage(tif, Image->Width, Image->Height, (uint32*)Image->Data, 1)) {
 			TIFFClose(tif);
 			ilSetError(IL_LIB_TIFF_ERROR);
 			return IL_FALSE;
 		}
-
-
-	/*if (TIFFRGBAImageBegin(&img, tif, 0, emsg)) {
-	    size_t npixels;
-	    uint32* raster;
-
-	    npixels = img.width * img.height;
-	    raster = (uint32*) _TIFFmalloc(npixels * sizeof (uint32));
-	    if (raster != NULL) {
-			if (TIFFRGBAImageGet(&img, raster, img.width, img.height)) {
-				//...process raster data...
-			}
-			_TIFFfree(raster);
-	    }
-	    TIFFRGBAImageEnd(&img);
-	}
-	else {
-		TIFFClose(tif);
-		ilSetError(IL_LIB_TIFF_ERROR);
-		return IL_FALSE;
-	}*/
-
 
 		if (TIFFGetField(tif, TIFFTAG_ICCPROFILE, &ProfileLen, &Buffer)) {
 			if (Image->Profile && Image->ProfileSize)
@@ -277,7 +281,8 @@ ILboolean iLoadTiffInternal()
 			memcpy(Image->Profile, Buffer, ProfileLen);
 			Image->ProfileSize = ProfileLen;
 
-			_TIFFfree(Buffer);
+			//removed on 2003-08-24 as explained in bug 579574 on sourceforge
+			//_TIFFfree(Buffer);
 		}
 
 		Image->Origin = IL_ORIGIN_LOWER_LEFT;  // eiu...dunno if this is right
@@ -287,13 +292,19 @@ ILboolean iLoadTiffInternal()
 			break;
 	}
 
+	//TODO: put switch into the loop??
 	switch (bpp)
 	{
 		case 1:
-			ilConvertImage(IL_LUMINANCE, IL_UNSIGNED_BYTE);
+			//added 2003-08-31 to keep palettized tiffs colored
+			if(photometric != 3)
+			  ilConvertImage(IL_LUMINANCE, IL_UNSIGNED_BYTE);
+			else //strip alpha as tiff supports no alpha palettes
+				ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
 			break;
 
 		case 3:
+			//TODO: why the ifdef??
 #ifdef __LITTLE_ENDIAN__
 			ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
 #endif			
@@ -301,15 +312,18 @@ ILboolean iLoadTiffInternal()
 
 		case 4:
 			pImageData = iCurImage->Data;
-			
-#ifdef __LITTLE_ENDIAN__
+//removed on 2003-08-26...why was this here? libtiff should and does
+//take care of these things???
+/*			
+			//invert alpha
+			#ifdef __LITTLE_ENDIAN__
 			pImageData += 3;
 #endif			
-			
 			for (i = iCurImage->Width * iCurImage->Height; i > 0; i--) {
 				*pImageData ^= 255;
 				pImageData += 4;
 			}
+*/
 			break;
 	}
 
@@ -404,16 +418,16 @@ _tiffDummyUnmapProc(thandle_t fd, tdata_t base, toff_t size)
 
 TIFF *iTIFFOpen(char *Mode)
 {
-    TIFF *tif;
+	TIFF *tif;
 
 	tif = TIFFClientOpen("TIFFMemFile", Mode,
-						 NULL,
-					    _tiffFileReadProc, _tiffFileWriteProc,
-					    _tiffFileSeekProc, _tiffFileCloseProc,
+						NULL,
+						_tiffFileReadProc, _tiffFileWriteProc,
+						_tiffFileSeekProc, _tiffFileCloseProc,
 						_tiffFileSizeProc, _tiffDummyMapProc,
 						_tiffDummyUnmapProc);
 
-    return tif;
+	return tif;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -478,16 +492,16 @@ ILboolean iSaveTiffInternal(char *Filename)
 	char	Description[512];
 	ILimage	*TempImage;
 
-	if (iCurImage == NULL) {
+	if(iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
-        
+
 	if (iGetHint(IL_COMPRESSION_HINT) == IL_USE_COMPRESSION)
 		Compression = COMPRESSION_PACKBITS;
 	else
-        Compression = COMPRESSION_NONE;
+		Compression = COMPRESSION_NONE;
 
 	if (iCurImage->Format == IL_COLOUR_INDEX) {
 		if (ilGetBppPal(iCurImage->Pal.PalType) == 4)  // Preserve the alpha.
@@ -510,7 +524,7 @@ ILboolean iSaveTiffInternal(char *Filename)
 		return IL_FALSE;
 	}
 
-	sprintf(Description, "Tiff generated by %s", ilGetString(IL_VERSION));
+	sprintf(Description, "Tiff generated by %s", ilGetString(IL_VERSION_NUM));
 
 	TIFFSetField(File, TIFFTAG_IMAGEWIDTH, TempImage->Width);
 	TIFFSetField(File, TIFFTAG_IMAGELENGTH, TempImage->Height);
@@ -520,7 +534,7 @@ ILboolean iSaveTiffInternal(char *Filename)
 	TIFFSetField(File, TIFFTAG_SAMPLESPERPIXEL, TempImage->Bpp);
 	TIFFSetField(File, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
 	TIFFSetField(File, TIFFTAG_ROWSPERSTRIP, 1);
-	TIFFSetField(File, TIFFTAG_SOFTWARE, ilGetString(IL_VERSION));
+	TIFFSetField(File, TIFFTAG_SOFTWARE, ilGetString(IL_VERSION_NUM));
 	/*TIFFSetField(File, TIFFTAG_DOCUMENTNAME,
 						iGetString(IL_TIF_DOCUMENTNAME_STRING) ?
 						iGetString(IL_TIF_DOCUMENTNAME_STRING) : FileName);*/
