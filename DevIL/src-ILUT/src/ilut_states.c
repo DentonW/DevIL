@@ -141,9 +141,12 @@ ILvoid ILAPIENTRY ilutGetBooleanv(ILenum Mode, ILboolean *Param)
       		break;
 
 		case ILUT_GL_USE_S3TC:
-      		*Param = ilutStates[ilutCurrentPos].ilutOglConv;
+      		*Param = ilutStates[ilutCurrentPos].ilutUseS3TC;
       		break;
 
+		case ILUT_GL_GEN_S3TC:
+      		*Param = ilutStates[ilutCurrentPos].ilutGenS3TC;
+      		break;
 
 
 		default:

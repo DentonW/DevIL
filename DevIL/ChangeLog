@@ -33,6 +33,7 @@
 - Added .pix support.
 - Added .pxr support.
 - Added .xpm support.
+- Fixed MSVC++ post-build, thanks to Nick Marley.
 
 
 

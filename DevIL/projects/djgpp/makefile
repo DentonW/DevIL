@@ -1,6 +1,6 @@
 ###################################
 #    Djgpp Makefile for DevIL     #
-#    Last Modified:  02/01/2001   #
+#    Last Modified:  05/27/2002   #
 ###################################
 
 # Uncomment any of the following lines to define them

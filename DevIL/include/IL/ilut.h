@@ -2,7 +2,7 @@
 //
 // ImageLib Utility Toolkit Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/15/2002 <--Y2K Compliant! =]
+// Last modified: 05/28/2002 <--Y2K Compliant! =]
 //
 // Filename: il/ilut.h
 //
@@ -74,7 +74,7 @@ extern "C" {
 #define ILUT_GL_GEN_S3TC					0x0635
 #define ILUT_D3D_GEN_DXTC					0x0635
 #define ILUT_S3TC_FORMAT					0x0705
-#define ILUT_DXTC_FORMAT					0x0706
+#define ILUT_DXTC_FORMAT					0x0705
 
 
 // Values

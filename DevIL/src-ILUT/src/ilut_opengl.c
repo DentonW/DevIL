@@ -143,15 +143,15 @@ ILboolean ILAPIENTRY ilutGLTexImage(GLuint Level)
 	}
 
 #ifdef _MSC_VER
-	if (ilutGetBoolean(ILUT_GL_USE_S3TC)) {
-		if (ilutCurImage->DxtcData != NULL && ilutCurImage->DxtcSize != 0 && ilGLCompressed2D != NULL) {
+	if (ilutGetBoolean(ILUT_GL_USE_S3TC) && ilGLCompressed2D != NULL) {
+		if (ilutCurImage->DxtcData != NULL && ilutCurImage->DxtcSize != 0) {
 			DXTCFormat = GLGetDXTCNum(ilutCurImage->DxtcFormat);
-			ilGLCompressed2D(GL_TEXTURE_2D, 0, DXTCFormat, ilutCurImage->Width,
+			ilGLCompressed2D(GL_TEXTURE_2D, Level, DXTCFormat, ilutCurImage->Width,
 				ilutCurImage->Height, 0, ilutCurImage->DxtcSize, ilutCurImage->DxtcData);
 			return IL_TRUE;
 		}
 
-		if (ilutGetBoolean(ILUT_GL_GEN_S3TC) && ilGLCompressed2D != NULL) {
+		if (ilutGetBoolean(ILUT_GL_GEN_S3TC)) {
 			DXTCFormat = ilutGetInteger(ILUT_S3TC_FORMAT);
 
 			Size = ilGetDXTCData(NULL, 0, DXTCFormat);
@@ -166,7 +166,7 @@ ILboolean ILAPIENTRY ilutGLTexImage(GLuint Level)
 				}
 
 				DXTCFormat = GLGetDXTCNum(DXTCFormat);
-				ilGLCompressed2D(GL_TEXTURE_2D, 0, DXTCFormat, ilutCurImage->Width,
+				ilGLCompressed2D(GL_TEXTURE_2D, Level, DXTCFormat, ilutCurImage->Width,
 					ilutCurImage->Height, 0, Size, Buffer);
 				ifree(Buffer);
 				return IL_TRUE;
@@ -179,9 +179,8 @@ ILboolean ILAPIENTRY ilutGLTexImage(GLuint Level)
 	if (Image == NULL)
 		return IL_FALSE;
 
-	glTexImage2D(GL_TEXTURE_2D, 0, ilutGLFormat(Image->Format, Image->Bpp), Image->Width,
+	glTexImage2D(GL_TEXTURE_2D, Level, ilutGLFormat(Image->Format, Image->Bpp), Image->Width,
 				Image->Height, 0, Image->Format, Image->Type, Image->Data);
-
 
 	if (Image != ilutCurImage)
 		ilCloseImage(Image);

@@ -2,7 +2,7 @@
 '
 ' ImageLib Utility Toolkit Sources
 ' Copyright (C) 2000-2002 by Denton Woods
-' Last modified: 05/18/2002 <--Y2K Compliant! =]
+' Last modified: 05/28/2002 <--Y2K Compliant! =]
 '
 ' Filename: il/ilut.h
 '
@@ -15,19 +15,19 @@
 ' Web: http://www.scheutz.dk
 ' e-mail: sourcecode@scheutz.dk
 '
-' Last modified: 05/18/2002
+' Last modified: 05/28/2002
 ' Based on DevIL Ver. 1.5.0 headers
 '
 ' Filename: ilut.inc
 '
 ' Description: PB main include file for OpenILUT
 '
-' For information on use and download of OpenIL goto: http://openil.sourceforge.net/
+' For information on use and download of DevIL goto: http://openil.sourceforge.net/
 ' (Get docs and "End User Package")
 '
 ' Report errors in the Powerbasic includes to e-mail above.
 '
-' For general help on Powerbasic and OpenIL, try the forums at:
+' For general help on Powerbasic and DevIL, try the forums at:
 ' http://www.powerbasic.com
 '-----------------------------------------------------------------------------
 
@@ -66,8 +66,8 @@
 ' #endif'_WIN32
 
 
-%ILUT_VERSION_1_3_0 = 1
-%ILUT_VERSION = 130
+%ILUT_VERSION_1_5_0 = 1
+%ILUT_VERSION = 150
 
 
 ' Attribute Bits
@@ -77,12 +77,12 @@
 
 
 ' Error Types
-%ILUT_INVALID_ENUM      = &H0501&
+%ILUT_INVALID_ENUM          = &H0501&
 %ILUT_OUT_OF_MEMORY         = &H0502&
 %ILUT_INVALID_VALUE         = &H0505&
-%ILUT_ILLEGAL_OPERATION         = &H0506&
+%ILUT_ILLEGAL_OPERATION     = &H0506&
 %ILUT_INVALID_PARAM         = &H0509&
-%ILUT_COULD_NOT_OPEN_FILE       = &H050A&
+%ILUT_COULD_NOT_OPEN_FILE   = &H050A&
 %ILUT_STACK_OVERFLOW        = &H050E&
 %ILUT_STACK_UNDERFLOW       = &H050F&
 %ILUT_NOT_SUPPORTED         = &H0550&
@@ -95,6 +95,12 @@
 %ILUT_MAXTEX_WIDTH      = &H0630&
 %ILUT_MAXTEX_HEIGHT     = &H0631&
 %ILUT_MAXTEX_DEPTH      = &H0632&
+%ILUT_GL_USE_S3TC       = &H0634
+%ILUT_D3D_USE_DXTC      = &H0634
+%ILUT_GL_GEN_S3TC       = &H0635
+%ILUT_D3D_GEN_DXTC      = &H0635
+%ILUT_S3TC_FORMAT       = &H0705
+%ILUT_DXTC_FORMAT       = &H0706
 
 
 ' Values

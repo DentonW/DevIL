@@ -2,7 +2,7 @@
 '
 ' ImageLib Sources
 ' Copyright (C) 2000-2002 by Denton Woods
-' Last modified: 05/18/2002 <--Y2K Compliant! =]
+' Last modified: 05/28/2002 <--Y2K Compliant! =]
 '
 ' Filename: il/il.h
 '
@@ -15,7 +15,7 @@
 ' Web: http://www.scheutz.dk
 ' e-mail: sourcecode@scheutz.dk
 '
-' Last modified: 05/18/2002
+' Last modified: 05/28/2002
 ' Based on DevIL Ver. 1.5.0 headers
 '
 ' Filename: il.inc
@@ -65,6 +65,14 @@
 '%IL_NO_DDS
 '%IL_NO_DCX
 '%IL_NO_PSD
+'%IL_NO_PSP
+'%IL_NO_PXR
+'%IL_NO_RAW
+'%IL_NO_SGI
+'%IL_NO_TGA
+'%IL_NO_TIF
+'%IL_NO_WAL
+'%IL_NO_XPM
 
 '%IL_USE_IJL ' Whether we use the Intel Jpeg Library (else use libjpeg).
 
@@ -179,7 +187,6 @@
 %IL_RAW         = &H0430&
 %IL_MDL         = &H0431&
 %IL_WAL         = &H0432&
-%IL_OIL         = &H0433&
 %IL_LIF         = &H0434&
 %IL_MNG         = &H0435&
 %IL_JNG         = &H0435&
@@ -189,6 +196,9 @@
 %IL_PSD			= &H0439&
 %IL_EXIF		= &H043A&
 %IL_PSP			= &H043B&
+%IL_PIX			= &H043C&
+%IL_PXR			= &H043D&
+%IL_XPM			= &H043E&
 
 %IL_JASC_PAL	= &H0475&
 
@@ -267,22 +277,22 @@
 
 
 ' Hints
-%IL_FASTEST         = &H0660&
-%IL_LESS_MEM        = &H0661&
-%IL_DONT_CARE       = &H0662&
-%IL_MEM_SPEED_HINT      = &H0665&
-%IL_USE_COMPRESSION         = &H0666&
-%IL_NO_COMPRESSION      = &H0667&
-%IL_COMPRESSION_HINT        = &H0668&
+%IL_FASTEST				= &H0660&
+%IL_LESS_MEM			= &H0661&
+%IL_DONT_CARE			= &H0662&
+%IL_MEM_SPEED_HINT		= &H0665&
+%IL_USE_COMPRESSION		= &H0666&
+%IL_NO_COMPRESSION		= &H0667&
+%IL_COMPRESSION_HINT	= &H0668&
 
 
 ' Subimage types
-%IL_SUB_NEXT        = &H0680&
-%IL_SUB_MIPMAP      = &H0681&
-%IL_SUB_LAYER       = &H0682&
+%IL_SUB_NEXT			= &H0680&
+%IL_SUB_MIPMAP			= &H0681&
+%IL_SUB_LAYER			= &H0682&
 
 
-' Compression definitions (mostly for .oil)
+' Compression definitions
 %IL_COMPRESS_MODE       = &H0700&
 %IL_COMPRESS_NONE       = &H0701&
 %IL_COMPRESS_RLE        = &H0702&
@@ -313,32 +323,56 @@
 %IL_TIF_HOSTCOMPUTER_STRING	= &H071E&
 %IL_TIF_DOCUMENTNAME_STRING	= &H071F&
 %IL_TIF_AUTHNAME_STRING		= &H0720&
+%IL_JPG_SAVE_FORMAT			= &H0721&
+%IL_CHEAD_HEADER_STRING		= &H0722&
+%IL_PCD_PICNUM				= &H0723&
+
+
+' DXTC definitions
+%IL_DXTC_FORMAT				= &H0705&
+%IL_DXT1					= &H0706&
+%IL_DXT2					= &H0707&
+%IL_DXT3					= &H0708&
+%IL_DXT4					= &H0709&
+%IL_DXT5					= &H070A&
+%IL_DXT_NO_COMP				= &H070B&
+%IL_KEEP_DXTC_DATA			= &H070C&
+%IL_DXTC_DATA_FORMAT		= &H070D&
+
+
+' Cube map definitions
+%IL_CUBEMAP_POSITIVEX		= &H00000400&
+%IL_CUBEMAP_NEGATIVEX		= &H00000800&
+%IL_CUBEMAP_POSITIVEY		= &H00001000&
+%IL_CUBEMAP_NEGATIVEY		= &H00002000&
+%IL_CUBEMAP_POSITIVEZ		= &H00004000&
+%IL_CUBEMAP_NEGATIVEZ		= &H00008000&
 
 
 ' Values
-%IL_VERSION_NUM         = &H0DE2&
-%IL_IMAGE_WIDTH         = &H0DE4&
-%IL_IMAGE_HEIGHT        = &H0DE5&
-%IL_IMAGE_DEPTH         = &H0DE6&
-%IL_IMAGE_SIZE_OF_DATA  = &H0DE7&
-%IL_IMAGE_BPP           = &H0DE8&
-%IL_IMAGE_BYTES_PER_PIXEL       = &H0DE8&
-%IL_IMAGE_BITS_PER_PIXEL        = &H0DE9&
-%IL_IMAGE_FORMAT        = &H0DEA&
-%IL_IMAGE_TYPE          = &H0DEB&
-%IL_PALETTE_TYPE        = &H0DEC&
-%IL_PALETTE_SIZE        = &H0DED&
-%IL_PALETTE_BPP         = &H0DEE&
-%IL_PALETTE_NUM_COLS    = &H0DEF&
-%IL_PALETTE_BASE_TYPE   = &H0DF0&
-%IL_NUM_IMAGES          = &H0DF1&
-%IL_NUM_MIPMAPS         = &H0DF2&
-%IL_NUM_LAYERS          = &H0DF3&
-%IL_ACTIVE_IMAGE        = &H0DF4&
-%IL_ACTIVE_MIPMAP       = &H0DF5&
-%IL_ACTIVE_LAYER        = &H0DF6&
-%IL_CUR_IMAGE           = &H0DF7&
-%IL_IMAGE_DURATION      = &H0DF8&
+%IL_VERSION_NUM				= &H0DE2&
+%IL_IMAGE_WIDTH				= &H0DE4&
+%IL_IMAGE_HEIGHT			= &H0DE5&
+%IL_IMAGE_DEPTH				= &H0DE6&
+%IL_IMAGE_SIZE_OF_DATA		= &H0DE7&
+%IL_IMAGE_BPP				= &H0DE8&
+%IL_IMAGE_BYTES_PER_PIXEL	= &H0DE8&
+%IL_IMAGE_BITS_PER_PIXEL	= &H0DE9&
+%IL_IMAGE_FORMAT	        = &H0DEA&
+%IL_IMAGE_TYPE			    = &H0DEB&
+%IL_PALETTE_TYPE			= &H0DEC&
+%IL_PALETTE_SIZE			= &H0DED&
+%IL_PALETTE_BPP				= &H0DEE&
+%IL_PALETTE_NUM_COLS		= &H0DEF&
+%IL_PALETTE_BASE_TYPE		= &H0DF0&
+%IL_NUM_IMAGES				= &H0DF1&
+%IL_NUM_MIPMAPS				= &H0DF2&
+%IL_NUM_LAYERS				= &H0DF3&
+%IL_ACTIVE_IMAGE			= &H0DF4&
+%IL_ACTIVE_MIPMAP			= &H0DF5&
+%IL_ACTIVE_LAYER			= &H0DF6&
+%IL_CUR_IMAGE				= &H0DF7&
+%IL_IMAGE_DURATION			= &H0DF8&
 
 
 '
@@ -370,6 +404,7 @@
 %IL_SEEK_SET = 0
 %IL_SEEK_CUR = 1
 %IL_SEEK_END = 2
+%IL_EOF = -1
 
 
 ' Callback functions for file reading

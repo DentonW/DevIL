@@ -4,7 +4,7 @@ unit OpenIL;
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/18/2002 <--Y2K Compliant! =]
+// Last modified: 05/28/2002 <--Y2K Compliant! =]
 //
 // Filename: il/il.h
 //
@@ -15,7 +15,7 @@ unit OpenIL;
 {******************************************************************************}
 { Converted to Delphi by Alexander Blach (alexander@abee.de)                   }
 {   Version:       DevIL v1.5.0                                                }
-{   Last modified: 05/18/2002                                                  }
+{   Last modified: 05/28/2002                                                  }
 {******************************************************************************}
 
 interface
@@ -108,11 +108,11 @@ const
 
 
 //
-// IL-specific #define's
+// IL-specific 's
 //
 
-  IL_VERSION_1_4_0 = 1;
-  IL_VERSION = 140;
+  IL_VERSION_1_5_0 = 1;
+  IL_VERSION = 150;
 
 
 // Attribute Bits
@@ -168,6 +168,9 @@ const
   IL_PSD = $0439;
   IL_EXIF = $043A;
   IL_PSP = $043B;
+  IL_PIX = $043C
+  IL_PXR = $043D
+  IL_XPM = $043E
 
   IL_JASC_PAL = $0475;
 
@@ -286,6 +289,30 @@ const
   IL_TIF_HOSTCOMPUTER_STRING = $071E;
   IL_TIF_DOCUMENTNAME_STRING = $071F;
   IL_TIF_AUTHNAME_STRING = $0720;
+  IL_JPG_SAVE_FORMAT = $0721
+  IL_CHEAD_HEADER_STRING = $0722
+  IL_PCD_PICNUM = $0723
+
+
+// DXTC definitions
+  IL_DXTC_FORMAT = $0705
+  IL_DXT1 = $0706
+  IL_DXT2 = $0707
+  IL_DXT3 = $0708
+  IL_DXT4 = $0709
+  IL_DXT5 = $070A
+  IL_DXT_NO_COMP = $070B
+  IL_KEEP_DXTC_DATA = $070C
+  IL_DXTC_DATA_FORMAT = $070D
+
+
+// Cube map definitions
+  IL_CUBEMAP_POSITIVEX = $00000400
+  IL_CUBEMAP_NEGATIVEX = $00000800
+  IL_CUBEMAP_POSITIVEY = $00001000
+  IL_CUBEMAP_NEGATIVEY = $00002000
+  IL_CUBEMAP_POSITIVEZ = $00004000
+  IL_CUBEMAP_NEGATIVEZ = $00008000
 
 
 // Values
@@ -329,6 +356,7 @@ const
   IL_SEEK_SET = 0;
   IL_SEEK_CUR = 1;
   IL_SEEK_END = 2;
+  IL_EOF = -1;
 
 // Callback functions for file reading
 type
@@ -397,6 +425,8 @@ function ilGetBoolean(Mode: TILenum): TILboolean; stdcall; external OPENILDLL;
 procedure ilGetBooleanv(Mode: TILenum; Param: PILboolean); stdcall; external
   OPENILDLL;
 function ilGetData: PILubyte; stdcall; external OPENILDLL;
+function ilGetDXTCData(Buffer: Pointer; BufferSize: TILuint; TILenum DXTCFormat):
+  TILuint; stdcall; external OPENILDLL;
 function ilGetError: TILenum; stdcall; external OPENILDLL;
 function ilGetInteger(Mode: TILenum): TILint; stdcall; external OPENILDLL;
 procedure ilGetIntegerv(Mode: TILenum; Param: PILint); stdcall; external

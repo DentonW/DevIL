@@ -57,9 +57,9 @@ LINK32=link.exe
 # ADD LINK32 delayimp.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /def:".\ilut.def" /out:"../../lib/debug/ilut-d.dll" /pdbtype:sept /delayload:d3d8.dll /delayload:sdl.dll
 # SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
-TargetPath=\DevIL\lib\debug\ilut-d.dll
+TargetName=ilut-d
 SOURCE="$(InputPath)"
-PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
+PostBuild_Cmds=..\..\projects\msvc\insdll.bat ..\..\lib\debug\$(TargetName).dll
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "ILUT - Win32 Dynamic"
@@ -91,9 +91,9 @@ LINK32=link.exe
 # ADD LINK32 delayimp.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386 /def:".\ilut.def" /out:"../../lib/ilut-l.dll" /delayload:d3d8.dll /delayload:sdl.dll
 # SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
-TargetPath=\DevIL\lib\ilut-l.dll
+TargetName=ilut-l
 SOURCE="$(InputPath)"
-PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
+PostBuild_Cmds=..\..\projects\msvc\insdll.bat ..\..\lib\$(TargetName).dll 
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "ILUT - Win32 Release"
@@ -125,9 +125,9 @@ LINK32=link.exe
 # ADD LINK32 delayimp.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386 /def:".\ilut.def" /delayload:d3d8.dll /delayload:sdl.dll
 # SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
-TargetPath=\DevIL\lib\ILUT.dll
+TargetName=ILUT
 SOURCE="$(InputPath)"
-PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
+PostBuild_Cmds=..\..\projects\msvc\insdll.bat ..\..\lib\$(TargetName).dll 
 # End Special Build Tool
 
 !ENDIF 

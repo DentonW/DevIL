@@ -220,7 +220,7 @@ IDirect3DTexture8* ILAPIENTRY ilutD3D8Texture(IDirect3DDevice8 *Device)
 			goto success;
 		}
 
-		if (ilutGetBoolean(ILUT_GL_GEN_S3TC)) {
+		if (ilutGetBoolean(ILUT_D3D_GEN_DXTC)) {
 			DXTCFormat = ilutGetInteger(ILUT_DXTC_FORMAT);
 
 			Size = ilGetDXTCData(NULL, 0, DXTCFormat);
@@ -251,7 +251,6 @@ IDirect3DTexture8* ILAPIENTRY ilutD3D8Texture(IDirect3DDevice8 *Device)
 			}
 		}
 	}
-
 
 	Image = MakeD3D8Compliant(Device, &Format);
 	if (Image == NULL) {

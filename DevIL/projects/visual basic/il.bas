@@ -5,7 +5,7 @@ Attribute VB_Name = "Module1"
 ' Copyright (C) 2000-2002 by Denton Woods
 ' Converted from il.h by Rune Kock (rune@vupti.com)
 ' based on the earlier conversion by Timo Heister (Timo-Heister@gmx.de)
-' Last modified:  05 February 2002, based on il.h dated 02/05/2002
+' Last modified:  28 May 2002, based on il.h dated 05/28/2002
 '
 ' Filename: il.bas
 '
@@ -65,8 +65,8 @@ Public Const IL_VENDOR = &H1F00
 ' IL-specific public const's
 '
 
-Public Const IL_VERSION_1_3_0 = 1
-Public Const IL_VERSION = 130
+Public Const IL_VERSION_1_5_0 = 1
+Public Const IL_VERSION = 150
 
 ' Attribute Bits
 Public Const IL_ORIGIN_BIT = &H1
@@ -117,6 +117,11 @@ Public Const IL_GIF = &H436
 Public Const IL_DDS = &H437
 Public Const IL_DCX = &H438
 Public Const IL_PSD = &H439
+Public Const IL_EXIF = &H43A
+Public Const IL_PSP = &H43B
+Public Const IL_PIX = &H43C
+Public Const IL_PXR = &H43D
+Public Const IL_XPM = &H43E
 
 Public Const IL_JASC_PAL = &H475
 
@@ -138,6 +143,9 @@ Public Const IL_OUT_FORMAT_SAME = &H50D
 Public Const IL_STACK_OVERFLOW = &H50E
 Public Const IL_STACK_UNDERFLOW = &H50F
 Public Const IL_INVALID_CONVERSION = &H510
+Public Const IL_BAD_DIMENSIONS = &H511
+Public Const IL_FILE_READ_ERROR = &H512
+
 Public Const IL_LIB_GIF_ERROR = &H5E1
 Public Const IL_LIB_JPEG_ERROR = &H5E2
 Public Const IL_LIB_PNG_ERROR = &H5E3
@@ -219,7 +227,28 @@ Public Const IL_TIF_DESCRIPTION_STRING = &H71D
 Public Const IL_TIF_HOSTCOMPUTER_STRING = &H71E
 Public Const IL_TIF_DOCUMENTNAME_STRING = &H71F
 Public Const IL_TIF_AUTHNAME_STRING = &H720
+Public Const IL_JPG_SAVE_FORMAT = &H721
+Public Const IL_CHEAD_HEADER_STRING = &H722
+Public Const IL_PCD_PICNUM = &H723
 
+' DXTC definitions
+Public Const IL_DXTC_FORMAT = &H705
+Public Const IL_DXT1 = &H706
+Public Const IL_DXT2 = &H707
+Public Const IL_DXT3 = &H708
+Public Const IL_DXT4 = &H709
+Public Const IL_DXT5 = &H70A
+Public Const IL_DXT_NO_COMP = &H70B
+Public Const IL_KEEP_DXTC_DATA = &H70C
+Public Const IL_DXTC_DATA_FORMAT = &H70D
+
+' Cube map definitions
+Public Const IL_CUBEMAP_POSITIVEX = &H00000400
+Public Const IL_CUBEMAP_NEGATIVEX = &H00000800
+Public Const IL_CUBEMAP_POSITIVEY = &H00001000
+Public Const IL_CUBEMAP_NEGATIVEY = &H00002000
+Public Const IL_CUBEMAP_POSITIVEZ = &H00004000
+Public Const IL_CUBEMAP_NEGATIVEZ = &H00008000
 
 ' Values
 Public Const IL_VERSION_NUM = &HDE2
@@ -254,6 +283,7 @@ Public Const IL_IMAGE_CUBEFLAGS = &HDFD
 Public Const IL_SEEK_SET = 0
 Public Const IL_SEEK_CUR = 1
 Public Const IL_SEEK_END = 2
+Public Const IL_EOF = -1
 
 
 ' ImageLib Functions

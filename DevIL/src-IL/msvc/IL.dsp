@@ -57,9 +57,9 @@ LINK32=link.exe
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /def:".\il.def" /out:"../../lib/debug/DevIL-d.dll" /pdbtype:sept /libpath:"../../extlibs/lib/debug"
 # SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
-TargetPath=\DevIL\lib\debug\DevIL-d.dll
+TargetName=DevIL-d
 SOURCE="$(InputPath)"
-PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
+PostBuild_Cmds=..\..\projects\msvc\insdll.bat ..\..\lib\debug\$(TargetName).dll
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "IL - Win32 Dynamic"
@@ -91,9 +91,9 @@ LINK32=link.exe
 # ADD LINK32 delayimp.lib user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /machine:I386 /def:".\il.def" /out:"../../lib/DevIL-l.dll" /libpath:"../../extlibs/lib" /OPT:NOWIN98 /delayload:lcms108.dll /delayload:libpng.dll
 # SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
-TargetPath=\DevIL\lib\DevIL-l.dll
+TargetName=DevIL-l
 SOURCE="$(InputPath)"
-PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
+PostBuild_Cmds=..\..\projects\msvc\insdll.bat ..\..\lib\$(TargetName).dll 
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "IL - Win32 Release"
@@ -125,9 +125,9 @@ LINK32=link.exe
 # ADD LINK32 user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /machine:I386 /def:".\il.def" /out:"../../lib/DevIL.dll" /libpath:"../../extlibs/lib" /OPT:NOWIN98
 # SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
-TargetPath=\DevIL\lib\DevIL.dll
+TargetName=DevIL
 SOURCE="$(InputPath)"
-PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
+PostBuild_Cmds=..\..\projects\msvc\insdll.bat ..\..\lib\$(TargetName).dll
 # End Special Build Tool
 
 !ENDIF 

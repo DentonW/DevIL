@@ -5,7 +5,7 @@ Attribute VB_Name = "Module3"
 ' Copyright (C) 2000-2002 by Denton Woods
 ' Converted from ilut.h by Rune Kock (rune@vupti.com)
 ' based on the earlier conversion by Timo Heister (Timo-Heister@gmx.de)
-' Last modified:  05 February 2002, based on ilut.h dated 02/05/2002
+' Last modified:  28 May 2002, based on ilut.h dated 05/28/2002
 '
 ' Filename: il/ilut.bas
 '
@@ -37,8 +37,8 @@ Attribute VB_Name = "Module3"
 
 Option Explicit
 
-Public Const ILUT_VERSION_1_3_0 = 1
-Public Const ILUT_VERSION = 130
+Public Const ILUT_VERSION_1_5_0 = 1
+Public Const ILUT_VERSION = 150
 
 
 ' Attribute Bits
@@ -66,6 +66,13 @@ Public Const ILUT_D3D_MIPLEVELS = &H620
 Public Const ILUT_MAXTEX_WIDTH = &H630
 Public Const ILUT_MAXTEX_HEIGHT = &H631
 Public Const ILUT_MAXTEX_DEPTH = &H632
+Public Const ILUT_GL_USE_S3TC = &H634
+Public Const ILUT_D3D_USE_DXTC = &H634
+Public Const ILUT_GL_GEN_S3TC = &H635
+Public Const ILUT_D3D_GEN_DXTC = &H635
+Public Const ILUT_S3TC_FORMAT = &H705
+Public Const ILUT_DXTC_FORMAT = &H706
+
 
 ' Values
 Public Const ILUT_VERSION_NUM = &HDE2

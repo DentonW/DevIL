@@ -4,7 +4,7 @@ unit OpenILUT;
 //
 // ImageLib Utility Toolkit Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/18/2002 <--Y2K Compliant! =]
+// Last modified: 05/28/2002 <--Y2K Compliant! =]
 //
 // Filename: il/ilut.h
 //
@@ -15,9 +15,9 @@ unit OpenILUT;
 {******************************************************************************}
 { Converted to Delphi by Alexander Blach (alexander@abee.de)                   }
 {   Version:       ILUT v1.5.0                                                 }
-{   Last modified: 05/18/2002                                                  }
+{   Last modified: 05/28/2002                                                  }
 {                                                                              }
-{   you will need the latest OpenGL units for Delphi. I recommend those on     }
+{   You will need the latest OpenGL units for Delphi. I recommend those on     }
 {   http://www.delphi3d.net                                                    }
 {******************************************************************************}
 
@@ -40,8 +40,8 @@ uses
 
 
 const
-  ILUT_VERSION_1_4_0 = 1;
-  ILUT_VERSION = 140;
+  ILUT_VERSION_1_5_0 = 1;
+  ILUT_VERSION = 150;
 
 const
 // Attribute Bits
@@ -61,13 +61,20 @@ const
   ILUT_NOT_SUPPORTED = $0550;
 
 
-// Palette Definitions
+// State Definitions
   ILUT_PALETTE_MODE = $0600;
   ILUT_OPENGL_CONV = $0610;
   ILUT_D3D_MIPLEVELS = $0620;
   ILUT_MAXTEX_WIDTH = $0630;
   ILUT_MAXTEX_HEIGHT = $0631;
   ILUT_MAXTEX_DEPTH = $0632;
+  ILUT_GL_USE_S3TC = $0634
+  ILUT_D3D_USE_DXTC = $0634
+  ILUT_GL_GEN_S3TC = $0635
+  ILUT_D3D_GEN_DXTC = $0635
+  ILUT_S3TC_FORMAT = $0705
+  ILUT_DXTC_FORMAT = $0706
+
 
 
 // Values

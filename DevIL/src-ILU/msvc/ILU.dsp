@@ -56,9 +56,9 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /out:"../../lib/debug/ilu-d.dll" /pdbtype:sept
 # Begin Special Build Tool
-TargetPath=\DevIL\lib\debug\ilu-d.dll
+TargetName=ilu-d
 SOURCE="$(InputPath)"
-PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
+PostBuild_Cmds=..\..\projects\msvc\insdll.bat ..\..\lib\debug\$(TargetName).dll
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "ILU - Win32 Release"
@@ -88,9 +88,9 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
 # Begin Special Build Tool
-TargetPath=\DevIL\lib\ILU.dll
+TargetName=ILU
 SOURCE="$(InputPath)"
-PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
+PostBuild_Cmds=..\..\projects\msvc\insdll.bat ..\..\lib\$(TargetName).dll 
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "ILU - Win32 Dynamic"
@@ -120,9 +120,9 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386 /out:"../../lib/ilu-l.dll"
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386 /out:"../../lib/ilu-l.dll"
 # Begin Special Build Tool
-TargetPath=\DevIL\lib\ilu-l.dll
+TargetName=ilu-l
 SOURCE="$(InputPath)"
-PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
+PostBuild_Cmds=..\..\projects\msvc\insdll.bat ..\..\lib\$(TargetName).dll 
 # End Special Build Tool
 
 !ENDIF 

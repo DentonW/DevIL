@@ -2,7 +2,7 @@
 '
 ' ImageLib Utility Sources
 ' Copyright (C) 2000-2002 by Denton Woods
-' Last modified: 05/18/2002 <--Y2K Compliant! =]
+' Last modified: 05/28/2002 <--Y2K Compliant! =]
 '
 ' Filename: il/ilu.h
 '
@@ -15,7 +15,7 @@
 ' Web: http://www.scheutz.dk
 ' e-mail: sourcecode@scheutz.dk
 '
-' Last modified: 05/18/2002
+' Last modified: 05/28/2002
 ' Based on DevIL Ver. 1.5.0 headers
 '
 ' Filename: ilu.inc
@@ -57,8 +57,8 @@
 ' #endif'_WIN32
 
 
-%ILU_VERSION_1_3_0 = 1
-%ILU_VERSION = 130
+%ILU_VERSION_1_5_0 = 1
+%ILU_VERSION = 150
 
 
 %ILU_FILTER         = &H2600&

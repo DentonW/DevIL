@@ -79,7 +79,8 @@ ILboolean iSaveDdsInternal()
 
 	DXTCFormat = iGetInt(IL_DXTC_FORMAT);
 	WriteHeader(iCurImage, DXTCFormat);
-	Compress(iCurImage, DXTCFormat);
+	if (!Compress(iCurImage, DXTCFormat))
+		return IL_FALSE;
 
 	if (Origin != IL_ORIGIN_UPPER_LEFT)
 		ilFlipImage();
@@ -189,7 +190,7 @@ ILuint ILAPIENTRY ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize, ILenum DXTCFo
 
 	if (DXTCFormat == iCurImage->DxtcFormat && iCurImage->DxtcSize && iCurImage->DxtcData) {
 		memcpy(Buffer, iCurImage->DxtcData, IL_MIN(BufferSize, iCurImage->DxtcSize));
-		return IL_TRUE;
+		return IL_MIN(BufferSize, iCurImage->DxtcSize);
 	}
 
 	iSetOutputLump(Buffer, BufferSize);
@@ -269,28 +270,29 @@ ILushort *CompressTo565(ILimage *Image)
 }
 
 
-ILboolean Compress(ILimage *Image, ILenum DXTCFormat)
+ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 {
 	ILushort	*Data, Block[16], ex0, ex1;
 	ILuint		x, y, i, BitMask;//, Rms1, Rms2;
 	ILubyte		*Alpha, AlphaBlock[16], AlphaBitMask[6], AlphaOut[16], a0, a1;
 	ILboolean	HasAlpha;
+	ILuint		Count = 0;
 
 	if (ilNextPower2(iCurImage->Width) != iCurImage->Width ||
 		ilNextPower2(iCurImage->Height) != iCurImage->Height ||
 		ilNextPower2(iCurImage->Depth) != iCurImage->Depth) {
 			ilSetError(IL_BAD_DIMENSIONS);
-			return IL_FALSE;
+			return 0;
 	}
 
 	Data = CompressTo565(Image);
 	if (Data == NULL)
-		return IL_FALSE;
+		return 0;
 
 	Alpha = ilGetAlpha(IL_UNSIGNED_BYTE);
 	if (Alpha == NULL) {
 		ifree(Data);
-		return IL_FALSE;
+		return 0;
 	}
 
 	switch (DXTCFormat)
@@ -317,6 +319,7 @@ ILboolean Compress(ILimage *Image, ILenum DXTCFormat)
 					else
 						BitMask = GenBitMask(ex0, ex1, 4, Block, NULL, NULL);
 					SaveLittleUInt(BitMask);
+					Count += 8;
 				}		
 			}
 			break;
@@ -354,6 +357,7 @@ ILboolean Compress(ILimage *Image, ILenum DXTCFormat)
 					SaveLittleUShort(ex1);
 					BitMask = GenBitMask(ex0, ex1, 4, Block, NULL, NULL);
 					SaveLittleUInt(BitMask);
+					Count += 16;
 				}		
 			}
 			break;
@@ -383,7 +387,8 @@ ILboolean Compress(ILimage *Image, ILenum DXTCFormat)
 					SaveLittleUShort(ex1);
 					BitMask = GenBitMask(ex0, ex1, 4, Block, NULL, NULL);
 					SaveLittleUInt(BitMask);
-				}		
+					Count += 16;
+				}
 			}
 			break;
 	}
@@ -391,7 +396,7 @@ ILboolean Compress(ILimage *Image, ILenum DXTCFormat)
 
 	ifree(Data);
 
-	return IL_TRUE;
+	return Count;
 }
 
 

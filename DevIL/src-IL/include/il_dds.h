@@ -174,7 +174,7 @@ ILvoid		GetBitsFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight);
 ILboolean	iSaveDdsInternal(ILvoid);
 ILboolean	WriteHeader(ILimage *Image, ILenum DXTCFormat);
 ILushort	*CompressTo565(ILimage *Image);
-ILboolean	Compress(ILimage *Image, ILenum DXTCFormat);
+ILuint		Compress(ILimage *Image, ILenum DXTCFormat);
 ILboolean	GetBlock(ILushort *Block, ILushort *Data, ILimage *Image, ILuint XPos, ILuint YPos);
 ILboolean	GetAlphaBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XPos, ILuint YPos);
 ILvoid		ShortToColor565(ILushort Pixel, Color565 *Colour);
