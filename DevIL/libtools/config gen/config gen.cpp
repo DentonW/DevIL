@@ -37,19 +37,19 @@ int main(int argc, char **argv)
 	Out.open("config.h.temp");
 	Out << "#ifndef __CONFIG_H__" << endl << "#define __CONFIG_H__" << endl << endl;
 
-	TestInc("jpeglib.h",	NULL,	"IL_NO_JPG",	false);
-	TestInc("libmng.h",		NULL,	"IL_NO_MNG",	false);
-	TestInc("png.h",		NULL,	"IL_NO_PNG",	false);
-	TestInc("tiff.h",		NULL,	"IL_NO_TIF",	false);
-	TestInc("lcms.h",		"lcms",	"IL_NO_LCMS",	false);
+	TestInc("jpeglib.h",	NULL,	"IL_NO_JPG 1",	false);
+	TestInc("libmng.h",		NULL,	"IL_NO_MNG 1",	false);
+	TestInc("png.h",		NULL,	"IL_NO_PNG 1",	false);
+	TestInc("tiff.h",		NULL,	"IL_NO_TIF 1",	false);
+	TestInc("lcms.h",		"lcms",	"IL_NO_LCMS 1",	false);
 
 	Out << endl;
 
-	TestInc("gl.h",			"gl",	"ILUT_USE_OPENGL",	true);
-	TestInc("d3d8.h",		NULL,	"ILUT_USE_DIRECTX8",true);
-	TestInc("d3d9.h",		NULL,	"ILUT_USE_DIRECTX9",true);
-	TestInc("sdl.h",		NULL,	"ILUT_USE_SDL",		true);
-	TestInc("windows.h",	NULL,	"ILUT_USE_WIN32",	true);
+	TestInc("gl.h",			"gl",	"ILUT_USE_OPENGL 1",	true);
+	TestInc("d3d8.h",		NULL,	"ILUT_USE_DIRECTX8 1",true);
+	TestInc("d3d9.h",		NULL,	"ILUT_USE_DIRECTX9 1",true);
+	TestInc("sdl.h",		NULL,	"ILUT_USE_SDL 1",		true);
+	TestInc("windows.h",	NULL,	"ILUT_USE_WIN32 1",	true);
 
 	Out << endl << "#endif /* __CONFIG_H__ */" << endl;
 	Out.close();
