@@ -6,7 +6,7 @@ libILUT_la_SOURCES = ilut_allegro.c     ilut_main.c \
                      ilut_win32.c       ilut_directx.c \
 					 ilut_directx9.c
 
-CFLAGS = @LIBILUT_CFLAGS@
+AM_CFLAGS = @LIBILUT_CFLAGS@
 
 libILUT_la_LDFLAGS = -no-undefined @VERSIONINFO@ \
                      -L$(top_srcdir)/src-IL/src \

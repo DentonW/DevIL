@@ -12,7 +12,7 @@ libIL_la_SOURCES = il_alloc.c     il_doom.c      il_stack.c    il_pcx.c        i
                    il_neuquant.c  il_dds-save.c  il_psp.c      il_pix.c        il_pxr.c \
 				   il_xpm.c il_hdr.c
 
-CFLAGS = @LIBIL_CFLAGS@
+AM_CFLAGS = @LIBIL_CFLAGS@
 libIL_la_LDFLAGS = -no-undefined @VERSIONINFO@
 libIL_la_LIBADD = @LIBPNG@ @LIBJPG@ @LIBTIFF@ @LIBGIF@ @LIBMNG@ @LIBLCMS@
 

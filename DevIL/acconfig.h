@@ -11,6 +11,7 @@
 #undef IL_NO_DDS
 #undef IL_NO_DOOM
 #undef IL_NO_GIF
+#undef IL_NO_HDR
 #undef IL_NO_ICO
 #undef IL_NO_JPG
 #undef IL_NO_LCMS
