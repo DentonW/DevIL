@@ -64,9 +64,9 @@ static ILint	WindW, WindH, WindD;
 static ILint	i;
 static ILubyte	*buffer;
 static ILint	Width, Height, Depth, Comp;
-static ILint	TotalColors;
+/*static ILint	TotalColors;
 static ILint	a, b;
-static ILubyte	*buf1, *buf2;
+static ILubyte	*buf1, *buf2;*/
 
 
 ILuint n2(ILint s)
