@@ -322,10 +322,6 @@ DEP_CPP_IL_AL=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_AL=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -421,10 +417,6 @@ DEP_CPP_IL_AL=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_AL=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ENDIF 
 
@@ -442,10 +434,6 @@ DEP_CPP_IL_BI=\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	
-NODEP_CPP_IL_BI=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
@@ -547,10 +535,6 @@ DEP_CPP_IL_BI=\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	
-NODEP_CPP_IL_BI=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -571,10 +555,6 @@ DEP_CPP_IL_BM=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
 	
-NODEP_CPP_IL_BM=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -683,10 +663,6 @@ DEP_CPP_IL_BM=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
-	
-NODEP_CPP_IL_BM=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -706,10 +682,6 @@ DEP_CPP_IL_CO=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
 	
-NODEP_CPP_IL_CO=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -811,10 +783,6 @@ DEP_CPP_IL_CO=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
-	
-NODEP_CPP_IL_CO=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -834,10 +802,6 @@ DEP_CPP_IL_CON=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
 	
-NODEP_CPP_IL_CON=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -939,10 +903,6 @@ DEP_CPP_IL_CON=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
-	
-NODEP_CPP_IL_CON=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -964,10 +924,6 @@ DEP_CPP_IL_CU=\
 	"..\..\..\src-IL\include\il_manip.h"\
 	"..\..\..\src-IL\include\il_pal.h"\
 	
-NODEP_CPP_IL_CU=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -1083,10 +1039,6 @@ DEP_CPP_IL_CU=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
 	"..\..\..\src-IL\include\il_pal.h"\
-	
-NODEP_CPP_IL_CU=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -1107,10 +1059,6 @@ DEP_CPP_IL_DC=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
 	
-NODEP_CPP_IL_DC=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -1220,9 +1168,108 @@ DEP_CPP_IL_DC=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
 	
-NODEP_CPP_IL_DC=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\src-IL\src\il_dds-save.c"
+
+!IF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Release"
+
+DEP_CPP_IL_DD=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_dds.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
+
+DEP_CPP_IL_DD=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_dds.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE SH3) Release"
+
+DEP_CPP_IL_DD=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_dds.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE SH3) Debug"
+
+DEP_CPP_IL_DD=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_dds.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE ARM) Release"
+
+DEP_CPP_IL_DD=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_dds.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE ARM) Debug"
+
+DEP_CPP_IL_DD=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_dds.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE x86em) Release"
+
+DEP_CPP_IL_DD=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_dds.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE x86em) Debug"
+
+DEP_CPP_IL_DD=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_dds.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
 	
 
 !ENDIF 
@@ -1234,22 +1281,18 @@ SOURCE="..\..\..\src-IL\src\il_dds.c"
 
 !IF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Release"
 
-DEP_CPP_IL_DD=\
+DEP_CPP_IL_DDS=\
 	"..\..\..\src-IL\include\il_alloc.h"\
 	"..\..\..\src-IL\include\il_dds.h"\
 	"..\..\..\src-IL\include\il_endian.h"\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	
-NODEP_CPP_IL_DD=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
-DEP_CPP_IL_DD=\
+DEP_CPP_IL_DDS=\
 	"..\..\..\src-IL\include\il_alloc.h"\
 	"..\..\..\src-IL\include\il_dds.h"\
 	"..\..\..\src-IL\include\il_endian.h"\
@@ -1257,14 +1300,14 @@ DEP_CPP_IL_DD=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_DD=\
+NODEP_CPP_IL_DDS=\
 	"..\..\..\src-IL\include\config.h"\
 	".\L\il.h"\
 	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE SH3) Release"
 
-DEP_CPP_IL_DD=\
+DEP_CPP_IL_DDS=\
 	"..\..\..\src-IL\include\il_alloc.h"\
 	"..\..\..\src-IL\include\il_dds.h"\
 	"..\..\..\src-IL\include\il_endian.h"\
@@ -1272,14 +1315,14 @@ DEP_CPP_IL_DD=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_DD=\
+NODEP_CPP_IL_DDS=\
 	"..\..\..\src-IL\include\config.h"\
 	".\L\il.h"\
 	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE SH3) Debug"
 
-DEP_CPP_IL_DD=\
+DEP_CPP_IL_DDS=\
 	"..\..\..\src-IL\include\il_alloc.h"\
 	"..\..\..\src-IL\include\il_dds.h"\
 	"..\..\..\src-IL\include\il_endian.h"\
@@ -1287,14 +1330,14 @@ DEP_CPP_IL_DD=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_DD=\
+NODEP_CPP_IL_DDS=\
 	"..\..\..\src-IL\include\config.h"\
 	".\L\il.h"\
 	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE ARM) Release"
 
-DEP_CPP_IL_DD=\
+DEP_CPP_IL_DDS=\
 	"..\..\..\src-IL\include\il_alloc.h"\
 	"..\..\..\src-IL\include\il_dds.h"\
 	"..\..\..\src-IL\include\il_endian.h"\
@@ -1302,7 +1345,7 @@ DEP_CPP_IL_DD=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_DD=\
+NODEP_CPP_IL_DDS=\
 	"..\..\..\src-IL\include\config.h"\
 	".\L\il.h"\
 	
@@ -1310,7 +1353,7 @@ NODEP_CPP_IL_DD=\
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE ARM) Debug"
 
-DEP_CPP_IL_DD=\
+DEP_CPP_IL_DDS=\
 	"..\..\..\src-IL\include\il_alloc.h"\
 	"..\..\..\src-IL\include\il_dds.h"\
 	"..\..\..\src-IL\include\il_endian.h"\
@@ -1318,14 +1361,14 @@ DEP_CPP_IL_DD=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_DD=\
+NODEP_CPP_IL_DDS=\
 	"..\..\..\src-IL\include\config.h"\
 	".\L\il.h"\
 	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE x86em) Release"
 
-DEP_CPP_IL_DD=\
+DEP_CPP_IL_DDS=\
 	"..\..\..\src-IL\include\il_alloc.h"\
 	"..\..\..\src-IL\include\il_dds.h"\
 	"..\..\..\src-IL\include\il_endian.h"\
@@ -1333,24 +1376,20 @@ DEP_CPP_IL_DD=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_DD=\
+NODEP_CPP_IL_DDS=\
 	"..\..\..\src-IL\include\config.h"\
 	".\L\il.h"\
 	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE x86em) Debug"
 
-DEP_CPP_IL_DD=\
+DEP_CPP_IL_DDS=\
 	"..\..\..\src-IL\include\il_alloc.h"\
 	"..\..\..\src-IL\include\il_dds.h"\
 	"..\..\..\src-IL\include\il_endian.h"\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	
-NODEP_CPP_IL_DD=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -1370,10 +1409,6 @@ DEP_CPP_IL_DE=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
 	
-NODEP_CPP_IL_DE=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -1475,10 +1510,6 @@ DEP_CPP_IL_DE=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
-	
-NODEP_CPP_IL_DE=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -1500,10 +1531,6 @@ DEP_CPP_IL_DO=\
 	"..\..\..\src-IL\include\il_manip.h"\
 	"..\..\..\src-IL\include\il_pal.h"\
 	
-NODEP_CPP_IL_DO=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -1619,10 +1646,6 @@ DEP_CPP_IL_DO=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
 	"..\..\..\src-IL\include\il_pal.h"\
-	
-NODEP_CPP_IL_DO=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -1641,10 +1664,6 @@ DEP_CPP_IL_EN=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_EN=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -1739,10 +1758,6 @@ DEP_CPP_IL_EN=\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	
-NODEP_CPP_IL_EN=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -1761,10 +1776,6 @@ DEP_CPP_IL_ER=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_ER=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -1860,10 +1871,6 @@ DEP_CPP_IL_ER=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_ER=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ENDIF 
 
@@ -1880,10 +1887,6 @@ DEP_CPP_IL_FA=\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	{$(INCLUDE)}"IL\il.h"\
-	
-NODEP_CPP_IL_FA=\
-	"..\..\..\src-IL\include\config.h"\
 	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
@@ -1894,10 +1897,10 @@ DEP_CPP_IL_FA=\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	{$(INCLUDE)}"IL\il.h"\
 	
 NODEP_CPP_IL_FA=\
 	"..\..\..\src-IL\include\config.h"\
+	".\L\il.h"\
 	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE SH3) Release"
@@ -1908,10 +1911,10 @@ DEP_CPP_IL_FA=\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	{$(INCLUDE)}"IL\il.h"\
 	
 NODEP_CPP_IL_FA=\
 	"..\..\..\src-IL\include\config.h"\
+	".\L\il.h"\
 	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE SH3) Debug"
@@ -1922,10 +1925,10 @@ DEP_CPP_IL_FA=\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	{$(INCLUDE)}"IL\il.h"\
 	
 NODEP_CPP_IL_FA=\
 	"..\..\..\src-IL\include\config.h"\
+	".\L\il.h"\
 	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE ARM) Release"
@@ -1962,10 +1965,10 @@ DEP_CPP_IL_FA=\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	{$(INCLUDE)}"IL\il.h"\
 	
 NODEP_CPP_IL_FA=\
 	"..\..\..\src-IL\include\config.h"\
+	".\L\il.h"\
 	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE x86em) Debug"
@@ -1976,10 +1979,6 @@ DEP_CPP_IL_FA=\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	{$(INCLUDE)}"IL\il.h"\
-	
-NODEP_CPP_IL_FA=\
-	"..\..\..\src-IL\include\config.h"\
 	
 
 !ENDIF 
@@ -1998,10 +1997,6 @@ DEP_CPP_IL_FI=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_FI=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -2096,10 +2091,6 @@ DEP_CPP_IL_FI=\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	
-NODEP_CPP_IL_FI=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -2116,11 +2107,8 @@ DEP_CPP_IL_GI=\
 	"..\..\..\src-IL\include\il_endian.h"\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_gif.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	
-NODEP_CPP_IL_GI=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
@@ -2215,11 +2203,8 @@ DEP_CPP_IL_GI=\
 	"..\..\..\src-IL\include\il_endian.h"\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_gif.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	
-NODEP_CPP_IL_GI=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -2238,10 +2223,6 @@ DEP_CPP_IL_HE=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_HE=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -2336,10 +2317,6 @@ DEP_CPP_IL_HE=\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	
-NODEP_CPP_IL_HE=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -2359,10 +2336,6 @@ DEP_CPP_IL_IC=\
 	"..\..\..\src-IL\include\il_icon.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_IC=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -2464,10 +2437,6 @@ DEP_CPP_IL_IC=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_icon.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	
-NODEP_CPP_IL_IC=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -2486,10 +2455,6 @@ DEP_CPP_IL_IN=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_IN=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -2584,10 +2549,6 @@ DEP_CPP_IL_IN=\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	
-NODEP_CPP_IL_IN=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -2608,10 +2569,6 @@ DEP_CPP_IL_IO=\
 	"..\..\..\src-IL\include\il_pal.h"\
 	"..\..\..\src-IL\include\il_register.h"\
 	
-NODEP_CPP_IL_IO=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -2720,10 +2677,6 @@ DEP_CPP_IL_IO=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_pal.h"\
 	"..\..\..\src-IL\include\il_register.h"\
-	
-NODEP_CPP_IL_IO=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -2745,8 +2698,7 @@ DEP_CPP_IL_JP=\
 	"..\..\..\src-IL\include\il_manip.h"\
 	
 NODEP_CPP_IL_JP=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
+	"..\..\..\src-IL\src\jpeglib.h"\
 	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
@@ -2858,8 +2810,7 @@ DEP_CPP_IL_JP=\
 	"..\..\..\src-IL\include\il_manip.h"\
 	
 NODEP_CPP_IL_JP=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
+	"..\..\..\src-IL\src\jpeglib.h"\
 	
 
 !ENDIF 
@@ -2879,10 +2830,6 @@ DEP_CPP_IL_LI=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_lif.h"\
 	
-NODEP_CPP_IL_LI=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -2984,10 +2931,6 @@ DEP_CPP_IL_LI=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_lif.h"\
-	
-NODEP_CPP_IL_LI=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -3006,10 +2949,6 @@ DEP_CPP_IL_MA=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_MA=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -3104,10 +3043,6 @@ DEP_CPP_IL_MA=\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	
-NODEP_CPP_IL_MA=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -3127,10 +3062,6 @@ DEP_CPP_IL_MAN=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
 	
-NODEP_CPP_IL_MAN=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -3232,10 +3163,6 @@ DEP_CPP_IL_MAN=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
-	
-NODEP_CPP_IL_MAN=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -3255,10 +3182,6 @@ DEP_CPP_IL_MD=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_mdl.h"\
 	
-NODEP_CPP_IL_MD=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -3360,10 +3283,6 @@ DEP_CPP_IL_MD=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_mdl.h"\
-	
-NODEP_CPP_IL_MD=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -3382,10 +3301,6 @@ DEP_CPP_IL_MN=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_MN=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -3481,9 +3396,92 @@ DEP_CPP_IL_MN=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_MN=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\src-IL\src\il_neuquant.c"
+
+!IF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Release"
+
+DEP_CPP_IL_NE=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
+
+DEP_CPP_IL_NE=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE SH3) Release"
+
+DEP_CPP_IL_NE=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE SH3) Debug"
+
+DEP_CPP_IL_NE=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE ARM) Release"
+
+DEP_CPP_IL_NE=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE ARM) Debug"
+
+DEP_CPP_IL_NE=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE x86em) Release"
+
+DEP_CPP_IL_NE=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE x86em) Debug"
+
+DEP_CPP_IL_NE=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
 	
 
 !ENDIF 
@@ -3503,10 +3501,6 @@ DEP_CPP_IL_PA=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_pal.h"\
 	
-NODEP_CPP_IL_PA=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -3608,10 +3602,6 @@ DEP_CPP_IL_PA=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_pal.h"\
-	
-NODEP_CPP_IL_PA=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -3631,10 +3621,6 @@ DEP_CPP_IL_PC=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
 	
-NODEP_CPP_IL_PC=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -3736,10 +3722,6 @@ DEP_CPP_IL_PC=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
-	
-NODEP_CPP_IL_PC=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -3760,10 +3742,6 @@ DEP_CPP_IL_PCX=\
 	"..\..\..\src-IL\include\il_manip.h"\
 	"..\..\..\src-IL\include\il_pcx.h"\
 	
-NODEP_CPP_IL_PCX=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -3872,10 +3850,6 @@ DEP_CPP_IL_PCX=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
 	"..\..\..\src-IL\include\il_pcx.h"\
-	
-NODEP_CPP_IL_PCX=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -3896,10 +3870,6 @@ DEP_CPP_IL_PI=\
 	"..\..\..\src-IL\include\il_manip.h"\
 	"..\..\..\src-IL\include\il_pic.h"\
 	
-NODEP_CPP_IL_PI=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -4009,9 +3979,100 @@ DEP_CPP_IL_PI=\
 	"..\..\..\src-IL\include\il_manip.h"\
 	"..\..\..\src-IL\include\il_pic.h"\
 	
-NODEP_CPP_IL_PI=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\src-IL\src\il_pix.c"
+
+!IF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Release"
+
+DEP_CPP_IL_PIX=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
+
+DEP_CPP_IL_PIX=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE SH3) Release"
+
+DEP_CPP_IL_PIX=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE SH3) Debug"
+
+DEP_CPP_IL_PIX=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE ARM) Release"
+
+DEP_CPP_IL_PIX=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE ARM) Debug"
+
+DEP_CPP_IL_PIX=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE x86em) Release"
+
+DEP_CPP_IL_PIX=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE x86em) Debug"
+
+DEP_CPP_IL_PIX=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
 	
 
 !ENDIF 
@@ -4031,10 +4092,6 @@ DEP_CPP_IL_PN=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
 	
-NODEP_CPP_IL_PN=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -4136,10 +4193,6 @@ DEP_CPP_IL_PN=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
-	
-NODEP_CPP_IL_PN=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -4161,10 +4214,6 @@ DEP_CPP_IL_PNM=\
 	"..\..\..\src-IL\include\il_manip.h"\
 	"..\..\..\src-IL\include\il_pnm.h"\
 	
-NODEP_CPP_IL_PNM=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -4280,10 +4329,6 @@ DEP_CPP_IL_PNM=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
 	"..\..\..\src-IL\include\il_pnm.h"\
-	
-NODEP_CPP_IL_PNM=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -4302,10 +4347,6 @@ DEP_CPP_IL_PR=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_PR=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -4400,10 +4441,6 @@ DEP_CPP_IL_PR=\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	
-NODEP_CPP_IL_PR=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -4423,10 +4460,6 @@ DEP_CPP_IL_PS=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_psd.h"\
 	
-NODEP_CPP_IL_PS=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -4529,9 +4562,195 @@ DEP_CPP_IL_PS=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_psd.h"\
 	
-NODEP_CPP_IL_PS=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\src-IL\src\il_psp.c"
+
+!IF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Release"
+
+DEP_CPP_IL_PSP=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_psp.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
+
+DEP_CPP_IL_PSP=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_psp.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE SH3) Release"
+
+DEP_CPP_IL_PSP=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_psp.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE SH3) Debug"
+
+DEP_CPP_IL_PSP=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_psp.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE ARM) Release"
+
+DEP_CPP_IL_PSP=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_psp.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE ARM) Debug"
+
+DEP_CPP_IL_PSP=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_psp.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE x86em) Release"
+
+DEP_CPP_IL_PSP=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_psp.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE x86em) Debug"
+
+DEP_CPP_IL_PSP=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_psp.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\src-IL\src\il_pxr.c"
+
+!IF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Release"
+
+DEP_CPP_IL_PX=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
+
+DEP_CPP_IL_PX=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE SH3) Release"
+
+DEP_CPP_IL_PX=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE SH3) Debug"
+
+DEP_CPP_IL_PX=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE ARM) Release"
+
+DEP_CPP_IL_PX=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE ARM) Debug"
+
+DEP_CPP_IL_PX=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE x86em) Release"
+
+DEP_CPP_IL_PX=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE x86em) Debug"
+
+DEP_CPP_IL_PX=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	"..\..\..\src-IL\include\il_manip.h"\
 	
 
 !ENDIF 
@@ -4550,10 +4769,6 @@ DEP_CPP_IL_QU=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_QU=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -4648,10 +4863,6 @@ DEP_CPP_IL_QU=\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	
-NODEP_CPP_IL_QU=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -4670,10 +4881,6 @@ DEP_CPP_IL_RA=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_RA=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -4768,10 +4975,6 @@ DEP_CPP_IL_RA=\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	
-NODEP_CPP_IL_RA=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -4791,10 +4994,6 @@ DEP_CPP_IL_RAW=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
 	
-NODEP_CPP_IL_RAW=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -4896,10 +5095,6 @@ DEP_CPP_IL_RAW=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
-	
-NODEP_CPP_IL_RAW=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -4919,10 +5114,6 @@ DEP_CPP_IL_RE=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_register.h"\
 	
-NODEP_CPP_IL_RE=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -5024,10 +5215,6 @@ DEP_CPP_IL_RE=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_register.h"\
-	
-NODEP_CPP_IL_RE=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -5047,10 +5234,6 @@ DEP_CPP_IL_RL=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_rle.h"\
 	
-NODEP_CPP_IL_RL=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -5152,10 +5335,6 @@ DEP_CPP_IL_RL=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_rle.h"\
-	
-NODEP_CPP_IL_RL=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -5176,10 +5355,6 @@ DEP_CPP_IL_SG=\
 	"..\..\..\src-IL\include\il_manip.h"\
 	"..\..\..\src-IL\include\il_sgi.h"\
 	
-NODEP_CPP_IL_SG=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -5288,10 +5463,6 @@ DEP_CPP_IL_SG=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
 	"..\..\..\src-IL\include\il_sgi.h"\
-	
-NODEP_CPP_IL_SG=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -5311,10 +5482,6 @@ DEP_CPP_IL_ST=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_stack.h"\
 	
-NODEP_CPP_IL_ST=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -5416,10 +5583,6 @@ DEP_CPP_IL_ST=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_stack.h"\
-	
-NODEP_CPP_IL_ST=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -5439,10 +5602,6 @@ DEP_CPP_IL_STA=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_states.h"\
 	
-NODEP_CPP_IL_STA=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -5544,10 +5703,6 @@ DEP_CPP_IL_STA=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_states.h"\
-	
-NODEP_CPP_IL_STA=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -5569,10 +5724,6 @@ DEP_CPP_IL_TA=\
 	"..\..\..\src-IL\include\il_manip.h"\
 	"..\..\..\src-IL\include\il_targa.h"\
 	
-NODEP_CPP_IL_TA=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -5688,10 +5839,6 @@ DEP_CPP_IL_TA=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
 	"..\..\..\src-IL\include\il_targa.h"\
-	
-NODEP_CPP_IL_TA=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -5711,10 +5858,6 @@ DEP_CPP_IL_TI=\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
 	
-NODEP_CPP_IL_TI=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -5816,10 +5959,6 @@ DEP_CPP_IL_TI=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	"..\..\..\src-IL\include\il_manip.h"\
-	
-NODEP_CPP_IL_TI=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -5838,10 +5977,6 @@ DEP_CPP_IL_UT=\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
 	
-NODEP_CPP_IL_UT=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -5936,10 +6071,6 @@ DEP_CPP_IL_UT=\
 	"..\..\..\src-IL\include\il_error.h"\
 	"..\..\..\src-IL\include\il_files.h"\
 	"..\..\..\src-IL\include\il_internal.h"\
-	
-NODEP_CPP_IL_UT=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
 	
 
 !ENDIF 
@@ -5960,10 +6091,6 @@ DEP_CPP_IL_WA=\
 	"..\..\..\src-IL\include\il_manip.h"\
 	"..\..\..\src-IL\include\il_q2pal.h"\
 	
-NODEP_CPP_IL_WA=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
-	
 
 !ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
 
@@ -6073,9 +6200,92 @@ DEP_CPP_IL_WA=\
 	"..\..\..\src-IL\include\il_manip.h"\
 	"..\..\..\src-IL\include\il_q2pal.h"\
 	
-NODEP_CPP_IL_WA=\
-	"..\..\..\src-IL\include\config.h"\
-	".\L\il.h"\
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\src-IL\src\il_xpm.c"
+
+!IF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Release"
+
+DEP_CPP_IL_XP=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE MIPS) Debug"
+
+DEP_CPP_IL_XP=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE SH3) Release"
+
+DEP_CPP_IL_XP=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE SH3) Debug"
+
+DEP_CPP_IL_XP=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE ARM) Release"
+
+DEP_CPP_IL_XP=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE ARM) Debug"
+
+DEP_CPP_IL_XP=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE x86em) Release"
+
+DEP_CPP_IL_XP=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
+	
+
+!ELSEIF  "$(CFG)" == "DevIL - Win32 (WCE x86em) Debug"
+
+DEP_CPP_IL_XP=\
+	"..\..\..\src-IL\include\il_alloc.h"\
+	"..\..\..\src-IL\include\il_endian.h"\
+	"..\..\..\src-IL\include\il_error.h"\
+	"..\..\..\src-IL\include\il_files.h"\
+	"..\..\..\src-IL\include\il_internal.h"\
 	
 
 !ENDIF 
@@ -6085,6 +6295,10 @@ NODEP_CPP_IL_WA=\
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=..\..\..\include\IL\config.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\..\include\il\il.h
@@ -6124,6 +6338,10 @@ SOURCE="..\..\..\src-IL\include\il_error.h"
 # Begin Source File
 
 SOURCE="..\..\..\src-IL\include\il_files.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\src-IL\include\il_gif.h"
 # End Source File
 # Begin Source File
 
@@ -6168,6 +6386,10 @@ SOURCE="..\..\..\src-IL\include\il_pnm.h"
 # Begin Source File
 
 SOURCE="..\..\..\src-IL\include\il_psd.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\src-IL\include\il_psp.h"
 # End Source File
 # Begin Source File
 

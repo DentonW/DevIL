@@ -36,6 +36,9 @@ ILboolean ILAPIENTRY ilLoadPal(const ILstring FileName)
 	if (iCheckExtension(FileName, IL_TEXT("act"))) {
 		return ilLoadActPal(FileName);
 	}
+	if (iCheckExtension(FileName, IL_TEXT("plt"))) {
+		return ilLoadPltPal(FileName);
+	}
 
 #ifndef _WIN32_WCE
 	f = fopen(FileName, "rt");
@@ -483,7 +486,53 @@ ILboolean ilLoadActPal(const ILstring FileName)
 }
 
 
+//! Loads an .plt palette file.
+ILboolean ilLoadPltPal(const ILstring FileName)
+{
+	ILHANDLE	PltFile;
 
+	if (!iCheckExtension(FileName, IL_TEXT("plt"))) {
+		ilSetError(IL_INVALID_EXTENSION);
+		return IL_FALSE;
+	}
+
+	if (iCurImage == NULL) {
+		ilSetError(IL_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	PltFile = iopenr(FileName);
+	if (PltFile == NULL) {
+		ilSetError(IL_COULD_NOT_OPEN_FILE);
+		return IL_FALSE;
+	}
+
+	if (iCurImage->Pal.Palette && iCurImage->Pal.PalSize > 0 && iCurImage->Pal.PalType != IL_PAL_NONE) {
+		ifree(iCurImage->Pal.Palette);
+		iCurImage->Pal.Palette = NULL;
+	}
+
+	iCurImage->Pal.PalSize = GetLittleUInt();
+	if (iCurImage->Pal.PalSize == 0) {
+		ilSetError(IL_INVALID_FILE_HEADER);
+		return IL_FALSE;
+	}
+	iCurImage->Pal.PalType = IL_PAL_RGB24;
+	iCurImage->Pal.Palette = (ILubyte*)ialloc(iCurImage->Pal.PalSize);
+	if (!iCurImage->Pal.Palette) {
+		icloser(PltFile);
+		return IL_FALSE;
+	}
+
+	if (iread(iCurImage->Pal.Palette, iCurImage->Pal.PalSize, 1) != 1) {
+		icloser(PltFile);
+		return IL_FALSE;
+	}
+
+	icloser(PltFile);
+
+	return IL_TRUE;
+}
 
 
 ILAPI ILpal* ILAPIENTRY iCopyPal()

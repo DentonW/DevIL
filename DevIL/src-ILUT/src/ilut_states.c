@@ -13,7 +13,9 @@
 
 #include "ilut_internal.h"
 #include "ilut_states.h"
-#include "ilut_opengl.h"
+#ifdef ILUT_USE_OPENGL
+	#include "ilut_opengl.h"
+#endif
 
 
 const char *_ilutVendor		= "Abysmal Software";

@@ -14,6 +14,8 @@
 - Optimized ilutGetPaddedData a bit.
 - Added some checks to prevent corrupt .psd files from crashing the library when loading.
 - Fixed a problem using ilLoadL with the IJL.
+- Updated the Win CE project files.
+- Added .plt support.
 
 
 1.5.1
