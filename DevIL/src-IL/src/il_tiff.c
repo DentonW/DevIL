@@ -692,6 +692,7 @@ ILboolean iSaveTiffInternal(char *Filename)
     TIFF	*File;
     char	Description[512];
     ILimage	*TempImage;
+	char    *str;
     
     if(iCurImage == NULL) {
         ilSetError(IL_ILLEGAL_OPERATION);
