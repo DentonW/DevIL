@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilActiveMipmap</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00190.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00208.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilActiveMipmap</h2>
+<font size=-1>
+<p>The <b>ilActiveMipmap</b> function sets the active mipmap level.</p>
+</font>
+<pre><code>
+<b>ILboolean ilActiveMipmap(
+  ILuint</b><i> Number</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Number</i></dt>
+<dd>Mipmap level to select as current.</dd>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>ilActiveMipmap</b> sets a mipmap of the image as the current mipmap.  Currently, the only way to generate mipmaps is by calling <a href="../ilu/f00094.htm">iluBuildMipmaps</a>.  If neither function has been called for the current image, no mipmaps exist for it.  If <i>Number</i> is 0, then the current base image is set.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+IL_ILLEGAL_OPERATION - IL_ILLEGAL_OPERATION - There is currently no image bound.  Use <a href="../il/f00026.htm">ilGenImages</a> and <a href="../il/f00013.htm">ilBindImage</a> before calling this function, or <i>Number</i> is too high.
+<br>
+IL_INTERNAL_ERROR - *Big* problem with DevIL.  E-mail <a href="mailto:denton@imagelib.org">Denton</a> with the conditions leading up to the error and pray. =]
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00026.htm">ilGenImages</a>, <a href="../il/f00013.htm">ilBindImage</a>, <a href="../il/f00008.htm">ilActiveImage</a>, <a href="../il/f00190.htm">ilActiveLayer</a>, <a href="../ilu/f00094.htm">iluBuildMipmaps</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>
