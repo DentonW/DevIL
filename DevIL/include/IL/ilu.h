@@ -37,8 +37,8 @@ extern "C" {
 	#endif//IL_STATIC_LIB
 #endif//_WIN32
 
-#define ILU_VERSION_1_6_1					1
-#define ILU_VERSION							161
+#define ILU_VERSION_1_6_6					1
+#define ILU_VERSION							166
 
 
 #define ILU_FILTER							0x2600
