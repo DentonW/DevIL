@@ -157,7 +157,8 @@ ILboolean iLoadGifInternal()
 		return IL_FALSE;
 	}
 
-	ilTexImage(Header.Width, Header.Height, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL);
+	if (!ilTexImage(Header.Width, Header.Height, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL))
+		return IL_FALSE;
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 
 	// Check for a global colour map.
@@ -190,6 +191,7 @@ ILboolean GetPalette(ILubyte Info, ILpal *Pal)
 		return IL_FALSE;
 	if (iread(Pal->Palette, 1, Pal->PalSize) != Pal->PalSize) {
 		ifree(Pal->Palette);
+		Pal->Palette = NULL;
 		return IL_FALSE;
 	}
 
@@ -256,7 +258,7 @@ ILboolean GetImages(ILpal *GlobalPal)
 
 		// Check to see if the image has its own palette.
 		if (ImageDesc.ImageInfo & (1 << 7)) {
-			if (!GetPalette(ImageDesc.ImageInfo, &iCurImage->Pal)) {
+			if (!GetPalette(ImageDesc.ImageInfo, &Image->Pal)) {
 				return IL_FALSE;
 			}
 		}
@@ -305,6 +307,8 @@ ILboolean GetImages(ILpal *GlobalPal)
 	}
 
 	iCurImage->NumNext = NumImages;
+	if (BaseImage)  // Was not able to load any images in...
+		return IL_FALSE;
 
 	return IL_TRUE;
 }

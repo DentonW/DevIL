@@ -11,6 +11,9 @@
 //-----------------------------------------------------------------------------
 
 #include <windows.h>
+#ifdef _DEBUG
+#define IL_DEBUG
+#endif
 #include <il\il.h>
 #include <il\ilu.h>
 #include <il\ilut.h>

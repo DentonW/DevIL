@@ -1,3 +1,16 @@
+1.5.2
+-----
+
+- Temporarily removed .pcd support, since no .pcd images were loading correctly.
+- Fixed problems with greyscale .bmp, .jpg and .pcx files.
+- Made ilLoadFromJpegStruct and ilSaveFromJpegStruct exportable even if IL_NO_JPG defined.
+- Fixed a bug loading .gif files with "local palettes".
+- Fixed a problem loading .ico/.cur files with ColoursUsed set to 0 in their headers.
+- Fixed a bug loading 4-bit .bmp images.
+
+
+
+
 1.5.1
 -----
 

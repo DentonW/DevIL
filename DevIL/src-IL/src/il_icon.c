@@ -94,6 +94,17 @@ ILboolean iLoadIconInternal()
 			goto file_read_error;
 
 		if (IconImages[i].Head.BitCount < 8) {
+			if (IconImages[i].Head.ColourUsed == 0) {
+				switch (IconImages[i].Head.BitCount)
+				{
+					case 1:
+						IconImages[i].Head.ColourUsed = 2;
+						break;
+					case 4:
+						IconImages[i].Head.ColourUsed = 16;
+						break;
+				}
+			}
 			IconImages[i].Pal = (ILubyte*)ialloc(IconImages[i].Head.ColourUsed * 4);
 			if (iread(IconImages[i].Pal, IconImages[i].Head.ColourUsed * 4, 1) != 1)
 				goto file_read_error;

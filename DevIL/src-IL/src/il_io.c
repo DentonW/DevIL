@@ -591,7 +591,7 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, const ILstring FileName)
 
 		#ifndef IL_NO_PCD
 		case IL_PCD:
-			return ilLoadPcd(FileName);
+			return IL_FALSE;//ilLoadPcd(FileName);
 		#endif
 
 		#ifndef IL_NO_PCX
@@ -747,7 +747,7 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 
 		#ifndef IL_NO_PCD
 		case IL_PCD:
-			return ilLoadPcdF(File);
+			return IL_FALSE;//return ilLoadPcdF(File);
 		#endif
 
 		#ifndef IL_NO_PCX
@@ -890,7 +890,7 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, ILvoid *Lump, ILuint Size)
 
 		#ifndef IL_NO_PCD
 		case IL_PCD:
-			return ilLoadPcdL(Lump, Size);
+			return IL_FALSE;//return ilLoadPcdL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_PCX
@@ -1060,7 +1060,7 @@ ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 
 		#ifndef IL_NO_PCD
 		if (!iStrCmp(Ext, IL_TEXT("pcd"))) {
-			return ilLoadPcd(FileName);
+			return IL_FALSE;//return ilLoadPcd(FileName);
 		}
 		#endif
 

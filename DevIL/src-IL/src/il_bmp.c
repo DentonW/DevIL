@@ -419,7 +419,7 @@ ILboolean ilReadUncompBmp(BMPHEAD *Header)
 								break;
 							iCurImage->Data[j * iCurImage->Width + i] = ByteData & 0x0F;
 						}
-						//iread(Padding, 1, PadSize);iseek(PadSize, IL_SEEK_CUR);
+						iread(Padding, 1, PadSize);//iseek(PadSize, IL_SEEK_CUR);
 					}
 
 					iUnCache();

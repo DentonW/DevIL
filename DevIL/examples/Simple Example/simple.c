@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 	       ilGetInteger(IL_IMAGE_WIDTH),
 	       ilGetInteger(IL_IMAGE_HEIGHT),
 	       ilGetInteger(IL_IMAGE_DEPTH),
-	       ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL));
+	       ilGetInteger(IL_IMAGE_BITS_PER_PIXEL));
 
 	// Enable this to let us overwrite the destination file if it already exists.
 	ilEnable(IL_FILE_OVERWRITE);

@@ -49,7 +49,7 @@ ILvoid		(ILAPIENTRY *icloseCopy)(ILHANDLE);
 
 ILboolean	UseCache = IL_FALSE;
 ILubyte		*Cache = NULL;
-ILuint		CacheSize, CachePos;
+ILuint		CacheSize, CachePos, CacheStartPos, CacheBytesRead;
 
 
 /*// Just preserves the current read functions and replaces
@@ -404,6 +404,7 @@ ILuint ILAPIENTRY iReadFile(ILvoid *Buffer, ILuint Size, ILuint Number)
 		CachePos += BuffSize;
 		if (Size != 0)
 			BuffSize /= Size;
+		CacheBytesRead += BuffSize;
 		return BuffSize;
 	}
 	else {
@@ -425,6 +426,7 @@ ILuint ILAPIENTRY iReadFile(ILvoid *Buffer, ILuint Size, ILuint Number)
 
 	if (Size != 0)
 		TotalBytes /= Size;
+	CacheBytesRead += TotalBytes;
 	if (TotalBytes != Number)
 		ilSetError(IL_FILE_READ_ERROR);
 	return TotalBytes;
@@ -478,11 +480,15 @@ ILboolean iPreCache(ILuint Size)
 	}
 
 	UseCache = IL_FALSE;
+	CacheStartPos = itell();
 	CacheSize = iread(Cache, 1, Size);
+	if (CacheSize != Size)
+		ilGetError();  // Get rid of the IL_FILE_READ_ERROR.
 
 	//CacheSize = Size;
 	CachePos = 0;
 	UseCache = IL_TRUE;
+	CacheBytesRead = 0;
 
 	return IL_TRUE;
 }
@@ -497,6 +503,8 @@ ILvoid iUnCache()
 		Cache = NULL;
 	}
 	UseCache = IL_FALSE;
+
+	iseek(CacheStartPos + CacheBytesRead, IL_SEEK_SET);
 
 	return;
 }

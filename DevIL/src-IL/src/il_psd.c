@@ -664,7 +664,8 @@ ILboolean ParseResources(ILuint ResourceSize, ILubyte *Resources)
 
 	while (ResourceSize) {
 		if (strncmp("8BIM", (ILbyte*)Resources, 4)) {
-			return IL_FALSE;
+			//return IL_FALSE;
+			return IL_TRUE;  // 05-30-2002: May not necessarily mean corrupt data...
 		}
 		Resources += 4;
 

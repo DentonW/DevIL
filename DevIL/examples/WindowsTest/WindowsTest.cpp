@@ -2,7 +2,7 @@
 //
 // ImageLib Windows (GDI) Test Source
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 02/16/2002 <--Y2K Compliant! =]
+// Last modified: 05/29/2002 <--Y2K Compliant! =]
 //
 // Filename: testil/windowstest/windowstest.c
 //
@@ -35,6 +35,7 @@ HBITMAP hBitmap;
 BITMAPINFOHEADER BmpInfo;
 HDC hDC = 0, hMemDC = 0;
 HWND HWnd;
+HBRUSH BackBrush;
 
 #define BORDER_W	8
 #define MENU_H		54
@@ -84,8 +85,9 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 
 	hInstance = hInst;
 
-	wcex.cbSize = sizeof(WNDCLASSEX);
+	BackBrush = CreateSolidBrush(RGB(128,128,128));
 
+	wcex.cbSize			= sizeof(WNDCLASSEX);
 	wcex.style			= CS_HREDRAW | CS_VREDRAW;
 	wcex.lpfnWndProc	= (WNDPROC)WndProc;
 	wcex.cbClsExtra		= 0;
@@ -93,7 +95,7 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 	wcex.hInstance		= hInstance;
 	wcex.hIcon			= LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
 	wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
-	wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW+1);
+	wcex.hbrBackground	= BackBrush;
 	wcex.lpszMenuName	= (LPCSTR)IDR_MENU1;
 	wcex.lpszClassName	= TITLE;
 	wcex.hIconSm		= LoadIcon(wcex.hInstance, (LPCTSTR)IDI_ICON1);
@@ -215,8 +217,6 @@ void ResizeWin()
 }
 
 
-ILubyte *RemoveMe;
-
 // Window procedure, handles all messages for this program
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -232,22 +232,30 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static char SaveFilter[2048];
 	static char *OFilter[] = {
 		"All Files (*.*)", "*.*",
+		"Alias|Wavefront Files (*.pix)", "*.pix",
+		"Cut Files (*.cut)", "*.cut",
+		"Dcx Files (*.dcx)", "*.dcx",
 		"Graphics Interchange Format (*.gif)", "*.gif",
 		"Half-Life Model Files (*.mdl)", "*.mdl",
 		"Homeworld Image Files (*.lif)", "*.lif",
-		"Image Files (All Supported Types)", "*.jpe;*.jpg;*.jpeg;*.lif;*.bmp;*.ico;*.pbm;*.pgm;*.pnm;*.ppm;*.png;*.bw;*.rgb;*.rgba;*.sgi;*.tga;*.tif;*.tiff;*.pcx",
+		"Image Files (All Supported Types)", "*.jpe;*.jpg;*.jpeg;*.lif;*.bmp;*.ico;*.pbm;*.pgm;*.pnm;*.ppm;*.png;*.bw;*.rgb;*.rgba;*.sgi;*.tga;*.tif;*.tiff;*.pcx;*.xpm;*.psp;*.psd;*.pix;*.pxr;*.cut;*.dcx",
 		"Jpeg Files (*.jpe, *.jpg, *.jpeg)", "*.jpe;*.jpg;*.jpeg",
+		"Kodak Photo CD Files (*.pcd)", "*.pcd",
 		"Microsoft Bitmap Files (*.bmp)", "*.bmp",
 		"Microsoft DirectDraw Surface (*.dds)", "*.dds",
-		"Microsoft Icon Files (*.ico)", "*.ico",
+		"Microsoft Icon Files (*.ico, *.cur)", "*.ico, *.cur",
+		"Multiple Network Graphics Files (*.mng)", "*.mng",
 		"Paint Shop Pro Files (*.psp)", "*.psp",
 		"PhotoShop Files (*.psd)", "*.psd",
+		"Pic Files (*.pic)", "*.pic",
+		"Pixar Files (*.pix)", "*.pix",
 		"Portable AnyMap Files (*.pbm, *.pgm, *.pnm, *.ppm)", "*.pbm;*.pgm;*.pnm;*.ppm",
 		"Portable Network Graphics Files (*.png)", "*.png",
 		"Sgi Files (*.sgi)", "*.bw;*.rgb;*.rgba;*.sgi",
-		"Targa Files (*.tga)", "*.tga",
+		"Targa Files (*.tga, *.vda, *.icb, *.vst)", "*.tga;*.vda;*.icb;*.vst",
 		"Tiff Files (*.tif)", "*.tif;*.tiff",
 		"Quake Wal Files (*.wal)", "*.wal",
+		"X PixelMap (*.xpm)", "*.xpm",
 		"ZSoft Pcx Files (*.pcx)", "*.pcx",
 		"\0\0"
 	};
@@ -261,6 +269,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		"Portable Network Graphics Files (*.png)", "*.png",
 		"Sgi Files (*.sgi)", "*.bw;*.rgb;*.rgba;*.sgi",
 		"Targa Files (*.tga)", "*.tga",
+		"Tiff Files (*.tif)", "*.tif",
 		"ZSoft Pcx Files (*.pcx)", "*.pcx",
 		"\0\0"
 	};
@@ -293,8 +302,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static ILboolean	MouseDown = IL_FALSE;
 
 	static RECT			WinSize;
-	static COLORREF		BackColour;
-	static HBRUSH		BackBrush;
 
 	unsigned int	currentColor = 0x80000000;
 	unsigned int	originalColor = 0x80000000;
@@ -312,21 +319,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			hDC = GetDC(hWnd);
 			DragAcceptFiles(hWnd, TRUE);
 
-			//BackColour = GetBkColor(hDC);
-			BackColour = 0xff808080;
-			BackBrush = CreateSolidBrush(BackColour);
-
 			ReleaseDC(hWnd, hDC);
-
-			/*BackHDC = CreateCompatibleDC(hDC);
-			Background = CreateCompatibleBitmap(BackHDC, 0, 0);
-			SelectObject(BackHDC, Background);*/
 			break;
 
 		case WM_CLOSE:
 			DestroyGDI();
-			/*DeleteObject(SelectObject(BackHDC, Background));
-			DeleteDC(BackHDC);*/
 			DestroyWindow(hWnd);
 			UnregisterClass(TITLE, hInstance);
 			break;
@@ -338,13 +335,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case WM_PAINT:
 			GetWindowRect(HWnd, &WinSize);  // Shouldn't be here!
 			hDC = BeginPaint(hWnd, &ps);
-			/*StretchBlt(hDC, 0, 0, WinSize.right - WinSize.left,
-				WinSize.bottom - WinSize.top, BackHDC, 0, 0, 1, 1, SRCCOPY);*/
+			//StretchBlt(hDC, 0, 0, WinSize.right - WinSize.left,
+			//	WinSize.bottom - WinSize.top, BackHDC, 0, 0, 1, 1, SRCCOPY);
 			WinSize.right -= WinSize.left;
 			WinSize.bottom -= WinSize.top;
 			WinSize.top = 0;
 			WinSize.left = 0;
 			FillRect(hDC, &WinSize, BackBrush);
+
             BitBlt(hDC, XOff, YOff, (WORD)BmpInfo.biWidth, (WORD)BmpInfo.biHeight, 
 				  hMemDC, 0, 0, SRCCOPY);
 			EndPaint(hWnd, &ps);

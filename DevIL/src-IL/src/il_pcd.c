@@ -106,7 +106,7 @@ ILvoid YCbCr2RGB(ILubyte Y, ILubyte Cb, ILubyte Cr, ILubyte *r, ILubyte *g, ILub
 
 ILboolean iLoadPcdInternal()
 {
-	ILenum	VertOrientation;
+	ILubyte	VertOrientation;
 	ILuint	Width, Height, i, Total, x, CurPos = 0;
 	ILubyte	*Y1=NULL, *Y2=NULL, *CbCr=NULL, r = 0, g = 0, b = 0;
 	ILuint	PicNum;
@@ -189,8 +189,10 @@ ILboolean iLoadPcdInternal()
 	ifree(CbCr);
 
 	// Not sure how it is...the documentation is hard to understand
-	if (!VertOrientation)
+	if ((VertOrientation & 0x3F) != 8)
 		iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
+	else
+		iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 
 	ilFixImage();
 

@@ -218,13 +218,17 @@ fill_input_buffer (j_decompress_ptr cinfo)
 		src->buffer[0] = (JOCTET) 0xFF;
 		src->buffer[1] = (JOCTET) JPEG_EOI;
 		nbytes = 2;
+		return IL_FALSE;
+	}
+	if (nbytes < INPUT_BUF_SIZE) {
+		ilGetError();  // Gets rid of the IL_FILE_READ_ERROR.
 	}
 
 	src->pub.next_input_byte = src->buffer;
 	src->pub.bytes_in_buffer = nbytes;
-	src->start_of_file = FALSE;
+	src->start_of_file = IL_FALSE;
 
-	return TRUE;
+	return IL_TRUE;
 }
 
 
@@ -275,60 +279,6 @@ devil_jpeg_read_init (j_decompress_ptr cinfo)
 	src->pub.next_input_byte = NULL;  // until buffer loaded
 }
 
-
-// Access point for applications wishing to use the jpeg library directly in
-// conjunction with DevIL.
-//
-// The decompressor must be set up with an input source and all desired parameters
-// this function is called. The caller must call jpeg_finish_decompress because
-// the caller may still need decompressor after calling this for e.g. examining
-// saved markers.
-ILboolean ILAPIENTRY ilLoadFromJpegStruct(ILvoid *_JpegInfo)
-{
-	// sam. void (*errorHandler)(j_common_ptr);
-	ILubyte *TempPtr[1];
-	j_decompress_ptr JpegInfo = (j_decompress_ptr)_JpegInfo;
-
-	// sam. errorHandler = JpegInfo->err->error_exit;
-	// sam. JpegInfo->err->error_exit = ExitErrorHandle;
-	jpeg_start_decompress((j_decompress_ptr)JpegInfo);
-
-	if (!ilTexImage(JpegInfo->output_width, JpegInfo->output_height, 1, (ILubyte)JpegInfo->output_components, 0, IL_UNSIGNED_BYTE, NULL)) {
-		return IL_FALSE;
-	}
-	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
-
-	switch (iCurImage->Bpp)
-	{
-		case 1:
-			iCurImage->Format = IL_LUMINANCE;
-			break;
-		case 3:
-			iCurImage->Format = IL_RGB;
-			break;
-		case 4:
-			iCurImage->Format = IL_RGBA;
-			break;
-		default:
-			// Anyway to get here?  Need to error out or something...
-			break;
-	}
-
-	TempPtr[0] = iCurImage->Data;
-	while (JpegInfo->output_scanline < JpegInfo->output_height) {
-		jpeg_read_scanlines(JpegInfo, TempPtr, 1);  // anyway to make it read all at once?
-		TempPtr[0] += iCurImage->Bps;
-	}
-
-	// sam. JpegInfo->err->error_exit = errorHandler;
-
-	if (jpgErrorOccured)
-		return IL_FALSE;
-
-	ilFixImage();
-
-	return IL_TRUE;
-}
 
 static jmp_buf	JpegJumpBuffer;
 
@@ -438,6 +388,7 @@ devil_jpeg_write_init(j_compress_ptr cinfo)
 	return;
 }
 
+
 //! Writes a Jpeg file
 ILboolean ilSaveJpeg(const ILstring FileName)
 {
@@ -477,75 +428,6 @@ ILboolean ilSaveJpegL(ILvoid *Lump, ILuint Size)
 {
 	iSetOutputLump(Lump, Size);
 	return iSaveJpegInternal();
-}
-
-
-// Access point for applications wishing to use the jpeg library directly in
-// conjunction with DevIL.
-//
-// The caller must set up the desired parameters by e.g. calling
-// jpeg_set_defaults and overriding the parameters the caller wishes
-// to change, such as quality, before calling this function. The caller
-// is also responsible for calling jpeg_finish_compress in case the
-// caller still needs to compressor for something.
-// 
-ILboolean ILAPIENTRY ilSaveFromJpegStruct(ILvoid *_JpegInfo)
-{
-	void (*errorHandler)(j_common_ptr);
-	JSAMPROW	row_pointer[1];
-	ILimage		*Temp;
-	ILenum		Origin;
-	j_compress_ptr JpegInfo = (j_compress_ptr)_JpegInfo;
-
-	if (iCurImage == NULL) {
-		ilSetError(IL_ILLEGAL_OPERATION);
-		return IL_FALSE;
-	}
-
-	errorHandler = JpegInfo->err->error_exit;
-	JpegInfo->err->error_exit = ExitErrorHandle;
-
-
-	Origin = iCurImage->Origin;
-	if (Origin == IL_ORIGIN_LOWER_LEFT) {
-		ilFlipImage();
-	}
-
-	if ((iCurImage->Format != IL_RGB && iCurImage->Format != IL_LUMINANCE) || iCurImage->Bpc != 1) {
-		Temp = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
-		if (Temp == NULL) {
-			return IL_FALSE;
-		}
-	}
-	else {
-		Temp = iCurImage;
-	}
-
-	JpegInfo->image_width = Temp->Width;  // image width and height, in pixels
-	JpegInfo->image_height = Temp->Height;
-	JpegInfo->input_components = Temp->Bpp;  // # of color components per pixel
-
-	jpeg_start_compress(JpegInfo, IL_TRUE);
-
-	//row_stride = image_width * 3;	// JSAMPLEs per row in image_buffer
-
-	while (JpegInfo->next_scanline < JpegInfo->image_height) {
-		// jpeg_write_scanlines expects an array of pointers to scanlines.
-		// Here the array is only one element long, but you could pass
-		// more than one scanline at a time if that's more convenient.
-		row_pointer[0] = &Temp->Data[JpegInfo->next_scanline * Temp->Bps];
-		(ILvoid) jpeg_write_scanlines(JpegInfo, row_pointer, 1);
-	}
-
-	if (Origin == IL_ORIGIN_LOWER_LEFT) {
-		ilFlipImage();
-	}
-
-	if (Temp != iCurImage) {
-		ilCloseImage(Temp);
-	}
-
-	return (!jpgErrorOccured);
 }
 
 
@@ -830,9 +712,9 @@ ILboolean iSaveJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size)
 	if ((iCurImage->Format != IL_RGB && iCurImage->Format != IL_RGBA && iCurImage->Format != IL_LUMINANCE)
 		|| iCurImage->Bpc != 1) {
 		if (iCurImage->Format == IL_BGRA)
-			Temp = iConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+			Temp = iConvertImage(iCurImage, IL_RGBA, IL_UNSIGNED_BYTE);
 		else
-			Temp = iConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+			Temp = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
 		if (Temp == NULL) {
 			return IL_FALSE;
 		}
@@ -912,3 +794,139 @@ ILboolean iSaveJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size)
 
 #endif//IL_NO_JPG
 
+
+// Access point for applications wishing to use the jpeg library directly in
+// conjunction with DevIL.
+//
+// The decompressor must be set up with an input source and all desired parameters
+// this function is called. The caller must call jpeg_finish_decompress because
+// the caller may still need decompressor after calling this for e.g. examining
+// saved markers.
+ILboolean ILAPIENTRY ilLoadFromJpegStruct(ILvoid *_JpegInfo)
+{
+#ifndef IL_NO_JPG
+#ifndef IL_USE_IJL
+	// sam. void (*errorHandler)(j_common_ptr);
+	ILubyte	*TempPtr[1];
+	ILuint	Returned;
+	j_decompress_ptr JpegInfo = (j_decompress_ptr)_JpegInfo;
+
+	// sam. errorHandler = JpegInfo->err->error_exit;
+	// sam. JpegInfo->err->error_exit = ExitErrorHandle;
+	jpeg_start_decompress((j_decompress_ptr)JpegInfo);
+
+	if (!ilTexImage(JpegInfo->output_width, JpegInfo->output_height, 1, (ILubyte)JpegInfo->output_components, 0, IL_UNSIGNED_BYTE, NULL)) {
+		return IL_FALSE;
+	}
+	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
+
+	switch (iCurImage->Bpp)
+	{
+		case 1:
+			iCurImage->Format = IL_LUMINANCE;
+			break;
+		case 3:
+			iCurImage->Format = IL_RGB;
+			break;
+		case 4:
+			iCurImage->Format = IL_RGBA;
+			break;
+		default:
+			// Anyway to get here?  Need to error out or something...
+			break;
+	}
+
+	TempPtr[0] = iCurImage->Data;
+	while (JpegInfo->output_scanline < JpegInfo->output_height) {
+		Returned = jpeg_read_scanlines(JpegInfo, TempPtr, 1);  // anyway to make it read all at once?
+		TempPtr[0] += iCurImage->Bps;
+		if (Returned == 0)
+			break;
+	}
+
+	// sam. JpegInfo->err->error_exit = errorHandler;
+
+	if (jpgErrorOccured)
+		return IL_FALSE;
+
+	ilFixImage();
+	return IL_TRUE;
+#endif
+#endif
+	return IL_FALSE;
+}
+
+
+
+// Access point for applications wishing to use the jpeg library directly in
+// conjunction with DevIL.
+//
+// The caller must set up the desired parameters by e.g. calling
+// jpeg_set_defaults and overriding the parameters the caller wishes
+// to change, such as quality, before calling this function. The caller
+// is also responsible for calling jpeg_finish_compress in case the
+// caller still needs to compressor for something.
+// 
+ILboolean ILAPIENTRY ilSaveFromJpegStruct(ILvoid *_JpegInfo)
+{
+#ifndef IL_NO_JPG
+#ifndef IL_USE_IJL
+	void (*errorHandler)(j_common_ptr);
+	JSAMPROW	row_pointer[1];
+	ILimage		*Temp;
+	ILenum		Origin;
+	j_compress_ptr JpegInfo = (j_compress_ptr)_JpegInfo;
+
+	if (iCurImage == NULL) {
+		ilSetError(IL_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	errorHandler = JpegInfo->err->error_exit;
+	JpegInfo->err->error_exit = ExitErrorHandle;
+
+
+	Origin = iCurImage->Origin;
+	if (Origin == IL_ORIGIN_LOWER_LEFT) {
+		ilFlipImage();
+	}
+
+	if ((iCurImage->Format != IL_RGB && iCurImage->Format != IL_LUMINANCE) || iCurImage->Bpc != 1) {
+		Temp = iConvertImage(iCurImage, IL_RGB, IL_UNSIGNED_BYTE);
+		if (Temp == NULL) {
+			return IL_FALSE;
+		}
+	}
+	else {
+		Temp = iCurImage;
+	}
+
+	JpegInfo->image_width = Temp->Width;  // image width and height, in pixels
+	JpegInfo->image_height = Temp->Height;
+	JpegInfo->input_components = Temp->Bpp;  // # of color components per pixel
+
+	jpeg_start_compress(JpegInfo, IL_TRUE);
+
+	//row_stride = image_width * 3;	// JSAMPLEs per row in image_buffer
+
+	while (JpegInfo->next_scanline < JpegInfo->image_height) {
+		// jpeg_write_scanlines expects an array of pointers to scanlines.
+		// Here the array is only one element long, but you could pass
+		// more than one scanline at a time if that's more convenient.
+		row_pointer[0] = &Temp->Data[JpegInfo->next_scanline * Temp->Bps];
+		(ILvoid) jpeg_write_scanlines(JpegInfo, row_pointer, 1);
+	}
+
+	if (Origin == IL_ORIGIN_LOWER_LEFT) {
+		ilFlipImage();
+	}
+
+	if (Temp != iCurImage) {
+		ilCloseImage(Temp);
+	}
+
+	return (!jpgErrorOccured);
+#endif
+#endif
+	return IL_FALSE;
+}

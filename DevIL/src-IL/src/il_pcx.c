@@ -358,12 +358,20 @@ ILboolean iUncompressPcx(PCXHEAD *Header)
 
 	// Read in the palette
 	if (iCurImage->Bpp == 1) {
-		ByteHead = igetc();	// the value 12, because it signals there's a palette for some reason...
-							//	We should do a check to make certain it's 12...
-		if (ByteHead != 12)  // Some Quake2 .pcx files don't have this byte for some reason.
-			iseek(-1, IL_SEEK_CUR);
-		if (iread(iCurImage->Pal.Palette, 1, iCurImage->Pal.PalSize) != iCurImage->Pal.PalSize)
-			goto file_read_error;
+		if (iread(&ByteHead, 1, 1) == 0) {  // If true, assume that we have a luminance image.
+			ilGetError();  // Get rid of the IL_FILE_READ_ERROR.
+			iCurImage->Format = IL_LUMINANCE;
+			if (iCurImage->Pal.Palette)
+				ifree(iCurImage->Pal.Palette);
+			iCurImage->Pal.PalSize = 0;
+			iCurImage->Pal.PalType = IL_PAL_NONE;
+		}
+		else {
+			if (ByteHead != 12)  // Some Quake2 .pcx files don't have this byte for some reason.
+				iseek(-1, IL_SEEK_CUR);
+			if (iread(iCurImage->Pal.Palette, 1, iCurImage->Pal.PalSize) != iCurImage->Pal.PalSize)
+				goto file_read_error;
+		}
 	}
 
 	ifree(ScanLine);
