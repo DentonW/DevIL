@@ -19,11 +19,7 @@
 
 
 const char *_ilutVendor		= "Abysmal Software";
-
-//use a define to enable the ## __DATE__ construct
-#define VERSION_STRING "Developer's Image Library Utility Toolkit (ILUT) 1.6.6 " ## __DATE__
-const char *_ilutVersion	= VERSION_STRING;
-#undef VESION_STRING
+const char *_ilutVersion	= "Developer's Image Library Utility Toolkit (ILUT) 1.6.7 " __DATE__;
 
 
 

@@ -20,7 +20,7 @@
 #include <stdlib.h>
 
 const ILstring _ilVendor		= IL_TEXT("Abysmal Software");
-const ILstring _ilVersion		= IL_TEXT("Developer's Image Library (DevIL) 1.6.6 " _DATE__);
+const ILstring _ilVersion		= IL_TEXT("Developer's Image Library (DevIL) 1.6.7 " _DATE__);
 
 
 const ILstring _ilLoadExt		= "" IL_BMP_EXT IL_CUT_EXT IL_DCX_EXT IL_DDS_EXT
