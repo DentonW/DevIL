@@ -408,7 +408,10 @@ typedef void			ILvoid;
 #if (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED) || defined(__BORLANDC__) || defined(__LCC__)
 	#define ILAPIENTRY __stdcall
 	#define IL_PACKSTRUCT
-#elif defined(linux) || defined(MACOSX) || defined(__CYGWIN__) //fix bug 840364
+//#elif defined(linux) || defined(MACOSX) || defined(__CYGWIN__) //fix bug 840364
+#elif defined( __GNUC__ )
+  // this should work for any of the above commented platforms 
+  // plus any platform using GCC
 	#define ILAPIENTRY
 	#define IL_PACKSTRUCT __attribute__ ((packed))
 #else

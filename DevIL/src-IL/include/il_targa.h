@@ -23,6 +23,7 @@
 #ifdef MACOSX 
 #pragma pack(1)
 #endif
+
 typedef struct TARGAHEAD
 {
 	ILubyte		IDLen;
@@ -54,7 +55,6 @@ typedef struct TARGAFOOTER
 #ifdef _MSC_VER
 #pragma pack(pop, tga_struct)
 #endif
-
 
 #define TGA_EXT_LEN		495
 typedef struct TARGAEXT
