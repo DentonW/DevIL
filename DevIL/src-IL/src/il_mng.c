@@ -21,11 +21,7 @@
 #endif
 
 
-#ifdef MACOSX
-    #include <libmng/libmng.h>
-#else
-    #include <libmng.h>
-#endif
+#include <libmng.h>
 
 //---------------------------------------------------------------------------------------------
 // memory allocation; data must be zeroed

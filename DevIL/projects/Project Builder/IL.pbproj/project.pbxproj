@@ -62,11 +62,6 @@
 		};
 		0867D69AFE84028FC02AAC07 = {
 			children = (
-				A3A666B1C5B06A6A00A80001,
-				A3A666B2C5B06A6A00A80001,
-				A3A666B3C5B06A6A00A80001,
-				A3A666B4C5B06A6A00A80001,
-				A3A666B5C5B06A6A00A80001,
 				A31F2A2AC5B03A9B00A80001,
 			);
 			isa = PBXGroup;
@@ -284,11 +279,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A31F2A2BC5B03A9B00A80001,
-				A3A666B6C5B06A6A00A80001,
-				A3A666B7C5B06A6A00A80001,
-				A3A666B8C5B06A6A00A80001,
-				A3A666B9C5B06A6A00A80001,
-				A3A666BAC5B06A6A00A80001,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2347,81 +2337,6 @@
 		};
 		A3800BC603C37DC500A80001 = {
 			fileRef = A3800BBE03C37DC500A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		A3A666B1C5B06A6A00A80001 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
-			lastKnownFileType = wrapper.framework;
-			name = lcms.framework;
-			path = /Library/Frameworks/lcms.framework;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-		A3A666B2C5B06A6A00A80001 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
-			lastKnownFileType = wrapper.framework;
-			name = libtiff.framework;
-			path = /Library/Frameworks/libtiff.framework;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-		A3A666B3C5B06A6A00A80001 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
-			lastKnownFileType = wrapper.framework;
-			name = libpng.framework;
-			path = /Library/Frameworks/libpng.framework;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-		A3A666B4C5B06A6A00A80001 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
-			lastKnownFileType = wrapper.framework;
-			name = libjpeg.framework;
-			path = /Library/Frameworks/libjpeg.framework;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-		A3A666B5C5B06A6A00A80001 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
-			lastKnownFileType = wrapper.framework;
-			name = libmng.framework;
-			path = /Library/Frameworks/libmng.framework;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-		A3A666B6C5B06A6A00A80001 = {
-			fileRef = A3A666B1C5B06A6A00A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		A3A666B7C5B06A6A00A80001 = {
-			fileRef = A3A666B2C5B06A6A00A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		A3A666B8C5B06A6A00A80001 = {
-			fileRef = A3A666B3C5B06A6A00A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		A3A666B9C5B06A6A00A80001 = {
-			fileRef = A3A666B4C5B06A6A00A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		A3A666BAC5B06A6A00A80001 = {
-			fileRef = A3A666B5C5B06A6A00A80001;
 			isa = PBXBuildFile;
 			settings = {
 			};

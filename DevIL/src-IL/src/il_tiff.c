@@ -14,11 +14,7 @@
 #include "il_internal.h"
 #ifndef IL_NO_TIF
 
-#ifdef MACOSX
-#include <libtiff/tiffio.h>
-#else
 #include <tiffio.h>
-#endif
 
 #include <time.h>
 #include <stdio.h>

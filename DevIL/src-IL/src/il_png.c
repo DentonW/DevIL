@@ -18,11 +18,7 @@
 
 #include "il_internal.h"
 #ifndef IL_NO_PNG
-#ifdef MACOSX
-#include <libpng/png.h>
-#else
 #include <png.h>
-#endif
 #include "il_manip.h"
 #include <stdlib.h>
 #if PNG_LIBPNG_VER < 10200

@@ -28,11 +28,7 @@
 		#define RGB_GREEN	1
 		#define RGB_BLUE	2
 
-		#ifdef MACOSX
-			#include <libjpeg/jpeglib.h>
-		#else
-			#include "jpeglib.h"
-		#endif
+		#include "jpeglib.h"
 
 		#if JPEG_LIB_VERSION < 62
 			#warning DevIL was designed with libjpeg 6b or higher in mind.  Consider upgrading at www.ijg.org
