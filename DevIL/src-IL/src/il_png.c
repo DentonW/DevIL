@@ -461,7 +461,6 @@ ILboolean iSavePngInternal()
 	* in case we are using dynamically linked libraries.  REQUIRED.
 	*/
 	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-
 	if (png_ptr == NULL) {
 		ilSetError(IL_LIB_PNG_ERROR);
 		return IL_FALSE;

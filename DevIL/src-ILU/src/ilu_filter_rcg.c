@@ -59,7 +59,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <malloc.h>
+//#include <malloc.h>
 #include <math.h>
 #include "ilu_internal.h"
 #include "ilu_states.h"
