@@ -7,12 +7,13 @@ dnl
 dnl
 dnl configure.in initialization
 dnl
-AC_INIT(README)
+AC_INIT
+AC_CONFIG_SRCDIR([README])
 
 dnl
 dnl Minimum Autoconf version
 dnl
-AC_PREREQ(2.50)
+AC_PREREQ(2.52)
 
 dnl
 dnl Version Info
@@ -29,16 +30,16 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.7 $)
+AC_REVISION($Revision: 1.8 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
-AC_LANG_C
+AC_LANG([C])
 AC_PROG_CC
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_C_BIGENDIAN
-AC_CYGWIN32
+AC_LIBTOOL_WIN32_DLL
 AC_PATH_XTRA
 
 AM_INIT_AUTOMAKE("DevIL", $DEVIL_MAJOR.$DEVIL_MINOR.$DEVIL_REVISION)
@@ -192,7 +193,7 @@ if test "$debug_symbols" = "yes" ; then
 fi
 
 case "$host" in
-  *win*)
+  *cygwin*)
 		LIBIL_CFLAGS=$LIBIL_CFLAGS" -mno-cygwin"
 		LIBILU_CFLAGS=$LIBILU_CFLAGS" -mno-cygwin"
 		LIBILUT_CFLAGS=$LIBILUT_CFLAGS" -mno-cygwin"
@@ -527,7 +528,7 @@ AC_SUBST(LIBILUT_CFLAGS)
 dnl
 dnl Ouput files to generate
 dnl
-AC_OUTPUT([Makefile \
+AC_CONFIG_FILES([Makefile \
            src-IL/Makefile \
            src-IL/src/Makefile \
            src-IL/include/Makefile \
@@ -539,3 +540,4 @@ AC_OUTPUT([Makefile \
            src-ILUT/include/Makefile \
            include/Makefile \
            include/IL/Makefile ])
+AC_OUTPUT

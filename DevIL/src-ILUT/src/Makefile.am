@@ -7,7 +7,7 @@ libILUT_la_SOURCES = ilut_allegro.c     ilut_main.c \
 
 CFLAGS = @LIBILUT_CFLAGS@
 
-libILUT_la_LDFLAGS = -version-info @DEVIL_LTVERSION@ \
+libILUT_la_LDFLAGS = -no-undefined -version-info @DEVIL_LTVERSION@ \
                      -L$(top_srcdir)/src-IL/src \
                      -L$(top_srcdir)/src-ILU/src \
                      @LIBSDL@ @LIBALLEGRO@
