@@ -28,6 +28,7 @@ extern "C" {
 //#define IL_NO_DDS
 //#define IL_NO_DOOM
 //#define IL_NO_GIF
+//#define IL_NO_HDR
 //#define IL_NO_ICO
 //#define IL_NO_JPG
 //#define IL_NO_LIF
@@ -230,6 +231,7 @@ typedef void			ILvoid;
 #define IL_PIX								0x043C
 #define IL_PXR								0x043D
 #define IL_XPM								0x043E
+#define IL_HDR								0x043F
 
 #define IL_JASC_PAL							0x0475
 
@@ -586,11 +588,11 @@ ILAPI ILboolean		ILAPIENTRY ilSaveFromJpegStruct(ILvoid* JpegCompressorPtr);
 #endif // __il_h__
 
 #ifdef ALTIVEC
-    #define imemclear(x,y) vec_memclear(x,y);
+	#define imemclear(x,y) vec_memclear(x,y);
 #else
-    #define imemclear(x,y) memset(x,0,y);
+	#define imemclear(x,y) memset(x,0,y);
 #endif
-    
+
 #ifdef ALTIVEC
-    void vec_memclear( ILvoid *, ILuint );
+	void vec_memclear( ILvoid *, ILuint );
 #endif

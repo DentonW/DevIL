@@ -24,7 +24,7 @@ const ILstring _ilVersion		= IL_TEXT("Developer's Image Library (DevIL) 1.6.7 " 
 
 
 const ILstring _ilLoadExt		= "" IL_BMP_EXT IL_CUT_EXT IL_DCX_EXT IL_DDS_EXT
-									IL_GIF_EXT IL_ICO_EXT IL_JPG_EXT IL_LIF_EXT
+									IL_GIF_EXT IL_HDR_EXT IL_ICO_EXT IL_JPG_EXT IL_LIF_EXT
 									IL_MDL_EXT IL_MNG_EXT IL_PCX_EXT IL_PIC_EXT
 									IL_PIX_EXT IL_PNG_EXT IL_PNM_EXT IL_PSD_EXT
 									IL_PSP_EXT IL_PXR_EXT IL_SGI_EXT IL_TGA_EXT
@@ -431,7 +431,8 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 				ilSetError(IL_ILLEGAL_OPERATION);
 				break;
 			}
-			*Param = iCurImage->Bpp << 3;
+			//changed 20040610 to channel count (Bpp) times sizeof type
+			*Param = (iCurImage->Bpp << 3)*ilGetBppType(iCurImage->Type);
 			break;
 		case IL_IMAGE_SIZE_OF_DATA:
 			if (iCurImage == NULL) {

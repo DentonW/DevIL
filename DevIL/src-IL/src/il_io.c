@@ -49,6 +49,8 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 		return IL_GIF;
 	if (!iStrCmp(Ext, IL_TEXT("cut")))
 		return IL_CUT;
+	if (!iStrCmp(Ext, IL_TEXT("hdr")))
+		return IL_HDR;
 	if (!iStrCmp(Ext, IL_TEXT("ico")) || !iStrCmp(Ext, IL_TEXT("cur")))
 		return IL_ICO;
 	if (!iStrCmp(Ext, IL_TEXT("jng")))
@@ -143,6 +145,11 @@ ILenum ilDetermineTypeF(ILHANDLE File)
 		return IL_GIF;
 	#endif
 
+	#ifndef IL_NO_HDR
+	if (ilIsValidHdrF(File))
+		return IL_HDR;
+	#endif
+
 	#ifndef IL_NO_LIF
 	if (ilIsValidLifF(File))
 		return IL_LIF;
@@ -222,6 +229,11 @@ ILenum ilDetermineTypeL(ILvoid *Lump, ILuint Size)
 	#ifndef IL_NO_GIF
 	if (ilIsValidGifL(Lump, Size))
 		return IL_GIF;
+	#endif
+
+	#ifndef IL_NO_HDR
+	if (ilIsValidHdrL(Lump, Size))
+		return IL_HDR;
 	#endif
 
 	#ifndef IL_NO_LIF
@@ -314,6 +326,11 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, const ILstring FileName)
 			return ilIsValidGif(FileName);
 		#endif
 
+		#ifndef IL_NO_HDR
+		case IL_HDR:
+			return ilIsValidHdr(FileName);
+		#endif
+
 		#ifndef IL_NO_LIF
 		case IL_LIF:
 			return ilIsValidLif(FileName);
@@ -399,6 +416,11 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 			return ilIsValidGifF(File);
 		#endif
 
+		#ifndef IL_NO_HDR
+		case IL_HDR:
+			return ilIsValidHdrF(File);
+		#endif
+
 		#ifndef IL_NO_LIF
 		case IL_LIF:
 			return ilIsValidLifF(File);
@@ -477,6 +499,11 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, ILvoid *Lump, ILuint Size)
 		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilIsValidGifL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_HDR
+		case IL_HDR:
+			return ilIsValidHdrL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_LIF
@@ -565,6 +592,11 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, const ILstring FileName)
 		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilLoadGif(FileName);
+		#endif
+
+		#ifndef IL_NO_HDR
+		case IL_HDR:
+			return ilLoadHdr(FileName);
 		#endif
 
 		#ifndef IL_NO_CUT
@@ -723,6 +755,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadGifF(File);
 		#endif
 
+		#ifndef IL_NO_HDR
+		case IL_HDR:
+			return ilLoadHdrF(File);
+		#endif
+
 		#ifndef IL_NO_CUT
 		case IL_CUT:
 			return ilLoadCutF(File);
@@ -869,6 +906,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, ILvoid *Lump, ILuint Size)
 		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilLoadGifL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_HDR
+		case IL_HDR:
+			return ilLoadHdrL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_CUT
@@ -1037,6 +1079,12 @@ ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 		}
 		#endif
 
+		#ifndef IL_NO_HDR
+		if (!iStrCmp(Ext, IL_TEXT("hdr"))) {
+			return ilLoadHdr(FileName);
+		}
+		#endif
+
 		#ifndef IL_NO_CUT
 		if (!iStrCmp(Ext, IL_TEXT("cut"))) {
 			return ilLoadCut(FileName);
@@ -1161,7 +1209,7 @@ ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 	if (Type == IL_TYPE_UNKNOWN)
 		return IL_FALSE;
 	return ilLoad(Type, FileName);
-}					 
+}
 
 
 ILboolean ILAPIENTRY ilSave(ILenum Type, const ILstring FileName)

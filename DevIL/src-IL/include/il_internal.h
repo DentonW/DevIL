@@ -282,6 +282,13 @@ ILboolean ilLoadGif(const ILstring FileName);
 ILboolean ilLoadGifF(ILHANDLE File);
 ILboolean ilLoadGifL(ILvoid *Lump, ILuint Size);
 
+ILboolean ilIsValidHdr(const ILstring FileName);
+ILboolean ilIsValidHdrF(ILHANDLE File);
+ILboolean ilIsValidHdrL(ILvoid *Lump, ILuint Size);
+ILboolean ilLoadHdr(const ILstring FileName);
+ILboolean ilLoadHdrF(ILHANDLE File);
+ILboolean ilLoadHdrL(ILvoid *Lump, ILuint Size);
+
 ILboolean ilLoadIcon(const ILstring FileName);
 ILboolean ilLoadIconF(ILHANDLE File);
 ILboolean ilLoadIconL(ILvoid *Lump, ILuint Size);

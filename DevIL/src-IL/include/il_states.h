@@ -147,6 +147,12 @@ IL_HINTS ilHints;
 	#define IL_GIF_EXT ""
 #endif
 
+#ifndef IL_NO_HDR
+	#define IL_HDR_EXT "hdr "
+#else
+	#define IL_HDR_EXT ""
+#endif
+
 #ifndef IL_NO_ICO
 	#define IL_ICO_EXT "ico cur "
 #else
