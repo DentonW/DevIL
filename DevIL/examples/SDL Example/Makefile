@@ -2,7 +2,7 @@
 
 CC=gcc
 OBJECTS=sdl_test.o
-LIBS=-lIL -lILU
+LIBS=-lIL -lILU -lILUT -lGL -lGLU -lSDL -lpthread
 
 all: DevIL_testsdl
 

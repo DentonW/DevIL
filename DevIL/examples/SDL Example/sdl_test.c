@@ -11,9 +11,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <IL\il.h>
-#include <IL\ilu.h>
-#include <IL\ilut.h>
+#include <IL/il.h>
+#include <IL/ilu.h>
+#include <IL/ilut.h>
 #include <SDL.h>
 
 #include <stdlib.h>
