@@ -293,12 +293,10 @@ ILint readpng_init()
 
 ILboolean readpng_get_image(ILdouble display_exponent)
 {
-	ILuint		i;
 	png_bytepp	row_pointers = NULL;
-	png_uint_32	width, height; // Changed the type to fix AMD64 bit problems, thanks to Eric Werness
-	ILuint		channels;
+	png_uint_32 width, height; // Changed the type to fix AMD64 bit problems, thanks to Eric Werness
 	ILdouble	screen_gamma = 1.0, image_gamma;
-	ILuint		bit_depth;
+	ILuint		i, channels, bit_depth;
 
 
 	/* setjmp() must be called in every function that calls a PNG-reading
