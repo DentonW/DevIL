@@ -61,6 +61,12 @@ ILvoid ilDefaultStates()
 	ilStates[ilCurrentPos].ilPngAuthName = NULL;
 	ilStates[ilCurrentPos].ilPngTitle = NULL;
 	ilStates[ilCurrentPos].ilPngDescription = NULL;
+
+	//2003-09-01: added tiff strings
+	ilStates[ilCurrentPos].ilTifDescription = NULL;
+	ilStates[ilCurrentPos].ilTifHostComputer = NULL;
+	ilStates[ilCurrentPos].ilTifDocumentName = NULL;
+	ilStates[ilCurrentPos].ilTifAuthName = NULL;
 	ilStates[ilCurrentPos].ilCHeader = NULL;
 
 	ilStates[ilCurrentPos].ilQuantMode = IL_WU_QUANT;
@@ -87,7 +93,9 @@ const ILstring ILAPIENTRY ilGetString(ILenum StringName)
 	{
 		case IL_VENDOR:
 			return (const ILstring)_ilVendor;
-		case IL_VERSION:
+		case IL_VERSION_NUM: //changed 2003-08-30: IL_VERSION changes
+												//to reflect the il version...not a good
+												//switch define ;-)
 			return (const ILstring)_ilVersion;
 		case IL_LOAD_EXT:
 			return (const ILstring)_ilLoadExt;
@@ -105,6 +113,15 @@ const ILstring ILAPIENTRY ilGetString(ILenum StringName)
 			return (const ILstring)ilStates[ilCurrentPos].ilPngTitle;
 		case IL_PNG_DESCRIPTION_STRING:
 			return (const ILstring)ilStates[ilCurrentPos].ilPngDescription;
+		//2003-08-31: added tif strings
+		case IL_TIF_DESCRIPTION_STRING:
+			return (const ILstring)ilStates[ilCurrentPos].ilTifDescription;
+		case IL_TIF_HOSTCOMPUTER_STRING:
+			return (const ILstring)ilStates[ilCurrentPos].ilTifHostComputer;
+		case IL_TIF_DOCUMENTNAME_STRING:
+			return (const ILstring)ilStates[ilCurrentPos].ilTifDocumentName;
+		case IL_TIF_AUTHNAME_STRING:
+			return (const ILstring)ilStates[ilCurrentPos].ilTifAuthName;
 		case IL_CHEAD_HEADER_STRING:
 			return (const ILstring)ilStates[ilCurrentPos].ilCHeader;
 		default:
@@ -155,16 +172,18 @@ char *iGetString(ILenum StringName)
 			return iClipString(ilStates[ilCurrentPos].ilPngTitle, 255);
 		case IL_PNG_DESCRIPTION_STRING:
 			return iClipString(ilStates[ilCurrentPos].ilPngDescription, 255);
+
+		//changed 2003-08-31...here was a serious copy and paste bug ;-)
 		case IL_TIF_DESCRIPTION_STRING:
-			return iClipString(ilStates[ilCurrentPos].ilPngDescription, 255);
+			return iClipString(ilStates[ilCurrentPos].ilTifDescription, 255);
 		case IL_TIF_HOSTCOMPUTER_STRING:
-			return iClipString(ilStates[ilCurrentPos].ilPngDescription, 255);
+			return iClipString(ilStates[ilCurrentPos].ilTifHostComputer, 255);
 		case IL_TIF_DOCUMENTNAME_STRING:
-			return iClipString(ilStates[ilCurrentPos].ilPngDescription, 255);
+			return iClipString(ilStates[ilCurrentPos].ilTifDocumentName, 255);
 		case IL_TIF_AUTHNAME_STRING:
-			return iClipString(ilStates[ilCurrentPos].ilPngDescription, 255);
+			return iClipString(ilStates[ilCurrentPos].ilTifAuthName, 255);
 		case IL_CHEAD_HEADER_STRING:
-			return iClipString(ilStates[ilCurrentPos].ilPngDescription, 32);
+			return iClipString(ilStates[ilCurrentPos].ilCHeader, 32);
 		default:
 			ilSetError(IL_INVALID_ENUM);
 	}
@@ -485,6 +504,13 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 			}
 			*Param = iCurImage->CubeFlags;
 			break;
+		case IL_IMAGE_ORIGIN:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			*Param = iCurImage->Origin;
+			break;
 
 		case IL_ACTIVE_IMAGE:
 		case IL_ACTIVE_MIPMAP:
@@ -778,14 +804,33 @@ ILvoid ILAPIENTRY ilPushAttrib(ILuint Bits)
 			ifree(ilStates[ilCurrentPos].ilPngTitle);
 		if (ilStates[ilCurrentPos].ilPngDescription)
 			ifree(ilStates[ilCurrentPos].ilPngDescription);
+
+		//2003-09-01: added tif strings
+		if (ilStates[ilCurrentPos].ilTifDescription)
+			ifree(ilStates[ilCurrentPos].ilTifDescription);
+		if (ilStates[ilCurrentPos].ilTifHostComputer)
+			ifree(ilStates[ilCurrentPos].ilTifHostComputer);
+		if (ilStates[ilCurrentPos].ilTifDocumentName)
+			ifree(ilStates[ilCurrentPos].ilTifDocumentName);
+		if (ilStates[ilCurrentPos].ilTifAuthName)
+			ifree(ilStates[ilCurrentPos].ilTifAuthName);
+
 		if (ilStates[ilCurrentPos].ilCHeader)
 			ifree(ilStates[ilCurrentPos].ilCHeader);
+
 		ilStates[ilCurrentPos].ilTgaId = ilStrDup(ilStates[ilCurrentPos-1].ilTgaId);
 		ilStates[ilCurrentPos].ilTgaAuthName = ilStrDup(ilStates[ilCurrentPos-1].ilTgaAuthName);
 		ilStates[ilCurrentPos].ilTgaAuthComment = ilStrDup(ilStates[ilCurrentPos-1].ilTgaAuthComment);
 		ilStates[ilCurrentPos].ilPngAuthName = ilStrDup(ilStates[ilCurrentPos-1].ilPngAuthName);
 		ilStates[ilCurrentPos].ilPngTitle = ilStrDup(ilStates[ilCurrentPos-1].ilPngTitle);
 		ilStates[ilCurrentPos].ilPngDescription = ilStrDup(ilStates[ilCurrentPos-1].ilPngDescription);
+
+		//2003-09-01: added tif strings
+		ilStates[ilCurrentPos].ilTifDescription = ilStrDup(ilStates[ilCurrentPos-1].ilTifDescription);
+		ilStates[ilCurrentPos].ilTifHostComputer = ilStrDup(ilStates[ilCurrentPos-1].ilTifHostComputer);
+		ilStates[ilCurrentPos].ilTifDocumentName = ilStrDup(ilStates[ilCurrentPos-1].ilTifDocumentName);
+		ilStates[ilCurrentPos].ilTifAuthName = ilStrDup(ilStates[ilCurrentPos-1].ilTifAuthName);
+
 		ilStates[ilCurrentPos].ilCHeader = ilStrDup(ilStates[ilCurrentPos-1].ilCHeader);
 	}
 
@@ -916,6 +961,29 @@ ILvoid ILAPIENTRY ilSetString(ILenum Mode, const char *String)
 				ifree(ilStates[ilCurrentPos].ilPngDescription);
 			ilStates[ilCurrentPos].ilPngDescription = ilStrDup(String);
 			break;
+
+		//2003-09-01: added tif strings
+		case IL_TIF_DESCRIPTION_STRING:
+			if (ilStates[ilCurrentPos].ilTifDescription)
+				ifree(ilStates[ilCurrentPos].ilTifDescription);
+			ilStates[ilCurrentPos].ilTifDescription = ilStrDup(String);
+			break;
+		case IL_TIF_HOSTCOMPUTER_STRING:
+			if (ilStates[ilCurrentPos].ilTifHostComputer)
+				ifree(ilStates[ilCurrentPos].ilTifHostComputer);
+			ilStates[ilCurrentPos].ilTifHostComputer = ilStrDup(String);
+			break;
+		case IL_TIF_DOCUMENTNAME_STRING:
+						if (ilStates[ilCurrentPos].ilTifDocumentName)
+				ifree(ilStates[ilCurrentPos].ilTifDocumentName);
+			ilStates[ilCurrentPos].ilTifDocumentName = ilStrDup(String);
+			break;
+		case IL_TIF_AUTHNAME_STRING:
+			if (ilStates[ilCurrentPos].ilTifAuthName)
+				ifree(ilStates[ilCurrentPos].ilTifAuthName);
+			ilStates[ilCurrentPos].ilTifAuthName = ilStrDup(String);
+			break;
+
 		case IL_CHEAD_HEADER_STRING:
 			if (ilStates[ilCurrentPos].ilCHeader)
 				ifree(ilStates[ilCurrentPos].ilCHeader);
