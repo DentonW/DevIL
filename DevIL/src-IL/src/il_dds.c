@@ -211,7 +211,7 @@ ILboolean iLoadDdsCubemapInternal()
 
 	CompData = NULL;
 
-	if (CompFormat == PF_RGB)
+	if (CompFormat == PF_RGB || CompFormat == PF_3DC)
 		Bpp = 3;
 	else
 		Bpp = 4;
@@ -293,6 +293,10 @@ ILboolean iLoadDdsInternal()
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
 	}
+	/*else if (CompFormat == PF_3DC) {
+		ilSetError(IL_FORMAT_NOT_SUPPORTED);
+		return IL_FALSE;
+	}*/
 	// Microsoft bug, they're not following their own documentation.
 	if (!(Head.Flags1 & (DDS_LINEARSIZE | DDS_PITCH))) {
 		Head.Flags1 |= DDS_LINEARSIZE;
@@ -371,6 +375,11 @@ ILvoid DecodePixelFormat()
 				BlockSize *= 16;
 				break;
 
+			case IL_MAKEFOURCC('A', 'T', 'I', '2'):
+				CompFormat = PF_3DC;
+				BlockSize *= 16;
+				break;
+
 			default:
 				CompFormat = PF_UNKNOWN;
 				BlockSize *= 16;
@@ -420,6 +429,7 @@ ILvoid AdjustVolumeTexture(DDSHEAD *Head)
 		case PF_DXT3:
 		case PF_DXT4:
 		case PF_DXT5:
+		case PF_3DC:
 			Head->LinearSize = IL_MAX(1,Head->Width/4) * IL_MAX(1,Head->Height/4) * 16;
 			break;
 	}
@@ -439,7 +449,7 @@ ILboolean ReadData()
 	ILubyte	*Temp;
 	ILuint	Bpp;
 
-	if (CompFormat == PF_RGB)
+	if (CompFormat == PF_RGB || CompFormat == PF_3DC)
 		Bpp = 3;
 	else
 		Bpp = 4;
@@ -500,6 +510,12 @@ ILboolean AllocImage()
 			if (!ilTexImage(Width, Height, Depth, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL))
 				return IL_FALSE;
 			break;
+		case PF_3DC:
+			//right now there's no OpenGL api to use the compressed 3dc data, so
+			//throw it away (I don't know how DirectX works, though)?
+			if (!ilTexImage(Width, Height, Depth, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL))
+				return IL_FALSE;
+			break;
 		default:
 			if (!ilTexImage(Width, Height, Depth, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL))
 				return IL_FALSE;
@@ -535,13 +551,16 @@ ILboolean Decompress()
 			return DecompressDXT2();
 
 		case PF_DXT3:
-			return DecompressDXT3();	
+			return DecompressDXT3();
 
 		case PF_DXT4:
 			return DecompressDXT4();
 
 		case PF_DXT5:
-			return DecompressDXT5();		
+			return DecompressDXT5();
+
+		case PF_3DC:
+			return Decompress3Dc();
 
 		case PF_UNKNOWN:
 			return IL_FALSE;
@@ -559,7 +578,7 @@ ILboolean ReadMipmaps()
 	ILuint	LastLinear;
 	ILuint	minW, minH;
 
-	if (CompFormat == PF_RGB)
+	if (CompFormat == PF_RGB || CompFormat == PF_3DC)
 		Bpp = 3;
 	else
 		Bpp = 4;
@@ -670,7 +689,7 @@ ILboolean DecompressDXT1()
 
 
 				if (*((ILushort*)color_0) > *((ILushort*)color_1)) {
-					// Four-color block: derive the other two colors.    
+					// Four-color block: derive the other two colors.
 					// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
 					// These 2-bit codes correspond to the 2-bit fields 
 					// stored in the 64-bit block.
@@ -683,7 +702,7 @@ ILboolean DecompressDXT1()
 					colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
 					colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
 					colours[3].a = 0xFF;
-				}    
+				}
 				else { 
 					// Three-color block: derive the other color.
 					// 00 = color_0,  01 = color_1,  10 = color_2,
@@ -905,10 +924,10 @@ ILboolean DecompressDXT5()
 					alphas[4] = (4 * alphas[0] + 3 * alphas[1] + 3) / 7;	// bit code 100
 					alphas[5] = (3 * alphas[0] + 4 * alphas[1] + 3) / 7;	// bit code 101
 					alphas[6] = (2 * alphas[0] + 5 * alphas[1] + 3) / 7;	// bit code 110
-					alphas[7] = (1 * alphas[0] + 6 * alphas[1] + 3) / 7;	// bit code 111  
-				}    
-				else {  
-					// 6-alpha block.    
+					alphas[7] = (1 * alphas[0] + 6 * alphas[1] + 3) / 7;	// bit code 111
+				}
+				else {
+					// 6-alpha block.
 					// Bit code 000 = alpha_0, 001 = alpha_1, others are interpolated.
 					alphas[2] = (4 * alphas[0] + 1 * alphas[1] + 2) / 5;	// Bit code 010
 					alphas[3] = (3 * alphas[0] + 2 * alphas[1] + 2) / 5;	// Bit code 011
@@ -953,6 +972,93 @@ ILboolean DecompressDXT5()
 	return IL_TRUE;
 }
 
+ILboolean	Decompress3Dc()
+{
+	int			x, y, z, i, j, k, t1, t2;
+	ILubyte		*Temp, *Temp2;
+	ILubyte		XColours[8], YColours[8];
+	ILuint		bitmask, bitmask2, Offset, CurrOffset;
+
+
+	Temp = CompData;
+	Offset = 0;
+	for (z = 0; z < Depth; z++) {
+		for (y = 0; y < Height; y += 4) {
+			for (x = 0; x < Width; x += 4) {
+				Temp2 = Temp + 8;
+
+				//Read Y palette
+				t1 = YColours[0] = Temp[0];
+				t2 = YColours[1] = Temp[1];
+				Temp += 2;
+				if (t1 > t2)
+					for (i = 2; i < 8; ++i)
+						YColours[i] = t1 + ((t2 - t1)*(i - 1))/7;
+				else {
+					for (i = 2; i < 6; ++i)
+						YColours[i] = t1 + ((t2 - t1)*(i - 1))/5;
+					YColours[6] = 0;
+					YColours[7] = 255;
+				}
+
+				// Read X palette
+				t1 = XColours[0] = Temp2[0];
+				t2 = XColours[1] = Temp2[1];
+				Temp2 += 2;
+				if (t1 > t2)
+					for (i = 2; i < 8; ++i)
+						XColours[i] = t1 + ((t2 - t1)*(i - 1))/7;
+				else {
+					for (i = 2; i < 6; ++i)
+						XColours[i] = t1 + ((t2 - t1)*(i - 1))/5;
+					XColours[6] = 0;
+					XColours[7] = 255;
+				}
+
+				//decompress pixel data
+				CurrOffset = Offset;
+				for (k = 0; k < 4; k += 2) {
+					// First three bytes
+					bitmask = ((ILuint)(Temp[0]) << 0) | ((ILuint)(Temp[1]) << 8) | ((ILuint)(Temp[2]) << 16);
+					bitmask2 = ((ILuint)(Temp2[0]) << 0) | ((ILuint)(Temp2[1]) << 8) | ((ILuint)(Temp2[2]) << 16);
+					for (j = 0; j < 2; j++) {
+						// only put pixels out < height
+						if ((y + k + j) < Height) {
+							for (i = 0; i < 4; i++) {
+								// only put pixels out < width
+								if (((x + i) < Width)) {
+									ILint t, tx, ty;
+
+									t1 = CurrOffset + (x + i)*3;
+									Image->Data[t1 + 1] = ty = YColours[bitmask & 0x07];
+									Image->Data[t1 + 0] = tx = XColours[bitmask2 & 0x07];
+
+									//calculate b (z) component ((r/255)^2 + (g/255)^2 + (b/255)^2 = 1
+									t = 127*128 - (tx - 127)*(tx - 128) - (ty - 127)*(ty - 128);
+									if (t > 0)
+										Image->Data[t1 + 2] = (ILubyte)(iSqrt(t) + 128);
+									else
+										Image->Data[t1 + 2] = 0x7F;
+								}
+								bitmask >>= 3;
+								bitmask2 >>= 3;
+							}
+							CurrOffset += Image->Bps;
+						}
+					}
+					Temp += 3;
+					Temp2 += 3;
+				}
+
+				//skip bytes that were read via Temp2
+				Temp += 8;
+			}
+			Offset += Image->Bps*4;
+		}
+	}
+
+	return IL_TRUE;
+}
 
 ILvoid CorrectPreMult()
 {
