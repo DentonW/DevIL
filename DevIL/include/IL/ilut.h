@@ -39,8 +39,8 @@ extern "C" {
 #endif//_WIN32
 
 
-#define ILUT_VERSION_1_5_5					1
-#define ILUT_VERSION						155
+#define ILUT_VERSION_1_5_6					1
+#define ILUT_VERSION						156
 
 
 // Attribute Bits
