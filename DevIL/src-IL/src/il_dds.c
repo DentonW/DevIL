@@ -48,7 +48,7 @@ ILuint CubemapDirections[CUBEMAP_SIDES] = {
 };
 
 
-//! Checks if the file specified in FileName is a valid .bmp file.
+//! Checks if the file specified in FileName is a valid .dds file.
 ILboolean ilIsValidDds(const ILstring FileName)
 {
 	ILHANDLE	DdsFile;
@@ -72,7 +72,7 @@ ILboolean ilIsValidDds(const ILstring FileName)
 }
 
 
-//! Checks if the ILHANDLE contains a valid .bmp file at the current position.
+//! Checks if the ILHANDLE contains a valid .dds file at the current position.
 ILboolean ilIsValidDdsF(ILHANDLE File)
 {
 	ILuint		FirstPos;
@@ -87,7 +87,7 @@ ILboolean ilIsValidDdsF(ILHANDLE File)
 }
 
 
-//! Checks if Lump is a valid .bmp lump.
+//! Checks if Lump is a valid .dds lump.
 ILboolean ilIsValidDdsL(ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
@@ -95,7 +95,7 @@ ILboolean ilIsValidDdsL(ILvoid *Lump, ILuint Size)
 }
 
 
-// Internal function used to get the .bmp header from the current file.
+// Internal function used to get the .dds header from the current file.
 ILboolean iGetDdsHead(DDSHEAD *Header)
 {
 	if (iread(Header, sizeof(DDSHEAD), 1) != 1)
@@ -126,17 +126,6 @@ ILboolean iGetDdsHead(DDSHEAD *Header)
 	if (Head.Depth == 0)
 		Head.Depth = 1;
 
-	DecodePixelFormat();
-	if (CompFormat == PF_UNKNOWN) {
-		ilSetError(IL_INVALID_FILE_HEADER);
-		return IL_FALSE;
-	}
-	// Microsoft bug, they're not following their own documentation.
-	if (!(Head.Flags1 & (DDS_LINEARSIZE | DDS_PITCH))) {
-		Head.Flags1 |= DDS_LINEARSIZE;
-		Head.LinearSize = BlockSize;
-	}
-
 	return IL_TRUE;
 }
 
@@ -156,7 +145,7 @@ ILboolean iIsValidDds()
 }
 
 
-// Internal function used to check if the HEADER is a valid .bmp header.
+// Internal function used to check if the HEADER is a valid .dds header.
 ILboolean iCheckDds(DDSHEAD *Head)
 {
 	if (strnicmp(Head->Signature, "DDS ", 4))
@@ -205,7 +194,7 @@ ILboolean ilLoadDdsF(ILHANDLE File)
 }
 
 
-//! Reads from a memory "lump" that contains a .bmp
+//! Reads from a memory "lump" that contains a .dds
 ILboolean ilLoadDdsL(ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
@@ -293,6 +282,22 @@ ILboolean iLoadDdsInternal()
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
 	}
+	if(!iCheckDds(&Head)) {
+		ilSetError(IL_INVALID_FILE_HEADER);
+		return IL_FALSE;
+	}
+
+	DecodePixelFormat();
+	if (CompFormat == PF_UNKNOWN) {
+		ilSetError(IL_INVALID_FILE_HEADER);
+		return IL_FALSE;
+	}
+	// Microsoft bug, they're not following their own documentation.
+	if (!(Head.Flags1 & (DDS_LINEARSIZE | DDS_PITCH))) {
+		Head.Flags1 |= DDS_LINEARSIZE;
+		Head.LinearSize = BlockSize;
+  }
+
 	Image = iCurImage;
 	if (Head.ddsCaps1 & DDS_COMPLEX) {
 		if (Head.ddsCaps2 & DDS_CUBEMAP) {
@@ -319,6 +324,7 @@ ILboolean iLoadDdsInternal()
 			ifree(CompData);
 		return IL_FALSE;
 	}
+
 	if (!ReadMipmaps()) {
 		if (CompData)
 			ifree(CompData);
@@ -330,6 +336,55 @@ ILboolean iLoadDdsInternal()
 
 	ilBindImage(ilGetCurName());  // Set to parent image first.
 	return ilFixImage();
+}
+
+
+ILvoid DecodePixelFormat()
+{
+	if (Head.Flags2 & DDS_FOURCC) {
+		BlockSize = ((Head.Width + 3)/4) * ((Head.Height + 3)/4) * ((Head.Depth + 3)/4);
+		switch (Head.FourCC)
+		{
+			case IL_MAKEFOURCC('D','X','T','1'):
+				CompFormat = PF_DXT1;
+				BlockSize *= 8;
+				break;
+
+			case IL_MAKEFOURCC('D','X','T','2'):
+				CompFormat = PF_DXT2;
+				BlockSize *= 16;
+				break;
+
+			case IL_MAKEFOURCC('D','X','T','3'):
+				CompFormat = PF_DXT3;
+				BlockSize *= 16;
+				break;
+
+			case IL_MAKEFOURCC('D','X','T','4'):
+				CompFormat = PF_DXT4;
+				BlockSize *= 16;
+				break;
+
+			case IL_MAKEFOURCC('D','X','T','5'):
+				CompFormat = PF_DXT5;
+				BlockSize *= 16;
+				break;
+
+			default:
+				CompFormat = PF_UNKNOWN;
+				BlockSize *= 16;
+				break;
+		}
+	} else {
+	// This dds texture isn't compressed so write out ARGB format
+		if (Head.Flags2 & DDS_ALPHAPIXELS) {
+			CompFormat = PF_ARGB;
+		} else {
+			CompFormat = PF_RGB;
+		}
+		BlockSize = (Head.Width * Head.Height * Head.Depth * (Head.RGBBitCount >> 3));
+	}
+	return;
 }
 
 
@@ -402,7 +457,7 @@ ILboolean ReadData()
 			ifree(CompData);
 			return IL_FALSE;
 		}
-    }
+	}
 	else {
 		Bps = Width * Head.RGBBitCount / 8;
 		CompSize = Bps * Height * Depth;
@@ -413,9 +468,9 @@ ILboolean ReadData()
 			return IL_FALSE;
 		}
 
-        Temp = CompData;
+		Temp = CompData;
 		for (z = 0; z < Depth; z++) {
-	        for (y = 0; y < Height; y++) {
+			for (y = 0; y < Height; y++) {
 				if (iread(Temp, 1, Bps) != Bps) {
 					ifree(CompData);
 					return IL_FALSE;
@@ -423,7 +478,7 @@ ILboolean ReadData()
 				Temp += Bps;
 			}
 		}
-    }
+	}
 
 	return IL_TRUE;
 }
@@ -458,56 +513,6 @@ ILboolean AllocImage()
 	Image->Origin = IL_ORIGIN_UPPER_LEFT;
 	
 	return IL_TRUE;
-}
-
-
-ILvoid DecodePixelFormat()
-{
-	if (Head.Flags2 & DDS_FOURCC) {
-		BlockSize = ((Head.Width + 3)/4) * ((Head.Height + 3)/4) * ((Head.Depth + 3)/4);
-		switch (Head.FourCC)
-		{
-			case IL_MAKEFOURCC('D','X','T','1'):
-				CompFormat = PF_DXT1;
-				BlockSize *= 8;
-				break;
-
-			case IL_MAKEFOURCC('D','X','T','2'):
-				CompFormat = PF_DXT2;
-				BlockSize *= 16;
-				break;
-
-			case IL_MAKEFOURCC('D','X','T','3'):
-				CompFormat = PF_DXT3;
-				BlockSize *= 16;
-				break;
-
-			case IL_MAKEFOURCC('D','X','T','4'):
-				CompFormat = PF_DXT4;
-				BlockSize *= 16;
-				break;
-
-			case IL_MAKEFOURCC('D','X','T','5'):
-				CompFormat = PF_DXT5;
-				BlockSize *= 16;
-				break;
-
-			default:
-				CompFormat = PF_UNKNOWN;
-				BlockSize *= 16;
-				break;
-		}
-	} else {
-        // This dds texture isn't compressed so write out ARGB format
-		if (Head.Flags2 & DDS_ALPHAPIXELS) {
-			CompFormat = PF_ARGB;
-			BlockSize = (Head.Width * Head.Height * Head.Depth * 4);
-		} else {
-			CompFormat = PF_RGB;
-			BlockSize = (Head.Width * Head.Height * Head.Depth * 3);
-		}
-	}
-	return;
 }
 
 
@@ -590,8 +595,11 @@ ILboolean ReadMipmaps()
 			if ((CompFormat != PF_RGB) && (CompFormat != PF_ARGB)) {
 				minW = IL_MAX(4, Width);
 				minH = IL_MAX(4, Height);
+				Head.LinearSize = (minW * minH * Depth * Bpp) / CompFactor;
 			}
-			Head.LinearSize = (minW * minH * Depth * Bpp) / CompFactor;
+			else {
+				Head.LinearSize = Width * Height * Depth * (Head.RGBBitCount >> 3);
+			}
 		}
 		else {
 			Head.LinearSize >>= 1;
@@ -599,16 +607,6 @@ ILboolean ReadMipmaps()
 
 		if (!ReadData())
 			goto mip_fail;
-
-		if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
-			Image->DxtcData = (ILubyte*)ialloc(Head.LinearSize);
-			if (Image->DxtcData != NULL) {
-				Image->DxtcFormat = CompFormat - PF_DXT1 + IL_DXT1;
-				Image->DxtcSize = Head.LinearSize;
-				memcpy(Image->DxtcData, CompData, Image->DxtcSize);
-			}
-		}
-		
 		if (!Decompress())
 			goto mip_fail;
 	}
@@ -637,8 +635,7 @@ ILboolean DecompressDXT1()
 {
 	int			x, y, z, i, j, k, Select;
 	ILubyte		*Temp;
-//	Color565	*color_0, *color_1;
-	ILushort	*color_0, *color_1;
+	Color565	*color_0, *color_1;
 	Color8888	colours[4], *col;
 	ILuint		bitmask, Offset;
 
@@ -648,21 +645,19 @@ ILboolean DecompressDXT1()
 		for (y = 0; y < Height; y += 4) {
 			for (x = 0; x < Width; x += 4) {
 
-//				color_0 = ((Color565*)Temp);
-//				color_1 = ((Color565*)(Temp+2));
-				color_0 = ((ILushort*)Temp);
-				color_1 = ((ILushort*)(Temp+2));
+				color_0 = ((Color565*)Temp);
+				color_1 = ((Color565*)(Temp+2));
 				bitmask = ((ILuint*)Temp)[1];
 				Temp += 8;
 
-				colours[0].r = ((*color_0 & 0xf800) >> 8);
-				colours[0].g = ((*color_0 & 0x07e0) >> 3);
-				colours[0].b = (*color_0 & 0x001f) << 3;
+				colours[0].r = color_0->nRed << 3;
+				colours[0].g = color_0->nGreen << 2;
+				colours[0].b = color_0->nBlue << 3;
 				colours[0].a = 0xFF;
 
-				colours[1].r = ((*color_1 & 0xf800) >> 8);
-				colours[1].g = ((*color_1 & 0x07e0) >> 3);
-				colours[1].b = (*color_1 & 0x001f) << 3;
+				colours[1].r = color_1->nRed << 3;
+				colours[1].g = color_1->nGreen << 2;
+				colours[1].b = color_1->nBlue << 3;
 				colours[1].a = 0xFF;
 
 
@@ -737,8 +732,7 @@ ILboolean DecompressDXT3()
 {
 	int			x, y, z, i, j, k, Select;
 	ILubyte		*Temp;
-//	Color565	*color_0, *color_1;
-	ILushort	*color_0, *color_1;
+	Color565	*color_0, *color_1;
 	Color8888	colours[4], *col;
 	ILuint		bitmask, Offset;
 	ILushort	word;
@@ -751,19 +745,19 @@ ILboolean DecompressDXT3()
 			for (x = 0; x < Width; x += 4) {
 				alpha = (DXTAlphaBlockExplicit*)Temp;
 				Temp += 8;
-				color_0 = ((ILushort*)Temp);
-				color_1 = ((ILushort*)(Temp+2));
+				color_0 = ((Color565*)Temp);
+				color_1 = ((Color565*)(Temp+2));
 				bitmask = ((ILuint*)Temp)[1];
 				Temp += 8;
 
-				colours[0].r = ((*color_0 & 0xf800) >> 8);
-				colours[0].g = ((*color_0 & 0x07e0) >> 3);
-				colours[0].b = (*color_0 & 0x001f) << 3;
+				colours[0].r = color_0->nRed << 3;
+				colours[0].g = color_0->nGreen << 2;
+				colours[0].b = color_0->nBlue << 3;
 				colours[0].a = 0xFF;
 
-				colours[1].r = ((*color_1 & 0xf800) >> 8);
-				colours[1].g = ((*color_1 & 0x07e0) >> 3);
-				colours[1].b = (*color_1 & 0x001f) << 3;
+				colours[1].r = color_1->nRed << 3;
+				colours[1].g = color_1->nGreen << 2;
+				colours[1].b = color_1->nBlue << 3;
 				colours[1].a = 0xFF;
 
 				// Four-color block: derive the other two colors.    
@@ -832,8 +826,7 @@ ILboolean DecompressDXT5()
 {
 	int			x, y, z, i, j, k, Select;
 	ILubyte		*Temp;
-//	Color565	*color_0, *color_1;
-	ILushort	*color_0, *color_1;
+	Color565	*color_0, *color_1;
 	Color8888	colours[4], *col;
 	ILuint		bitmask, Offset;
 	ILubyte		alphas[8], *alphamask;
@@ -849,19 +842,19 @@ ILboolean DecompressDXT5()
 				alphas[1] = Temp[1];
 				alphamask = Temp + 2;
 				Temp += 8;
-				color_0 = ((ILushort*)Temp);
-				color_1 = ((ILushort*)(Temp+2));
+				color_0 = ((Color565*)Temp);
+				color_1 = ((Color565*)(Temp+2));
 				bitmask = ((ILuint*)Temp)[1];
 				Temp += 8;
 
-				colours[0].r = ((*color_0 & 0xf800) >> 8);
-				colours[0].g = ((*color_0 & 0x07e0) >> 3);
-				colours[0].b = (*color_0 & 0x001f) << 3;
+				colours[0].r = color_0->nRed << 3;
+				colours[0].g = color_0->nGreen << 2;
+				colours[0].b = color_0->nBlue << 3;
 				colours[0].a = 0xFF;
 
-				colours[1].r = ((*color_1 & 0xf800) >> 8);
-				colours[1].g = ((*color_1 & 0x07e0) >> 3);
-				colours[1].b = (*color_1 & 0x001f) << 3;
+				colours[1].r = color_1->nRed << 3;
+				colours[1].g = color_1->nGreen << 2;
+				colours[1].b = color_1->nBlue << 3;
 				colours[1].a = 0xFF;
 
 				// Four-color block: derive the other two colors.    
