@@ -1553,6 +1553,12 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 
 	BpcSrc = ilGetBppType(SrcType);
 	BpcDest = ilGetBppType(DestType);
+
+	if (BpcSrc == 0 || BpcDest == 0) {
+		ilSetError (IL_INTERNAL_ERROR);
+		return IL_FALSE;
+	}
+
 	Size = SizeOfData / BpcSrc;
 
 	if (BpcSrc == BpcDest) {
