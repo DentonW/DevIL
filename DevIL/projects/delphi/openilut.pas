@@ -4,7 +4,7 @@ unit OpenILUT;
 //
 // ImageLib Utility Toolkit Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 12/04/2001 <--Y2K Compliant! =]
+// Last modified: 05/15/2002 <--Y2K Compliant! =]
 //
 // Filename: il/ilut.h
 //
@@ -14,8 +14,8 @@ unit OpenILUT;
 
 {******************************************************************************}
 { Converted to Delphi by Alexander Blach (alexander@abee.de)                   }
-{   Version:       ILUT v1.3.0                                                 }
-{   Last modified: 02/05/2002                                                  }
+{   Version:       ILUT v1.4.0                                                 }
+{   Last modified: 05/15/2002                                                  }
 {                                                                              }
 {   you will need the latest OpenGL units for Delphi. I recommend those on     }
 {   http://www.delphi3d.net                                                    }

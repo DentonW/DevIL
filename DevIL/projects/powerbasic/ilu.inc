@@ -2,7 +2,7 @@
 '
 ' ImageLib Utility Sources
 ' Copyright (C) 2000-2002 by Denton Woods
-' Last modified: 02/05/2002 <--Y2K Compliant! =]
+' Last modified: 05/15/2002 <--Y2K Compliant! =]
 '
 ' Filename: il/ilu.h
 '
@@ -15,8 +15,8 @@
 ' Web: http://www.scheutz.dk
 ' e-mail: sourcecode@scheutz.dk
 '
-' Last modified: 02/05/2001
-' Based on DevIL Ver. 1.3.0 headers
+' Last modified: 05/15/2002
+' Based on DevIL Ver. 1.4.0 headers
 '
 ' Filename: ilu.inc
 '
