@@ -100,6 +100,8 @@ sh:
 export LDFLAGS=-L/sw/lib
 export CFLAGS=-I/sw/includee -L/sw/lib
 
+HOWEVER THE LIBRARIES IS STILL EXPERIMENTAL, USE PROJECT BULDER AND BUILD A FRAMEWORK!
+
 Usage:
 ------
 
