@@ -23,7 +23,7 @@ DevIL can be found at http://www.imagelib.org and http://openil.sourceforge.net
 Where do I find the projects files ?
 -----------------------------------------
 
-MSVC++ projects are in ??? .
+MSVC++ projects are in \DevIL\projects\MSVC.
 
 
 More Extensive Documentation
