@@ -12,6 +12,7 @@
 
 
 #include "ilut_internal.h"
+
 #ifdef ILUT_USE_ALLEGRO
 #include "ilut_allegro.h"
 
@@ -120,5 +121,5 @@ ILboolean ILAPIENTRY ilutAllegFromBitmap(BITMAP *Bitmap)
 	return IL_TRUE;
 }
 
-
 #endif//ILUT_USE_ALLEGRO
+

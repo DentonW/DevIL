@@ -179,7 +179,7 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 	ILAPI ILboolean ILAPIENTRY ilutGLSaveImage(const ILstring FileName, GLuint TexID);
 	ILAPI ILboolean ILAPIENTRY ilutGLSetTex(GLuint TexID);
 	ILAPI ILboolean ILAPIENTRY ilutGLTexImage(GLuint Level);
-	ILAPI ILboolean ILAPIENTRY ilutGLSubTex(GLuint TexID, ILuint XOff, ILuint YOff)
+	ILAPI ILboolean ILAPIENTRY ilutGLSubTex(GLuint TexID, ILuint XOff, ILuint YOff);
 
 #endif//ILUT_USE_OPENGL
 
