@@ -366,6 +366,12 @@ ILboolean ReadMipmaps()
 	CompFactor = (Width * Height * Bpp) / Head.LinearSize;
 	Image = iCurImage;
 
+	// Added by Kenneth Hurley 01/23/2002.
+	if (!(Head.Flags1 & DDS_MIPMAPCOUNT))
+	{
+		Head.MipMapCount = 1;
+	}
+
 	for (i = 0; i < Head.MipMapCount - 1; i++) {
 		Width = IL_MAX(Width / 2, 1);
 		Height = IL_MAX(Height / 2, 1);
