@@ -217,7 +217,7 @@ ILboolean ReadGenAttributes()
 		ChunkLen -= 4;
 	iread(&AttChunk, IL_MIN(sizeof(AttChunk), ChunkLen), 1);
 
-	// Can have new entries in newer versions of the spec (5.0).
+	// Can have new entries in newer versions of the spec (4.0).
 	Padding = (ChunkLen) - sizeof(AttChunk);
 	if (Padding > 0)
 		iseek(Padding, IL_SEEK_CUR);
@@ -321,7 +321,7 @@ ILboolean ReadLayerBlock(ILuint BlockLen)
 		iread(&LayerInfo, sizeof(LayerInfo), 1);
 		iread(&Bitmap, sizeof(Bitmap), 1);
 	}
-	else {  // Header.MajorVersion == 5
+	else {  // Header.MajorVersion >= 4
 		ChunkSize = GetLittleUInt();
 		NumChars = GetLittleUShort();
 		iseek(NumChars, IL_SEEK_CUR);  // We don't care about the layer's name.
@@ -401,7 +401,7 @@ ILboolean ReadAlphaBlock(ILuint BlockLen)
 		return IL_FALSE;
 
 
-	if (Header.MajorVersion == 5) {
+	if (Header.MajorVersion >= 4) {
 		ChunkSize = GetLittleUInt();
 		StringSize = GetLittleUShort();
 		iseek(StringSize, IL_SEEK_CUR);
@@ -458,7 +458,7 @@ ILubyte *GetChannel()
 		return NULL;
 
 
-	if (Header.MajorVersion == 5) {
+	if (Header.MajorVersion >= 4) {
 		ChunkSize = GetLittleUInt();
 		iread(&Channel, sizeof(Channel), 1);
 
@@ -561,7 +561,7 @@ ILboolean ReadPalette(ILuint BlockLen)
 {
 	ILuint ChunkSize, PalCount, Padding, i;
 
-	if (Header.MajorVersion == 5) {
+	if (Header.MajorVersion >= 4) {
 		ChunkSize = GetLittleUInt();
 		PalCount = GetLittleUInt();
 		Padding = (ChunkSize - 4 - 4);

@@ -49,6 +49,7 @@ typedef struct IMAGEDESC
 ILboolean iLoadGifInternal(ILvoid);
 ILboolean ilLoadGifF(ILHANDLE File);
 ILboolean iIsValidGif(ILvoid);
+ILboolean SkipExtensions(ILvoid);
 ILboolean GifGetData(ILvoid);
 
 #endif//GIF_H

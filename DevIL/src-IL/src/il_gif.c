@@ -172,14 +172,58 @@ ILboolean iLoadGifInternal()
 		iread(iCurImage->Pal.Palette, 1, iCurImage->Pal.PalSize);
 	}
 
-	if (GifType == GIF89A)
-		iseek(8, IL_SEEK_CUR);
-	iread(&ImageDesc, sizeof(ImageDesc), 1);
-
-	if (!GifGetData())
+	if (!SkipExtensions())
 		return IL_FALSE;
 
+	iread(&ImageDesc, sizeof(ImageDesc), 1);
+
+	if (!SkipExtensions())
+		return IL_FALSE;
+
+	if (!GifGetData()) {
+		ilSetError(IL_ILLEGAL_FILE_VALUE);
+		return IL_FALSE;
+	}
+
 	ilFixImage();
+
+	return IL_TRUE;
+}
+
+
+ILboolean SkipExtensions()
+{
+	static ILint	Code;
+	static ILint	Label;
+	static ILint	Size;
+
+	if (GifType == GIF87A)
+		return IL_TRUE;  // No extensions in the gif87a format.
+
+	do {
+		Code = igetc();
+		if (Code != 0x21) {
+			iseek(-1, IL_SEEK_CUR);
+			return IL_TRUE;
+		}
+
+		Label = igetc();
+		/*if (Label != 0xF9 && Label != 0xFE) {
+			ilSetError(IL_ILLEGAL_FILE_VALUE);
+			return IL_FALSE;
+		}*/
+
+		do {
+			Size = igetc();
+			iseek(Size, IL_SEEK_CUR);
+		} while (Size != -1 && Size != 0);
+
+		// @TODO:  Handle this better.
+		if (Size == -1) {
+			ilSetError(IL_ILLEGAL_FILE_VALUE);
+			return IL_FALSE;
+		}
+	} while (1);
 
 	return IL_TRUE;
 }

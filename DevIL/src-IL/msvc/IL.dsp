@@ -412,33 +412,6 @@ SOURCE=..\include\il_icon.h
 # Begin Source File
 
 SOURCE=..\include\il_internal.h
-
-!IF  "$(CFG)" == "IL - Win32 Debug"
-
-# Begin Custom Build
-InputPath=..\include\il_internal.h
-InputName=il_internal
-
-"$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	"..\..\LIBTOOLS\config gen\config_gen.exe" ..\..\include\IL
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "IL - Win32 Dynamic"
-
-# Begin Custom Build
-InputPath=..\include\il_internal.h
-InputName=il_internal
-
-"$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	"..\..\LIBTOOLS\config gen\config_gen.exe" ..\..\include\IL
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "IL - Win32 Release"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 

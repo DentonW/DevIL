@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 02/16/2002 <--Y2K Compliant! =]
+// Last modified: 05/15/2002 <--Y2K Compliant! =]
 //
 // Filename: il/il_jpeg.c
 //
@@ -911,3 +911,4 @@ ILboolean iSaveJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size)
 
 
 #endif//IL_NO_JPG
+

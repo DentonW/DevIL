@@ -2,9 +2,9 @@
 //
 // ImageLib GL Test Source
 // Copyright (C) 2000 by Denton Woods
-// Last modified:  11/23/2000 <--Y2K Compliant! =]
+// Last modified:  05/17/2002 <--Y2K Compliant! =]
 //
-// Filename:  testil/gltest/gltest.c
+// Filename:  examples/gl example/gl example.c
 //
 // Description:  Sample implementation of an OpenGL image viewer.
 //
@@ -61,7 +61,7 @@ int main(int argc, char** argv)
 		return 2;
 	}
 
-	// Needed for Djgpp
+	// Needed to initialize DevIL.
 	ilInit();
 	// GL cannot use palettes anyway, so convert early.
 	ilEnable(IL_CONV_PAL);
