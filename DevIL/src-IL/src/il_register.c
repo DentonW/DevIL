@@ -288,6 +288,7 @@ ILvoid ILAPIENTRY ilRegisterFormat(ILenum Format)
 		case IL_BGR:
 		case IL_BGRA:
 		case IL_LUMINANCE:
+                case IL_LUMINANCE_ALPHA:
 			iCurImage->Format = Format;
 			break;
 		default:
