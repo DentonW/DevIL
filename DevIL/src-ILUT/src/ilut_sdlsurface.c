@@ -132,7 +132,7 @@ SDL_Surface * ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags)
 
 
 #ifndef _WIN32_WCE
-SDL_Surface* ILAPIENTRY ilutSDLSurfaceLoadImage(char *FileName)
+SDL_Surface* ILAPIENTRY ilutSDLSurfaceLoadImage(const ILstring FileName)
 {
 	SDL_Surface *Surface;
 
