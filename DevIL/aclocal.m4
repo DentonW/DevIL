@@ -3620,6 +3620,26 @@ AC_DEFUN([AM_PROG_NM],        [AC_PROG_NM])
 # This is just to silence aclocal about the macro not being used
 ifelse([AC_DISABLE_FAST_INSTALL])
 
+# Add --enable-maintainer-mode option to configure.
+# From Jim Meyering
+
+# serial 1
+
+AC_DEFUN(AM_MAINTAINER_MODE,
+[AC_MSG_CHECKING([whether to enable maintainer-specific portions of Makefiles])
+  dnl maintainer-mode is disabled by default
+  AC_ARG_ENABLE(maintainer-mode,
+[  --enable-maintainer-mode enable make rules and dependencies not useful
+                          (and sometimes confusing) to the casual installer],
+      USE_MAINTAINER_MODE=$enableval,
+      USE_MAINTAINER_MODE=no)
+  AC_MSG_RESULT($USE_MAINTAINER_MODE)
+  AM_CONDITIONAL(MAINTAINER_MODE, test $USE_MAINTAINER_MODE = yes)
+  MAINT=$MAINTAINER_MODE_TRUE
+  AC_SUBST(MAINT)dnl
+]
+)
+
 # Define a conditional.
 
 AC_DEFUN(AM_CONDITIONAL,

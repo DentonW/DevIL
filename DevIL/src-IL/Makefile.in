@@ -81,6 +81,7 @@ LIBSDL = @LIBSDL@
 LIBTIFF = @LIBTIFF@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
+MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
@@ -105,10 +106,10 @@ TAR = tar
 GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu src-IL/Makefile
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOMAKE) --cygnus src-IL/Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -123,7 +124,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 @SET_MAKE@
 
 all-recursive install-data-recursive install-exec-recursive \
-installdirs-recursive install-recursive uninstall-recursive  \
+installdirs-recursive install-recursive uninstall-recursive install-info-recursive \
 check-recursive installcheck-recursive info-recursive dvi-recursive:
 	@set fnord $(MAKEFLAGS); amf=$$2; \
 	dot_seen=no; \
@@ -207,13 +208,8 @@ distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 subdir = src-IL
 
 distdir: $(DISTFILES)
-	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(top_distdir) && pwd`; \
-	distdir=`cd $(distdir) && pwd`; \
-	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu src-IL/Makefile
 	@for file in $(DISTFILES); do \
-	  d=$(srcdir); \
+	  if test -f $$file; then d=.; else d=$(srcdir); fi; \
 	  if test -d $$d/$$file; then \
 	    cp -pr $$d/$$file $(distdir)/$$file; \
 	  else \
@@ -236,10 +232,12 @@ info-am:
 info: info-recursive
 dvi-am:
 dvi: dvi-recursive
-check-am: all-am
+check-am:
 check: check-recursive
 installcheck-am:
 installcheck: installcheck-recursive
+install-info-am: 
+install-info: install-info-recursive
 install-exec-am:
 install-exec: install-exec-recursive
 
@@ -295,11 +293,12 @@ installcheck-recursive info-recursive dvi-recursive \
 mostlyclean-recursive distclean-recursive clean-recursive \
 maintainer-clean-recursive tags tags-recursive mostlyclean-tags \
 distclean-tags clean-tags maintainer-clean-tags distdir info-am info \
-dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
-install-exec install-data-am install-data install-am install \
-uninstall-am uninstall all-redirect all-am all installdirs-am \
-installdirs mostlyclean-generic distclean-generic clean-generic \
-maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+dvi-am dvi check check-am installcheck-am installcheck install-info-am \
+install-info install-exec-am install-exec install-data-am install-data \
+install-am install uninstall-am uninstall all-redirect all-am all \
+installdirs-am installdirs mostlyclean-generic distclean-generic \
+clean-generic maintainer-clean-generic clean mostlyclean distclean \
+maintainer-clean
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

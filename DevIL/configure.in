@@ -29,7 +29,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.2 $)
+AC_REVISION($Revision: 1.3 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -38,11 +38,13 @@ AC_PROG_CC
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_C_BIGENDIAN
+AC_CYGWIN32
 
 AM_INIT_AUTOMAKE("DevIL", $DEVIL_MAJOR.$DEVIL_MINOR.$DEVIL_REVISION)
 AM_CONFIG_HEADER(include/IL/config.h)
 AM_DISABLE_STATIC
 AM_PROG_LIBTOOL
+AM_MAINTAINER_MODE
 
 LIBIL_CFLAGS="-O2  -funroll-loops -ffast-math  -fomit-frame-pointer \
               -fexpensive-optimizations"

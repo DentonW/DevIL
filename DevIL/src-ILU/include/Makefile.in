@@ -81,6 +81,7 @@ LIBSDL = @LIBSDL@
 LIBTIFF = @LIBTIFF@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
+MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
@@ -107,10 +108,10 @@ TAR = tar
 GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu src-ILU/include/Makefile
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOMAKE) --cygnus src-ILU/include/Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -149,13 +150,8 @@ distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 subdir = src-ILU/include
 
 distdir: $(DISTFILES)
-	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(top_distdir) && pwd`; \
-	distdir=`cd $(distdir) && pwd`; \
-	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu src-ILU/include/Makefile
 	@for file in $(DISTFILES); do \
-	  d=$(srcdir); \
+	  if test -f $$file; then d=.; else d=$(srcdir); fi; \
 	  if test -d $$d/$$file; then \
 	    cp -pr $$d/$$file $(distdir)/$$file; \
 	  else \
@@ -168,10 +164,12 @@ info-am:
 info: info-am
 dvi-am:
 dvi: dvi-am
-check-am: all-am
+check-am:
 check: check-am
 installcheck-am:
 installcheck: installcheck-am
+install-info-am: 
+install-info: install-info-am
 install-exec-am:
 install-exec: install-exec-am
 
@@ -221,11 +219,11 @@ maintainer-clean: maintainer-clean-am
 
 .PHONY: tags mostlyclean-tags distclean-tags clean-tags \
 maintainer-clean-tags distdir info-am info dvi-am dvi check check-am \
-installcheck-am installcheck install-exec-am install-exec \
-install-data-am install-data install-am install uninstall-am uninstall \
-all-redirect all-am all installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+installcheck-am installcheck install-info-am install-info \
+install-exec-am install-exec install-data-am install-data install-am \
+install uninstall-am uninstall all-redirect all-am all installdirs \
+mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

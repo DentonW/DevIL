@@ -1,4 +1,4 @@
-AUTOMAKE_OPTIONS = 1.4
+AUTOMAKE_OPTIONS = 1.4 cygnus
 
 SUBDIRS      = src-IL src-ILU src-ILUT include
 DIST_SUBDIRS = src-IL src-ILU src-ILUT include
@@ -8,7 +8,9 @@ EXTRA_DIST = README.unix   README.win \
              MSVC++.txt
 
 dist-hook:
-	cp -Rf libtools      $(distdir)
-	cp -Rf examples      $(distdir)
-	cp -Rf docs          $(distdir)
-	cp -Rf "cpp wrapper" $(distdir)
+	cp -Rf "libtools"      $(distdir)
+	cp -Rf "examples"      $(distdir)
+	cp -Rf "docs"          $(distdir)
+	cp -Rf "cpp wrapper"   $(distdir)
+	cp -Rf "test"          $(distdir)
+	cp -Rf "projects"      $(distdir)
