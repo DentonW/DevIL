@@ -220,7 +220,7 @@ ILvoid XpmPredefCol(char *Buff, XpmPixel *Colour)
 ILboolean XpmGetColour(char *Buffer, ILint Size, XpmPixel *Colours)
 {
 	ILint	i = 0, j;
-	ILbyte	Pos, ColBuff[3];
+	ILubyte	Pos, ColBuff[3];
 	char	Buff[1024];
 
 	for ( ; i < Size; i++) {

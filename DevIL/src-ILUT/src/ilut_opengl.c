@@ -142,6 +142,7 @@ ILboolean ILAPIENTRY ilutGLTexImage(GLuint Level)
 		return IL_FALSE;
 	}
 
+#ifdef _MSC_VER
 	if (ilutGetBoolean(ILUT_GL_USE_S3TC)) {
 		if (ilutCurImage->DxtcData != NULL && ilutCurImage->DxtcSize != 0 && ilGLCompressed2D != NULL) {
 			DXTCFormat = GLGetDXTCNum(ilutCurImage->DxtcFormat);
@@ -172,6 +173,7 @@ ILboolean ILAPIENTRY ilutGLTexImage(GLuint Level)
 			}
 		}
 	}
+#endif//_MSC_VER
 
 	Image = MakeGLCompliant(ilutCurImage);
 	if (Image == NULL)
