@@ -280,8 +280,10 @@ ILboolean ILAPIENTRY ilActiveMipmap(ILuint Number)
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
+
 	if (Number == 0) {
-		iCurImage = ImageStack[ilGetCurName()];
+	//removed 20040621 - this also resets the currently selected layer etc.
+	//	iCurImage = ImageStack[ilGetCurName()];
 		return IL_TRUE;
 	}
 
@@ -319,8 +321,10 @@ ILboolean ILAPIENTRY ilActiveImage(ILuint Number)
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
+
 	if (Number == 0) {
-		iCurImage = ImageStack[ilGetCurName()];
+	//removed 20040621 - this also resets the currently selected layer etc.
+	//	iCurImage = ImageStack[ilGetCurName()];
 		return IL_TRUE;
 	}
 
@@ -358,8 +362,10 @@ ILboolean ILAPIENTRY ilActiveLayer(ILuint Number)
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
+
 	if (Number == 0) {
-		iCurImage = ImageStack[ilGetCurName()];
+	//removed 20040621 - this also resets the currently selected layer etc.
+	//	iCurImage = ImageStack[ilGetCurName()];
 		return IL_TRUE;
 	}
 
