@@ -483,6 +483,7 @@ ILboolean iSaveTiffInternal(char *Filename)
 		return IL_FALSE;
 	}
 
+        
         // Packbits makes file bigger
 	/*if (iGetHint(IL_COMPRESSION_HINT) == IL_USE_COMPRESSION)
 		Compression = COMPRESSION_PACKBITS;
@@ -536,10 +537,22 @@ ILboolean iSaveTiffInternal(char *Filename)
 					iGetString(IL_TIF_DESCRIPTION_STRING));
 	TIFFSetField(File, TIFFTAG_DATETIME, iMakeString());
 
-	TIFFSetField(File, TIFFTAG_ORIENTATION,
-		TempImage->Origin == IL_ORIGIN_UPPER_LEFT ? ORIENTATION_TOPLEFT :
-													 ORIENTATION_BOTLEFT);
 
+        // 24/4/2003
+        // Orientation flag is not always supported ( Photoshop, ...), orient the image data 
+        // and set it always to normal view
+        TIFFSetField(File, TIFFTAG_ORIENTATION,ORIENTATION_TOPLEFT );
+        if( TempImage->Origin != IL_ORIGIN_UPPER_LEFT ) {
+            ILubyte *temp_image = iGetFlipped(TempImage);
+            ifree( TempImage->Bps );
+            TempImage->Bps = temp_image;
+        }
+        
+        /*
+	TIFFSetField(File, TIFFTAG_ORIENTATION,
+		TempImage->Origin == IL_ORIGIN_UPPER_LEFT ? ORIENTATION_TOPLEFT : ORIENTATION_BOTLEFT);
+        */
+        
 	Format = TempImage->Format;
 	if (Format == IL_BGR || Format == IL_BGRA)
 		ilSwapColours();
