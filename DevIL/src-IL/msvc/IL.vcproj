@@ -40,13 +40,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="delayimp.lib C:\DevIL\extlibs\lib\libmng.lib"
+				AdditionalDependencies="delayimp.lib"
 				OutputFile="../../lib/DevIL-l.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="../../extlibs/lib"
 				ModuleDefinitionFile=".\il.def"
-				DelayLoadDLLs="libpng3.dll,lcms.dll"
+				DelayLoadDLLs="lcms108.dll,libpng.dll"
 				ProgramDatabaseFile=".\../../lib/DevIL-l.pdb"
 				OptimizeForWindows98="1"
 				ImportLibrary=".\../../lib/DevIL-l.lib"/>
@@ -86,7 +86,7 @@
 				Optimization="1"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="../include,../../extlibs/libjpeg"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;IL_EXPORTS;IL_STATIC_LIB;MNG_USE_DLL"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;IL_EXPORTS;IL_STATIC_LIB"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
@@ -349,6 +349,9 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
 			<File
+				RelativePath="..\..\include\IL\config.h">
+			</File>
+			<File
 				RelativePath="..\..\include\il\il.h">
 			</File>
 			<File
@@ -383,6 +386,30 @@
 			</File>
 			<File
 				RelativePath="..\include\il_internal.h">
+				<FileConfiguration
+					Name="Dynamic|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="&quot;..\..\LIBTOOLS\config gen\config_gen.exe&quot; ..\..\include\IL
+"
+						Outputs="$(InputName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="&quot;..\..\LIBTOOLS\config gen\config_gen.exe&quot; ..\..\include\IL
+"
+						Outputs="$(InputName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="&quot;..\..\LIBTOOLS\config gen\config_gen.exe&quot; ..\..\include\IL
+"
+						Outputs="$(InputName)"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\include\il_jpeg.h">
