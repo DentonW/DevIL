@@ -124,9 +124,16 @@ ILint ILAPIENTRY iDefaultGetc(ILHANDLE Handle)
 {
 	static ILint Val;
 
-	Val = fgetc((FILE*)Handle);
-	if (Val == IL_EOF)
-		ilSetError(IL_FILE_READ_ERROR);
+	if (!UseCache) {
+		Val = fgetc((FILE*)Handle);
+		if (Val == IL_EOF)
+			ilSetError(IL_FILE_READ_ERROR);
+	}
+	else {
+		Val = 0;
+		if (iread(&Val, 1, 1) != 1)
+			return IL_EOF;
+	}
 	return Val;
 }
 
@@ -395,6 +402,8 @@ ILuint ILAPIENTRY iReadFile(ILvoid *Buffer, ILuint Size, ILuint Number)
 	if (BuffSize < CacheSize - CachePos) {
 		memcpy(Buffer, Cache + CachePos, BuffSize);
 		CachePos += BuffSize;
+		if (Size != 0)
+			BuffSize /= Size;
 		return BuffSize;
 	}
 	else {
@@ -414,6 +423,10 @@ ILuint ILAPIENTRY iReadFile(ILvoid *Buffer, ILuint Size, ILuint Number)
 		}
 	}
 
+	if (Size != 0)
+		TotalBytes /= Size;
+	if (TotalBytes != Number)
+		ilSetError(IL_FILE_READ_ERROR);
 	return TotalBytes;
 }
 
@@ -435,6 +448,8 @@ ILuint ILAPIENTRY iReadLump(ILvoid *Buffer, ILuint Size, ILuint Number)
 	}
 
 	ReadLumpPos += i;
+	if (Size != 0)
+		i /= Size;
 	if (i != Number)
 		ilSetError(IL_FILE_READ_ERROR);
 	return i;

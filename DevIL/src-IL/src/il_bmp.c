@@ -270,7 +270,7 @@ ILboolean iLoadBitmapInternal()
 ILboolean ilReadUncompBmp(BMPHEAD *Header)
 {
 	ILuint i, j, k, c, Read;
-	ILubyte Bpp, ByteData, PadSize;
+	ILubyte Bpp, ByteData, PadSize, Padding[4];
 
 	if (Header->biBitCount < 8)
 		Bpp = 1;  // We can't have an integral number less than one and greater than 0
@@ -374,7 +374,8 @@ ILboolean ilReadUncompBmp(BMPHEAD *Header)
 									break;
 							}
 						}
-						iseek(PadSize, IL_SEEK_CUR);
+						//iseek(PadSize, IL_SEEK_CUR);
+						iread(Padding, 1, PadSize);
 					}
 
 					iUnCache();
@@ -418,7 +419,7 @@ ILboolean ilReadUncompBmp(BMPHEAD *Header)
 								break;
 							iCurImage->Data[j * iCurImage->Width + i] = ByteData & 0x0F;
 						}
-						iseek(PadSize, IL_SEEK_CUR);
+						//iread(Padding, 1, PadSize);iseek(PadSize, IL_SEEK_CUR);
 					}
 
 					iUnCache();
@@ -458,7 +459,8 @@ ILboolean ilReadUncompBmp(BMPHEAD *Header)
 						iUnCache();
 						return IL_FALSE;
 					}
-					iseek(PadSize, IL_SEEK_CUR);
+					//iseek(PadSize, IL_SEEK_CUR);
+					iread(Padding, 1, PadSize);
 				}
 
 				iUnCache();

@@ -26,7 +26,7 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 	if (FileName == NULL || wcslen(FileName) < 1) {
 #endif//_UNICODE
 		ilSetError(IL_INVALID_PARAM);
-		return IL_FALSE;
+		return IL_TYPE_UNKNOWN;
 	}
 
 	if (!iStrCmp(Ext, IL_TEXT("tga")) || !iStrCmp(Ext, IL_TEXT("vda")) ||

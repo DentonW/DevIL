@@ -7,7 +7,7 @@
 ' e-mail: sourcecode@scheutz.dk
 '
 ' Last modified: 05/18/2002
-' Based on DevIL Ver. 1.5.0 PB incs
+' Based on DevIL Ver. 1.5.1 PB incs
 ' Filename: imgview.bas
 '
 ' Released under the GNU Lesser General Public License:

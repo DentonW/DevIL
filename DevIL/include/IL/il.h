@@ -160,8 +160,8 @@ typedef void			ILvoid;
 // IL-specific #define's
 //
 
-#define IL_VERSION_1_5_0					1
-#define IL_VERSION							150
+#define IL_VERSION_1_5_1					1
+#define IL_VERSION							151
 
 
 // Attribute Bits

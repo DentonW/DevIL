@@ -244,16 +244,17 @@ ILboolean iLoadIconInternal()
 	return IL_TRUE;
 
 file_read_error:
-	for (i = 0; i < IconDir.Count; i++) {
-		if (IconImages[i].Pal)
-			ifree(IconImages[i].Pal);
-		if (IconImages[i].Data)
-			ifree(IconImages[i].Data);
-		if (IconImages[i].AND)
-			ifree(IconImages[i].AND);
-	}
-	if (IconImages)
+	if (IconImages) {
+		for (i = 0; i < IconDir.Count; i++) {
+			if (IconImages[i].Pal)
+				ifree(IconImages[i].Pal);
+			if (IconImages[i].Data)
+				ifree(IconImages[i].Data);
+			if (IconImages[i].AND)
+				ifree(IconImages[i].AND);
+		}
 		ifree(IconImages);
+	}
 	if (DirEntries)
 		ifree(DirEntries);
 	return IL_FALSE;

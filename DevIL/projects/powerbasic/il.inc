@@ -16,7 +16,7 @@
 ' e-mail: sourcecode@scheutz.dk
 '
 ' Last modified: 05/28/2002
-' Based on DevIL Ver. 1.5.0 headers
+' Based on DevIL Ver. 1.5.1 headers
 '
 ' Filename: il.inc
 '
@@ -141,8 +141,8 @@
 ' IL-specific #define's
 '
 
-%IL_VERSION_1_4_0 = 1
-%IL_VERSION = 140
+%IL_VERSION_1_5_1 = 1
+%IL_VERSION = 151
 
 
 ' Attribute Bits

@@ -188,7 +188,7 @@ ILboolean GetPalette(ILubyte Info, ILpal *Pal)
 	Pal->Palette = (ILubyte*)ialloc(Pal->PalSize);
 	if (Pal->Palette == NULL)
 		return IL_FALSE;
-	if (iread(Pal->Palette, 1, Pal->PalSize) != IL_FALSE) {
+	if (iread(Pal->Palette, 1, Pal->PalSize) != Pal->PalSize) {
 		ifree(Pal->Palette);
 		return IL_FALSE;
 	}
@@ -213,8 +213,10 @@ ILboolean GetImages(ILpal *GlobalPal)
 			return IL_FALSE;
 
 		// Either of these means that we've reached the end of the data stream.
-		if (iread(&ImageDesc, sizeof(ImageDesc), 1) != 1)
+		if (iread(&ImageDesc, sizeof(ImageDesc), 1) != 1) {
+			ilGetError();  // Gets rid of the IL_FILE_READ_ERROR that inevitably results.
 			break;
+		}
 		if (ImageDesc.Separator != 0x2C)
 			break;
 

@@ -16,7 +16,7 @@
 ' e-mail: sourcecode@scheutz.dk
 '
 ' Last modified: 05/28/2002
-' Based on DevIL Ver. 1.5.0 headers
+' Based on DevIL Ver. 1.5.1 headers
 '
 ' Filename: ilu.inc
 '
@@ -57,8 +57,8 @@
 ' #endif'_WIN32
 
 
-%ILU_VERSION_1_5_0 = 1
-%ILU_VERSION = 150
+%ILU_VERSION_1_5_1 = 1
+%ILU_VERSION = 151
 
 
 %ILU_FILTER         = &H2600&

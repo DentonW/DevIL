@@ -190,7 +190,7 @@ ILboolean iLoadPcdInternal()
 
 	// Not sure how it is...the documentation is hard to understand
 	if (!VertOrientation)
-		iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
+		iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
 
 	ilFixImage();
 

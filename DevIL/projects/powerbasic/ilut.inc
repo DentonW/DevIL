@@ -16,7 +16,7 @@
 ' e-mail: sourcecode@scheutz.dk
 '
 ' Last modified: 05/28/2002
-' Based on DevIL Ver. 1.5.0 headers
+' Based on DevIL Ver. 1.5.1 headers
 '
 ' Filename: ilut.inc
 '
@@ -66,8 +66,8 @@
 ' #endif'_WIN32
 
 
-%ILUT_VERSION_1_5_0 = 1
-%ILUT_VERSION = 150
+%ILUT_VERSION_1_5_1 = 1
+%ILUT_VERSION = 151
 
 
 ' Attribute Bits

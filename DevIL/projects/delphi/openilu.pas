@@ -14,7 +14,7 @@ unit OpenILU;
 
 {******************************************************************************}
 { Converted to Delphi by Alexander Blach (alexander@abee.de)                   }
-{   Version:       ILU v1.5.0                                                  }
+{   Version:       ILU v1.5.1                                                  }
 {   Last modified: 05/28/2002                                                  }
 {******************************************************************************}
 
@@ -25,8 +25,8 @@ uses
   Windows;
 
 const
-  ILU_VERSION_1_5_0 = 1;
-  ILU_VERSION = 150;
+  ILU_VERSION_1_5_1 = 1;
+  ILU_VERSION = 151;
 
   ILU_FILTER = $2600;
   ILU_NEAREST = $2601;

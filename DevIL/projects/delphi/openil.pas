@@ -14,7 +14,7 @@ unit OpenIL;
 
 {******************************************************************************}
 { Converted to Delphi by Alexander Blach (alexander@abee.de)                   }
-{   Version:       DevIL v1.5.0                                                }
+{   Version:       DevIL v1.5.1                                                }
 {   Last modified: 05/28/2002                                                  }
 {******************************************************************************}
 
@@ -111,8 +111,8 @@ const
 // IL-specific 's
 //
 
-  IL_VERSION_1_5_0 = 1;
-  IL_VERSION = 150;
+  IL_VERSION_1_5_1 = 1;
+  IL_VERSION = 151;
 
 
 // Attribute Bits

@@ -444,7 +444,7 @@ ILboolean iGetWord(ILvoid)
 
 		// Get rid of any erroneous spaces
 		while ((Current = igetc()) != IL_EOF) {
-			if (Current == ' ')
+			if (Current != ' ')
 				break;
 		}
 		iseek(-1, IL_SEEK_CUR);

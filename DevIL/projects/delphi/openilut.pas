@@ -14,7 +14,7 @@ unit OpenILUT;
 
 {******************************************************************************}
 { Converted to Delphi by Alexander Blach (alexander@abee.de)                   }
-{   Version:       ILUT v1.5.0                                                 }
+{   Version:       ILUT v1.5.1                                                 }
 {   Last modified: 05/28/2002                                                  }
 {                                                                              }
 {   You will need the latest OpenGL units for Delphi. I recommend those on     }
@@ -40,8 +40,8 @@ uses
 
 
 const
-  ILUT_VERSION_1_5_0 = 1;
-  ILUT_VERSION = 150;
+  ILUT_VERSION_1_5_1 = 1;
+  ILUT_VERSION = 151;
 
 const
 // Attribute Bits
