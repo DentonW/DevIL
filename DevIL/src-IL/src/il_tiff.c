@@ -183,7 +183,7 @@ ILboolean iLoadTiffInternal()
 	TIFF		*tif;
 	uint16	w, h, d, photometric, planarconfig, orientation;
 	uint16	samplesperpixel, bitspersample, *sampleinfo, extrasamples;
-	uint32	linesize;
+	uint32	linesize, tilewidth, tilelength;
 	ILubyte		*pImageData;
 	ILuint		i, ProfileLen, DirCount = 0;
 	ILvoid		*Buffer;
@@ -243,6 +243,7 @@ ILboolean iLoadTiffInternal()
 		TIFFGetFieldDefaulted(tif, TIFFTAG_ORIENTATION, &orientation);
 		linesize = TIFFScanlineSize(tif);
 
+		
 		//added 2003-08-31
 		//1 bpp tiffs are not neccessarily greyscale, they can
 		//have a palette (photometric == 3)...get this information
@@ -252,13 +253,20 @@ ILboolean iLoadTiffInternal()
 		//special-case code for frequent data cases that may be read more
 		//efficiently than with the TIFFReadRGBAImage() interface.
 
-		//TODO: add tile support or fail on tiles...
+		//added 2004-05-12
+		//Get tile sizes and use TIFFReadRGBAImage() for tiled images for now
+		tilewidth = w; tilelength = h;
+		TIFFGetFieldDefaulted(tif, TIFFTAG_TILEWIDTH, &tilewidth);
+		TIFFGetFieldDefaulted(tif, TIFFTAG_TILELENGTH, &tilelength);
+
+
 		if (extrasamples == 0 && samplesperpixel == 1  //luminance or palette
 			&& (bitspersample == 8 || bitspersample == 1)
 			&& (photometric == PHOTOMETRIC_MINISWHITE
 				|| photometric == PHOTOMETRIC_MINISBLACK
 				|| photometric == PHOTOMETRIC_PALETTE)
 			&& (orientation == ORIENTATION_TOPLEFT || orientation == ORIENTATION_BOTLEFT)
+			&& tilewidth == w && tilelength == h
 			) {
 			ILubyte* strip;
 			tsize_t stripsize;
