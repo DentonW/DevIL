@@ -498,6 +498,13 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 			}
 			*Param = iCurImage->Bpc;
 			break;
+                case IL_IMAGE_CHANNELS:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			*Param = iCurImage->Bpp / iCurImage->Bpc;
+			break;
 		case IL_IMAGE_OFFX:
 		case IL_IMAGE_OFFY:
 			if (iCurImage == NULL) {
