@@ -30,7 +30,7 @@ ILboolean ilIsValidTga(const ILstring FileName)
 	ILHANDLE	TargaFile;
 	ILboolean	bTarga = IL_FALSE;
 
-	if (!iCheckExtension(FileName, TEXT("tga"))) {
+	if (!iCheckExtension(FileName, IL_TEXT("tga"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bTarga;
 	}
@@ -597,7 +597,7 @@ ILboolean iSaveTargaInternal()
 		Compress = IL_FALSE;
 
 	if (ID)
-		IDLen = strlen(ID);
+		IDLen = (ILubyte)strlen(ID);
 
 	if (iCurImage->Pal.Palette && iCurImage->Pal.PalSize && iCurImage->Pal.PalType != IL_PAL_NONE)
 		UsePal = IL_TRUE;

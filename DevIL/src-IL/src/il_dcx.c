@@ -23,7 +23,7 @@ ILboolean ilIsValidDcx(const ILstring FileName)
 	ILHANDLE	DcxFile;
 	ILboolean	bDcx = IL_FALSE;
 
-	if (!iCheckExtension(FileName, TEXT("dcx"))) {
+	if (!iCheckExtension(FileName, IL_TEXT("dcx"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bDcx;
 	}

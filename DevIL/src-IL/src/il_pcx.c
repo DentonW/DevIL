@@ -23,7 +23,7 @@ ILboolean ilIsValidPcx(const ILstring FileName)
 	ILHANDLE	PcxFile;
 	ILboolean	bPcx = IL_FALSE;
 
-	if (!iCheckExtension(FileName, TEXT("pcx"))) {
+	if (!iCheckExtension(FileName, IL_TEXT("pcx"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bPcx;
 	}

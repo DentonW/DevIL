@@ -31,11 +31,11 @@ ILboolean ILAPIENTRY ilRegisterLoad(const ILstring Ext, IL_LOADPROC Load)
 	if (TempNode != NULL) {
 		while (TempNode->Next != NULL) {
 			TempNode = TempNode->Next;
-#ifndef _WIN32_WCE
+#ifndef _UNICODE
 			if (!stricmp(TempNode->Ext, Ext)) {  // already registered
 #else
 			if (!wcsicmp(TempNode->Ext, Ext)) {
-#endif//_WIN32_WCE
+#endif//_UNICODE
 				return IL_TRUE;
 			}
 		}
@@ -54,11 +54,11 @@ ILboolean ILAPIENTRY ilRegisterLoad(const ILstring Ext, IL_LOADPROC Load)
 		TempNode->Next = NewNode;
 	}
 
-#ifndef _WIN32_WCE
+#ifndef _UNICODE
 	NewNode->Ext = ilStrDup(Ext);
 #else
 	NewNode->Ext = _wcsdup(Ext);
-#endif//_WIN32_WCE
+#endif//_UNICODE
 	NewNode->Load = Load;
 	NewNode->Next = NULL;
 
@@ -74,11 +74,11 @@ ILboolean ILAPIENTRY ilRegisterSave(const ILstring Ext, IL_SAVEPROC Save)
 	if (TempNode != NULL) {
 		while (TempNode->Next != NULL) {
 			TempNode = TempNode->Next;
-#ifndef _WIN32_WCE
+#ifndef _UNICODE
 			if (!stricmp(TempNode->Ext, Ext)) {  // already registered
 #else
 			if (!_wcsicmp(TempNode->Ext, Ext)) {
-#endif//_WIN32_WCE
+#endif//_UNICODE
 				return IL_TRUE;
 			}
 		}
@@ -97,11 +97,11 @@ ILboolean ILAPIENTRY ilRegisterSave(const ILstring Ext, IL_SAVEPROC Save)
 		TempNode->Next = NewNode;
 	}
 
-#ifndef _WIN32_WCE
+#ifndef _UNICODE
 	NewNode->Ext = ilStrDup(Ext);
 #else
 	NewNode->Ext = _wcsdup(Ext);
-#endif//_WIN32_WCE
+#endif//_UNICODE
 	NewNode->Save = Save;
 	NewNode->Next = NULL;
 
@@ -115,11 +115,11 @@ ILboolean ILAPIENTRY ilRemoveLoad(const ILstring Ext)
 	iFormatL *TempNode = LoadProcs, *PrevNode = NULL;
 
 	while (TempNode != NULL) {
-#ifndef _WIN32_WCE
+#ifndef _UNICODE
 		if (!stricmp(Ext, TempNode->Ext)) {
 #else
 		if (_wcsicmp(Ext, TempNode->Ext)) {
-#endif//_WIN32_WCE
+#endif//_UNICODE
 			if (PrevNode == NULL) {  // first node in the list
 				LoadProcs = TempNode->Next;
 				ifree(TempNode->Ext);
@@ -148,11 +148,11 @@ ILboolean ILAPIENTRY ilRemoveSave(const ILstring Ext)
 	iFormatS *TempNode = SaveProcs, *PrevNode = NULL;
 
 	while (TempNode != NULL) {
-#ifndef _WIN32_WCE
+#ifndef _UNICODE
 		if (!stricmp(Ext, TempNode->Ext)) {
 #else
 		if (_wcsicmp(Ext, TempNode->Ext)) {
-#endif//_WIN32_WCE
+#endif//_UNICODE
 			if (PrevNode == NULL) {  // first node in the list
 				SaveProcs = TempNode->Next;
 				ifree(TempNode->Ext);
@@ -208,11 +208,11 @@ ILboolean iRegisterLoad(const ILstring FileName)
 		return IL_FALSE;
 
 	while (TempNode != NULL) {
-#ifndef _WIN32_WCE
+#ifndef _UNICODE
 		if (!stricmp(Ext, TempNode->Ext)) {
 #else
 		if (_wcsicmp(Ext, TempNode->Ext)) {
-#endif//_WIN32_WCE
+#endif//_UNICODE
 			return TempNode->Load(FileName);
 		}
 		TempNode = TempNode->Next;
@@ -231,11 +231,11 @@ ILboolean iRegisterSave(const ILstring FileName)
 		return IL_FALSE;
 
 	while (TempNode != NULL) {
-#ifndef _WIN32_WCE
+#ifndef _UNICODE
 		if (!stricmp(Ext, TempNode->Ext)) {
 #else
 		if (_wcsicmp(Ext, TempNode->Ext)) {
-#endif//_WIN32_WCE
+#endif//_UNICODE
 			return TempNode->Save(FileName);
 		}
 		TempNode = TempNode->Next;

@@ -25,7 +25,7 @@ ILboolean ilIsValidPic(const ILstring FileName)
 	ILHANDLE	PicFile;
 	ILboolean	bPic = IL_FALSE;
 
-	if (!iCheckExtension(FileName, TEXT("pic"))) {
+	if (!iCheckExtension(FileName, IL_TEXT("pic"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bPic;
 	}

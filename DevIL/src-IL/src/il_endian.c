@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 10/27/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 01/05/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/endian.c
+// Filename: openil/il_endian.c
 //
 // Description: Handles Endian-ness
 //
@@ -125,7 +125,7 @@ ILfloat GetLittleFloat()
 	static ILfloat f;
 	iread(&f, sizeof(ILfloat), 1);
 #ifdef __BIG_ENDIAN__
-	f = _SwapFloat(i);
+	f = _SwapFloat(f);
 #endif
 	return f;
 }
@@ -136,7 +136,7 @@ ILdouble GetLittleDouble()
 	static ILdouble d;
 	iread(&d, sizeof(ILdouble), 1);
 #ifdef __BIG_ENDIAN__
-	i = _SwapDouble(d);
+	d = _SwapDouble(d);
 #endif
 	return d;
 }

@@ -86,7 +86,7 @@ ILboolean iCheckExtension(const ILstring Arg, const ILstring Ext)
 {
 	ILboolean PeriodFound = IL_FALSE;
 	ILint i;
-#ifndef _WIN32_WCE
+#ifndef _UNICODE
 	char *Argu = (char*)Arg;  // pointer to arg so we don't destroy arg
 
 	if (Arg == NULL || Ext == NULL || !strlen(Arg) || !strlen(Ext))  // if not a good filename/extension, exit early
@@ -141,13 +141,13 @@ ILboolean iCheckExtension(const ILstring Arg, const ILstring Ext)
 ILstring iGetExtension(const ILstring FileName)
 {
 	ILboolean PeriodFound = IL_FALSE;
-#ifndef _WIN32_WCE
+#ifndef _UNICODE
 	char *Ext = FileName;
 	ILint i, Len = strlen(FileName);
 #else
 	wchar_t *Ext = FileName;
 	ILint i, Len = wcslen(FileName);
-#endif//_WIN32_WCE
+#endif//_UNICODE
 
 	if (FileName == NULL || !Len)  // if not a good filename/extension, exit early
 		return NULL;
@@ -172,11 +172,11 @@ ILstring iGetExtension(const ILstring FileName)
 // Checks if the file exists
 ILboolean iFileExists(const ILstring FileName)
 {
-#ifndef _WIN32_WCE
+#ifndef _UNICODE
 	FILE *CheckFile = fopen(FileName, "rb");
 #else
 	FILE *CheckFile = _wfopen(FileName, L"rb");
-#endif//_WIN32_WCE
+#endif//_UNICODE
 
 	if (CheckFile) {
 		fclose(CheckFile);

@@ -23,7 +23,7 @@ ILboolean ilIsValidBmp(const ILstring FileName)
 	ILHANDLE	BitmapFile;
 	ILboolean	bBitmap = IL_FALSE;
 
-	if (!iCheckExtension(FileName, TEXT("bmp"))) {
+	if (!iCheckExtension(FileName, IL_TEXT("bmp"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bBitmap;
 	}
@@ -819,7 +819,22 @@ ILboolean iSaveBitmapInternal()
 	iputc('M');  //  "signature"
 	SaveLittleUInt(0);  // Will come back and change later in this function (filesize)
 	SaveLittleUInt(0);  // Reserved
-	SaveLittleUInt(54 + iCurImage->Pal.PalSize);  // Offset of the data
+
+	// If the current image has a palette, take care of it
+	if (iCurImage->Pal.PalSize && iCurImage->Pal.Palette && iCurImage->Pal.PalType != IL_PAL_NONE) {
+		// If the palette in .bmp format, write it directly
+		if (iCurImage->Pal.PalType == IL_PAL_BGR32) {
+			TempPal = &iCurImage->Pal;
+		}
+		else {
+			TempPal = iConvertPal(&iCurImage->Pal, IL_PAL_BGR32);
+			if (TempPal == NULL) {
+				return IL_FALSE;
+			}
+		}
+	}
+
+	SaveLittleUInt(54 + TempPal->PalSize);  // Offset of the data
 
 	SaveLittleUInt(0x28);  // Header size
 	SaveLittleUInt(iCurImage->Width);
@@ -866,25 +881,7 @@ ILboolean iSaveBitmapInternal()
 	else
 		TempData = TempImage->Data;
 
-	// If the current image has a palette, take care of it
-	if (iCurImage->Pal.PalSize && iCurImage->Pal.Palette && iCurImage->Pal.PalType != IL_PAL_NONE) {
-		// If the palette in .bmp format, write it directly
-		if (iCurImage->Pal.PalType == IL_PAL_BGR32) {
-			iwrite(iCurImage->Pal.Palette, 1, iCurImage->Pal.PalSize);
-		}
-		else {
-			TempPal = iConvertPal(&iCurImage->Pal, IL_PAL_BGR32);
-			if (TempPal == NULL) {
-				ifree(TempPal->Palette);
-				ifree(TempPal);
-				return IL_FALSE;
-			}
-
-			iwrite(TempPal->Palette, 1, TempPal->PalSize);
-			ifree(TempPal->Palette);
-			ifree(TempPal);
-		}
-	}
+	iwrite(TempPal->Palette, 1, TempPal->PalSize);
 
 	PadSize = PadSize = (4 - (TempImage->Bps % 4)) % 4;
 	// No padding, so write data directly.
@@ -904,6 +901,11 @@ ILboolean iSaveBitmapInternal()
 	iseekw(2, IL_SEEK_SET);
 	SaveLittleUInt(FileSize);
 
+
+	if (TempPal != &iCurImage->Pal) {
+		ifree(TempPal->Palette);
+		ifree(TempPal);
+	}
 	if (TempData != TempImage->Data)
 		free(TempData);
 	if (TempImage != iCurImage)

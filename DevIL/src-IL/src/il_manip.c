@@ -341,10 +341,15 @@ ILuint ILAPIENTRY ilCopyPixels(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Wid
 	}
 	SrcSize = Width * Height * Depth * iCurImage->Bpp * iCurImage->Bpc;
 
-	TempBuff = (ILubyte*)ialloc(SrcSize);
-	if (TempBuff == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
-		return 0;
+	if (Format == iCurImage->Format && Type == iCurImage->Type) {
+		TempBuff = (ILubyte*)Data;
+	}
+	else {
+		TempBuff = (ILubyte*)ialloc(SrcSize);
+		if (TempBuff == NULL) {
+			ilSetError(IL_OUT_OF_MEMORY);
+			return 0;
+		}
 	}
 
 	if (YOff + Height <= 1) {
@@ -355,6 +360,10 @@ ILuint ILAPIENTRY ilCopyPixels(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Wid
 	}
 	else {
 		ilCopyPixels3D(XOff, YOff, ZOff, Width, Height, Depth, TempBuff);
+	}
+
+	if (Format == iCurImage->Format && Type == iCurImage->Type) {
+		return IL_TRUE;
 	}
 
 	Converted = ilConvertBuffer(SrcSize, iCurImage->Format, Format, iCurImage->Type, Type, TempBuff);
@@ -551,9 +560,14 @@ ILvoid ILAPIENTRY ilSetPixels(ILint XOff, ILint YOff, ILint ZOff, ILuint Width, 
 		return;
 	}
 
-	Converted = ilConvertBuffer(Width * Height * Depth * ilGetBppFormat(Format) * ilGetBppType(Type), Format, iCurImage->Format, iCurImage->Type, Type, Data);
-	if (!Converted)
-		return;
+	if (Format == iCurImage->Format && Type == iCurImage->Type) {
+		Converted = (ILvoid*)Data;
+	}
+	else {
+		Converted = ilConvertBuffer(Width * Height * Depth * ilGetBppFormat(Format) * ilGetBppType(Type), Format, iCurImage->Format, iCurImage->Type, Type, Data);
+		if (!Converted)
+			return;
+	}
 
 	if (YOff + Height <= 1) {
 		ilSetPixels1D(XOff, Width, Converted);
@@ -564,6 +578,12 @@ ILvoid ILAPIENTRY ilSetPixels(ILint XOff, ILint YOff, ILint ZOff, ILuint Width, 
 	else {
 		ilSetPixels3D(XOff, YOff, ZOff, Width, Height, Depth, Converted);
 	}
+
+	if (Format == iCurImage->Format && Type == iCurImage->Type) {
+		return;
+	}
+
+	ifree(Converted);
 
 	return;
 }

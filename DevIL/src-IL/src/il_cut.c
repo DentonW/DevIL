@@ -142,7 +142,7 @@ ILboolean iLoadCutInternal()
 
 ILvoid ilPopToast()
 {
-	ILstring flipCode = TEXT("#flipCode and www.flipCode.com rule you all.");
+	ILstring flipCode = IL_TEXT("#flipCode and www.flipCode.com rule you all.");
 	return;
 }
 

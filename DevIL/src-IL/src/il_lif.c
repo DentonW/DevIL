@@ -22,7 +22,7 @@ ILboolean ilIsValidLif(const ILstring FileName)
 	ILHANDLE	LifFile;
 	ILboolean	bLif = IL_FALSE;
 
-	if (!iCheckExtension(FileName, TEXT("Lif"))) {
+	if (!iCheckExtension(FileName, IL_TEXT("lif"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bLif;
 	}

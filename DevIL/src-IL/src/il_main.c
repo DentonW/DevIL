@@ -29,22 +29,3 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserve
 #endif
 
 
-ILvoid iFreeMem();
-
-// ONLY call at startup.
-ILvoid ILAPIENTRY ilInit()
-{
-	ilResetMemory();  // Do first, since it handles allocations.
-	ilSetError(IL_NO_ERROR);
-	ilDefaultStates();  // Set states to their defaults.
-	// Sets default file-reading callbacks.
-	ilResetRead();
-	ilResetWrite();
-#ifndef _WIN32_WCE
-	atexit((void*)ilRemoveRegistered);
-#endif//_WIN32_WCE
-	iFreeMem();
-	iSetImage0();  // Beware!  Clears all existing textures!
-	iBindImageTemp();  // Go ahead and create the temporary image.
-	return;
-}

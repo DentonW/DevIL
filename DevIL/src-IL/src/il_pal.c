@@ -30,7 +30,7 @@ ILboolean ILAPIENTRY ilLoadPal(const ILstring FileName)
 		return IL_FALSE;
 	}
 
-	if (iCheckExtension(FileName, TEXT("col"))) {
+	if (iCheckExtension(FileName, IL_TEXT("col"))) {
 		return ilLoadColPal(FileName);
 	}
 
@@ -63,7 +63,7 @@ ILboolean ilLoadJascPal(const ILstring FileName)
 	ILboolean Error = IL_FALSE;
 	ILpal *Pal = &iCurImage->Pal;
 
-	if (!iCheckExtension(FileName, TEXT("pal"))) {
+	if (!iCheckExtension(FileName, IL_TEXT("pal"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return IL_FALSE;
 	}
@@ -178,11 +178,11 @@ ILboolean ILAPIENTRY ilSavePal(const ILstring FileName)
 		return IL_FALSE;
 	}
 
-#ifndef _WIN32_WCE
+#ifndef _UNICODE
 	if (FileName == NULL || strlen(FileName) < 1 || Ext == NULL) {
 #else
 	if (FileName == NULL || wcslen(FileName) < 1 || Ext == NULL) {
-#endif//_WIN32_WCE
+#endif//_UNICODE
 		ilSetError(IL_INVALID_PARAM);
 		return IL_FALSE;
 	}
@@ -192,7 +192,7 @@ ILboolean ILAPIENTRY ilSavePal(const ILstring FileName)
 		return IL_FALSE;
 	}
 
-	if (!iStrCmp(Ext, TEXT("pal"))) {
+	if (!iStrCmp(Ext, IL_TEXT("pal"))) {
 		return ilSaveJascPal(FileName);
 	}
 
@@ -213,16 +213,16 @@ ILboolean ilSaveJascPal(const ILstring FileName)
 		return IL_FALSE;
 	}
 	
-#ifndef _WIN32_WCE
+#ifndef _UNICODE
 	if (FileName == NULL || strlen(FileName) < 5) {
 #else
 	if (FileName == NULL || wcslen(FileName) < 5) {
-#endif//_WIN32_WCE
+#endif//_UNICODE
 		ilSetError(IL_INVALID_VALUE);
 		return IL_FALSE;
 	}
 
-	if (!iCheckExtension(FileName, TEXT("pal"))) {
+	if (!iCheckExtension(FileName, IL_TEXT("pal"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return IL_FALSE;
 	}
@@ -291,7 +291,7 @@ ILboolean ilLoadHaloPal(const ILstring FileName)
 	ILushort	*TempPal;
 	ILuint		i;
 
-	if (!iCheckExtension(FileName, TEXT("pal"))) {
+	if (!iCheckExtension(FileName, IL_TEXT("pal"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return IL_FALSE;
 	}
@@ -359,7 +359,7 @@ ILboolean ilLoadColPal(const ILstring FileName)
 	ILushort	Version;
 	ILHANDLE	ColFile;
 
-	if (!iCheckExtension(FileName, TEXT("col"))) {
+	if (!iCheckExtension(FileName, IL_TEXT("col"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return IL_FALSE;
 	}

@@ -15,8 +15,8 @@
 #include "il_states.h"
 #include <malloc.h>
 
-const ILstring _ilVendor	= TEXT("Abysmal Software");
-const ILstring _ilVersion	= TEXT("Developer's Image Library (DevIL) 1.2.2");
+const ILstring _ilVendor	= IL_TEXT("Abysmal Software");
+const ILstring _ilVersion	= IL_TEXT("Developer's Image Library (DevIL) 1.2.2");
 
 
 //! Set all states to their defaults.

@@ -30,9 +30,9 @@ ILboolean ilIsValidPnm(const ILstring FileName)
 	ILHANDLE	PnmFile;
 	ILboolean	bPnm = IL_FALSE;
 
-	if (   !iCheckExtension(FileName, TEXT("pbm"))
-		&& !iCheckExtension(FileName, TEXT("pgm"))
-		&& !iCheckExtension(FileName, TEXT("ppm"))) {
+	if (   !iCheckExtension(FileName, IL_TEXT("pbm"))
+		&& !iCheckExtension(FileName, IL_TEXT("pgm"))
+		&& !iCheckExtension(FileName, IL_TEXT("ppm"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bPnm;
 	}
@@ -535,11 +535,11 @@ ILboolean iSavePnmInternal()
 		return IL_FALSE;		
 	}
 
-	if (iCheckExtension(FName, TEXT("pbm")))
+	if (iCheckExtension(FName, IL_TEXT("pbm")))
 		Type = IL_PBM_ASCII;
-	else if (iCheckExtension(FName, TEXT("pgm")))
+	else if (iCheckExtension(FName, IL_TEXT("pgm")))
 		Type = IL_PGM_ASCII;
-	else if (iCheckExtension(FName, TEXT("ppm")))
+	else if (iCheckExtension(FName, IL_TEXT("ppm")))
 		Type = IL_PPM_ASCII;
 	else
 		Type = IL_PPM_ASCII;
@@ -580,34 +580,34 @@ ILboolean iSavePnmInternal()
 	{
 		case IL_PBM_ASCII:
 			Bpp = 1;
-			iprintf("P1\n");
+			ilprintf("P1\n");
 			TempImage = iConvertImage(IL_LUMINANCE, IL_UNSIGNED_BYTE);
 			break;
 		//case IL_PBM_BINARY:  // Don't want to mess with saving bits just yet...
 			//Bpp = 1;
-			//iprintf("P4\n");
+			//ilprintf("P4\n");
 			//break;
 		case IL_PBM_BINARY:
 			ilSetError(IL_FORMAT_NOT_SUPPORTED);
 			return IL_FALSE;
 		case IL_PGM_ASCII:
 			Bpp = 1;
-			iprintf("P2\n");
+			ilprintf("P2\n");
 			TempImage = iConvertImage(IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
 			break;
 		case IL_PGM_BINARY:
 			Bpp = 1;
-			iprintf("P5\n");
+			ilprintf("P5\n");
 			TempImage = iConvertImage(IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
 			break;
 		case IL_PPM_ASCII:
 			Bpp = 3;
-			iprintf("P3\n");
+			ilprintf("P3\n");
 			TempImage = iConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
 			break;
 		case IL_PPM_BINARY:
 			Bpp = 3;
-			iprintf("P6\n");
+			ilprintf("P6\n");
 			TempImage = iConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
 			break;
 	}
@@ -623,9 +623,9 @@ ILboolean iSavePnmInternal()
 		return IL_FALSE;
 	}
 
-	iprintf("%d %d\n", TempImage->Width, TempImage->Height);
+	ilprintf("%d %d\n", TempImage->Width, TempImage->Height);
 	if (Type != IL_PBM_BINARY && Type != IL_PBM_ASCII)  // not needed for .pbm's (only 0 and 1)
-		iprintf("%d\n", MaxVal);
+		ilprintf("%d\n", MaxVal);
 
 	while (i < TempImage->SizeOfPlane) {
 		for (j = 0; j < Bpp; j++) {
@@ -645,10 +645,10 @@ ILboolean iSavePnmInternal()
 				else  // IL_UNSIGNED_SHORT
 					k = *((ILushort*)TempImage->Data + i);
 				if (Type == IL_PBM_ASCII) {
-					LinePos += iprintf("%d ", TempImage->Data[i] > 127 ? 1 : 0);
+					LinePos += ilprintf("%d ", TempImage->Data[i] > 127 ? 1 : 0);
 				}
 				else {
-					LinePos += iprintf("%d ", TempImage->Data[i]);
+					LinePos += ilprintf("%d ", TempImage->Data[i]);
 				}
 			}
 
@@ -658,7 +658,7 @@ ILboolean iSavePnmInternal()
 		}
 
 		if (LinePos > 65) {  // Just a good number =]
-			iprintf("\n");
+			ilprintf("\n");
 			LinePos = 0;
 		}
 	}

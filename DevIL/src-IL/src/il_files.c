@@ -294,7 +294,7 @@ ILuint ILAPIENTRY ilGetLumpPos()
 }
 
 
-ILuint ILAPIENTRY iprintf(const char *Line, ...)
+ILuint ILAPIENTRY ilprintf(const char *Line, ...)
 {
 	static char		Buffer[2048];  // Hope this is large enough
 	static va_list	VaLine;

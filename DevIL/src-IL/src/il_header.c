@@ -31,16 +31,16 @@ ILboolean ilSaveCHeader(const ILstring FileName, const char *InternalName)
 	}
 
 	if (FileName == NULL || InternalName == NULL ||
-#ifndef _WIN32_WCE
+#ifndef _UNICODE
 		strlen(FileName) < 1 ||	strlen(InternalName) < 1) {
 #else
 		wcslen(FileName) < 1 || wcslen(FileName) < 1) {
-#endif//_WIN32_WCE
+#endif//_UNICODE
 		ilSetError(IL_INVALID_VALUE);
 		return IL_FALSE;
 	}
 
-	if (!iCheckExtension(FileName, TEXT("h"))) {
+	if (!iCheckExtension(FileName, IL_TEXT("h"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return IL_FALSE;
 	}
@@ -61,7 +61,7 @@ ILboolean ilSaveCHeader(const ILstring FileName, const char *InternalName)
 		TempImage = iCurImage;
 	}
 
-#ifndef _WIN32_WCE
+#ifndef _unicode
 	HeadFile = fopen(FileName, "rb");
 #else
 	HeadFile = _wfopen(FileName, L"rb");

@@ -25,7 +25,7 @@ ILboolean ilIsValidSgi(const ILstring FileName)
 	ILHANDLE	SgiFile;
 	ILboolean	bSgi = IL_FALSE;
 
-	if (!iCheckExtension(FileName, TEXT("sgi")))
+	if (!iCheckExtension(FileName, IL_TEXT("sgi")))
 	{
 		ilSetError(IL_INVALID_EXTENSION);
 		return bSgi;
