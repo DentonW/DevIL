@@ -19,8 +19,9 @@
 //	http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dx8_c/hh/dx8_c/graphics_using_0j03.asp
 //	and
 //	http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dx8_c/directx_cpp/Graphics/ProgrammersGuide/Appendix/DDSFileFormat/ovwDDSFileFormat.asp
-//
-//
+//	However, some not really valid .dds files are also read, for example
+//	Volume Textures without the COMPLEX bit set, so the specs aren't taken
+//	too strictly while reading.
 
 
 #include "il_internal.h"
@@ -296,7 +297,7 @@ ILboolean iLoadDdsInternal()
 	if (!(Head.Flags1 & (DDS_LINEARSIZE | DDS_PITCH))) {
 		Head.Flags1 |= DDS_LINEARSIZE;
 		Head.LinearSize = BlockSize;
-  }
+	}
 
 	Image = iCurImage;
 	if (Head.ddsCaps1 & DDS_COMPLEX) {
@@ -557,6 +558,7 @@ ILboolean ReadMipmaps()
 	ILimage	*StartImage, *TempImage;
 	ILuint	LastLinear;
 	ILuint	minW, minH;
+	ILuint	mipMapCount;
 
 	if (CompFormat == PF_RGB)
 		Bpp = 3;
@@ -573,8 +575,17 @@ ILboolean ReadMipmaps()
 		Head.MipMapCount = 1;
 	}
 
+	if(Head.MipMapCount > 0) {
+		//some .dds-files have their mipmap flag set,
+		//but a mipmapcount of 0. Because mipMapCount is an uint, 0 - 1 gives
+		//overflow - don't let this happen:
+		mipMapCount = Head.MipMapCount - 1;
+	}
+	else
+		mipMapCount = 0;
+
 	LastLinear = Head.LinearSize;
-	for (i = 0; i < Head.MipMapCount - 1; i++) {
+	for (i = 0; i < mipMapCount; i++) {
 		Depth = Depth / 2;
 		Width = Width / 2;
 		Height = Height / 2;
@@ -617,7 +628,7 @@ ILboolean ReadMipmaps()
 	Head.LinearSize = LastLinear;
 	StartImage->Mipmaps = StartImage->Next;
 	StartImage->Next = NULL;
-	StartImage->NumMips = Head.MipMapCount - 1;
+	StartImage->NumMips = mipMapCount;
 	Image = StartImage;
 
 	return IL_TRUE;
