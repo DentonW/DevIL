@@ -2,12 +2,8 @@ DevIL TODO:
 
 -----------
 
-* Complete IL_LUMINANCE_ALPHA
 - IL_LUMINANCE_ALPHA support must be tested in ilApplyPal();
-- IL_LUMINANCE/_ALPHA, IL_COLOUR_INDEX:  must be implemented in iluReplaceColour(ILubyte Red, ILubyte Green, ILubyte Blue, ILfloat Tolerance);
-- iluScaleColours missing IL_LUMINANCE_ALPHA
-- ilApplyProfile missing IL_LUMINANCE_ALPHA
-
+- IL_COLOUR_INDEX:  must be implemented in iluReplaceColour(ILubyte Red, ILubyte Green, ILubyte Blue, ILfloat Tolerance);
 - Check saving of Luminance (8 bpp/1 Bpp) BMP
 - ilKeyColor ilAddKey...
 - iluRotate3D

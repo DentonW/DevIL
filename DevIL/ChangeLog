@@ -7,6 +7,10 @@
 - Added ilSetAlpha
 - Added ilModAlpha
 - Removed ilSetSharedPal
+- Fixed a common TARGA/TIFF/PNG memory Leak
+- Fixed bug 785053 in il_header.c
+- Fixed bug 785178 in il_header.c
+- Fixed stack problem for name reuse
 
 1.6.7
 -----
