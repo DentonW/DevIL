@@ -39,7 +39,6 @@ int main(int argc, char **argv)
 	TestInc("libmng.h",		NULL,	"IL_NO_MNG",	false);
 	TestInc("png.h",		NULL,	"IL_NO_PNG",	false);
 	TestInc("tiff.h",		NULL,	"IL_NO_TIF",	false);
-	TestInc("gif_lib.h",	NULL,	"IL_NO_GIF",	false);
 	TestInc("lcms.h",		"lcms",	"IL_NO_LCMS",	false);
 
 	Out << endl;

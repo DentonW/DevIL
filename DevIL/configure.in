@@ -30,7 +30,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.16 $)
+AC_REVISION($Revision: 1.17 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -229,7 +229,6 @@ AC_SUBST(X_CFLAGS)
 AC_CHECK_HEADER(jpeglib.h, ,no_jpeg="yes")
 AC_CHECK_HEADER(tiffio.h, ,no_tiff="yes")
 AC_CHECK_HEADER(png.h, ,no_png="yes")
-AC_CHECK_HEADER(gif_lib.h, ,no_gif="yes")
 AC_CHECK_HEADER(lcms/lcms.h, ,no_lcms="yes")
 AC_CHECK_HEADER(libmng.h, ,no_mng="yes")
 AC_CHECK_HEADER(GL/gl.h, , use_opengl="no")
