@@ -309,6 +309,9 @@
 				RelativePath="..\src\il_psd.c">
 			</File>
 			<File
+				RelativePath="..\src\il_psp.c">
+			</File>
+			<File
 				RelativePath="..\src\il_quantizer.c">
 			</File>
 			<File
@@ -382,34 +385,13 @@
 				RelativePath="..\include\il_files.h">
 			</File>
 			<File
+				RelativePath="..\include\il_gif.h">
+			</File>
+			<File
 				RelativePath="..\include\il_icon.h">
 			</File>
 			<File
 				RelativePath="..\include\il_internal.h">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="&quot;..\..\LIBTOOLS\config gen\config_gen.exe&quot; ..\..\include\IL
-"
-						Outputs="$(InputName)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="&quot;..\..\LIBTOOLS\config gen\config_gen.exe&quot; ..\..\include\IL
-"
-						Outputs="$(InputName)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="&quot;..\..\LIBTOOLS\config gen\config_gen.exe&quot; ..\..\include\IL
-"
-						Outputs="$(InputName)"/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\include\il_jpeg.h">
@@ -437,6 +419,9 @@
 			</File>
 			<File
 				RelativePath="..\include\il_psd.h">
+			</File>
+			<File
+				RelativePath="..\include\il_psp.h">
 			</File>
 			<File
 				RelativePath="..\include\il_q2pal.h">
