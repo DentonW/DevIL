@@ -597,6 +597,7 @@ ILboolean iSaveJpegInternal()
 	  JpegInfo.write_EXIF_header = FALSE;
 	}
 #else
+	Type = Type;
 	JpegInfo.write_JFIF_header = TRUE;
 #endif//IL_USE_JPEGLIB_UNMODIFIED
 
