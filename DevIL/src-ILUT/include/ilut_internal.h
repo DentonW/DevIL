@@ -22,13 +22,15 @@
 
 #include <string.h>
 
+/*
 #ifdef _MSC_VER
 	#if _MSC_VER > 1000
-		#pragma once
-		#pragma intrinsic(memcpy)
-		#pragma intrinsic(memset)
+		pragma once
+		pragma intrinsic(memcpy)
+		pragma intrinsic(memset)
 	#endif // _MSC_VER > 1000
 #endif
+*/
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

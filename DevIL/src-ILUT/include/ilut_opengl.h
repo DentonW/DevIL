@@ -25,12 +25,13 @@
 ILvoid iGLSetMaxW(ILuint Width);
 ILvoid iGLSetMaxH(ILuint Height);
 
-ILenum		ilutGLFormat(ILenum, ILubyte);
-ILimage*	MakeGLCompliant(ILimage *Src);
-ILboolean	IsExtensionSupported(const char *extension);
+ILenum    ilutGLFormat(ILenum, ILubyte);
+ILimage*  MakeGLCompliant(ILimage *Src);
+ILboolean IsExtensionSupported(const char *extension);
 
 
-#ifdef _MSC_VER
+#ifdef _WIN32
+	#include <windows.h>
 	typedef void (ILAPIENTRY * ILGLCOMPRESSEDTEXIMAGE2DARBPROC) (GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *data);
 #endif
 

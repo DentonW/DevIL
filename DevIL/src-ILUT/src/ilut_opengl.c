@@ -13,6 +13,7 @@
 
 #include "ilut_internal.h"
 #ifdef ILUT_USE_OPENGL
+
 #include "ilut_opengl.h"
 #include <stdio.h>
 #include <string.h>
@@ -29,20 +30,11 @@
 #define ILGL_CLAMP_TO_EDGE					0x812F
 #define ILGL_TEXTURE_WRAP_R					0x8072
 
-
-#ifdef  _MSC_VER
-	//pragma comment(lib, "opengl32.lib")
-	//pragma comment(lib, "glu32.lib")
-#endif//_MSC_VER
-
-
 ILint MaxTexW = 256, MaxTexH = 256;  // maximum texture widths and heights
 ILboolean HasCubemapHardware = IL_FALSE;
 #ifdef _MSC_VER
 	ILGLCOMPRESSEDTEXIMAGE2DARBPROC ilGLCompressed2D = NULL;
 #endif
-
-
 
 
 // Absolutely *have* to call this if planning on using the image library with OpenGL.
@@ -340,7 +332,7 @@ ILboolean ILAPIENTRY ilutGLBuildMipmaps()
 ILboolean ILAPIENTRY ilutGLSubTex(GLuint TexID, ILuint XOff, ILuint YOff)
 {
 	ILimage	*Image;
-	ILuint Width, Height;
+	ILint Width, Height;
 
 	ilutCurImage = ilGetCurImage();
 	if (ilutCurImage == NULL) {
@@ -357,7 +349,7 @@ ILboolean ILAPIENTRY ilutGLSubTex(GLuint TexID, ILuint XOff, ILuint YOff)
 	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH,  &Width);
 	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &Height);
 
-	if (Image->Width + XOff > Width || Image->Height + YOff > Height) {
+	if (Image->Width + XOff > (ILuint)Width || Image->Height + YOff > (ILuint)Height) {
 		ilSetError(ILUT_BAD_DIMENSIONS);
 		return IL_FALSE;
 	}
@@ -598,15 +590,15 @@ ILboolean IsExtensionSupported(const char *extension)
 	const GLubyte *start;
 	GLubyte *where, *terminator;
 
-	/* Extension names should not have spaces. */
+	// Extension names should not have spaces.
 	where = (GLubyte *) strchr(extension, ' ');
 	if (where || *extension == '\0')
 		return IL_FALSE;
 	extensions = glGetString(GL_EXTENSIONS);
 	if (!extensions)
 		return IL_FALSE;
-	/* It takes a bit of care to be fool-proof about parsing the
-		OpenGL extensions string. Don't be fooled by sub-strings, etc. */
+	// It takes a bit of care to be fool-proof about parsing the
+	// OpenGL extensions string. Don't be fooled by sub-strings, etc.
 	start = extensions;
 	for (;;) {
 		where = (GLubyte *)strstr((const char *) start, extension);

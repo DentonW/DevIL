@@ -13,8 +13,8 @@
 
 #include "ilut_internal.h"
 #ifdef ILUT_USE_WIN32
-#include <wininet.h>
 #include <windows.h>
+#include <wininet.h>
 
 // For ilutWinLoadUrl().
 //pragma comment(lib, "wininet.lib")

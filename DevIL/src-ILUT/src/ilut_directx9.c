@@ -19,6 +19,7 @@
 //pragma comment(lib, "d3d9.lib")
 //pragma comment(lib, "d3dx9.lib")
 
+
 ILimage*	MakeD3D9Compliant(IDirect3DDevice9 *Device, D3DFORMAT *DestFormat);
 ILenum		GetD3D9Compat(ILenum Format);
 //D3DFORMAT	GetD3DFormat(ILenum Format);
