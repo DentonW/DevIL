@@ -1023,7 +1023,7 @@ ILboolean ILAPIENTRY iluSaturate1f(ILfloat Saturation)
 
 ILboolean ILAPIENTRY iluSaturate4f(ILfloat r, ILfloat g, ILfloat b, ILfloat Saturation)
 {
-	ILfloat Mat[3][3];
+	ILfloat Mat[4][4];
 	ILfloat s = Saturation;
 
 	Mat[0][0] = (1.0f - s) * r + s;
