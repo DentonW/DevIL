@@ -164,6 +164,7 @@ ILvoid ILAPIENTRY ilutGetBooleanv(ILenum Mode, ILboolean *Param)
 
 		case ILUT_GL_AUTODETECT_TEXTURE_TARGET:
 			*Param = ilutStates[ilutCurrentPos].ilutAutodetectTextureTarget;
+			break;
 
 		default:
 			ilSetError(ILUT_INVALID_ENUM);
