@@ -225,7 +225,7 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 
 // ImageLib Utility Toolkit's Allegro Functions
 #ifdef ILUT_USE_ALLEGRO
-<<<<<<< ilut.h
+
 #ifdef __cplusplus
 }
 #endif
@@ -233,10 +233,9 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 #ifdef __cplusplus
 extern "C" {
 #endif
-=======
->>>>>>> 1.49
+
 	ILAPI BITMAP* ILAPIENTRY ilutAllegLoadImage(const ILstring FileName);
-	ILAPI BITMAP* ILAPIENTRY ilutConvertToAlleg( unsigned char Pal[256][4]);
+	ILAPI BITMAP* ILAPIENTRY ilutConvertToAlleg(PALETTE Pal);
 #endif//ILUT_USE_ALLEGRO
 
 
