@@ -181,12 +181,13 @@ void errorHandler(const char* mod, const char* fmt, va_list ap)
 ILboolean iLoadTiffInternal()
 {
 	TIFF		*tif;
-	uint16	w, h, d, photometric, planarconfig;
+	uint16	w, h, d, photometric, planarconfig, orientation;
 	uint16	samplesperpixel, bitspersample, *sampleinfo, extrasamples;
+	uint32	linesize;
 	ILubyte		*pImageData;
 	ILuint		i, ProfileLen, DirCount = 0;
 	ILvoid		*Buffer;
-	ILimage		*Image;
+	ILimage		*Image, *TempImage;
 	ILushort	si;
 //TIFFRGBAImage img;
 //char emsg[1024];
@@ -204,8 +205,8 @@ ILboolean iLoadTiffInternal()
 	//TIFFSetWarningHandler(warningHandler);
 	//TIFFSetErrorHandler(errorHandler);
 
-		tif = iTIFFOpen("r");
-		if (tif == NULL) {
+	tif = iTIFFOpen("r");
+	if (tif == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
 		return IL_FALSE;
 	}
@@ -235,26 +236,41 @@ ILboolean iLoadTiffInternal()
 		TIFFSetDirectory(tif, (tdir_t)i);
 		TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
 		TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
-		TIFFGetFieldDefaulted(tif, TIFFTAG_IMAGEDEPTH, &d);
+		TIFFGetFieldDefaulted(tif, TIFFTAG_IMAGEDEPTH, &d); //TODO: d is ignored...
 		TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samplesperpixel);
-		TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &bitspersample);
+		TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bitspersample);
 		TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES, &extrasamples, &sampleinfo);
+		TIFFGetFieldDefaulted(tif, TIFFTAG_ORIENTATION, &orientation);
+		linesize = TIFFScanlineSize(tif);
 
 		//added 2003-08-31
 		//1 bpp tiffs are not neccessarily greyscale, they can
 		//have a palette (photometric == 3)...get this information
 		TIFFGetFieldDefaulted(tif, TIFFTAG_PHOTOMETRIC, &photometric);
 		TIFFGetFieldDefaulted(tif, TIFFTAG_PLANARCONFIG, &planarconfig);
-/*
-    //TODO: finish the manual greyscale/palette loading code
-		if (samplesperpixel - extrasamples == 1) { //luminance or palette
+#if 1
+		//special-case code for frequent data cases that may be read more
+		//efficiently than with the TIFFReadRGBAImage() interface.
+
+		//TODO: add tile support or fail on tiles...
+		if (extrasamples == 0 && samplesperpixel == 1  //luminance or palette
+			&& (bitspersample == 8 || bitspersample == 1)
+			&& (photometric == PHOTOMETRIC_MINISWHITE
+				|| photometric == PHOTOMETRIC_MINISBLACK
+				|| photometric == PHOTOMETRIC_PALETTE)
+			&& (orientation == ORIENTATION_TOPLEFT || orientation == ORIENTATION_BOTLEFT)
+			) {
 			ILubyte* strip;
 			tsize_t stripsize;
 			ILuint y;
-			uint32 rowsperstrip;
+			uint32 rowsperstrip, j, linesread;
 
-			if(!Image) {
-				if(!ilTexImage(w, h, 1, 1, IL_LUMINANCE, IL_UNSIGNED_BYTE, NULL)) {
+			//TODO: 1 bit/pixel images should not be stored as 8 bits...
+			//(-> add new format)
+			if (!Image) {
+				int type = IL_UNSIGNED_BYTE;
+				if ( bitspersample == 16) type = IL_UNSIGNED_SHORT;
+				if(!ilTexImage(w, h, 1, 1, IL_LUMINANCE, type, NULL)) {
 					TIFFClose(tif);
 					return IL_FALSE;
 				}
@@ -271,25 +287,127 @@ ILboolean iLoadTiffInternal()
 				iCurImage->NumNext++;
 			}
 
+			if (photometric == PHOTOMETRIC_PALETTE) { //read palette
+				uint16 *red, *green, *blue;
+				ILboolean is16bitpalette = IL_FALSE;
+				ILubyte *entry;
+				uint32 count = 1 << bitspersample, j;
+
+				TIFFGetField(tif, TIFFTAG_COLORMAP, &red, &green, &blue);
+
+				Image->Format = IL_COLOUR_INDEX;
+				Image->Pal.PalSize = (count)*3;
+				Image->Pal.PalType = IL_PAL_RGB24;
+				Image->Pal.Palette = ialloc(Image->Pal.PalSize);
+				entry = Image->Pal.Palette;
+				for (j = 0; j < count; ++j) {
+					entry[0] = (ILubyte)(red[j] >> 8);
+					entry[1] = (ILubyte)(green[j] >> 8);
+					entry[2] = (ILubyte)(blue[j] >> 8);
+
+					entry += 3;
+				}
+			}
+
 			TIFFGetField(tif, TIFFTAG_ROWSPERSTRIP, &rowsperstrip);
 			stripsize = TIFFStripSize(tif);
 
 			strip = ialloc(stripsize);
 
-			for(y = 0; y < h; y += rowsperstrip) {
-				//if(y + rowsperstrip > h)
-				//	stripsize = (stripsize*(h - y))/rowsperstrip;
-				if (TIFFReadEncodedStrip(tif, TIFFComputeStrip(tif, y, 0), strip, stripsize) == -1) {
-					ilSetError(IL_LIB_TIFF_ERROR);
-					ifree(strip);
-					TIFFClose(tif);
-					return IL_FALSE;
+			if (bitspersample == 8) {
+				ILubyte *dat = Image->Data;
+				for (y = 0; y < h; y += rowsperstrip) {
+					//the last strip may contain less data if the image
+					//height is not evenly divisible by rowsperstrip
+					if (y + rowsperstrip > h) {
+						stripsize = linesize*(h - y);
+						linesread = h - y;
+					}
+					else
+						linesread = rowsperstrip;
+
+					if (TIFFReadEncodedStrip(tif, TIFFComputeStrip(tif, y, 0), strip, stripsize) == -1) {
+						ilSetError(IL_LIB_TIFF_ERROR);
+						ifree(strip);
+						TIFFClose(tif);
+						return IL_FALSE;
+					}
+
+					if (photometric == PHOTOMETRIC_MINISWHITE) { //invert channel
+						uint32 k, t2;
+						for (j = 0; j < linesread; ++j) {
+							t2 = j*linesize;
+							for (k = 0; k < w; ++k)
+								dat[k] = ~strip[t2 + k];
+							dat += w;
+						}
+					}
+					else
+						for(j = 0; j < linesread; ++j)
+							memcpy(&Image->Data[(y + j)*w], &strip[j*linesize], w);
+				}
+			}
+			else if (bitspersample == 1) {
+				//TODO: add a native format to devil, so we don't have to
+				//unpack the values here
+				ILubyte mask, curr, *dat = Image->Data;
+				uint32 k, sx, t2;
+				for (y = 0; y < h; y += rowsperstrip) {
+					//the last strip may contain less data if the image
+					//height is not evenly divisible by rowsperstrip
+					if (y + rowsperstrip > h) {
+						stripsize = linesize*(h - y);
+						linesread = h - y;
+					}
+					else
+						linesread = rowsperstrip;
+
+					if (TIFFReadEncodedStrip(tif, TIFFComputeStrip(tif, y, 0), strip, stripsize) == -1) {
+						ilSetError(IL_LIB_TIFF_ERROR);
+						ifree(strip);
+						TIFFClose(tif);
+						return IL_FALSE;
+					}
+
+					for (j = 0; j < linesread; ++j) {
+						k = 0;
+						sx = 0;
+						t2 = j*linesize;
+						while (k < w) {
+							curr = strip[t2 + sx];
+							if (photometric == PHOTOMETRIC_MINISWHITE)
+								curr = ~curr;
+							for (mask = 0x80; mask != 0 && k < w; mask >>= 1){
+								if((curr & mask) != 0)
+									dat[k] = 255;
+								else
+									dat[k] = 0;
+								++k;
+							}
+							++sx;
+						}
+						dat += w;
+					}
 				}
 			}
 
 			ifree(strip);
-		}
-		else*/ {//rgb or rgba
+
+			if(orientation == ORIENTATION_TOPLEFT)
+				Image->Origin = IL_ORIGIN_UPPER_LEFT;
+			else if(orientation == ORIENTATION_BOTLEFT)
+				Image->Origin = IL_ORIGIN_LOWER_LEFT;
+		}/*
+		else if (extrasamples == 0 && samplesperpixel == 3  //rgb
+			&& (bitspersample == 8 || bitspersample == 1 || bitspersample == 16)
+			&& photometric == PHOTOMETRIC_RGB
+			&& (planarconfig == PLANARCONFIG_CONTIG || planarcon
+			&& (orientation == ORIENTATION_TOPLEFT || orientation == ORIENTATION_BOTLEFT)
+			) {
+		}*/
+		else
+#endif
+		{ //not direclty supported format
 
 			if(!Image) {
 				if(!ilTexImage(w, h, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL)) {
@@ -334,7 +452,53 @@ ILboolean iLoadTiffInternal()
 				ilSetError(IL_LIB_TIFF_ERROR);
 				return IL_FALSE;
 			}
-		} //else rgb or rgba
+			Image->Origin = IL_ORIGIN_LOWER_LEFT;  // eiu...dunno if this is right
+
+			/*
+				The following switch() should not be needed,
+				because we take care of the special cases that needed
+				these conversions. But since not all special cases
+				are handled right now, keep it :)
+			*/
+			//TODO: put switch into the loop??
+			TempImage = iCurImage;
+			iCurImage = Image; //ilConvertImage() converts iCurImage
+			switch (samplesperpixel)
+			{
+				case 1:
+					//added 2003-08-31 to keep palettized tiffs colored
+					if(photometric != 3)
+						ilConvertImage(IL_LUMINANCE, IL_UNSIGNED_BYTE);
+					else //strip alpha as tiff supports no alpha palettes
+						ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+					break;
+
+				case 3:
+					//TODO: why the ifdef??
+			#ifdef __LITTLE_ENDIAN__
+					ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+			#endif			
+					break; 
+
+				case 4:
+					pImageData = Image->Data;
+		//removed on 2003-08-26...why was this here? libtiff should and does
+		//take care of these things???
+		/*			
+					//invert alpha
+					#ifdef __LITTLE_ENDIAN__
+					pImageData += 3;
+		#endif			
+					for (i = Image->Width * Image->Height; i > 0; i--) {
+						*pImageData ^= 255;
+						pImageData += 4;
+					}
+		*/
+					break;
+			}
+			iCurImage = TempImage;
+
+		} //else not directly supported format
 
 		if (TIFFGetField(tif, TIFFTAG_ICCPROFILE, &ProfileLen, &Buffer)) {
 			if (Image->Profile && Image->ProfileSize)
@@ -352,47 +516,11 @@ ILboolean iLoadTiffInternal()
 			//_TIFFfree(Buffer);
 		}
 
-		Image->Origin = IL_ORIGIN_LOWER_LEFT;  // eiu...dunno if this is right
 /*
 		Image = Image->Next;
 		if (Image == NULL)  // Should never happen except when we reach the end, but check anyway.
 			break;*/
 	} //for tiff directories
-
-	//TODO: put switch into the loop??
-	switch (samplesperpixel)
-	{
-		case 1:
-			//added 2003-08-31 to keep palettized tiffs colored
-			if(photometric != 3)
-				ilConvertImage(IL_LUMINANCE, IL_UNSIGNED_BYTE);
-			else //strip alpha as tiff supports no alpha palettes
-				ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
-			break;
-
-		case 3:
-			//TODO: why the ifdef??
-#ifdef __LITTLE_ENDIAN__
-			ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
-#endif			
-			break; 
-
-		case 4:
-			pImageData = iCurImage->Data;
-//removed on 2003-08-26...why was this here? libtiff should and does
-//take care of these things???
-/*			
-			//invert alpha
-			#ifdef __LITTLE_ENDIAN__
-			pImageData += 3;
-#endif			
-			for (i = iCurImage->Width * iCurImage->Height; i > 0; i--) {
-				*pImageData ^= 255;
-				pImageData += 4;
-			}
-*/
-			break;
-	}
 
 	TIFFClose(tif);
 

@@ -38,6 +38,7 @@ HBITMAP ILAPIENTRY ilutConvertToHBitmap(HDC hDC)
 	ILimage		*TempImage;
 	ILuint		pad, i, j, k, l, m, n;
 	ILpal		*palImg;
+	ILboolean	alloc_buffer;
 
 	//reserve space for palette in every case...
 	ILubyte		*buff[sizeof(BITMAPINFOHEADER) + 256*sizeof(RGBQUAD)];
@@ -81,7 +82,9 @@ HBITMAP ILAPIENTRY ilutConvertToHBitmap(HDC hDC)
 	info->bmiHeader.biClrImportant = 0;
 
 	pad = (4 - TempImage->Bps%4)%4;
-	if(pad == 0 && TempImage->Format != IL_RGB && TempImage->Format != IL_RGBA) {
+	alloc_buffer = !(pad == 0 && TempImage->Format != IL_RGB
+		&& TempImage->Format != IL_RGBA && TempImage->Format != IL_LUMINANCE_ALPHA);
+	if(!alloc_buffer) {
 		Data = TempImage->Data;
 	}
 	else {
@@ -90,14 +93,19 @@ HBITMAP ILAPIENTRY ilutConvertToHBitmap(HDC hDC)
 			pad = (4 - (3*TempImage->Width)%4)%4;
 			Data = ialloc((TempImage->Width + pad)*TempImage->Height*3);
 		}
+		//strip alpha channel from grayscale image
+		else if(TempImage->Format == IL_LUMINANCE_ALPHA)
+			Data = ialloc((TempImage->Width + pad)*TempImage->Height);
 		else
 			Data = ialloc((TempImage->Width + pad)*TempImage->Height*TempImage->Bpp);
+
 		if (Data == NULL) {
-			ilSetCurImage(TempImage);
+			ilSetCurImage(ilutCurImage);
 			ilCloseImage(TempImage);
 			ilSetError(IL_OUT_OF_MEMORY);
 			return hBitmap;
 		}
+
 		if (TempImage->Format == IL_RGB || TempImage->Format == IL_RGBA) {
 			//swap bytes
 			m = (TempImage->Format == IL_RGB)?3:4;
@@ -111,6 +119,17 @@ HBITMAP ILAPIENTRY ilutConvertToHBitmap(HDC hDC)
 
 				k += TempImage->Bps;
 				l += 3*TempImage->Width + pad;
+			}
+		}
+		else if(TempImage->Format == IL_LUMINANCE_ALPHA) {
+			//strip alpha channel
+			k = l = 0;
+			for (j = 0; j < TempImage->Height; j++) {
+				for (i = 0, n = 0; i < TempImage->Width; ++i, n += 2) {
+					Data[l + i] = TempImage->Data[k + n];
+				}
+				k += TempImage->Bps;
+				l += TempImage->Width + pad;
 			}
 		}
 		else
@@ -166,7 +185,7 @@ HBITMAP ILAPIENTRY ilutConvertToHBitmap(HDC hDC)
 
 	SetDIBits(hDC, hBitmap, 0, ilutCurImage->Height, Data, info, DIB_RGB_COLORS);
 
-	if(!(pad == 0 && ilutCurImage->Format != IL_RGB && ilutCurImage->Format != IL_RGBA))
+	if(alloc_buffer)
 		ifree(Data);
 
 	return hBitmap;

@@ -152,6 +152,9 @@ typedef ILubyte XpmPixel[4];
 
 ILvoid XpmPredefCol(char *Buff, XpmPixel *Colour)
 {
+	ILint len;
+	ILint val = 128;
+
 	if (!stricmp(Buff, "none")) {
 		(*Colour)[0] = 0;
 		(*Colour)[1] = 0;
@@ -166,6 +169,12 @@ ILvoid XpmPredefCol(char *Buff, XpmPixel *Colour)
 		(*Colour)[0] = 0;
 		(*Colour)[1] = 0;
 		(*Colour)[2] = 0;
+		return;
+	}
+	if (!stricmp(Buff, "white")) {
+		(*Colour)[0] = 255;
+		(*Colour)[1] = 255;
+		(*Colour)[2] = 255;
 		return;
 	}
 	if (!stricmp(Buff, "red")) {
@@ -205,21 +214,44 @@ ILvoid XpmPredefCol(char *Buff, XpmPixel *Colour)
 		return;
 	}
 
+	//check for grayXXX codes (added 20040218)
+	len = strlen(Buff);
+	if (len >= 5) {
+		if (Buff[0] == 'g' || Buff[0] == 'G'
+			|| Buff[1] == 'r' || Buff[1] == 'R'
+			|| Buff[2] == 'a' || Buff[2] == 'A'
+			|| Buff[3] == 'y' || Buff[3] == 'Y') {
+			if (isdigit(Buff[4])) { // isdigit returns false on '\0'
+				val = Buff[4] - '0';
+				if (isdigit(Buff[5])) {
+					val = val*10 + Buff[5] - '0';
+					if (isdigit(Buff[6]))
+						val = val*10 + Buff[6] - '0';
+				}
+				val = (255*val)/100;
+			}
+			(*Colour)[0] = val;
+			(*Colour)[1] = val;
+			(*Colour)[2] = val;
+			return;
+		}
+	}
 
 
-	// No colour defined, so use transparent.
+	// Unknown colour string, so use black
+	// (changed 20040218)
 	(*Colour)[0] = 0;
 	(*Colour)[1] = 0;
 	(*Colour)[2] = 0;
-	(*Colour)[3] = 0;
 
 	return;
 }
 
 
+
 ILboolean XpmGetColour(char *Buffer, ILint Size, XpmPixel *Colours)
 {
-	ILint	i = 0, j;
+	ILint	i = 0, j, strLen = 0;
 	ILubyte	Pos, ColBuff[3];
 	char	Buff[1024];
 
@@ -254,10 +286,31 @@ ILboolean XpmGetColour(char *Buffer, ILint Size, XpmPixel *Colours)
 		return IL_FALSE;
 
 	if (Buffer[i] == '#') {
+		// colour string may 4 digits/color or 1 digit/color
+		// (added 20040218) TODO: is isxdigit() ANSI???
+		++i;
+		while (i + strLen < Size && isxdigit(Buffer[i + strLen]))
+			++strLen;
+
 		for (j = 0; j < 3; j++) {
-			ColBuff[0] = Buffer[++i];
-			ColBuff[1] = Buffer[++i];
-			ColBuff[2] = 0;
+			if (strLen >= 10) { // 4 digits
+				ColBuff[0] = Buffer[i + j*4];
+				ColBuff[1] = Buffer[i + j*4 + 1];
+			}
+			else if (strLen >= 8) { // 3 digits
+				ColBuff[0] = Buffer[i + j*3];
+				ColBuff[1] = Buffer[i + j*3 + 1];
+			}
+			else if (strLen >= 6) { // 2 digits
+				ColBuff[0] = Buffer[i + j*2];
+				ColBuff[1] = Buffer[i + j*2 + 1];
+			}
+			else if(j < strLen) { // 1 digit, strLen >= 1
+				ColBuff[0] = Buffer[i + j];
+				ColBuff[1] = 0;
+			}
+
+			ColBuff[2] = 0; // add terminating '\0' char
 			Colours[Pos][j] = (ILubyte)strtol(ColBuff, NULL, 16);
 		}
 		Colours[Pos][3] = 255;  // Full alpha.
@@ -326,6 +379,9 @@ ILboolean iLoadXpmInternal()
 			iCurImage->Data[Offset++] = Colours[Buffer[x+1]][3];
 		}
 	}
+
+	//added 20040218
+	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 
 	ifree(Colours);
 

@@ -177,8 +177,13 @@ ILboolean iLoadPngInternal()
 
 	switch (iCurImage->Bpp)
 	{
-		case 1:  // @TODO:	FIX THIS!
+		case 1: // @TODO:	FIX THIS! Will never happen right now, because
+				//paletted images are expanded to rgb at the moment...
 			iCurImage->Format = IL_COLOUR_INDEX;
+			break;
+		case 2: //this has to be gray + alpha, since palette images were
+				//expanded to rgb earlier (added 20040224)
+			iCurImage->Format = IL_LUMINANCE_ALPHA;
 			break;
 		case 3:
 			iCurImage->Format = IL_RGB;
@@ -215,7 +220,16 @@ static ILvoid png_read(png_structp png_ptr, png_bytep data, png_size_t length)
 static void png_error_func(png_structp png_ptr, png_const_charp message)
 {
 	ilSetError(IL_LIB_PNG_ERROR);
-	return;
+
+	/*
+	  changed 20040224
+	  From the libpng docs:
+	  "Errors handled through png_error() are fatal, meaning that png_error()
+	   should never return to its caller. Currently, this is handled via
+	   setjmp() and longjmp()"
+	*/
+	//return;
+	longjmp(png_jmpbuf(png_ptr), 1);
 }
 
 static void png_warn_func(png_structp png_ptr, png_const_charp message)
@@ -244,7 +258,7 @@ ILint readpng_init()
 	/* setjmp() must be called in every function that calls a PNG-reading
 	 * libpng function */
 
-	if (setjmp(png_ptr->jmpbuf)) {
+	if (setjmp(png_jmpbuf(png_ptr))) {
 		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
 		return 2;
 	}
@@ -282,7 +296,7 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 	/* setjmp() must be called in every function that calls a PNG-reading
 	 * libpng function */
 
-	if (setjmp(png_ptr->jmpbuf)) {
+	if (setjmp(png_jmpbuf(png_ptr))) {
 		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
 		return IL_FALSE;
 	}
@@ -294,15 +308,19 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 	//	transparency chunks to full alpha channel; strip 16-bit-per-sample
 	//	images to 8 bits per sample; and convert grayscale to RGB[A]
 	if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8) {
-		png_set_expand(png_ptr);
+		png_set_gray_1_2_4_to_8(png_ptr);
 	}
 	// Expand paletted colors into true RGB triplets
-	if (color_type | PNG_COLOR_TYPE_PALETTE)
-		png_set_expand(png_ptr);
+	if (color_type == PNG_COLOR_TYPE_PALETTE)
+		png_set_palette_to_rgb(png_ptr);
 	// Expand paletted or RGB images with transparency to full alpha channels
 	//	so the data will be available as RGBA quartets.
 	if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
-		png_set_expand(png_ptr);
+		png_set_tRNS_to_alpha(png_ptr);
+
+	//refresh information (added 20040224)
+	png_get_IHDR(png_ptr, info_ptr, (png_uint_32*)&width, (png_uint_32*)&height,
+		&bit_depth, &color_type, NULL, NULL, NULL);
 
 	if (bit_depth < 8)	// Expanded earlier.
 		bit_depth = 8;
@@ -324,6 +342,9 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 
 	png_read_update_info(png_ptr, info_ptr);
 	channels = (ILint)png_get_channels(png_ptr, info_ptr);
+	//added 20040224: update color_type so that it has the correct value
+	//in iLoadPngInternal (globals rule...)
+	color_type = png_get_color_type(png_ptr, info_ptr);
 
 	if (!ilTexImage(width, height, 1, (ILubyte)channels, 0, ilGetTypeBpc((ILubyte)(bit_depth >> 3)), NULL)) {
 		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
@@ -491,7 +512,7 @@ ILboolean iSavePngInternal()
 
 	/*// Set error handling.  REQUIRED if you aren't supplying your own
 	//	error handling functions in the png_create_write_struct() call.
-	if (setjmp(png_ptr->jmpbuf)) {
+	if (setjmp(png_jmpbuf(png_ptr))) {
 		// If we get here, we had a problem reading the file
 		png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
 		ilSetError(IL_LIB_PNG_ERROR);

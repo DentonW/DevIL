@@ -86,6 +86,11 @@ extern "C" {
 #define ILUT_D3D_ALPHA_KEY_COLOR			0x0707
 #define ILUT_D3D_ALPHA_KEY_COLOUR			0x0707
 
+//This new state does automatic texture target detection
+//if enabled. Currently, only cubemap detection is supported.
+//if the current image is no cubemap, the 2d texture is chosen.
+#define ILUT_GL_AUTODETECT_TEXTURE_TARGET	0x0807
+
 
 // Values
 #define ILUT_VERSION_NUM					IL_VERSION_NUM
@@ -166,7 +171,7 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
  		#include <GL/glu.h>
 	#endif//__APPLE__
 
-	ILAPI GLuint	ILAPIENTRY ilutGLBindTexImage(ILvoid);
+	ILAPI GLuint	ILAPIENTRY ilutGLBindTexImage();
 	ILAPI GLuint	ILAPIENTRY ilutGLBindMipmaps(ILvoid);
 	ILAPI ILboolean	ILAPIENTRY ilutGLBuildMipmaps(ILvoid);
 	ILAPI GLuint	ILAPIENTRY ilutGLLoadImage(const ILstring FileName);

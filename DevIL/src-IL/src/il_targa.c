@@ -114,6 +114,16 @@ ILboolean iCheckTarga(TARGAHEAD *Header)
 		return IL_FALSE;
 	if (Header->ImageDesc & BIT_4)  // Supposed to be set to 0
 		return IL_FALSE;
+
+	// check type (added 20040218)
+	if(Header->ImageType != TGA_NO_DATA
+		&& Header->ImageType != TGA_COLMAP_UNCOMP
+		&& Header->ImageType != TGA_UNMAP_UNCOMP
+		&& Header->ImageType != TGA_BW_UNCOMP
+		&& Header->ImageType != TGA_COLMAP_COMP
+		&& Header->ImageType != TGA_UNMAP_COMP
+		&& Header->ImageType != TGA_BW_UNCOMP)
+		return IL_FALSE;
 	
 	// Doesn't work well with the bitshift so change it.
 	if (Header->Bpp == 15)

@@ -17,6 +17,18 @@
 #include <stdio.h>
 #include <string.h>
 
+//used for automatic texture target detection
+#define ILGL_TEXTURE_CUBE_MAP				0x8513
+#define ILGL_TEXTURE_BINDING_CUBE_MAP		0x8514
+#define ILGL_TEXTURE_CUBE_MAP_POSITIVE_X	0x8515
+#define ILGL_TEXTURE_CUBE_MAP_NEGATIVE_X	0x8516
+#define ILGL_TEXTURE_CUBE_MAP_POSITIVE_Y	0x8517
+#define ILGL_TEXTURE_CUBE_MAP_NEGATIVE_Y	0x8518
+#define ILGL_TEXTURE_CUBE_MAP_POSITIVE_Z	0x8519
+#define ILGL_TEXTURE_CUBE_MAP_NEGATIVE_Z	0x851A
+#define ILGL_CLAMP_TO_EDGE					0x812F
+#define ILGL_TEXTURE_WRAP_R					0x8072
+
 
 #ifdef  _MSC_VER
 	#pragma comment(lib, "opengl32.lib")
@@ -25,9 +37,12 @@
 
 
 ILint MaxTexW = 256, MaxTexH = 256;  // maximum texture widths and heights
+ILboolean HasCubemapHardware = IL_FALSE;
 #ifdef _MSC_VER
 	ILGLCOMPRESSEDTEXIMAGE2DARBPROC ilGLCompressed2D = NULL;
 #endif
+
+
 
 
 // Absolutely *have* to call this if planning on using the image library with OpenGL.
@@ -48,10 +63,10 @@ ILboolean ilutGLInit()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-    glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
+	glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+	glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+	glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+	glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
 #ifdef _MSC_VER
@@ -61,6 +76,9 @@ ILboolean ilutGLInit()
 				wglGetProcAddress("glCompressedTexImage2DARB");
 	}
 #endif
+
+	if (IsExtensionSupported("GL_ARB_texture_cube_map"))
+		HasCubemapHardware = IL_TRUE;
 
 	return IL_TRUE;
 }
@@ -83,21 +101,39 @@ ILvoid iGLSetMaxH(ILuint Height)
 
 GLuint ILAPIENTRY ilutGLBindTexImage()
 {
-	GLuint	TexID = 0;
+	GLuint	TexID = 0, Target = GL_TEXTURE_2D;
+	ILimage *Image;
+
+	Image = ilGetCurImage();
+	if (Image == NULL)
+		return 0;
 
 	glGenTextures(1, &TexID);
 	glBindTexture(GL_TEXTURE_2D, TexID);
 
+	if (ilutGetBoolean(ILUT_GL_AUTODETECT_TEXTURE_TARGET)) {
+		if (HasCubemapHardware && Image->CubeFlags != 0)
+			Target = ILGL_TEXTURE_CUBE_MAP;
+		
+	}
+
+	if (Target == GL_TEXTURE_2D) {
+		glTexParameteri(Target, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(Target, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	}
+	else if (Target == ILGL_TEXTURE_CUBE_MAP) {
+		glTexParameteri(Target, GL_TEXTURE_WRAP_S, ILGL_CLAMP_TO_EDGE);
+		glTexParameteri(Target, GL_TEXTURE_WRAP_T, ILGL_CLAMP_TO_EDGE);
+		glTexParameteri(Target, ILGL_TEXTURE_WRAP_R, ILGL_CLAMP_TO_EDGE);
+	}
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(Target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(Target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-    glPixelStorei(GL_UNPACK_SWAP_BYTES, IL_FALSE);
+	glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+	glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+	glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+	glPixelStorei(GL_UNPACK_SWAP_BYTES, IL_FALSE);
 
 	if (!ilutGLTexImage(0)) {
 		glDeleteTextures(1, &TexID);
@@ -129,67 +165,120 @@ ILuint GLGetDXTCNum(ILenum DXTCFormat)
 
 
 // We assume *all* states have been set by the user, including 2d texturing!
-ILboolean ILAPIENTRY ilutGLTexImage(GLuint Level)
+ILboolean ILAPIENTRY ilutGLTexImage_(GLuint Level, GLuint Target, ILimage *Image)
 {
-	ILimage	*Image;
+	ILimage	*ImageCopy, *OldImage;
 #ifdef _MSC_VER
 	ILenum	DXTCFormat;
 	ILuint	Size;
 	ILubyte	*Buffer;
 #endif
 
-	ilutCurImage = ilGetCurImage();
-	if (ilutCurImage == NULL) {
+	if (Image == NULL) {
 		ilSetError(ILUT_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
+	OldImage = ilGetCurImage();
+
 #ifdef _MSC_VER
 	if (ilutGetBoolean(ILUT_GL_USE_S3TC) && ilGLCompressed2D != NULL) {
-		if (ilutCurImage->DxtcData != NULL && ilutCurImage->DxtcSize != 0) {
-			DXTCFormat = GLGetDXTCNum(ilutCurImage->DxtcFormat);
-			ilGLCompressed2D(GL_TEXTURE_2D, Level, DXTCFormat, ilutCurImage->Width,
-				ilutCurImage->Height, 0, ilutCurImage->DxtcSize, ilutCurImage->DxtcData);
+		if (Image->DxtcData != NULL && Image->DxtcSize != 0) {
+			DXTCFormat = GLGetDXTCNum(Image->DxtcFormat);
+			ilGLCompressed2D(Target, Level, DXTCFormat, Image->Width,
+				Image->Height, 0, Image->DxtcSize, Image->DxtcData);
 			return IL_TRUE;
 		}
 
 		if (ilutGetBoolean(ILUT_GL_GEN_S3TC)) {
 			DXTCFormat = ilutGetInteger(ILUT_S3TC_FORMAT);
 
+			ilSetCurImage(Image);
 			Size = ilGetDXTCData(NULL, 0, DXTCFormat);
 			if (Size != 0) {
 				Buffer = (ILubyte*)ialloc(Size);
-				if (Buffer == NULL)
+				if (Buffer == NULL) {
+					ilSetCurImage(OldImage);
 					return IL_FALSE;
+				}
+
 				Size = ilGetDXTCData(Buffer, Size, DXTCFormat);
 				if (Size == 0) {
+					ilSetCurImage(OldImage);
 					ifree(Buffer);
 					return IL_FALSE;
 				}
 
 				DXTCFormat = GLGetDXTCNum(DXTCFormat);
-				ilGLCompressed2D(GL_TEXTURE_2D, Level, DXTCFormat, ilutCurImage->Width,
-					ilutCurImage->Height, 0, Size, Buffer);
+				ilGLCompressed2D(Target, Level, DXTCFormat, Image->Width,
+					Image->Height, 0, Size, Buffer);
 				ifree(Buffer);
+				ilSetCurImage(OldImage);
 				return IL_TRUE;
 			}
+			ilSetCurImage(OldImage);
 		}
 	}
 #endif//_MSC_VER
 
-	Image = MakeGLCompliant(ilutCurImage);
-	if (Image == NULL)
+	ImageCopy = MakeGLCompliant(Image);
+	if (ImageCopy == NULL)
 		return IL_FALSE;
 
-	glTexImage2D(GL_TEXTURE_2D, Level, ilutGLFormat(Image->Format, Image->Bpp), Image->Width,
-				Image->Height, 0, Image->Format, Image->Type, Image->Data);
+	glTexImage2D(Target, Level, ilutGLFormat(ImageCopy->Format, ImageCopy->Bpp), ImageCopy->Width,
+				Image->Height, 0, ImageCopy->Format, ImageCopy->Type, ImageCopy->Data);
 
-	if (Image != ilutCurImage)
-		ilCloseImage(Image);
+	if (Image != ImageCopy)
+		ilCloseImage(ImageCopy);
 
 	return IL_TRUE;
 }
 
+GLuint iToGLCube(ILuint cube)
+{
+	switch (cube) {
+		case IL_CUBEMAP_POSITIVEX:
+			return ILGL_TEXTURE_CUBE_MAP_POSITIVE_X;
+		case IL_CUBEMAP_POSITIVEY:
+			return ILGL_TEXTURE_CUBE_MAP_POSITIVE_Y;
+		case IL_CUBEMAP_POSITIVEZ:
+			return ILGL_TEXTURE_CUBE_MAP_POSITIVE_Z;
+		case IL_CUBEMAP_NEGATIVEX:
+			return ILGL_TEXTURE_CUBE_MAP_NEGATIVE_X;
+		case IL_CUBEMAP_NEGATIVEY:
+			return ILGL_TEXTURE_CUBE_MAP_NEGATIVE_Y;
+		case IL_CUBEMAP_NEGATIVEZ:
+			return ILGL_TEXTURE_CUBE_MAP_NEGATIVE_Z;
+
+		default:
+			return ILGL_TEXTURE_CUBE_MAP_POSITIVE_X; //???
+	}
+}
+
+ILboolean ILAPIENTRY ilutGLTexImage(GLuint Level)
+{
+	ILimage *Temp;
+
+	ilutCurImage = ilGetCurImage();
+
+	if (!ilutGetBoolean(ILUT_GL_AUTODETECT_TEXTURE_TARGET))
+		return ilutGLTexImage_(0, GL_TEXTURE_2D, ilGetCurImage());
+	else {
+		//autodetect texture target
+
+		//cubemap
+		if (ilutCurImage->CubeFlags != 0 && HasCubemapHardware) { //bind to cubemap
+			Temp = ilutCurImage;
+			while(Temp != NULL && Temp->CubeFlags != 0) {
+				ilutGLTexImage_(0, iToGLCube(Temp->CubeFlags), Temp);
+				Temp = Temp->Next;
+			}
+			return IL_TRUE; //TODO: check for errors??
+		}
+		else  //2d texture
+			return ilutGLTexImage_(0, GL_TEXTURE_2D, ilGetCurImage());
+	}
+}
 
 GLuint ILAPIENTRY ilutGLBindMipmaps()
 {
@@ -249,7 +338,7 @@ ILimage* MakeGLCompliant(ILimage *Src)
 
 	if (Src->Pal.Palette != NULL && Src->Pal.PalSize != 0 && Src->Pal.PalType != IL_PAL_NONE) {
 		//ilSetCurImage(Src);
-		Dest = iConvertImage(ilutCurImage, ilGetPalBaseType(Src->Pal.PalType), IL_UNSIGNED_BYTE);
+		Dest = iConvertImage(Src, ilGetPalBaseType(Src->Pal.PalType), IL_UNSIGNED_BYTE);
 		//Dest = iConvertImage(IL_BGR);
 		//ilSetCurImage(ilutCurImage);
 		if (Dest == NULL)

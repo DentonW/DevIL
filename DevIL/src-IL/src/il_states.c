@@ -216,8 +216,8 @@ ILboolean ilAble(ILenum Mode, ILboolean Flag)
 	switch (Mode)
 	{
 		case IL_ORIGIN_SET:
-      		ilStates[ilCurrentPos].ilOriginSet = Flag;
-      		break;
+			ilStates[ilCurrentPos].ilOriginSet = Flag;
+			break;
 		case IL_FORMAT_SET:
 			ilStates[ilCurrentPos].ilFormatSet = Flag;
 			break;

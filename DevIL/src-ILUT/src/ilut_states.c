@@ -30,6 +30,7 @@ ILvoid ilutDefaultStates()
 	ilutStates[ilutCurrentPos].ilutDXTCFormat = 0;
 	ilutStates[ilutCurrentPos].ilutUseS3TC = IL_FALSE;
 	ilutStates[ilutCurrentPos].ilutGenS3TC = IL_FALSE;
+	ilutStates[ilutCurrentPos].ilutAutodetectTextureTarget = IL_FALSE;
 	ilutStates[ilutCurrentPos].D3DMipLevels = 0;
 	ilutStates[ilutCurrentPos].D3DPool = 0;
 	ilutStates[ilutCurrentPos].D3DAlphaKeyColor = -1;
@@ -77,20 +78,24 @@ ILboolean ilutAble(ILenum Mode, ILboolean Flag)
 	switch (Mode)
 	{
 		case ILUT_PALETTE_MODE:
-      		ilutStates[ilutCurrentPos].ilutUsePalettes = Flag;
-      		break;
+			ilutStates[ilutCurrentPos].ilutUsePalettes = Flag;
+			break;
 
 		case ILUT_OPENGL_CONV:
-      		ilutStates[ilutCurrentPos].ilutOglConv = Flag;
-      		break;
+			ilutStates[ilutCurrentPos].ilutOglConv = Flag;
+			break;
 
 		case ILUT_GL_USE_S3TC:
-      		ilutStates[ilutCurrentPos].ilutUseS3TC = Flag;
-      		break;
+			ilutStates[ilutCurrentPos].ilutUseS3TC = Flag;
+			break;
 
 		case ILUT_GL_GEN_S3TC:
-      		ilutStates[ilutCurrentPos].ilutGenS3TC = Flag;
-      		break;
+			ilutStates[ilutCurrentPos].ilutGenS3TC = Flag;
+			break;
+
+		case ILUT_GL_AUTODETECT_TEXTURE_TARGET:
+			ilutStates[ilutCurrentPos].ilutAutodetectTextureTarget = Flag;
+			break;
 
 
 		default:
@@ -110,13 +115,16 @@ ILboolean ILAPIENTRY ilutIsEnabled(ILenum Mode)
 			return ilutStates[ilutCurrentPos].ilutUsePalettes;
 
 		case ILUT_OPENGL_CONV:
-      		return ilutStates[ilutCurrentPos].ilutOglConv;
+			return ilutStates[ilutCurrentPos].ilutOglConv;
 
 		case ILUT_GL_USE_S3TC:
 			return ilutStates[ilutCurrentPos].ilutUseS3TC;
 
 		case ILUT_GL_GEN_S3TC:
 			return ilutStates[ilutCurrentPos].ilutGenS3TC;
+
+		case ILUT_GL_AUTODETECT_TEXTURE_TARGET:
+			return ilutStates[ilutCurrentPos].ilutAutodetectTextureTarget;
 
 
 		default:
@@ -142,17 +150,19 @@ ILvoid ILAPIENTRY ilutGetBooleanv(ILenum Mode, ILboolean *Param)
 			break;
 
 		case ILUT_OPENGL_CONV:
-      		*Param = ilutStates[ilutCurrentPos].ilutOglConv;
-      		break;
+			*Param = ilutStates[ilutCurrentPos].ilutOglConv;
+			break;
 
 		case ILUT_GL_USE_S3TC:
-      		*Param = ilutStates[ilutCurrentPos].ilutUseS3TC;
-      		break;
+			*Param = ilutStates[ilutCurrentPos].ilutUseS3TC;
+			break;
 
 		case ILUT_GL_GEN_S3TC:
-      		*Param = ilutStates[ilutCurrentPos].ilutGenS3TC;
-      		break;
+			*Param = ilutStates[ilutCurrentPos].ilutGenS3TC;
+			break;
 
+		case ILUT_GL_AUTODETECT_TEXTURE_TARGET:
+			*Param = ilutStates[ilutCurrentPos].ilutAutodetectTextureTarget;
 
 		default:
 			ilSetError(ILUT_INVALID_ENUM);
@@ -183,16 +193,19 @@ ILvoid ILAPIENTRY ilutGetIntegerv(ILenum Mode, ILint *Param)
 			*Param = ilutStates[ilutCurrentPos].ilutUsePalettes;
 			break;
 		case ILUT_OPENGL_CONV:
-      		*Param = ilutStates[ilutCurrentPos].ilutOglConv;
-      		break;
+			*Param = ilutStates[ilutCurrentPos].ilutOglConv;
+			break;
 		case ILUT_GL_USE_S3TC:
-      		*Param = ilutStates[ilutCurrentPos].ilutUseS3TC;
-      		break;
+			*Param = ilutStates[ilutCurrentPos].ilutUseS3TC;
+			break;
 		case ILUT_GL_GEN_S3TC:
-      		*Param = ilutStates[ilutCurrentPos].ilutUseS3TC;
-      		break;
+			*Param = ilutStates[ilutCurrentPos].ilutUseS3TC;
+			break;
 		case ILUT_S3TC_FORMAT:
 			*Param = ilutStates[ilutCurrentPos].ilutDXTCFormat;
+			break;
+		case ILUT_GL_AUTODETECT_TEXTURE_TARGET:
+			*Param = ilutStates[ilutCurrentPos].ilutAutodetectTextureTarget;
 			break;
 		case ILUT_D3D_MIPLEVELS:
 			*Param = ilutStates[ilutCurrentPos].D3DMipLevels;
@@ -248,6 +261,12 @@ ILvoid ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param)
 		case ILUT_GL_GEN_S3TC:
 			if (Param == IL_TRUE || Param == IL_FALSE) {
 				ilutStates[ilutCurrentPos].ilutGenS3TC = Param;
+				return;
+			}
+			break;
+		case ILUT_GL_AUTODETECT_TEXTURE_TARGET:
+			if (Param == IL_TRUE || Param == IL_FALSE) {
+				ilutStates[ilutCurrentPos].ilutAutodetectTextureTarget = Param;
 				return;
 			}
 			break;

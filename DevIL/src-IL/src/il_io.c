@@ -118,11 +118,6 @@ ILenum ilDetermineTypeF(ILHANDLE File)
 	if (File == NULL)
 		return IL_TYPE_UNKNOWN;
 
-	#ifndef IL_NO_TGA
-	if (ilIsValidTgaF(File))
-		return IL_TGA;
-	#endif
-
 	#ifndef IL_NO_JPG
 	if (ilIsValidJpgF(File))
 		return IL_JPG;
@@ -187,6 +182,13 @@ ILenum ilDetermineTypeF(ILHANDLE File)
 	if (ilIsValidTiffF(File))
 		return IL_TIF;
 	#endif
+
+	//moved tga to end of list because it has no magic number
+	//in header to assure that this is really a tga... (20040218)
+	#ifndef IL_NO_TGA
+	if (ilIsValidTgaF(File))
+		return IL_TGA;
+	#endif
 	
 	return IL_TYPE_UNKNOWN;
 }
@@ -196,11 +198,6 @@ ILenum ilDetermineTypeL(ILvoid *Lump, ILuint Size)
 {
 	if (Lump == NULL)
 		return IL_TYPE_UNKNOWN;
-
-	#ifndef IL_NO_TGA
-	if (ilIsValidTgaL(Lump, Size))
-		return IL_TGA;
-	#endif
 
 	#ifndef IL_NO_JPG
 	if (ilIsValidJpgL(Lump, Size))
@@ -265,6 +262,13 @@ ILenum ilDetermineTypeL(ILvoid *Lump, ILuint Size)
 	#ifndef IL_NO_TIF
 	if (ilIsValidTiffL(Lump, Size))
 		return IL_TIF;
+	#endif
+
+	//moved tga to end of list because it has no magic number
+	//in header to assure that this is really a tga... (20040218)
+	#ifndef IL_NO_TGA
+	if (ilIsValidTgaL(Lump, Size))
+		return IL_TGA;
 	#endif
 
 	return IL_TYPE_UNKNOWN;

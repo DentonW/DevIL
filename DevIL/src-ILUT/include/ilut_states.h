@@ -38,6 +38,7 @@ typedef struct ILUT_STATES
 	// GL states
 	ILboolean	ilutUseS3TC;
 	ILboolean	ilutGenS3TC;
+	ILboolean	ilutAutodetectTextureTarget;
 
 	// D3D states
 	ILuint		D3DMipLevels;

@@ -395,7 +395,10 @@ ILvoid AdjustVolumeTexture(DDSHEAD *Head)
 	if (Head->Depth <= 1)
 		return;
 
-	if (!(Head->ddsCaps1 & DDS_COMPLEX) || !(Head->ddsCaps2 & DDS_VOLUME)) {
+	// All volume textures I've seem so far didn't have the DDS_COMPLEX flag set,
+	// even though this is normally required. But because noone does set it,
+	// also read images without it (TODO: check file size for 3d texture?)
+	if (/*!(Head->ddsCaps1 & DDS_COMPLEX) ||*/ !(Head->ddsCaps2 & DDS_VOLUME)) {
 		Head->Depth = 1;
 		Depth = 1;
 	}
