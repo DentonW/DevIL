@@ -13,8 +13,8 @@
 //-----------------------------------------------------------------------------
 
 
-#include <il/il.h>
-#include <il/ilu.h>
+#include <IL/il.h>
+#include <IL/ilu.h>
 #include <SDL.h>
 #include <stdlib.h>
 
