@@ -236,6 +236,11 @@ ILAPI ILimage* ILAPIENTRY iConvertImage(ILimage *Image, ILenum DestFormat, ILenu
 
 	if (Image->Format == IL_COLOUR_INDEX) {
 		NewImage = iConvertPalette(Image, DestFormat);
+
+		//added test 2003-09-01
+		if(NewImage == NULL)
+			return NULL;
+
 		if (DestType == NewImage->Type)
 			return NewImage;
 
