@@ -317,6 +317,12 @@ ILboolean ILAPIENTRY ilutRenderer(ILenum Renderer)
 			return ilutWin32Init();
 		#endif
 
+		#ifdef ILUT_USE_DIRECTX8
+		case ILUT_DIRECT3D8:
+			return ilutD3D8Init();
+		#endif
+
+
 		default:
 			ilSetError(ILUT_NOT_SUPPORTED);
 	}

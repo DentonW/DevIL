@@ -435,8 +435,8 @@ ILboolean GifGetData(ILubyte *Data)
 		return IL_FALSE;
 	}
 
-	stack  = (ILbyte*)ialloc(MAX_CODES + 1);
-	suffix = (ILbyte*)ialloc(MAX_CODES + 1);
+	stack  = (ILubyte*)ialloc(MAX_CODES + 1);
+	suffix = (ILubyte*)ialloc(MAX_CODES + 1);
 	prefix = (ILshort*)ialloc(sizeof(*prefix) * (MAX_CODES + 1));
 	if (!stack || !suffix || !prefix)
 		return IL_FALSE;

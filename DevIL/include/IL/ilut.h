@@ -98,6 +98,7 @@ ILAPI ILvoid		ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param);
 #define ILUT_OPENGL		0
 #define ILUT_ALLEGRO	1
 #define ILUT_WIN32		2
+#define ILUT_DIRECT3D8	3
 
 
 ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);

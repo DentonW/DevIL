@@ -1,4 +1,4 @@
-1.4.3
+1.4.7
 -----
 
 - Removed the printfs that somehow got left in il_sgi.c.
@@ -26,6 +26,7 @@
 - Added ilGetDXTCData().
 - Fixed some RLE .sgi loading bugs.
 - Added direct S3TC/DXTC to OpenGL code.
+- Added ILUT_DIRECT3D8 for use with ilutRenderer.
 
 
 

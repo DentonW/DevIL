@@ -52,5 +52,10 @@ ILvoid ILAPIENTRY ilutInit()
 	ilutGLInit();  // default renderer is OpenGL
 #endif
 
+#ifdef ILUT_USE_DIRECTX8
+	ilutD3D8Init();
+#endif
+
+
 	return;
 }

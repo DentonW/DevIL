@@ -25,6 +25,8 @@
 
 ILboolean ilutWin32Init()
 {
+
+
 	return IL_TRUE;
 }
 

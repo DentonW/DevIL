@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2001 by Denton Woods
 // Last modified: 12/25/2001 <--Y2K Compliant! =]
 //
-// Filename: openilut/ilut_directx.h
+// Filename: src-ILUT/src/ilut_directx.c
 //
 // Description: DirectX functions for textures
 //
@@ -18,9 +18,46 @@
 #pragma comment(lib, "d3d8.lib")
 #pragma comment(lib, "d3dx8.lib")
 
-ILimage*	MakeD3D8Compliant(D3DFORMAT *DestFormat);
+ILimage*	MakeD3D8Compliant(IDirect3DDevice8 *Device, D3DFORMAT *DestFormat);
 ILenum		GetD3D8Compat(ILenum Format);
 D3DFORMAT	GetD3DFormat(ILenum Format);
+
+ILboolean	FormatsChecked = IL_FALSE;
+ILboolean	FormatSupported[6] =
+	{ IL_FALSE, IL_FALSE, IL_FALSE, IL_FALSE, IL_FALSE, IL_FALSE };
+D3DFORMAT	Formats[6] =
+	{ D3DFMT_R8G8B8, D3DFMT_A8R8G8B8, D3DFMT_L8, D3DFMT_DXT1, D3DFMT_DXT3, D3DFMT_DXT5 };
+
+
+ILboolean ilutD3D8Init()
+{
+
+	return IL_TRUE;
+}
+
+
+ILvoid CheckFormats(IDirect3DDevice8 *Device)
+{
+	D3DDISPLAYMODE	DispMode;
+	HRESULT			hr;
+	IDirect3D8		*TestD3D8;
+	ILuint			i;
+
+	IDirect3DDevice8_GetDirect3D(Device, (IDirect3D8**)&TestD3D8);
+	IDirect3DDevice8_GetDisplayMode(Device, &DispMode);
+
+	for (i = 0; i < 6; i++) {
+		hr = IDirect3D8_CheckDeviceFormat(TestD3D8, D3DADAPTER_DEFAULT,
+			D3DDEVTYPE_HAL, DispMode.Format, 0, D3DRTYPE_TEXTURE, Formats[i]);
+		FormatSupported[i] = SUCCEEDED(hr);
+	}
+
+	IDirect3D8_Release(TestD3D8);
+	FormatsChecked = IL_TRUE;
+
+	return;
+}
+
 
 #ifndef _WIN32_WCE
 ILboolean ILAPIENTRY ilutD3D8TexFromFile(IDirect3DDevice8 *Device, char *FileName, IDirect3DTexture8 **Texture)
@@ -147,7 +184,7 @@ IDirect3DTexture8* ILAPIENTRY ilutD3D8Texture(IDirect3DDevice8 *Device)
 		return NULL;
 	}
 
-	Image = MakeD3D8Compliant(&Format);
+	Image = MakeD3D8Compliant(Device, &Format);
 	if (Image == NULL)
 		return NULL;
 	if (FAILED(IDirect3DDevice8_CreateTexture(Device, Image->Width, Image->Height, ilutGetInteger(ILUT_D3D_MIPLEVELS), 0, Format, D3DPOOL_MANAGED, &Texture)))
@@ -180,7 +217,7 @@ IDirect3DVolumeTexture8* ILAPIENTRY ilutD3D8VolumeTexture(IDirect3DDevice8 *Devi
 		return NULL;
 	}
 
-	Image = MakeD3D8Compliant(&Format);
+	Image = MakeD3D8Compliant(Device, &Format);
 	if (Image == NULL)
 		return NULL;
 	if (FAILED(IDirect3DDevice8_CreateVolumeTexture(Device, Image->Width, Image->Height, Image->Depth, 1, 0, Format, D3DPOOL_MANAGED, &Texture)))
@@ -200,10 +237,13 @@ IDirect3DVolumeTexture8* ILAPIENTRY ilutD3D8VolumeTexture(IDirect3DDevice8 *Devi
 }
 
 
-ILimage *MakeD3D8Compliant(D3DFORMAT *DestFormat)
+ILimage *MakeD3D8Compliant(IDirect3DDevice8 *Device, D3DFORMAT *DestFormat)
 {
 	static ILubyte *Data;
 	static ILimage *Converted, *Scaled, *CurImage;
+
+	if (!FormatsChecked)
+		CheckFormats(Device);
 
 	*DestFormat = D3DFMT_A8R8G8B8;
 

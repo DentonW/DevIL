@@ -203,7 +203,7 @@ ILboolean iLoadPcxInternal()
 ILboolean iUncompressPcx(PCXHEAD *Header)
 {
 	ILubyte		ByteHead, Colour, *ScanLine /* Only one plane */;
-	ILuint		c, i, x, y, Read = 0;
+	ILuint		c, i, x, y;
 
 	if (Header->Bpp < 8) {
 		/*ilSetError(IL_FORMAT_NOT_SUPPORTED);

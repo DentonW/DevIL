@@ -26,8 +26,7 @@ ILboolean ilIsValidSgi(const ILstring FileName)
 	ILHANDLE	SgiFile;
 	ILboolean	bSgi = IL_FALSE;
 
-	if (!iCheckExtension(FileName, IL_TEXT("sgi")))
-	{
+	if (!iCheckExtension(FileName, IL_TEXT("sgi"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bSgi;
 	}
@@ -35,8 +34,7 @@ ILboolean ilIsValidSgi(const ILstring FileName)
 	FName = (char*) FileName;
 
 	SgiFile = iopenr(FileName);
-	if (SgiFile == NULL)
-	{
+	if (SgiFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
 		return bSgi;
 	}
@@ -252,8 +250,10 @@ ILboolean iReadRleSgi(iSgiHeader *Head)
 			// Seeks to the offset table position
 			iseek(RleOff, IL_SEEK_SET);
 			if (iGetScanLine((TempData[ixPlane]) + (ixHeight * Head->XSize * Head->Bpc),
-				Head, RleLen) != Head->XSize * Head->Bpc)
+				Head, RleLen) != Head->XSize * Head->Bpc) {
+					ilSetError(IL_ILLEGAL_FILE_VALUE);
 					goto cleanup_error;
+			}
 		}
 	}
 

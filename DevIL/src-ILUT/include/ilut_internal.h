@@ -122,11 +122,16 @@ ILAPI ILimage* ILAPIENTRY iluScale_(ILimage *Image, ILuint Width, ILuint Height,
 	ILboolean ilutGLInit();
 #endif
 
-
 // ImageLib Utility Toolkit's Win32 Functions
 #ifdef ILUT_USE_WIN32
 	ILboolean ilutWin32Init();
 #endif
+
+// ImageLib Utility Toolkit's Win32 Functions
+#ifdef ILUT_USE_DIRECTX8
+	ILboolean ilutD3D8Init();
+#endif
+
 
 
 #endif//INTERNAL_H

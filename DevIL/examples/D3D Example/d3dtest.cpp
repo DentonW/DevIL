@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib GL Test Source
-// Copyright (C) 2000 by Denton Woods
+// Copyright (C) 2000-2002 by Denton Woods
 // Last modified:  04/28/2001 <--Y2K Compliant! =]
 //
 // Filename:  testil/d3dtest/d3dtest.cpp
@@ -14,13 +14,18 @@
 #define STRICT
 #include <stdio.h>
 #include <math.h>
-#include <il/ilut.h>
 #include <D3DX8.h>
 #include "D3DApp.h"
 #include "D3DFile.h"
 #include "D3DFont.h"
 #include "D3DUtil.h"
 #include "DXUtil.h"
+
+#ifdef  _DEBUG
+#define IL_DEBUG
+#endif//_DEBUG
+#include <il/ilut.h>
+
 
 #pragma comment(lib, "d3d8.lib")
 #pragma comment(lib, "d3dx8.lib")
@@ -197,8 +202,11 @@ HRESULT CMyD3DApplication::InitDeviceObjects()
 
     m_pFont->InitDeviceObjects( m_pd3dDevice );
 
-	//ilutD3D8TexFromFile(m_pd3dDevice, __argv[1], &m_pTexture);
-	D3DXCreateTextureFromFile(m_pd3dDevice, __argv[1], &m_pTexture);
+	ilInit();
+	iluInit();
+	ilutInit();
+	ilutD3D8TexFromFile(m_pd3dDevice, __argv[1], &m_pTexture);
+	//D3DXCreateTextureFromFile(m_pd3dDevice, __argv[1], &m_pTexture);
 
     // Create a vertex buffer
     {

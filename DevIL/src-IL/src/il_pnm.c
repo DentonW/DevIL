@@ -354,8 +354,7 @@ ILimage *ilReadAsciiPpm(PPMINFO *Info)
 
 ILimage *ilReadBinaryPpm(PPMINFO *Info)
 {
-	ILuint	DataInc = 0, /*LinePos = 0,*/ Size;
-//	ILint	BytesRead = 0;
+	ILuint	Size;
 
 	Size = Info->Width * Info->Height * Info->Bpp;
 
