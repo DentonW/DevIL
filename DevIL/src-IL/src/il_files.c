@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Last modified: 09/01/2003 <--Y2K Compliant! =]
 //
 // Filename: src-IL/src/il_files.c
 //
@@ -497,6 +497,12 @@ ILboolean iPreCache(ILuint Size)
 
 ILvoid iUnCache()
 {
+	//changed 2003-09-01:
+	//make iUnCache smart enough to return if
+	//no cache is used
+	if(!UseCache)
+		return;
+
 	if (iread == iReadLump)
 		return;
 

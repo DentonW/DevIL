@@ -18,7 +18,7 @@
 
 ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 {
-	ILstring Ext = iGetExtension(FileName);
+	ILstring Ext;
 
 #ifndef _UNICODE
 	if (FileName == NULL || strlen(FileName) < 1) {
@@ -28,6 +28,11 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 		ilSetError(IL_INVALID_PARAM);
 		return IL_TYPE_UNKNOWN;
 	}
+
+	//added 2003-08-31: fix sf bug 789535
+	Ext = iGetExtension(FileName);
+	if(Ext == NULL)
+		return IL_TYPE_UNKNOWN;
 
 	if (!iStrCmp(Ext, IL_TEXT("tga")) || !iStrCmp(Ext, IL_TEXT("vda")) ||
 		!iStrCmp(Ext, IL_TEXT("icb")) || !iStrCmp(Ext, IL_TEXT("vst")))
