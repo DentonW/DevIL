@@ -255,7 +255,7 @@ ILboolean iLoadBitmapInternal()
 	OS2_HEAD	Os2Head;
 	ILboolean	bBitmap;
 
-  if (iCurImage == NULL) {
+	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
@@ -450,7 +450,9 @@ ILboolean ilReadUncompBmp(BMPHEAD *Header)
 
 		case 16: 
 			//padding
-			PadSize = (4 - (iCurImage->Bps % 4)) % 4;
+			//2003-09-09: changed iCurImage->Bps to iCurImage->Width*2,
+			//because iCurImage->Bps refers to the 24 bit devil image
+			PadSize = (4 - (iCurImage->Width*2 % 4)) % 4;
 
 			//check if bitfield compression is used
 			rMask = 0x7C00;
@@ -500,6 +502,7 @@ ILboolean ilReadUncompBmp(BMPHEAD *Header)
 
 		case 8:
 		case 24:
+            //for 8 and 24 bit, Bps is equal to the bmps bps
 			PadSize = (4 - (iCurImage->Bps % 4)) % 4;
 			if (PadSize == 0) {
 				if (iread(iCurImage->Data, 1, iCurImage->SizeOfPlane) != iCurImage->SizeOfPlane)
