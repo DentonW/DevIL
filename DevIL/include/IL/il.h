@@ -471,7 +471,7 @@ ILAPI ILboolean		ILAPIENTRY ilGetBoolean(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilGetBooleanv(ILenum Mode, ILboolean *Param);
 ILAPI ILubyte*		ILAPIENTRY ilGetData(ILvoid);
 ILAPI ILenum		ILAPIENTRY ilGetError(ILvoid);
-ILAPI ILint		ILAPIENTRY ilGetInteger(ILenum Mode);
+ILAPI ILint			ILAPIENTRY ilGetInteger(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param);
 ILAPI ILuint		ILAPIENTRY ilGetLumpPos(ILvoid);
 ILAPI ILubyte*		ILAPIENTRY ilGetPalette(ILvoid);
