@@ -38,6 +38,17 @@ ILuint CubemapDirections[CUBEMAP_SIDES] = {
 };
 
 
+// Global variables
+DDSHEAD	Head;			// Image header
+ILubyte	*CompData;		// Compressed data
+ILuint	CompSize;		// Compressed size
+ILuint	CompLineSize;	// Compressed line size
+ILuint	CompFormat;		// Compressed format
+ILimage	*Image;
+ILint	Width, Height, Depth;
+ILuint	BlockSize;
+
+
 //! Checks if the file specified in FileName is a valid .bmp file.
 ILboolean ilIsValidDds(const ILstring FileName)
 {
