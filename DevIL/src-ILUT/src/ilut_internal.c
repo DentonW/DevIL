@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Toolkit Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 06/27/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 05/15/2002 <--Y2K Compliant! =]
 //
 // Filename: openilut/internal.c
 //
@@ -13,6 +13,6 @@
 
 #include "ilut_internal.h"
 
-#if !defined(__APPLE__)
+//#if !defined(__APPLE__)
 	ILimage *ilutCurImage = NULL;
-#endif
+//#endif
