@@ -1275,6 +1275,12 @@ ILuint ILAPIENTRY ilSaveF(ILenum Type, ILHANDLE File)
 			break;
 		#endif
 
+		#ifndef IL_NO_TIF
+		case IL_TIF:
+			Ret = ilSaveTiffF(File);
+			break;
+		#endif
+
 		default:
 			ilSetError(IL_INVALID_ENUM);
 			return 0;
@@ -1337,6 +1343,12 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size)
 		#ifndef IL_NO_TGA
 		case IL_TGA:
 			Ret = ilSaveTargaL(Lump, Size);
+			break;
+		#endif
+
+		#ifndef IL_NO_TIF
+		case IL_TIF:
+			Ret = ilSaveTiffL(Lump, Size);
 			break;
 		#endif
 

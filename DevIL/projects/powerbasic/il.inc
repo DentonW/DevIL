@@ -2,7 +2,7 @@
 '
 ' ImageLib Sources
 ' Copyright (C) 2000-2002 by Denton Woods
-' Last modified: 05/28/2002 <--Y2K Compliant! =]
+' Last modified: 06/08/2002 <--Y2K Compliant! =]
 '
 ' Filename: il/il.h
 '
@@ -15,8 +15,8 @@
 ' Web: http://www.scheutz.dk
 ' e-mail: sourcecode@scheutz.dk
 '
-' Last modified: 05/28/2002
-' Based on DevIL Ver. 1.5.1 headers
+' Last modified: 06/08/2002
+' Based on DevIL Ver. 1.5.5 headers
 '
 ' Filename: il.inc
 '
@@ -51,7 +51,6 @@
 '%IL_NO_LIF
 '%IL_NO_LBM
 '%IL_NO_MDL
-'%IL_NO_OIL
 '%IL_NO_PCD
 '%IL_NO_PCX
 '%IL_NO_PIC
@@ -141,8 +140,8 @@
 ' IL-specific #define's
 '
 
-%IL_VERSION_1_5_1 = 1
-%IL_VERSION = 151
+%IL_VERSION_1_5_5 = 1
+%IL_VERSION = 155
 
 
 ' Attribute Bits

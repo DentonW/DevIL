@@ -4,7 +4,7 @@ unit OpenIL;
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/28/2002 <--Y2K Compliant! =]
+// Last modified: 06/08/2002 <--Y2K Compliant! =]
 //
 // Filename: il/il.h
 //
@@ -14,8 +14,8 @@ unit OpenIL;
 
 {******************************************************************************}
 { Converted to Delphi by Alexander Blach (alexander@abee.de)                   }
-{   Version:       DevIL v1.5.1                                                }
-{   Last modified: 05/28/2002                                                  }
+{   Version:       DevIL v1.5.5                                                }
+{   Last modified: 06/08/2002                                                  }
 {******************************************************************************}
 
 interface
@@ -34,7 +34,6 @@ uses
 //{$DEFINE IL_NO_LIF}
 //{$DEFINE IL_NO_LBM}
 //{$DEFINE IL_NO_MDL}
-//{$DEFINE IL_NO_OIL}
 //{$DEFINE IL_NO_PCD}
 //{$DEFINE IL_NO_PCX}
 //{$DEFINE IL_NO_PIC}
@@ -111,8 +110,8 @@ const
 // IL-specific 's
 //
 
-  IL_VERSION_1_5_1 = 1;
-  IL_VERSION = 151;
+  IL_VERSION_1_5_5 = 1;
+  IL_VERSION = 155;
 
 
 // Attribute Bits
@@ -158,7 +157,6 @@ const
   IL_RAW = $0430;
   IL_MDL = $0431;
   IL_WAL = $0432;
-  IL_OIL = $0433;
   IL_LIF = $0434;
   IL_MNG = $0435;
   IL_JNG = $0435;

@@ -27,7 +27,8 @@
 // No need for a separate header
 ILboolean	iLoadTiffInternal(ILvoid);
 char*		iMakeString(ILvoid);
-TIFF*		iTIFFOpen();
+TIFF*		iTIFFOpen(char *Mode);
+ILboolean	iSaveTiffInternal(ILvoid);
 
 /*----------------------------------------------------------------------------*/
 
@@ -166,13 +167,13 @@ ILboolean iLoadTiffInternal()
 	TIFF		*tif;
 	ILushort	bpp;
 	ILushort	*sampleinfo, extrasamples;
-	ILuint		ixPixel;
 	ILubyte		*pImageData;
-	ILuint		ProfileLen;
+	ILuint		i, ProfileLen, DirCount = 0;
 	ILvoid		*Buffer;
+	ILimage		*Image;
+	ILushort	si;
 	
-	if (iCurImage == NULL)
-	{
+	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
@@ -180,70 +181,87 @@ ILboolean iLoadTiffInternal()
 	TIFFSetWarningHandler(NULL);
 	TIFFSetErrorHandler(NULL);
 
-    tif = iTIFFOpen();
-    if (tif == NULL)
-	{
+    tif = iTIFFOpen("r");
+    if (tif == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
 		return IL_FALSE;
 	}
 
-	TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &iCurImage->Width);
-	TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &iCurImage->Height);
-	TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &bpp);
+	do {
+	    DirCount++;
+	} while (TIFFReadDirectory(tif));
 
-	if (bpp == 4)
-	{
-		TIFFGetFieldDefaulted(	tif, TIFFTAG_EXTRASAMPLES, &extrasamples,
-								&sampleinfo); 
-		if (!sampleinfo || 
-			 sampleinfo[0] == EXTRASAMPLE_UNSPECIFIED)
-		{
-			static ILushort si = EXTRASAMPLE_ASSOCALPHA;
-			TIFFSetField(tif, TIFFTAG_EXTRASAMPLES, 1, &si);
-		}
-	}
 
-	if (!ilTexImage(iCurImage->Width, iCurImage->Height, 1, 4, IL_RGBA,
-					IL_UNSIGNED_BYTE, NULL))
-	{
+	if (!ilTexImage(1, 1, 1, 1, IL_RGBA, IL_UNSIGNED_BYTE, NULL)) {
 		TIFFClose(tif);
 		return IL_FALSE;
 	}
-
-	// Siigron: added u_long cast to shut up compiler warning
-    if (!TIFFReadRGBAImage( tif, iCurImage->Width, iCurImage->Height,
-							(uint32*) iCurImage->Data, 1))
-	{
-		TIFFClose(tif);
-		ilSetError(IL_LIB_TIFF_ERROR);
-		return IL_FALSE;
-	}
-
-	if (TIFFGetField(tif, TIFFTAG_ICCPROFILE, &ProfileLen, &Buffer)) {
-		if (iCurImage->Profile && iCurImage->ProfileSize)
-			ifree(iCurImage->Profile);
-		iCurImage->Profile = (ILubyte*)ialloc(ProfileLen);
-		if (iCurImage->Profile == NULL) {
+	Image = iCurImage;
+	for (i = 1; i < DirCount; i++) {
+		Image->Next = ilNewImage(1, 1, 1, 1, 1);
+		if (Image->Next == NULL) {
 			TIFFClose(tif);
 			return IL_FALSE;
 		}
-
-		memcpy(iCurImage->Profile, Buffer, ProfileLen);
-		iCurImage->ProfileSize = ProfileLen;
-
-		_TIFFfree(Buffer);
+		Image = Image->Next;
 	}
+	iCurImage->NumNext = DirCount - 1;
 
-	//TIFFClose(tif);
+	Image = iCurImage;
+	for (i = 0; i < DirCount; i++) {
+		TIFFSetDirectory(tif, (tdir_t)i);
+		TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &Image->Width);
+		TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &Image->Height);
+		TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &bpp);
 
-	iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;  // eiu...dunno if this is right
+		if (bpp == 4) {
+			TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES, &extrasamples, &sampleinfo); 
+			if (!sampleinfo || sampleinfo[0] == EXTRASAMPLE_UNSPECIFIED) {
+				si = EXTRASAMPLE_ASSOCALPHA;
+				TIFFSetField(tif, TIFFTAG_EXTRASAMPLES, 1, &si);
+			}
+		}
+
+		if (!ilResizeImage(Image, Image->Width, Image->Height, 1, 4, 1)) {
+			TIFFClose(tif);
+			return IL_FALSE;
+		}
+		Image->Format = IL_RGBA;
+		Image->Type = IL_UNSIGNED_BYTE;
+
+		// Siigron: added u_long cast to shut up compiler warning
+		if (!TIFFReadRGBAImage(tif, Image->Width, Image->Height, (uint32*)Image->Data, 1)) {
+			TIFFClose(tif);
+			ilSetError(IL_LIB_TIFF_ERROR);
+			return IL_FALSE;
+		}
+
+		if (TIFFGetField(tif, TIFFTAG_ICCPROFILE, &ProfileLen, &Buffer)) {
+			if (Image->Profile && Image->ProfileSize)
+				ifree(Image->Profile);
+			Image->Profile = (ILubyte*)ialloc(ProfileLen);
+			if (Image->Profile == NULL) {
+				TIFFClose(tif);
+				return IL_FALSE;
+			}
+
+			memcpy(Image->Profile, Buffer, ProfileLen);
+			Image->ProfileSize = ProfileLen;
+
+			_TIFFfree(Buffer);
+		}
+
+		Image->Origin = IL_ORIGIN_LOWER_LEFT;  // eiu...dunno if this is right
+
+		Image = Image->Next;
+		if (Image == NULL)  // Should never happen except when we reach the end, but check anyway.
+			break;
+	}
 
 	switch (bpp)
 	{
 		case 1:
-#ifdef __LITTLE_ENDIAN__
 			ilConvertImage(IL_LUMINANCE, IL_UNSIGNED_BYTE);
-#endif			
 			break;
 
 		case 3:
@@ -254,22 +272,20 @@ ILboolean iLoadTiffInternal()
 
 		case 4:
 			pImageData = iCurImage->Data;
-				
+			
 #ifdef __LITTLE_ENDIAN__
 			pImageData += 3;
 #endif			
-				
-			for (	ixPixel=iCurImage->Width * iCurImage->Height;
-					ixPixel>0; 
-					ixPixel--)
-			{
+			
+			for (i = iCurImage->Width * iCurImage->Height; i > 0; i--) {
 				*pImageData ^= 255;
 				pImageData += 4;
 			}
 			break;
 	}
 
-	//iCurImage->SwapEndian = IL_TRUE;
+	TIFFClose(tif);
+
 	ilFixImage();
 
 	return IL_TRUE;
@@ -293,8 +309,9 @@ _tiffFileReadProc(thandle_t fd, tdata_t pData, tsize_t tSize)
 static tsize_t
 _tiffFileWriteProc(thandle_t fd, tdata_t pData, tsize_t tSize)
 {
-	TIFFWarning("TIFFMemFile", "_tiffFileWriteProc() Not implemented");
-	return(0);
+	/*TIFFWarning("TIFFMemFile", "_tiffFileWriteProc() Not implemented");
+	return(0);*/
+	return iwrite(pData, 1, tSize);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -356,11 +373,11 @@ _tiffDummyUnmapProc(thandle_t fd, tdata_t base, toff_t size)
 
 /*----------------------------------------------------------------------------*/
 
-TIFF *iTIFFOpen()
+TIFF *iTIFFOpen(char *Mode)
 {
     TIFF *tif;
 
-	tif = TIFFClientOpen("TIFFMemFile", "r",
+	tif = TIFFClientOpen("TIFFMemFile", Mode,
 						 NULL,
 					    _tiffFileReadProc, _tiffFileWriteProc,
 					    _tiffFileSeekProc, _tiffFileCloseProc,
@@ -372,8 +389,53 @@ TIFF *iTIFFOpen()
 
 /*----------------------------------------------------------------------------*/
 
+
+//! Writes a Tiff file
+ILboolean ilSaveTiff(const ILstring FileName)
+{
+	ILHANDLE	TiffFile;
+	ILboolean	bTiff = IL_FALSE;
+
+	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
+		if (iFileExists(FileName)) {
+			ilSetError(IL_FILE_ALREADY_EXISTS);
+			return IL_FALSE;
+		}
+	}
+
+	TiffFile = iopenw(FileName);
+	if (TiffFile == NULL) {
+		ilSetError(IL_COULD_NOT_OPEN_FILE);
+		return bTiff;
+	}
+
+	bTiff = ilSaveTiffF(TiffFile);
+	iclosew(TiffFile);
+
+	return bTiff;
+}
+
+
+//! Writes a Tiff to an already-opened file
+ILboolean ilSaveTiffF(ILHANDLE File)
+{
+	iSetOutputFile(File);
+	return iSaveTiffInternal();
+}
+
+
+//! Writes a Tiff to a memory "lump"
+ILboolean ilSaveTiffL(ILvoid *Lump, ILuint Size)
+{
+	iSetOutputLump(Lump, Size);
+	return iSaveTiffInternal();
+}
+
+
 // @TODO:  Accept palettes!
-ILboolean ilSaveTiff(const char *FileName)
+
+// Internal function used to save the Tiff.
+ILboolean iSaveTiffInternal()
 {
 	ILenum	Format;
 	ILenum	Compression;
@@ -385,24 +447,6 @@ ILboolean ilSaveTiff(const char *FileName)
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
-	}
-
-	if (FileName == NULL || strlen(FileName) < 5) {
-		ilSetError(IL_INVALID_VALUE);
-		return IL_FALSE;
-	}
-
-	if (!ilisValidTiffExtension((ILstring) FileName)) {
-		ilSetError(IL_INVALID_EXTENSION);
-		return IL_FALSE;
-	}
-
-	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
-		if (iFileExists((ILstring)FileName))
-		{
-			ilSetError(IL_FILE_ALREADY_EXISTS);
-			return IL_FALSE;
-		}
 	}
 
 	if (iGetHint(IL_COMPRESSION_HINT) == IL_USE_COMPRESSION)
@@ -424,7 +468,8 @@ ILboolean ilSaveTiff(const char *FileName)
 		TempImage = iCurImage;
 	}
 	
-	File = TIFFOpen(FileName, "w");
+	//File = TIFFOpen(FileName, "w");
+	File = iTIFFOpen("w");
 	if (File == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
 		return IL_FALSE;
@@ -441,9 +486,11 @@ ILboolean ilSaveTiff(const char *FileName)
 	TIFFSetField(File, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
 	TIFFSetField(File, TIFFTAG_ROWSPERSTRIP, 1);
 	TIFFSetField(File, TIFFTAG_SOFTWARE, ilGetString(IL_VERSION));
-	TIFFSetField(File, TIFFTAG_DOCUMENTNAME,
+	/*TIFFSetField(File, TIFFTAG_DOCUMENTNAME,
 						iGetString(IL_TIF_DOCUMENTNAME_STRING) ?
-						iGetString(IL_TIF_DOCUMENTNAME_STRING) : FileName);
+						iGetString(IL_TIF_DOCUMENTNAME_STRING) : FileName);*/
+	if (iGetString(IL_TIF_DOCUMENTNAME_STRING))
+		TIFFSetField(File, TIFFTAG_DOCUMENTNAME, iGetString(IL_TIF_DOCUMENTNAME_STRING));
 	if (iGetString(IL_TIF_AUTHNAME_STRING))
 		TIFFSetField(File, TIFFTAG_ARTIST, iGetString(IL_TIF_AUTHNAME_STRING));
 	if (iGetString(IL_TIF_HOSTCOMPUTER_STRING))

@@ -1,4 +1,4 @@
-1.5.2
+1.5.5
 -----
 
 - Temporarily removed .pcd support, since no .pcd images were loading correctly.
@@ -12,6 +12,8 @@
 - Added a check for extensions in GIF87A files.
 - Added .psd saving.
 - Optimized ilutGetPaddedData a bit.
+- Added some checks to prevent corrupt .psd files from crashing the library when loading.
+- Fixed a problem using ilLoadL with the IJL.
 
 
 1.5.1

@@ -308,12 +308,14 @@ ILboolean ILAPIENTRY ilRegisterMipNum(ILuint Num)
 	if (Num == 0)  // Just gets rid of all the mipmaps.
 		return IL_TRUE;
 
-	iCurImage->Mipmaps = (ILimage*)ialloc(sizeof(ILimage));
+	//iCurImage->Mipmaps = (ILimage*)ialloc(sizeof(ILimage));
+	iCurImage->Mipmaps = ilNewImage(1, 1, 1, 1, 1);
 	Next = iCurImage->Mipmaps;
 	Num--;
 
 	while (Num) {
-		Next->Next = (ILimage*)ialloc(sizeof(ILimage));
+		//Next->Next = (ILimage*)ialloc(sizeof(ILimage));
+		Next->Next = ilNewImage(1, 1, 1, 1, 1);
 		if (Next->Next == NULL) {
 			return IL_FALSE;
 		}
@@ -336,12 +338,14 @@ ILboolean ILAPIENTRY ilRegisterNumImages(ILuint Num)
 	if (Num == 0)  // Just gets rid of all the "next" images.
 		return IL_TRUE;
 
-	iCurImage->Next = (ILimage*)ialloc(sizeof(ILimage));
+	//iCurImage->Next = (ILimage*)ialloc(sizeof(ILimage));
+	iCurImage->Next = ilNewImage(1, 1, 1, 1, 1);
 	Next = iCurImage->Next;
 	Num--;
 
 	while (Num) {
-		Next->Next = (ILimage*)ialloc(sizeof(ILimage));
+		//Next->Next = (ILimage*)ialloc(sizeof(ILimage));
+		Next->Next = ilNewImage(1, 1, 1, 1, 1);
 		if (Next->Next == NULL) {
 			return IL_FALSE;
 		}

@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/28/2002 <--Y2K Compliant! =]
+// Last modified: 06/08/2002 <--Y2K Compliant! =]
 //
 // Filename: il/il.h
 //
@@ -160,8 +160,8 @@ typedef void			ILvoid;
 // IL-specific #define's
 //
 
-#define IL_VERSION_1_5_1					1
-#define IL_VERSION							151
+#define IL_VERSION_1_5_5					1
+#define IL_VERSION							155
 
 
 // Attribute Bits

@@ -578,7 +578,7 @@ ILboolean iLoadJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size)
 		}
 	}
 	else {
-		Image.JPGBytes = (char*)FileName;
+		Image.JPGBytes = Lump;
 		Image.JPGSizeBytes = Size > 0 ? Size : UINT_MAX;
 		if (ijlRead(&Image, IJL_JBUFF_READPARAMS) != IJL_OK) {
 			ilSetError(IL_LIB_JPEG_ERROR);

@@ -4,7 +4,7 @@ unit OpenILU;
 //
 // ImageLib Utility Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/28/2002 <--Y2K Compliant! =]
+// Last modified: 06/08/2002 <--Y2K Compliant! =]
 //
 // Filename: il/ilu.h
 //
@@ -14,8 +14,8 @@ unit OpenILU;
 
 {******************************************************************************}
 { Converted to Delphi by Alexander Blach (alexander@abee.de)                   }
-{   Version:       ILU v1.5.1                                                  }
-{   Last modified: 05/28/2002                                                  }
+{   Version:       ILU v1.5.5                                                  }
+{   Last modified: 06/08/2002                                                  }
 {******************************************************************************}
 
 
@@ -25,8 +25,8 @@ uses
   Windows;
 
 const
-  ILU_VERSION_1_5_1 = 1;
-  ILU_VERSION = 151;
+  ILU_VERSION_1_5_5 = 1;
+  ILU_VERSION = 155;
 
   ILU_FILTER = $2600;
   ILU_NEAREST = $2601;

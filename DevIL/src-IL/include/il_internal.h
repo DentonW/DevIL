@@ -501,7 +501,9 @@ ILboolean ilIsValidTiffL(ILvoid *Lump, ILuint Size);
 ILboolean ilLoadTiff(const ILstring FileName);
 ILboolean ilLoadTiffF(ILHANDLE File);
 ILboolean ilLoadTiffL(ILvoid *Lump, ILuint Size);
-ILboolean ilSaveTiff(const char *FileName);
+ILboolean ilSaveTiff(const ILstring FileName);
+ILboolean ilSaveTiffF(ILHANDLE File);
+ILboolean ilSaveTiffL(ILvoid *Lump, ILuint Size);
 
 ILboolean ilLoadWal(const ILstring FileName);
 ILboolean ilLoadWalF(ILHANDLE File);
