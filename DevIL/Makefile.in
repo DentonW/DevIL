@@ -100,7 +100,7 @@ AUTOMAKE_OPTIONS = 1.4 cygnus
 
 SUBDIRS = src-IL src-ILU src-ILUT include
 DIST_SUBDIRS = src-IL src-ILU src-ILUT include
-EXTRA_DIST = README.unix   README.win              Libraries.txt CREDITS              VERSION       BUGS              MSVC++.txt
+EXTRA_DIST = README.unix   README.win              Libraries.txt CREDITS              VERSION       BUGS              MSVC++.txt   configure.bat
 
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/libtools/mkinstalldirs

@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/13/2002 <--Y2K Compliant! =]
+// Last modified: 05/14/2002 <--Y2K Compliant! =]
 //
 // Filename: il/il_gif.c
 //
@@ -12,6 +12,13 @@
 //    that can be found at http://www.programmersheaven.com/zone10/cat452/
 //
 //-----------------------------------------------------------------------------
+
+
+//
+//
+// @TODO:  Complete this code!
+//
+//
 
 
 #include "il_internal.h"
@@ -127,7 +134,6 @@ ILboolean ilLoadGifL(ILvoid *Lump, ILuint Size)
 	return iLoadGifInternal();
 }
 
-ILubyte *Data;
 
 // Internal function used to load the Gif.
 ILboolean iLoadGifInternal()
@@ -170,7 +176,6 @@ ILboolean iLoadGifInternal()
 		iseek(8, IL_SEEK_CUR);
 	iread(&ImageDesc, sizeof(ImageDesc), 1);
 
-	Data = iCurImage->Data;
 	if (!GifGetData())
 		return IL_FALSE;
 
@@ -250,6 +255,7 @@ ILboolean GifGetData()
 	ILint	code, fc, oc;
 	ILubyte	size;
 	ILint	c;
+	ILubyte	*Data = iCurImage->Data;
 
 	size = igetc();
 	if (size < 2 || 9 < size) {
