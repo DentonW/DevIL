@@ -22,13 +22,13 @@ ILimage *iluScale2DNear_(ILimage *Image, ILimage *Scaled, ILuint Width, ILuint H
 ILimage *iluScale2DLinear_(ILimage *Image, ILimage *Scaled, ILuint Width, ILuint Height);
 ILimage *iluScale2DBilinear_(ILimage *Image, ILimage *Scaled, ILuint Width, ILuint Height);
 
-ILuint		x1, x2;
-ILuint		NewY1, NewY2, NewX1, NewX2, Size, x, y, c;
-ILdouble	ScaleX, ScaleY, t1, t2, t3, t4, f, ft, NewX;
-ILdouble	Table[2][4];  // Assumes we don't have larger than 32-bit images.
-ILuint		ImgBps, SclBps;
-ILushort	*ShortPtr, *SShortPtr;
-ILuint		*IntPtr, *SIntPtr;
+static ILuint		x1, x2;
+static ILuint		NewY1, NewY2, NewX1, NewX2, Size, x, y, c;
+static ILdouble	ScaleX, ScaleY, t1, t2, t3, t4, f, ft, NewX;
+static ILdouble	Table[2][4];  // Assumes we don't have larger than 32-bit images.
+static ILuint		ImgBps, SclBps;
+static ILushort	*ShortPtr, *SShortPtr;
+static ILuint		*IntPtr, *SIntPtr;
 
 
 ILimage *iluScale2D_(ILimage *Image, ILimage *Scaled, ILuint Width, ILuint Height)
