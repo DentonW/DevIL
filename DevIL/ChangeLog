@@ -26,6 +26,9 @@
 - Fixed PowerBasic test files.
 - Added GDI+ and MFC static library interfaces.
 - Added more Modes for ilSetString, along with setting the C Header output string.
+- Added DDS saving.
+- Added preliminary (not functional) .psp support.
+- Added a config.h generator for MSVC++.
 
 
 1.2.4

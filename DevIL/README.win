@@ -1,4 +1,4 @@
-Developer's Image Library version 1.2.5 Readme, Notes and Quick Use
+Developer's Image Library version 1.3.0 Readme, Notes and Quick Use
 -------------------------------------------------------------------
 
 <DZA[afk]> DevIL song: "la la la, a cross-platform image library utilizing a
@@ -78,8 +78,8 @@ Libraries.txt (included with the DevIL distribution) lists all libraries needed
 to properly compile DevIL.
 
 Precompiled versions and sources of all libraries needed to compile DevIL are
-available at ftp://openil.sourceforge.net/pub/OpenIL/LibCompiled.zip and
-ftp://openil.sourceforge.net/pub/OpenIL/LibSrc.zip , respectively.
+available at http://openil.sourceforge.net/libs/LibCompiled.zip and
+http://openil.sourceforge.net/libs/LibSrc.zip , respectively.
 
 
 Errors:
@@ -97,9 +97,7 @@ Installation:
 
 Just unzip and compile other libs included if needed...  You should be able to
 just go to tools - options - directories and add in the include and lib
-directories for DevIL.  You will need to edit the post-build tabs for each
-OpenIL* project (Project - Settings - Post-Build) if your Windows System
-directory isn't c:\windows\system.
+directories for DevIL.
 
 
 Usage:
