@@ -591,11 +591,12 @@ ILboolean ilAddAlpha()
 }
 
 
-ILfloat KeyRed = 0, KeyGreen = 0, KeyBlue = 0, KeyAlpha = 0;
+//ILfloat KeyRed = 0, KeyGreen = 0, KeyBlue = 0, KeyAlpha = 0;
 
 ILvoid ILAPIENTRY ilKeyColour(ILclampf Red, ILclampf Green, ILclampf Blue, ILclampf Alpha)
 {
-	KeyRed		= Red;
+	ILfloat KeyRed = 0, KeyGreen = 0, KeyBlue = 0, KeyAlpha = 0;
+        KeyRed		= Red;
 	KeyGreen	= Green;
 	KeyBlue		= Blue;
 	KeyAlpha	= Alpha;
@@ -607,7 +608,8 @@ ILvoid ILAPIENTRY ilKeyColour(ILclampf Red, ILclampf Green, ILclampf Blue, ILcla
 //	making the image transparent where Key is equal to the pixel.
 ILboolean ilAddAlphaKey(ILimage *Image)
 {
-	ILubyte		*NewData, NewBpp;
+	ILfloat KeyRed = 0, KeyGreen = 0, KeyBlue = 0, KeyAlpha = 0;
+        ILubyte		*NewData, NewBpp;
 	ILfloat		KeyColour[3];
 	ILuint		i = 0, j = 0, c, Size;
 	ILboolean	Same;
@@ -817,7 +819,7 @@ ILboolean ilAddAlphaKey(ILimage *Image)
 //	Should we maybe add an option that changes the image based on the alpha?
 ILboolean ilRemoveAlpha()
 {
-	ILubyte *NewData, NewBpp;
+        ILubyte *NewData, NewBpp;
 	ILuint i = 0, j = 0, Size;
 
 	if (iCurImage == NULL) {
