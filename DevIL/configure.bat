@@ -1,6 +1,6 @@
 @echo off
 echo Generating include/IL/config.h based on what your system has installed...
-"LIBTOOLS\config gen\config_gen.exe" include\IL
+"libtools\config gen\config_gen.exe" include\IL
 echo Done.
 echo.
 echo Please check include/IL/config.h to make sure that it has

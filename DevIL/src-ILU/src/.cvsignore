@@ -1,0 +1,6 @@
+Makefile
+.deps
+.libs
+*.o
+*.lo
+libILU.la
