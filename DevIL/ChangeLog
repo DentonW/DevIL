@@ -3,9 +3,7 @@
 
 - Fixed a problem loading .psd files when IL_MEM_SPEED_HINT is set to IL_FASTEST.
 - Fixed a bug loading corrupted .pcx files.
-- Fixed a bug using ilLoadL with some image formats.
-
-
+- Fixed some bugs using ilLoadL.
 
 
 1.5.5
