@@ -18,7 +18,7 @@
 
 ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 {
-	ILstring Ext = iGetExtension(FileName);
+	ILstring Ext;
 
 #ifndef _UNICODE
 	if (FileName == NULL || strlen(FileName) < 1) {
@@ -28,6 +28,11 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 		ilSetError(IL_INVALID_PARAM);
 		return IL_TYPE_UNKNOWN;
 	}
+
+	//added 2003-08-31: fix sf bug 789535
+	Ext = iGetExtension(FileName);
+	if(Ext == NULL)
+		return IL_TYPE_UNKNOWN;
 
 	if (!iStrCmp(Ext, IL_TEXT("tga")) || !iStrCmp(Ext, IL_TEXT("vda")) ||
 		!iStrCmp(Ext, IL_TEXT("icb")) || !iStrCmp(Ext, IL_TEXT("vst")))
@@ -44,6 +49,8 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 		return IL_GIF;
 	if (!iStrCmp(Ext, IL_TEXT("cut")))
 		return IL_CUT;
+	if (!iStrCmp(Ext, IL_TEXT("hdr")))
+		return IL_HDR;
 	if (!iStrCmp(Ext, IL_TEXT("ico")) || !iStrCmp(Ext, IL_TEXT("cur")))
 		return IL_ICO;
 	if (!iStrCmp(Ext, IL_TEXT("jng")))
@@ -87,7 +94,8 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 
 ILenum ilDetermineTypeF(ILHANDLE File);
 
-ILenum ilDetermineType(const ILstring FileName)
+//changed 2003-09-17 to ILAPIENTRY
+ILAPI ILenum ILAPIENTRY ilDetermineType(const ILstring FileName)
 {
 	ILHANDLE	File;
 	ILenum		Type;
@@ -112,11 +120,6 @@ ILenum ilDetermineTypeF(ILHANDLE File)
 	if (File == NULL)
 		return IL_TYPE_UNKNOWN;
 
-	#ifndef IL_NO_TGA
-	if (ilIsValidTgaF(File))
-		return IL_TGA;
-	#endif
-
 	#ifndef IL_NO_JPG
 	if (ilIsValidJpgF(File))
 		return IL_JPG;
@@ -140,6 +143,11 @@ ILenum ilDetermineTypeF(ILHANDLE File)
 	#ifndef IL_NO_GIF
 	if (ilIsValidGifF(File))
 		return IL_GIF;
+	#endif
+
+	#ifndef IL_NO_HDR
+	if (ilIsValidHdrF(File))
+		return IL_HDR;
 	#endif
 
 	#ifndef IL_NO_LIF
@@ -181,6 +189,13 @@ ILenum ilDetermineTypeF(ILHANDLE File)
 	if (ilIsValidTiffF(File))
 		return IL_TIF;
 	#endif
+
+	//moved tga to end of list because it has no magic number
+	//in header to assure that this is really a tga... (20040218)
+	#ifndef IL_NO_TGA
+	if (ilIsValidTgaF(File))
+		return IL_TGA;
+	#endif
 	
 	return IL_TYPE_UNKNOWN;
 }
@@ -190,11 +205,6 @@ ILenum ilDetermineTypeL(ILvoid *Lump, ILuint Size)
 {
 	if (Lump == NULL)
 		return IL_TYPE_UNKNOWN;
-
-	#ifndef IL_NO_TGA
-	if (ilIsValidTgaL(Lump, Size))
-		return IL_TGA;
-	#endif
 
 	#ifndef IL_NO_JPG
 	if (ilIsValidJpgL(Lump, Size))
@@ -219,6 +229,11 @@ ILenum ilDetermineTypeL(ILvoid *Lump, ILuint Size)
 	#ifndef IL_NO_GIF
 	if (ilIsValidGifL(Lump, Size))
 		return IL_GIF;
+	#endif
+
+	#ifndef IL_NO_HDR
+	if (ilIsValidHdrL(Lump, Size))
+		return IL_HDR;
 	#endif
 
 	#ifndef IL_NO_LIF
@@ -259,6 +274,13 @@ ILenum ilDetermineTypeL(ILvoid *Lump, ILuint Size)
 	#ifndef IL_NO_TIF
 	if (ilIsValidTiffL(Lump, Size))
 		return IL_TIF;
+	#endif
+
+	//moved tga to end of list because it has no magic number
+	//in header to assure that this is really a tga... (20040218)
+	#ifndef IL_NO_TGA
+	if (ilIsValidTgaL(Lump, Size))
+		return IL_TGA;
 	#endif
 
 	return IL_TYPE_UNKNOWN;
@@ -302,6 +324,11 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, const ILstring FileName)
 		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilIsValidGif(FileName);
+		#endif
+
+		#ifndef IL_NO_HDR
+		case IL_HDR:
+			return ilIsValidHdr(FileName);
 		#endif
 
 		#ifndef IL_NO_LIF
@@ -389,6 +416,11 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 			return ilIsValidGifF(File);
 		#endif
 
+		#ifndef IL_NO_HDR
+		case IL_HDR:
+			return ilIsValidHdrF(File);
+		#endif
+
 		#ifndef IL_NO_LIF
 		case IL_LIF:
 			return ilIsValidLifF(File);
@@ -467,6 +499,11 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, ILvoid *Lump, ILuint Size)
 		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilIsValidGifL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_HDR
+		case IL_HDR:
+			return ilIsValidHdrL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_LIF
@@ -555,6 +592,11 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, const ILstring FileName)
 		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilLoadGif(FileName);
+		#endif
+
+		#ifndef IL_NO_HDR
+		case IL_HDR:
+			return ilLoadHdr(FileName);
 		#endif
 
 		#ifndef IL_NO_CUT
@@ -713,6 +755,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadGifF(File);
 		#endif
 
+		#ifndef IL_NO_HDR
+		case IL_HDR:
+			return ilLoadHdrF(File);
+		#endif
+
 		#ifndef IL_NO_CUT
 		case IL_CUT:
 			return ilLoadCutF(File);
@@ -859,6 +906,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, ILvoid *Lump, ILuint Size)
 		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilLoadGifL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_HDR
+		case IL_HDR:
+			return ilLoadHdrL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_CUT
@@ -1027,6 +1079,12 @@ ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 		}
 		#endif
 
+		#ifndef IL_NO_HDR
+		if (!iStrCmp(Ext, IL_TEXT("hdr"))) {
+			return ilLoadHdr(FileName);
+		}
+		#endif
+
 		#ifndef IL_NO_CUT
 		if (!iStrCmp(Ext, IL_TEXT("cut"))) {
 			return ilLoadCut(FileName);
@@ -1151,7 +1209,7 @@ ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 	if (Type == IL_TYPE_UNKNOWN)
 		return IL_FALSE;
 	return ilLoad(Type, FileName);
-}					 
+}
 
 
 ILboolean ILAPIENTRY ilSave(ILenum Type, const ILstring FileName)
@@ -1480,4 +1538,3 @@ ILboolean ILAPIENTRY ilSaveImage(const ILstring FileName)
 	ilSetError(IL_INVALID_EXTENSION);
 	return IL_FALSE;
 }
-

@@ -56,10 +56,6 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /def:".\il.def" /out:"C:\path\devil.dll" /pdbtype:sept /libpath:"../../projects/msvc/extlibs"
 # SUBTRACT LINK32 /pdb:none
-# Begin Special Build Tool
-SOURCE="$(InputPath)"
-PostBuild_Cmds=copy ..\..\lib\DevIL.dll "C:\Nico\nico - Yanns Rechner\path\test\DevIL.dll"
-# End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "IL - Win32 Dynamic"
 
@@ -223,6 +219,10 @@ SOURCE=..\src\il_files.c
 # Begin Source File
 
 SOURCE=..\src\il_gif.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\il_hdr.c
 # End Source File
 # Begin Source File
 
@@ -415,6 +415,10 @@ SOURCE=..\include\il_files.h
 # Begin Source File
 
 SOURCE=..\include\il_gif.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\il_hdr.h
 # End Source File
 # Begin Source File
 
