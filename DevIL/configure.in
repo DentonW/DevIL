@@ -29,7 +29,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.3 $)
+AC_REVISION($Revision: 1.4 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -79,17 +79,6 @@ dnl no_sgi="no"
 dnl no_tga="no"
 dnl no_tiff="no"
 dnl no_wal="no"
-
-dnl
-dnl Libraries development checking
-dnl
-AC_CHECK_HEADER(jpeglib.h, ,no_jpeg="yes")
-AC_CHECK_HEADER(tiffio.h, ,no_tiff="yes")
-AC_CHECK_HEADER(png.h, ,no_png="yes")
-AC_CHECK_HEADER(gif_lib.h, ,no_gif="yes")
-AC_CHECK_HEADER(lcms/lcms.h, ,no_lcms="yes")
-AC_CHECK_HEADER(libmng.h, ,no_mng="yes")
-AC_CHECK_HEADER(GL/gl.h, use_opengl="no")
 
 dnl
 dnl Arguments
@@ -202,6 +191,18 @@ case "$host" in
               use_directx="no"
               ;;
 esac
+
+dnl
+dnl Libraries development checking
+dnl
+AC_CHECK_HEADER(jpeglib.h, ,no_jpeg="yes")
+AC_CHECK_HEADER(tiffio.h, ,no_tiff="yes")
+AC_CHECK_HEADER(png.h, ,no_png="yes")
+AC_CHECK_HEADER(gif_lib.h, ,no_gif="yes")
+AC_CHECK_HEADER(lcms/lcms.h, ,no_lcms="yes")
+AC_CHECK_HEADER(libmng.h, ,no_mng="yes")
+AC_CHECK_HEADER(GL/gl.h, , use_opengl="no")
+AC_CHECK_HEADER(d3d8.h, , use_directx="no")
 
 dnl
 dnl Now we can check for bin libraries
@@ -487,6 +488,11 @@ fi
 if test "$use_win32" = "yes" ; then
   AC_DEFINE(ILUT_USE_WIN32)
   SUPPORTED_API=$SUPPORTED_API"Win32 "
+fi
+
+if test "$use_directx" = "yes" ; then
+  AC_DEFINE(ILUT_USE_DIRECTX8)
+  SUPPORTED_API=$SUPPORTED_API"DirectX8 "
 fi
 
 AC_MSG_RESULT([ ])
