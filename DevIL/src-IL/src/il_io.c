@@ -92,7 +92,8 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 
 ILenum ilDetermineTypeF(ILHANDLE File);
 
-ILenum ilDetermineType(const ILstring FileName)
+//changed 2003-09-17 to ILAPIENTRY
+ILAPI ILenum ILAPIENTRY ilDetermineType(const ILstring FileName)
 {
 	ILHANDLE	File;
 	ILenum		Type;
