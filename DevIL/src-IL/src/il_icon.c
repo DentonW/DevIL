@@ -167,7 +167,8 @@ ILboolean iLoadIconInternal()
 
 	for (i = 0; i < IconDir.Count; i++) {
 		if (IconImages[i].Head.BitCount != 1 && IconImages[i].Head.BitCount != 4 &&
-			IconImages[i].Head.BitCount != 8 && IconImages[i].Head.BitCount != 24)
+			IconImages[i].Head.BitCount != 8 && IconImages[i].Head.BitCount != 24 &&
+			IconImages[i].Head.BitCount != 32)
 			continue;
 
 		if (!BaseCreated) {
@@ -279,6 +280,16 @@ ILboolean iLoadIconInternal()
 						x = 0;
 					}
 				}
+			}
+		}
+		else if (IconImages[i].Head.BitCount == 32) {
+			for (; j < Image->SizeOfData; j += 4, k += 4) {
+				Image->Data[j] = IconImages[i].Data[k];
+				Image->Data[j+1] = IconImages[i].Data[k+1];
+				Image->Data[j+2] = IconImages[i].Data[k+2];
+				//If the icon has 4 channels, use 4th channel for alpha...
+				//(for winxp style icons with true alpha channel
+				Image->Data[j+3] = IconImages[i].Data[k+3];
 			}
 		}
 	}
