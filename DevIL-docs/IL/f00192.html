@@ -1,73 +1,81 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<HTML>
-<HEAD>
-<TITLE>DevIL Documentation, ilCloneCurImage</TITLE>
-<STYLE TYPE = "text/css">
- 	A:link		{color: 0000FF;}
-	A:link		{text-decoration: none;}
-	A:visited	{color: 000080;}
-	A:visited	{text-decoration: none;}
-	A:active	{color: 000080;}
-	A:active	{text-decoration: none;}
-	A:hover		{color: 000080;}
-	A:hover		{text-decoration: underline;}
-</STYLE>
-
-</HEAD>
-
-<BODY TOPMARGIN=0 bgcolor="white">
-<FONT face="verdana">
-
-<IMG SRC="..\images\devil.gif">
-<br>
-<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
-<TR ALIGN=RIGHT>
-
-<TD ALIGN=LEFT>
-<FONT color="white">DevIL Documentation</FONT>
-</TD>
-
-<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00014.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00016.htm">Next</A>
-</TD>
-
-</TR>
-</TABLE>
-<h2>ilCloneCurImage</h2>
-<font size=-1>
-<p>The <b>ilCloneCurImage</b> function creates a copy of the current image.</p>
+<html>
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 1st February 2002), see www.w3.org">
+<title>DevIL Documentation, ilCloneCurImage</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
 </font>
-<pre><code>
-<b>ILuint ilCloneCurImage(
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="right">
+<td align="left"><font color="white">DevIL
+Documentation</font></td>
+<td align="right" valign="top"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00014.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00016.html">Next</a></td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilCloneCurImage</font></h2>
+
+<p><font size="-1">The <b>ilCloneCurImage</b> function creates a
+copy of the current image.</font></p>
+
+<pre>
+<code><b>ILuint ilCloneCurImage(
   ILvoid
 );</b>
 
-</code></pre>
+</code>
+</pre>
+
 <br>
 <h4>Parameters</h4>
-<font size=-1>
-<p>
-<i>None</i>
-</p>
-</font>
+
+<p><font size="-1"><i>None</i></font></p>
+
 <h4>Remarks</h4>
-<font size=-1>
-<p>
-<b>ilCloneCurImage</b> creates a copy of the current image and returns the id of the new image.  If a subimage of the current image is currently selected via <a href="../il/f00008.htm">ilActiveImage</a>, <a href="../il/f00190.htm">ilActiveLayer</a> or <a href="../il/f00009.htm">ilActiveMipmap</a>, the subimage is copied, not the base image.
-</p>
-</font>
+
+<p><font size="-1"><b>ilCloneCurImage</b> creates a copy of the
+current image and returns the id of the new image. If a subimage of
+the current image is currently selected via <a href=
+"./f00008.html">ilActiveImage</a>, <a href=
+"./f00190.html">ilActiveLayer</a> or <a href=
+"./f00009.html">ilActiveMipmap</a>, the subimage is copied, not the
+base image.</font></p>
+
 <h4>Error Codes</h4>
-<font size=-1>
-<p>
-IL_ILLEGAL_OPERATION - There is currently no image bound.  Use <a href="../il/f00026.htm">ilGenImages</a> and <a href="../il/f00013.htm">ilBindImage</a> before calling this function.
-</p>
-</font>
+
+<p><font size="-1">IL_ILLEGAL_OPERATION - There is currently no
+image bound. Use <a href="./f00026.html">ilGenImages</a> and <a
+href="./f00013.html">ilBindImage</a> before calling this
+function.</font></p>
+
 <h4>See Also</h4>
-<font size=-1>
-<p>
-<a href="../il/f00026.htm">ilGenImages</a>, <a href="../il/f00013.htm">ilBindImage</a>, <a href="../il/f00017.htm">ilCopyImage</a>, <a href="../il/f00008.htm">ilActiveImage</a>, <a href="../il/f00190.htm">ilActiveLayer</a>, <a href="../il/f00009.htm">ilActiveMipmap</a>
-</p><br>
-</font>
-</FONT>
-</BODY>
-</HTML>
+
+<p><font size="-1"><a href="./f00026.html">ilGenImages</a>, <a
+href="./f00013.html">ilBindImage</a>, <a href=
+"./f00017.html">ilCopyImage</a>, <a href=
+"./f00008.html">ilActiveImage</a>, <a href=
+"./f00190.html">ilActiveLayer</a>, <a href=
+"./f00009.html">ilActiveMipmap</a></font></p>
+
+<br>
+ 
+</body>
+</html>
+

@@ -1,83 +1,91 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<HTML>
-<HEAD>
-<TITLE>DevIL Documentation, iluEnlargeImage</TITLE>
-<STYLE TYPE = "text/css">
- 	A:link		{color: 0000FF;}
-	A:link		{text-decoration: none;}
-	A:visited	{color: 000080;}
-	A:visited	{text-decoration: none;}
-	A:active	{color: 000080;}
-	A:active	{text-decoration: none;}
-	A:hover		{color: 000080;}
-	A:hover		{text-decoration: underline;}
-</STYLE>
-
-</HEAD>
-
-<BODY TOPMARGIN=0 bgcolor="white">
-<FONT face="verdana">
-
-<IMG SRC="..\images\devil.gif">
-<br>
-<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
-<TR ALIGN=RIGHT>
-
-<TD ALIGN=LEFT>
-<FONT color="white">DevIL Documentation</FONT>
-</TD>
-
-<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../ilu/f00138.htm">Previous</A></font> <font color="white">|</font> <A HREF="../ilu/f00096.htm">Next</A>
-</TD>
-
-</TR>
-</TABLE>
-<h2>iluEnlargeImage</h2>
-<font size=-1>
-<p>The <b>iluEnlargeImage</b> function enlarges an image's dimensions by multipliers.</p>
+<html>
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 1st February 2002), see www.w3.org">
+<title>DevIL Documentation, iluEnlargeImage</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
 </font>
-<pre><code>
-<b>ILboolean iluEnlargeImage(
-  ILfloat</b><i> XDim,</i><b>
-  ILfloat</b><i> YDim,</i><b>
-  ILfloat</b><i> ZDim</i><b>
-);</b>
-</code></pre>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="right">
+<td align="left"><font color="white">DevIL
+Documentation</font></td>
+<td align="right" valign="top"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00138.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00096.html">Next</a></td>
+</tr>
+</table>
+
+<h2><font face="verdana">iluEnlargeImage</font></h2>
+
+<p><font size="-1">The <b>iluEnlargeImage</b> function enlarges an
+image's dimensions by multipliers.</font></p>
+
+<pre>
+<code><b>ILboolean iluEnlargeImage(
+  ILfloat</b> <i>XDim,</i> <b> ILfloat</b> <i>YDim,</i> <b> ILfloat</b> <i>ZDim</i><b>);</b>
+</code>
+</pre>
+
 <br>
 <h4>Parameters</h4>
-<font size=-1>
-<p>
+
 <dl>
-<dt><i>XDim</i></dt>
+<dt><font size="-1"><i>XDim</i></font></dt>
+
 <dd>Width multiplier.</dd>
+
 <dt><i>YDim</i></dt>
+
 <dd>Height multiplier.</dd>
+
 <dt><i>ZDim</i></dt>
+
 <dd>Depth multiplier.</dd>
 </dl>
-</p>
-</font>
-<h4>Remarks</h4>
-<font size=-1>
-<p>
-<b>iluEnlargeImage</b> enlarges an image's dimensions by multipliers, via <a href="../ilu/f00099.htm">iluScale</a>.  This function could be useful if you wanted to double the size of all images or something similar.
-</p>
-</font>
-<h4>Error Codes</h4>
-<font size=-1>
-<p>
-ILU_ILLEGAL_OPERATION - There is currently no image bound.  Use <a href="../il/f00026.htm">ilGenImages</a> and <a href="../il/f00013.htm">ilBindImage</a> before calling this function.
+
 <br>
-ILU_INVALID_PARAM - <i>XDim</i>, <i>YDim</i> or <i>ZDim</i> was equal to or less than 0.0f.
-</p>
-</font>
+<br>
+  
+
+<h4>Remarks</h4>
+
+<p><font size="-1"><b>iluEnlargeImage</b> enlarges an image's
+dimensions by multipliers, via <a href=
+"./f00099.html">iluScale</a>. This function could be useful if you
+wanted to double the size of all images or something
+similar.</font></p>
+
+<h4>Error Codes</h4>
+
+<p><font size="-1">ILU_ILLEGAL_OPERATION - There is currently no
+image bound. Use <a href="../IL/f00026.html">ilGenImages</a> and <a
+href="../IL/f00013.html">ilBindImage</a> before calling this
+function.<br>
+ ILU_INVALID_PARAM - <i>XDim</i>, <i>YDim</i> or <i>ZDim</i> was
+equal to or less than 0.0f.</font></p>
+
 <h4>See Also</h4>
-<font size=-1>
-<p>
-<a href="../il/f00026.htm">ilGenImages</a>, <a href="../il/f00013.htm">ilBindImage</a>
-</p><br>
-</font>
-</FONT>
-</BODY>
-</HTML>
+
+<p><font size="-1"><a href="../IL/f00026.html">ilGenImages</a>, <a
+href="../IL/f00013.html">ilBindImage</a></font></p>
+
+<br>
+ 
+</body>
+</html>
+

@@ -1,84 +1,114 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<HTML>
-<HEAD>
-<TITLE>DevIL Documentation, iluEdgeDetectS</TITLE>
-<STYLE TYPE = "text/css">
- 	A:link		{color: 0000FF;}
-	A:link		{text-decoration: none;}
-	A:visited	{color: 000080;}
-	A:visited	{text-decoration: none;}
-	A:active	{color: 000080;}
-	A:active	{text-decoration: none;}
-	A:hover		{color: 000080;}
-	A:hover		{text-decoration: underline;}
-</STYLE>
-
-</HEAD>
-
-<BODY TOPMARGIN=0 bgcolor="white">
-<FONT face="verdana">
-
-<IMG SRC="..\images\devil.gif">
-<br>
-<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
-<TR ALIGN=RIGHT>
-
-<TD ALIGN=LEFT>
-<FONT color="white">DevIL Documentation</FONT>
-</TD>
-
-<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../ilu/f00136.htm">Previous</A></font> <font color="white">|</font> <A HREF="../ilu/f00181.htm">Next</A>
-</TD>
-
-</TR>
-</TABLE>
-<h2>iluEdgeDetectS</h2>
-<font size=-1>
-<p>The <b>iluEdgeDetectS</b> function detects the edges of the current image.</p>
+<html>
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 1st February 2002), see www.w3.org">
+<title>DevIL Documentation, iluEdgeDetectS</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
 </font>
-<pre><code>
-<b>ILboolean iluEdgeDetectS(
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="right">
+<td align="left"><font color="white">DevIL
+Documentation</font></td>
+<td align="right" valign="top"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00136.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00181.html">Next</a></td>
+</tr>
+</table>
+
+<h2><font face="verdana">iluEdgeDetectS</font></h2>
+
+<p><font size="-1">The <b>iluEdgeDetectS</b> function detects the
+edges of the current image.</font></p>
+
+<pre>
+<code><b>ILboolean iluEdgeDetectS(
   ILvoid
 );</b>
-</code></pre>
+</code>
+</pre>
+
 <br>
 <h4>Parameters</h4>
-<font size=-1>
-<p>
-<i>None</i>
-</p>
-</font>
+
+<p><font size="-1"><i>None</i></font></p>
+
 <h4>Remarks</h4>
-<font size=-1>
-<p>
-<b>iluEdgeDetectS</b> detects the edges in the current image by combining two convolution filters.  The filters used are Sobel filters.  The two filters are:
-<p>
-<dd><tt>&nbsp;1,&nbsp;&nbsp;2,&nbsp;&nbsp;1,</tt></dd><br>
-<dd><tt>&nbsp;0,&nbsp;&nbsp;0,&nbsp;&nbsp;0,</tt></dd><br>
-<dd><tt>-1,&nbsp;-2,&nbsp;-1,</tt></dd><br>
-<dd><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1</tt>
-<p>
-<tt>
-<dd>1, 0, -1,</dd><br>
-<dd>2, 0, -2,</dd><br>
-<dd>1, 0, -1,</dd><br>
-<dd>&nbsp;&nbsp;&nbsp;1
-</tt>
-</p>
-</font>
+
+<p><font size="-1"><b>iluEdgeDetectS</b> detects the edges in the
+current image by combining two convolution filters. The filters
+used are Sobel filters. The two filters are:</font></p>
+
+<dl>
+<dd><font size=
+"-1"><tt>&nbsp;1,&nbsp;&nbsp;2,&nbsp;&nbsp;1,</tt></font></dd>
+
+<dd><br>
+</dd>
+
+<dd><tt>&nbsp;0,&nbsp;&nbsp;0,&nbsp;&nbsp;0,</tt></dd>
+
+<dd><br>
+</dd>
+
+<dd><tt>-1,&nbsp;-2,&nbsp;-1,</tt></dd>
+
+<dd><br>
+</dd>
+
+<dd><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1</tt></dd>
+</dl>
+
+<dl>
+<dd><tt>1, 0, -1,</tt></dd>
+
+<dd><br>
+</dd>
+
+<dd>2, 0, -2,</dd>
+
+<dd><br>
+</dd>
+
+<dd>1, 0, -1,</dd>
+
+<dd><br>
+</dd>
+
+<dd>&nbsp;&nbsp;&nbsp;1  <br>
+<br>
+ </dd>
+</dl>
+
 <h4>Error Codes</h4>
-<font size=-1>
-<p>
-ILU_ILLEGAL_OPERATION - There is currently no image bound.  Use <a href="../il/f00026.htm">ilGenImages</a> and <a href="../il/f00013.htm">ilBindImage</a> before calling this function.
-</p>
-</font>
+
+<p><font size="-1">ILU_ILLEGAL_OPERATION - There is currently no
+image bound. Use <a href="../IL/f00026.html">ilGenImages</a> and <a
+href="../IL/f00013.html">ilBindImage</a> before calling this
+function.</font></p>
+
 <h4>See Also</h4>
-<font size=-1>
-<p>
-<a href="../il/f00026.htm">ilGenImages</a>, <a href="../il/f00013.htm">ilBindImage</a>, <a href="../ilu/f00136.htm">iluEdgeDetectP</a>
-</p><br>
-</font>
-</FONT>
-</BODY>
-</HTML>
+
+<p><font size="-1"><a href="../IL/f00026.html">ilGenImages</a>, <a
+href="../IL/f00013.html">ilBindImage</a>, <a href=
+"./f00136.html">iluEdgeDetectP</a></font></p>
+
+<br>
+ 
+</body>
+</html>
+

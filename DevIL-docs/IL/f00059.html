@@ -1,103 +1,134 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<HTML>
-<HEAD>
-<TITLE>DevIL Documentation, ilTexImage</TITLE>
-<STYLE TYPE = "text/css">
- 	A:link		{color: 0000FF;}
-	A:link		{text-decoration: none;}
-	A:visited	{color: 000080;}
-	A:visited	{text-decoration: none;}
-	A:active	{color: 000080;}
-	A:active	{text-decoration: none;}
-	A:hover		{color: 000080;}
-	A:hover		{text-decoration: underline;}
-</STYLE>
-
-</HEAD>
-
-<BODY TOPMARGIN=0 bgcolor="white">
-<FONT face="verdana">
-
-<IMG SRC="..\images\devil.gif">
-<br>
-<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
-<TR ALIGN=RIGHT>
-
-<TD ALIGN=LEFT>
-<FONT color="white">DevIL Documentation</FONT>
-</TD>
-
-<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00209.htm">Previous</A></font> <font color="white">|</font> <A HREF="../ilu/f00129.htm">Next</A>
-</TD>
-
-</TR>
-</TABLE>
-<h2>ilTexImage</h2>
-<font size=-1>
-<p>The <b>ilTexImage</b> function changes the current bound image to use new dimensions.</p>
+<html>
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 1st February 2002), see www.w3.org">
+<title>DevIL Documentation, ilTexImage</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
 </font>
-<pre><code>
-<b>ILboolean ilTexImage(
-  ILuint</b><i> Width,</i><b>
-  ILuint</b><i> Height,</i><b>
-  ILuint</b><i> Depth,</i><b>
-  ILubyte</b><i> Bpp,</i><b>
-  ILenum</b><i> Format,</i><b>
-  ILenum</b><i> Type,</i><b>
-  ILvoid</b><i> *Data</i>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="right">
+<td align="left"><font color="white">DevIL
+Documentation</font></td>
+<td align="right" valign="top"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00209.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"../ILU/f00129.html">Next</a></td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilTexImage</font></h2>
+
+<p><font size="-1">The <b>ilTexImage</b> function changes the
+current bound image to use new dimensions.</font></p>
+
+<pre>
+<code><b>ILboolean ilTexImage(
+  ILuint</b> <i>Width,</i> <b> ILuint</b> <i>Height,</i> <b> ILuint</b> <i>Depth,</i> <b> ILubyte</b> <i>Bpp,</i> <b> ILenum</b> <i>Format,</i> <b> ILenum</b> <i>Type,</i> <b> ILvoid</b> <i>*Data</i>
 <b>);</b>
-</code></pre>
+</code>
+</pre>
+
 <br>
 <h4>Parameters</h4>
-<font size=-1>
-<p>
+
 <dl>
-<i><dt>Width</dt></i>
-<dd>Specifies the new image width.  This cannot be 0.</dd>
-<br>
-<i><dt>Height</dt></i>
-<dd>Specifies the new image height.  This cannot be 0.</dd>
-<br>
-<i><dt>Depth</dt></i>
-<dd>Specifies the new image depth.  Anything greater than 1 will make the image 3d.  This cannot be 0.</dd>
-<br>
-<i><dt>Bpp</dt></i>
-<dd>Specifies the new bytes per pixel (not bits per pixel).  Common values are 3 and 4.</dd>
-<br>
-<i><dt>Format</dt></i>
-<dd>Specifies the data format this image has.  For a list of values this can be, see the See Also section.</dd>
-<br>
-<i><dt>Type</dt></i>
-<dd>Specifies the data format this image has.  For a list of values this can be, see the See Also section.</dd>
-<br>
-<i><dt>Data</dt></i>
-<dd>Specifies data that should be copied to the new image.  If this parameter is NULL, no data is copied, and the new image data consists of undefined values.</dd>
+<dt><font size="-1"><i>Width</i></font></dt>
+
+<dd>Specifies the new image width. This cannot be 0.</dd>
+
+<dd><br>
+</dd>
+
+<dt><i>Height</i></dt>
+
+<dd>Specifies the new image height. This cannot be 0.</dd>
+
+<dd><br>
+</dd>
+
+<dt><i>Depth</i></dt>
+
+<dd>Specifies the new image depth. Anything greater than 1 will
+make the image 3d. This cannot be 0.</dd>
+
+<dd><br>
+</dd>
+
+<dt><i>Bpp</i></dt>
+
+<dd>Specifies the new bytes per pixel (not bits per pixel). Common
+values are 3 and 4.</dd>
+
+<dd><br>
+</dd>
+
+<dt><i>Format</i></dt>
+
+<dd>Specifies the data format this image has. For a list of values
+this can be, see the See Also section.</dd>
+
+<dd><br>
+</dd>
+
+<dt><i>Type</i></dt>
+
+<dd>Specifies the data format this image has. For a list of values
+this can be, see the See Also section.</dd>
+
+<dd><br>
+</dd>
+
+<dt><i>Data</i></dt>
+
+<dd>Specifies data that should be copied to the new image. If this
+parameter is NULL, no data is copied, and the new image data
+consists of undefined values.</dd>
 </dl>
-</p>
-</font>
+
+<br>
+<br>
+  
+
 <h4>Remarks</h4>
-<font size=-1>
-<p>
-Any current image data is destroyed by <b>ilTexImage</b> and replaced by a new image with the attributes specified.  The new image data has undefined values.  To set the new image data to a certain value, use <b>ilClearImage</b> or <b>ilClearImageTo</b>.
-</p>
-</font>
+
+<p><font size="-1">Any current image data is destroyed by
+<b>ilTexImage</b> and replaced by a new image with the attributes
+specified. The new image data has undefined values. To set the new
+image data to a certain value, use <b>ilClearImage</b> or
+<b>ilClearImageTo</b>.</font></p>
+
 <h4>Error Codes</h4>
-<font size=-1>
-<p>
-IL_ILLEGAL_OPERATION - There is currently no image bound.  Use <a href="../il/f00026.htm">ilGenImages</a> and <a href="../il/f00013.htm">ilBindImage</a> before calling this function.
-<br>
-IL_INVALID_PARAM - One of the parameters provided was invalid.  Width, Height, Depth or Bpp was an incorrect 0.
-<br>
-IL_OUT_OF_MEMORY - Could not allocate memory for the new image data.
-</p>
-</font>
+
+<p><font size="-1">IL_ILLEGAL_OPERATION - There is currently no
+image bound. Use <a href="./f00026.html">ilGenImages</a> and <a
+href="./f00013.html">ilBindImage</a> before calling this
+function.<br>
+ IL_INVALID_PARAM - One of the parameters provided was invalid.
+Width, Height, Depth or Bpp was an incorrect 0.<br>
+ IL_OUT_OF_MEMORY - Could not allocate memory for the new image
+data.</font></p>
+
 <h4>See Also</h4>
-<font size=-1>
-<p>
-<a href="../il/f00026.htm">ilGenImages</a>, <a href="../il/f00013.htm">ilBindImage</a>
-</p><br>
-</font>
-</FONT>
-</BODY>
-</HTML>
+
+<p><font size="-1"><a href="./f00026.html">ilGenImages</a>, <a
+href="./f00013.html">ilBindImage</a></font></p>
+
+<br>
+ 
+</body>
+</html>
+

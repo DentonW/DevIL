@@ -1,89 +1,101 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<HTML>
-<HEAD>
-<TITLE>DevIL Documentation, ilutEnable, ilutDisable</TITLE>
-<STYLE TYPE = "text/css">
- 	A:link		{color: 0000FF;}
-	A:link		{text-decoration: none;}
-	A:visited	{color: 000080;}
-	A:visited	{text-decoration: none;}
-	A:active	{color: 000080;}
-	A:active	{text-decoration: none;}
-	A:hover		{color: 000080;}
-	A:hover		{text-decoration: underline;}
-</STYLE>
-
-</HEAD>
-
-<BODY TOPMARGIN=0 bgcolor="white">
-<FONT face="verdana">
-
-<IMG SRC="..\images\devil.gif">
-<br>
-<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
-<TR ALIGN=RIGHT>
-
-<TD ALIGN=LEFT>
-<FONT color="white">DevIL Documentation</FONT>
-</TD>
-
-<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../ilut/f00122.htm">Previous</A></font> <font color="white">|</font> <A HREF="../ilut/f00186.htm">Next</A>
-</TD>
-
-</TR>
-</TABLE>
-<h2>ilutEnable, ilutDisable</h2>
-<font size=-1>
-<p>These functions enable or disable an OpenILUT state.</p>
+<html>
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 1st February 2002), see www.w3.org">
+<title>DevIL Documentation, ilutEnable, ilutDisable</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
 </font>
-<pre><code>
-<b>ILboolean ilutEnable(
-  ILenum</b><i> Mode</i><b>
-);
-<p>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="right">
+<td align="left"><font color="white">DevIL
+Documentation</font></td>
+<td align="right" valign="top"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00122.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00186.html">Next</a></td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilutEnable, ilutDisable</font></h2>
+
+<p><font size="-1">These functions enable or disable an OpenILUT
+state.</font></p>
+
+<pre>
+<code><b>ILboolean ilutEnable(
+  ILenum</b> <i>Mode</i><b>);
+<br>
 ILboolean ilutDisable(
-  ILenum</b><i> Mode</i><b>
-);</b>
-</code></pre>
+  ILenum</b> <i>Mode</i><b>);</b>
+</code>
+</pre>
+
 <br>
 <h4>Parameters</h4>
-<font size=-1>
-<p>
+
 <dl>
-<dt><i>Mode</i></dt>
+<dt><font size="-1"><i>Mode</i></font></dt>
+
 <dd>Mode to enable/disable.</dd>
 </dl>
-</p>
-</font>
+
+<br>
+<br>
+  
+
 <h4>Remarks</h4>
-<font size=-1>
-<p>
-<b>ilutEnable</b> enables a mode specified by <i>Mode</i>.  <b>ilutDisable</b> disables a mode specified by <i>Mode</i>.
-<p>
-A list of available modes and their meaning:
-<p>
+
+<p><font size="-1"><b>ilutEnable</b> enables a mode specified by
+<i>Mode</i>. <b>ilutDisable</b> disables a mode specified by
+<i>Mode</i>.</font></p>
+
+<p><font size="-1">A list of available modes and their
+meaning:</font></p>
+
 <dl>
-<dt>ILUT_PALETTE_MODE</dt>
+<dt><font size="-1">ILUT_PALETTE_MODE</font></dt>
+
 <dd>Does nothing currently.</dd>
-<p>
+
 <dt>ILUT_OPENGL_CONV</dt>
-<dd>When enabled, OpenIL passes GL_RGB8 and GL_RGBA8 to OpenGL instead of GL_RGB and GL_RGBA.  This can give better visual quality on some nVidia-based cards (at the price of increased memory usage).</dd>
+
+<dd>When enabled, OpenIL passes GL_RGB8 and GL_RGBA8 to OpenGL
+instead of GL_RGB and GL_RGBA. This can give better visual quality
+on some nVidia-based cards (at the price of increased memory
+usage).</dd>
 </dl>
-</p>
-</font>
+
+<br>
+<br>
+  
+
 <h4>Error Codes</h4>
-<font size=-1>
-<p>
-ILUT_INVALID_ENUM - <i>Mode</i> was of an unsupported value.
-</p>
-</font>
+
+<p><font size="-1">ILUT_INVALID_ENUM - <i>Mode</i> was of an
+unsupported value.</font></p>
+
 <h4>See Also</h4>
-<font size=-1>
-<p>
-<a href="../ilut/f00109.htm">ilutIsEnabled, ilutIsDisabled</a>, <a href="../il/f00024.htm">ilEnable, ilDisable</a>
-</p><br>
-</font>
-</FONT>
-</BODY>
-</HTML>
+
+<p><font size="-1"><a href="./f00109.html">ilutIsEnabled,
+ilutIsDisabled</a>, <a href="../IL/f00024.html">ilEnable,
+ilDisable</a></font></p>
+
+<br>
+ 
+</body>
+</html>
+

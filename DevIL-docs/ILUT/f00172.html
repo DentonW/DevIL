@@ -1,75 +1,86 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<HTML>
-<HEAD>
-<TITLE>DevIL Documentation, ilutGLTexImage</TITLE>
-<STYLE TYPE = "text/css">
- 	A:link		{color: 0000FF;}
-	A:link		{text-decoration: none;}
-	A:visited	{color: 000080;}
-	A:visited	{text-decoration: none;}
-	A:active	{color: 000080;}
-	A:active	{text-decoration: none;}
-	A:hover		{color: 000080;}
-	A:hover		{text-decoration: underline;}
-</STYLE>
-
-</HEAD>
-
-<BODY TOPMARGIN=0 bgcolor="white">
-<FONT face="verdana">
-
-<IMG SRC="..\images\devil.gif">
-<br>
-<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
-<TR ALIGN=RIGHT>
-
-<TD ALIGN=LEFT>
-<FONT color="white">DevIL Documentation</FONT>
-</TD>
-
-<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../ilut/f00175.htm">Previous</A></font> <font color="white">|</font> <A HREF="../ilut/f00109.htm">Next</A>
-</TD>
-
-</TR>
-</TABLE>
-<h2>ilutGLTexImage</h2>
-<font size=-1>
-<p>The <b>ilutGLTexImage</b> function binds an image to an OpenGL texture.</p>
+<html>
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 1st February 2002), see www.w3.org">
+<title>DevIL Documentation, ilutGLTexImage</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
 </font>
-<pre><code>
-<b>ILboolean ilutGLTexImage(
-  GLuint</b><i> Level</i><b>
-);</b>
-</code></pre>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="right">
+<td align="left"><font color="white">DevIL
+Documentation</font></td>
+<td align="right" valign="top"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00175.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00109.html">Next</a></td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilutGLTexImage</font></h2>
+
+<p><font size="-1">The <b>ilutGLTexImage</b> function binds an
+image to an OpenGL texture.</font></p>
+
+<pre>
+<code><b>ILboolean ilutGLTexImage(
+  GLuint</b> <i>Level</i><b>);</b>
+</code>
+</pre>
+
 <br>
 <h4>Parameters</h4>
-<font size=-1>
-<p>
+
 <dl>
-<dt><i>Level</i></dt>
-<dd>Texture level to place the image at.  0 is the base image level, and anything lower is a mipmap.  Use <a href="../il/f00009.htm">ilActiveMipmap</a> to access OpenIL's mipmaps.</dd>
+<dt><font size="-1"><i>Level</i></font></dt>
+
+<dd>Texture level to place the image at. 0 is the base image level,
+and anything lower is a mipmap. Use <a href=
+"../IL/f00009.html">ilActiveMipmap</a> to access OpenIL's
+mipmaps.</dd>
 </dl>
-</p>
-</font>
+
+<br>
+<br>
+  
+
 <h4>Remarks</h4>
-<font size=-1>
-<p>
-<b>ilutGLTexImage</b> simply calls glTexImage2D with the current bound image's data and attributes.
-</p>
-</font>
+
+<p><font size="-1"><b>ilutGLTexImage</b> simply calls glTexImage2D
+with the current bound image's data and attributes.</font></p>
+
 <h4>Error Codes</h4>
-<font size=-1>
-<p>
-ILUT_ILLEGAL_OPERATION - There is currently no image bound.  Use <a href="../il/f00026.htm">ilGenImages</a> and <a href="../il/f00013.htm">ilBindImage</a> before calling this function.
-</p>
-</font>
+
+<p><font size="-1">ILUT_ILLEGAL_OPERATION - There is currently no
+image bound. Use <a href="../IL/f00026.html">ilGenImages</a> and <a
+href="../IL/f00013.html">ilBindImage</a> before calling this
+function.</font></p>
+
 <h4>See Also</h4>
-<font size=-1>
-<p>
-<a href="../il/f00026.htm">ilGenImages</a>, <a href="../il/f00013.htm">ilBindImage</a>, <a href="../il/f00009.htm">ilActiveMipmap</a>, <a href="../ilut/f00171.htm">ilutOglBindTexImage</a>, <a href="../ilut/f00173.htm">ilutOglBuildMipmaps</a>, <a href="../ilut/f00174.htm">ilutOglScreen</a>, <a href="../ilut/f00175.htm">ilutGLScreenie</a>
-</p><br>
-</font>
-</FONT>
-</BODY>
-</HTML>
+
+<p><font size="-1"><a href="../IL/f00026.html">ilGenImages</a>, <a
+href="../IL/f00013.html">ilBindImage</a>, <a href=
+"../IL/f00009.html">ilActiveMipmap</a>, <a href=
+"./f00171.html">ilutOglBindTexImage</a>, <a href=
+"./f00173.html">ilutOglBuildMipmaps</a>, <a href=
+"./f00174.html">ilutOglScreen</a>, <a href=
+"./f00175.html">ilutGLScreenie</a></font></p>
+
+<br>
+ 
+</body>
+</html>
+

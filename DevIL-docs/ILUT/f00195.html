@@ -1,78 +1,81 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<HTML>
-<HEAD>
-<TITLE>DevIL Documentation, ilutWinLoadImage</TITLE>
-<STYLE TYPE = "text/css">
- 	A:link		{color: 0000FF;}
-	A:link		{text-decoration: none;}
-	A:visited	{color: 000080;}
-	A:visited	{text-decoration: none;}
-	A:active	{color: 000080;}
-	A:active	{text-decoration: none;}
-	A:hover		{color: 000080;}
-	A:hover		{text-decoration: underline;}
-</STYLE>
-
-</HEAD>
-
-<BODY TOPMARGIN=0 bgcolor="white">
-<FONT face="verdana">
-
-<IMG SRC="..\images\devil.gif">
-<br>
-<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
-<TR ALIGN=RIGHT>
-
-<TD ALIGN=LEFT>
-<FONT color="white">DevIL Documentation</FONT>
-</TD>
-
-<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../ilut/f00169.htm">Previous</A></font> <font color="white">|</font> <A HREF="../ilut/f00197.htm">Next</A>
-</TD>
-
-</TR>
-</TABLE>
-<h2>ilutWinLoadImage</h2>
-<font size=-1>
-<p>The <b>ilutWinLoadImage</b> function loads an image to a Win32 bitmap.</p>
+<html>
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 1st February 2002), see www.w3.org">
+<title>DevIL Documentation, ilutWinLoadImage</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
 </font>
-<pre><code>
-<b>HBITMAP ilutWinLoadImage(
-  char</b><i> *FileName,</i><b>
-  HDC</b><i> hDC</i><b>
-);</b>
-</code></pre>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="right">
+<td align="left"><font color="white">DevIL
+Documentation</font></td>
+<td align="right" valign="top"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00169.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00197.html">Next</a></td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilutWinLoadImage</font></h2>
+
+<p><font size="-1">The <b>ilutWinLoadImage</b> function loads an
+image to a Win32 bitmap.</font></p>
+
+<pre>
+<code><b>HBITMAP ilutWinLoadImage(
+  char</b> <i>*FileName,</i> <b> HDC</b> <i>hDC</i><b>);</b>
+</code>
+</pre>
+
 <br>
 <h4>Parameters</h4>
-<font size=-1>
-<p>
+
 <dl>
-<dt><i>FileName</i></dt>
+<dt><font size="-1"><i>FileName</i></font></dt>
+
 <dd>Name of the image file to load.</dd>
+
 <dt><i>hDC</i></dt>
+
 <dd>Device context the bitmap should reside in.</dd>
 </dl>
-</p>
-</font>
+
+<br>
+<br>
+  
+
 <h4>Remarks</h4>
-<font size=-1>
-<p>
-<b>ilutWinLoadImage</b> loads an image directly to a Win32 HBITMAP, skipping the use of OpenIL image names.
-</p>
-</font>
+
+<p><font size="-1"><b>ilutWinLoadImage</b> loads an image directly
+to a Win32 HBITMAP, skipping the use of OpenIL image
+names.</font></p>
+
 <h4>Error Codes</h4>
-<font size=-1>
-<p>
-None
-</p>
-</font>
+
+<p><font size="-1">None</font></p>
+
 <h4>See Also</h4>
-<font size=-1>
-<p>
-<a href="../il/f00039.htm">ilLoadImage</a>, <a href="../ilut/f00194.htm">ilutOglLoadImage</a>, <a href="../ilut/f00197.htm">ilutWinSaveImage</a>
-</p><br>
-</font>
-</FONT>
-</BODY>
-</HTML>
+
+<p><font size="-1"><a href="../IL/f00039.html">ilLoadImage</a>, <a
+href="./f00194.html">ilutOglLoadImage</a>, <a href=
+"./f00197.html">ilutWinSaveImage</a></font></p>
+
+<br>
+ 
+</body>
+</html>
+

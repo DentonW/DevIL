@@ -1,78 +1,88 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<HTML>
-<HEAD>
-<TITLE>DevIL Documentation, ilRegisterLoad</TITLE>
-<STYLE TYPE = "text/css">
- 	A:link		{color: 0000FF;}
-	A:link		{text-decoration: none;}
-	A:visited	{color: 000080;}
-	A:visited	{text-decoration: none;}
-	A:active	{color: 000080;}
-	A:active	{text-decoration: none;}
-	A:hover		{color: 000080;}
-	A:hover		{text-decoration: underline;}
-</STYLE>
-
-</HEAD>
-
-<BODY TOPMARGIN=0 bgcolor="white">
-<FONT face="verdana">
-
-<IMG SRC="..\images\devil.gif">
-<br>
-<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
-<TR ALIGN=RIGHT>
-
-<TD ALIGN=LEFT>
-<FONT color="white">DevIL Documentation</FONT>
-</TD>
-
-<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00154.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00184.htm">Next</A>
-</TD>
-
-</TR>
-</TABLE>
-<h2>ilRegisterLoad</h2>
-<font size=-1>
-<p>The <b>ilRegisterLoad</b> function registers a function to load a new imagetype, extending OpenIL's capabilities.</p>
+<html>
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 1st February 2002), see www.w3.org">
+<title>DevIL Documentation, ilRegisterLoad</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
 </font>
-<pre><code>
-<b>ILboolean ilRegisterLoad(
-  char</b><i> *Ext,</i><b>
-  IL_LOADPROC</b><i> Load</i><b>
-);</b>
-</code></pre>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="right">
+<td align="left"><font color="white">DevIL
+Documentation</font></td>
+<td align="right" valign="top"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00154.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00184.html">Next</a></td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilRegisterLoad</font></h2>
+
+<p><font size="-1">The <b>ilRegisterLoad</b> function registers a
+function to load a new imagetype, extending OpenIL's
+capabilities.</font></p>
+
+<pre>
+<code><b>ILboolean ilRegisterLoad(
+  char</b> <i>*Ext,</i> <b> IL_LOADPROC</b> <i>Load</i><b>);</b>
+</code>
+</pre>
+
 <br>
 <h4>Parameters</h4>
-<font size=-1>
-<p>
+
 <dl>
-<dt><i>Ext</i></dt>
+<dt><font size="-1"><i>Ext</i></font></dt>
+
 <dd>Extension of the image type to load.</dd>
+
 <dt><i>Load</i></dt>
+
 <dd>Pointer to a loading function.</dd>
 </dl>
-</p>
-</font>
+
+<br>
+<br>
+  
+
 <h4>Remarks</h4>
-<font size=-1>
-<p>
-<b>ilRegisterLoad</b> allows the user to register functions for use by OpenIL, when loading unknown image types.  The user can also override the default internal loading functions by passing their extension in <i>Ext</i> when using <a href="../il/f00039.htm">ilLoadImage</a>.  <b>ilRegisterLoad</b> allows the user to use their own loading functions while using OpenIL's capabilities, or to extend OpenIL when it does not support a specific image format.
-</p>
-</font>
+
+<p><font size="-1"><b>ilRegisterLoad</b> allows the user to
+register functions for use by OpenIL, when loading unknown image
+types. The user can also override the default internal loading
+functions by passing their extension in <i>Ext</i> when using <a
+href="./f00039.html">ilLoadImage</a>. <b>ilRegisterLoad</b> allows
+the user to use their own loading functions while using OpenIL's
+capabilities, or to extend OpenIL when it does not support a
+specific image format.</font></p>
+
 <h4>Error Codes</h4>
-<font size=-1>
-<p>
-IL_OUT_OF_MEMORY - Could not allocate enough memory to use the loading function.
-</p>
-</font>
+
+<p><font size="-1">IL_OUT_OF_MEMORY - Could not allocate enough
+memory to use the loading function.</font></p>
+
 <h4>See Also</h4>
-<font size=-1>
-<p>
-<a href="../il/f00158.htm">ilRegisterSave</a>, <a href="../il/f00159.htm">ilRemoveLoad</a>, <a href="../il/f00160.htm">ilRemoveSave</a>
-</p><br>
-</font>
-</FONT>
-</BODY>
-</HTML>
+
+<p><font size="-1"><a href="./f00158.html">ilRegisterSave</a>, <a
+href="./f00159.html">ilRemoveLoad</a>, <a href=
+"./f00160.html">ilRemoveSave</a></font></p>
+
+<br>
+ 
+</body>
+</html>
+

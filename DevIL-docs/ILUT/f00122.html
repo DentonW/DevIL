@@ -1,77 +1,82 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 "http://www.w3.org/TR/REC-html40/loose.dtd">
-<HTML>
-<HEAD>
-<TITLE>DevIL Documentation, ilutConvertToHBitmap</TITLE>
-<STYLE TYPE = "text/css">
- 	A:link		{color: 0000FF;}
-	A:link		{text-decoration: none;}
-	A:visited	{color: 000080;}
-	A:visited	{text-decoration: none;}
-	A:active	{color: 000080;}
-	A:active	{text-decoration: none;}
-	A:hover		{color: 000080;}
-	A:hover		{text-decoration: underline;}
-</STYLE>
-
-</HEAD>
-
-<BODY TOPMARGIN=0 bgcolor="white">
-<FONT face="verdana">
-
-<IMG SRC="..\images\devil.gif">
-<br>
-<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
-<TR ALIGN=RIGHT>
-
-<TD ALIGN=LEFT>
-<FONT color="white">DevIL Documentation</FONT>
-</TD>
-
-<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../ilut/f00121.htm">Previous</A></font> <font color="white">|</font> <A HREF="../ilut/f00103.htm">Next</A>
-</TD>
-
-</TR>
-</TABLE>
-<h2>ilutConvertToHBitmap</h2>
-<font size=-1>
-<p>The <b>ilutConvertToHBitmap</b> function returns a Windows-friendly bitmap handle.</p>
+<html>
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 1st February 2002), see www.w3.org">
+<title>DevIL Documentation, ilutConvertToHBitmap</title>
+<style type="text/css">
+    A:link      {color: 0000FF;}
+    A:link      {text-decoration: none;}
+    A:visited   {color: 000080;}
+    A:visited   {text-decoration: none;}
+    A:active    {color: 000080;}
+    A:active    {text-decoration: none;}
+    A:hover     {color: 000080;}
+    A:hover     {text-decoration: underline;}
+</style>
+</head>
+<body topmargin="0" bgcolor="white">
+<font face="verdana"><img src="../images/DevIL.gif"><br>
 </font>
-<pre><code>
-<b>HBITMAP ilutConvertToHBitmap(
-  HDC</b><i> hDC</i><b>
-);</b>
-</code></pre>
+<table width="100%" cols="2" border="0" bgcolor="navy">
+<tr align="right">
+<td align="left"><font color="white">DevIL
+Documentation</font></td>
+<td align="right" valign="top"><a href="../index.html">Home</a>
+<font color="white">|</font> <a href="./f00121.html"><font color=
+"gray">Previous</font></a> <font color="white">|</font> <a href=
+"./f00103.html">Next</a></td>
+</tr>
+</table>
+
+<h2><font face="verdana">ilutConvertToHBitmap</font></h2>
+
+<p><font size="-1">The <b>ilutConvertToHBitmap</b> function returns
+a Windows-friendly bitmap handle.</font></p>
+
+<pre>
+<code><b>HBITMAP ilutConvertToHBitmap(
+  HDC</b> <i>hDC</i><b>);</b>
+</code>
+</pre>
+
 <br>
 <h4>Parameters</h4>
-<font size=-1>
-<p>
+
 <dl>
-<dt><i>hDC</i></dt>
+<dt><font size="-1"><i>hDC</i></font></dt>
+
 <dd>The device context that you want to receive the HBITMAP.</dd>
 </dl>
-</p>
-</font>
-<h4>Remarks</h4>
-<font size=-1>
-<p>
-<b>ilutConvertToHBitmap</b> creates a Windows bitmap handle (HBITMAP) copy of the current image, for direct use in Windows.
-</p>
-</font>
-<h4>Error Codes</h4>
-<font size=-1>
-<p>
-ILUT_ILLEGAL_OPERATION - There is currently no image bound.  Use <a href="../il/f00026.htm">ilGenImages</a> and <a href="../il/f00013.htm">ilBindImage</a> before calling this function.
+
 <br>
-ILUT_OUT_OF_MEMORY - Could not allocate enough memory for the new bitmap.
-</p>
-</font>
+<br>
+  
+
+<h4>Remarks</h4>
+
+<p><font size="-1"><b>ilutConvertToHBitmap</b> creates a Windows
+bitmap handle (HBITMAP) copy of the current image, for direct use
+in Windows.</font></p>
+
+<h4>Error Codes</h4>
+
+<p><font size="-1">ILUT_ILLEGAL_OPERATION - There is currently no
+image bound. Use <a href="../IL/f00026.html">ilGenImages</a> and <a
+href="../IL/f00013.html">ilBindImage</a> before calling this
+function.<br>
+ ILUT_OUT_OF_MEMORY - Could not allocate enough memory for the new
+bitmap.</font></p>
+
 <h4>See Also</h4>
-<font size=-1>
-<p>
-<a href="../il/f00026.htm">ilGenImages</a>, <a href="../il/f00013.htm">ilBindImage</a>, <a href="../ilut/f00128.htm">ilutGetHPal</a>
-</p><br>
-</font>
-</FONT>
-</BODY>
-</HTML>
+
+<p><font size="-1"><a href="../IL/f00026.html">ilGenImages</a>, <a
+href="../IL/f00013.html">ilBindImage</a>, <a href=
+"./f00128.html">ilutGetHPal</a></font></p>
+
+<br>
+ 
+</body>
+</html>
+
