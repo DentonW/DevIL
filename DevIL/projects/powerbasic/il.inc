@@ -133,8 +133,8 @@
 ' IL-specific #define's
 '
 
-%IL_VERSION_1_3_0 = 1
-%IL_VERSION = 130
+%IL_VERSION_1_4_0 = 1
+%IL_VERSION = 140
 
 
 ' Attribute Bits
@@ -186,6 +186,9 @@
 %IL_GIF         = &H0436&
 %IL_DDS         = &H0437&
 %IL_DCX			= &H0438&
+%IL_PSD			= &H0439&
+%IL_EXIF		= &H043A&
+%IL_PSP			= &H043B&
 
 %IL_JASC_PAL	= &H0475&
 
@@ -208,6 +211,9 @@
 %IL_STACK_OVERFLOW			= &H050E&
 %IL_STACK_UNDERFLOW			= &H050F&
 %IL_INVALID_CONVERSION		= &H0510&
+%IL_BAD_DIMENSIONS			= &H0511&
+%IL_FILE_READ_ERROR			= &H0512&
+
 %IL_LIB_GIF_ERROR			= &H05E1&
 %IL_LIB_JPEG_ERROR			= &H05E2&
 %IL_LIB_PNG_ERROR			= &H05E3&
@@ -414,6 +420,7 @@ Declare Function ilDisable Lib "DevIL.dll" Alias "ilDisable" (ByVal pb_Mode As D
 Declare Function ilEnable Lib "DevIL.dll" Alias "ilEnable" (ByVal pb_Mode As Dword) As Byte
 Declare Function ilFormatFunc Lib "DevIL.dll" Alias "ilFormatFunc" (ByVal pb_Mode As Dword) As Byte
 Declare Sub ilGenImages Lib "DevIL.dll" Alias "ilGenImages" (ByVal pb_Num As Long, ByRef pb_Images As Dword)
+Declare Function ilGetAlpha Lib "DevIL.dll" Alias "ilGetAlpha" (ByVal pb_Type As Dword) As Long
 Declare Function ilGetBoolean Lib "DevIL.dll" Alias "ilGetBoolean" (ByVal pb_Mode As Dword) As Byte
 Declare Sub ilGetBooleanv Lib "DevIL.dll" Alias "ilGetBooleanv" (ByVal pb_Mode As Dword, ByRef pb_Param As Byte)
 Declare Function ilGetData Lib "DevIL.dll" Alias "ilGetData" () As Long

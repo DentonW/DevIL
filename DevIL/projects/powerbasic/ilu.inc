@@ -156,6 +156,7 @@ Declare Function iluGetInteger Lib "ilu.dll" Alias "iluGetInteger" (ByVal pb_Mod
 Declare Sub iluGetIntegerv Lib "ilu.dll" Alias "iluGetIntegerv" (ByVal pb_Mode As Dword, ByRef pb_Param As Long)
 Declare Function iluGetString Lib "ilu.dll" Alias "iluGetString" (ByVal pb_StringName As Dword) As String
 Declare Sub iluInit Lib "ilu.dll" Alias "iluInit" ()
+Declare Function iluInvertAlpha Lib "ilu.dll" Alias "iluInvertAlpha" () As Byte
 Declare Function iluLoadImage Lib "ilu.dll" Alias "iluLoadImage" (ByRef pb_FileName As Asciiz) As Dword
 Declare Sub iluImageParameter Lib "ilu.dll" Alias "iluImageParameter" (ByVal pb_PName As Dword, ByVal pb_Param As Dword)
 Declare Function iluMirror Lib "ilu.dll" Alias "iluMirror" () As Byte

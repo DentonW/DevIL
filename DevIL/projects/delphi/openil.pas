@@ -111,8 +111,8 @@ const
 // IL-specific #define's
 //
 
-  IL_VERSION_1_3_0 = 1;
-  IL_VERSION = 130;
+  IL_VERSION_1_4_0 = 1;
+  IL_VERSION = 140;
 
 
 // Attribute Bits
@@ -166,6 +166,8 @@ const
   IL_DDS = $0437;
   IL_DCX = $0438;
   IL_PSD = $0439;
+  IL_EXIF = $043A;
+  IL_PSP = $043B;
 
   IL_JASC_PAL = $0475;
 
@@ -188,6 +190,9 @@ const
   IL_STACK_OVERFLOW = $050E;
   IL_STACK_UNDERFLOW = $050F;
   IL_INVALID_CONVERSION = $0510;
+  IL_BAD_DIMENSIONS = $0511;
+  IL_FILE_READ_ERROR = $0512
+
   IL_LIB_GIF_ERROR = $05E1;
   IL_LIB_JPEG_ERROR = $05E2;
   IL_LIB_PNG_ERROR = $05E3;
@@ -387,6 +392,7 @@ function ilEnable(Mode: TILenum): TILboolean; stdcall; external OPENILDLL;
 function ilFormatFunc(Mode: TILenum): TILboolean; stdcall; external OPENILDLL;
 procedure ilGenImages(Num: TILsizei; Images: PILuint); stdcall; external
   OPENILDLL;
+procedure ilGetAlpha(Type: TILenum): PILubyte; stdcall; external OPENILDLL;
 function ilGetBoolean(Mode: TILenum): TILboolean; stdcall; external OPENILDLL;
 procedure ilGetBooleanv(Mode: TILenum; Param: PILboolean); stdcall; external
   OPENILDLL;

@@ -40,8 +40,8 @@ uses
 
 
 const
-  ILUT_VERSION_1_3_0 = 1;
-  ILUT_VERSION = 130;
+  ILUT_VERSION_1_4_0 = 1;
+  ILUT_VERSION = 140;
 
 const
 // Attribute Bits

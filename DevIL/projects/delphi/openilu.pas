@@ -25,8 +25,8 @@ uses
   Windows;
 
 const
-  ILU_VERSION_1_3_0 = 1;
-  ILU_VERSION = 130;
+  ILU_VERSION_1_4_0 = 1;
+  ILU_VERSION = 140;
 
   ILU_FILTER = $2600;
   ILU_NEAREST = $2601;
@@ -141,6 +141,7 @@ procedure iluGetIntegerv(Mode: TILenum; var Param: TILint); stdcall; external IL
 function iluGetString(StringName: TILenum): PChar; stdcall; external ILUDLL;
 procedure iluImageParameter(PName, Param: TILenum); stdcall; external ILUDLL;
 procedure iluInit; stdcall; external ILUDLL;
+function iluInvertAlpha: TILboolean; stdcall; external ILUDLL;
 function iluLoadImage(FileName: PChar): TILuint; stdcall; external ILUDLL;
 function iluMirror: TILboolean; stdcall; external ILUDLL;
 function iluNegative: TILboolean; stdcall; external ILUDLL;
