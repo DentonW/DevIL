@@ -1,5 +1,6 @@
 *nix    users should read README.unix
-VisualC users should read README.visualc
+VisualC users should read README.win
 Cygwin  users should read README.cygwin
+MacOSX  users should read README.macosx
 
 PS: *nix stands for GNU/Linux, *BSD, SunOS/Solaris and perhaps some more.
