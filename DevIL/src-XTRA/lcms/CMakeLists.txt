@@ -2,7 +2,7 @@ PROJECT(LCMS)
 
 FILE(GLOB LCMS_SRCS *.c *.h )
 
-SET(LIBRARY_OUTPUT_PATH		${SET_LIB_DEST_DIR}	)
+SET(LIBRARY_OUTPUT_PATH		${DEVIL_LIB_DEST_DIR}	)
 
 #
 # for windows add the .def and .rc files to the source list

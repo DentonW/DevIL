@@ -28,7 +28,7 @@ jdsample.c jdcolor.c jquant1.c jquant2.c jdmerge.c
 
 FILE(GLOB libjpeg_HEADERS *.h )
 
-SET(LIBRARY_OUTPUT_PATH		${SET_LIB_DEST_DIR}	)
+SET(LIBRARY_OUTPUT_PATH		${DEVIL_LIB_DEST_DIR}	)
 
 IF (WIN32)
 	ADD_DEFINITIONS(-DIL_USE_PRAGMA_LIBS)

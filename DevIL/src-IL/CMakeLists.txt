@@ -10,7 +10,7 @@ INCLUDE_DIRECTORIES(
 
 SET(DevIL_SRCS ${DevIL_SRCS} ${DEVIL_INCS} )
 
-SET(LIBRARY_OUTPUT_PATH		${SET_LIB_DEST_DIR}	)
+SET(LIBRARY_OUTPUT_PATH		${DEVIL_LIB_DEST_DIR}	)
 
 #
 # for windows add the .def and .rc files to the source list
