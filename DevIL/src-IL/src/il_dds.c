@@ -558,7 +558,6 @@ ILboolean ReadMipmaps()
 	ILimage	*StartImage, *TempImage;
 	ILuint	LastLinear;
 	ILuint	minW, minH;
-	ILuint	mipMapCount;
 
 	if (CompFormat == PF_RGB)
 		Bpp = 3;
@@ -578,17 +577,8 @@ ILboolean ReadMipmaps()
 		Head.MipMapCount = 1;
 	}
 
-	if(Head.MipMapCount > 0) {
-		//some .dds-files have their mipmap flag set,
-		//but a mipmapcount of 0. Because mipMapCount is an uint, 0 - 1 gives
-		//overflow - don't let this happen:
-		mipMapCount = Head.MipMapCount - 1;
-	}
-	else
-		mipMapCount = 0;
-
 	LastLinear = Head.LinearSize;
-	for (i = 0; i < mipMapCount; i++) {
+	for (i = 0; i < Head.MipMapCount - 1; i++) {
 		Depth = Depth / 2;
 		Width = Width / 2;
 		Height = Height / 2;
@@ -632,7 +622,7 @@ ILboolean ReadMipmaps()
 	Head.LinearSize = LastLinear;
 	StartImage->Mipmaps = StartImage->Next;
 	StartImage->Next = NULL;
-	StartImage->NumMips = mipMapCount;
+	StartImage->NumMips = Head.MipMapCount - 1;
 	Image = StartImage;
 
 	return IL_TRUE;
