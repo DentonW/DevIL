@@ -30,14 +30,12 @@
 
 
 // Global variables
-DDSHEAD	Head;			// Image header
-ILubyte	*CompData;		// Compressed data
-ILuint	CompSize;		// Compressed size
-ILuint	CompLineSize;		// Compressed line size
-ILuint	CompFormat;		// Compressed format
-ILimage	*Image;
-ILint	Width, Height, Depth;
-ILuint	BlockSize;
+static DDSHEAD	Head;			// Image header
+static ILubyte	*CompData;		// Compressed data
+static ILuint	CompSize;		// Compressed size
+static ILuint	CompFormat;		// Compressed format
+static ILimage	*Image;
+static ILint	Width, Height, Depth;
 
 ILuint CubemapDirections[CUBEMAP_SIDES] = {
 	DDS_CUBEMAP_POSITIVEX,
@@ -238,30 +236,36 @@ ILboolean iLoadDdsCubemapInternal()
 
 				Image = Image->Next;
 				startImage->NumNext++;
-				ilBindImage(ilGetCurName());  // Set to parent image first.
-				ilActiveImage(i);
+				ilBindImage(ilGetCurName()); // Set to parent image first.
+				ilActiveImage(i); //now Image == iCurImage...globals SUCK, fix this!!!
 			}
 
 			if (!ReadData())
 				return IL_FALSE;
 
 			if (!AllocImage()) {
-				if (CompData)
+				if (CompData) {
 					ifree(CompData);
+					CompData = NULL;
+				}
 				return IL_FALSE;
 			}
 
 			Image->CubeFlags = CubemapDirections[i];
 
 			if (!Decompress()) {
-				if (CompData)
+				if (CompData) {
 					ifree(CompData);
+					CompData = NULL;
+				}
 				return IL_FALSE;
 			}
 
 			if (!ReadMipmaps()) {
-				if (CompData)
+				if (CompData) {
 					ifree(CompData);
+					CompData = NULL;
+				}
 				return IL_FALSE;
 			}
 		}
@@ -279,7 +283,10 @@ ILboolean iLoadDdsCubemapInternal()
 
 ILboolean iLoadDdsInternal()
 {
+	ILuint BlockSize = 0;
+
 	CompData = NULL;
+	Image = NULL;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -295,7 +302,7 @@ ILboolean iLoadDdsInternal()
 		return IL_FALSE;
 	}
 
-	DecodePixelFormat();
+	BlockSize = DecodePixelFormat();
 	if (CompFormat == PF_UNKNOWN) {
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
@@ -316,41 +323,51 @@ ILboolean iLoadDdsInternal()
 			return IL_TRUE;
 		}
 	}
+
 	Width = Head.Width;
 	Height = Head.Height;
 	Depth = Head.Depth;
-
 	AdjustVolumeTexture(&Head);
 
 	if (!ReadData())
 		return IL_FALSE;
 	if (!AllocImage()) {
-		if (CompData)
+		if (CompData) {
 			ifree(CompData);
+			CompData = NULL;
+		}
 		return IL_FALSE;
 	}
 	if (!Decompress()) {
-		if (CompData)
+		if (CompData) {
 			ifree(CompData);
+			CompData = NULL;
+		}
 		return IL_FALSE;
 	}
 
 	if (!ReadMipmaps()) {
-		if (CompData)
+		if (CompData) {
 			ifree(CompData);
+			CompData = NULL;
+		}
 		return IL_FALSE;
 	}
 
-	if (CompData)
+	if (CompData) {
 		ifree(CompData);
+		CompData = NULL;
+	}
 
 	ilBindImage(ilGetCurName());  // Set to parent image first.
 	return ilFixImage();
 }
 
 
-ILvoid DecodePixelFormat()
+ILuint DecodePixelFormat()
 {
+	ILuint BlockSize;
+
 	if (Head.Flags2 & DDS_FOURCC) {
 		BlockSize = ((Head.Width + 3)/4) * ((Head.Height + 3)/4) * ((Head.Depth + 3)/4);
 		switch (Head.FourCC)
@@ -413,12 +430,13 @@ ILvoid DecodePixelFormat()
 		}
 		BlockSize = (Head.Width * Head.Height * Head.Depth * (Head.RGBBitCount >> 3));
 	}
-	return;
+
+	return BlockSize;
 }
 
 
 // The few volume textures that I have don't have consistent LinearSize
-//	entries, even thouh the DDS_LINEARSIZE flag is set.
+//	entries, even though the DDS_LINEARSIZE flag is set.
 ILvoid AdjustVolumeTexture(DDSHEAD *Head)
 {
 	if (Head->Depth <= 1)
@@ -485,13 +503,13 @@ ILboolean ReadData()
 
 		if (iread(CompData, 1, Head.LinearSize) != (ILuint)Head.LinearSize) {
 			ifree(CompData);
+			CompData = NULL;
 			return IL_FALSE;
 		}
 	}
 	else {
 		Bps = Width * Head.RGBBitCount / 8;
 		CompSize = Bps * Height * Depth;
-		CompLineSize = Bps;
 
 		CompData = (ILubyte*)ialloc(CompSize);
 		if (CompData == NULL) {
@@ -503,6 +521,7 @@ ILboolean ReadData()
 			for (y = 0; y < Height; y++) {
 				if (iread(Temp, 1, Bps) != Bps) {
 					ifree(CompData);
+					CompData = NULL;
 					return IL_FALSE;
 				}
 				Temp += Bps;
@@ -551,7 +570,7 @@ ILboolean AllocImage()
 
 			if (!ilTexImage(Width, Height, Depth, channels, format, IL_UNSIGNED_BYTE, NULL))
 				return IL_FALSE;
-			if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
+			if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE && CompData) {
 				iCurImage->DxtcData = (ILubyte*)ialloc(Head.LinearSize);
 				if (iCurImage->DxtcData == NULL)
 					return IL_FALSE;
@@ -597,7 +616,7 @@ ILboolean Decompress()
 			return Decompress3Dc();
 
 		case PF_RXGB:
-		  return DecompressRXGB();
+			return DecompressRXGB();
 
 		case PF_UNKNOWN:
 			return IL_FALSE;
@@ -681,8 +700,6 @@ ILboolean ReadMipmaps()
 		Image->Origin = IL_ORIGIN_UPPER_LEFT;
 
 		if (Head.Flags1 & DDS_LINEARSIZE) {
-			minW = Width;
-			minH = Height;
 			if (CompFormat != PF_RGB && CompFormat != PF_ARGB
 				&& CompFormat != PF_LUMINANCE
 				&& CompFormat != PF_LUMINANCE_ALPHA){
@@ -732,6 +749,8 @@ ILboolean DecompressDXT1()
 	Color8888	colours[4], *col;
 	ILuint		bitmask, Offset;
 
+	if (!CompData)
+		return IL_FALSE;
 
 	Temp = CompData;
 	for (z = 0; z < Depth; z++) {
@@ -831,6 +850,8 @@ ILboolean DecompressDXT3()
 	ILushort	word;
 	DXTAlphaBlockExplicit *alpha;
 
+	if (!CompData)
+		return IL_FALSE;
 
 	Temp = CompData;
 	for (z = 0; z < Depth; z++) {
@@ -924,6 +945,9 @@ ILboolean DecompressDXT5()
 	ILuint		bitmask, Offset;
 	ILubyte		alphas[8], *alphamask;
 	ILuint		bits;
+
+	if (!CompData)
+		return IL_FALSE;
 
 	Temp = CompData;
 	for (z = 0; z < Depth; z++) {
@@ -1045,6 +1069,8 @@ ILboolean	Decompress3Dc()
 	ILubyte		XColours[8], YColours[8];
 	ILuint		bitmask, bitmask2, Offset, CurrOffset;
 
+	if (!CompData)
+		return IL_FALSE;
 
 	Temp = CompData;
 	Offset = 0;
@@ -1138,6 +1164,9 @@ ILboolean DecompressRXGB()
 	ILuint		bitmask, Offset;
 	ILubyte		alphas[8], *alphamask;
 	ILuint		bits;
+
+	if (!CompData)
+		return IL_FALSE;
 
 	Temp = CompData;
 	for (z = 0; z < Depth; z++) {
@@ -1273,6 +1302,9 @@ ILboolean DecompressARGB()
 	ILuint	i, ReadI, RedL, RedR, GreenL, GreenR, BlueL, BlueR, AlphaL, AlphaR;
 	ILubyte	*Temp;
 
+	if (!CompData)
+		return IL_FALSE;
+
 	GetBitsFromMask(Head.RBitMask, &RedL, &RedR);
 	GetBitsFromMask(Head.GBitMask, &GreenL, &GreenR);
 	GetBitsFromMask(Head.BBitMask, &BlueL, &BlueR);
@@ -1280,23 +1312,39 @@ ILboolean DecompressARGB()
 	Temp = CompData;
 
 	for (i = 0; i < Image->SizeOfData; i += Image->Bpp) {
-		ReadI = *((ILuint*)Temp);
+
+		//TODO: This is SLOOOW...
+		//but the old version crashed in release build under
+		//winxp (and xp is right that it crahes - I always
+		//wondered that it worked the old way at all)
+		if (Image->Bpp == 4)
+			ReadI = *((ILuint*)Temp);
+		if (Image->Bpp == 3) { //this branch is extra-SLOOOW
+			ReadI =
+				*((ILubyte*)Temp)
+				| (*((ILubyte*)(Temp + 1)) << 8)
+				| (*((ILubyte*)(Temp + 2)) << 16);
+		}
+		else if (Image->Bpp == 1)
+			ReadI = *((ILubyte*)Temp);
+		else if (Image->Bpp == 2)
+		  ReadI = *((ILushort*)Temp);
 		Temp += (Head.RGBBitCount / 8);
 
-		Image->Data[i]   = ((ReadI & Head.RBitMask) >> RedR) << RedL;
+		Image->Data[i] = ((ReadI & Head.RBitMask) >> RedR) << RedL;
 
 		if(Image->Bpp >= 3) {
 			Image->Data[i+1] = ((ReadI & Head.GBitMask) >> GreenR) << GreenL;
 			Image->Data[i+2] = ((ReadI & Head.BBitMask) >> BlueR) << BlueL;
-		}
 
-		if (Image->Bpp == 4) {
-			Image->Data[i+3] = ((ReadI & Head.RGBAlphaBitMask) >> AlphaR) << AlphaL;
-			if (AlphaL >= 7) {
-				Image->Data[i+3] = Image->Data[i+3] ? 0xFF : 0x00;
-			}
-			else if (AlphaL >= 4) {
-				Image->Data[i+3] = Image->Data[i+3] | (Image->Data[i+3] >> 4);
+			if (Image->Bpp == 4) {
+				Image->Data[i+3] = ((ReadI & Head.RGBAlphaBitMask) >> AlphaR) << AlphaL;
+				if (AlphaL >= 7) {
+					Image->Data[i+3] = Image->Data[i+3] ? 0xFF : 0x00;
+				}
+				else if (AlphaL >= 4) {
+					Image->Data[i+3] = Image->Data[i+3] | (Image->Data[i+3] >> 4);
+				}
 			}
 		}
 		else if (Image->Bpp == 2) {
