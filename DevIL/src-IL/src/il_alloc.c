@@ -13,8 +13,8 @@
 
 #define __ALLOC_C
 #include "il_internal.h"
-//#include <stdlib.h>
-
+#include <stdlib.h>
+#include <math.h>
 
 //mAlloc ialloc;
 //mFree  ifree;
@@ -23,31 +23,29 @@ mAlloc ialloc_ptr = NULL;
 mFree  ifree_ptr = NULL;
 
 
-#ifdef ALTIVEC
+#ifdef ALTIVEC_GCC
+
+typedef union {
+    float scalars[ vec_step( vector float ) ];
+    vector float v;
+} buffer;
+
 __inline__ ILvoid *vec_malloc( ILuint );
 __inline__ ILvoid *vec_malloc( ILuint size ) {
-    union {
-        vector char vec;
-        void *ptr;
-    } mem_ptr;
-    mem_ptr.ptr = (void*)malloc(size);
-    return mem_ptr.ptr;
+    buffer *b = (buffer*)malloc( size );
+    return (void*)b;
 }
 
 __inline__ ILvoid *vec_calloc( ILuint, ILuint );
 __inline__ ILvoid *vec_calloc( ILuint count, ILuint size ) {
-    union {
-        vector unsigned char vec;
-        void *ptr;
-    } mem_ptr;
-    mem_ptr.ptr = (void*)calloc(count,size);
-    return mem_ptr.ptr;
+    buffer *b = (buffer*)calloc(count,size);
+    return (void*)b;
 }
 
 __inline__ ILvoid *vec_align_buffer( ILvoid *buffer, ILuint size ) {
     if( (size_t)buffer % 16 != 0 ) {
         void *aligned_buffer = vec_malloc( size );
-        memset( aligned_buffer, buffer, size );
+        memcpy( aligned_buffer, buffer, size );
         ifree( buffer );
         return aligned_buffer;
     }
@@ -57,7 +55,7 @@ __inline__ ILvoid *vec_align_buffer( ILvoid *buffer, ILuint size ) {
 
 ILvoid* ILAPIENTRY DefaultAllocFunc(ILuint Size)
 {
-        #ifdef ALTIVEC
+        #ifdef ALTIVEC_GCC
             return (ILvoid*)vec_malloc(Size);
         #else
             return malloc(Size);
