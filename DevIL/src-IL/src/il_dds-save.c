@@ -18,16 +18,6 @@
 #include <limits.h>
 
 
-// Global variables
-DDSHEAD	Head;			// Image header
-ILubyte	*CompData;		// Compressed data
-ILuint	CompSize;		// Compressed size
-ILuint	CompLineSize;	// Compressed line size
-ILuint	CompFormat;		// Compressed format
-ILimage	*Image;
-ILint	Width, Height, Depth;
-ILuint	BlockSize;
-
 
 //! Writes a Dds file
 ILboolean ilSaveDds(const ILstring FileName)
