@@ -347,7 +347,23 @@ SOURCE=.\jchuff.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\jconfig.h
+SOURCE=.\jconfig.vc
+
+!IF  "$(CFG)" == "LibJpeg - Win32 Debug"
+
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build
+InputPath=.\jconfig.vc
+
+"jconfig.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy jconfig.vc jconfig.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "LibJpeg - Win32 Release"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
