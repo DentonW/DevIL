@@ -111,7 +111,8 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat)
 {
 	ILuint i, FourCC, Flags1 = 0, Flags2 = 0, ddsCaps1 = 0, LinearSize;
 
-	Flags1 |= DDS_LINEARSIZE;
+	Flags1 |= DDS_LINEARSIZE | DDS_MIPMAPCOUNT 
+			| DDS_WIDTH | DDS_HEIGHT | DDS_CAPS | DDS_PIXELFORMAT;
 	Flags2 |= DDS_FOURCC;
 
 	// @TODO:  Fix the pre-multiplied alpha problem.
@@ -172,6 +173,11 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat)
 	SaveLittleUInt(0);			// BBitMask
 	SaveLittleUInt(0);			// RGBAlphaBitMask
 	ddsCaps1 |= DDS_TEXTURE;
+	//changed 20040516: set mipmap flag on mipmap images
+	//(cubemaps and non-compressed .dds files still not supported,
+	//though)
+	if (ilGetInteger(IL_NUM_MIPMAPS) > 0)
+		ddsCaps1 |= DDS_MIPMAP | DDS_COMPLEX;
 	SaveLittleUInt(ddsCaps1);	// ddsCaps1
 	SaveLittleUInt(0);			// ddsCaps2
 	SaveLittleUInt(0);			// ddsCaps3
