@@ -3,6 +3,7 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
+
 /* Supported images formats (il) */
 
 /* #undef IL_NO_BMP */
@@ -13,10 +14,10 @@
 /* #undef IL_NO_GIF */
 /* #undef IL_NO_ICO */
 /* #undef IL_NO_JPG */
-//#define IL_NO_LCMS 1
+#define IL_NO_LCMS 1
 /* #undef IL_NO_LIF */
 /* #undef IL_NO_MDL */
-//#define IL_NO_MNG 1
+/* #undef IL_NO_MNG */
 /* #undef IL_NO_PCD */
 /* #undef IL_NO_PCX */
 /* #undef IL_NO_PIC */
@@ -32,33 +33,31 @@
 /* #undef IL_NO_TIF */
 /* #undef IL_NO_WAL */
 /* #undef IL_NO_XPM */
-#undef IL_USE_JPEGLIB_UNMODIFIED
 #define IL_USE_JPEGLIB_UNMODIFIED 1
-#define IL_NO_LCMS
 
 /* Supported api (ilut) */
 
 /* #undef ILUT_USE_ALLEGRO */
-//#define ILUT_USE_DIRECTX8 1
-//#define ILUT_USE_DIRECTX9 1
+/* #undef ILUT_USE_DIRECTX8 */
+/* #undef ILUT_USE_DIRECTX9 */
 #define ILUT_USE_OPENGL 1
-//#define ILUT_USE_SDL 1
-#define ILUT_USE_WIN32 1
+/* #undef ILUT_USE_SDL */
+/* #undef ILUT_USE_WIN32 */
 
 
 /* Define if you have the <dlfcn.h> header file. */
-/* #undef HAVE_DLFCN_H */
+#define HAVE_DLFCN_H 1
 
 /* Name of package */
 #define PACKAGE "DevIL"
 
 /* Version number of package */
-#define VERSION "1.6.6"
+#define VERSION "1.6.7"
 
 /* Define if your processor stores words with the most significant byte first
    (like Motorola and SPARC, unlike Intel and VAX). */
 /* #undef WORDS_BIGENDIAN */
 
 /* Define if the X Window System is missing or not being used. */
-#define X_DISPLAY_MISSING 1
+/* #undef X_DISPLAY_MISSING */
 #endif /* __CONFIG_H__ */
