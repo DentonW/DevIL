@@ -553,8 +553,8 @@ ILboolean ilReadUncompBmp(BMPHEAD *Header)
 				GetShiftFromMask(bMask, &bShiftL, &bShiftR);
 			}
 
-      //TODO: win98 supports per-pixel alpha, so
-      //load to rgba????
+			//TODO: win98 supports per-pixel alpha, so
+			//load to rgba????
 
 			//changed 2003-09-01
 			if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST)
@@ -960,28 +960,10 @@ ILboolean iSaveBitmapInternal()
 
 	SaveLittleUInt(54 + TempPal->PalSize);  // Offset of the data
 
-	SaveLittleUInt(0x28);  // Header size
-	SaveLittleUInt(iCurImage->Width);
 
-	// Removed because some image viewers don't like the negative height.
-	/*if (iCurImage->Origin == IL_ORIGIN_UPPER_LEFT)
-		SaveLittleInt(-(ILint)iCurImage->Height);
-	else*/
-		SaveLittleInt(iCurImage->Height);
-
-	SaveLittleUShort(1);  // Number of planes
-	SaveLittleUShort((ILushort)((ILushort)iCurImage->Bpp << 3));  // Bpp
-	SaveLittleInt(0);  // Compression
-	SaveLittleInt(0);  // Size of image (Obsolete)
-	SaveLittleInt(0);  // (Obsolete)
-	SaveLittleInt(0);  // (Obsolete)
-
-	if (iCurImage->Pal.PalType != IL_PAL_NONE)
-		SaveLittleInt(ilGetInteger(IL_PALETTE_NUM_COLS));  // Num colours used
-	else
-		SaveLittleInt(0);
-	SaveLittleInt(0);  // Important colour (none)
-
+	//Changed 20040923: moved this block above writing of
+	//BITMAPINFOHEADER, so that the written header refers to
+	//TempImage instead of the original image
 	if (iCurImage->Format != IL_BGR && iCurImage->Format != IL_BGRA && iCurImage->Format != IL_COLOUR_INDEX) {
 		if (iCurImage->Format == IL_RGBA)
 			TempImage = iConvertImage(iCurImage, IL_BGRA, IL_UNSIGNED_BYTE);
@@ -1004,6 +986,29 @@ ILboolean iSaveBitmapInternal()
 		TempData = iGetFlipped(TempImage);
 	else
 		TempData = TempImage->Data;
+
+
+	SaveLittleUInt(0x28);  // Header size
+	SaveLittleUInt(iCurImage->Width);
+
+	// Removed because some image viewers don't like the negative height.
+	/*if (iCurImage->Origin == IL_ORIGIN_UPPER_LEFT)
+		SaveLittleInt(-(ILint)iCurImage->Height);
+	else*/
+		SaveLittleInt(TempImage->Height);
+
+	SaveLittleUShort(1);  // Number of planes
+	SaveLittleUShort((ILushort)((ILushort)TempImage->Bpp << 3));  // Bpp
+	SaveLittleInt(0);  // Compression
+	SaveLittleInt(0);  // Size of image (Obsolete)
+	SaveLittleInt(0);  // (Obsolete)
+	SaveLittleInt(0);  // (Obsolete)
+
+	if (TempImage->Pal.PalType != IL_PAL_NONE)
+		SaveLittleInt(ilGetInteger(IL_PALETTE_NUM_COLS));  // Num colours used
+	else
+		SaveLittleInt(0);
+	SaveLittleInt(0);  // Important colour (none)
 
 	iwrite(TempPal->Palette, 1, TempPal->PalSize);
 
