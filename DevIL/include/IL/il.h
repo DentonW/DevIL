@@ -530,7 +530,7 @@ ILAPI ILboolean		ILAPIENTRY ilLoadDataF(ILHANDLE File, ILuint Width, ILuint Heig
 ILAPI ILboolean		ILAPIENTRY ilLoadDataL(ILvoid *Lump, ILuint Size, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp);
 ILAPI ILboolean		ILAPIENTRY ilSaveData(const ILstring FileName);
 
-#if !IL_NO_JPG && !IL_USE_IJL
+#if !defined(IL_NO_JPG) && !defined(IL_USE_IJL)
 	#include <jpeglib.h>
 	ILAPI ILboolean	ILAPIENTRY ilLoadFromJpegStruct(struct jpeg_decompress_struct* JpegDecompressorPtr);
 	ILAPI ILboolean	ILAPIENTRY ilSaveFromJpegStruct(struct jpeg_compress_struct* JpegCompressorPtr);
