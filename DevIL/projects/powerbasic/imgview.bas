@@ -1,24 +1,24 @@
 '-----------------------------------------------------------------------------
-' Minimal Image viewer using OpenIL
-' OpenIL Sample program using Powerbasic.
+' Minimal Image viewer using DevIL
+' DevIL Sample program using Powerbasic.
 '
 ' by Peter Scheutz, Scheutz & Clementsen Design
 ' Web: http://www.scheutz.dk
 ' e-mail: sourcecode@scheutz.dk
 '
-' Last modified: 03/02/2001
-' Based on OpenIL Ver. 2.1.4b PB incs
+' Last modified: 02/16/2002
+' Based on DevIL Ver. 1.3.0 PB incs
 ' Filename: imgview.bas
 '
 ' Released under the GNU Lesser General Public License:
 ' http://www.gnu.org/copyleft/lesser.html
 '
-' For information on use and download of OpenIL goto: http://openil.sourceforge.net/
+' For information on use and download of DevIL goto: http://openil.sourceforge.net/
 ' (Get docs and "End User Package")
 '
 ' Report errors in the Powerbasic includes to e-mail above.
 '
-' For general help on Powerbasic and OpenIL, try the forums at:
+' For general help on Powerbasic and DevIL, try the forums at:
 ' http://www.powerbasic.com
 '-----------------------------------------------------------------------------
 
@@ -30,9 +30,9 @@ Option Explicit
 
 #Include "win32api.inc"
 
-#Include "openIl.inc"
-#Include "openIlu.inc"
-#Include "openIlut.inc"
+#Include "il.inc"
+#Include "ilu.inc"
+#Include "ilut.inc"
 
 
 Global hDCBmp As Long
@@ -102,6 +102,8 @@ Function PbMain() As Long
         Exit Function
     End If
 
+    ilInit
+
     ilEnable %IL_FORMAT_SET
     ilEnable %IL_ORIGIN_SET
     ilEnable %IL_TYPE_SET
@@ -124,7 +126,7 @@ Function PbMain() As Long
 
 
 
-    Dialog New 0, "OpenIL Mini imageviewer in PB " & Command$, , , 100, 100 , %WS_SYSMENU Or %WS_CAPTION To hWnd
+    Dialog New 0, "DevIL Mini imageviewer in PB " & Command$, , , 100, 100 , %WS_SYSMENU Or %WS_CAPTION To hWnd
     hDC = getDC (hWnd)
     If hDC<>0 Then
         hBmp = ilutWinLoadImage (Command$,getDC (hWnd) )

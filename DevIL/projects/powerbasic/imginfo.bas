@@ -1,24 +1,24 @@
 '-----------------------------------------------------------------------------
-' Get Image info using OpenIL
-' OpenIL Sample program using Powerbasic.
+' Get Image info using DevIL
+' DevIL Sample program using Powerbasic.
 '
 ' by Peter Scheutz, Scheutz & Clementsen Design
 ' Web: http://www.scheutz.dk
 ' e-mail: sourcecode@scheutz.dk
 '
-' Last modified: 03/02/2001
-' Based on OpenIL Ver. 2.1.4b PB incs
-' Filename: imginfo.bas
+' Last modified: 02/16/2002
+' Based on DevIL Ver. 1.3.0 PB incs
+' Filename: imgview.bas
 '
 ' Released under the GNU Lesser General Public License:
 ' http://www.gnu.org/copyleft/lesser.html
 '
-' For information on use and download of OpenIL goto: http://openil.sourceforge.net/
+' For information on use and download of DevIL goto: http://openil.sourceforge.net/
 ' (Get docs and "End User Package")
 '
 ' Report errors in the Powerbasic includes to e-mail above.
 '
-' For general help on Powerbasic and OpenIL, try the forums at:
+' For general help on Powerbasic and DevIL, try the forums at:
 ' http://www.powerbasic.com
 '-----------------------------------------------------------------------------
 
@@ -28,9 +28,9 @@
 Option Explicit
 
 
-#Include "openil.inc"
-#Include "openilu.inc"
-#Include "openilut.inc"
+#Include "il.inc"
+#Include "ilu.inc"
+#Include "ilut.inc"
 
 
 Function OpenIL_TypeString(ByVal il_const As Dword) As String
@@ -120,6 +120,8 @@ Function PbMain() As Long
         Exit Function
     End If
 
+    ilInit
+
     ilGenImages ByVal 1, ID
     ILErr=ilGetError()
     If  ILErr <> 0 Then
@@ -173,7 +175,7 @@ Function PbMain() As Long
             GoTo done
     Else
 
-        MsgBox "OpenIL Image info: " & $CRLF & $CRLF & _
+        MsgBox "DevIL Image info: " & $CRLF & $CRLF & _
         "Id: " & $TAB & $TAB & Format$(info.iId) & $CRLF & _
         "Data Pointer"  & $TAB & Format$(info.iData) & $CRLF & _
         "Width: " & $TAB & $TAB & Format$(info.iWidth) & $CRLF & _
