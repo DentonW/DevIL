@@ -504,7 +504,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 					for (x = 0; x < Image->Width; x += 4) {
 						GetAlphaBlock(AlphaBlock, Alpha, Image, x, y);
 						for (i = 0; i < 16; i += 2) {
-							iputc((ILubyte)(((AlphaBlock[i] >> 4) << 4) | (AlphaBlock[i+1] >> 4)));
+							iputc((ILubyte)(((AlphaBlock[i+1] >> 4) << 4) | (AlphaBlock[i] >> 4)));
 						}
 
 						GetBlock(Block, Data, Image, x, y);
@@ -811,6 +811,9 @@ ILvoid ChooseAlphaEndpoints(ILubyte *Block, ILubyte *a0, ILubyte *a1)
 	ILuint	i;
 	ILuint	Lowest = 0xFF, Highest = 0;
 	ILboolean flip = IL_FALSE;
+
+	*a1 = Lowest;
+	*a0 = Highest;
 
 	for (i = 0; i < 16; i++) {
 		if (Block[i] == 0) // use 0, 255 as endpoints
