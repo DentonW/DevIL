@@ -36,12 +36,12 @@ extern "C" {
 #endif//_WIN32
 
 #define ILU_VERSION_1_2_5					1
-#define ILU_VERSION						125
+#define ILU_VERSION							125
 
 
-#define ILU_FILTER						0x2600
-#define ILU_NEAREST						0x2601
-#define ILU_LINEAR						0x2602
+#define ILU_FILTER							0x2600
+#define ILU_NEAREST							0x2601
+#define ILU_LINEAR							0x2602
 #define ILU_BILINEAR						0x2603
 #define ILU_SCALE_BOX						0x2604
 #define ILU_SCALE_TRIANGLE					0x2605
@@ -56,7 +56,7 @@ extern "C" {
 #define ILU_OUT_OF_MEMORY					0x0502
 #define ILU_INTERNAL_ERROR					0x0504
 #define ILU_INVALID_VALUE					0x0505
-#define ILU_ILLEGAL_OPERATION					0x0506
+#define ILU_ILLEGAL_OPERATION				0x0506
 #define ILU_INVALID_PARAM					0x0509
 
 
@@ -66,22 +66,22 @@ extern "C" {
 #define ILU_LOWER_RIGHT						0x0702
 #define ILU_UPPER_LEFT						0x0703
 #define ILU_UPPER_RIGHT						0x0704
-#define ILU_CENTER						0x0705
-#define ILU_CONVOLUTION_MATRIX					0x0710
+#define ILU_CENTER							0x0705
+#define ILU_CONVOLUTION_MATRIX				0x0710
 #define ILU_VERSION_NUM						0x0DE2
 
 
 // Filters
 /*
 #define ILU_FILTER_BLUR						0x0803
-#define ILU_FILTER_GAUSSIAN_3x3					0x0804
-#define ILU_FILTER_GAUSSIAN_5X5					0x0805
+#define ILU_FILTER_GAUSSIAN_3x3				0x0804
+#define ILU_FILTER_GAUSSIAN_5X5				0x0805
 #define ILU_FILTER_EMBOSS1					0x0807
 #define ILU_FILTER_EMBOSS2					0x0808
-#define ILU_FILTER_LAPLACIAN1					0x080A
-#define ILU_FILTER_LAPLACIAN2					0x080B
-#define ILU_FILTER_LAPLACIAN3					0x080C
-#define ILU_FILTER_LAPLACIAN4					0x080D
+#define ILU_FILTER_LAPLACIAN1				0x080A
+#define ILU_FILTER_LAPLACIAN2				0x080B
+#define ILU_FILTER_LAPLACIAN3				0x080C
+#define ILU_FILTER_LAPLACIAN4				0x080D
 #define ILU_FILTER_SHARPEN1					0x080E
 #define ILU_FILTER_SHARPEN2					0x080F
 #define ILU_FILTER_SHARPEN3					0x0810
@@ -131,7 +131,7 @@ ILAPI ILboolean		ILAPIENTRY iluFlipImage(ILvoid);
 ILAPI ILboolean		ILAPIENTRY iluGammaCorrect(ILfloat Gamma);
 ILAPI ILuint		ILAPIENTRY iluGenImage(ILvoid);
 ILAPI ILvoid		ILAPIENTRY iluGetImageInfo(ILinfo *Info);
-ILAPI ILint		ILAPIENTRY iluGetInteger(ILenum Mode);
+ILAPI ILint			ILAPIENTRY iluGetInteger(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY iluGetIntegerv(ILenum Mode, ILint *Param);
 ILAPI const ILstring	ILAPIENTRY iluGetString(ILenum StringName);
 ILAPI ILvoid		ILAPIENTRY iluImageParameter(ILenum PName, ILenum Param);

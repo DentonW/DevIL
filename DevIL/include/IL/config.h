@@ -19,7 +19,7 @@ DJGPP src/il_png.c src/il_targa.c
 /* #undef IL_NO_GIF */
 /* #undef IL_NO_ICO */
 /* #undef IL_NO_JPG */
-/* #undef IL_NO_LCMS */
+#define IL_NO_LCMS 1
 /* #undef IL_NO_LIF */
 /* #undef IL_NO_MDL */
 /* #undef IL_NO_MNG */
@@ -48,7 +48,7 @@ DJGPP src/il_png.c src/il_targa.c
 
 /*
 __LITTLE_ENDIAN__ src/il_endian.c src/il_png.c src/il_sgi.c src/il_tiff.c
-_MEM_DEBUG src/il_istack.c
+_MEM_DEBUG src/il_stack.c
 _MSC_VER src/il_cut.c
 RGB_RED src/il_jpeg.c
 _WIN32 src/il_internal.c src/il_main.c src/il_png.c src/il_profiles.c src/il_targa.c src/il_tiff.c
