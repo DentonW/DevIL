@@ -1,8 +1,9 @@
 lib_LTLIBRARIES = libILUT.la
 
 libILUT_la_SOURCES = ilut_allegro.c     ilut_main.c \
-                     ilut_sdlsurface.c  \
-                     ilut_internal.c    ilut_opengl.c  ilut_states.c
+                     ilut_sdlsurface.c  ilut_states.c \
+                     ilut_internal.c    ilut_opengl.c \
+                     ilut_win32.c       ilut_directx.c
 
 CFLAGS = @LIBILUT_CFLAGS@
 

@@ -93,7 +93,7 @@ sdl_config = @sdl_config@
 
 lib_LTLIBRARIES = libILUT.la
 
-libILUT_la_SOURCES = ilut_allegro.c     ilut_main.c                      ilut_sdlsurface.c                       ilut_internal.c    ilut_opengl.c  ilut_states.c
+libILUT_la_SOURCES = ilut_allegro.c     ilut_main.c                      ilut_sdlsurface.c  ilut_states.c                      ilut_internal.c    ilut_opengl.c                      ilut_win32.c       ilut_directx.c
 
 
 CFLAGS = @LIBILUT_CFLAGS@
@@ -117,7 +117,8 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 libILUT_la_DEPENDENCIES = 
 libILUT_la_OBJECTS =  ilut_allegro.lo ilut_main.lo ilut_sdlsurface.lo \
-ilut_internal.lo ilut_opengl.lo ilut_states.lo
+ilut_states.lo ilut_internal.lo ilut_opengl.lo ilut_win32.lo \
+ilut_directx.lo
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
@@ -129,9 +130,9 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DEP_FILES =  .deps/ilut_allegro.P .deps/ilut_internal.P \
-.deps/ilut_main.P .deps/ilut_opengl.P .deps/ilut_sdlsurface.P \
-.deps/ilut_states.P
+DEP_FILES =  .deps/ilut_allegro.P .deps/ilut_directx.P \
+.deps/ilut_internal.P .deps/ilut_main.P .deps/ilut_opengl.P \
+.deps/ilut_sdlsurface.P .deps/ilut_states.P .deps/ilut_win32.P
 SOURCES = $(libILUT_la_SOURCES)
 OBJECTS = $(libILUT_la_OBJECTS)
 
