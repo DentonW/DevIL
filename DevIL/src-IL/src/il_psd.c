@@ -374,8 +374,13 @@ ILboolean ReadRGB(PSDHEAD *Head)
 			Format = IL_RGBA;
 			break;
 		default:
-			ilSetError(IL_FORMAT_NOT_SUPPORTED);
-			return IL_FALSE;
+		//	ilSetError(IL_FORMAT_NOT_SUPPORTED);
+		//	return IL_FALSE;
+			//drop additional channels. This is not the 100% correct
+			//way of loading the image, but it is better than loading
+			//the image not at all.
+			Format = IL_RGBA;
+			Head->Channels = 4;
 	}
 	switch (Head->Depth)
 	{

@@ -650,6 +650,15 @@ ILboolean AssembleImage()
 				iCurImage->Data[j+3] = Alpha[i];
 			}
 		}
+		else if (NumChannels == 4) {
+			ilTexImage(AttChunk.Width, AttChunk.Height, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL);
+			for (i = 0, j = 0; i < Size; i++, j += 4) {
+				iCurImage->Data[j  ] = Channels[0][i];
+				iCurImage->Data[j+1] = Channels[1][i];
+				iCurImage->Data[j+2] = Channels[2][i];
+				iCurImage->Data[j+3] = Channels[3][i];
+			}
+		}
 		else if (NumChannels == 3) {
 			ilTexImage(AttChunk.Width, AttChunk.Height, 1, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL);
 			for (i = 0, j = 0; i < Size; i++, j += 3) {
