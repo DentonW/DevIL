@@ -338,6 +338,7 @@ typedef void			ILvoid;
 #define IL_DXT3								0x0708
 #define IL_DXT4								0x0709
 #define IL_DXT5								0x070A
+#define IL_DXT_NO_COMP						0x070B
 
 
 // Cube map definitions
