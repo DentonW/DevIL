@@ -1,0 +1,152 @@
+Developer's Image Library version 1.2.5 Readme, Notes and Quick Use
+-------------------------------------------------------------------
+
+<DZA[afk]> DevIL song: "la la la, a cross-platform image library utilizing a
+           simple syntax to load, save, convert, manipulate, filter and display
+           a variety of images with ease, la la la"
+
+
+What is it?
+-----------
+
+DevIL is an Open Source image library whose distribution is done under the
+terms of the GNU LGPL license. See the COPYING file for more details.
+DevIL offers you a simple way to implement loading, manipulating, filtering,
+converting, displaying, saving from/to several different image formats in your
+own project.
+
+
+Where can I find it?
+--------------------
+
+DevIL can be found at http://www.imagelib.org and http://openil.sourceforge.net
+
+
+How do I compile the 3 libraries ?
+-----------------------------------------
+
+Just type ./configure && make. It should find automatically what can
+(or cannot) be built on your system.
+
+NB : ./configure --help gives you all compiling options available for the three
+      libs. This includes enabling/disabling picture formats, ilut apis.
+
+More Extensive Documentation
+----------------------------
+
+This file is only a quick guide to point you to more detailed information on
+how to use DevIL.  More extensive documentation can currently be found on the
+DevIL site at http://www.imagelib.org and in the /Docs directory in a normal
+install.
+
+
+Why the hell another image library?
+-----------------------------------
+
+I have never seen an image library that can do everything DevIL does. Sure,
+various different libraries can do part of what DevIL can do as well or even
+better, but I wanted a simple to use library that encompassed all of these
+features.  I also wanted an extremely portable image library that could be used
+from a variety of languages and utilized the OpenGL syntax.
+
+
+Basic Readme
+------------
+
+Most anything stated in this document applies to DevIL as well as DevILU and
+DevILUT, unless otherwise stated. (This file is best viewed with word wrap on.)
+
+Libraries needed to compile DevIL* :
+-----------------------------------
+
+They are all autodetected by the ./configure script. But if you want to include
+one of those format, you have just to install the corresponding lib :
+
+libjpeg available at 
+libungif available at 
+libtiff available at 
+
+or in your distro/port ftp/site/whatever_you_want :-)
+
+Errors:
+-------
+
+All errors generated inside DevIL, along with illegal parameters passed to
+DevIL functions are caught and passed to ilSetError(), an internal library
+function.  The calling program can call ilGetError() to get the value of the
+error generated.  Error types are defined in il.h, using the 0x501 - 0x5FF
+range.  ilGetError() will return 0 (IL_NO_ERROR) if no error has occurred.
+
+
+Installation:
+-------------
+
+If #make succeeded, just type #make install
+
+
+Usage:
+------
+
+As of right now, no function needs to be called to setup the library, as it is
+all set up in DllMain() in Windows.  To load an image, simply:
+
+#include <IL/il.h>
+#include <IL/ilu.h>
+#include <IL/ilut.h>
+
+
+ILuint id, Error;
+
+ilGenImages(1, &id);
+ilBindImage(id);
+ilLoadImage("default1.tga");  // Loads into the current bound image
+Error = ilGetError();
+
+
+Then you can do something with the image, such as sending it to OpenGL as a
+texture:
+
+ilutRenderer(IL_OPENGL);  // Switch the renderer
+TexID = ilutGLBindTexImage();
+Error = ilGetError();
+
+
+Make sure to close the image when you are done with it (though DevIL
+automatically deletes them when the program exits):
+
+glDeleteTextures(1, &TexID);
+ilDeleteImages(1, &id);
+
+
+The TestIL project is included to test features of DevIL.
+
+DevIL includes a project called GLTest.  This is a simple test of DevIL's
+capabilities.  All it does it load any image and displays it in a window
+created by FreeGlut, which is available on http://freeglut.sourceforge.net. It
+is also included to let the user have an idea of what the library can really
+be used for.
+
+Several other test projects are included to test support with various display
+APIs.  The WindowsTest project is a basic image program that only runs in
+Windows right now but showcases several of DevIL's features through various
+menus.
+
+If you want more in-depth tutorials, you can find them on
+http://www.imagelib.org, or they may be in your installation under the /tuts
+directory.  Documents are also available in the /docs directory.
+
+
+Additional Reading
+------------------
+
+All image formats used in DevIL have corresponding documents on
+http://www.wotsit.org, under the Graphics Files section.  These documents
+proved invaluable for the creation of this library when there was no library
+already available for that image format.
+
+
+Legalese
+--------
+
+All contents of this file are intellectual property of Denton Woods,
+copyright 2001.

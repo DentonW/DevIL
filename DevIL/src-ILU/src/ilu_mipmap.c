@@ -1,0 +1,594 @@
+//-----------------------------------------------------------------------------
+//
+// ImageLib Utility Sources
+// Copyright (C) 2000-2001 by Denton Woods
+// Last modified: 08/11/2001 <--Y2K Compliant! =]
+//
+// Filename: openilu/manip.c
+//
+// Description: Generates mipmaps for the current image
+//
+//-----------------------------------------------------------------------------
+
+
+#include "ilu_internal.h"
+#include "ilu_mipmap.h"
+#include "ilu_states.h"
+#include "ilu_alloc.h"
+
+
+ILimage *Original;  // So we can increment NumMips
+
+
+// Note:  If any image is a non-power-of-2 image, it will automatically be
+//	converted to a power-of-2 image by iluScaleImage, which is likely to
+//	uglify the image. =]
+
+
+// @TODO:  Check for 1 bpp textures!
+
+
+// Currently changes all textures to powers of 2...should we change?
+ILboolean iluBuild2DMipmaps()
+{
+	ILimage		*Temp;
+	ILboolean	Resized = IL_FALSE;
+	ILuint		Width, Height;
+	ILenum		Filter = iluFilter;
+
+	iCurImage = Original = ilGetCurImage();
+	if (Original == NULL) {
+		ilSetError(ILU_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	// Get rid of any existing mipmaps.
+	if (Original->Mipmaps) {
+		ilCloseImage(Original->Mipmaps);
+		Original->Mipmaps = NULL;
+	}
+	Original->NumMips = 0;
+
+	Width = ilNextPower2(iCurImage->Width);
+	Height = ilNextPower2(iCurImage->Height);
+	if (iCurImage->Width != Width || iCurImage->Height != Height) {
+		Resized = IL_TRUE;
+		Temp = ilCopyImage_(ilGetCurImage());
+		ilSetCurImage(Temp);
+		iluImageParameter(ILU_FILTER, ILU_BILINEAR);
+		iluScale(Width, Height, 1);
+		iluImageParameter(ILU_FILTER, Filter);
+		iCurImage = ilGetCurImage();
+	}
+
+	CurMipMap = NULL;
+	iBuild2DMipmaps_(iCurImage->Width >> 1, iCurImage->Height >> 1);
+
+	if (Resized) {
+		Original->Mipmaps = iCurImage->Mipmaps;
+		iCurImage->Mipmaps = NULL;
+		ilCloseImage(iCurImage);
+		ilSetCurImage(Original);
+	}
+
+	return IL_TRUE;
+}
+
+
+ILboolean iluBuild3DMipmaps()
+{
+	ILimage		*Temp;
+	ILboolean	Resized = IL_FALSE;
+	ILuint		Width, Height, Depth;
+	ILenum		Filter = iluFilter;
+
+	iCurImage = Original = ilGetCurImage();
+	if (Original == NULL) {
+		ilSetError(ILU_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	// Get rid of any existing mipmaps.
+	if (Original->Mipmaps) {
+		ilCloseImage(Original->Mipmaps);
+		Original->Mipmaps = NULL;
+	}
+	Original->NumMips = 0;
+
+	Width = ilNextPower2(iCurImage->Width);
+	Height = ilNextPower2(iCurImage->Height);
+	Depth = ilNextPower2(iCurImage->Depth);
+	if (iCurImage->Width != Width || iCurImage->Height != Height || iCurImage->Depth != Depth) {
+		Resized = IL_TRUE;
+		Temp = ilCopyImage_(ilGetCurImage());
+		ilSetCurImage(Temp);
+		iluImageParameter(ILU_FILTER, ILU_BILINEAR);
+		iluScale(Width, Height, Depth);
+		iluImageParameter(ILU_FILTER, iluFilter);
+		iCurImage = ilGetCurImage();
+	}
+
+	CurMipMap = NULL;
+	iBuild3DMipmaps_(iCurImage->Width >> 1, iCurImage->Height >> 1, iCurImage->Depth >> 1);
+
+	if (Resized) {
+		Original->Mipmaps = iCurImage->Mipmaps;
+		iCurImage->Mipmaps = NULL;
+		ilCloseImage(iCurImage);
+		ilSetCurImage(Original);
+	}
+
+	return IL_TRUE;
+}
+
+
+ILboolean ILAPIENTRY iluBuildMipmaps()
+{
+	iCurImage = ilGetCurImage();
+	if (iCurImage == NULL) {
+		ilSetError(ILU_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	if (iCurImage->Depth > 1)
+		return iluBuild3DMipmaps();
+	/*if (iCurImage->Height <= 1)
+		return iluBuild1DMipmaps();*/  // 8-8-2001
+	return iluBuild2DMipmaps();
+}
+
+
+ILboolean iBuild1DMipmaps_(ILuint Width)
+{
+	ILimage *MipMap;
+	ILuint i, j, c;
+
+	if (CurMipMap->Width <= 1) {  // Already at the last mipmap
+		CurMipMap->Next = NULL;  // Terminate the list
+		return IL_TRUE;
+	}
+
+	MipMap = ilNewImage(Width, 1, 1, iCurImage->Bpp, iCurImage->Bpc);
+	if (MipMap == NULL) {
+		ilSetError(IL_OUT_OF_MEMORY);
+		if (CurMipMap != NULL)
+			CurMipMap->Next = NULL;
+		return IL_FALSE;
+	}
+
+	// Copies attributes
+	MipMap->Origin = iCurImage->Origin;  // 8-11-2001
+	MipMap->Format = iCurImage->Format;
+	MipMap->Type = iCurImage->Type;
+	MipMap->Pal.PalSize = iCurImage->Pal.PalSize;
+	MipMap->Pal.PalType = iCurImage->Pal.PalType;
+	if (iCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
+		MipMap->Pal.Palette = (ILubyte*)malloc(iCurImage->Pal.PalSize);  // check?
+		memcpy(MipMap->Pal.Palette, iCurImage->Pal.Palette, MipMap->Pal.PalSize);
+	}
+
+	if (CurMipMap == NULL) {  // First mipmap
+		iCurImage->Mipmaps = MipMap;
+	}
+	else {
+		CurMipMap->Next = MipMap;
+	}
+
+	for (c = 0; c < CurMipMap->Bpp; c++) {  // 8-12-2001
+		for (i = 0, j = 0; i < Width; i++) {
+			MipMap->Data[i * MipMap->Bpp + c] =
+				(CurMipMap->Data[j++ * MipMap->Bpp + c] +
+				 CurMipMap->Data[j++ * MipMap->Bpp + c]) >> 1;
+		}
+	}
+	
+	// 8-11-2001
+	CurMipMap = MipMap;
+	iBuild1DMipmaps_(MipMap->Width >> 1);
+	Original->NumMips++;
+
+	return IL_TRUE;
+}
+
+
+ILboolean iBuild1DMipmapsVertical_(ILuint Height)
+{
+	ILimage *MipMap, *Src;
+	ILuint i = 0, j = 0, c;
+
+	if (CurMipMap->Height <= 1) {  // Already at the last mipmap
+		CurMipMap->Next = NULL;  // Terminate the list
+		return IL_TRUE;
+	}
+
+	MipMap = ilNewImage(1, Height, 1, iCurImage->Bpp, iCurImage->Bpc);
+	if (MipMap == NULL) {
+		ilSetError(IL_OUT_OF_MEMORY);
+		if (CurMipMap != NULL)
+			CurMipMap->Next = NULL;
+		return IL_FALSE;
+	}
+
+	// Copies attributes
+	MipMap->Origin = iCurImage->Origin;  // 8-11-2001
+	MipMap->Format = iCurImage->Format;
+	MipMap->Type = iCurImage->Type;
+	MipMap->Pal.PalSize = iCurImage->Pal.PalSize;
+	MipMap->Pal.PalType = iCurImage->Pal.PalType;
+	if (iCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
+		MipMap->Pal.Palette = (ILubyte*)malloc(iCurImage->Pal.PalSize);  // check?
+		memcpy(MipMap->Pal.Palette, iCurImage->Pal.Palette, MipMap->Pal.PalSize);
+	}
+
+	if (CurMipMap == NULL) {  // First mipmap
+		iCurImage->Mipmaps = MipMap;
+		Src = iCurImage;
+	}
+	else {
+		CurMipMap->Next = MipMap;
+		Src = CurMipMap;
+	}
+
+	for (c = 0; c < CurMipMap->Bpp; c++) {  // 8-12-2001
+		//j = 0;
+		for (i = 0, j = 0; i < Height; i++) {
+			MipMap->Data[i * MipMap->Bpp + c] =
+				(CurMipMap->Data[j++ * MipMap->Bpp + c] +
+				 CurMipMap->Data[j++ * MipMap->Bpp + c]) >> 1;
+		}
+	}
+	// 8-11-2001
+	CurMipMap = MipMap;
+	iBuild1DMipmapsVertical_(MipMap->Height >> 1);
+	Original->NumMips++;
+
+	return IL_TRUE;
+}
+
+
+ILboolean iBuild2DMipmaps_(ILuint Width, ILuint Height)
+{
+	ILimage *MipMap, *Src;
+	ILuint	x1 = 0, x2 = 0, y1 = 0, y2 = 0, c;
+
+	if (CurMipMap) {
+		if (CurMipMap->Width == 1 && CurMipMap->Height == 1) {  // Already at the last mipmap
+			CurMipMap->Next = NULL;  // Terminate the list
+			return IL_TRUE;
+		}
+
+		if (/*CurMipMap->*/Height == 1) {
+			return iBuild1DMipmaps_(Width);
+		}
+
+		if (/*CurMipMap->*/Width == 1) {
+			return iBuild1DMipmapsVertical_(Height);
+		}
+	}
+	else if (iCurImage->Width <= 1 && iCurImage->Height <= 1) {  // 8-9-2001 - Not sure...
+		ilSetError(ILU_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	if (Height == 0 && Width == 0) {
+		ilSetError(ILU_INTERNAL_ERROR);
+		return IL_FALSE;
+	}
+	// 8-9-2001 - Should these two if statements read == 0 || == 1?
+	if (Height == 0) {
+		return iBuild1DMipmaps_(Width);
+	}
+	if (Width == 0) {
+		return iBuild1DMipmapsVertical_(Height);  // 8-9-2001
+	}
+
+	MipMap = ilNewImage(Width, Height, 1, iCurImage->Bpp, iCurImage->Bpc);
+	if (MipMap == NULL) {
+		ilSetError(IL_OUT_OF_MEMORY);
+		if (CurMipMap != NULL)
+			CurMipMap->Next = NULL;
+		return IL_FALSE;
+	}
+
+	// Copies attributes
+	MipMap->Origin = iCurImage->Origin;  // 8-11-2001
+	MipMap->Format = iCurImage->Format;
+	MipMap->Type = iCurImage->Type;
+	MipMap->Pal.PalSize = iCurImage->Pal.PalSize;
+	MipMap->Pal.PalType = iCurImage->Pal.PalType;
+	if (iCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
+		MipMap->Pal.Palette = (ILubyte*)malloc(iCurImage->Pal.PalSize);  // check?
+		memcpy(MipMap->Pal.Palette, iCurImage->Pal.Palette, MipMap->Pal.PalSize);
+	}
+
+	if (CurMipMap == NULL) {  // First mipmap
+		iCurImage->Mipmaps = MipMap;
+		Src = iCurImage;
+	}
+	else {
+		CurMipMap->Next = MipMap;
+		Src = CurMipMap;
+	}
+
+	for (y1 = 0; y1 < Height; y1++, y2 += 2) {
+		x1 = 0;  x2 = 0;
+		for (; x1 < Width; x1++, x2 += 2) {
+			for (c = 0; c < MipMap->Bpp; c++) {
+				MipMap->Data[y1 * MipMap->Bps + x1 * MipMap->Bpp + c] = (
+					Src->Data[y2 * Src->Bps + x2 * MipMap->Bpp + c] +
+					Src->Data[y2 * Src->Bps + (x2 + 1) * MipMap->Bpp + c] +
+					Src->Data[(y2 + 1) * Src->Bps + x2 * MipMap->Bpp + c] +
+					Src->Data[(y2 + 1) * Src->Bps + (x2 + 1) * MipMap->Bpp + c]) >> 2;
+			}
+		}
+	}
+
+	CurMipMap = MipMap;
+	iBuild2DMipmaps_(MipMap->Width >> 1, MipMap->Height >> 1);
+	Original->NumMips++;
+
+	return IL_TRUE;
+}
+
+
+ILboolean iBuild3DMipmaps_(ILuint Width, ILuint Height, ILuint Depth)
+{
+	ILimage *MipMap, *Src;
+	ILuint	x1 = 0, x2 = 0, y1 = 0, y2 = 0, z1 = 0, z2 = 0, z3, z4, z5, c;
+
+	if (CurMipMap) {
+		// Already at the last mipmap
+		if (CurMipMap->Width == 1 && CurMipMap->Height == 1 && CurMipMap->Depth == 1) {
+			CurMipMap->Next = NULL;  // Terminate the list
+			return IL_TRUE;
+		}
+
+		if (CurMipMap->Depth == 1) {
+			return iBuild2DMipmaps_(Width, Height);
+		}
+		if (CurMipMap->Height == 1) {
+			return iBuild3DMipmapsHorizontal_(Width, Depth);
+		}
+
+		if (CurMipMap->Width == 1) {
+			return iBuild3DMipmapsVertical_(Height, Depth);
+		}
+	}
+	else if (iCurImage->Width <= 1 && iCurImage->Height <= 1 && iCurImage->Height <= 1) {
+		ilSetError(ILU_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	if (Height == 0 && Width == 0 && Depth == 0) {
+		ilSetError(ILU_INTERNAL_ERROR);
+		return IL_FALSE;
+	}
+	if (Depth == 0) {
+		return iBuild2DMipmaps_(Width, Height);
+	}
+	if (Height == 0) {
+		return iBuild3DMipmapsHorizontal_(Width, Depth);
+	}
+	if (Width == 0) {
+		return iBuild3DMipmapsVertical_(Height, Depth);
+	}
+
+	MipMap = ilNewImage(Width, Height, Depth, iCurImage->Bpp, iCurImage->Bpc);
+	if (MipMap == NULL) {
+		ilSetError(IL_OUT_OF_MEMORY);
+		if (CurMipMap != NULL)
+			CurMipMap->Next = NULL;
+		return IL_FALSE;
+	}
+
+	// Copies attributes
+	MipMap->Origin = iCurImage->Origin;  // 8-11-2001
+	MipMap->Format = iCurImage->Format;
+	MipMap->Type = iCurImage->Type;
+	MipMap->Pal.PalSize = iCurImage->Pal.PalSize;
+	MipMap->Pal.PalType = iCurImage->Pal.PalType;
+	if (iCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
+		MipMap->Pal.Palette = (ILubyte*)malloc(iCurImage->Pal.PalSize);  // check?
+		memcpy(MipMap->Pal.Palette, iCurImage->Pal.Palette, MipMap->Pal.PalSize);
+	}
+
+	if (CurMipMap == NULL) {  // First mipmap
+		iCurImage->Mipmaps = MipMap;
+		Src = iCurImage;
+	}
+	else {
+		CurMipMap->Next = MipMap;
+		Src = CurMipMap;
+	}
+
+	for (z1 = 0; z1 < Depth; z1++, z2 += 2) {
+		z3 = z1 * MipMap->SizeOfPlane;
+		z4 = z2 * Src->SizeOfPlane;
+		z5 = (z2 + 1) * Src->SizeOfPlane;
+
+		y1 = 0;  y2 = 0;
+		for (; y1 < Height; y1++, y2 += 2) {
+ 			x1 = 0;  x2 = 0;
+			for (; x1 < Width; x1++, x2 += 2) {
+				for (c = 0; c < MipMap->Bpp; c++) {
+					MipMap->Data[z1 * MipMap->SizeOfPlane + y1 * MipMap->Bps + x1 * MipMap->Bpp + c] = (
+						Src->Data[z2 * Src->SizeOfPlane + y2 * Src->Bps + x2 * Src->Bpp + c] +
+						Src->Data[z2 * Src->SizeOfPlane + y2 * Src->Bps + (x2 + 1) * Src->Bpp + c] +
+						Src->Data[z2 * Src->SizeOfPlane + (y2 + 1) * Src->Bps + x2 * Src->Bpp + c] +
+						Src->Data[z2 * Src->SizeOfPlane + (y2 + 1) * Src->Bps + (x2 + 1) * Src->Bpp + c] +
+						Src->Data[(z2 + 1) * Src->SizeOfPlane + y2 * Src->Bps + x2 * Src->Bpp + c] +
+						Src->Data[(z2 + 1) * Src->SizeOfPlane + y2 * Src->Bps + (x2 + 1) * Src->Bpp + c] +
+						Src->Data[(z2 + 1) * Src->SizeOfPlane + (y2 + 1) * Src->Bps + x2 * Src->Bpp + c] +
+						Src->Data[(z2 + 1) * Src->SizeOfPlane + (y2 + 1) * Src->Bps + (x2 + 1) * Src->Bpp + c]) / 8;
+				}
+			}
+		}
+	}
+
+	CurMipMap = MipMap;
+	iBuild3DMipmaps_(MipMap->Width >> 1, MipMap->Height >> 1, MipMap->Depth >> 1);
+	Original->NumMips++;
+
+	return IL_TRUE;
+}
+
+
+ILboolean iBuild3DMipmapsVertical_(ILuint Height, ILuint Depth)
+{
+	ILimage *MipMap, *Src;
+	ILuint	y1 = 0, y2 = 0, z1 = 0, z2 = 0, z3, z4, z5, c;
+
+	if (CurMipMap) {
+		// Already at the last mipmap
+		if (CurMipMap->Width == 1 && CurMipMap->Height == 1 && CurMipMap->Depth == 1) {
+			CurMipMap->Next = NULL;  // Terminate the list
+			return IL_TRUE;
+		}
+
+		if (CurMipMap->Depth == 1) {
+			return iBuild1DMipmapsVertical_(Height);
+		}
+	}
+	else if (iCurImage->Height <= 1 && iCurImage->Height <= 1) {
+		ilSetError(ILU_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	if (Height == 0 && Depth == 0) {
+		ilSetError(ILU_INTERNAL_ERROR);
+		return IL_FALSE;
+	}
+	if (Depth == 0) {
+		return iBuild1DMipmapsVertical_(Height);
+	}
+
+	MipMap = ilNewImage(1, Height, Depth, iCurImage->Bpp, iCurImage->Bpc);
+	if (MipMap == NULL) {
+		ilSetError(IL_OUT_OF_MEMORY);
+		if (CurMipMap != NULL)
+			CurMipMap->Next = NULL;
+		return IL_FALSE;
+	}
+
+	// Copies attributes
+	MipMap->Format = iCurImage->Format;
+	MipMap->Type = iCurImage->Type;
+	MipMap->Pal.PalSize = iCurImage->Pal.PalSize;
+	MipMap->Pal.PalType = iCurImage->Pal.PalType;
+	if (iCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
+		MipMap->Pal.Palette = (ILubyte*)malloc(iCurImage->Pal.PalSize);  // check?
+		memcpy(MipMap->Pal.Palette, iCurImage->Pal.Palette, MipMap->Pal.PalSize);
+	}
+
+	if (CurMipMap == NULL) {  // First mipmap
+		iCurImage->Mipmaps = MipMap;
+		Src = iCurImage;
+	}
+	else {
+		CurMipMap->Next = MipMap;
+		Src = CurMipMap;
+	}
+
+	for (z1 = 0; z1 < Depth; z1++, z2 += 2) {
+		z3 = z1 * iCurImage->SizeOfPlane;
+		z4 = z2 * iCurImage->SizeOfPlane;
+		z5 = (z2 + 1) * iCurImage->SizeOfPlane;
+
+		for (y1 = 0; y1 < Height; y1++, y2 += 2) {
+			for (c = 0; c < MipMap->Bpp; c++) {
+				MipMap->Data[z3 + y1 * MipMap->Bps + c] = (
+					Src->Data[z4 + y2 * Src->Bps + c] +
+					Src->Data[z4 + y2 * Src->Bps + c] +
+					Src->Data[z4 + (y2 + 1) * Src->Bps + c] +
+					Src->Data[z4 + (y2 + 1) * Src->Bps + c]) >> 2;
+			}
+		}
+	}
+
+	CurMipMap = MipMap;
+	iBuild3DMipmapsVertical_(MipMap->Height >> 1, MipMap->Depth >> 1);
+	Original->NumMips++;
+
+	return IL_TRUE;
+}
+
+
+ILboolean iBuild3DMipmapsHorizontal_(ILuint Width, ILuint Depth)
+{
+	ILimage *MipMap, *Src;
+	ILuint	x1 = 0, x2 = 0, z1 = 0, z2 = 0, z3, z4, z5, c;
+
+	if (CurMipMap) {
+		// Already at the last mipmap
+		if (CurMipMap->Width == 1 && CurMipMap->Height == 1 && CurMipMap->Depth == 1) {
+			CurMipMap->Next = NULL;  // Terminate the list
+			return IL_TRUE;
+		}
+
+		if (CurMipMap->Depth == 1) {
+			return iBuild1DMipmaps_(Width);
+		}
+	}
+	else if (iCurImage->Width <= 1 && iCurImage->Height <= 1) {
+		ilSetError(ILU_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	if (Width == 0 && Depth == 0) {
+		ilSetError(ILU_INTERNAL_ERROR);
+		return IL_FALSE;
+	}
+	if (Depth == 0) {
+		return iBuild1DMipmaps_(Width);
+	}
+
+	MipMap = ilNewImage(Width, 1, Depth, iCurImage->Bpp, iCurImage->Bpc);
+	if (MipMap == NULL) {
+		ilSetError(IL_OUT_OF_MEMORY);
+		if (CurMipMap != NULL)
+			CurMipMap->Next = NULL;
+		return IL_FALSE;
+	}
+
+	// Copies attributes
+	MipMap->Format = iCurImage->Format;
+	MipMap->Type = iCurImage->Type;
+	MipMap->Pal.PalSize = iCurImage->Pal.PalSize;
+	MipMap->Pal.PalType = iCurImage->Pal.PalType;
+	if (iCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
+		MipMap->Pal.Palette = (ILubyte*)malloc(iCurImage->Pal.PalSize);  // check?
+		memcpy(MipMap->Pal.Palette, iCurImage->Pal.Palette, MipMap->Pal.PalSize);
+	}
+
+	if (CurMipMap == NULL) {  // First mipmap
+		iCurImage->Mipmaps = MipMap;
+		Src = iCurImage;
+	}
+	else {
+		CurMipMap->Next = MipMap;
+		Src = CurMipMap;
+	}
+
+	for (z1 = 0; z1 < Depth; z1++, z2 += 2) {
+		z3 = z1 * iCurImage->SizeOfPlane;
+		z4 = z2 * iCurImage->SizeOfPlane;
+		z5 = (z2 + 1) * iCurImage->SizeOfPlane;
+
+		x1 = 0;  x2 = 0;
+		for (; x1 < Width; x1++, x2 += 2) {
+			for (c = 0; c < MipMap->Bpp; c++) {
+				MipMap->Data[z3 + x1 * MipMap->Bpp + c] = (
+					Src->Data[z4 + x2 * MipMap->Bpp + c] +
+					Src->Data[z4 + (x2 + 1) * MipMap->Bpp + c] +
+					Src->Data[z4 + x2 * MipMap->Bpp + c] +
+					Src->Data[z4 + (x2 + 1) * MipMap->Bpp + c]) >> 2;
+			}
+		}
+	}
+
+	CurMipMap = MipMap;
+	iBuild3DMipmapsHorizontal_(MipMap->Width >> 1, MipMap->Depth >> 1);
+	Original->NumMips++;
+
+	return IL_TRUE;
+}

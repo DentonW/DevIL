@@ -1,0 +1,512 @@
+dnl 
+dnl Autoconf script for DevIL Library
+dnl Written by Edouard Gomez <ed.gomez@wanadoo.fr>
+dnl 
+
+
+dnl
+dnl configure.in initialization
+dnl
+AC_INIT(README)
+
+dnl
+dnl Minimum Autoconf version
+dnl
+AC_PREREQ(2.50)
+
+dnl
+dnl Version Info
+dnl
+
+DEVIL_MAJOR=1
+DEVIL_MINOR=2
+DEVIL_REVISION=5
+DEVIL_VERSION=$DEVIL_MAJOR$DEVIL_MINOR$DEVIL_REVISION
+DEVIL_LTVERSION=1:$DEVIL_VERSION:0
+AC_SUBST(DEVIL_LTVERSION)
+
+dnl
+dnl Basic conf
+dnl
+
+AC_REVISION($Revision: 1.1.1.1 $)
+AC_CONFIG_AUX_DIR(libtools)
+AC_PREFIX_DEFAULT(/usr/local)
+AC_CANONICAL_HOST
+AC_LANG_C
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_PROG_MAKE_SET
+AC_C_BIGENDIAN
+
+AM_INIT_AUTOMAKE("DevIL", $DEVIL_MAJOR.$DEVIL_MINOR.$DEVIL_REVISION)
+AM_CONFIG_HEADER(include/IL/config.h)
+AM_DISABLE_STATIC
+AM_PROG_LIBTOOL
+
+LIBIL_CFLAGS="-O2  -funroll-loops -ffast-math  -fomit-frame-pointer \
+              -fexpensive-optimizations"
+LIBILU_CFLAGS="-O2  -funroll-loops -ffast-math  -fomit-frame-pointer \
+               -fexpensive-optimizations"
+LIBILUT_CFLAGS="-O2  -funroll-loops -ffast-math  -fomit-frame-pointer \
+               -fexpensive-optimizations"
+AC_SUBST(LIBIL_CFLAGS)
+AC_SUBST(LIBILU_CFLAGS)
+AC_SUBST(LIBILUT_CFLAGS)
+
+dnl
+dnl Default supported formats : all except lcms
+dnl
+dnl no_bmp="no"
+dnl no_dcx="no"
+dnl no_dds="no"
+dnl no_doom="no"
+dnl no_gif="no"
+dnl no_icon="no"
+dnl no_jpeg="no"
+dnl no_lif="no"
+dnl no_mdl="no"
+dnl no_mng="no"
+dnl no_pcd="no"
+dnl no_pcx="no"
+dnl no_png="no"
+dnl no_pnm="no"
+dnl no_lcms="no"
+dnl no_raw="no"
+dnl no_sgi="no"
+dnl no_tga="no"
+dnl no_tiff="no"
+dnl no_wal="no"
+
+dnl
+dnl Libraries development checking
+dnl
+AC_CHECK_HEADER(jpeglib.h, ,no_jpeg="yes")
+AC_CHECK_HEADER(tiffio.h, ,no_tiff="yes")
+AC_CHECK_HEADER(png.h, ,no_png="yes")
+AC_CHECK_HEADER(gif_lib.h, ,no_gif="yes")
+AC_CHECK_HEADER(lcms/lcms.h, ,no_lcms="yes")
+AC_CHECK_HEADER(libmng.h, ,no_mng="yes")
+AC_CHECK_HEADER(GL/gl.h, use_opengl="no")
+
+dnl
+dnl Arguments
+dnl
+AC_ARG_ENABLE(bmp,
+[  --disable-bmp           Doesn't compile bmp support],
+no_bmp="yes", no_bmp="no")
+
+AC_ARG_ENABLE(dcx,
+[  --disable-dcx           Doesn't compile dcx support],
+no_dcx="yes", no_dcx="no")
+
+AC_ARG_ENABLE(doom,
+[  --disable-doom          Doesn't compile wad support],
+no_doom="yes", no_doom="no")
+
+AC_ARG_ENABLE(gif,
+[  --disable-gif           Doesn't compile gif support],
+no_gif="yes", no_gif="no")
+
+AC_ARG_ENABLE(icon,
+[  --disable-icon          Doesn't compile icon support],
+no_icon="yes", no_icon="no")
+
+AC_ARG_ENABLE(jpeg,
+[  --disable-jpeg          Doesn't compile jpeg support],
+no_jpeg="yes", no_jpeg="no")
+
+AC_ARG_ENABLE(lif,
+[  --disable-lif           Doesn't compile lif support],
+no_lif="yes", no_lif="no")
+
+AC_ARG_ENABLE(lcms,
+[  --disable-lcms          Doesn't compile lcms support],
+no_lcms="yes", no_lcms="no")
+
+AC_ARG_ENABLE(mdl,
+[  --disable-mdl           Doesn't compile mdl support],
+no_mdl="yes", no_mdl="no")
+
+AC_ARG_ENABLE(mng,
+[  --disable-mng           Doesn't compile mng support],
+no_mng="yes", no_mng="no")
+
+AC_ARG_ENABLE(pcd,
+[  --disable-pcd           Doesn't compile pcd support],
+no_pcd="yes", no_pcd="no")
+
+AC_ARG_ENABLE(pcx,
+[  --disable-pcx           Doesn't compile pcx support],
+no_pcx="yes", no_pcx="no")
+
+AC_ARG_ENABLE(png,
+[  --disable-png           Doesn't compile png support],
+no_png="yes", no_png="no")
+
+AC_ARG_ENABLE(pnm,
+[  --disable-pnm           Doesn't compile pnm support],
+no_pnm="yes", no_pnm="no")
+
+AC_ARG_ENABLE(lcms,
+[  --disable-lcms          Doesn't compile lcms support],
+no_lcms="yes", no_lcms="no")
+
+AC_ARG_ENABLE(raw,
+[  --disable-raw           Doesn't compile raw support],
+no_raw="yes", no_raw="no")
+
+AC_ARG_ENABLE(sgi,
+[  --disable-sgi           Doesn't compile sgi support],
+no_sgi="yes", no_sgi="no")
+
+AC_ARG_ENABLE(tga,
+[  --disable-tga           Doesn't compile tga support],
+no_tga="yes", no_tga="no")
+
+AC_ARG_ENABLE(tiff,
+[  --disable-tiff          Doesn't compile tiff support],
+no_tiff="yes", no_tiff="no")
+
+AC_ARG_ENABLE(wal,
+[  --disable-wal           Doesn't compile wal support],
+no_wal="yes", no_wal="no")
+
+AC_ARG_ENABLE(allegro,
+[  --disable-allegro       Doesn't compile allegro support],
+use_allegro="no", use_allegro="yes")
+
+AC_ARG_ENABLE(directx,
+[  --disable-directx       Doesn't compile directx support],
+use_directx="no", use_directx="yes")
+
+AC_ARG_ENABLE(opengl,
+[  --disable-opengl        Doesn't compile opengl support],
+use_opengl="no", use_opengl="yes")
+
+AC_ARG_ENABLE(sdl,
+[  --disable-sdl           Doesn't compile sdl support],
+use_sdl="no", use_sdl="yes")
+
+AC_ARG_ENABLE(win32,
+[  --disable-win32         Doesn't compile win32 support],
+use_win32="no", use_win32="yes")
+
+case "$host" in
+  *win*) 
+              ;;
+  *)
+              use_win32="no"
+              use_directx="no"
+              ;;
+esac
+
+dnl
+dnl Now we can check for bin libraries
+dnl
+if test "$no_jpeg" = "no" ; then
+  AC_CHECK_LIB(jpeg, jpeg_start_decompress, LIBJPG="-ljpeg", LIBJPG="", )
+  if test "$LIBJPG" != "-ljpeg" ; then
+    no_jpeg="yes"
+  fi
+else
+  LIBJPG=""
+fi
+AC_SUBST(LIBJPG)
+
+if test "$no_tiff" = "no" ; then
+   AC_CHECK_LIB(tiff, TIFFReadRGBAImage, LIBTIFF="-ltiff", LIBTIFF="", -lm)
+   if test "$LIBTIFF" != "-ltiff" ; then
+     no_tiff="yes"
+   fi
+else
+  LIBTIFF=""
+fi
+AC_SUBST(LIBTIFF)
+
+if test "$no_png" = "no" ; then
+   AC_CHECK_LIB(png, png_start_read_image, LIBPNG="-lpng", LIBPNG="", )
+   if test "$LIBPNG" != "-lpng" ; then
+     no_png="yes"
+   fi
+else
+  LIBPNG=""
+fi
+AC_SUBST(LIBPNG)
+
+if test "$no_lcms" = "no" ; then
+   AC_CHECK_LIB(lcms,  cmsOpenProfileFromFile, LIBLCMS="-llcms", LIBLCMS="", -lm)
+   if test "$LIBLCMS" != "-llcms" ; then
+     no_lcms="yes"
+   fi
+else
+  LIBLCMS=""
+fi
+AC_SUBST(LIBLCMS)
+
+if test "$no_mng" = "no" ; then
+   AC_CHECK_LIB(mng, mng_setcb_openstream, LIBMNG="-lmng", LIBMNG="", )
+   if test "$LIBMNG" != "-lmng" ; then
+     no_mng="yes"
+   fi
+else
+  LIBMNG=""
+fi
+AC_SUBST(LIBMNG)
+
+if test "$no_gif" = "no" ; then
+   AC_CHECK_LIB(ungif, DGifOpenFileName, LIBGIF="-lungif", LIBGIF="", )
+   if test "$LIBGIF" != "-lungif" ; then
+     no_gif="yes"
+   fi
+else
+  LIBGIF=""
+fi
+AC_SUBST(LIBGIF)
+
+dnl
+dnl ILUT APIs checking
+dnl
+
+if test "$use_sdl" = "yes" ; then
+  AC_CHECK_PROG(sdl_config, sdl-config, yes, no , )
+  if test $sdl_config = no ; then
+    use_sdl="no"
+    LIBSDL=""
+    HSDL=""
+  else
+    LIBSDL=`sdl-conf --libs`
+    HSDL=`sdl-config --cflags`
+  fi
+fi
+AC_SUBST(LIBSDL)
+AC_SUBST(HSDL)
+
+if test "$use_opengl" = "yes" ; then
+  AC_CHECK_LIB(GL, glEnable, LIBGL="-lGL", LIBGL="", -lm)
+  if test "$LIBGL" != "-lGL" ; then
+    use_opengl="no"
+  fi
+else
+  LIBGL=""
+fi
+AC_SUBST(LIBGL)
+
+if test "$use_allegro" = "yes" ; then
+  AC_CHECK_PROG(allegro_config, allegro-config, yes, no, )
+  if test $allegro_config = no ; then
+    use_allegro="no"
+    LIBALLEGRO=""
+    HALLEGRO=""
+  else
+    LIBALLEGRO=`allegro-config --libs`
+    HALLEGRO=`allegro-config --cflags`
+  fi
+fi
+AC_SUBST(LIBALLEGRO)
+AC_SUBST(HALLEGRO)
+
+dnl
+dnl Prepares substitutions in config.h
+dnl
+
+SUPPORTED_FORMATS=""
+
+if test "$no_bmp"  = "yes"  ; then
+  AC_DEFINE(IL_NO_BMP)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"BMP "
+fi
+AM_CONDITIONAL(IL_NO_BMP, test x$no_bmp != "xyes")
+
+if test "$no_dcx"  = "yes"  ; then
+  AC_DEFINE(IL_NO_DCX)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"DCX "
+fi
+AM_CONDITIONAL(IL_NO_DCX, test x$no_dcx != "xyes")
+
+if test "$no_dds"  = "yes"  ; then
+  AC_DEFINE(IL_NO_DDS)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"DDS "
+fi
+AM_CONDITIONAL(IL_NO_DDS, test x$no_dds != "xyes")
+
+if test "$no_doom" = "yes" ; then
+  AC_DEFINE(IL_NO_DOOM)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"WAD "
+fi
+AM_CONDITIONAL(IL_NO_DOOM, test x$no_doom != "xyes")
+
+if test "$no_gif"  = "yes"  ; then
+  AC_DEFINE(IL_NO_GIF)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"GIF "
+fi
+AM_CONDITIONAL(IL_NO_GIF, test x$no_gif != "xyes")
+
+if test "$no_icon" = "yes"  ; then
+  AC_DEFINE(IL_NO_ICO)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"ICO "
+fi
+AM_CONDITIONAL(IL_NO_ICO, test x$no_icon != "xyes")
+
+if test "$no_jpeg" = "yes"  ; then
+  AC_DEFINE(IL_NO_JPG)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"JPG "
+fi
+AM_CONDITIONAL(IL_NO_JPG, test x$no_jpeg != "xyes")
+
+if test "$no_lif"  = "yes"  ; then
+  AC_DEFINE(IL_NO_LIF)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"LIF "
+fi
+AM_CONDITIONAL(IL_NO_LIF, test x$no_lif != "xyes")
+
+if test "$no_lcms"  = "yes"  ; then
+  AC_DEFINE(IL_NO_LCMS)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"LCMS "
+fi
+AM_CONDITIONAL(IL_NO_LCMS, test x$no_lcms != "xyes")
+
+if test "$no_mdl"  = "yes"  ; then
+  AC_DEFINE(IL_NO_MDL)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"MDL "
+fi
+AM_CONDITIONAL(IL_NO_MDL, test x$no_mdl != "xyes")
+
+if test "$no_mng"  = "yes"  ; then
+  AC_DEFINE(IL_NO_MNG)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"MNG "
+fi
+AM_CONDITIONAL(IL_NO_MNG, test x$no_mng != "xyes")
+
+if test "$no_pcd"  = "yes"  ; then
+  AC_DEFINE(IL_NO_PCD)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PCD "
+fi
+AM_CONDITIONAL(IL_NO_PCD, test x$no_pcd != "xyes")
+
+if test "$no_pcx"  = "yes"  ; then
+  AC_DEFINE(IL_NO_PCX)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PCX "
+fi
+AM_CONDITIONAL(IL_NO_PCX, test x$no_pcx != "xyes")
+
+if test "$no_png"  = "yes"  ; then
+  AC_DEFINE(IL_NO_PNG)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PNG "
+fi
+AM_CONDITIONAL(IL_NO_PNG, test x$no_png != "xyes")
+
+if test "$no_pnm"  = "yes"  ; then
+  AC_DEFINE(IL_NO_PNM)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PNM "
+fi
+AM_CONDITIONAL(IL_NO_PNM, test x$no_pnm != "xyes")
+
+if test "$no_raw"  = "yes"  ; then
+  AC_DEFINE(IL_NO_RAW)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"RAW "
+fi
+AM_CONDITIONAL(IL_NO_RAW, test x$no_raw != "xyes")
+
+if test "$no_sgi"  = "yes"  ; then
+  AC_DEFINE(IL_NO_SGI)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"SGI "
+fi
+AM_CONDITIONAL(IL_NO_SGI, test x$no_sgi != "xyes")
+
+if test "$no_tga"  = "yes"  ; then
+  AC_DEFINE(IL_NO_TGA)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"TGA "
+fi
+AM_CONDITIONAL(IL_NO_TGA, test x$no_tga != "xyes")
+
+if test "$no_tiff" = "yes"  ; then
+  AC_DEFINE(IL_NO_TIF)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"TIF "
+fi
+AM_CONDITIONAL(IL_NO_TIF, test x$no_tiff != "xyes")
+
+if test "$no_wal"  = "yes"  ; then
+  AC_DEFINE(IL_NO_WAL)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"WAL "
+fi
+AM_CONDITIONAL(IL_NO_WAL, test x$no_wal != "xyes")
+
+
+AC_MSG_RESULT([ ])
+AC_MSG_RESULT([+----------------------------------------+])
+AC_MSG_RESULT([|     IL library  Supported formats      |])
+AC_MSG_RESULT([+----------------------------------------+-------+])
+AC_MSG_RESULT([$SUPPORTED_FORMATS])
+
+
+SUPPORTED_API=""
+
+if test "$use_allegro" = "yes" ; then
+  AC_DEFINE(ILUT_USE_ALLEGRO)
+  SUPPORTED_API=$SUPPORTED_API"Allegro "
+fi
+
+if test "$use_directx" = "yes" ; then
+  AC_DEFINE(ILUT_USE_DIRECTX8)
+  SUPPORTED_APPI=$SUPPORTED_API"Directx8 "
+fi
+
+if test "$use_opengl" = "yes" ; then
+  AC_DEFINE(ILUT_USE_OPENGL)
+  SUPPORTED_API=$SUPPORTED_API"OpenGL "
+fi
+
+if test "$use_sdl" = "yes" ; then
+  AC_DEFINE(ILUT_USE_SDL)
+  SUPPORTED_API=$SUPPORTED_API"SDL "
+fi
+
+if test "$use_win32" = "yes" ; then
+  AC_DEFINE(ILUT_USE_WIN32)
+  SUPPORTED_API=$SUPPORTED_API"Win32 "
+fi
+
+AC_MSG_RESULT([ ])
+AC_MSG_RESULT([+----------------------------------------+])
+AC_MSG_RESULT([|      ILUT library  Supported APIs      |])
+AC_MSG_RESULT([+----------------------------------------+-------+])
+AC_MSG_RESULT([$SUPPORTED_API])
+
+AC_MSG_RESULT([ ])
+
+dnl
+dnl Ouput files to generate
+dnl
+AC_OUTPUT([Makefile \
+           src-IL/Makefile \
+           src-IL/src/Makefile \
+           src-IL/include/Makefile \
+           src-ILU/Makefile \
+           src-ILU/src/Makefile \
+           src-ILU/include/Makefile \
+           src-ILUT/Makefile \
+           src-ILUT/src/Makefile \
+           src-ILUT/include/Makefile \
+           include/Makefile \
+           include/IL/Makefile ])

@@ -1,0 +1,257 @@
+//-----------------------------------------------------------------------------
+//
+// ImageLib Utility Sources
+// Copyright (C) 2000-2001 by Denton Woods
+// Last modified: 05/25/2001 <--Y2K Compliant! =]
+//
+// Filename: openilu/scale.c
+//
+// Description: Scales an image.
+//
+//-----------------------------------------------------------------------------
+
+
+#include "ilu_internal.h"
+#include "ilu_states.h"
+#include "ilu_alloc.h"
+
+
+ILboolean ILAPIENTRY iluEnlargeImage(ILfloat XDim, ILfloat YDim, ILfloat ZDim)
+{
+	if (XDim <= 0.0f || YDim <= 0.0f || ZDim <= 0.0f) {
+		ilSetError(ILU_INVALID_PARAM);
+		return IL_FALSE;
+	}
+
+	iCurImage = ilGetCurImage();
+	return iluScale((ILuint)(iCurImage->Width * XDim), (ILuint)(iCurImage->Height * YDim),
+					(ILuint)(iCurImage->Depth * ZDim));
+}
+
+
+ILimage *iluScale1D_(ILimage *Image, ILimage *Scaled, ILuint Width);
+ILimage *iluScale2D_(ILimage *Image, ILimage *Scaled, ILuint Width, ILuint Height);
+ILimage *iluScale3D_(ILimage *Image, ILimage *Scaled, ILuint Width, ILuint Height, ILuint Depth);
+
+
+ILboolean ILAPIENTRY iluScale(ILuint Width, ILuint Height, ILuint Depth)
+{
+	static ILimage		*Temp;
+	static ILboolean	UsePal;
+	static ILenum		PalType;
+	static ILenum		Origin;
+
+	iCurImage = ilGetCurImage();
+	if (iCurImage == NULL) {
+		ilSetError(ILU_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	if (iCurImage->Width == Width && iCurImage->Height == Height && iCurImage->Depth == Depth)
+		return IL_TRUE;
+
+	switch (iluFilter)
+	{
+		case ILU_SCALE_BOX:
+		case ILU_SCALE_TRIANGLE:
+		case ILU_SCALE_BELL:
+		case ILU_SCALE_BSPLINE:
+		case ILU_SCALE_LANCZOS3:
+		case ILU_SCALE_MITCHELL:
+			return iluScaleAdvanced(Width, Height, iluFilter);
+	}
+
+
+	Origin = iCurImage->Origin;
+	UsePal = (iCurImage->Format == IL_COLOUR_INDEX);
+	PalType = iCurImage->Pal.PalType;
+	Temp = iluScale_(iCurImage, Width, Height, Depth);
+	if (Temp != NULL) {
+		ilTexImage(Temp->Width, Temp->Height, Temp->Depth, Temp->Bpp, Temp->Format, Temp->Type, Temp->Data);
+		iCurImage->Origin = Origin;
+		ilCloseImage(Temp);
+		if (UsePal) {
+			if (!ilConvertImage(IL_COLOUR_INDEX, IL_UNSIGNED_BYTE))
+				return IL_FALSE;
+			ilConvertPal(PalType);
+		}
+		return IL_TRUE;
+	}
+
+	return IL_FALSE;
+}
+
+
+ILAPI ILimage* ILAPIENTRY iluScale_(ILimage *Image, ILuint Width, ILuint Height, ILuint Depth)
+{
+	static ILimage		*Scaled, *CurImage, *ToScale;
+	static ILenum		Format, PalType;
+
+	CurImage = ilGetCurImage();
+	Format = Image->Format;
+	if (Format == IL_COLOUR_INDEX) {
+		ilSetCurImage(Image);
+		PalType = Image->Pal.PalType;
+		ToScale = iConvertImage(ilGetPalBaseType(Image->Pal.PalType), iCurImage->Type);
+	}
+	else {
+		ToScale = Image;
+	}
+
+	// So we don't replicate this 3 times (one in each iluScalexD_() function.
+	Scaled = (ILimage*)calloc(1, sizeof(ILimage));
+	if (ilCopyImageAttr(Scaled, ToScale) == IL_FALSE) {
+		ilSetError(ILU_OUT_OF_MEMORY);
+		ilCloseImage(Scaled);
+		if (ToScale != Image)
+			ilCloseImage(ToScale);
+		ilSetCurImage(CurImage);
+		return NULL;
+	}
+	if (ilResizeImage(Scaled, Width, Height, Depth, ToScale->Bpp, ToScale->Bpc) == IL_FALSE) {
+		ilSetError(ILU_OUT_OF_MEMORY);
+		ilCloseImage(Scaled);
+		if (ToScale != Image)
+			ilCloseImage(ToScale);
+		ilSetCurImage(CurImage);
+		return NULL;
+	}
+	
+	if (Height <= 1 && Image->Height <= 1) {
+		iluScale1D_(ToScale, Scaled, Width);
+	}
+	if (Depth <= 1 && Image->Depth <= 1) {
+		iluScale2D_(ToScale, Scaled, Width, Height);
+	}
+	else {
+		iluScale3D_(ToScale, Scaled, Width, Height, Depth);
+	}
+
+	if (Format == IL_COLOUR_INDEX) {
+		//ilSetCurImage(Scaled);
+		//ilConvertImage(IL_COLOUR_INDEX);
+		ilSetCurImage(CurImage);
+		ilCloseImage(ToScale);
+	}
+
+	return Scaled;
+}
+
+
+ILimage *iluScale1D_(ILimage *Image, ILimage *Scaled, ILuint Width)
+{
+	static ILuint	x1, x2;
+	static ILuint	NewX1, NewX2, NewX3, x, c;
+	static ILdouble	ScaleX, t1, t2, f;
+	static ILushort	*ShortPtr, *SShortPtr;
+	static ILuint	*IntPtr, *SIntPtr;
+
+	if (Image == NULL) {
+		ilSetError(ILU_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	ScaleX = (ILdouble)Width / Image->Width;
+
+	ShortPtr = (ILushort*)Image->Data;
+	SShortPtr = (ILushort*)Scaled->Data;
+	IntPtr = (ILuint*)Image->Data;
+	SIntPtr = (ILuint*)Scaled->Data;
+
+	if (iluFilter == ILU_NEAREST) {
+		switch (Image->Bpc)
+		{
+			case 1:
+				for (x = 0; x < Width; x++) {
+					NewX1 = x * Scaled->Bpp;
+					NewX2 = (ILuint)(x / ScaleX) * Image->Bpp;
+					for (c = 0; c < Scaled->Bpp; c++) {
+						Scaled->Data[NewX1 + c] = Image->Data[NewX2 + c];
+					}
+				}
+				break;
+			case 2:
+				for (x = 0; x < Width; x++) {
+					NewX1 = x * Scaled->Bpp;
+					NewX2 = (ILuint)(x / ScaleX) * Image->Bpp;
+					for (c = 0; c < Scaled->Bpp; c++) {
+						SShortPtr[NewX1 + c] = ShortPtr[NewX2 + c];
+					}
+				}
+				break;
+			case 4:
+				for (x = 0; x < Width; x++) {
+					NewX1 = x * Scaled->Bpp;
+					NewX2 = (ILuint)(x / ScaleX) * Image->Bpp;
+					for (c = 0; c < Scaled->Bpp; c++) {
+						SIntPtr[NewX1 + c] = IntPtr[NewX2 + c];
+					}
+				}
+				break;
+		}
+	}
+	else {  // IL_LINEAR or IL_BILINEAR
+		switch (Image->Bpc)
+		{
+			case 1:
+				NewX3 = 0;
+				for (x = 0; x < Width; x++) {
+					t1 = x / (ILdouble)Width;
+					t2 = t1 * Width - (ILuint)(t1 * Width);
+					f = (1.0 - cos(t2 * IL_PI)) * .5;
+					NewX1 = ((ILuint)(t1 * Width / ScaleX)) * Image->Bpp;
+					NewX2 = ((ILuint)(t1 * Width / ScaleX) + 1) * Image->Bpp;
+
+					for (c = 0; c < Scaled->Bpp; c++) {
+						x1 = Image->Data[NewX1 + c];
+						x2 = Image->Data[NewX2 + c];
+
+						Scaled->Data[NewX3 + c] = (ILubyte)(x1 * (1.0 - f) + x2 * f);
+					}
+
+					NewX3 += Scaled->Bpp;
+				}
+				break;
+			case 2:
+				NewX3 = 0;
+				for (x = 0; x < Width; x++) {
+					t1 = x / (ILdouble)Width;
+					t2 = t1 * Width - (ILuint)(t1 * Width);
+					f = (1.0 - cos(t2 * IL_PI)) * .5;
+					NewX1 = ((ILuint)(t1 * Width / ScaleX)) * Image->Bpp;
+					NewX2 = ((ILuint)(t1 * Width / ScaleX) + 1) * Image->Bpp;
+
+					for (c = 0; c < Scaled->Bpp; c++) {
+						x1 = ShortPtr[NewX1 + c];
+						x2 = ShortPtr[NewX2 + c];
+
+						SShortPtr[NewX3 + c] = (ILushort)(x1 * (1.0 - f) + x2 * f);
+					}
+
+					NewX3 += Scaled->Bpp;
+				}
+				break;
+			case 4:
+				NewX3 = 0;
+				for (x = 0; x < Width; x++) {
+					t1 = x / (ILdouble)Width;
+					t2 = t1 * Width - (ILuint)(t1 * Width);
+					f = (1.0 - cos(t2 * IL_PI)) * .5;
+					NewX1 = ((ILuint)(t1 * Width / ScaleX)) * Image->Bpp;
+					NewX2 = ((ILuint)(t1 * Width / ScaleX) + 1) * Image->Bpp;
+
+					for (c = 0; c < Scaled->Bpp; c++) {
+						x1 = IntPtr[NewX1 + c];
+						x2 = IntPtr[NewX2 + c];
+
+						SIntPtr[NewX3 + c] = (ILuint)(x1 * (1.0 - f) + x2 * f);
+					}
+
+					NewX3 += Scaled->Bpp;
+				}
+				break;
+		}
+	}
+
+	return Scaled;
+}

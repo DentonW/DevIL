@@ -1,0 +1,11 @@
+In the Post-Build step, a Copy command used to copy the resultant dlls to the
+Windows\System directory.  If your Windows System directory is not
+c:\Windows\System, edit the post-build step for all the DevIL* projects.
+
+When compiling a program that uses DevIL*, it must be configured to use the
+multithreaded dll version of the libc runtime.  To do this, go to Project
+Settings - C/C++ tab - Change "Category" to 'Code Generation' - Change
+"Use run-time library" to 'Multithreaded DLL' or 'Debug Multithreaded DLL',
+based on whether the project you are build is release or debug, respectively.
+
+For more information, look at the tutorials.

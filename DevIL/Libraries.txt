@@ -1,0 +1,25 @@
+Libraries needed to compile DevIL* :
+----------------------------------
+
+(Most of these are optional)
+
+
+Libpng for .png support available at http://www.libpng.org/pub/png/libpng.html
+ZLib for .png support available at http://www.gzip.org/zlib/
+Libjpeg for .jpg support from http://www.ijg.org/
+Libtiff for .tif support from http://www.libtiff.org/
+Libmng for .mng and .jng support from http://www.libmng.com/
+Libungif for .gif support from http://prtr-13.ucsc.edu/~badger/software/libungif/
+Little CMS for color profiles (ILU) from http://www.littlecms.com/
+Colour Picker lib for WindowsTest from http://www.fluidstudios.com/publications.html
+Freeglut (or glut) for GLTest from http://freeglut.sourceforge.net
+glext.h from http://oss.sgi.com/projects/ogl-sample/ABI/glext.h (as <gl/glext.h> if using OpenGL)
+
+MSVC++ precompiled versions of libpng, zlib, libjpeg and libtiff can be found
+at ftp://openil.sourceforge.net/pub/openil/LibCompiled.zip
+
+Sources of libpng, zlib, libjpeg, libmng, libungif, libtiff and lcms can be
+found at http://openil.sourceforge.net/libs/LibSrc.zip
+
+Intel Jpeg Library from
+ http://developer.intel.com/software/products/perflib/ijl/index.htm
