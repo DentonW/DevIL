@@ -249,7 +249,7 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 			//load the image that was in place before the current (this is not implemented
 			//here! (TODO?))
 			if (DisposalMethod == 2 || DisposalMethod == 3)
-				//Note that this is actually wrong to: If the image has a local
+				//Note that this is actually wrong, too: If the image has a local
 				//color table, we should really search for the best fit of the
 				//background color table and use that index (?). Furthermore,
 				//we should only memset the part of the image that is not read
