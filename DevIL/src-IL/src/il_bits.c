@@ -120,6 +120,10 @@ ILint bseek(BITFILE *BitFile, ILuint Offset, ILuint Mode)
 // hehe, "bread".  It reads data into Buffer from the BITFILE, just like fread for FILE.
 ILint bread(ILvoid *Buffer, ILuint Size, ILuint Number, BITFILE *BitFile)
 {
+	//Note that this function is somewhat useless: In binary image
+	//formats, there are some pad bits after each scanline. This
+	//function does not take that into account, so...
+
 	ILuint	BuffPos = 0, Count = Size * Number;
 
 	while (BuffPos < Count) {
