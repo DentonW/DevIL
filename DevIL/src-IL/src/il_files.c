@@ -486,7 +486,9 @@ ILboolean iPreCache(ILuint Size)
 	if (CacheSize != Size)
 		ilGetError();  // Get rid of the IL_FILE_READ_ERROR.
 
-	//CacheSize = Size;
+	//2003-09-09: uncommented the following line to prevent
+	//an infinite loop in ilPreCache()
+	CacheSize = Size;
 	CachePos = 0;
 	UseCache = IL_TRUE;
 	CacheBytesRead = 0;
