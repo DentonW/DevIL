@@ -12,8 +12,6 @@
 
 
 #include "il_internal.h"
-#undef IL_NO_TIF
-
 #ifndef IL_NO_TIF
 
 #include <tiffio.h>
