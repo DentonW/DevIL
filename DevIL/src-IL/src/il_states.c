@@ -424,15 +424,16 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 				ilSetError(IL_ILLEGAL_OPERATION);
 				break;
 			}
-			*Param = iCurImage->Bpp;
+			//changed 20040610 to channel count (Bpp) times Byte per channel
+			*Param = iCurImage->Bpp*iCurImage->Bpc;
 			break;
 		case IL_IMAGE_BITS_PER_PIXEL:
 			if (iCurImage == NULL) {
 				ilSetError(IL_ILLEGAL_OPERATION);
 				break;
 			}
-			//changed 20040610 to channel count (Bpp) times sizeof type
-			*Param = (iCurImage->Bpp << 3)*ilGetBppType(iCurImage->Type);
+			//changed 20040610 to channel count (Bpp) times Byte per channel
+			*Param = (iCurImage->Bpp << 3)*iCurImage->Bpc;
 			break;
 		case IL_IMAGE_SIZE_OF_DATA:
 			if (iCurImage == NULL) {
