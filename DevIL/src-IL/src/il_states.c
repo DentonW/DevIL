@@ -13,7 +13,8 @@
 
 #include "il_internal.h"
 #include "il_states.h"
-#include <malloc.h>
+//#include <malloc.h>
+#include <stdlib.h>
 
 const ILstring _ilVendor	= IL_TEXT("Abysmal Software");
 const ILstring _ilVersion	= IL_TEXT("Developer's Image Library (DevIL) 1.3.0");
