@@ -576,7 +576,7 @@ ILboolean GetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 			for (i = 0; i < Head->Width * Head->Height; ) {
 				HeadByte = igetc();
 
-				if (HeadByte >= 0 && HeadByte <= 127) {
+				if (HeadByte >= 0) {  //  && HeadByte <= 127
 					iread(Channel + i, 1, HeadByte + 1);
 					i += HeadByte + 1;
 				}
@@ -688,7 +688,7 @@ ILboolean GetSingleChannel(PSDHEAD *Head, ILubyte *Buffer, ILboolean Compressed)
 		for (i = 0; i < Head->Width * Head->Height; ) {
 			HeadByte = igetc();
 
-			if (HeadByte >= 0 && HeadByte <= 127) {
+			if (HeadByte >= 0) {  //  && HeadByte <= 127
 				iread(Buffer + i, 1, HeadByte + 1);
 				i += HeadByte + 1;
 			}
