@@ -403,6 +403,10 @@ SOURCE=..\include\il_files.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\il_gif.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\il_icon.h
 # End Source File
 # Begin Source File

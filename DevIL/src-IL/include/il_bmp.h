@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 05/13/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/bmp.h
+// Filename: il/il_bmp.h
 //
 // Description: Reads and writes to a bitmap (.bmp) file.
 //

@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 09/15/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 05/13/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/gif.c
+// Filename: il/il_gif.c
 //
 // Description: Reads from a Graphics Interchange Format (.gif) file.
 //
@@ -13,10 +13,9 @@
 
 #include "il_internal.h"
 #ifndef IL_NO_GIF
-#include <gif_lib.h>
 
+#include "il_gif.h"
 
-ILboolean iIsValidGif(ILvoid);
 
 //! Checks if the file specified in FileName is a valid Gif file.
 ILboolean ilIsValidGif(const ILstring FileName)
@@ -82,121 +81,78 @@ ILboolean iIsValidGif()
 }
 
 
+//! Reads a Gif file
 ILboolean ilLoadGif(const ILstring FileName)
 {
-	GifFileType		*GifFile;
-	ColorMapObject	*ColorMap;
+	ILHANDLE	GifFile;
+	ILboolean	bGif = IL_FALSE;
+
+	GifFile = iopenr(FileName);
+	if (GifFile == NULL) {
+		ilSetError(IL_COULD_NOT_OPEN_FILE);
+		return bGif;
+	}
+
+	bGif = ilLoadGifF(GifFile);
+	icloser(GifFile);
+
+	return bGif;
+}
+
+
+//! Reads an already-opened Gif file
+ILboolean ilLoadGifF(ILHANDLE File)
+{
+	ILuint		FirstPos;
+	ILboolean	bRet;
+
+	iSetInputFile(File);
+	FirstPos = itell();
+	bRet = iLoadGifInternal();
+	iseek(FirstPos, IL_SEEK_SET);
+
+	return bRet;
+}
+
+
+//! Reads from a memory "lump" that contains a Gif
+ILboolean ilLoadGifL(ILvoid *Lump, ILuint Size)
+{
+	iSetInputLump(Lump, Size);
+	return iLoadGifInternal();
+}
+
+
+// Internal function used to load the Gif.
+ILboolean iLoadGifInternal()
+{
 	ILimage			*Image = NULL;
 	ILenum			LibErr;
 	ILint			i, j, k;
 	ILubyte			*BaseData = NULL;
 	ILuint			x, y, BaseW, BaseH, CurW, CurH, XOff, YOff;
+	GIFHEAD			Header;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
-	GifFile = DGifOpenFileName(FileName);
-	if (GifFile == NULL) {
-		LibErr = GifLastError();
-		switch(LibErr)
-		{
-			case D_GIF_ERR_OPEN_FAILED:
-				ilSetError(IL_COULD_NOT_OPEN_FILE);
-				break;
-			case D_GIF_ERR_NOT_ENOUGH_MEM:
-				break;
-			default:
-				ilSetError(IL_UNKNOWN_ERROR);
-		}
+	if (!iIsValidGif())
 		return IL_FALSE;
-	}
 
-	// Read in the remainder of the gif file
-	if (DGifSlurp(GifFile) == GIF_ERROR /*|| GifFile->SColorResolution != 6*/) {
-		LibErr = GifLastError();
-		ilSetError(IL_LIB_GIF_ERROR);
-		DGifCloseFile(GifFile);
-		return IL_FALSE;
-	}
+	iread(&Header, sizeof(Header), 1);
 
-	BaseW = 0;  BaseH = 0;  // Just to get rid of warnings about 'possibly being uninitialized'.
-	iCurImage->NumNext = GifFile->ImageCount - 1;
-	for (k = 0; k < GifFile->ImageCount; k++) {
-		if (k == 0) {
-			if (!ilTexImage(GifFile->SWidth, GifFile->SHeight, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL)) {
-				DGifCloseFile(GifFile);
-				return IL_FALSE;
-			}
-			iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
-			Image = iCurImage;
-			BaseData = Image->Data;
-			BaseW = Image->Width;
-			BaseH = Image->Height;
-		}
-		else {
-			//Image->Next = ilNewImage(GifFile->SavedImages[k].ImageDesc.Width, GifFile->SavedImages[k].ImageDesc.Height, 1, 1, 1);
-			Image->Next = ilNewImage(BaseW, BaseH, 1, 1, 1);
-			Image = Image->Next;
-			memcpy(Image->Data, BaseData, Image->SizeOfData);
-			if (Image == NULL) {
-				DGifCloseFile(GifFile);
-				return IL_FALSE;
-			}
-			Image->Origin = IL_ORIGIN_UPPER_LEFT;
-			Image->Format = IL_COLOUR_INDEX;
-		}
+	
 
-		// See if this is our new "base image", since .gif can update just portions of an image.
-		if (GifFile->SavedImages[k].ImageDesc.Width == (ILint)BaseW && GifFile->SavedImages[k].ImageDesc.Height == (ILint)BaseH) {
-			BaseData = Image->Data;
-			BaseW = Image->Width;
-			BaseH = Image->Height;
-			memcpy(Image->Data, GifFile->SavedImages[k].RasterBits, Image->SizeOfData);
-		}
-		else {
-			CurW = GifFile->SavedImages[k].ImageDesc.Width;
-			CurH = GifFile->SavedImages[k].ImageDesc.Height;
-			XOff = GifFile->SavedImages[k].ImageDesc.Left;
-			YOff = GifFile->SavedImages[k].ImageDesc.Top;
-
-			for (y = 0; y < CurH; y++) {
-				memcpy(Image->Data + (y + YOff) * Image->Width + XOff,
-					GifFile->SavedImages[k].RasterBits + y * CurW, CurW);
-			}
-		}
-
-		ColorMap = (GifFile->Image.ColorMap ? GifFile->Image.ColorMap : GifFile->SColorMap);
-		Image->Pal.Palette = (ILubyte*)ialloc(ColorMap->ColorCount * 3);
-		if (Image->Pal.Palette == NULL) {
-			DGifCloseFile(GifFile);
-			return IL_FALSE;
-		}
-		Image->Pal.PalSize = ColorMap->ColorCount * 3;
-		Image->Pal.PalType = IL_PAL_RGB24;
-
-		for (i = 0, j = 0; i < ColorMap->ColorCount; i++, j += 3) {
-			Image->Pal.Palette[j] = ColorMap->Colors[i].Red;
-			Image->Pal.Palette[j+1] = ColorMap->Colors[i].Green;
-			Image->Pal.Palette[j+2] = ColorMap->Colors[i].Blue;
-		}
-
-		// Find the current image's duration, if any, by checking in the extensions blocks (89a gifs only).
-		for (x = 0; x < (ILuint)GifFile->SavedImages[k].ExtensionBlockCount; x++) {
-			if (GifFile->SavedImages[k].Function == GRAPHICS_EXT_FUNC_CODE) {
-				Image->Duration = *(ILushort*)(GifFile->SavedImages[k].ExtensionBlocks[x].Bytes+1);
-				// The specification says 1/100 second, but it really is different...
-				Image->Duration = Image->Duration * 14;
-			}
-		}
-	}
+	
 
 
-	DGifCloseFile(GifFile);
+
+
 	ilFixImage();
 
 	return IL_TRUE;
 }
-    
+
 #endif //IL_NO_GIF

@@ -69,7 +69,7 @@ ILboolean ilIsValidBmpL(ILvoid *Lump, ILuint Size)
 // Internal function used to get the .bmp header from the current file.
 ILvoid iGetBmpHead(BMPHEAD *Header)
 {
-	iread(&Header, 1, sizeof(BMPHEAD));
+	iread(Header, 1, sizeof(BMPHEAD));
 
 	Header->bfType			= UShort(Header->bfType);
 	Header->bfSize			= Int(Header->bfSize);
@@ -93,7 +93,7 @@ ILvoid iGetBmpHead(BMPHEAD *Header)
 
 ILvoid iGetOS2Head(OS2_HEAD *Header)
 {
-	iread(&Header, 1, sizeof(OS2_HEAD));
+	iread(Header, 1, sizeof(OS2_HEAD));
 
 	Header->bfType		= UShort(Header->bfType);
 	Header->biSize		= UInt(Header->biSize);
