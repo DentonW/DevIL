@@ -159,6 +159,9 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 RANLIB = @RANLIB@
+SDL_CFLAGS = @SDL_CFLAGS@
+SDL_CONFIG = @SDL_CONFIG@
+SDL_LIBS = @SDL_LIBS@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
@@ -208,10 +211,16 @@ oldincludedir = @oldincludedir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 sbindir = @sbindir@
-sdl_config = @sdl_config@
+sdl_major_version = @sdl_major_version@
+sdl_micro_version = @sdl_micro_version@
+sdl_minor_version = @sdl_minor_version@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
+target = @target@
 target_alias = @target_alias@
+target_cpu = @target_cpu@
+target_os = @target_os@
+target_vendor = @target_vendor@
 noinst_HEADERS = il_targa.h    il_doompal.h \
                   il_jpeg.h     il_pnm.h \
                   il_endian.h   il_lif.h \

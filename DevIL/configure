@@ -464,7 +464,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS DEVIL_LTVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA SET_MAKE CPP X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE EGREP LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB DLLTOOL ac_ct_DLLTOOL AS ac_ct_AS OBJDUMP ac_ct_OBJDUMP CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT VERSIONINFO LIBJPG LIBTIFF LIBPNG LIBLCMS LIBMNG sdl_config LIBSDL HSDL LIBGL allegro_config LIBALLEGRO HALLEGRO LIBGDI32 IL_NO_BMP_TRUE IL_NO_BMP_FALSE IL_NO_DCX_TRUE IL_NO_DCX_FALSE IL_NO_DDS_TRUE IL_NO_DDS_FALSE IL_NO_DOOM_TRUE IL_NO_DOOM_FALSE IL_NO_GIF_TRUE IL_NO_GIF_FALSE IL_NO_ICO_TRUE IL_NO_ICO_FALSE IL_NO_JPG_TRUE IL_NO_JPG_FALSE IL_NO_LIF_TRUE IL_NO_LIF_FALSE IL_NO_LCMS_TRUE IL_NO_LCMS_FALSE IL_NO_MDL_TRUE IL_NO_MDL_FALSE IL_NO_MNG_TRUE IL_NO_MNG_FALSE IL_NO_PCD_TRUE IL_NO_PCD_FALSE IL_NO_PCX_TRUE IL_NO_PCX_FALSE IL_NO_PIC_TRUE IL_NO_PIC_FALSE IL_NO_PIX_TRUE IL_NO_PIX_FALSE IL_NO_PNG_TRUE IL_NO_PNG_FALSE IL_NO_PNM_TRUE IL_NO_PNM_FALSE IL_NO_PSD_TRUE IL_NO_PSD_FALSE IL_NO_PSP_TRUE IL_NO_PSP_FALSE IL_NO_PXR_TRUE IL_NO_PXR_FALSE IL_NO_RAW_TRUE IL_NO_RAW_FALSE IL_NO_SGI_TRUE IL_NO_SGI_FALSE IL_NO_TGA_TRUE IL_NO_TGA_FALSE IL_NO_TIF_TRUE IL_NO_TIF_FALSE IL_NO_WAL_TRUE IL_NO_WAL_FALSE IL_NO_XPM_TRUE IL_NO_XPM_FALSE LIBIL_CFLAGS LIBILU_CFLAGS LIBILUT_CFLAGS LIBILUT_WIN32LIBPATH LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS DEVIL_LTVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA SET_MAKE CPP X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE EGREP LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB DLLTOOL ac_ct_DLLTOOL AS ac_ct_AS OBJDUMP ac_ct_OBJDUMP CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT VERSIONINFO LIBJPG LIBTIFF LIBPNG LIBLCMS LIBMNG SDL_CONFIG sdl_major_version sdl_minor_version sdl_micro_version SDL_CFLAGS SDL_LIBS LIBSDL HSDL LIBGL allegro_config LIBALLEGRO HALLEGRO LIBGDI32 IL_NO_BMP_TRUE IL_NO_BMP_FALSE IL_NO_DCX_TRUE IL_NO_DCX_FALSE IL_NO_DDS_TRUE IL_NO_DDS_FALSE IL_NO_DOOM_TRUE IL_NO_DOOM_FALSE IL_NO_GIF_TRUE IL_NO_GIF_FALSE IL_NO_ICO_TRUE IL_NO_ICO_FALSE IL_NO_JPG_TRUE IL_NO_JPG_FALSE IL_NO_LIF_TRUE IL_NO_LIF_FALSE IL_NO_LCMS_TRUE IL_NO_LCMS_FALSE IL_NO_MDL_TRUE IL_NO_MDL_FALSE IL_NO_MNG_TRUE IL_NO_MNG_FALSE IL_NO_PCD_TRUE IL_NO_PCD_FALSE IL_NO_PCX_TRUE IL_NO_PCX_FALSE IL_NO_PIC_TRUE IL_NO_PIC_FALSE IL_NO_PIX_TRUE IL_NO_PIX_FALSE IL_NO_PNG_TRUE IL_NO_PNG_FALSE IL_NO_PNM_TRUE IL_NO_PNM_FALSE IL_NO_PSD_TRUE IL_NO_PSD_FALSE IL_NO_PSP_TRUE IL_NO_PSP_FALSE IL_NO_PXR_TRUE IL_NO_PXR_FALSE IL_NO_RAW_TRUE IL_NO_RAW_FALSE IL_NO_SGI_TRUE IL_NO_SGI_FALSE IL_NO_TGA_TRUE IL_NO_TGA_FALSE IL_NO_TIF_TRUE IL_NO_TIF_FALSE IL_NO_WAL_TRUE IL_NO_WAL_FALSE IL_NO_XPM_TRUE IL_NO_XPM_FALSE LIBIL_CFLAGS LIBILU_CFLAGS LIBILUT_CFLAGS LIBILUT_WIN32LIBPATH LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1018,6 +1018,7 @@ Program names:
 System types:
   --build=BUILD     configure for building on BUILD [guessed]
   --host=HOST       cross-compile to build programs to run on HOST [BUILD]
+  --target=TARGET   configure for building compilers for TARGET [HOST]
 _ACEOF
 fi
 
@@ -1070,6 +1071,7 @@ Optional Features:
   --disable-sdl           Doesn't compile sdl support
   --disable-win32         Doesn't compile win32 support
   --disable-release         Compile a debug version of the library
+  --disable-sdltest       Do not try to compile and run a test SDL program
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -1080,6 +1082,8 @@ Optional Packages:
                           both]
   --with-tags[=TAGS]
                           include additional configurations [automatic]
+  --with-sdl-prefix=PFX   Prefix where SDL is installed (optional)
+  --with-sdl-exec-prefix=PFX Exec prefix where SDL is installed (optional)
 
 Some influential environment variables:
   CC          C compiler command
@@ -1595,6 +1599,34 @@ host_vendor=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
 host_os=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 
 
+echo "$as_me:$LINENO: checking target system type" >&5
+echo $ECHO_N "checking target system type... $ECHO_C" >&6
+if test "${ac_cv_target+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_target_alias=$target_alias
+test "x$ac_cv_target_alias" = "x" &&
+  ac_cv_target_alias=$ac_cv_host_alias
+ac_cv_target=`$ac_config_sub $ac_cv_target_alias` ||
+  { { echo "$as_me:$LINENO: error: $ac_config_sub $ac_cv_target_alias failed" >&5
+echo "$as_me: error: $ac_config_sub $ac_cv_target_alias failed" >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+echo "$as_me:$LINENO: result: $ac_cv_target" >&5
+echo "${ECHO_T}$ac_cv_target" >&6
+target=$ac_cv_target
+target_cpu=`echo $ac_cv_target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+target_vendor=`echo $ac_cv_target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
+target_os=`echo $ac_cv_target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+
+
+# The aliases save the names the user supplied, while $host etc.
+# will get canonicalized.
+test -n "$target_alias" &&
+  test "$program_prefix$program_suffix$program_transform_name" = \
+    NONENONEs,x,x, &&
+  program_prefix=${target_alias}-
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -5165,7 +5197,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 5168 "configure"' > conftest.$ac_ext
+  echo '#line 5200 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -6636,7 +6668,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:6639:" \
+echo "$as_me:6671:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -7641,11 +7673,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7644: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7676: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7648: \$? = $ac_status" >&5
+   echo "$as_me:7680: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -7873,11 +7905,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7876: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7908: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7880: \$? = $ac_status" >&5
+   echo "$as_me:7912: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -7940,11 +7972,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7943: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7975: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7947: \$? = $ac_status" >&5
+   echo "$as_me:7979: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -9942,7 +9974,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9945 "configure"
+#line 9977 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10040,7 +10072,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10043 "configure"
+#line 10075 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12172,11 +12204,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12175: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12207: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:12179: \$? = $ac_status" >&5
+   echo "$as_me:12211: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -12239,11 +12271,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12242: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12274: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:12246: \$? = $ac_status" >&5
+   echo "$as_me:12278: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -13472,7 +13504,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 13475 "configure"
+#line 13507 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13570,7 +13602,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 13573 "configure"
+#line 13605 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -14392,11 +14424,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14395: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14427: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:14399: \$? = $ac_status" >&5
+   echo "$as_me:14431: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -14459,11 +14491,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14462: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14494: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14466: \$? = $ac_status" >&5
+   echo "$as_me:14498: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16401,11 +16433,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16404: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16436: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16408: \$? = $ac_status" >&5
+   echo "$as_me:16440: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -16633,11 +16665,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16636: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16668: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16640: \$? = $ac_status" >&5
+   echo "$as_me:16672: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -16700,11 +16732,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16703: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16735: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16707: \$? = $ac_status" >&5
+   echo "$as_me:16739: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -18702,7 +18734,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 18705 "configure"
+#line 18737 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -18800,7 +18832,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 18803 "configure"
+#line 18835 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -21625,64 +21657,116 @@ fi
 
 
 
-if test "$use_sdl" = "yes" ; then
+
+# Check whether --with-sdl-prefix or --without-sdl-prefix was given.
+if test "${with_sdl_prefix+set}" = set; then
+  withval="$with_sdl_prefix"
+  sdl_prefix="$withval"
+else
+  sdl_prefix=""
+fi;
+
+# Check whether --with-sdl-exec-prefix or --without-sdl-exec-prefix was given.
+if test "${with_sdl_exec_prefix+set}" = set; then
+  withval="$with_sdl_exec_prefix"
+  sdl_exec_prefix="$withval"
+else
+  sdl_exec_prefix=""
+fi;
+# Check whether --enable-sdltest or --disable-sdltest was given.
+if test "${enable_sdltest+set}" = set; then
+  enableval="$enable_sdltest"
+
+else
+  enable_sdltest=yes
+fi;
+
+  if test x$sdl_exec_prefix != x ; then
+     sdl_args="$sdl_args --exec-prefix=$sdl_exec_prefix"
+     if test x${SDL_CONFIG+set} != xset ; then
+        SDL_CONFIG=$sdl_exec_prefix/bin/sdl-config
+     fi
+  fi
+  if test x$sdl_prefix != x ; then
+     sdl_args="$sdl_args --prefix=$sdl_prefix"
+     if test x${SDL_CONFIG+set} != xset ; then
+        SDL_CONFIG=$sdl_prefix/bin/sdl-config
+     fi
+  fi
+
+
+  PATH="$prefix/bin:$prefix/usr/bin:$PATH"
   # Extract the first word of "sdl-config", so it can be a program name with args.
 set dummy sdl-config; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_prog_sdl_config+set}" = set; then
+if test "${ac_cv_path_SDL_CONFIG+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  if test -n "$sdl_config"; then
-  ac_cv_prog_sdl_config="$sdl_config" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+  case $SDL_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_SDL_CONFIG="$SDL_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
 for as_dir in $PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
   if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_sdl_config="yes"
+    ac_cv_path_SDL_CONFIG="$as_dir/$ac_word$ac_exec_ext"
     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
 done
 done
 
-  test -z "$ac_cv_prog_sdl_config" && ac_cv_prog_sdl_config="no "
+  test -z "$ac_cv_path_SDL_CONFIG" && ac_cv_path_SDL_CONFIG="no"
+  ;;
+esac
 fi
-fi
-sdl_config=$ac_cv_prog_sdl_config
-if test -n "$sdl_config"; then
-  echo "$as_me:$LINENO: result: $sdl_config" >&5
-echo "${ECHO_T}$sdl_config" >&6
+SDL_CONFIG=$ac_cv_path_SDL_CONFIG
+
+if test -n "$SDL_CONFIG"; then
+  echo "$as_me:$LINENO: result: $SDL_CONFIG" >&5
+echo "${ECHO_T}$SDL_CONFIG" >&6
 else
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
-  if test $sdl_config = no ; then
-    use_sdl="no"
-    LIBSDL=""
-    HSDL=""
+  min_sdl_version=1.2.5
+  echo "$as_me:$LINENO: checking for SDL - version >= $min_sdl_version" >&5
+echo $ECHO_N "checking for SDL - version >= $min_sdl_version... $ECHO_C" >&6
+  no_sdl=""
+  if test "$SDL_CONFIG" = "no" ; then
+    no_sdl=yes
   else
-    LIBSDL=`sdl-conf --libs`
-    HSDL=`sdl-config --cflags`
-  fi
-fi
+    SDL_CFLAGS=`$SDL_CONFIG $sdlconf_args --cflags`
+    SDL_LIBS=`$SDL_CONFIG $sdlconf_args --libs`
+
+    sdl_major_version=`$SDL_CONFIG $sdl_args --version | \
+           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
+    sdl_minor_version=`$SDL_CONFIG $sdl_args --version | \
+           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
+    sdl_micro_version=`$SDL_CONFIG $sdl_config_args --version | \
+           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
 
 
 
-if test "$use_opengl" = "yes" ; then
-  echo "$as_me:$LINENO: checking for glEnable in -lGL" >&5
-echo $ECHO_N "checking for glEnable in -lGL... $ECHO_C" >&6
-if test "${ac_cv_lib_GL_glEnable+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+
+
+    if test "x$enable_sdltest" = "xyes" ; then
+      ac_save_CFLAGS="$CFLAGS"
+      ac_save_LIBS="$LIBS"
+      CFLAGS="$CFLAGS $SDL_CFLAGS"
+      LIBS="$LIBS $SDL_LIBS"
+      rm -f conf.sdltest
+      if test "$cross_compiling" = yes; then
+  echo $ac_n "cross compiling; assumed OK... $ac_c"
 else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lGL -lm $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
+  cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 /* confdefs.h.  */
 _ACEOF
@@ -21690,17 +21774,129 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char glEnable ();
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "SDL.h"
+
+char*
+my_strdup (char *str)
+{
+  char *new_str;
+
+  if (str)
+    {
+      new_str = (char *)malloc ((strlen (str) + 1) * sizeof(char));
+      strcpy (new_str, str);
+    }
+  else
+    new_str = NULL;
+
+  return new_str;
+}
+
+int main (int argc, char *argv[])
+{
+  int major, minor, micro;
+  char *tmp_version;
+
+  /* This hangs on some systems (?)
+  system ("touch conf.sdltest");
+  */
+  { FILE *fp = fopen("conf.sdltest", "a"); if ( fp ) fclose(fp); }
+
+  /* HP/UX 9 (%@#!) writes to sscanf strings */
+  tmp_version = my_strdup("$min_sdl_version");
+  if (sscanf(tmp_version, "%d.%d.%d", &major, &minor, &micro) != 3) {
+     printf("%s, bad version string\n", "$min_sdl_version");
+     exit(1);
+   }
+
+   if (($sdl_major_version > major) ||
+      (($sdl_major_version == major) && ($sdl_minor_version > minor)) ||
+      (($sdl_major_version == major) && ($sdl_minor_version == minor) && ($sdl_micro_version >= micro)))
+    {
+      return 0;
+    }
+  else
+    {
+      printf("\n*** 'sdl-config --version' returned %d.%d.%d, but the minimum version\n", $sdl_major_version, $sdl_minor_version, $sdl_micro_version);
+      printf("*** of SDL required is %d.%d.%d. If sdl-config is correct, then it is\n", major, minor, micro);
+      printf("*** best to upgrade to the required version.\n");
+      printf("*** If sdl-config was wrong, set the environment variable SDL_CONFIG\n");
+      printf("*** to point to the correct copy of sdl-config, and remove the file\n");
+      printf("*** config.cache before re-running configure\n");
+      return 1;
+    }
+}
+
+
+_ACEOF
+rm -f conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  :
+else
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+( exit $ac_status )
+no_sdl=yes
+fi
+rm -f core core.* *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+fi
+       CFLAGS="$ac_save_CFLAGS"
+       LIBS="$ac_save_LIBS"
+     fi
+  fi
+  if test "x$no_sdl" = x ; then
+     echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+     :
+  else
+     echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+     if test "$SDL_CONFIG" = "no" ; then
+       echo "*** The sdl-config script installed by SDL could not be found"
+       echo "*** If SDL was installed in PREFIX, make sure PREFIX/bin is in"
+       echo "*** your path, or set the SDL_CONFIG environment variable to the"
+       echo "*** full path to sdl-config."
+     else
+       if test -f conf.sdltest ; then
+        :
+       else
+          echo "*** Could not run SDL test program, checking why..."
+          CFLAGS="$CFLAGS $SDL_CFLAGS"
+          LIBS="$LIBS $SDL_LIBS"
+          cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#include <stdio.h>
+#include "SDL.h"
+
+int main(int argc, char *argv[])
+{ return 0; }
+#undef  main
+#define main K_and_R_C_main
+
 int
 main ()
 {
-glEnable ();
+ return 0;
   ;
   return 0;
 }
@@ -21717,27 +21913,306 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  ac_cv_lib_GL_glEnable=yes
+   echo "*** The test program compiled, but did not run. This usually means"
+          echo "*** that the run-time linker is not finding SDL or finding the wrong"
+          echo "*** version of SDL. If it is not finding SDL, you'll need to set your"
+          echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
+          echo "*** to the installed location  Also, make sure you have run ldconfig if that"
+          echo "*** is required on your system"
+	  echo "***"
+          echo "*** If you have an old version installed, it is best to remove it, although"
+          echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-ac_cv_lib_GL_glEnable=no
+ echo "*** The test program failed to compile or link. See the file config.log for the"
+          echo "*** exact error that occured. This usually means SDL was incorrectly installed"
+          echo "*** or that you have moved SDL since it was installed. In the latter case, you"
+          echo "*** may want to edit the sdl-config script: $SDL_CONFIG"
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+          CFLAGS="$ac_save_CFLAGS"
+          LIBS="$ac_save_LIBS"
+       fi
+     fi
+     SDL_CFLAGS=""
+     SDL_LIBS=""
+     { { echo "$as_me:$LINENO: error: SDL library not found. aedGUI requires libSDL
+version 1.2.5 or later. Please make sure it is installed. If you
+don't have it you can get it from http://www.libsdl.org." >&5
+echo "$as_me: error: SDL library not found. aedGUI requires libSDL
+version 1.2.5 or later. Please make sure it is installed. If you
+don't have it you can get it from http://www.libsdl.org." >&2;}
+   { (exit 1); exit 1; }; }
+  fi
+
+
+  rm -f conf.sdltest
+
+HSDL="$SDL_CFLAGS"
+LIBSDL="$SDL_LIBS"
+
+
+
+if test "$use_opengl" = "yes" ; then
+if test "${ac_cv_header_GL_gl_h+set}" = set; then
+  echo "$as_me:$LINENO: checking for GL/gl.h" >&5
+echo $ECHO_N "checking for GL/gl.h... $ECHO_C" >&6
+if test "${ac_cv_header_GL_gl_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_GL_gl_h" >&5
+echo "${ECHO_T}$ac_cv_header_GL_gl_h" >&6
+else
+  # Is the header compilable?
+echo "$as_me:$LINENO: checking GL/gl.h usability" >&5
+echo $ECHO_N "checking GL/gl.h usability... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <GL/gl.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_header_compiler=no
+fi
+rm -f conftest.$ac_objext conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6
+
+# Is the header present?
+echo "$as_me:$LINENO: checking GL/gl.h presence" >&5
+echo $ECHO_N "checking GL/gl.h presence... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <GL/gl.h>
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_c_preproc_warn_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+rm -f conftest.err conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc in
+  yes:no )
+    { echo "$as_me:$LINENO: WARNING: GL/gl.h: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: GL/gl.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: GL/gl.h: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: GL/gl.h: proceeding with the preprocessor's result" >&2;}
+    (
+      cat <<\_ASBOX
+## ------------------------------------ ##
+## Report this to bug-autoconf@gnu.org. ##
+## ------------------------------------ ##
+_ASBOX
+    ) |
+      sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+  no:yes )
+    { echo "$as_me:$LINENO: WARNING: GL/gl.h: present but cannot be compiled" >&5
+echo "$as_me: WARNING: GL/gl.h: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: GL/gl.h: check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: GL/gl.h: check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: GL/gl.h: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: GL/gl.h: proceeding with the preprocessor's result" >&2;}
+    (
+      cat <<\_ASBOX
+## ------------------------------------ ##
+## Report this to bug-autoconf@gnu.org. ##
+## ------------------------------------ ##
+_ASBOX
+    ) |
+      sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+echo "$as_me:$LINENO: checking for GL/gl.h" >&5
+echo $ECHO_N "checking for GL/gl.h... $ECHO_C" >&6
+if test "${ac_cv_header_GL_gl_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_header_GL_gl_h=$ac_header_preproc
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_GL_gl_h" >&5
+echo "${ECHO_T}$ac_cv_header_GL_gl_h" >&6
+
+fi
+if test $ac_cv_header_GL_gl_h = yes; then
+  have_gl_hdr=yes
+fi
+
+
+case "$target" in
+*-*-cygwin* | *-*-mingw32*)
+	LIBGL="-lopengl32 -lglu32"
+	;;
+*-*-*)
+	echo "$as_me:$LINENO: checking for glLoadIdentity in -lGL" >&5
+echo $ECHO_N "checking for glLoadIdentity in -lGL... $ECHO_C" >&6
+if test "${ac_cv_lib_GL_glLoadIdentity+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lGL  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char glLoadIdentity ();
+int
+main ()
+{
+glLoadIdentity ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_GL_glLoadIdentity=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_GL_glLoadIdentity=no
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_GL_glEnable" >&5
-echo "${ECHO_T}$ac_cv_lib_GL_glEnable" >&6
-if test $ac_cv_lib_GL_glEnable = yes; then
+echo "$as_me:$LINENO: result: $ac_cv_lib_GL_glLoadIdentity" >&5
+echo "${ECHO_T}$ac_cv_lib_GL_glLoadIdentity" >&6
+if test $ac_cv_lib_GL_glLoadIdentity = yes; then
   LIBGL="-lGL"
-else
-  LIBGL=""
 fi
 
-  if test "$LIBGL" != "-lGL" ; then
-    use_opengl="no"
-  fi
+	echo "$as_me:$LINENO: checking for gluPerspective in -lGLU" >&5
+echo $ECHO_N "checking for gluPerspective in -lGLU... $ECHO_C" >&6
+if test "${ac_cv_lib_GLU_gluPerspective+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lGLU $LIBGL $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char gluPerspective ();
+int
+main ()
+{
+gluPerspective ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_GLU_gluPerspective=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_GLU_gluPerspective=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_GLU_gluPerspective" >&5
+echo "${ECHO_T}$ac_cv_lib_GLU_gluPerspective" >&6
+if test $ac_cv_lib_GLU_gluPerspective = yes; then
+  LIBGL="-lGLU"
+fi
+
+	;;
+esac
 else
   LIBGL=""
 fi
@@ -23232,6 +23707,10 @@ s,@host@,$host,;t t
 s,@host_cpu@,$host_cpu,;t t
 s,@host_vendor@,$host_vendor,;t t
 s,@host_os@,$host_os,;t t
+s,@target@,$target,;t t
+s,@target_cpu@,$target_cpu,;t t
+s,@target_vendor@,$target_vendor,;t t
+s,@target_os@,$target_os,;t t
 s,@CC@,$CC,;t t
 s,@CFLAGS@,$CFLAGS,;t t
 s,@LDFLAGS@,$LDFLAGS,;t t
@@ -23304,7 +23783,12 @@ s,@LIBTIFF@,$LIBTIFF,;t t
 s,@LIBPNG@,$LIBPNG,;t t
 s,@LIBLCMS@,$LIBLCMS,;t t
 s,@LIBMNG@,$LIBMNG,;t t
-s,@sdl_config@,$sdl_config,;t t
+s,@SDL_CONFIG@,$SDL_CONFIG,;t t
+s,@sdl_major_version@,$sdl_major_version,;t t
+s,@sdl_minor_version@,$sdl_minor_version,;t t
+s,@sdl_micro_version@,$sdl_micro_version,;t t
+s,@SDL_CFLAGS@,$SDL_CFLAGS,;t t
+s,@SDL_LIBS@,$SDL_LIBS,;t t
 s,@LIBSDL@,$LIBSDL,;t t
 s,@HSDL@,$HSDL,;t t
 s,@LIBGL@,$LIBGL,;t t

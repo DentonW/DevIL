@@ -30,10 +30,11 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.27 $)
+AC_REVISION($Revision: 1.28 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
 AC_LANG([C])
 AC_PROG_CC
 AC_PROG_INSTALL
@@ -318,25 +319,29 @@ dnl
 dnl ILUT APIs checking
 dnl
 
-if test "$use_sdl" = "yes" ; then
-  AC_CHECK_PROG(sdl_config, sdl-config, yes, no , )
-  if test $sdl_config = no ; then
-    use_sdl="no"
-    LIBSDL=""
-    HSDL=""
-  else
-    LIBSDL=`sdl-conf --libs`
-    HSDL=`sdl-config --cflags`
-  fi
-fi
+dnl Check for SDL
+AM_PATH_SDL(1.2.5,,AC_MSG_ERROR([SDL library not found. aedGUI requires libSDL
+version 1.2.5 or later. Please make sure it is installed. If you
+don't have it you can get it from http://www.libsdl.org.]))
+HSDL="$SDL_CFLAGS"
+LIBSDL="$SDL_LIBS"
 AC_SUBST(LIBSDL)
 AC_SUBST(HSDL)
 
 if test "$use_opengl" = "yes" ; then
-  AC_CHECK_LIB(GL, glEnable, LIBGL="-lGL", LIBGL="", -lm)
-  if test "$LIBGL" != "-lGL" ; then
-    use_opengl="no"
-  fi
+AC_CHECK_HEADER(GL/gl.h, [have_gl_hdr=yes])
+case "$target" in
+*-*-cygwin* | *-*-mingw32*)
+	LIBGL="-lopengl32 -lglu32"
+	;;
+*-*-*)
+	AC_CHECK_LIB(GL,glLoadIdentity,[LIBGL="-lGL"])
+	AC_CHECK_LIB(GLU,gluPerspective,[LIBGL="-lGLU"],,$LIBGL)
+	;;
+esac
+dnl  if test "$LIBGL" != "-lGL" ; then
+dnl    use_opengl="no"
+dnl  fi
 else
   LIBGL=""
 fi
