@@ -14,6 +14,8 @@
 #include "il_internal.h"
 #include "il_endian.h"
 
+#define MACOSX
+
 ILvoid _SwapUShort(ILushort *s)
 {
 	#ifdef USE_WIN32_ASM
@@ -33,7 +35,7 @@ ILvoid _SwapUShort(ILushort *s)
                 ((ILubyte*)s)[0] = t1;
                 ((ILubyte*)s)[1] = t0;
             #else
-		*s = (*s>>8) | (*s<<8);
+		*s = ((*s)>>8) | ((*s)<<8);
             #endif
         #endif//USE_WIN32_ASM
 }
@@ -57,7 +59,7 @@ ILvoid _SwapShort(ILshort *s)
                 ((ILubyte*)s)[0] = t1;
                 ((ILubyte*)s)[1] = t0;
             #else
-		*s = (*s>>8) | (*s<<8);
+		*s = ((*s)>>8) | ((*s)<<8);
             #endif
 	#endif//USE_WIN32_ASM
 }
@@ -85,7 +87,7 @@ ILvoid _SwapUInt(ILuint *i)
                 ((ILubyte*)i)[2] = t1;
                 ((ILubyte*)i)[3] = t0;
             #else
-		*i = (*i>>24) | ((*i>>8) & 0xff00) | ((*i<<8) & 0xff0000) | (*i<<24);
+		*i = ((*i)>>24) | (((*i)>>8) & 0xff00) | (((*i)<<8) & 0xff0000) | ((*i)<<24);
             #endif
         #endif//USE_WIN32_ASM
 }
@@ -114,7 +116,7 @@ ILvoid _SwapInt(ILint *i)
                 ((ILubyte*)i)[2] = t1;
                 ((ILubyte*)i)[3] = t0;
             #else
-		*i = (*i>>24) | ((*i>>8) & 0xff00) | ((*i<<8) & 0xff0000) | (*i<<24);
+		*i = ((*i)>>24) | (((*i)>>8) & 0xff00) | (((*i)<<8) & 0xff0000) | ((*i)<<24);
             #endif
 	#endif//USE_WIN32_ASM
 }

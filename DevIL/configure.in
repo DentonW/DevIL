@@ -37,7 +37,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.31 $)
+AC_REVISION($Revision: 1.32 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -69,6 +69,7 @@ dnl no_dcx="no"
 dnl no_dds="no"
 dnl no_doom="no"
 dnl no_gif="no"
+dnl no_hdr="no"
 dnl no_icon="no"
 dnl no_jpeg="no"
 dnl no_lif="no"
@@ -141,6 +142,18 @@ AC_ARG_ENABLE(gif,
     ;;
 esac],
 no_gif="no")
+
+AC_ARG_ENABLE(hdr,
+[  --disable-hdr           Doesn't compile hdr support],
+[case "$enable_hdr" in
+  no)
+    no_hdr="yes"
+    ;;
+  *)
+    no_hdr="no"
+    ;;
+esac],
+no_hdr="no")
 
 AC_ARG_ENABLE(icon,
 [  --disable-icon          Doesn't compile icon support],
@@ -629,6 +642,13 @@ else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"GIF "
 fi
 AM_CONDITIONAL(IL_NO_GIF, test x$no_gif != "xyes")
+
+if test "$no_hdr"  = "yes"  ; then
+  AC_DEFINE(IL_NO_HDR)
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"HDR "
+fi
+AM_CONDITIONAL(IL_NO_HDR, test x$no_hdr != "xyes")
 
 if test "$no_icon" = "yes"  ; then
   AC_DEFINE(IL_NO_ICO)
