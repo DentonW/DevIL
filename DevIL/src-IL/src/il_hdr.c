@@ -73,7 +73,6 @@ ILboolean iGetHdrHead(HDRHEADER *Header)
 	ILuint count = 0;
 
 	iread(Header->Signature, 1, 10);
-	Header->Signature[10] = '\0';
 
 	//skip lines until an empty line is found.
 	//this marks the end of header information,
@@ -104,7 +103,16 @@ ILboolean iGetHdrHead(HDRHEADER *Header)
 		++count;
 	}
 	buff[count] = '\0';
-	sscanf(buff, "%s %d %s %d", x, &Header->Width, y, &Header->Height);
+
+	//note that this is not the 100% correct way to load hdr images:
+	//in a perfect world we would check if there's a +/- X/Y in front
+	//of width and heigth and mirror + rotate the image after decoding
+	//according to that. But HDRShop doesn't do that either (and that's
+	//my reference program :) ) and it's just a rotate and a mirror,
+	//nothing that really changes the appearance of the loaded image...
+	//(The code as it is now assumes that y contains "-Y" and x contains
+	//"+X" after the following line)
+	sscanf(buff, "%s %d %s %d", y, &Header->Height, x, &Header->Width);
 
 	return IL_TRUE;
 }
@@ -113,23 +121,22 @@ ILboolean iGetHdrHead(HDRHEADER *Header)
 // Internal function to get the header and check it.
 ILboolean iIsValidHdr()
 {
-	char	Head[11];
+	char	Head[10];
 	ILint	Read;
 
 	Read = iread(Head, 1, 10);
-	Head[10] = '\0';
 	iseek(-Read, IL_SEEK_CUR);  // Go ahead and restore to previous state
 	if (Read != 10)
 		return IL_FALSE;
 
-	return !iStrCmp(Head, "#?RADIANCE");
+	return !strnicmp(Head, "#?RADIANCE", 10);
 }
 
 
 // Internal function used to check if the HEADER is a valid .hdr header.
 ILboolean iCheckHdr(HDRHEADER *Header)
 {
-	return !iStrCmp(Header->Signature, "#?RADIANCE");;
+	return !strnicmp(Header->Signature, "#?RADIANCE", 10);
 }
 
 
@@ -301,16 +308,16 @@ ILvoid ReadScanline(ILubyte *scanline, ILuint w) {
 		if (r == 1 && g == 1 && b == 1) {
 			ILuint length = e;
 			ILuint j;
-			for (j = length << shift; j > 0; --j) {
+			for (j = length << shift; j > 0 && read < w; --j) {
 				memcpy(runner, runner - 4, 4);
 				runner += 4;
+				++read;
 			}
 			//if more than one rle count dword is read
 			//consecutively, they are higher order bytes
 			//of the first read value. shift keeps track of
 			//that.
 			shift += 8;
-			read += length;
 		}
 		else {
 			runner[0] = r;
