@@ -89,6 +89,7 @@ PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 STRIP = @STRIP@
 VERSION = @VERSION@
+X_CFLAGS = @X_CFLAGS@
 allegro_config = @allegro_config@
 sdl_config = @sdl_config@
 

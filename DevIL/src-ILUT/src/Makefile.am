@@ -15,4 +15,4 @@ libILUT_la_LDFLAGS = -version-info @DEVIL_LTVERSION@ \
 libILUT_la_LIBADD = -lIL -lILU @LIBGL@
 
 INCLUDES = -I$(top_srcdir)/include -I$(top_srcdir)/src-ILUT/include \
-           @HSDL@ @HALLEGRO@
+           @HSDL@ @HALLEGRO@ @X_CFLAGS@

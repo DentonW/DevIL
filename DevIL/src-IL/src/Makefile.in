@@ -89,6 +89,7 @@ PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 STRIP = @STRIP@
 VERSION = @VERSION@
+X_CFLAGS = @X_CFLAGS@
 allegro_config = @allegro_config@
 sdl_config = @sdl_config@
 
@@ -112,6 +113,9 @@ DEFS = @DEFS@ -I. -I$(srcdir) -I../../include/IL
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
+X_LIBS = @X_LIBS@
+X_EXTRA_LIBS = @X_EXTRA_LIBS@
+X_PRE_LIBS = @X_PRE_LIBS@
 libIL_la_DEPENDENCIES = 
 libIL_la_OBJECTS =  il_alloc.lo il_doom.lo il_stack.lo il_pcx.lo \
 il_rle.lo il_bits.lo il_endian.lo il_jpeg.lo il_pic.lo il_sgi.lo \

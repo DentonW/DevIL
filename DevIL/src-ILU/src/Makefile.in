@@ -89,6 +89,7 @@ PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 STRIP = @STRIP@
 VERSION = @VERSION@
+X_CFLAGS = @X_CFLAGS@
 allegro_config = @allegro_config@
 sdl_config = @sdl_config@
 
@@ -114,6 +115,9 @@ DEFS = @DEFS@ -I. -I$(srcdir) -I../../include/IL
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
+X_LIBS = @X_LIBS@
+X_EXTRA_LIBS = @X_EXTRA_LIBS@
+X_PRE_LIBS = @X_PRE_LIBS@
 libILU_la_DEPENDENCIES = 
 libILU_la_OBJECTS =  ilu_alloc.lo ilu_internal.lo ilu_noise.lo \
 ilu_scale.lo ilu_error.lo ilu_main.lo ilu_rotate.lo ilu_scaling.lo \

@@ -29,7 +29,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.6 $)
+AC_REVISION($Revision: 1.7 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -39,6 +39,7 @@ AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_C_BIGENDIAN
 AC_CYGWIN32
+AC_PATH_XTRA
 
 AM_INIT_AUTOMAKE("DevIL", $DEVIL_MAJOR.$DEVIL_MINOR.$DEVIL_REVISION)
 AM_CONFIG_HEADER(include/IL/config.h)
@@ -46,15 +47,12 @@ AM_DISABLE_STATIC
 AM_PROG_LIBTOOL
 AM_MAINTAINER_MODE
 
-LIBIL_CFLAGS="-Wall -O2  -funroll-loops -ffast-math  -fomit-frame-pointer \
+LIBIL_CFLAGS="-Wall -O3  -funroll-loops -ffast-math  -fomit-frame-pointer \
               -fexpensive-optimizations"
-LIBILU_CFLAGS="-Wall -O2  -funroll-loops -ffast-math  -fomit-frame-pointer \
+LIBILU_CFLAGS="-Wall -O3  -funroll-loops -ffast-math  -fomit-frame-pointer \
                -fexpensive-optimizations"
-LIBILUT_CFLAGS="-Wall -O2  -funroll-loops -ffast-math  -fomit-frame-pointer \
+LIBILUT_CFLAGS="-Wall -O3  -funroll-loops -ffast-math  -fomit-frame-pointer \
                -fexpensive-optimizations"
-AC_SUBST(LIBIL_CFLAGS)
-AC_SUBST(LIBILU_CFLAGS)
-AC_SUBST(LIBILUT_CFLAGS)
 
 dnl
 dnl Default supported formats : all except lcms
@@ -208,6 +206,8 @@ esac
 dnl
 dnl Libraries development checking
 dnl
+CPPFLAGS=$X_CFLAGS
+AC_SUBST(X_CFLAGS)
 AC_CHECK_HEADER(jpeglib.h, ,no_jpeg="yes")
 AC_CHECK_HEADER(tiffio.h, ,no_tiff="yes")
 AC_CHECK_HEADER(png.h, ,no_png="yes")
@@ -516,6 +516,13 @@ AC_MSG_RESULT([+----------------------------------------+-------+])
 AC_MSG_RESULT([$SUPPORTED_API])
 
 AC_MSG_RESULT([ ])
+
+dnl
+dnl Final vars
+dnl
+AC_SUBST(LIBIL_CFLAGS)
+AC_SUBST(LIBILU_CFLAGS)
+AC_SUBST(LIBILUT_CFLAGS)
 
 dnl
 dnl Ouput files to generate
