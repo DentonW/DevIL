@@ -224,10 +224,18 @@ ILboolean ILAPIENTRY ilutGLTexImage_(GLuint Level, GLuint Target, ILimage *Image
 	ImageCopy = MakeGLCompliant(Image);
 	if (ImageCopy == NULL)
 		return IL_FALSE;
-
-	glTexImage2D(Target, Level, ilutGLFormat(ImageCopy->Format, ImageCopy->Bpp), ImageCopy->Width,
-				Image->Height, 0, ImageCopy->Format, ImageCopy->Type, ImageCopy->Data);
-
+	
+	glTexImage2D(
+			Target, 
+			Level, 
+			ilutGLFormat(ImageCopy->Format, ImageCopy->Bpp),
+			ImageCopy->Width,
+			ImageCopy->Height,
+			0,
+			ImageCopy->Format,
+			ImageCopy->Type,
+			ImageCopy->Data);	
+	
 	if (Image != ImageCopy)
 		ilCloseImage(ImageCopy);
 
