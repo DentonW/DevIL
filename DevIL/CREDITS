@@ -209,9 +209,11 @@ Mark Callow for EXIF-loading and saving code, along with il[Load/Save]FromJpegSt
 
 Sam for several fixes to my .bmp and .jpg loaders.
 
-chris79 for his help debugging my .psp and .gif code in the 1.4.0 version.
+chris79 for his help debugging my .psp and .gif code in several versions.
 
 Nick Marley for his MSVC++ post-build fixes.
 
 Marc Gregoire for sending images that DevIL would not load.
+
+Alberto Barbati for noticing that the IL_NEU_QUANT_SAMPLE mode wasn't being used properly.
 
