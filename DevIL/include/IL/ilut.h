@@ -77,7 +77,7 @@ ILAPI ILboolean		ILAPIENTRY ilutDisable(ILenum Mode);
 ILAPI ILboolean		ILAPIENTRY ilutEnable(ILenum Mode);
 ILAPI ILboolean		ILAPIENTRY ilutGetBoolean(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilutGetBooleanv(ILenum Mode, ILboolean *Param);
-ILAPI ILint		ILAPIENTRY ilutGetInteger(ILenum Mode);
+ILAPI ILint			ILAPIENTRY ilutGetInteger(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilutGetIntegerv(ILenum Mode, ILint *Param);
 ILAPI const char*	ILAPIENTRY ilutGetString(ILenum StringName);
 ILAPI ILvoid		ILAPIENTRY ilutInit(ILvoid);
@@ -90,7 +90,7 @@ ILAPI ILvoid		ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param);
 
 // The different rendering api's...more to be added later?
 #define ILUT_OPENGL		0
-#define ILUT_ALLEGRO		1
+#define ILUT_ALLEGRO	1
 #define ILUT_WIN32		2
 
 
@@ -106,6 +106,9 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 	#define ILUT_USE_OPENGL
 	//#define ILUT_USE_SDL
 	#define ILUT_USE_DIRECTX8
+	#ifdef __CYGWIN32__
+		#undef ILUT_USE_DIRECTX8
+	#endif
 #elif BEOS  // Don't know the #define
 	#define ILUT_USE_BEOS
 	#define ILUT_USE_OPENGL
