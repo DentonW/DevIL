@@ -282,7 +282,6 @@ ILimage *iUncompressDcx(DCXHEAD *Header)
 	}
 
 
-	if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST) {
 		/*StartPos = itell();
 		Compressed = (ILubyte*)ialloc(Image->SizeOfData * 4 / 3);
 		iread(Compressed, 1, Image->SizeOfData * 4 / 3);
@@ -313,76 +312,43 @@ ILimage *iUncompressDcx(DCXHEAD *Header)
 		ifree(Compressed);
 		iseek(StartPos + Read, IL_SEEK_SET);*/
 
+	//changed 2003-09-01
+	if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST)
 		iPreCache(iCurImage->SizeOfData);
 
-		for (y = 0; y < Image->Height; y++) {
-			for (c = 0; c < Image->Bpp; c++) {
-				x = 0;
-				while (x < Header->Bps) {
-					if (iread(&ByteHead, 1, 1) != 1) {
+	//TODO: because the .pcx-code was broken this
+	//code is probably broken, too
+	for (y = 0; y < Image->Height; y++) {
+		for (c = 0; c < Image->Bpp; c++) {
+			x = 0;
+			while (x < Header->Bps) {
+				if (iread(&ByteHead, 1, 1) != 1) {
+					iUnCache();
+					goto dcx_error;
+				}
+				if ((ByteHead & 0xC0) == 0xC0) {
+					ByteHead &= 0x3F;
+					if (iread(&Colour, 1, 1) != 1) {
 						iUnCache();
 						goto dcx_error;
 					}
-					if ((ByteHead & 0xC0) == 0xC0) {
-						ByteHead &= 0x3F;
-						if (iread(&Colour, 1, 1) != 1) {
-							iUnCache();
-							goto dcx_error;
-						}
-						for (i = 0; i < ByteHead; i++) {
-							ScanLine[x++] = Colour;
-						}
-					}
-					else {
-						ScanLine[x++] = ByteHead;
+					for (i = 0; i < ByteHead; i++) {
+						ScanLine[x++] = Colour;
 					}
 				}
-
-				for (x = 0; x < Image->Width; x++) {  // 'Cleverly' ignores the pad bytes ;)
-					Image->Data[y * Image->Bps + x * Image->Bpp + c] = ScanLine[x];
+				else {
+					ScanLine[x++] = ByteHead;
 				}
 			}
-		}
 
-		iUnCache();
-	}
-	else {
-		for (y = 0; y < Image->Height; y++) {
-			for (c = 0; c < Image->Bpp; c++) {
-				x = 0;
-				while (x < Header->Bps) {
-					if (iread(&ByteHead, 1, 1) != 1)
-						goto dcx_error;
-
-					/*if ((ByteHead & BIT_7) && (ByteHead & BIT_6)) {
-						ClearBits(ByteHead, BIT_7);
-						ClearBits(ByteHead, BIT_6);
-						if (iread(&Colour, 1, 1) != 1)
-							return IL_FALSE;
-						for (i = 0; i < ByteHead; i++) {
-							ScanLine[x++] = Colour;
-						}
-					}*/
-					if ((ByteHead & 0xC0) == 0xC0) {
-						ByteHead &= 0x3F;
-						if (iread(&Colour, 1, 1) != 1)
-							goto dcx_error;
-
-						for (i = 0; i < ByteHead; i++) {
-							ScanLine[x++] = Colour;
-						}
-					}
-					else {
-						ScanLine[x++] = ByteHead;
-					}
-				}
-
-				for (x = 0; x < Image->Width; x++) {  // 'Cleverly' ignores the pad bytes ;)
-					Image->Data[y * Image->Bps + x * Image->Bpp + c] = ScanLine[x];
-				}
+			for (x = 0; x < Image->Width; x++) {  // 'Cleverly' ignores the pad bytes ;)
+				Image->Data[y * Image->Bps + x * Image->Bpp + c] = ScanLine[x];
 			}
 		}
 	}
+
+	iUnCache();
+
 
 	ifree(ScanLine);
 
