@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/20/2002 <--Y2K Compliant! =]
+// Last modified: 09/01/2003 <--Y2K Compliant! =]
 //
 // Filename: src-IL/src/il_pcx.c
 //
@@ -104,9 +104,14 @@ ILboolean iCheckPcx(PCXHEAD *Header)
 {
 	ILuint	Test, i;
 
-	// There are other versions, but I am not supporting them as of yet.
 	//	Got rid of the Reserved check, because I've seen some .pcx files with invalid values in it.
-	if (Header->Manufacturer != 10 || Header->Version != 5 || Header->Encoding != 1/* || Header->Reserved != 0*/)
+	if (Header->Manufacturer != 10 || Header->Encoding != 1/* || Header->Reserved != 0*/)
+		return IL_FALSE;
+
+	// Try to support all pcx versions, as they only differ in allowed formats...
+	// Let's hope it works.
+	if(Header->Version != 5 && Header->Version != 0 && Header->Version != 2 &&
+		 Header->VDpi != 3 && Header->VDpi != 4)
 		return IL_FALSE;
 
 	// See if the padding size is correct
@@ -202,7 +207,15 @@ ILboolean iLoadPcxInternal()
 // Internal function to uncompress the .pcx (all .pcx files are rle compressed)
 ILboolean iUncompressPcx(PCXHEAD *Header)
 {
-	ILubyte	ByteHead, Colour, *ScanLine /* Only one plane */;
+	//changed decompression loop 2003-09-01
+	//From the pcx spec: "There should always
+	//be a decoding break at the end of each scan line.
+	//But there will not be a decoding break at the end of
+	//each plane within each scan line."
+	//This is now handled correctly (hopefully ;) )
+
+	ILubyte	ByteHead, Colour, *ScanLine /* For all planes */;
+	ILuint ScanLineSize;
 	ILuint	c, i, x, y;
 
 	if (Header->Bpp < 8) {
@@ -215,11 +228,6 @@ ILboolean iUncompressPcx(PCXHEAD *Header)
 		return IL_FALSE;
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 
-	ScanLine = (ILubyte*)ialloc(Header->Bps);
-	if (ScanLine == NULL) {
-		return IL_FALSE;
-	}
-
 	switch (iCurImage->Bpp)
 	{
 		case 1:
@@ -228,7 +236,6 @@ ILboolean iUncompressPcx(PCXHEAD *Header)
 			iCurImage->Pal.PalSize = 256 * 3;  // Need to find out for sure...
 			iCurImage->Pal.Palette = (ILubyte*)ialloc(iCurImage->Pal.PalSize);
 			if (iCurImage->Pal.Palette == NULL) {
-				ifree(ScanLine);
 				return IL_FALSE;
 			}
 			break;
@@ -248,90 +255,65 @@ ILboolean iUncompressPcx(PCXHEAD *Header)
 
 		default:
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
-			ifree(ScanLine);
 			return IL_FALSE;
 	}
 
+	ScanLineSize = iCurImage->Bpp*Header->Bps;
+	ScanLine = (ILubyte*)ialloc(ScanLineSize);
+	if (ScanLine == NULL) {
+		return IL_FALSE;
+	}
 
-	if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST) {
+
+	//changed 2003-09-01
+	//having the decoding code twice is error-prone,
+	//so I made iUnCache() smart enough to grasp
+	//if iPreCache() wasn't called and call it
+	//anyways.
+	if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST)
 		iPreCache(iCurImage->SizeOfData / 4);
 
-		for (y = 0; y < iCurImage->Height; y++) {
-			for (c = 0; c < iCurImage->Bpp; c++) {
-				x = 0;
-				while (x < Header->Bps) {
-					if (iread(&ByteHead, 1, 1) != 1) {
-						iUnCache();
-						goto file_read_error;
-					}
-					if ((ByteHead & 0xC0) == 0xC0) {
-						ByteHead &= 0x3F;
-						if (iread(&Colour, 1, 1) != 1) {
-							iUnCache();
-							goto file_read_error;
-						}
-						if (x + ByteHead > iCurImage->Width) {
-							iUnCache();
-							goto file_read_error;
-						}
-						for (i = 0; i < ByteHead; i++) {
-							ScanLine[x++] = Colour;
-						}
-					}
-					else {
-						ScanLine[x++] = ByteHead;
-					}
+	for (y = 0; y < iCurImage->Height; y++) {
+		x = 0;
+		//read scanline
+		while (x < ScanLineSize) {
+			if (iread(&ByteHead, 1, 1) != 1) {
+				iUnCache();
+				goto file_read_error;
+			}
+			if ((ByteHead & 0xC0) == 0xC0) {
+				ByteHead &= 0x3F;
+				if (iread(&Colour, 1, 1) != 1) {
+					iUnCache();
+					goto file_read_error;
 				}
-
-				for (x = 0; x < iCurImage->Width; x++) {  // 'Cleverly' ignores the pad bytes ;)
-					iCurImage->Data[y * iCurImage->Bps + x * iCurImage->Bpp + c] = ScanLine[x];
+				if (x + ByteHead > ScanLineSize) {
+					iUnCache();
+					goto file_read_error;
 				}
+				for (i = 0; i < ByteHead; i++) {
+					ScanLine[x++] = Colour;
+				}
+			}
+			else {
+				ScanLine[x++] = ByteHead;
 			}
 		}
 
-		iUnCache();
-	}
-	else {
-		for (y = 0; y < iCurImage->Height; y++) {
-			for (c = 0; c < iCurImage->Bpp; c++) {
-				x = 0;
-				while (x < Header->Bps) {
-					if (iread(&ByteHead, 1, 1) != 1)
-						goto file_read_error;
-					/*if ((ByteHead & BIT_7) && (ByteHead & BIT_6)) {
-						ClearBits(ByteHead, BIT_7);
-						ClearBits(ByteHead, BIT_6);
-						if (iread(&Colour, 1, 1) != 1)
-							goto file_read_error;
-						for (i = 0; i < ByteHead; i++) {
-							ScanLine[x++] = Colour;
-						}
-					}*/
-					if ((ByteHead & 0xC0) == 0xC0) {
-						ByteHead &= 0x3F;
-						if (iread(&Colour, 1, 1) != 1)
-							goto file_read_error;
-						if (x + ByteHead > iCurImage->Width) {
-							goto file_read_error;
-						}
-						for (i = 0; i < ByteHead; i++) {
-							ScanLine[x++] = Colour;
-						}
-					}
-					else {
-						ScanLine[x++] = ByteHead;
-					}
-				}
-
-				for (x = 0; x < iCurImage->Width; x++) {  // 'Cleverly' ignores the pad bytes ;)
-					iCurImage->Data[y * iCurImage->Bps + x * iCurImage->Bpp + c] = ScanLine[x];
-				}
+		//convert plane-separated scanline into index, rgb or rgba pixels.
+		//there might be a padding byte at the end of each scanline...
+		for (x = 0; x < iCurImage->Width; x++) {
+			for(c = 0; c < iCurImage->Bpp; c++) {
+				iCurImage->Data[y * iCurImage->Bps + x * iCurImage->Bpp + c] =
+						ScanLine[x + c * Header->Bps];
 			}
 		}
 	}
+
+	iUnCache();
 
 	// Read in the palette
-	if (iCurImage->Bpp == 1) {
+	if (Header->Version == 5 && iCurImage->Bpp == 1) {
 		x = itell();
 		if (iread(&ByteHead, 1, 1) == 0) {  // If true, assume that we have a luminance image.
 			ilGetError();  // Get rid of the IL_FILE_READ_ERROR.
@@ -355,6 +337,9 @@ ILboolean iUncompressPcx(PCXHEAD *Header)
 
 file_read_error:
 	ifree(ScanLine);
+
+	//added 2003-09-01
+	ilSetError(IL_FILE_READ_ERROR);
 	return IL_FALSE;
 }
 
@@ -384,7 +369,7 @@ ILboolean iUncompressSmall(PCXHEAD *Header)
 
 	if (Header->NumPlanes == 1) {
 		for (j = 0; j < iCurImage->Height; j++) {
-			i = 0;
+			i = 0; //number of written pixels
 			while (i < iCurImage->Width) {
 				if (iread(&HeadByte, 1, 1) != 1)
 					return IL_FALSE;
@@ -392,11 +377,11 @@ ILboolean iUncompressSmall(PCXHEAD *Header)
 					HeadByte -= 192;
 					if (iread(&Data, 1, 1) != 1)
 						return IL_FALSE;
-					
+
 					for (c = 0; c < HeadByte; c++) {
 						k = 128;
 						for (d = 0; d < 8 && i < iCurImage->Width; d++) {
-							iCurImage->Data[j * iCurImage->Width + i++] = (!!(Data & k) == 1 ? 255 : 0);
+							iCurImage->Data[j * iCurImage->Width + i++] = ((Data & k) != 0 ? 255 : 0);
 							k >>= 1;
 						}
 					}
@@ -404,13 +389,22 @@ ILboolean iUncompressSmall(PCXHEAD *Header)
 				else {
 					k = 128;
 					for (c = 0; c < 8 && i < iCurImage->Width; c++) {
-						iCurImage->Data[j * iCurImage->Width + i++] = (!!(HeadByte & k) == 1 ? 255 : 0);
+						iCurImage->Data[j * iCurImage->Width + i++] = ((HeadByte & k) != 0 ? 255 : 0);
 						k >>= 1;
 					}
 				}
 			}
-			if (Data != 0)
-				igetc();  // Skip pad byte if last byte not a 0
+
+			//if(Data != 0)
+			//changed 2003-09-01:
+			//There has to be an even number of bytes per line in a pcx.
+			//One byte can hold up to 8 bits, so Width/8 bytes
+			//are needed to hold a 1 bit per pixel image line.
+			//If Width/8 is even no padding is needed,
+			//one pad byte has to be read otherwise.
+			//(let's hope the above is true ;-))
+			if(!((iCurImage->Width >> 3) & 0x1))
+				igetc();	// Skip pad byte
 		}
 	}
 	else {   // 4-bit images
