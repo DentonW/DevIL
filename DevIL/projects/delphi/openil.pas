@@ -4,7 +4,7 @@ unit OpenIL;
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 06/22/2002 <--Y2K Compliant! =]
+// Last modified: 06/23/2002 <--Y2K Compliant! =]
 //
 // Filename: il/il.h
 //
@@ -14,8 +14,8 @@ unit OpenIL;
 
 {******************************************************************************}
 { Converted to Delphi by Alexander Blach (alexander@abee.de)                   }
-{   Version:       DevIL v1.6.0                                                }
-{   Last modified: 06/22/2002                                                  }
+{   Version:       DevIL v1.6.1                                                }
+{   Last modified: 06/23/2002                                                  }
 {******************************************************************************}
 
 interface

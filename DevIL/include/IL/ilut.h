@@ -2,7 +2,7 @@
 //
 // ImageLib Utility Toolkit Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 06/22/2002 <--Y2K Compliant! =]
+// Last modified: 06/23/2002 <--Y2K Compliant! =]
 //
 // Filename: IL/ilut.h
 //
@@ -39,8 +39,8 @@ extern "C" {
 #endif//_WIN32
 
 
-#define ILUT_VERSION_1_6_0					1
-#define ILUT_VERSION						160
+#define ILUT_VERSION_1_6_1					1
+#define ILUT_VERSION						161
 
 
 // Attribute Bits

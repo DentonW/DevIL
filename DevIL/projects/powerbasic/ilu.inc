@@ -16,7 +16,7 @@
 ' e-mail: sourcecode@scheutz.dk
 '
 ' Last modified: 06/22/2002
-' Based on DevIL Ver. 1.6.0 headers
+' Based on DevIL Ver. 1.6.1 headers
 '
 ' Filename: ilu.inc
 '
