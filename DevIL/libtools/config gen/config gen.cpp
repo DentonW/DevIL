@@ -12,19 +12,24 @@ ofstream	Out;
 bool	GetDirs(void);
 void	TestInc(char *FileName, char *SubDir, char *Directive, bool IfFound);
 void	CleanUp(void);
+void	Compare(void);
+
 
 int main(int argc, char **argv)
 {
+	char CurDir[1024];
+
 	if (argc <= 1) {
 		cout << "Please specify where to generate the config.h file." << endl;
 		return 1;
 	}
 	chdir(argv[1]);
+	getcwd(CurDir, 1024);
 
 	if (!GetDirs())
 		return false;
 
-	Out.open("config.h");
+	Out.open("config.h.temp");
 	Out << "#ifndef __CONFIG_H__" << endl << "#define __CONFIG_H__" << endl << endl;
 
 	TestInc("jpeglib.h",	NULL,	"IL_NO_JPG",	false);
@@ -45,6 +50,8 @@ int main(int argc, char **argv)
 	Out.close();
 
 	CleanUp();
+	chdir(CurDir);
+	Compare();
 
 	return 0;
 }
@@ -180,6 +187,36 @@ void CleanUp()
 
 	delete []IncDirs;
 	delete []LibDirs;
+
+	return;
+}
+
+
+void Compare()
+{
+	FILE *config, *temp;
+
+	config = fopen("config.h", "rt");
+	if (!config) {
+		rename("config.h.temp", "config.h");
+		return;
+	}
+
+	temp = fopen("config.h.temp", "rt");
+
+	while (!feof(temp)) {
+		if (fgetc(temp) != fgetc(config)) {
+			fclose(config);
+			fclose(temp);
+			remove("config.h");
+			rename("config.h.temp", "config.h");
+			return;
+		}
+	}
+
+	fclose(config);
+	fclose(temp);
+	remove("config.h.temp");
 
 	return;
 }
