@@ -15,9 +15,13 @@
 #define MNG_SUPPORT_READ
 #define MNG_SUPPORT_WRITE
 #define MNG_SUPPORT_DISPLAY
-#include <libmng.h>
 
 
+#ifdef MACOSX
+    #include <libmng/libmng.h>
+#else
+    #include <libmng.h>
+#endif
 
 //---------------------------------------------------------------------------------------------
 // memory allocation; data must be zeroed
