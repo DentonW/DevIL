@@ -13,8 +13,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\../../lib"
-			IntermediateDirectory=".\../src/obj/debug"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -50,7 +50,8 @@
 				TypeLibraryName=".\../../lib/debug/IL.tlb"
 				HeaderFileName=""/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -70,8 +71,8 @@
 		</Configuration>
 		<Configuration
 			Name="Dynamic|Win32"
-			OutputDirectory=".\../../lib"
-			IntermediateDirectory=".\../src/obj/dynamic"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -81,7 +82,7 @@
 				Optimization="1"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="../include;../../include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;ZLIB_DLL;PNG_USE_DLL;MNG_USE_DLL;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;ZLIB_DLL;PNG_USE_DLL;MNG_USE_DLL;LCMS_DLL;"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
@@ -96,7 +97,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libz_DLL.lib libpng_DLL.lib libmng_DLL.lib libtiff_DLL.lib littlecms_DLL.lib libjpeg_DLL.lib"
+				AdditionalDependencies="zlib_DLL.lib libpng_DLL.lib libmng_DLL.lib libtiff_DLL.lib lcmsdll.lib libjpeg_DLL.lib"
 				OutputFile="$(OutDir)/DevIL.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -118,7 +119,9 @@
 				TypeLibraryName=".\../../lib/IL.tlb"
 				HeaderFileName=""/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;
+copy &quot;$(TargetDir)\$(TargetName)_DLL.lib&quot; &quot;..\..\lib&quot;"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -140,8 +143,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\../../lib"
-			IntermediateDirectory=".\../src/obj"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -176,7 +179,8 @@
 				TypeLibraryName=".\../../lib/IL.tlb"
 				HeaderFileName=""/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool

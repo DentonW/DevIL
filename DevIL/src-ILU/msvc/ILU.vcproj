@@ -13,8 +13,8 @@
 	<Configurations>
 		<Configuration
 			Name="Dynamic|Win32"
-			OutputDirectory=".\../../lib"
-			IntermediateDirectory=".\../src/obj/dynamic"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -44,11 +44,9 @@
 				OutputFile="$(OutDir)/DevILU.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\lib"
+				AdditionalLibraryDirectories="..\..\projects\msvc\dynamic"
 				ModuleDefinitionFile=".\ilu.def"
-				ProgramDatabaseFile=".\../../lib/ilu-l.pdb"
-				ImportLibrary="$(OutDir)/DevILU_DLL.lib"
-				TargetMachine="1"/>
+				ImportLibrary="$(OutDir)/DevILU_DLL.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
@@ -58,7 +56,9 @@
 				TypeLibraryName=".\../../lib/ILU.tlb"
 				HeaderFileName=""/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;
+copy &quot;$(TargetDir)\$(TargetName)_DLL.lib&quot; &quot;..\..\lib&quot;"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -80,8 +80,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\../../lib"
-			IntermediateDirectory=".\../src/obj/debuf"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -99,7 +99,7 @@
 				AssemblerListingLocation=".\../src/obj/debug/"
 				ObjectFile=".\../src/obj/debug/"
 				ProgramDataBaseFileName=".\../src/obj/debug/"
-				WarningLevel="3"
+				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="4"/>
 			<Tool
@@ -117,7 +117,8 @@
 				TypeLibraryName=".\../../lib/debug/ILU.tlb"
 				HeaderFileName=""/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -137,8 +138,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\../../lib"
-			IntermediateDirectory=".\../src/obj"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -173,7 +174,8 @@
 				TypeLibraryName=".\../../lib/ILU.tlb"
 				HeaderFileName=""/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
