@@ -442,7 +442,13 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 			else  // IL_IMAGE_OFFY
 				*Param = iCurImage->OffY;
 			break;
-
+		case IL_IMAGE_CUBEFLAGS:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			*Param = iCurImage->CubeFlags;
+			break;
 
 		case IL_ACTIVE_IMAGE:
 		case IL_ACTIVE_MIPMAP:

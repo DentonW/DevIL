@@ -40,6 +40,7 @@ ILAPI ILimage* ILAPIENTRY ilNewImage(ILuint Width, ILuint Height, ILuint Depth, 
 	Image->NumMips = 0;
 	Image->NumNext = 0;
 	Image->Duration = 0;
+	Image->CubeFlags = 0;
 	Image->Type = IL_UNSIGNED_BYTE;
 	Image->Origin = IL_ORIGIN_LOWER_LEFT;
 	Image->AnimList = NULL;

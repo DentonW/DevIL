@@ -103,6 +103,7 @@ typedef struct ILinfo
 	ILubyte	*Palette;			// the image's palette
 	ILenum	PalType;			// palette type
 	ILuint	PalSize;			// palette size
+	ILenum	CubeFlags;			// flags for what cube map sides are present
 	ILuint	NumNext;			// number of images following
 	ILuint	NumMips;			// number of mipmaps
 	ILuint	NumLayers;			// number of layers

@@ -116,6 +116,7 @@ typedef struct ILimage
 	ILenum	Origin;				// origin of the image
 	ILpal	Pal;				// palette details
 	ILuint	Duration;			// length of the time to display this "frame"
+	ILenum	CubeFlags;			// cube map flags for sides present in chain
 	struct	ILimage *Mipmaps;	// mipmapped versions of this image terminated by a NULL - usu. NULL
 	struct	ILimage *Next;		// next image in the chain - usu. NULL
 	struct	ILimage *Layers;	// subsequent layers in the chain - usu. NULL

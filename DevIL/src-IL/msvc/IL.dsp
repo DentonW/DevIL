@@ -57,7 +57,7 @@ LINK32=link.exe
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /def:".\il.def" /out:"../../lib/debug/DevIL-d.dll" /pdbtype:sept
 # SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
-TargetPath=\DevIL-1.2.5\lib\debug\DevIL-d.dll
+TargetPath=\DevIL\lib\debug\DevIL-d.dll
 SOURCE="$(InputPath)"
 PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
 # End Special Build Tool
@@ -91,7 +91,7 @@ LINK32=link.exe
 # ADD LINK32 delayimp.lib user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /machine:I386 /def:".\il.def" /out:"../../lib/DevIL-l.dll" /OPT:NOWIN98 /delayload:libpng3.dll /delayload:lcms.dll
 # SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
-TargetPath=\DevIL-1.2.5\lib\DevIL-l.dll
+TargetPath=\DevIL\lib\DevIL-l.dll
 SOURCE="$(InputPath)"
 PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
 # End Special Build Tool
@@ -125,7 +125,7 @@ LINK32=link.exe
 # ADD LINK32 user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /machine:I386 /def:".\il.def" /out:"../../lib/DevIL.dll" /OPT:NOWIN98
 # SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
-TargetPath=\DevIL-1.2.5\lib\DevIL.dll
+TargetPath=\DevIL\lib\DevIL.dll
 SOURCE="$(InputPath)"
 PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
 # End Special Build Tool
@@ -211,6 +211,10 @@ SOURCE=..\src\il_error.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\il_fastconv.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\il_files.c
 # End Source File
 # Begin Source File
@@ -284,6 +288,10 @@ SOURCE=..\src\il_pnm.c
 # Begin Source File
 
 SOURCE=..\src\il_profiles.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\il_psd.c
 # End Source File
 # Begin Source File
 
@@ -416,6 +424,10 @@ SOURCE=..\include\il_pic.h
 # Begin Source File
 
 SOURCE=..\include\il_pnm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\il_psd.h
 # End Source File
 # Begin Source File
 

@@ -96,15 +96,25 @@ typedef struct DXTAlphaBlock3BitLinear
 
 
 // Defines
-#define DDS_FOURCC		0x00000004l
-#define DDS_PITCH		0x00000008l
-#define DDS_COMPLEX		0x00000008l
-#define DDS_TEXTURE		0x00001000l
-#define DDS_MIPMAPCOUNT	0x00020000l
-#define DDS_LINEARSIZE	0x00080000l
-#define DDS_VOLUME		0x00200000l
-#define DDS_MIPMAP		0x00400000l
-#define DDS_DEPTH		0x00800000l
+#define DDS_ALPHAPIXELS			0x00000001l
+#define DDS_ALPHA				0x00000002l
+#define DDS_FOURCC				0x00000004l
+#define DDS_PITCH				0x00000008l
+#define DDS_COMPLEX				0x00000008l
+#define DDS_TEXTURE				0x00001000l
+#define DDS_MIPMAPCOUNT			0x00020000l
+#define DDS_LINEARSIZE			0x00080000l
+#define DDS_VOLUME				0x00200000l
+#define DDS_MIPMAP				0x00400000l
+#define DDS_DEPTH				0x00800000l
+
+#define DDS_CUBEMAP				0x00000200L
+#define DDS_CUBEMAP_POSITIVEX	0x00000400L
+#define DDS_CUBEMAP_NEGATIVEX	0x00000800L
+#define DDS_CUBEMAP_POSITIVEY	0x00001000L
+#define DDS_CUBEMAP_NEGATIVEY	0x00002000L
+#define DDS_CUBEMAP_POSITIVEZ	0x00004000L
+#define DDS_CUBEMAP_NEGATIVEZ	0x00008000L
 
 
 // Remove!
@@ -117,6 +127,7 @@ typedef struct DXTAlphaBlock3BitLinear
 enum PixFormat
 {
 	PF_ARGB,
+	PF_RGB,
 	PF_DXT1,
 	PF_DXT2,
 	PF_DXT3,
@@ -133,8 +144,19 @@ ILuint	CompSize;		// Compressed size
 ILuint	CompLineSize;	// Compressed line size
 ILuint	CompFormat;		// Compressed format
 ILimage	*Image;
-ILint	Width, Height;
+ILint	Width, Height, Depth;
+ILuint	BlockSize;
 
+#define CUBEMAP_SIDES 6
+
+ILuint CubemapDirections[CUBEMAP_SIDES] = {
+		DDS_CUBEMAP_POSITIVEX,
+		DDS_CUBEMAP_NEGATIVEX,
+		DDS_CUBEMAP_POSITIVEY,
+		DDS_CUBEMAP_NEGATIVEY,
+		DDS_CUBEMAP_POSITIVEZ,
+		DDS_CUBEMAP_NEGATIVEZ
+};
 
 // Internal functions
 ILboolean	iLoadDdsInternal(ILvoid);

@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
+// Copyright (C) 2000-2001 by Denton Woods
 // Last modified: 12/25/2001 <--Y2K Compliant! =]
 //
 // Filename: openil/il_dds.c
@@ -32,7 +32,7 @@ ILboolean ilIsValidDds(const ILstring FileName)
 	ILHANDLE	DdsFile;
 	ILboolean	bDds = IL_FALSE;
 
-	if (!iCheckExtension(FileName, IL_TEXT("dds"))) {
+	if (!iCheckExtension(FileName, TEXT("dds"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bDds;
 	}
@@ -77,28 +77,39 @@ ILboolean ilIsValidDdsL(ILvoid *Lump, ILuint Size)
 ILvoid iGetDdsHead(DDSHEAD *Header)
 {
 	iread(Header->Signature, 1, 4);
-	Header->Size1 = GetLittleInt();
-	Header->Flags1 = GetLittleInt();
-	Header->Height = GetLittleInt();
-	Header->Width = GetLittleInt();
-	Header->LinearSize = GetLittleInt();
-	Header->Depth = GetLittleInt();
-	Header->MipMapCount = GetLittleInt();
-	Header->AlphaBitDepth = GetLittleInt();
-	iread(Header->NotUsed, sizeof(ILint), 10);
-	Header->Size2 = GetLittleInt();
-	Header->Flags2 = GetLittleInt();
-	Header->FourCC = GetLittleInt();
-	Header->RGBBitCount = GetLittleInt();
-	Header->RBitMask = GetLittleInt();
-	Header->GBitMask = GetLittleInt();
-	Header->BBitMask = GetLittleInt();
-	Header->RGBAlphaBitMask = GetLittleInt();
-	Header->ddsCaps1 = GetLittleInt();
-	Header->ddsCaps2 = GetLittleInt();
-	Header->ddsCaps3 = GetLittleInt();
-	Header->ddsCaps4 = GetLittleInt();
-	Header->TextureStage = GetLittleInt();
+	Header->Size1 = GetLittleUInt();
+	Header->Flags1 = GetLittleUInt();
+	Header->Height = GetLittleUInt();
+	Header->Width = GetLittleUInt();
+	Header->LinearSize = GetLittleUInt();
+	Header->Depth = GetLittleUInt();
+	Header->MipMapCount = GetLittleUInt();
+	Header->AlphaBitDepth = GetLittleUInt();
+	iread(Header->NotUsed, sizeof(ILuint), 10);
+	Header->Size2 = GetLittleUInt();
+	Header->Flags2 = GetLittleUInt();
+	Header->FourCC = GetLittleUInt();
+	Header->RGBBitCount = GetLittleUInt();
+	Header->RBitMask = GetLittleUInt();
+	Header->GBitMask = GetLittleUInt();
+	Header->BBitMask = GetLittleUInt();
+	Header->RGBAlphaBitMask = GetLittleUInt();
+	Header->ddsCaps1 = GetLittleUInt();
+	Header->ddsCaps2 = GetLittleUInt();
+	Header->ddsCaps3 = GetLittleUInt();
+	Header->ddsCaps4 = GetLittleUInt();
+	Header->TextureStage = GetLittleUInt();
+
+	if (Head.Depth == 0)
+		Head.Depth = 1;
+	
+	DecodePixelFormat();
+	// Microsoft bug, they're not following thier own documentation.
+	if (!(Head.Flags1 & (DDS_LINEARSIZE | DDS_PITCH)))
+	{
+		Head.Flags1 |= DDS_LINEARSIZE;
+		Head.LinearSize = BlockSize;
+	}
 
 	return;
 }
@@ -134,7 +145,7 @@ ILboolean iCheckDds(DDSHEAD *Head)
 }
 
 
-//! Reads a .bmp file
+//! Reads a .dds file
 ILboolean ilLoadDds(const ILstring FileName)
 {
 	ILHANDLE	DdsFile;
@@ -153,7 +164,7 @@ ILboolean ilLoadDds(const ILstring FileName)
 }
 
 
-//! Reads an already-opened .bmp file
+//! Reads an already-opened .dds file
 ILboolean ilLoadDdsF(ILHANDLE File)
 {
 	ILuint		FirstPos;
@@ -176,6 +187,77 @@ ILboolean ilLoadDdsL(ILvoid *Lump, ILuint Size)
 }
 
 
+ILboolean iLoadDdsCubemapInternal()
+{
+	ILuint	i;
+	ILubyte	Bpp;
+	ILimage *startImage;
+
+	CompData = NULL;
+
+	if (CompFormat == PF_RGB)
+		Bpp = 3;
+	else
+		Bpp = 4;
+
+	startImage = Image;
+	// run through cube map possibilities
+	for (i=0; i<CUBEMAP_SIDES; i++)
+	{
+		// reset each time
+		Width = Head.Width;
+		Height = Head.Height;
+		Depth = Head.Depth;
+		if (Head.ddsCaps2 & CubemapDirections[i])
+		{
+			if (i != 0)
+			{
+				Image->Next = ilNewImage(Width, Height, Depth, Bpp, 1);
+				if (Image->Next == NULL)
+					return IL_FALSE;
+
+				Image = Image->Next;
+				startImage->NumNext++;
+				ilBindImage(ilGetCurName());  // Set to parent image first.
+				ilActiveImage(i);
+			}
+
+			Image->CubeFlags = CubemapDirections[i];
+
+			if (!ReadData())
+				return IL_FALSE;
+
+			if (!AllocImage()) {
+				if (CompData)
+					free(CompData);
+				return IL_FALSE;
+			}
+
+			if (!Decompress()) {
+				if (CompData)
+					free(CompData);
+				return IL_FALSE;
+			}
+
+			if (!ReadMipmaps()) {
+				if (CompData)
+					free(CompData);
+				return IL_FALSE;
+			}
+		}
+	}
+
+	if (CompData)
+	{
+		free(CompData);
+		CompData = NULL;
+	}
+
+	ilBindImage(ilGetCurName());  // Set to parent image first.
+	return ilFixImage();
+}
+
+
 ILboolean iLoadDdsInternal()
 {
 	CompData = NULL;
@@ -186,21 +268,41 @@ ILboolean iLoadDdsInternal()
 	}
 
 	iGetDdsHead(&Head);
+	Image = iCurImage;
+	if (Head.ddsCaps1 & DDS_COMPLEX) {
+		if (Head.ddsCaps2 & DDS_CUBEMAP) {
+			if (!iLoadDdsCubemapInternal())
+				return IL_FALSE;
+			return IL_TRUE;
+		}
+	}
 	Width = Head.Width;
 	Height = Head.Height;
+	Depth = Head.Depth;
 
-	ReadData();
-	DecodePixelFormat();
-	AllocImage();
-	Decompress();
-	ReadMipmaps();
+	if (!ReadData())
+		return IL_FALSE;
+	if (!AllocImage()) {
+		if (CompData)
+			free(CompData);
+		return IL_FALSE;
+	}
+	if (!Decompress()) {
+		if (CompData)
+			free(CompData);
+		return IL_FALSE;
+	}
+	if (!ReadMipmaps()) {
+		if (CompData)
+			free(CompData);
+		return IL_FALSE;
+	}
 
 	if (CompData)
 		free(CompData);
 
-	ilFixImage();
-
-	return IL_TRUE;
+	ilBindImage(ilGetCurName());  // Set to parent image first.
+	return ilFixImage();
 }
 
 
@@ -208,8 +310,14 @@ ILboolean iLoadDdsInternal()
 ILboolean ReadData()
 {
 	ILuint	Bps;
-	ILint	i;
+	ILint	y, z;
 	ILubyte	*Temp;
+	ILuint Bpp;
+
+	if (CompFormat == PF_RGB)
+		Bpp = 3;
+	else
+		Bpp = 4;
 
 	if (CompData) {
 		ifree(CompData);
@@ -224,23 +332,25 @@ ILboolean ReadData()
 		}
 
 		iread(CompData, 1, Head.LinearSize);
-    }
-    else {
+    } else {
 		Bps = Width * Head.RGBBitCount / 8;
-		CompSize = Head.LinearSize * Height;
+		CompSize = Bps * Height * Depth;
 		CompLineSize = Bps;
 
-		CompData = (ILubyte*)malloc(Head.LinearSize * Height);
+		CompData = (ILubyte*)malloc(CompSize);
 		if (CompData == NULL) {
 			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 
         Temp = CompData;
-        for (i = 0; i < Height; i++) {
-            iread(Temp, 1, Bps);
-            Temp += Head.LinearSize;
-        }
+		for (z = 0; z < Depth; z++) {
+	        for (y = 0; y < Height; y++) {
+		        iread(Temp, 1, Bps);
+				Temp += Bps;
+			}
+		}
+
     }
 
 	return IL_TRUE;
@@ -249,66 +359,73 @@ ILboolean ReadData()
 
 ILboolean AllocImage()
 {
-	if (CompFormat != PF_ARGB) {
-		if (!ilTexImage(Width, Height, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL)) {
-			free(CompData);
-			return IL_FALSE;
-		}
-	}
-	else {
-		if (Head.RGBAlphaBitMask == 0) {
-			if (!ilTexImage(Width, Height, 1, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL)) {
+	switch (CompFormat) {
+		case PF_RGB:
+			if (!ilTexImage(Width, Height, Depth, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL)) {
 				free(CompData);
 				return IL_FALSE;
 			}
-		}
-		else {
-			if (!ilTexImage(Width, Height, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL)) {
+			break;
+		case PF_ARGB:
+		default:
+			if (!ilTexImage(Width, Height, Depth, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL)) {
 				free(CompData);
 				return IL_FALSE;
 			}
-		}	
 	}
-	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
-	Image = iCurImage;
 
+	Image->Origin = IL_ORIGIN_UPPER_LEFT;
+	
 	return IL_TRUE;
 }
 
 
 ILvoid DecodePixelFormat()
 {
-    switch (Head.FourCC)
-    {
-        case 0:
-            // This dds texture isn't compressed so write out ARGB format
+	if (Head.Flags2 & DDS_FOURCC) {
+		BlockSize = ((Head.Width + 3)/4) * ((Head.Height + 3)/4) * ((Head.Depth + 3)/4);
+		switch (Head.FourCC)
+		{
+			case MAKEFOURCC('D','X','T','1'):
+				CompFormat = PF_DXT1;
+				BlockSize *= 8;
+				break;
+
+			case MAKEFOURCC('D','X','T','2'):
+				CompFormat = PF_DXT2;
+				BlockSize *= 16;
+				break;
+
+			case MAKEFOURCC('D','X','T','3'):
+				CompFormat = PF_DXT3;
+				BlockSize *= 16;
+				break;
+
+			case MAKEFOURCC('D','X','T','4'):
+				CompFormat = PF_DXT4;
+				BlockSize *= 16;
+				break;
+
+			case MAKEFOURCC('D','X','T','5'):
+				CompFormat = PF_DXT5;
+				BlockSize *= 16;
+				break;
+
+			default:
+				CompFormat = PF_UNKNOWN;
+				BlockSize *= 16;
+				break;
+		}
+	} else {
+        // This dds texture isn't compressed so write out ARGB format
+		if (Head.Flags2 & DDS_ALPHAPIXELS) {
 			CompFormat = PF_ARGB;
-            break;
-
-        case MAKEFOURCC('D','X','T','1'):
-			CompFormat = PF_DXT1;
-            break;
-
-        case MAKEFOURCC('D','X','T','2'):
-			CompFormat = PF_DXT2;
-            break;
-
-        case MAKEFOURCC('D','X','T','3'):
-			CompFormat = PF_DXT3;
-            break;
-
-        case MAKEFOURCC('D','X','T','4'):
-			CompFormat = PF_DXT4;
-            break;
-
-        case MAKEFOURCC('D','X','T','5'):
-			CompFormat = PF_DXT5;
-            break;
-
-		default:
-			CompFormat = PF_UNKNOWN;
-			break;
-    }
+			BlockSize = (Head.Width * Head.Height * Head.Depth * 4);
+		} else {
+			CompFormat = PF_RGB;
+			BlockSize = (Head.Width * Head.Height * Head.Depth * 3);
+		}
+	}
 	return;
 }
 
@@ -318,6 +435,7 @@ ILboolean Decompress()
 	switch (CompFormat)
 	{
 		case PF_ARGB:
+		case PF_RGB:
 			return DecompressARGB();
 
 		case PF_DXT1:
@@ -348,51 +466,66 @@ ILboolean ReadMipmaps()
 	ILint	i;
 	ILuint	CompFactor;
 	ILubyte	Bpp;
+	ILimage	*startImage;
+	ILuint	LastLinear;
+	ILuint	minW, minH;
 
-	if (!(Head.Flags1 & DDS_LINEARSIZE))
-		return IL_FALSE;  // @TODO: Change. Cannot accurately calculate the LinearSize yet.
-
-	if (!(Head.Flags1 & DDS_MIPMAPCOUNT))
-		  if (Head.MipMapCount)
-			  return IL_FALSE;
-		  else
-			  return IL_TRUE;
-
-	if (CompFormat != PF_ARGB || Head.RGBAlphaBitMask != 0)
-		Bpp = 4;
-	else
+	if (CompFormat == PF_RGB)
 		Bpp = 3;
+	else
+		Bpp = 4;
 
-	CompFactor = (Width * Height * Bpp) / Head.LinearSize;
-	Image = iCurImage;
+	if (Head.Flags1 & DDS_LINEARSIZE) {
+		CompFactor = (Width * Height * Depth * Bpp) / Head.LinearSize;
+	}
 
-	// Added by Kenneth Hurley 01/23/2002.
+	startImage = Image;
+
 	if (!(Head.Flags1 & DDS_MIPMAPCOUNT))
 	{
 		Head.MipMapCount = 1;
 	}
 
+	LastLinear = Head.LinearSize;
 	for (i = 0; i < Head.MipMapCount - 1; i++) {
-		Width = IL_MAX(Width / 2, 1);
-		Height = IL_MAX(Height / 2, 1);
+		Depth = Depth / 2;
+		Width = Width / 2;
+		Height = Height / 2;
 
-		Image->Next = ilNewImage(Width, Height, 1, Bpp, 1);
+		if (Depth == 0) 
+			Depth = 1;
+		if (Width == 0) 
+			Width = 1;
+		if (Height == 0) 
+			Height = 1;
+
+		Image->Next = ilNewImage(Width, Height, Depth, Bpp, 1);
 		if (Image->Next == NULL)
 			return IL_FALSE;
 		Image = Image->Next;
 		Image->Origin = IL_ORIGIN_UPPER_LEFT;
 
-		// Smallest block possible is 8 for DXT1 and 16 for DXT2+.
-		Head.LinearSize = Width * Height * Bpp / CompFactor;
-		Head.LinearSize = IL_MAX(Head.LinearSize, CompFormat == PF_DXT1 ? 8 : 16);
+		if (Head.Flags1 & DDS_LINEARSIZE) {
+			minW = Width;
+			minH = Height;
+			if ((CompFormat != PF_RGB) && (CompFormat != PF_ARGB)) {
+				minW = max(4, Width);
+				minH = max(4, Height);
+			}
+			Head.LinearSize = (minW * minH * Depth * Bpp) / CompFactor;
+		} else {
+			Head.LinearSize >>= 1;
+		}
 
 		ReadData();
 		Decompress();
 	}
 
-	iCurImage->Mipmaps = iCurImage->Next;
-	iCurImage->Next = NULL;
-	iCurImage->NumMips = Head.MipMapCount - 1;
+	Head.LinearSize = LastLinear;
+	startImage->Mipmaps = startImage->Next;
+	startImage->Next = NULL;
+	startImage->NumMips = Head.MipMapCount - 1;
+	Image = startImage;
 
 	return IL_TRUE;
 }
@@ -400,7 +533,7 @@ ILboolean ReadMipmaps()
 
 ILboolean DecompressDXT1()
 {
-	int			x, y, i, j, k, Select;
+	int			x, y, z, i, j, k, Select;
 	ILubyte		*Temp;
 	Color565	*color_0, *color_1;
 	Color8888	colours[4], *col;
@@ -408,72 +541,72 @@ ILboolean DecompressDXT1()
 
 
 	Temp = CompData;
-	for (y = 0; y < Height; y += 4) {
-		for (x = 0; x < Width; x += 4) {
-			if (y >= Height || x >= Width)
-				break;
+	for (z = 0; z < Depth; z++) {
+		for (y = 0; y < Height; y += 4) {
+			for (x = 0; x < Width; x += 4) {
 
-			color_0 = ((Color565*)Temp);
-			color_1 = ((Color565*)(Temp+2));
-			bitmask = ((ILuint*)Temp)[1];
-			Temp += 8;
+				color_0 = ((Color565*)Temp);
+				color_1 = ((Color565*)(Temp+2));
+				bitmask = ((ILuint*)Temp)[1];
+				Temp += 8;
 
-			colours[0].r = color_0->nRed << 3;
-			colours[0].g = color_0->nGreen << 2;
-			colours[0].b = color_0->nBlue << 3;
-			colours[0].a = 0xFF;
+				colours[0].r = color_0->nRed << 3;
+				colours[0].g = color_0->nGreen << 2;
+				colours[0].b = color_0->nBlue << 3;
+				colours[0].a = 0xFF;
 
-			colours[1].r = color_1->nRed << 3;
-			colours[1].g = color_1->nGreen << 2;
-			colours[1].b = color_1->nBlue << 3;
-			colours[1].a = 0xFF;
+				colours[1].r = color_1->nRed << 3;
+				colours[1].g = color_1->nGreen << 2;
+				colours[1].b = color_1->nBlue << 3;
+				colours[1].a = 0xFF;
 
 
-			if (*((ILushort*)color_0) > *((ILushort*)color_1)) {
-				// Four-color block: derive the other two colors.    
-				// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
-				// These 2-bit codes correspond to the 2-bit fields 
-				// stored in the 64-bit block.
-				colours[2].b = (2 * colours[0].b + colours[1].b + 1) / 3;
-				colours[2].g = (2 * colours[0].g + colours[1].g + 1) / 3;
-				colours[2].r = (2 * colours[0].r + colours[1].r + 1) / 3;
-				colours[2].a = 0xFF;
+				if (*((ILushort*)color_0) > *((ILushort*)color_1)) {
+					// Four-color block: derive the other two colors.    
+					// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
+					// These 2-bit codes correspond to the 2-bit fields 
+					// stored in the 64-bit block.
+					colours[2].b = (2 * colours[0].b + colours[1].b + 1) / 3;
+					colours[2].g = (2 * colours[0].g + colours[1].g + 1) / 3;
+					colours[2].r = (2 * colours[0].r + colours[1].r + 1) / 3;
+					colours[2].a = 0xFF;
 
-				colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
-				colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
-				colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
-				colours[3].a = 0xFF;
-			}    
-			else { 
-				// Three-color block: derive the other color.
-				// 00 = color_0,  01 = color_1,  10 = color_2,
-				// 11 = transparent.
-				// These 2-bit codes correspond to the 2-bit fields 
-				// stored in the 64-bit block. 
-				colours[2].b = (colours[0].b + colours[1].b) / 2;
-				colours[2].g = (colours[0].g + colours[1].g) / 2;
-				colours[2].r = (colours[0].r + colours[1].r) / 2;
-				colours[2].a = 0xFF;
+					colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
+					colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
+					colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
+					colours[3].a = 0xFF;
+				}    
+				else { 
+					// Three-color block: derive the other color.
+					// 00 = color_0,  01 = color_1,  10 = color_2,
+					// 11 = transparent.
+					// These 2-bit codes correspond to the 2-bit fields 
+					// stored in the 64-bit block. 
+					colours[2].b = (colours[0].b + colours[1].b) / 2;
+					colours[2].g = (colours[0].g + colours[1].g) / 2;
+					colours[2].r = (colours[0].r + colours[1].r) / 2;
+					colours[2].a = 0xFF;
 
-				colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
-				colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
-				colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
-				colours[3].a = 0x00;
-			}
+					colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
+					colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
+					colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
+					colours[3].a = 0x00;
+				}
 
-			for (j = 0, k = 0; j < 4; j++) {
-				for (i = 0; i < 4; i++, k++) {
-					if (j >= Height || i >= Width)
-						break;
+				for (j = 0, k = 0; j < 4; j++) {
+					for (i = 0; i < 4; i++, k++) {
 
-					Select = (bitmask & (0x03 << k*2)) >> k*2;
-					col = &colours[Select];
+						Select = (bitmask & (0x03 << k*2)) >> k*2;
+						col = &colours[Select];
 
-					Offset = (y + j) * Image->Bps + (x + i) * Image->Bpp;
-					Image->Data[Offset + 0] = col->r;
-					Image->Data[Offset + 1] = col->g;
-					Image->Data[Offset + 2] = col->b;
-					Image->Data[Offset + 3] = col->a;
+						if (((x + i) < Width) && ((y + j) < Height)) {
+							Offset = (y + j) * Image->Bps + (x + i) * Image->Bpp;
+							Image->Data[Offset + 0] = col->r;
+							Image->Data[Offset + 1] = col->g;
+							Image->Data[Offset + 2] = col->b;
+							Image->Data[Offset + 3] = col->a;
+						}
+					}
 				}
 			}
 		}
@@ -496,7 +629,7 @@ ILboolean DecompressDXT2()
 
 ILboolean DecompressDXT3()
 {
-	int			x, y, i, j, k, Select;
+	int			x, y, z, i, j, k, Select;
 	ILubyte		*Temp;
 	Color565	*color_0, *color_1;
 	Color8888	colours[4], *col;
@@ -506,63 +639,69 @@ ILboolean DecompressDXT3()
 
 
 	Temp = CompData;
-	for (y = 0; y < Height; y += 4) {
-		for (x = 0; x < Width; x += 4) {
-			alpha = (DXTAlphaBlockExplicit*)Temp;
-			Temp += 8;
-			color_0 = ((Color565*)Temp);
-			color_1 = ((Color565*)(Temp+2));
-			bitmask = ((ILuint*)Temp)[1];
-			Temp += 8;
+	for (z = 0; z < Depth; z++) {
+		for (y = 0; y < Height; y += 4) {
+			for (x = 0; x < Width; x += 4) {
+				alpha = (DXTAlphaBlockExplicit*)Temp;
+				Temp += 8;
+				color_0 = ((Color565*)Temp);
+				color_1 = ((Color565*)(Temp+2));
+				bitmask = ((ILuint*)Temp)[1];
+				Temp += 8;
 
-			colours[0].r = color_0->nRed << 3;
-			colours[0].g = color_0->nGreen << 2;
-			colours[0].b = color_0->nBlue << 3;
-			colours[0].a = 0xFF;
+				colours[0].r = color_0->nRed << 3;
+				colours[0].g = color_0->nGreen << 2;
+				colours[0].b = color_0->nBlue << 3;
+				colours[0].a = 0xFF;
 
-			colours[1].r = color_1->nRed << 3;
-			colours[1].g = color_1->nGreen << 2;
-			colours[1].b = color_1->nBlue << 3;
-			colours[1].a = 0xFF;
+				colours[1].r = color_1->nRed << 3;
+				colours[1].g = color_1->nGreen << 2;
+				colours[1].b = color_1->nBlue << 3;
+				colours[1].a = 0xFF;
 
-			// Four-color block: derive the other two colors.    
-			// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
-			// These 2-bit codes correspond to the 2-bit fields 
-			// stored in the 64-bit block.
-			colours[2].b = (2 * colours[0].b + colours[1].b + 1) / 3;
-			colours[2].g = (2 * colours[0].g + colours[1].g + 1) / 3;
-			colours[2].r = (2 * colours[0].r + colours[1].r + 1) / 3;
-			colours[2].a = 0xFF;
+				// Four-color block: derive the other two colors.    
+				// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
+				// These 2-bit codes correspond to the 2-bit fields 
+				// stored in the 64-bit block.
+				colours[2].b = (2 * colours[0].b + colours[1].b + 1) / 3;
+				colours[2].g = (2 * colours[0].g + colours[1].g + 1) / 3;
+				colours[2].r = (2 * colours[0].r + colours[1].r + 1) / 3;
+				colours[2].a = 0xFF;
 
-			colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
-			colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
-			colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
-			colours[3].a = 0xFF;
+				colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
+				colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
+				colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
+				colours[3].a = 0xFF;
 
-			k = 0;
-			for (j = 0; j < 4; j++) {
-				for (i = 0; i < 4; i++, k++) {
+				k = 0;
+				for (j = 0; j < 4; j++) {
+					for (i = 0; i < 4; i++, k++) {
 
-					Select = (bitmask & (0x03 << k*2)) >> k*2;
-					col = &colours[Select];
+						Select = (bitmask & (0x03 << k*2)) >> k*2;
+						col = &colours[Select];
 
-					Offset = (y + j) * Image->Bps + (x + i) * Image->Bpp;
-					Image->Data[Offset + 0] = col->r;
-					Image->Data[Offset + 1] = col->g;
-					Image->Data[Offset + 2] = col->b;
+						if (((x + i) < Width) && ((y + j) < Height)) {
+							Offset = (y + j) * Image->Bps + (x + i) * Image->Bpp;
+							Image->Data[Offset + 0] = col->r;
+							Image->Data[Offset + 1] = col->g;
+							Image->Data[Offset + 2] = col->b;
+						}
+					}
 				}
-			}
 
-			for (j = 0; j < 4; j++) {
-				word = alpha->row[j];
-				for (i = 0; i < 4; i++) {
-					Offset = (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
-					Image->Data[Offset] = word & 0x0F;
-					Image->Data[Offset] = Image->Data[Offset] | (Image->Data[Offset] << 4);
-					word >>= 4;
+				for (j = 0; j < 4; j++) {
+					word = alpha->row[j];
+					for (i = 0; i < 4; i++) {
+						if (((x + i) < Width) && ((y + j) < Height)) {
+							Offset = (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
+							Image->Data[Offset] = word & 0x0F;
+							Image->Data[Offset] = Image->Data[Offset] | (Image->Data[Offset] << 4);
+						}
+						word >>= 4;
+					}
 				}
-			}
 
+			}
 		}
 	}
 
@@ -583,7 +722,7 @@ ILboolean DecompressDXT4()
 
 ILboolean DecompressDXT5()
 {
-	int			x, y, i, j, k, Select;
+	int			x, y, z, i, j, k, Select;
 	ILubyte		*Temp;
 	Color565	*color_0, *color_1;
 	Color8888	colours[4], *col;
@@ -593,101 +732,112 @@ ILboolean DecompressDXT5()
 
 
 	Temp = CompData;
-	for (y = 0; y < Height; y += 4) {
-		for (x = 0; x < Width; x += 4) {
-			alphas[0] = Temp[0];
-			alphas[1] = Temp[1];
-			alphamask = Temp + 2;
-			Temp += 8;
-			color_0 = ((Color565*)Temp);
-			color_1 = ((Color565*)(Temp+2));
-			bitmask = ((ILuint*)Temp)[1];
-			Temp += 8;
+	for (z = 0; z < Height; z ++) {
+		for (y = 0; y < Height; y += 4) {
+			for (x = 0; x < Width; x += 4) {
+				if (y >= Height || x >= Width)
+					break;
+				alphas[0] = Temp[0];
+				alphas[1] = Temp[1];
+				alphamask = Temp + 2;
+				Temp += 8;
+				color_0 = ((Color565*)Temp);
+				color_1 = ((Color565*)(Temp+2));
+				bitmask = ((ILuint*)Temp)[1];
+				Temp += 8;
 
-			colours[0].r = color_0->nRed << 3;
-			colours[0].g = color_0->nGreen << 2;
-			colours[0].b = color_0->nBlue << 3;
-			colours[0].a = 0xFF;
+				colours[0].r = color_0->nRed << 3;
+				colours[0].g = color_0->nGreen << 2;
+				colours[0].b = color_0->nBlue << 3;
+				colours[0].a = 0xFF;
 
-			colours[1].r = color_1->nRed << 3;
-			colours[1].g = color_1->nGreen << 2;
-			colours[1].b = color_1->nBlue << 3;
-			colours[1].a = 0xFF;
+				colours[1].r = color_1->nRed << 3;
+				colours[1].g = color_1->nGreen << 2;
+				colours[1].b = color_1->nBlue << 3;
+				colours[1].a = 0xFF;
 
-			// Four-color block: derive the other two colors.    
-			// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
-			// These 2-bit codes correspond to the 2-bit fields 
-			// stored in the 64-bit block.
-			colours[2].b = (2 * colours[0].b + colours[1].b + 1) / 3;
-			colours[2].g = (2 * colours[0].g + colours[1].g + 1) / 3;
-			colours[2].r = (2 * colours[0].r + colours[1].r + 1) / 3;
-			colours[2].a = 0xFF;
+				// Four-color block: derive the other two colors.    
+				// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
+				// These 2-bit codes correspond to the 2-bit fields 
+				// stored in the 64-bit block.
+				colours[2].b = (2 * colours[0].b + colours[1].b + 1) / 3;
+				colours[2].g = (2 * colours[0].g + colours[1].g + 1) / 3;
+				colours[2].r = (2 * colours[0].r + colours[1].r + 1) / 3;
+				colours[2].a = 0xFF;
 
-			colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
-			colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
-			colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
-			colours[3].a = 0xFF;
+				colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
+				colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
+				colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
+				colours[3].a = 0xFF;
 
-			k = 0;
-			for (j = 0; j < 4; j++) {
-				for (i = 0; i < 4; i++, k++) {
+				k = 0;
+				for (j = 0; j < 4; j++) {
+					for (i = 0; i < 4; i++, k++) {
 
-					Select = (bitmask & (0x03 << k*2)) >> k*2;
-					col = &colours[Select];
+						Select = (bitmask & (0x03 << k*2)) >> k*2;
+						col = &colours[Select];
 
-					Offset = (y + j) * Image->Bps + (x + i) * Image->Bpp;
-					Image->Data[Offset + 0] = col->r;
-					Image->Data[Offset + 1] = col->g;
-					Image->Data[Offset + 2] = col->b;
+						// only put pixels out < width or height
+						if (((x + i) < Width) && ((y + j) < Height)) {
+							Offset = (y + j) * Image->Bps + (x + i) * Image->Bpp;
+							Image->Data[Offset + 0] = col->r;
+							Image->Data[Offset + 1] = col->g;
+							Image->Data[Offset + 2] = col->b;
+						}
+					}
+				}
+
+				// 8-alpha or 6-alpha block?    
+				if (alphas[0] > alphas[1]) {    
+					// 8-alpha block:  derive the other six alphas.    
+					// Bit code 000 = alpha_0, 001 = alpha_1, others are interpolated.
+					alphas[2] = (6 * alphas[0] + 1 * alphas[1] + 3) / 7;	// bit code 010
+					alphas[3] = (5 * alphas[0] + 2 * alphas[1] + 3) / 7;	// bit code 011
+					alphas[4] = (4 * alphas[0] + 3 * alphas[1] + 3) / 7;	// bit code 100
+					alphas[5] = (3 * alphas[0] + 4 * alphas[1] + 3) / 7;	// bit code 101
+					alphas[6] = (2 * alphas[0] + 5 * alphas[1] + 3) / 7;	// bit code 110
+					alphas[7] = (1 * alphas[0] + 6 * alphas[1] + 3) / 7;	// bit code 111  
+				}    
+				else {  
+					// 6-alpha block.    
+					// Bit code 000 = alpha_0, 001 = alpha_1, others are interpolated.
+					alphas[2] = (4 * alphas[0] + 1 * alphas[1] + 2) / 5;	// Bit code 010
+					alphas[3] = (3 * alphas[0] + 2 * alphas[1] + 2) / 5;	// Bit code 011
+					alphas[4] = (2 * alphas[0] + 3 * alphas[1] + 2) / 5;	// Bit code 100
+					alphas[5] = (1 * alphas[0] + 4 * alphas[1] + 2) / 5;	// Bit code 101
+					alphas[6] = 0x00;										// Bit code 110
+					alphas[7] = 0xFF;										// Bit code 111
+				}
+
+				// Note: Have to separate the next two loops,
+				//	it operates on a 6-byte system.
+
+				// First three bytes
+				bits = *((ILint*)alphamask);
+				for (j = 0; j < 2; j++) {
+					for (i = 0; i < 4; i++) {
+						// only put pixels out < width or height
+						if (((x + i) < Width) && ((y + j) < Height)) {
+							Offset = (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
+							Image->Data[Offset] = alphas[bits & 0x07];
+						}
+						bits >>= 3;
+					}
+				}
+
+				// Last three bytes
+				bits = *((ILint*)&alphamask[3]);
+				for (j = 2; j < 4; j++) {
+					for (i = 0; i < 4; i++) {
+						// only put pixels out < width or height
+						if (((x + i) < Width) && ((y + j) < Height)) {
+							Offset = (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
+							Image->Data[Offset] = alphas[bits & 0x07];
+						}
+						bits >>= 3;
+					}
 				}
 			}
-
-			// 8-alpha or 6-alpha block?    
-			if (alphas[0] > alphas[1]) {    
-				// 8-alpha block:  derive the other six alphas.    
-				// Bit code 000 = alpha_0, 001 = alpha_1, others are interpolated.
-				alphas[2] = (6 * alphas[0] + 1 * alphas[1] + 3) / 7;	// bit code 010
-				alphas[3] = (5 * alphas[0] + 2 * alphas[1] + 3) / 7;	// bit code 011
-				alphas[4] = (4 * alphas[0] + 3 * alphas[1] + 3) / 7;	// bit code 100
-				alphas[5] = (3 * alphas[0] + 4 * alphas[1] + 3) / 7;	// bit code 101
-				alphas[6] = (2 * alphas[0] + 5 * alphas[1] + 3) / 7;	// bit code 110
-				alphas[7] = (1 * alphas[0] + 6 * alphas[1] + 3) / 7;	// bit code 111  
-			}    
-			else {  
-				// 6-alpha block.    
-				// Bit code 000 = alpha_0, 001 = alpha_1, others are interpolated.
-				alphas[2] = (4 * alphas[0] + 1 * alphas[1] + 2) / 5;	// Bit code 010
-				alphas[3] = (3 * alphas[0] + 2 * alphas[1] + 2) / 5;	// Bit code 011
-				alphas[4] = (2 * alphas[0] + 3 * alphas[1] + 2) / 5;	// Bit code 100
-				alphas[5] = (1 * alphas[0] + 4 * alphas[1] + 2) / 5;	// Bit code 101
-				alphas[6] = 0x00;										// Bit code 110
-				alphas[7] = 0xFF;										// Bit code 111
-			}
-
-			// Note: Have to separate the next two loops,
-			//	it operates on a 6-byte system.
-
-			// First three bytes
-			bits = *((ILint*)alphamask);
-			for (j = 0; j < 2; j++) {
-				for (i = 0; i < 4; i++) {
-					Offset = (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
-					Image->Data[Offset] = alphas[bits & 0x07];
-					bits >>= 3;
-				}
-			}
-
-			// Last three bytes
-			bits = *((ILint*)&alphamask[3]);
-			for (j = 2; j < 4; j++) {
-				for (i = 0; i < 4; i++) {
-					Offset = (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
-					Image->Data[Offset] = alphas[bits & 0x07];
-					bits >>= 3;
-				}
-			}
-
-
 		}
 	}
 

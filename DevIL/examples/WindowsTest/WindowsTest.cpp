@@ -37,7 +37,7 @@ HDC hDC = 0, hMemDC = 0;
 HWND HWnd;
 
 #define BORDER_W	8
-#define MENU_H		46
+#define MENU_H		54
 #define MIN_W		205  // Accomodate the menu bar.
 #define MAX_W		400
 #define MAX_H		400

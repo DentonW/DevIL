@@ -55,6 +55,7 @@ CLEAN :
 	-@erase "$(INTDIR)\il_doom.obj"
 	-@erase "$(INTDIR)\il_endian.obj"
 	-@erase "$(INTDIR)\il_error.obj"
+	-@erase "$(INTDIR)\il_fastconv.obj"
 	-@erase "$(INTDIR)\il_files.obj"
 	-@erase "$(INTDIR)\il_gif.obj"
 	-@erase "$(INTDIR)\il_header.obj"
@@ -74,6 +75,7 @@ CLEAN :
 	-@erase "$(INTDIR)\il_png.obj"
 	-@erase "$(INTDIR)\il_pnm.obj"
 	-@erase "$(INTDIR)\il_profiles.obj"
+	-@erase "$(INTDIR)\il_psd.obj"
 	-@erase "$(INTDIR)\il_quantizer.obj"
 	-@erase "$(INTDIR)\il_raw.obj"
 	-@erase "$(INTDIR)\il_rawdata.obj"
@@ -153,14 +155,16 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_tiff.obj" \
 	"$(INTDIR)\il_utility.obj" \
 	"$(INTDIR)\il_wal.obj" \
-	"$(INTDIR)\IL.res"
+	"$(INTDIR)\IL.res" \
+	"$(INTDIR)\il_psd.obj" \
+	"$(INTDIR)\il_fastconv.obj"
 
 "$(OUTDIR)\DevIL-d.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
 
-TargetPath=\DevIL-1.2.5\lib\debug\DevIL-d.dll
+TargetPath=\DevIL\lib\debug\DevIL-d.dll
 SOURCE="$(InputPath)"
 DS_POSTBUILD_DEP=$(INTDIR)\postbld.dep
 
@@ -171,7 +175,7 @@ OutDir=.\../../lib/debug
 # End Custom Macros
 
 $(DS_POSTBUILD_DEP) : "$(OUTDIR)\DevIL-d.dll"
-   ..\..\projects\msvc\insdll.bat \DevIL-1.2.5\lib\debug\DevIL-d.dll
+   ..\..\projects\msvc\insdll.bat \DevIL\lib\debug\DevIL-d.dll
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
 !ELSEIF  "$(CFG)" == "IL - Win32 Dynamic"
@@ -199,6 +203,7 @@ CLEAN :
 	-@erase "$(INTDIR)\il_doom.obj"
 	-@erase "$(INTDIR)\il_endian.obj"
 	-@erase "$(INTDIR)\il_error.obj"
+	-@erase "$(INTDIR)\il_fastconv.obj"
 	-@erase "$(INTDIR)\il_files.obj"
 	-@erase "$(INTDIR)\il_gif.obj"
 	-@erase "$(INTDIR)\il_header.obj"
@@ -218,6 +223,7 @@ CLEAN :
 	-@erase "$(INTDIR)\il_png.obj"
 	-@erase "$(INTDIR)\il_pnm.obj"
 	-@erase "$(INTDIR)\il_profiles.obj"
+	-@erase "$(INTDIR)\il_psd.obj"
 	-@erase "$(INTDIR)\il_quantizer.obj"
 	-@erase "$(INTDIR)\il_raw.obj"
 	-@erase "$(INTDIR)\il_rawdata.obj"
@@ -294,14 +300,16 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_tiff.obj" \
 	"$(INTDIR)\il_utility.obj" \
 	"$(INTDIR)\il_wal.obj" \
-	"$(INTDIR)\IL.res"
+	"$(INTDIR)\IL.res" \
+	"$(INTDIR)\il_psd.obj" \
+	"$(INTDIR)\il_fastconv.obj"
 
 "$(OUTDIR)\DevIL-l.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
 
-TargetPath=\DevIL-1.2.5\lib\DevIL-l.dll
+TargetPath=\DevIL\lib\DevIL-l.dll
 SOURCE="$(InputPath)"
 DS_POSTBUILD_DEP=$(INTDIR)\postbld.dep
 
@@ -312,7 +320,7 @@ OutDir=.\../../lib
 # End Custom Macros
 
 $(DS_POSTBUILD_DEP) : "$(OUTDIR)\DevIL-l.dll"
-   ..\..\projects\msvc\insdll.bat \DevIL-1.2.5\lib\DevIL-l.dll
+   ..\..\projects\msvc\insdll.bat \DevIL\lib\DevIL-l.dll
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
 !ELSEIF  "$(CFG)" == "IL - Win32 Release"
@@ -340,6 +348,7 @@ CLEAN :
 	-@erase "$(INTDIR)\il_doom.obj"
 	-@erase "$(INTDIR)\il_endian.obj"
 	-@erase "$(INTDIR)\il_error.obj"
+	-@erase "$(INTDIR)\il_fastconv.obj"
 	-@erase "$(INTDIR)\il_files.obj"
 	-@erase "$(INTDIR)\il_gif.obj"
 	-@erase "$(INTDIR)\il_header.obj"
@@ -359,6 +368,7 @@ CLEAN :
 	-@erase "$(INTDIR)\il_png.obj"
 	-@erase "$(INTDIR)\il_pnm.obj"
 	-@erase "$(INTDIR)\il_profiles.obj"
+	-@erase "$(INTDIR)\il_psd.obj"
 	-@erase "$(INTDIR)\il_quantizer.obj"
 	-@erase "$(INTDIR)\il_raw.obj"
 	-@erase "$(INTDIR)\il_rawdata.obj"
@@ -435,14 +445,16 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_tiff.obj" \
 	"$(INTDIR)\il_utility.obj" \
 	"$(INTDIR)\il_wal.obj" \
-	"$(INTDIR)\IL.res"
+	"$(INTDIR)\IL.res" \
+	"$(INTDIR)\il_psd.obj" \
+	"$(INTDIR)\il_fastconv.obj"
 
 "$(OUTDIR)\DevIL.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
 
-TargetPath=\DevIL-1.2.5\lib\DevIL.dll
+TargetPath=\DevIL\lib\DevIL.dll
 SOURCE="$(InputPath)"
 DS_POSTBUILD_DEP=$(INTDIR)\postbld.dep
 
@@ -453,7 +465,7 @@ OutDir=.\../../lib
 # End Custom Macros
 
 $(DS_POSTBUILD_DEP) : "$(OUTDIR)\DevIL.dll"
-   ..\..\projects\msvc\insdll.bat \DevIL-1.2.5\lib\DevIL.dll
+   ..\..\projects\msvc\insdll.bat \DevIL\lib\DevIL.dll
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
 !ENDIF 
@@ -571,6 +583,12 @@ SOURCE=..\src\il_error.c
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
+SOURCE=..\src\il_fastconv.c
+
+"$(INTDIR)\il_fastconv.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
 SOURCE=..\src\il_files.c
 
 "$(INTDIR)\il_files.obj" : $(SOURCE) "$(INTDIR)"
@@ -682,6 +700,12 @@ SOURCE=..\src\il_pnm.c
 SOURCE=..\src\il_profiles.c
 
 "$(INTDIR)\il_profiles.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+SOURCE=..\src\il_psd.c
+
+"$(INTDIR)\il_psd.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 

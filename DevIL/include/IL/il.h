@@ -349,6 +349,7 @@ typedef void ILvoid;
 #define IL_IMAGE_BPC						0x0DFA
 #define IL_IMAGE_OFFX						0x0DFB
 #define IL_IMAGE_OFFY						0x0DFC
+#define IL_IMAGE_CUBEFLAGS					0x0DFD
 
 
 //
