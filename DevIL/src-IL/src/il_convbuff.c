@@ -30,13 +30,13 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 	//static const	ILfloat LumFactor[3] = { 0.3086f, 0.6094f, 0.0820f };  // http://www.sgi.com/grafica/matrix/index.html
 	static const	ILfloat LumFactor[3] = { 0.212671f, 0.715160f, 0.072169f };  // http://www.inforamp.net/~poynton/ and libpng's libpng.txt
 
-	ILubyte		*NewData;
+	ILubyte		*NewData = NULL;
 	ILuint		i, j, c, Size;
 	ILfloat		Resultf;
 	ILdouble	Resultd;
 	ILuint		NumPix;  // Really number of pixels * bpp.
 	ILuint		BpcDest;
-	ILvoid		*Data;
+	ILvoid		*Data = NULL;
 
 	if (SizeOfData == 0 || Buffer == NULL) {
 		ilSetError(IL_INVALID_PARAM);
