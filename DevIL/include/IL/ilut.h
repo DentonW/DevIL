@@ -178,7 +178,7 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 
 // ImageLib Utility Toolkit's SDL Functions
 #ifdef ILUT_USE_SDL
-	#include <SDL.h>
+	#include <SDL/SDL.h>
 	ILAPI SDL_Surface*	ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags);
 	ILAPI SDL_Surface*	ILAPIENTRY ilutSDLSurfaceLoadImage(const ILstring FileName);
 	ILAPI ILboolean		ILAPIENTRY ilutSDLSurfaceFromBitmap(SDL_Surface *Bitmap);

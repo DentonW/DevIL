@@ -73,7 +73,7 @@ BSC32_FLAGS=/nologo /o"$(OUTDIR)\WindowsTest.bsc"
 BSC32_SBRS= \
 	
 LINK32=link.exe
-LINK32_FLAGS=user32.lib gdi32.lib comdlg32.lib shell32.lib colorpicker.lib /nologo /subsystem:windows /incremental:no /pdb:"$(OUTDIR)\WindowsTest.pdb" /machine:I386 /out:"$(OUTDIR)\WindowsTest.exe" 
+LINK32_FLAGS=user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /subsystem:windows /incremental:no /pdb:"$(OUTDIR)\WindowsTest.pdb" /machine:I386 /out:"$(OUTDIR)\WindowsTest.exe" 
 LINK32_OBJS= \
 	"$(INTDIR)\BatchConv.obj" \
 	"$(INTDIR)\WindowsTest.obj" \
@@ -133,7 +133,7 @@ BSC32_FLAGS=/nologo /o"$(OUTDIR)\WindowsTest.bsc"
 BSC32_SBRS= \
 	
 LINK32=link.exe
-LINK32_FLAGS=user32.lib gdi32.lib comdlg32.lib shell32.lib colorpicker.lib /nologo /subsystem:windows /incremental:yes /pdb:"$(OUTDIR)\WindowsTest.pdb" /debug /machine:I386 /out:"$(OUTDIR)\WindowsTest.exe" /pdbtype:sept 
+LINK32_FLAGS=user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /subsystem:windows /incremental:yes /pdb:"$(OUTDIR)\WindowsTest.pdb" /debug /machine:I386 /out:"$(OUTDIR)\WindowsTest.exe" /pdbtype:sept 
 LINK32_OBJS= \
 	"$(INTDIR)\BatchConv.obj" \
 	"$(INTDIR)\WindowsTest.obj" \
@@ -187,7 +187,7 @@ BSC32_FLAGS=/nologo /o"$(OUTDIR)\WindowsTest.bsc"
 BSC32_SBRS= \
 	
 LINK32=link.exe
-LINK32_FLAGS=user32.lib gdi32.lib comdlg32.lib shell32.lib colorpicker.lib /nologo /subsystem:windows /incremental:no /pdb:"$(OUTDIR)\WindowsTest.pdb" /machine:I386 /out:"$(OUTDIR)\WindowsTest.exe" 
+LINK32_FLAGS=user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /subsystem:windows /incremental:no /pdb:"$(OUTDIR)\WindowsTest.pdb" /machine:I386 /out:"$(OUTDIR)\WindowsTest.exe" 
 LINK32_OBJS= \
 	"$(INTDIR)\BatchConv.obj" \
 	"$(INTDIR)\WindowsTest.obj" \

@@ -24,8 +24,8 @@
 //#include <sdl.h>
 #include "resource.h"
 
-#pragma comment(lib, "sdl.lib")
-#pragma comment(lib, "sdlmain.lib")
+//#pragma comment(lib, "sdl.lib")
+//#pragma comment(lib, "sdlmain.lib")
 #pragma comment(lib, "colorpicker.lib")
 
 

@@ -55,7 +55,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 user32.lib gdi32.lib comdlg32.lib shell32.lib colorpicker.lib /nologo /subsystem:windows /machine:I386
+# ADD LINK32 user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /subsystem:windows /machine:I386
 
 !ELSEIF  "$(CFG)" == "WindowsTest - Win32 Debug"
 
@@ -82,7 +82,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 user32.lib gdi32.lib comdlg32.lib shell32.lib colorpicker.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 
 !ELSEIF  "$(CFG)" == "WindowsTest - Win32 Dynamic"
 
@@ -111,7 +111,8 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib comdlg32.lib shell32.lib colorpicker.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 user32.lib gdi32.lib comdlg32.lib shell32.lib colorpicker.lib /nologo /subsystem:windows /machine:I386
+# ADD LINK32 user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /subsystem:windows /pdb:"../bin/debug/WindowsTest.pdb" /machine:I386 /out:"../bin/WindowsTest.exe"
+# SUBTRACT LINK32 /pdb:none
 
 !ENDIF 
 

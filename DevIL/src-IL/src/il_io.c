@@ -40,8 +40,8 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 		return IL_PNG;
 	if (!iStrCmp(Ext, IL_TEXT("bmp")) || !iStrCmp(Ext, IL_TEXT("dib")))
 		return IL_BMP;
-	/*if (!iStrCmp(Ext, IL_TEXT("gif")))
-		return IL_GIF;*/
+	if (!iStrCmp(Ext, IL_TEXT("gif")))
+		return IL_GIF;
 	if (!iStrCmp(Ext, IL_TEXT("cut")))
 		return IL_CUT;
 	if (!iStrCmp(Ext, IL_TEXT("ico")) || !iStrCmp(Ext, IL_TEXT("cur")))
@@ -551,8 +551,8 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, const ILstring FileName)
 		case IL_BMP:
 			return ilLoadBmp(FileName);
 		#endif
-                
-                #ifndef IL_NO_GIF
+
+		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilLoadGif(FileName);
 		#endif

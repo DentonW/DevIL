@@ -1,3 +1,10 @@
+1.6.6
+-----
+
+- Added .gif support back in.
+
+
+
 1.6.5
 -----
 
@@ -16,7 +23,8 @@
 - Fixed a bug saving .dds files with blocks of all the same colour.
 - Added support for the IL_LUMINANCE_ALPHA format.
 - Fixed a bug loading corrupt .gif files.
-- Added region checking in ILU.
+- Removed .gif support, to comply with the Unisys patent (though the code is still there).
+- Added preliminary region checking in ILU.
 
 
 1.6.1
