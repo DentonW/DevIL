@@ -143,7 +143,7 @@ ILboolean ilImage::Clear()
 }
 
 
-ILvoid ilImage::ClearColour(ILubyte Red, ILubyte Green, ILubyte Blue, ILubyte Alpha)
+ILvoid ilImage::ClearColour(ILclampf Red, ILclampf Green, ILclampf Blue, ILclampf Alpha)
 {
 	ilClearColour(Red, Green, Blue, Alpha);
 	return;
