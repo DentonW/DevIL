@@ -1,6 +1,6 @@
 # Unix Makefile
 
-CC=gcc -g
+CC=gcc
 OBJECTS=gltest.o
 LIBS=-lm -lGL -lGLU -lglut -lIL -lILU -lILUT
 
