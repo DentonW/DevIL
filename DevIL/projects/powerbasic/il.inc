@@ -140,8 +140,8 @@
 ' IL-specific #define's
 '
 
-%IL_VERSION_1_5_5 = 1
-%IL_VERSION = 155
+%IL_VERSION_1_5_6 = 1
+%IL_VERSION = 156
 
 
 ' Attribute Bits

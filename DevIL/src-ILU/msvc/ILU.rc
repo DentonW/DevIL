@@ -78,14 +78,14 @@ BEGIN
             VALUE "Comments", "ILU:  A great portable image library in development"
             VALUE "CompanyName", "Abysmal Software"
             VALUE "FileDescription", "ILU:  A great portable image library in development"
-            VALUE "FileVersion", "1.5.5"
+            VALUE "FileVersion", "1.5.6"
             VALUE "InternalName", "ILU"
             VALUE "LegalCopyright", "Copyright © 2000-2002"
             VALUE "LegalTrademarks", "Under LGPL License"
             VALUE "OriginalFilename", "ILU.dll"
             VALUE "PrivateBuild", "Open Source"
             VALUE "ProductName", "Developer's Image Utilities Library"
-            VALUE "ProductVersion", "1.5.5"
+            VALUE "ProductVersion", "1.5.6"
             VALUE "SpecialBuild", "eh?"
         END
     END

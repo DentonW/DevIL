@@ -5,7 +5,7 @@ Attribute VB_Name = "Module3"
 ' Copyright (C) 2000-2002 by Denton Woods
 ' Converted from ilut.h by Rune Kock (rune@vupti.com)
 ' based on the earlier conversion by Timo Heister (Timo-Heister@gmx.de)
-' Last modified:  08 June 2002, based on ilut.h dated 06/08/2002
+' Last modified:  11 June 2002, based on ilut.h dated 06/11/2002
 '
 ' Filename: il/ilut.bas
 '
@@ -37,8 +37,8 @@ Attribute VB_Name = "Module3"
 
 Option Explicit
 
-Public Const ILUT_VERSION_1_5_5 = 1
-Public Const ILUT_VERSION = 155
+Public Const ILUT_VERSION_1_5_6 = 1
+Public Const ILUT_VERSION = 156
 
 
 ' Attribute Bits

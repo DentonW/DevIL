@@ -5,7 +5,7 @@ Attribute VB_Name = "Module1"
 ' Copyright (C) 2000-2002 by Denton Woods
 ' Converted from il.h by Rune Kock (rune@vupti.com)
 ' based on the earlier conversion by Timo Heister (Timo-Heister@gmx.de)
-' Last modified:  08 June 2002, based on il.h dated 06/08/2002
+' Last modified:  11 June 2002, based on il.h dated 06/11/2002
 '
 ' Filename: il.bas
 '
@@ -65,8 +65,8 @@ Public Const IL_VENDOR = &H1F00
 ' IL-specific public const's
 '
 
-Public Const IL_VERSION_1_5_5 = 1
-Public Const IL_VERSION = 155
+Public Const IL_VERSION_1_5_6 = 1
+Public Const IL_VERSION = 156
 
 ' Attribute Bits
 Public Const IL_ORIGIN_BIT = &H1

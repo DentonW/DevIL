@@ -25,8 +25,8 @@ uses
   Windows;
 
 const
-  ILU_VERSION_1_5_5 = 1;
-  ILU_VERSION = 155;
+  ILU_VERSION_1_5_6 = 1;
+  ILU_VERSION = 156;
 
   ILU_FILTER = $2600;
   ILU_NEAREST = $2601;

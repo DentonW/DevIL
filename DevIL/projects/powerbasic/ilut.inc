@@ -66,8 +66,8 @@
 ' #endif'_WIN32
 
 
-%ILUT_VERSION_1_5_5 = 1
-%ILUT_VERSION = 155
+%ILUT_VERSION_1_5_6 = 1
+%ILUT_VERSION = 156
 
 
 ' Attribute Bits

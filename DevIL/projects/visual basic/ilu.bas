@@ -5,7 +5,7 @@ Attribute VB_Name = "DevIL_manipulate"
 ' Copyright (C) 2000-2002 by Denton Woods
 ' Converted from ilu.h by Rune Kock (rune@vupti.com)
 ' based on the earlier conversion by Timo Heister (Timo-Heister@gmx.de)
-' Last modified:  08 June 2002, based on ilu.h dated 06/08/2002
+' Last modified:  11 June 2002, based on ilu.h dated 06/11/2002
 '
 ' Filename: ilu.bas
 '
@@ -37,8 +37,8 @@ Attribute VB_Name = "DevIL_manipulate"
 
 Option Explicit
 
-Public Const ILU_VERSION_1_5_5 = 1
-Public Const ILU_VERSION = 155
+Public Const ILU_VERSION_1_5_6 = 1
+Public Const ILU_VERSION = 156
 
 
 Public Const ILU_FILTER = &H2600
