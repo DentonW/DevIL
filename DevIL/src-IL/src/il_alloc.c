@@ -23,49 +23,61 @@ mAlloc ialloc_ptr = NULL;
 mFree  ifree_ptr = NULL;
 
 
+#ifdef ALTIVEC
+__inline__ void *vec_malloc( unsigned int );
+__inline__ void *vec_malloc( unsigned int size ) {
+    union {
+        vector unsigned char vec;
+        void *ptr;
+    } mem_ptr;
+    mem_ptr.ptr = (void*)malloc(size);
+    return mem_ptr.ptr;
+}
+#endif
+
 ILvoid* ILAPIENTRY DefaultAllocFunc(ILuint Size)
 {
-	return malloc(Size);
+        #ifdef ALTIVEC
+            return (ILvoid*)vec_malloc(Size);
+        #else
+            return malloc(Size);
+        #endif
 }
 
 
 ILvoid* ILAPIENTRY ialloc(ILuint Size)
 {
-	ILvoid *Ptr;
+        ILvoid *Ptr;
 
-	Ptr = ialloc_ptr(Size);
-	if (Ptr == NULL)
-		ilSetError(IL_OUT_OF_MEMORY);
-
+        Ptr = ialloc_ptr(Size);
+        if (Ptr == NULL)
+                ilSetError(IL_OUT_OF_MEMORY);
 	return Ptr;
 }
 
 
 ILvoid ILAPIENTRY ifree(ILvoid *Ptr)
 {
-	ifree_ptr(Ptr);
-	return;
+        ifree_ptr(Ptr);
+        return;
 }
 
 
 ILvoid* ILAPIENTRY icalloc(ILuint Size, ILuint Num)
 {
 	ILvoid *Ptr;
-
-	Ptr = ialloc(Size * Num);
-	if (Ptr == NULL)
-		return NULL;
-	memset(Ptr, 0, Size * Num);
-
+        Ptr = ialloc(Size * Num);
+        if (Ptr == NULL)
+            return NULL;
+        memset(Ptr, 0, Size * Num);
 	return Ptr;
 }
 
 
 ILvoid ILAPIENTRY DefaultFreeFunc(ILvoid *Ptr)
 {
-	if (Ptr)
-		free(Ptr);
-	return;
+        if (Ptr)
+            free(Ptr);
 }
 
 
