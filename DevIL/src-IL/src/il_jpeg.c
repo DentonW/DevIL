@@ -801,11 +801,6 @@ ILboolean iSaveJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size)
 #endif//IL_USE_IJL
 
 
-
-
-#endif//IL_NO_JPG
-
-
 // Access point for applications wishing to use the jpeg library directly in
 // conjunction with DevIL.
 //
@@ -951,3 +946,5 @@ ILboolean ILAPIENTRY ilSaveFromJpegStruct(ILvoid *_JpegInfo)
 #endif
 	return IL_FALSE;
 }
+
+#endif//IL_NO_JPG
