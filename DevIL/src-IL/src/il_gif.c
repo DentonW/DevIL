@@ -133,8 +133,8 @@ ILboolean ilLoadGifL(ILvoid *Lump, ILuint Size)
 // Internal function used to load the Gif.
 ILboolean iLoadGifInternal()
 {
-	GIFHEAD		Header;
-	ILpal		GlobalPal;
+	GIFHEAD	Header;
+	ILpal	GlobalPal;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);

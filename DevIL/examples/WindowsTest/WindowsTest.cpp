@@ -265,6 +265,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		"Jpeg Files (*.jpe, *.jpg, *.jpeg)", "*.jpe;*.jpg;*.jpeg",
 		"Microsoft Bitmap Files (*.bmp)", "*.bmp",
 		"Microsoft DirectDraw Surface (*.dds)", "*.dds",
+		"PhotoShop Files (*.psd)", "*.psd",
 		"Portable AnyMap Files (*.pbm, *.pgm, *.ppm)", "*.pbm;*.pgm;*.ppm",
 		"Portable Network Graphics Files (*.png)", "*.png",
 		"Sgi Files (*.sgi)", "*.bw;*.rgb;*.rgba;*.sgi",

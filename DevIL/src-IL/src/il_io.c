@@ -1186,6 +1186,11 @@ ILboolean ILAPIENTRY ilSave(ILenum Type, const ILstring FileName)
 			return ilSavePnm(FileName);
 		#endif
 
+		#ifndef IL_NO_PSD
+		case IL_PSD:
+			return ilSavePsd(FileName);
+		#endif
+
 		#ifndef IL_NO_RAW
 		case IL_RAW:
 			return ilSaveRaw(FileName);
@@ -1232,9 +1237,23 @@ ILuint ILAPIENTRY ilSaveF(ILenum Type, ILHANDLE File)
 			break;
 		#endif
 
+		#ifndef IL_NO_JPG
+			#ifndef IL_USE_IJL
+			case IL_JPG:
+				Ret = ilSaveJpegF(File);
+				break;
+			#endif
+		#endif
+
 		#ifndef IL_NO_PNM
 		case IL_PNM:
 			Ret = ilSavePnmF(File);
+			break;
+		#endif
+
+		#ifndef IL_NO_PSD
+		case IL_PSD:
+			Ret = ilSavePsdF(File);
 			break;
 		#endif
 
@@ -1294,6 +1313,12 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size)
 		#ifndef IL_NO_PNM
 		case IL_PNM:
 			Ret = ilSavePnmL(Lump, Size);
+			break;
+		#endif
+
+		#ifndef IL_NO_PSD
+		case IL_PSD:
+			Ret = ilSavePsdL(Lump, Size);
 			break;
 		#endif
 
@@ -1392,6 +1417,12 @@ ILboolean ILAPIENTRY ilSaveImage(const ILstring FileName)
 	}
 	if (!iStrCmp(Ext, IL_TEXT("ppm"))) {
 		return ilSavePnm(FileName);
+	}
+	#endif
+
+	#ifndef IL_NO_PSD
+	if (!iStrCmp(Ext, IL_TEXT("psd"))) {
+		return ilSavePsd(FileName);
 	}
 	#endif
 

@@ -1,3 +1,8 @@
+if "%ILNOCOPY%" == "" goto work
+goto done
+
+:work
+
 if "%SystemRoot%" == "" goto isnotnt
 
 echo Copying %1 to %SystemRoot%\System32...

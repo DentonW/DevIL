@@ -1,4 +1,4 @@
-Credits as of 05/28/2002
+Credits as of 06/04/2002
 ------------------------
 
 If I inadvertently omitted anyone's name from this list, please e-mail me at
@@ -212,4 +212,6 @@ Sam for several fixes to my .bmp and .jpg loaders.
 chris79 for his help debugging my .psp and .gif code in the 1.4.0 version.
 
 Nick Marley for his MSVC++ post-build fixes.
+
+Marc Gregoire for sending images that DevIL would not load.
 

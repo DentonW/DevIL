@@ -87,7 +87,7 @@ extern "C" {
 
 
 #ifdef _WIN32
-	#define IL_USE_IJL  // Whether we use the Intel Jpeg Library (else use libjpeg).
+	//#define IL_USE_IJL  // Whether we use the Intel Jpeg Library (else use libjpeg).
 	#ifndef IL_STATIC_LIB
 		#ifdef  _MSC_VER
 			#ifndef _IL_BUILD_LIBRARY

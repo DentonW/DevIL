@@ -87,14 +87,19 @@ ILubyte* ILAPIENTRY iGetPaddedData(ILimage *Image)
 {
 	ILubyte	*NewData, *TempBuff;
 	ILuint	i, CurPos = 0, PadSize;
+	ILubyte	*TempData;
 
 	if (Image == NULL) {
 		ilSetError(ILUT_INVALID_PARAM);
 		return NULL;
 	}
 
-	if (Image->Origin != IL_ORIGIN_LOWER_LEFT)
-		iluFlipImage();
+	if (Image->Origin != IL_ORIGIN_LOWER_LEFT) {
+		TempData = iGetFlipped(Image);
+	}
+	else {
+		TempData = Image->Data;
+	}
 
 	if (Image->Format == IL_RGB || Image->Format == IL_RGBA) {
 		TempBuff = (ILubyte*)ialloc(Image->SizeOfData);
@@ -103,13 +108,13 @@ ILubyte* ILAPIENTRY iGetPaddedData(ILimage *Image)
 		}
 		// Swap red and blue.
 		for (i = 0; i < Image->SizeOfData; i += Image->Bpp) {
-			TempBuff[i] = Image->Data[i+2];
-			TempBuff[i+1] = Image->Data[i+1];
-			TempBuff[i+2] = Image->Data[i];
+			TempBuff[i] = TempData[i+2];
+			TempBuff[i+1] = TempData[i+1];
+			TempBuff[i+2] = TempData[i];
 		}
 	}
 	else {
-		TempBuff = Image->Data;
+		TempBuff = TempData;
 	}
 
 	PadSize = (4 - (Image->Bps % 4)) % 4;
@@ -127,8 +132,8 @@ ILubyte* ILAPIENTRY iGetPaddedData(ILimage *Image)
 
 	if (TempBuff != Image->Data)
 		ifree(TempBuff);
-	if (Image->Origin != IL_ORIGIN_LOWER_LEFT)
-		iluFlipImage();
+	if (TempData != TempBuff && TempData != Image->Data)
+		ifree(TempBuff);
 
 	return NewData;
 }

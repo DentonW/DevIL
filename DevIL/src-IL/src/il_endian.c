@@ -25,7 +25,6 @@ ILushort _SwapUShort(ILushort s)
 			mov ah, cl
 		}
 	#else
-		// No masking with 0xFF should be necessary.
 		return (s>>8) | (s<<8);
 	#endif//USE_WIN32_ASM
 }
@@ -39,7 +38,6 @@ ILshort _SwapShort(ILshort s)
 			mov ah, cl
 		}
 	#else
-		// No masking with 0xFF should be necessary.
 		return (s>>8) | (s<<8);
 	#endif//USE_WIN32_ASM
 }

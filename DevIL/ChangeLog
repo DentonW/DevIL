@@ -10,8 +10,8 @@
 - Added a check to see if a .jpg is missing data at the end, so it does not loop infinitely.
 - Fixed the Delphi headers.
 - Added a check for extensions in GIF87A files.
-
-
+- Added .psd saving.
+- Optimized ilutGetPaddedData a bit.
 
 
 1.5.1

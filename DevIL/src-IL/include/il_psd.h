@@ -49,6 +49,7 @@ ILuint		*GetCompChanLen(PSDHEAD *Head);
 ILboolean	PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed);
 ILboolean	ParseResources(ILuint ResourceSize, ILubyte *Resources);
 ILboolean	GetSingleChannel(PSDHEAD *Head, ILubyte *Buffer, ILboolean Compressed);
+ILboolean	iSavePsdInternal(ILvoid);
 
 
 

@@ -542,12 +542,12 @@ ILuint *GetCompChanLen(PSDHEAD *Head)
 
 ILboolean PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 {
-	ILuint		c, x, y, i;
-	ILubyte		*Channel;
+	ILuint		c, x, y, i, Size;
+	ILubyte		*Channel = NULL;
 	ILushort	*ShortPtr;
 	ILbyte		HeadByte;
 	ILint		Run;
-	ILuint		*ChanLen;
+	ILuint		*ChanLen = NULL;
 	ILboolean	PreCache = IL_FALSE;
 
 	Channel = (ILubyte*)ialloc(Head->Width * Head->Height * iCurImage->Bpc);
@@ -600,13 +600,16 @@ ILboolean PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 		if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST)
 			PreCache = IL_TRUE;
 
+		Size = Head->Width * Head->Height;
 		for (c = 0; c < Head->Channels; c++) {
 			if (PreCache)
 				iPreCache(ChanLen[c]);
-			for (i = 0; i < Head->Width * Head->Height; ) {
+			for (i = 0; i < Size; ) {
 				HeadByte = igetc();
 
 				if (HeadByte >= 0) {  //  && HeadByte <= 127
+					if (i + HeadByte > Size)
+						goto file_corrupt;
 					if (iread(Channel + i, HeadByte + 1, 1) != 1) {
 						ifree(Channel);
 						if (PreCache)
@@ -624,6 +627,8 @@ ILboolean PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 							iUnCache();
 						return IL_FALSE;
 					}
+					if (i + (-HeadByte + 1) > Size)
+						goto file_corrupt;
 
 					memset(Channel + i, Run, -HeadByte + 1);
 					i += -HeadByte + 1;
@@ -648,6 +653,16 @@ ILboolean PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 	ifree(Channel);
 
 	return IL_TRUE;
+
+file_corrupt:
+	if (ChanLen)
+		ifree(ChanLen);
+	if (Channel)
+		ifree(Channel);
+	if (PreCache)
+		iUnCache();
+	ilSetError(IL_ILLEGAL_FILE_VALUE);
+	return IL_FALSE;
 }
 
 
@@ -752,5 +767,180 @@ ILboolean GetSingleChannel(PSDHEAD *Head, ILubyte *Buffer, ILboolean Compressed)
 
 	return IL_TRUE;
 }
+
+
+
+//! Writes a Psd file
+ILboolean ilSavePsd(const ILstring FileName)
+{
+	ILHANDLE	PsdFile;
+	ILboolean	bPsd = IL_FALSE;
+
+	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
+		if (iFileExists(FileName)) {
+			ilSetError(IL_FILE_ALREADY_EXISTS);
+			return IL_FALSE;
+		}
+	}
+
+	PsdFile = iopenw(FileName);
+	if (PsdFile == NULL) {
+		ilSetError(IL_COULD_NOT_OPEN_FILE);
+		return bPsd;
+	}
+
+	bPsd = ilSavePsdF(PsdFile);
+	iclosew(PsdFile);
+
+	return bPsd;
+}
+
+
+//! Writes a Psd to an already-opened file
+ILboolean ilSavePsdF(ILHANDLE File)
+{
+	iSetOutputFile(File);
+	return iSavePsdInternal();
+}
+
+
+//! Writes a Psd to a memory "lump"
+ILboolean ilSavePsdL(ILvoid *Lump, ILuint Size)
+{
+	iSetOutputLump(Lump, Size);
+	return iSavePsdInternal();
+}
+
+
+// Internal function used to save the Psd.
+ILboolean iSavePsdInternal()
+{
+	ILubyte		*Signature = "8BPS";
+	ILimage		*TempImage;
+	ILpal		*TempPal;
+	ILuint		c, i;
+	ILubyte		*TempData;
+	ILushort	*ShortPtr;
+	ILenum		Format, Type;
+
+	if (iCurImage == NULL) {
+		ilSetError(IL_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	Format = iCurImage->Format;
+	Type = iCurImage->Type;
+
+	// All of these comprise the actual signature.
+	iwrite(Signature, 1, 4);
+	SaveBigShort(1);
+	SaveBigInt(0);
+	SaveBigShort(0);
+
+	SaveBigShort(iCurImage->Bpp);
+	SaveBigInt(iCurImage->Height);
+	SaveBigInt(iCurImage->Width);
+	if (iCurImage->Bpc > 2)
+		Type = IL_UNSIGNED_SHORT;
+
+	if (iCurImage->Format == IL_BGR)
+		Format = IL_RGB;
+	else if (iCurImage->Format == IL_BGRA)
+		Format = IL_RGBA;
+
+	if (Format != iCurImage->Format || Type != iCurImage->Type) {
+		TempImage = iConvertImage(iCurImage, Format, Type);
+		if (TempImage == NULL)
+			return IL_FALSE;
+	}
+	else {
+		TempImage = iCurImage;
+	}
+	SaveBigShort((ILushort)(TempImage->Bpc * 8));
+
+	// @TODO:  Put the other formats here.
+	switch (TempImage->Format)
+	{
+		case IL_COLOUR_INDEX:
+			SaveBigShort(2);
+			break;
+		case IL_LUMINANCE:
+			SaveBigShort(1);
+			break;
+		case IL_RGB:
+		case IL_RGBA:
+			SaveBigShort(3);
+			break;
+		default:
+			ilSetError(IL_INTERNAL_ERROR);
+			return IL_FALSE;
+	}
+
+	if (TempImage->Format == IL_COLOUR_INDEX) {
+		// @TODO: We're currently making a potentially fatal assumption that
+		//	iConvertImage was not called if the format is IL_COLOUR_INDEX.
+		TempPal = iConvertPal(&TempImage->Pal, IL_PAL_RGB24);
+		if (TempPal == NULL)
+			return IL_FALSE;
+		SaveBigInt(768);
+
+		// Have to save the palette in a planar format.
+		for (c = 0; c < 3; c++) {
+			for (i = c; i < TempPal->PalSize; i += 3) {
+				iputc(TempPal->Palette[i]);
+			}
+		}
+
+		ifree(TempPal->Palette);
+	}
+	else {
+		SaveBigInt(0);  // No colour mode data.
+	}
+
+	SaveBigInt(0);  // No image resources.
+	SaveBigInt(0);  // No layer information.
+	SaveBigShort(0);  // Raw data, no compression.
+
+	// @TODO:  Add RLE compression.
+
+	if (TempImage->Origin == IL_ORIGIN_LOWER_LEFT) {
+		TempData = iGetFlipped(TempImage);
+		if (TempData == NULL) {
+			ilCloseImage(TempImage);
+			return IL_FALSE;
+		}
+	}
+	else {
+		TempData = TempImage->Data;
+	}
+
+	if (TempImage->Bpc == 1) {
+		for (c = 0; c < TempImage->Bpp; c++) {
+			for (i = c; i < TempImage->SizeOfPlane; i += TempImage->Bpp) {
+				iputc(TempData[i]);
+			}
+		}
+	}
+	else {  // TempImage->Bpc == 2
+		ShortPtr = (ILushort*)TempData;
+		TempImage->SizeOfPlane /= 2;
+		for (c = 0; c < TempImage->Bpp; c++) {
+			for (i = c; i < TempImage->SizeOfPlane; i += TempImage->Bpp) {
+				SaveBigUShort(ShortPtr[i]);
+			}
+		}
+		TempImage->SizeOfPlane *= 2;
+	}
+
+	if (TempData != TempImage->Data)
+		ifree(TempData);
+
+	if (TempImage != iCurImage)
+		ilCloseImage(TempImage);
+
+
+	return IL_TRUE;
+}
+
 
 #endif//IL_NO_PSD

@@ -453,6 +453,9 @@ ILboolean ilIsValidPsdL(ILvoid *Lump, ILuint Size);
 ILboolean ilLoadPsd(const ILstring FileName);
 ILboolean ilLoadPsdF(ILHANDLE File);
 ILboolean ilLoadPsdL(ILvoid *Lump, ILuint Size);
+ILboolean ilSavePsd(const ILstring FileName);
+ILboolean ilSavePsdF(ILHANDLE File);
+ILboolean ilSavePsdL(ILvoid *Lump, ILuint Size);
 
 ILboolean ilIsValidPsp(const ILstring FileName);
 ILboolean ilIsValidPspF(ILHANDLE File);
