@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 03/02/2002 <--Y2K Compliant! =]
+// Last modified: 04/17/2002 <--Y2K Compliant! =]
 //
 // Filename: openil/il_psp.c
 //

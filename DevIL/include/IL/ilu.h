@@ -155,8 +155,6 @@ ILAPI ILboolean		ILAPIENTRY iluSharpen(ILfloat Factor, ILuint Iter);
 ILAPI ILboolean		ILAPIENTRY iluSwapColours(ILvoid);
 ILAPI ILboolean		ILAPIENTRY iluWave(ILfloat Angle);
 
-ILAPI ILuint ILAPIENTRY iluScaleTest(ILuint Width, ILuint Height, ILubyte Filter);
-
 #define iluColorsUsed	iluColoursUsed
 #define iluSwapColors	iluSwapColours
 #define iluReplaceColor	iluReplaceColour
