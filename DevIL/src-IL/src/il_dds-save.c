@@ -18,7 +18,6 @@
 #include <limits.h>
 
 
-
 //! Writes a Dds file
 ILboolean ilSaveDds(const ILstring FileName)
 {

@@ -28,7 +28,17 @@
 #include "il_dds.h"
 
 
-ILuint CubemapDirections[CUBEMAP_SIDES] = {
+// Global variables
+DDSHEAD	Head;			// Image header
+ILubyte	*CompData;		// Compressed data
+ILuint	CompSize;		// Compressed size
+ILuint	CompLineSize;		// Compressed line size
+ILuint	CompFormat;		// Compressed format
+ILimage	*Image;
+ILint	Width, Height, Depth;
+ILuint	BlockSize;
+
+static ILuint CubemapDirections[CUBEMAP_SIDES] = {
 	DDS_CUBEMAP_POSITIVEX,
 	DDS_CUBEMAP_NEGATIVEX,
 	DDS_CUBEMAP_POSITIVEY,

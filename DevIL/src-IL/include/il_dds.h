@@ -144,16 +144,15 @@ enum PixFormat
 	PF_UNKNOWN
 };
 
-
 // Global variables
-DDSHEAD	Head;			// Image header
-ILubyte	*CompData;		// Compressed data
-ILuint	CompSize;		// Compressed size
-ILuint	CompLineSize;	// Compressed line size
-ILuint	CompFormat;		// Compressed format
-ILimage	*Image;
-ILint	Width, Height, Depth;
-ILuint	BlockSize;
+extern DDSHEAD	Head;			// Image header
+extern ILubyte	*CompData;		// Compressed data
+extern ILuint	CompSize;		// Compressed size
+extern ILuint	CompLineSize;		// Compressed line size
+extern ILuint	CompFormat;		// Compressed format
+extern ILimage	*Image;
+extern ILint	Width, Height, Depth;
+extern ILuint	BlockSize;
 
 #define CUBEMAP_SIDES 6
 

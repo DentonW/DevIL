@@ -52,21 +52,21 @@ typedef struct Box
  * NB: these must start out 0!
  */
 
-ILfloat	gm2[33][33][33];
-ILint	wt[33][33][33], mr[33][33][33],	mg[33][33][33],	mb[33][33][33];
-ILubyte	*Ir, *Ig, *Ib;
-ILuint	size; /*image size*/
-ILint	K;    /*color look-up table size*/
-ILushort	*Qadd;
+static ILfloat	gm2[33][33][33];
+static ILint	wt[33][33][33], mr[33][33][33],	mg[33][33][33],	mb[33][33][33];
+static ILubyte	*Ir, *Ig, *Ib;
+static ILuint	size; /*image size*/
+static ILint	K;    /*color look-up table size*/
+static ILushort	*Qadd;
 
 
-ILint	WindW, WindH, WindD;
-ILint	i;
-ILubyte	*buffer;
-ILint	Width, Height, Depth, Comp;
-ILint	TotalColors;
-ILint	a, b;
-ILubyte	*buf1, *buf2;
+static ILint	WindW, WindH, WindD;
+static ILint	i;
+static ILubyte	*buffer;
+static ILint	Width, Height, Depth, Comp;
+static ILint	TotalColors;
+static ILint	a, b;
+static ILubyte	*buf1, *buf2;
 
 
 ILuint n2(ILint s)
