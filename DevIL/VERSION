@@ -1,3 +1,10 @@
+1.4.2
+-----
+
+- Fixed a crash with the .psp code and a large memory leak.
+- Fixed .gif loading, even loading animations better than I did with libungif.
+
+
 1.4.0
 -----
 
