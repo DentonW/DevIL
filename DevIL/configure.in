@@ -30,7 +30,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.29 $)
+AC_REVISION($Revision: 1.30 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -320,9 +320,7 @@ dnl ILUT APIs checking
 dnl
 
 dnl Check for SDL
-AM_PATH_SDL(1.2.5,,AC_MSG_ERROR([SDL library not found. aedGUI requires libSDL
-version 1.2.5 or later. Please make sure it is installed. If you
-don't have it you can get it from http://www.libsdl.org.]))
+AM_PATH_SDL(1.2.5,,)
 HSDL="$SDL_CFLAGS"
 LIBSDL="$SDL_LIBS"
 AC_SUBST(LIBSDL)
@@ -339,12 +337,14 @@ case "$target" in
 	AC_CHECK_LIB(GLU,gluPerspective,[LIBGL="-lGLU"],,$LIBGL)
 	;;
 esac
-dnl  if test "$LIBGL" != "-lGL" ; then
-dnl    use_opengl="no"
-dnl  fi
+   if test "x$have_gl_hdr" != "xyes" ; then
+     use_opengl="no"
+     LIBGL=""
+   fi
 else
   LIBGL=""
 fi
+
 AC_SUBST(LIBGL)
 
 if test "$use_allegro" = "yes" ; then

@@ -21938,13 +21938,7 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
      fi
      SDL_CFLAGS=""
      SDL_LIBS=""
-     { { echo "$as_me:$LINENO: error: SDL library not found. aedGUI requires libSDL
-version 1.2.5 or later. Please make sure it is installed. If you
-don't have it you can get it from http://www.libsdl.org." >&5
-echo "$as_me: error: SDL library not found. aedGUI requires libSDL
-version 1.2.5 or later. Please make sure it is installed. If you
-don't have it you can get it from http://www.libsdl.org." >&2;}
-   { (exit 1); exit 1; }; }
+     :
   fi
 
 
@@ -22213,9 +22207,14 @@ fi
 
 	;;
 esac
+   if test "x$have_gl_hdr" != "xyes" ; then
+     use_opengl="no"
+     LIBGL=""
+   fi
 else
   LIBGL=""
 fi
+
 
 
 if test "$use_allegro" = "yes" ; then
