@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ILU", "..\..\src-ILU\msvc\I
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ILUT", "..\..\src-ILUT\msvc\ILUT.vcproj", "{7703E5F1-DE8D-4F65-A09D-0F991246431E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowsTest", "..\..\examples\WindowsTest\WindowsTest.vcproj", "{F1E90057-40E5-4650-8AC1-259AC327A9E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		ConfigName.0 = Debug
@@ -13,6 +15,9 @@ Global
 	GlobalSection(ProjectDependencies) = postSolution
 		{870E670A-FF39-4561-8423-B8AE8435ED02}.0 = {0ED493BD-A61D-49C5-B130-CC0AE0F2C1FA}
 		{7703E5F1-DE8D-4F65-A09D-0F991246431E}.0 = {870E670A-FF39-4561-8423-B8AE8435ED02}
+		{F1E90057-40E5-4650-8AC1-259AC327A9E1}.0 = {0ED493BD-A61D-49C5-B130-CC0AE0F2C1FA}
+		{F1E90057-40E5-4650-8AC1-259AC327A9E1}.1 = {870E670A-FF39-4561-8423-B8AE8435ED02}
+		{F1E90057-40E5-4650-8AC1-259AC327A9E1}.2 = {7703E5F1-DE8D-4F65-A09D-0F991246431E}
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{0ED493BD-A61D-49C5-B130-CC0AE0F2C1FA}.Debug.ActiveCfg = Debug|Win32
@@ -27,6 +32,10 @@ Global
 		{7703E5F1-DE8D-4F65-A09D-0F991246431E}.Debug.Build.0 = Debug|Win32
 		{7703E5F1-DE8D-4F65-A09D-0F991246431E}.Release.ActiveCfg = Release|Win32
 		{7703E5F1-DE8D-4F65-A09D-0F991246431E}.Release.Build.0 = Release|Win32
+		{F1E90057-40E5-4650-8AC1-259AC327A9E1}.Debug.ActiveCfg = Debug|Win32
+		{F1E90057-40E5-4650-8AC1-259AC327A9E1}.Debug.Build.0 = Debug|Win32
+		{F1E90057-40E5-4650-8AC1-259AC327A9E1}.Release.ActiveCfg = Release|Win32
+		{F1E90057-40E5-4650-8AC1-259AC327A9E1}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

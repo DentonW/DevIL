@@ -38,13 +38,13 @@
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/IL.pdb"
 				SubSystem="2"
-				ImportLibrary="$(OutDir)/IL.lib"
+				ImportLibrary="$(OutDir)/DevIL-d.lib"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="..\..\projects\msvc7\insdll.bat $(TargetPath)"/>
+				CommandLine="..\..\projects\msvc\insdll.bat $(TargetPath)"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -85,17 +85,17 @@
 				OutputFile="$(OutDir)/DevIL.dll"
 				LinkIncremental="1"
 				ModuleDefinitionFile="il.def"
-				GenerateDebugInformation="TRUE"
+				GenerateDebugInformation="FALSE"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				ImportLibrary="$(OutDir)/IL.lib"
+				ImportLibrary="$(OutDir)/DevIL.lib"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="..\..\projects\msvc7\insdll.bat $(TargetPath)"/>
+				CommandLine="..\..\projects\msvc\insdll.bat $(TargetPath)"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -150,6 +150,9 @@
 			</File>
 			<File
 				RelativePath="..\src\il_error.c">
+			</File>
+			<File
+				RelativePath="..\src\il_fastconv.c">
 			</File>
 			<File
 				RelativePath="..\src\il_files.c">
@@ -207,6 +210,9 @@
 			</File>
 			<File
 				RelativePath="..\src\il_profiles.c">
+			</File>
+			<File
+				RelativePath="..\src\il_psd.c">
 			</File>
 			<File
 				RelativePath="..\src\il_quantizer.c">
@@ -307,6 +313,9 @@
 			</File>
 			<File
 				RelativePath="..\include\il_pnm.h">
+			</File>
+			<File
+				RelativePath="..\include\il_psd.h">
 			</File>
 			<File
 				RelativePath="..\include\il_q2pal.h">

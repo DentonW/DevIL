@@ -1,8 +1,8 @@
 //--------------------------------------------------------------------------------
 //
 // ImageLib Windows (GDI) Test Source
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified:  05/23/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified:  01/30/2002 <--Y2K Compliant! =]
 //
 // Filename: testil/windowstest/windowstest.c
 //
@@ -26,6 +26,7 @@
 
 //#pragma comment(lib, "sdl.lib")
 //#pragma comment(lib, "sdlmain.lib")
+#pragma comment(lib, "colorpicker.lib")
 
 
 // Evil globals!
@@ -138,7 +139,7 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 		}
 	}
 
-	return msg.wParam;
+	return (int)msg.wParam;
 }
 
 
@@ -237,7 +238,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		"Microsoft Bitmap Files (*.bmp)", "*.bmp",
 		"Microsoft DirectDraw Surface (*.dds)", "*.dds",
 		"Microsoft Icon Files (*.ico)", "*.ico",
-		"DevIL Files (*.oil)", "*.oil",
+		"PhotoShop Files (*.psd)", "*.psd",
 		"Portable AnyMap Files (*.pbm, *.pgm, *.pnm, *.ppm)", "*.pbm;*.pgm;*.pnm;*.ppm",
 		"Portable Network Graphics Files (*.png)", "*.png",
 		"Sgi Files (*.sgi)", "*.bw;*.rgb;*.rgba;*.sgi",
@@ -252,7 +253,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		"C-Style Header (*.h)", "*.h",
 		"Jpeg Files (*.jpe, *.jpg, *.jpeg)", "*.jpe;*.jpg;*.jpeg",
 		"Microsoft Bitmap Files (*.bmp)", "*.bmp",
-		"DevIL Files (*.oil)", "*.oil",
 		"Portable AnyMap Files (*.pbm, *.pgm, *.ppm)", "*.pbm;*.pgm;*.ppm",
 		"Portable Network Graphics Files (*.png)", "*.png",
 		"Sgi Files (*.sgi)", "*.bw;*.rgb;*.rgba;*.sgi",
@@ -805,7 +805,7 @@ void GenFilterString(char *Out, char **Strings)
 
 	while (Strings[StringPos][0] != 0) {
 		sprintf(Out + OutPos, Strings[StringPos]);
-		OutPos += strlen(Strings[StringPos++]) + 1;
+		OutPos += (int)strlen(Strings[StringPos++]) + 1;
 	}
 
 	Out[OutPos++] = 0;

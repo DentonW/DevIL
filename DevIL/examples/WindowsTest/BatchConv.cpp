@@ -104,7 +104,7 @@ char *GetExtension(const char *FileName)
 {
 	bool PeriodFound = false;
 	char *Ext = (char*)FileName;
-	long i, Len = strlen(FileName);
+	long i, Len = (long)strlen(FileName);
 
 	if (FileName == NULL || !Len)  // if not a good filename/extension, exit early
 		return NULL;
@@ -139,7 +139,7 @@ bool CheckExtension(char *Arg, char *Ext)
 	Argu += strlen(Arg);  // start at the end
 
 
-	for (i = strlen(Arg); i >= 0; i--) {
+	for (i = (int)strlen(Arg); i >= 0; i--) {
 		if (*Argu == '.') {  // try to find a period 
 			PeriodFound = true;
 			break;

@@ -525,7 +525,7 @@ ILboolean GetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 	ILuint		*ChanLen;
 	ILboolean	PreCache = IL_FALSE;
 
-	Channel = (ILubyte*)ialloc(Head->Width * Head->Height * iCurImage->Bps);
+	Channel = (ILubyte*)ialloc(Head->Width * Head->Height * iCurImage->Bpc);
 	if (Channel == NULL) {
 		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
@@ -669,12 +669,10 @@ ILboolean ParseResources(ILuint ResourceSize, ILubyte *Resources)
 
 ILboolean GetSingleChannel(PSDHEAD *Head, ILubyte *Buffer, ILboolean Compressed)
 {
-	ILuint		c, x, y, i;
+	ILuint		i;
 	ILushort	*ShortPtr;
 	ILbyte		HeadByte;
 	ILubyte		Run;
-	ILuint		*ChanLen;
-	ILboolean	PreCache = IL_FALSE;
 
 	ShortPtr = (ILushort*)Buffer;
 

@@ -39,13 +39,13 @@
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/ILUT.pdb"
 				SubSystem="2"
-				ImportLibrary="$(OutDir)/ILUT.lib"
+				ImportLibrary="$(OutDir)/ILUT-d.lib"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="..\..\projects\msvc7\insdll.bat $(TargetPath)"/>
+				CommandLine="..\..\projects\msvc\insdll.bat $(TargetPath)"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -95,7 +95,7 @@
 				Name="VCMIDLTool"/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="..\..\projects\msvc7\insdll.bat $(TargetPath)"/>
+				CommandLine="..\..\projects\msvc\insdll.bat $(TargetPath)"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
