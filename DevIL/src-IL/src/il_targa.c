@@ -428,60 +428,36 @@ ILboolean iUncompressTgaData(ILimage *Image)
 
 	Size = Image->Width * Image->Height * Image->Depth * Image->Bpp;
 
-	if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST) {
+	if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST)
 		iPreCache(iCurImage->SizeOfData / 2);
 
-		while (BytesRead < Size) {
-			Header = igetc();
-			if (Header & BIT_7) {
-				ClearBits(Header, BIT_7);
-				if (iread(Color, 1, Image->Bpp) != Image->Bpp) {
-					iUnCache();
-					return IL_FALSE;
-				}
-				RunLen = (Header+1) * Image->Bpp;
-				for (i = 0; i < RunLen; i += Image->Bpp) {
-					for (c = 0; c < Image->Bpp; c++) {
-						Image->Data[BytesRead+i+c] = Color[c];
-					}
-				}
-				BytesRead += RunLen;
+	while (BytesRead < Size) {
+		Header = igetc();
+		if (Header & BIT_7) {
+			ClearBits(Header, BIT_7);
+			if (iread(Color, 1, Image->Bpp) != Image->Bpp) {
+				iUnCache();
+				return IL_FALSE;
 			}
-			else {
-				RunLen = (Header+1) * Image->Bpp;
-				if (iread(Image->Data + BytesRead, 1, RunLen) != RunLen) {
-					iUnCache();
-					return IL_FALSE;
+			RunLen = (Header+1) * Image->Bpp;
+			for (i = 0; i < RunLen; i += Image->Bpp) {
+				for (c = 0; c < Image->Bpp; c++) {
+					Image->Data[BytesRead+i+c] = Color[c];
 				}
-				BytesRead += RunLen;
 			}
+			BytesRead += RunLen;
 		}
+		else {
+			RunLen = (Header+1) * Image->Bpp;
+			if (iread(Image->Data + BytesRead, 1, RunLen) != RunLen) {
+				iUnCache();
+				return IL_FALSE;
+			}
+			BytesRead += RunLen;
+		}
+	}
 
-		iUnCache();
-	}
-	else {
-		while (BytesRead < Size) {
-			Header = igetc();
-			if (Header & BIT_7) {
-				ClearBits(Header, BIT_7);
-				if (iread(Color, 1, Image->Bpp) != Image->Bpp)
-					return IL_FALSE;
-				RunLen = (Header+1) * Image->Bpp;
-				for (i = 0; i < RunLen; i += Image->Bpp) {
-					for (c = 0; c < Image->Bpp; c++) {
-						Image->Data[BytesRead+i+c] = Color[c];
-					}
-				}
-				BytesRead += (Header+1) * Image->Bpp;
-			}
-			else {
-				RunLen = (Header+1) * Image->Bpp;
-				if (iread(Image->Data + BytesRead, 1, RunLen) != RunLen)
-					return IL_FALSE;
-				BytesRead += RunLen;
-			}
-		}
-	}
+	iUnCache();
 
 	return IL_TRUE;
 }
