@@ -117,7 +117,6 @@ ILboolean ILAPIENTRY ilApplyProfile(const ILstring InProfile, const ILstring Out
 
 	Temp = (ILbyte*)ialloc(iCurImage->SizeOfData);
 	if (Temp == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 

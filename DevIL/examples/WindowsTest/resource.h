@@ -25,6 +25,7 @@
 #define IDD_DIALOG_FILTER               169
 #define IDD_DIALOG_RESIZE               170
 #define IDD_DIALOG_BATCHCONV            171
+#define IDD_DIALOG_PROPERTIES           183
 #define IDC_ABOUT_VENDOR                1001
 #define IDC_ABOUT_VER_STRING            1002
 #define IDC_ABOUT_VER_NUM               1003
@@ -43,6 +44,11 @@
 #define IDC_BATCH_CHECK1                1021
 #define IDC_BATCH_NEWEXT                1022
 #define IDC_BATCH_DIR                   1023
+#define IDC_PROP_FILENAME               1028
+#define IDC_PROP_WIDTH                  1029
+#define IDC_PROP_HEIGHT                 1030
+#define IDC_PROP_DEPTH                  1031
+#define IDC_PROP_SIZE                   1032
 #define ID_FILE_EXIT                    32771
 #define ID_HELP_ABOUT                   32772
 #define ID_CONVERT_RGB                  32773
@@ -86,15 +92,16 @@
 #define ID_FILTER_EQUALIZE              32812
 #define ID_EFFECTSTOOLS_BACKGROUNDCOLOUR 32813
 #define ID_EDIT_VIEWALPHA               32814
+#define ID_FILE_PROPERTIES              32815
 #define IDC_STATIC                      -1
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        183
-#define _APS_NEXT_COMMAND_VALUE         32815
-#define _APS_NEXT_CONTROL_VALUE         1024
+#define _APS_NEXT_RESOURCE_VALUE        184
+#define _APS_NEXT_COMMAND_VALUE         32816
+#define _APS_NEXT_CONTROL_VALUE         1033
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
 #endif

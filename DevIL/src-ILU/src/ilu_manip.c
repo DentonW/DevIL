@@ -361,6 +361,116 @@ ILboolean ILAPIENTRY iluMirror()
 }
 
 
+//! Inverts the alpha in the image
+ILboolean ILAPIENTRY iluInvertAlpha()
+{
+	ILuint		i, *IntPtr, NumPix;
+	ILubyte		*Data;
+	ILushort	*ShortPtr;
+	ILfloat		*FltPtr;
+	ILdouble	*DblPtr;
+	ILubyte		Bpp;
+
+	iluCurImage = ilGetCurImage();
+	if (iluCurImage == NULL) {
+		ilSetError(ILU_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	if (iluCurImage->Format != IL_RGBA &&
+		iluCurImage->Format != IL_BGRA &&
+		iluCurImage->Format != IL_LUMINANCE) {
+			ilSetError(ILU_ILLEGAL_OPERATION);
+			return IL_FALSE;
+	}
+
+	Data = iluCurImage->Data;
+	Bpp = iluCurImage->Bpp;
+	NumPix = iluCurImage->SizeOfData / iluCurImage->Bpc;
+
+	switch (iluCurImage->Type)
+	{
+		case IL_BYTE:
+		case IL_UNSIGNED_BYTE:
+			if (iluCurImage->Format == IL_LUMINANCE) {
+				for (i = 0; i < NumPix; i++, Data++) {
+					*(Data) = ~*(Data);
+				}
+			}
+			else {
+				for (i = Bpp - 1; i < NumPix; i += Bpp, Data += Bpp) {
+					*(Data) = ~*(Data);
+				}
+			}
+			break;
+
+		case IL_SHORT:
+		case IL_UNSIGNED_SHORT:
+			ShortPtr = (ILushort*)Data;
+			if (iluCurImage->Format == IL_LUMINANCE) {
+				for (i = 0; i < NumPix; i++, ShortPtr++) {
+					*(ShortPtr) = ~*(ShortPtr);
+				}
+			}
+			else {
+				Data += (Bpp - 1) * 2;
+				for (i = Bpp - 1; i < NumPix; i += Bpp, ShortPtr += Bpp) {
+					*(ShortPtr) = ~*(ShortPtr);
+				}
+			}
+			break;
+
+		case IL_INT:
+		case IL_UNSIGNED_INT:
+			IntPtr = (ILuint*)Data;
+			if (iluCurImage->Format == IL_LUMINANCE) {
+				for (i = 0; i < NumPix; i++, IntPtr++) {
+					*(IntPtr) = ~*(IntPtr);
+				}
+			}
+			else {
+				Data += (Bpp - 1) * 4;
+				for (i = Bpp - 1; i < NumPix; i += Bpp, IntPtr += Bpp) {
+					*(IntPtr) = ~*(IntPtr);
+				}
+			}
+			break;
+
+		case IL_FLOAT:
+			FltPtr = (ILfloat*)Data;
+			if (iluCurImage->Format == IL_LUMINANCE) {
+				for (i = 0; i < NumPix; i++, FltPtr++) {
+					*(FltPtr) = 1.0f - *(FltPtr);
+				}
+			}
+			else {
+				Data += (Bpp - 1) * sizeof(ILfloat);
+				for (i = Bpp - 1; i < NumPix; i += Bpp, FltPtr += Bpp) {
+					*(FltPtr) = 1.0f - *(FltPtr);
+				}
+			}
+			break;
+
+		case IL_DOUBLE:
+			DblPtr = (ILdouble*)Data;
+			if (iluCurImage->Format == IL_LUMINANCE) {
+				for (i = 0; i < NumPix; i++, DblPtr++) {
+					*(DblPtr) = 1.0f - *(DblPtr);
+				}
+			}
+			else {
+				Data += (Bpp - 1) * sizeof(ILdouble);
+				for (i = Bpp - 1; i < NumPix; i += Bpp, DblPtr += Bpp) {
+					*(DblPtr) = 1.0f - *(DblPtr);
+				}
+			}
+			break;
+	}
+
+	return IL_TRUE;
+}
+
+
 //! Inverts the colours in the image
 ILboolean ILAPIENTRY iluNegative()
 {

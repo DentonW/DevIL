@@ -137,7 +137,6 @@ ILvoid ILAPIENTRY ilDeleteImages(ILsizei Num, const ILuint *Images)
 			// Add to head of list - works for empty and non-empty lists
 			Temp = (iFree*)ialloc(sizeof(iFree));
 			if (!Temp) {
-				ilSetError(IL_OUT_OF_MEMORY);
 				return;
 			}
 			Temp->Name = Images[Index];
@@ -514,7 +513,6 @@ ILboolean iEnlargeStack()
 	}
 
 	if (!(ImageStack = ilRecalloc(ImageStack, StackSize * sizeof(ILimage*), (StackSize + I_STACK_INCREMENT) * sizeof(ILimage*)))) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	StackSize += I_STACK_INCREMENT;

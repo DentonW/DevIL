@@ -111,7 +111,6 @@ char *iClipString(char *String, ILuint MaxLen)
 
 	Clipped = (char*)ialloc(MaxLen + 1);  // Terminating NULL makes it +1.
 	if (Clipped == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return NULL;
 	}
 

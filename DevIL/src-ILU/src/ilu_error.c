@@ -17,7 +17,7 @@
 // We can use ilSetError() in ILU, because it *is* exported, but there is
 //	no prototype in il.h, so we define it in il_error.h of ILU
 
-static const ILstring iluErrorStrings[IL_BAD_DIMENSIONS - IL_INVALID_ENUM + 1] = {
+static const ILstring iluErrorStrings[IL_FILE_READ_ERROR - IL_INVALID_ENUM + 1] = {
 	IL_TEXT("invalid enumerant"),
     IL_TEXT("out of memory"),
 	IL_TEXT("format not supported yet"),
@@ -34,7 +34,8 @@ static const ILstring iluErrorStrings[IL_BAD_DIMENSIONS - IL_INVALID_ENUM + 1] =
 	IL_TEXT("stack overflow"),
     IL_TEXT("stack underflow"),
 	IL_TEXT("invalid conversion"),
-	IL_TEXT("bad dimensions")
+	IL_TEXT("bad dimensions"),
+	IL_TEXT("file read error")
 };
 
 static const ILstring iluLibErrorStrings[IL_LIB_MNG_ERROR - IL_LIB_GIF_ERROR + 1] = {
@@ -54,7 +55,7 @@ const ILstring ILAPIENTRY iluErrorString(ILenum Error)
 	if (Error == IL_UNKNOWN_ERROR) {
 		return (const ILstring)"unknown error";
 	}
-	if (Error >= IL_INVALID_ENUM && Error <= IL_INVALID_CONVERSION) {
+	if (Error >= IL_INVALID_ENUM && Error <= IL_FILE_READ_ERROR) {
 		return iluErrorStrings[Error - IL_INVALID_ENUM];
 	}
 	if (Error >= IL_LIB_GIF_ERROR && Error <= IL_LIB_MNG_ERROR) {

@@ -100,7 +100,6 @@ ILboolean iLoadCutInternal()
 	}
 
 	if (!ilTexImage(Header.Width, Header.Height, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL)) {  // always 1 bpp
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;

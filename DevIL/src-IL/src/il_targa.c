@@ -279,7 +279,6 @@ ILboolean iReadColMapTga(TARGAHEAD *Header)
 
 	iCurImage->Pal.Palette = (ILubyte*)ialloc(iCurImage->Pal.PalSize);
 	if (!iCurImage->Pal.Palette) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -329,7 +328,6 @@ ILboolean iReadUnmapTga(TARGAHEAD *Header)
 		Bpp = (ILubyte)(Header->Bpp >> 3);
 
 	if (!ilTexImage(Header->Width, Header->Height, Depth, Bpp, 0, IL_UNSIGNED_BYTE, NULL)) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -405,7 +403,6 @@ ILboolean iReadBwTga(TARGAHEAD *Header)
 	//  Should we mess with it or not?
 
 	if (!ilTexImage(Header->Width, Header->Height, Depth, (ILubyte)(Header->Bpp >> 3), IL_LUMINANCE, IL_UNSIGNED_BYTE, NULL)) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -514,7 +511,6 @@ ILvoid i16BitTarga(ILimage *Image)
 
 	if (!ilTexImage(Image->Width, Image->Height, 1, 3, IL_BGR, IL_UNSIGNED_BYTE, Data)) {
 		ifree(Data);
-		ilSetError(IL_OUT_OF_MEMORY);
 		return;
 	}
 
@@ -720,7 +716,6 @@ ILboolean iSaveTargaInternal()
 	else {
 		Rle = (ILubyte*)ialloc(TempImage->SizeOfData + TempImage->SizeOfData / 2 + 1);  // max
 		if (Rle == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 		RleLen = ilRleCompress(TempData, TempImage->Width, TempImage->Height, TempImage->Depth, TempImage->Bpp, Rle, IL_TGACOMP, NULL);

@@ -147,12 +147,10 @@ ILboolean iLoadPcdInternal(ILuint PicNum)
 	Y2 = (ILubyte*)ialloc(Width);
 	CbCr = (ILubyte*)ialloc(Width);
 	if (Y1 == NULL || Y2 == NULL || CbCr == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
 	if (!ilTexImage(Width, Height, 1, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL)) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;

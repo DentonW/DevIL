@@ -27,7 +27,6 @@ ILimage *iConvertPalette(ILimage *Image, ILenum DestFormat)
 
 	NewImage = (ILimage*)calloc(1, sizeof(ILimage));  // Much better to have it all set to 0.
 	if (NewImage == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -50,7 +49,6 @@ ILimage *iConvertPalette(ILimage *Image, ILenum DestFormat)
 			case IL_PAL_RGBA32:
 				Temp = (ILubyte*)ialloc(Image->Pal.PalSize / ilGetBppPal(Image->Pal.PalType));
 				if (Temp == NULL) {
-					ilSetError(IL_OUT_OF_MEMORY);
 					ifree(NewImage);
 					return IL_FALSE;
 				}
@@ -71,7 +69,6 @@ ILimage *iConvertPalette(ILimage *Image, ILenum DestFormat)
 			case IL_PAL_BGRA32:
 				Temp = (ILubyte*)ialloc(Image->Pal.PalSize / ilGetBppPal(Image->Pal.PalType));
 				if (Temp == NULL) {
-					ilSetError(IL_OUT_OF_MEMORY);
 					ifree(NewImage);
 					return IL_FALSE;
 				}
@@ -138,7 +135,6 @@ ILimage *iConvertPalette(ILimage *Image, ILenum DestFormat)
 			NewImage->Data = (ILubyte*)ialloc(CurImage->SizeOfData);
 			NewImage->Pal.Palette = (ILubyte*)ialloc(iCurImage->Pal.PalSize);
 			if (!NewImage->Data || !NewImage->Pal.Palette) {
-				ilSetError(IL_OUT_OF_MEMORY);
 				ilCloseImage(NewImage);
 				ilSetCurImage(CurImage);
 				return IL_FALSE;
@@ -220,7 +216,6 @@ ILAPI ILimage* ILAPIENTRY iConvertImage(ILimage *Image, ILenum DestFormat, ILenu
 	else {
 		NewImage = (ILimage*)calloc(1, sizeof(ILimage));  // Much better to have it all set to 0.
 		if (NewImage == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 
@@ -455,7 +450,6 @@ ILboolean ilAddAlpha()
 	
 	NewData = (ILubyte*)ialloc(NewBpp * iCurImage->Width * iCurImage->Height);
 	if (NewData == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -533,7 +527,6 @@ ILboolean ilAddAlphaKey(ILimage *Image)
 		
 		NewData = (ILubyte*)ialloc(NewBpp * Image->Width * Image->Height);
 		if (NewData == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 
@@ -641,7 +634,6 @@ ILboolean ilRemoveAlpha()
 	
 	NewData = (ILubyte*)ialloc(NewBpp * iCurImage->Width * iCurImage->Height);
 	if (NewData == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 

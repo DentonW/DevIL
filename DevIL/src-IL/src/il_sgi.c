@@ -224,9 +224,7 @@ ILboolean iReadRleSgi(iSgiHeader *Head)
 	ILuint		*OffTable, *LenTable, TableSize, Cur, ChanInt = 0;
 	ILubyte		**TempData;
 
-	if (!iNewSgi(Head))
-	{
-		ilSetError(IL_OUT_OF_MEMORY);
+	if (!iNewSgi(Head)) {
 		return IL_FALSE;
 	}
 
@@ -416,7 +414,6 @@ ILboolean iReadNonRleSgi(iSgiHeader *Head)
 	ILint j, ChanInt = 0, ChanSize;
 
 	if (!iNewSgi(Head)) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -473,7 +470,6 @@ ILvoid sgiSwitchData(ILubyte *Data, ILuint SizeOfData)
 ILboolean iNewSgi(iSgiHeader *Head)
 {
 	if (!ilTexImage(Head->XSize, Head->YSize, Head->Bpc, (ILubyte)Head->ZSize, 0, IL_UNSIGNED_BYTE, NULL)) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
@@ -692,7 +688,6 @@ ILboolean iSaveRleSgi()
 	StartTable = (ILuint*)ialloc(iCurImage->Height * iCurImage->Bpp * sizeof(ILuint));
 	LenTable = (ILuint*)ialloc(iCurImage->Height * iCurImage->Bpp * sizeof(ILuint));
 	if (!ScanLine || !StartTable || !LenTable) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 

@@ -126,7 +126,6 @@ ILboolean iLoadMdlInternal()
 
 		TempPal	= (ILubyte*)ialloc(768);
 		if (TempPal == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			iCurImage = BaseImage;
 			return IL_FALSE;
 		}

@@ -65,18 +65,18 @@ ILdouble	_SwapDouble(ILdouble d);
 //	((f>>8) & 0xff000000) | ((f<<8) & 0xff00000000) | ((f<<24) & 0xff0000000000) | ((f<<40) & 0xff000000000000) | (f<<56))
 
 
-ILushort	GetLittleUShort();
-ILshort		GetLittleShort();
-ILuint		GetLittleUInt();
-ILint		GetLittleInt();
-ILfloat		GetLittleFloat();
-ILdouble	GetLittleDouble();
-ILushort	GetBigUShort();
-ILshort		GetBigShort();
-ILuint		GetBigUInt();
-ILint		GetBigInt();
-ILfloat		GetBigFloat();
-ILdouble	GetBigDouble();
+ILushort	GetLittleUShort(ILvoid);
+ILshort		GetLittleShort(ILvoid);
+ILuint		GetLittleUInt(ILvoid);
+ILint		GetLittleInt(ILvoid);
+ILfloat		GetLittleFloat(ILvoid);
+ILdouble	GetLittleDouble(ILvoid);
+ILushort	GetBigUShort(ILvoid);
+ILshort		GetBigShort(ILvoid);
+ILuint		GetBigUInt(ILvoid);
+ILint		GetBigInt(ILvoid);
+ILfloat		GetBigFloat(ILvoid);
+ILdouble	GetBigDouble(ILvoid);
 
 ILubyte		SaveLittleUShort(ILushort _s);
 ILubyte		SaveLittleShort(ILshort _s);

@@ -220,7 +220,6 @@ ILboolean iUncompressPcx(PCXHEAD *Header)
 
 	ScanLine = (ILubyte*)ialloc(Header->Bps);
 	if (ScanLine == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -232,7 +231,6 @@ ILboolean iUncompressPcx(PCXHEAD *Header)
 			iCurImage->Pal.PalSize = 256 * 3; // Need to find out for sure...
 			iCurImage->Pal.Palette = (ILubyte*)ialloc(iCurImage->Pal.PalSize);
 			if (iCurImage->Pal.Palette == NULL) {
-				ilSetError(IL_OUT_OF_MEMORY);
 				ifree(ScanLine);
 				return IL_FALSE;
 			}
@@ -345,7 +343,6 @@ ILboolean iUncompressSmall(PCXHEAD *Header)
 	ILubyte	HeadByte, Colour, Data = 0, *ScanLine;
 
 	if (!ilTexImage(Header->Xmax - Header->Xmin + 1, Header->Ymax - Header->Ymin + 1, 1, 1, 0, IL_UNSIGNED_BYTE, NULL)) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
@@ -397,7 +394,6 @@ ILboolean iUncompressSmall(PCXHEAD *Header)
 		iCurImage->Pal.Palette = (ILubyte*)ialloc(16 * 3);  // Size of palette always (48 bytes).
 		ScanLine = (ILubyte*)ialloc(Bps);
 		if (iCurImage->Pal.Palette == NULL || ScanLine == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 		memcpy(iCurImage->Pal.Palette, Header->ColMap, 16 * 3);

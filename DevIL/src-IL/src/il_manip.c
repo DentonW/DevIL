@@ -29,7 +29,6 @@ ILboolean ilFlipImage()
 
 	Flipped = (ILubyte*)ialloc(iCurImage->SizeOfData);
 	if (Flipped == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -72,7 +71,6 @@ ILubyte* ILAPIENTRY iGetFlipped(ILimage *Image)
 
 	Flipped = (ILubyte*)ialloc(Image->SizeOfData);
 	if (Flipped == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return NULL;
 	}
 
@@ -112,7 +110,6 @@ ILboolean ilMirrorImage()
 
 	Data = (ILubyte*)ialloc(iCurImage->SizeOfData);
 	if (Data == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -347,7 +344,6 @@ ILuint ILAPIENTRY ilCopyPixels(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Wid
 	else {
 		TempBuff = (ILubyte*)ialloc(SrcSize);
 		if (TempBuff == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return 0;
 		}
 	}
@@ -611,7 +607,6 @@ ILboolean ILAPIENTRY ilDefaultImage()
 	}
 
 	if (!ilTexImage(64, 64, 1, 3, IL_BGR, IL_UNSIGNED_BYTE, NULL)) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
@@ -683,7 +678,6 @@ ILubyte* ILAPIENTRY ilGetAlpha(ILenum Type)
 	if (Alpha == NULL) {
 		if (TempImage != iCurImage)
 			ilCloseImage(TempImage);
-		ilSetError(IL_OUT_OF_MEMORY);
 		return NULL;
 	}
 

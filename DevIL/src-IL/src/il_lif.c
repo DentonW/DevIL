@@ -165,7 +165,6 @@ ILboolean iLoadLifInternal()
 
 	iCurImage->Pal.Palette = (ILubyte*)ialloc(1024);
 	if (iCurImage->Pal.Palette == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iCurImage->Pal.PalSize = 1024;

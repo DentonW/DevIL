@@ -101,7 +101,6 @@ ILboolean iLoadDoomInternal()
 
 	iCurImage->Pal.Palette = (ILubyte*)ialloc(IL_DOOMPAL_SIZE);
 	if (iCurImage->Pal.Palette == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iCurImage->Pal.PalSize = IL_DOOMPAL_SIZE;
@@ -138,7 +137,6 @@ ILboolean iLoadDoomInternal()
 	if (ilGetBoolean(IL_CONV_PAL) == IL_TRUE) {
 		NewData = (ILubyte*)ialloc(iCurImage->SizeOfData * 4);
 		if (NewData == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 
@@ -234,7 +232,6 @@ ILboolean iLoadDoomFlatInternal()
 
 	iCurImage->Pal.Palette = (ILubyte*)ialloc(IL_DOOMPAL_SIZE);
 	if (iCurImage->Pal.Palette == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iCurImage->Pal.PalSize = IL_DOOMPAL_SIZE;
@@ -246,7 +243,6 @@ ILboolean iLoadDoomFlatInternal()
 	if (ilGetBoolean(IL_CONV_PAL) == IL_TRUE) {
 		NewData = (ILubyte*)ialloc(iCurImage->SizeOfData * 4);
 		if (NewData == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 

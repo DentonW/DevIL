@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2001 by Denton Woods
 // Last modified: 05/25/2001 <--Y2K Compliant! =]
 //
-// Filename: openil/error.c
+// Filename: il/error.c
 //
 // Description: The error functions
 //

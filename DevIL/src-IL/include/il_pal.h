@@ -48,5 +48,6 @@ ILboolean	ilSaveJascPal(const ILstring FileName);
 char		*iFgetw(char *Buff, ILint MaxLen, FILE *File);
 ILboolean	ilLoadHaloPal(const ILstring FileName);
 ILboolean	ilLoadColPal(const ILstring FileName);
+ILboolean	ilLoadActPal(const ILstring FileName);
 
 #endif//IL_PAL_H

@@ -350,7 +350,6 @@ ILboolean ReadData()
 
 		CompData = (ILubyte*)ialloc(Head.LinearSize);
 		if (CompData == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 
@@ -362,7 +361,6 @@ ILboolean ReadData()
 
 		CompData = (ILubyte*)ialloc(CompSize);
 		if (CompData == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 

@@ -174,7 +174,6 @@ ILboolean iLoadPicInternal()
 	}
 
 	if (!ilTexImage(Header.Width, Header.Height, 1, 1, 0, IL_UNSIGNED_BYTE, NULL)) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;

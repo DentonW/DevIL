@@ -182,7 +182,6 @@ ILushort *CompressTo565(ILimage *Image)
 
 	Data = (ILushort*)ialloc(iCurImage->Width * iCurImage->Height * 2);
 	if (Data == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		if (TempImage != Image)
 			ilCloseImage(TempImage);
 		return NULL;

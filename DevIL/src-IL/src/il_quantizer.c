@@ -95,7 +95,6 @@ ILvoid Hist3d(ILint *vwt, ILint *vmr, ILint *vmg, ILint *vmb, ILfloat *m2)
 	}
 	Qadd = (ILushort*)malloc(sizeof(ILushort) * size);
 	if (Qadd == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return;
 	}
 	memset(Qadd, 0, sizeof(ILushort) * size);
@@ -429,7 +428,6 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 	NewData = (ILubyte*)malloc(Image->Width * Image->Height * Image->Depth);
 	Palette = (ILubyte*)malloc(3 * NumCols);
 	if (!NewData || !Palette) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return NULL;
 	}
 
@@ -437,7 +435,6 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 	Ig = malloc(Width * Height * Depth);
 	Ib = malloc(Width * Height * Depth);
 	if (!Ir || !Ig || !Ib) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		free(NewData);
 		free(Palette);
 		return NULL;
@@ -497,7 +494,6 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 
 		tag = (ILubyte*)malloc(33 * 33 * 33 * sizeof(ILubyte));
 		if (tag == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			free(NewData);
 			free(Palette);
 			free(Ig);
@@ -549,7 +545,6 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 
 	NewImage = (ILimage*)calloc(sizeof(ILimage), 1);
 	if (NewImage == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return NULL;
 	}
 	ilCopyImageAttr(NewImage, Image);

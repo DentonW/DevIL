@@ -40,6 +40,7 @@ extern "C" {
 //#define IL_NO_PNG
 //#define IL_NO_PNM
 //#define IL_NO_PSD
+//#define IL_NO_PSP
 //#define IL_NO_RAW
 //#define IL_NO_SGI
 //#define IL_NO_TGA
@@ -213,6 +214,7 @@ typedef void			ILvoid;
 #define IL_DCX								0x0438
 #define IL_PSD								0x0439
 #define IL_EXIF								0x043A
+#define IL_PSP								0x043B
 
 #define IL_JASC_PAL							0x0475
 
@@ -236,6 +238,8 @@ typedef void			ILvoid;
 #define IL_STACK_UNDERFLOW					0x050F
 #define IL_INVALID_CONVERSION				0x0510
 #define IL_BAD_DIMENSIONS					0x0511
+#define IL_FILE_READ_ERROR					0x0512  // 05/12/2002: Addition by Sam.
+
 #define IL_LIB_GIF_ERROR					0x05E1
 #define IL_LIB_JPEG_ERROR					0x05E2
 #define IL_LIB_PNG_ERROR					0x05E3
@@ -403,10 +407,14 @@ typedef void			ILvoid;
 #if defined(__LCC__)
 	#define ILAPI __stdcall
 #elif _WIN32
-	#ifdef _IL_BUILD_LIBRARY
-		#define ILAPI __declspec(dllexport)
+	#ifdef IL_STATIC_LIB
+		#define ILAPI
 	#else
-		#define ILAPI __declspec(dllimport)
+		#ifdef _IL_BUILD_LIBRARY
+			#define ILAPI __declspec(dllexport)
+		#else
+			#define ILAPI __declspec(dllimport)
+		#endif
 	#endif
 #elif __APPLE__
 	#define ILAPI extern

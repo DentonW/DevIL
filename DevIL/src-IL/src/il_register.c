@@ -43,7 +43,6 @@ ILboolean ILAPIENTRY ilRegisterLoad(const ILstring Ext, IL_LOADPROC Load)
 
 	NewNode = (iFormatL*)ialloc(sizeof(iFormatL));
 	if (NewNode == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -86,7 +85,6 @@ ILboolean ILAPIENTRY ilRegisterSave(const ILstring Ext, IL_SAVEPROC Save)
 
 	NewNode = (iFormatS*)ialloc(sizeof(iFormatL));
 	if (NewNode == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -301,7 +299,6 @@ ILboolean ILAPIENTRY ilRegisterMipNum(ILuint Num)
 	while (Num) {
 		Next->Next = (ILimage*)ialloc(sizeof(ILimage));
 		if (Next->Next == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 		Next = Next->Next;
@@ -330,7 +327,6 @@ ILboolean ILAPIENTRY ilRegisterNumImages(ILuint Num)
 	while (Num) {
 		Next->Next = (ILimage*)ialloc(sizeof(ILimage));
 		if (Next->Next == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 		Next = Next->Next;

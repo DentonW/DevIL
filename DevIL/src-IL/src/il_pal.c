@@ -33,6 +33,9 @@ ILboolean ILAPIENTRY ilLoadPal(const ILstring FileName)
 	if (iCheckExtension(FileName, IL_TEXT("col"))) {
 		return ilLoadColPal(FileName);
 	}
+	if (iCheckExtension(FileName, IL_TEXT("act"))) {
+		return ilLoadActPal(FileName);
+	}
 
 #ifndef _WIN32_WCE
 	f = fopen(FileName, "rt");
@@ -113,7 +116,6 @@ ILboolean ilLoadJascPal(const ILstring FileName)
 	Pal->PalType = IL_PAL_RGB24;
 	Pal->Palette = (ILubyte*)ialloc(NumColours * PALBPP);
 	if (Pal->Palette == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		fclose(PalFile);
 		return IL_FALSE;
 	}
@@ -243,7 +245,6 @@ ILboolean ilSaveJascPal(const ILstring FileName)
 	iCurImage->Pal.Palette = (ILubyte*)ialloc(iCurImage->Pal.PalSize);
 	if (!iCurImage->Pal.Palette) {
 		iCurImage->Pal.Palette = CurPal;
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -330,7 +331,6 @@ ILboolean ilLoadHaloPal(const ILstring FileName)
 	TempPal = (ILushort*)ialloc(iCurImage->Pal.PalSize * sizeof(ILushort));
 	if (!iCurImage->Pal.Palette || !TempPal) {
 		icloser(HaloFile);
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -348,6 +348,8 @@ ILboolean ilLoadHaloPal(const ILstring FileName)
 	}
 	TempPal -= iCurImage->Pal.PalSize;
 	ifree(TempPal);
+
+	icloser(HaloFile);
 
 	return IL_TRUE;
 }
@@ -412,7 +414,6 @@ ILboolean ilLoadColPal(const ILstring FileName)
 	iCurImage->Pal.Palette = (ILubyte*)ialloc(768);
 	if (iCurImage->Pal.Palette == NULL) {
 		icloser(ColFile);
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -433,6 +434,55 @@ ILboolean ilLoadColPal(const ILstring FileName)
 }
 
 
+//! Loads an .act palette file.
+ILboolean ilLoadActPal(const ILstring FileName)
+{
+	ILHANDLE	ActFile;
+
+	if (!iCheckExtension(FileName, IL_TEXT("act"))) {
+		ilSetError(IL_INVALID_EXTENSION);
+		return IL_FALSE;
+	}
+
+	if (iCurImage == NULL) {
+		ilSetError(IL_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	ActFile = iopenr(FileName);
+	if (ActFile == NULL) {
+		ilSetError(IL_COULD_NOT_OPEN_FILE);
+		return IL_FALSE;
+	}
+
+	if (iCurImage->Pal.Palette && iCurImage->Pal.PalSize > 0 && iCurImage->Pal.PalType != IL_PAL_NONE) {
+		ifree(iCurImage->Pal.Palette);
+		iCurImage->Pal.Palette = NULL;
+	}
+
+	iCurImage->Pal.PalType = IL_PAL_RGB24;
+	iCurImage->Pal.PalSize = 768;
+	iCurImage->Pal.Palette = (ILubyte*)ialloc(768);
+	if (!iCurImage->Pal.Palette) {
+		icloser(ActFile);
+		return IL_FALSE;
+	}
+
+	if (iread(iCurImage->Pal.Palette, 1, 768) != 768) {
+		ilSetError(IL_INVALID_FILE_HEADER);
+		icloser(ActFile);
+		return IL_FALSE;
+	}
+
+	icloser(ActFile);
+
+	return IL_TRUE;
+}
+
+
+
+
+
 ILAPI ILpal* ILAPIENTRY iCopyPal()
 {
 	ILpal *Pal;
@@ -445,12 +495,10 @@ ILAPI ILpal* ILAPIENTRY iCopyPal()
 
 	Pal = (ILpal*)ialloc(sizeof(ILpal));
 	if (Pal == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return NULL;
 	}
 	Pal->Palette = (ILubyte*)ialloc(iCurImage->Pal.PalSize);
 	if (Pal->Palette == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return NULL;
 	}
 
@@ -480,12 +528,10 @@ ILAPI ILpal* ILAPIENTRY iConvertPal(ILpal *Pal, ILenum DestFormat)
 
 	NewPal = (ILpal*)ialloc(sizeof(ILpal));
 	if (NewPal == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return NULL;
 	}
 	NewPal->Palette = (ILubyte*)ialloc(Pal->PalSize);
 	if (NewPal == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	NewPal->PalSize = Pal->PalSize;
@@ -713,7 +759,6 @@ ILboolean ILAPIENTRY ilConvertPal(ILenum DestFormat)
 
 	iCurImage->Pal.Palette = (ILubyte*)ialloc(Pal->PalSize);
 	if (iCurImage->Pal.Palette == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	memcpy(iCurImage->Pal.Palette, Pal->Palette, Pal->PalSize);
@@ -751,7 +796,6 @@ ILboolean ILAPIENTRY ilApplyPal(const ILstring FileName)
 
 	NewData = (ILubyte*)ialloc(iCurImage->Width * iCurImage->Height * iCurImage->Depth);
 	if (NewData == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -769,7 +813,6 @@ ILboolean ILAPIENTRY ilApplyPal(const ILstring FileName)
 	if (PalInfo == NULL) {
 		ifree(NewData);
 		iCurImage = CurImage;
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 

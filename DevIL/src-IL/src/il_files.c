@@ -445,7 +445,6 @@ ILboolean iPreCache(ILuint Size)
 
 	Cache = (ILubyte*)ialloc(Size);
 	if (Cache == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 

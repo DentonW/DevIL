@@ -45,6 +45,7 @@ HWND HWnd;
 ILuint	NumUndosAllowed = 4, UndoSize = 0;
 ILuint	Undos[11] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 ILuint	Width, Height, Depth;  // Main image
+char	CurFileName[2048];
 
 ILint	XOff, YOff;
 
@@ -59,6 +60,7 @@ char	NewTitle[512];
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 BOOL APIENTRY AboutDlgProc (HWND hDlg, UINT message, UINT wParam, LONG lParam);
+BOOL APIENTRY PropertiesDlgProc (HWND hDlg, UINT message, UINT wParam, LONG lParam);
 BOOL APIENTRY FilterDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam);
 BOOL APIENTRY ResizeDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam);
 BOOL APIENTRY BatchDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam);
@@ -392,7 +394,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			ilutRenderer(ILUT_WIN32);
 			ResizeWin();
 			CreateGDI();
-			
+
+			sprintf(CurFileName, "%s", OpenFileName);
 			sprintf(NewTitle, "%s - %s", TITLE, OpenFileName);
 			SetWindowText(hWnd, NewTitle);
 
@@ -413,6 +416,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						MAKEINTRESOURCE(IDD_DIALOG_ABOUT),
 						hWnd,
 						AboutDlgProc);
+					return (0L);
+
+				case ID_FILE_PROPERTIES:
+					DialogBox (hInstance,
+						MAKEINTRESOURCE(IDD_DIALOG_PROPERTIES),
+						hWnd,
+						PropertiesDlgProc);
 					return (0L);
 
 				case ID_BATCHCONVERT:
@@ -468,6 +478,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					ilBindImage(Undos[0]);
 					ilutGetWinClipboard();
 
+					sprintf(CurFileName, "Clipboard Paste");
 					sprintf(NewTitle, "%s - Pasted from the Clipboard", TITLE);
 					SetWindowText(hWnd, NewTitle);
 
@@ -550,7 +561,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					ilutRenderer(ILUT_WIN32);
 					ResizeWin();
 					CreateGDI();
-					
+
+					sprintf(CurFileName, "%s", OpenFileName);
 					sprintf(NewTitle, "%s - %s:  %g ms", TITLE, OpenFileName, elapsed);
 					SetWindowText(hWnd, NewTitle);
 
@@ -596,6 +608,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					ilEnable(IL_FILE_OVERWRITE);
 					ilSaveImage(SaveFileName);
 
+					sprintf(CurFileName, "%s", SaveFileName);
 					sprintf(NewTitle, "%s - %s", TITLE, SaveFileName);
 					SetWindowText(hWnd, NewTitle);
 
@@ -871,6 +884,46 @@ BOOL APIENTRY AboutDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
 }
 
 
+BOOL APIENTRY PropertiesDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
+{
+    switch (message)
+	{
+	    case WM_INITDIALOG:
+		{
+			char Temp[256];
+
+			SetDlgItemText(hDlg, IDC_PROP_FILENAME, CurFileName);
+			sprintf(Temp, "%d", ilGetInteger(IL_IMAGE_WIDTH));
+			SetDlgItemText(hDlg, IDC_PROP_WIDTH, Temp);
+			sprintf(Temp, "%d", ilGetInteger(IL_IMAGE_HEIGHT));
+			SetDlgItemText(hDlg, IDC_PROP_HEIGHT, Temp);
+			sprintf(Temp, "%d", ilGetInteger(IL_IMAGE_DEPTH));
+			SetDlgItemText(hDlg, IDC_PROP_DEPTH, Temp);
+			sprintf(Temp, "%d", ilGetInteger(IL_IMAGE_SIZE_OF_DATA));
+			SetDlgItemText(hDlg, IDC_PROP_SIZE, Temp);
+
+			return (TRUE);
+		}
+		break;
+
+	    case WM_COMMAND:      
+		{
+			if (LOWORD(wParam) == IDOK)
+				EndDialog(hDlg, TRUE);
+			if (LOWORD(wParam) == IDCANCEL)
+				EndDialog(hDlg, FALSE);
+	    }
+		break;
+
+		case WM_CLOSE:
+			EndDialog(hDlg, TRUE);
+			break;
+	}
+
+	return FALSE;
+}
+
+
 BOOL APIENTRY FilterDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
 {
     switch (message)
@@ -1028,7 +1081,7 @@ BOOL APIENTRY BatchDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
 	    case WM_INITDIALOG:
 		{
 			sprintf(Dir, "");
-			sprintf(NewExt, "oil");
+			sprintf(NewExt, "tga");
 			SetDlgItemText(hDlg, IDC_BATCH_DIR, Dir);
 			SetDlgItemText(hDlg, IDC_BATCH_NEWEXT, NewExt);
 			return TRUE;

@@ -76,7 +76,6 @@ ILboolean iLoadDataInternal(ILuint Width, ILuint Height, ILuint Depth, ILubyte B
 	}
 
 	if (!ilTexImage(Width, Height, Depth, Bpp, 0, IL_UNSIGNED_BYTE, NULL)) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;

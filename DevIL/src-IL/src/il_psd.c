@@ -219,7 +219,6 @@ ILboolean ReadGrey(PSDHEAD *Head)
 	ResourceSize = GetBigUInt();  // Read the 'image resources section'
 	Resources = (ILubyte*)ialloc(ResourceSize);
 	if (Resources == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iread(Resources, 1, ResourceSize);
@@ -273,7 +272,6 @@ ILboolean ReadIndexed(PSDHEAD *Head)
 	}
 	Palette = (ILubyte*)ialloc(ColorMode);
 	if (Palette == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iread(Palette, 1, ColorMode);
@@ -281,7 +279,6 @@ ILboolean ReadIndexed(PSDHEAD *Head)
 	ResourceSize = GetBigUInt();  // Read the 'image resources section'
 	Resources = (ILubyte*)ialloc(ResourceSize);
 	if (Resources == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iread(Resources, 1, ResourceSize);
@@ -304,7 +301,6 @@ ILboolean ReadIndexed(PSDHEAD *Head)
 	iCurImage->Pal.Palette = (ILubyte*)ialloc(ColorMode);
 	if (iCurImage->Pal.Palette == NULL) {
 		ifree(Palette);
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iCurImage->Pal.PalSize = ColorMode;
@@ -341,7 +337,6 @@ ILboolean ReadRGB(PSDHEAD *Head)
 	ResourceSize = GetBigUInt();  // Read the 'image resources section'
 	Resources = (ILubyte*)ialloc(ResourceSize);
 	if (Resources == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iread(Resources, 1, ResourceSize);
@@ -402,7 +397,6 @@ ILboolean ReadCMYK(PSDHEAD *Head)
 	ResourceSize = GetBigUInt();  // Read the 'image resources section'
 	Resources = (ILubyte*)ialloc(ResourceSize);
 	if (Resources == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iread(Resources, 1, ResourceSize);
@@ -449,7 +443,6 @@ ILboolean ReadCMYK(PSDHEAD *Head)
 	Size = iCurImage->Bpc * iCurImage->Width * iCurImage->Height;
 	KChannel = (ILubyte*)ialloc(Size);
 	if (KChannel == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	if (!GetSingleChannel(Head, KChannel, (ILboolean)Compressed)) {
@@ -490,7 +483,6 @@ ILuint *GetCompChanLen(PSDHEAD *Head)
 	RleTable = (ILushort*)ialloc(Head->Height * Channels * sizeof(ILushort));
 	ChanLen = (ILuint*)ialloc(Channels * sizeof(ILuint));
 	if (RleTable == NULL || ChanLen == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return NULL;
 	}
 
@@ -527,7 +519,6 @@ ILboolean GetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 
 	Channel = (ILubyte*)ialloc(Head->Width * Head->Height * iCurImage->Bpc);
 	if (Channel == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	ShortPtr = (ILushort*)Channel;
@@ -646,7 +637,6 @@ ILboolean ParseResources(ILuint ResourceSize, ILubyte *Resources)
 			case 0x040F:  // ICC Profile
 				iCurImage->Profile = (ILubyte*)ialloc(Size);
 				if (iCurImage->Profile == NULL) {
-					ilSetError(IL_OUT_OF_MEMORY);
 					return IL_FALSE;
 				}
 				memcpy(iCurImage->Profile, Resources, Size);

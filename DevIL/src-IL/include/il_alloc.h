@@ -26,15 +26,17 @@
 
 
 #if defined (__ALLOC_C)
-#define __ALLOC_EXTERN
+	#define __ALLOC_EXTERN
 #else
-#define __ALLOC_EXTERN extern
+	#define __ALLOC_EXTERN extern
 #endif
 #include <IL/il.h>
 
 
-__ALLOC_EXTERN mAlloc ialloc;
+__ALLOC_EXTERN mAlloc ialloc_ptr;
 __ALLOC_EXTERN mFree  ifree;
+ILvoid *ialloc(ILuint Size);
+
 
 
 #endif//ALLOC_H

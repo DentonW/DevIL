@@ -1,4 +1,4 @@
-Developer's Image Library version 1.3.0 Readme, Notes and Quick Use
+Developer's Image Library version 1.3.1 Readme, Notes and Quick Use
 -------------------------------------------------------------------
 
 <DZA[afk]> DevIL song: "la la la, a cross-platform image library utilizing a
@@ -87,8 +87,7 @@ If #make succeeded, just type #make install
 Usage:
 ------
 
-As of right now, no function needs to be called to setup the library, as it is
-all set up in DllMain() in Windows.  To load an image, simply:
+Before you do anything, call ilInit().  To load an image, simply:
 
 #include <IL/il.h>
 #include <IL/ilu.h>

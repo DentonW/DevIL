@@ -18,7 +18,7 @@
 
 ILboolean ILAPIENTRY iluRotate(ILfloat Angle)
 {
-	ILimage	*Temp, *Temp1, *CurImage;
+	ILimage	*Temp, *Temp1, *CurImage = NULL;
 	ILenum	PalType = 0;
 
 	iluCurImage = ilGetCurImage();

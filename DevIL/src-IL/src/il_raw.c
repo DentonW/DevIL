@@ -82,7 +82,6 @@ ILboolean iLoadRawInternal()
 	iread(&iCurImage->Bpc, sizeof(ILubyte), 1);
 
 	if (!ilTexImage(iCurImage->Width, iCurImage->Height, iCurImage->Depth, iCurImage->Bpp, 0, ilGetTypeBpc(iCurImage->Bpc), NULL)) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;

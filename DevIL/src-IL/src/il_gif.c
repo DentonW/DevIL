@@ -106,7 +106,6 @@ ILboolean ilLoadGif(const ILstring FileName)
 				ilSetError(IL_COULD_NOT_OPEN_FILE);
 				break;
 			case D_GIF_ERR_NOT_ENOUGH_MEM:
-				ilSetError(IL_OUT_OF_MEMORY);
 				break;
 			default:
 				ilSetError(IL_UNKNOWN_ERROR);
@@ -171,7 +170,6 @@ ILboolean ilLoadGif(const ILstring FileName)
 		ColorMap = (GifFile->Image.ColorMap ? GifFile->Image.ColorMap : GifFile->SColorMap);
 		Image->Pal.Palette = (ILubyte*)ialloc(ColorMap->ColorCount * 3);
 		if (Image->Pal.Palette == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			DGifCloseFile(GifFile);
 			return IL_FALSE;
 		}

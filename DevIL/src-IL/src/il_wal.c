@@ -89,12 +89,10 @@ ILboolean iLoadWalInternal()
 	for (i = 0; i < 3; i++) {
 		Mipmaps[i] = (ILimage*)calloc(sizeof(ILimage), 1);
 		if (Mipmaps[i] == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 		Mipmaps[i]->Pal.Palette = (ILubyte*)ialloc(768);
 		if (Mipmaps[i]->Pal.Palette == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 		memcpy(Mipmaps[i]->Pal.Palette, ilDefaultQ2Pal, 768);
@@ -103,7 +101,6 @@ ILboolean iLoadWalInternal()
 
 	iread(&Header, sizeof(WALHEAD), 1);
 	if (!ilTexImage(Header.Width, Header.Height, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL)) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -114,7 +111,6 @@ ILboolean iLoadWalInternal()
 		NewH /= 2;
 		iCurImage = Mipmaps[i];
 		if (!ilTexImage(NewW, NewH, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL)) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 		// Don't set until now so ilTexImage won't get rid of the palette.
@@ -134,7 +130,6 @@ ILboolean iLoadWalInternal()
 		ifree(iCurImage->Pal.Palette);
 	iCurImage->Pal.Palette = (ILubyte*)ialloc(768);
 	if (iCurImage->Pal.Palette == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 

@@ -93,6 +93,7 @@
 
 
 #define IL_MAX(a,b) (((a) > (b)) ? (a) : (b))
+#define IL_MIN(a,b) (((a) < (b)) ? (a) : (b))
 
 
 // Basic Palette struct
@@ -454,6 +455,13 @@ ILboolean ilIsValidPsdL(ILvoid *Lump, ILuint Size);
 ILboolean ilLoadPsd(const ILstring FileName);
 ILboolean ilLoadPsdF(ILHANDLE File);
 ILboolean ilLoadPsdL(ILvoid *Lump, ILuint Size);
+
+ILboolean ilIsValidPsp(const ILstring FileName);
+ILboolean ilIsValidPspF(ILHANDLE File);
+ILboolean ilIsValidPspL(ILvoid *Lump, ILuint Size);
+ILboolean ilLoadPsp(const ILstring FileName);
+ILboolean ilLoadPspF(ILHANDLE File);
+ILboolean ilLoadPspL(ILvoid *Lump, ILuint Size);
 
 ILboolean ilLoadRaw(const ILstring FileName);
 ILboolean ilLoadRawF(ILHANDLE File);

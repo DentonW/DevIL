@@ -180,6 +180,9 @@ ILboolean iLoadTiffInternal()
 		return IL_FALSE;
 	}
 
+	TIFFSetWarningHandler(NULL);
+	TIFFSetErrorHandler(NULL);
+
     tif = iTIFFOpen();
     if (tif == NULL)
 	{
@@ -224,7 +227,6 @@ ILboolean iLoadTiffInternal()
 			ifree(iCurImage->Profile);
 		iCurImage->Profile = (ILubyte*)ialloc(ProfileLen);
 		if (iCurImage->Profile == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			TIFFClose(tif);
 			return IL_FALSE;
 		}
@@ -260,7 +262,7 @@ ILboolean iLoadTiffInternal()
 			pImageData += 3;
 #endif			
 				
-			for (	ixPixel=iCurImage->Width*iCurImage->Height;
+			for (	ixPixel=iCurImage->Width * iCurImage->Height;
 					ixPixel>0; 
 					ixPixel--)
 			{

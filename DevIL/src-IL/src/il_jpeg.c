@@ -19,7 +19,6 @@
 #include "il_internal.h"
 #ifndef IL_NO_JPG
 	#ifndef IL_USE_IJL
-
 		#ifdef RGB_RED
 			#undef RGB_RED
 			#undef RGB_GREEN
@@ -41,6 +40,7 @@
 	#endif
 #include "il_jpeg.h"
 #include "il_manip.h"
+#include <setjmp.h>
 
 ILboolean jpgErrorOccured = IL_FALSE;
 
@@ -256,14 +256,13 @@ devil_jpeg_read_init (j_decompress_ptr cinfo)
 {
 	iread_ptr src;
 
-	if (cinfo->src == NULL) {  // first time for this JPEG object?
+	if ( cinfo->src == NULL ) {  // first time for this JPEG object?
 		cinfo->src = (struct jpeg_source_mgr *)
-			(*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-				sizeof(iread_mgr));
+					 (*cinfo->mem->alloc_small)( (j_common_ptr)cinfo, JPOOL_PERMANENT, sizeof(iread_mgr) );
 		src = (iread_ptr) cinfo->src;
 		src->buffer = (JOCTET *)
-		(*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-				INPUT_BUF_SIZE * sizeof(JOCTET));
+					  (*cinfo->mem->alloc_small)( (j_common_ptr)cinfo, JPOOL_PERMANENT,
+												  INPUT_BUF_SIZE * sizeof(JOCTET) );
 	}
 
 	src = (iread_ptr) cinfo->src;
@@ -284,18 +283,16 @@ devil_jpeg_read_init (j_decompress_ptr cinfo)
 // this function is called. The caller must call jpeg_finish_decompress because
 // the caller may still need decompressor after calling this for e.g. examining
 // saved markers.
-ILboolean ILAPIENTRY ilLoadFromJpegStruct(ILvoid *JpegDecompressorPtr)
+ILboolean ILAPIENTRY ilLoadFromJpegStruct(j_decompress_ptr JpegInfo)
 {
-	void (*errorHandler)(j_common_ptr);
+	// sam. void (*errorHandler)(j_common_ptr);
 	ILubyte *TempPtr[1];
-	j_decompress_ptr JpegInfo = (j_decompress_ptr)JpegDecompressorPtr;
 
-	errorHandler = JpegInfo->err->error_exit;
-	JpegInfo->err->error_exit = ExitErrorHandle;
+	// sam. errorHandler = JpegInfo->err->error_exit;
+	// sam. JpegInfo->err->error_exit = ExitErrorHandle;
 	jpeg_start_decompress(JpegInfo);
 
 	if (!ilTexImage(JpegInfo->output_width, JpegInfo->output_height, 1, (ILubyte)JpegInfo->output_components, 0, IL_UNSIGNED_BYTE, NULL)) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
@@ -322,7 +319,7 @@ ILboolean ILAPIENTRY ilLoadFromJpegStruct(ILvoid *JpegDecompressorPtr)
 		TempPtr[0] += iCurImage->Bps;
 	}
 
-	JpegInfo->err->error_exit = errorHandler;
+	// sam. JpegInfo->err->error_exit = errorHandler;
 
 	if (jpgErrorOccured)
 		return IL_FALSE;
@@ -332,40 +329,55 @@ ILboolean ILAPIENTRY ilLoadFromJpegStruct(ILvoid *JpegDecompressorPtr)
 	return IL_TRUE;
 }
 
+static jmp_buf	JpegJumpBuffer;
+
+static void iJpegErrorExit( j_common_ptr cinfo )
+{
+	ilSetError( IL_LIB_JPEG_ERROR );
+	jpeg_destroy( cinfo );
+	longjmp( JpegJumpBuffer, 1 );
+}
 
 // Internal function used to load the jpeg.
 ILboolean iLoadJpegInternal()
 {
-	struct jpeg_error_mgr Error;
-	struct jpeg_decompress_struct JpegInfo;
-	ILboolean result;
+	struct jpeg_error_mgr			Error;
+	struct jpeg_decompress_struct	JpegInfo;
+	ILboolean						result;
 
-	if (iCurImage == NULL) {
-		ilSetError(IL_ILLEGAL_OPERATION);
+	if ( iCurImage == NULL )
+	{
+		ilSetError( IL_ILLEGAL_OPERATION );
 		return IL_FALSE;
 	}
 
-	JpegInfo.err = jpeg_std_error(&Error);
-	jpeg_create_decompress(&JpegInfo);
-	JpegInfo.do_block_smoothing = IL_TRUE;
-	JpegInfo.do_fancy_upsampling = IL_TRUE;
+	JpegInfo.err = jpeg_std_error( &Error );		// init standard error handlers
+	Error.error_exit = iJpegErrorExit;				// add our exit handler
 
-	//jpeg_stdio_src(&JpegInfo, iGetFile());
-	devil_jpeg_read_init(&JpegInfo);
-	jpeg_read_header(&JpegInfo, IL_TRUE);
+	if ( (result = setjmp( JpegJumpBuffer ) == 0) != IL_FALSE )
+	{
+		jpeg_create_decompress( &JpegInfo );
+		JpegInfo.do_block_smoothing = IL_TRUE;
+		JpegInfo.do_fancy_upsampling = IL_TRUE;
 
-	result = ilLoadFromJpegStruct(&JpegInfo);
+		//jpeg_stdio_src(&JpegInfo, iGetFile());
+		devil_jpeg_read_init( &JpegInfo );
+		jpeg_read_header( &JpegInfo, IL_TRUE );
 
-	jpeg_finish_decompress(&JpegInfo);
-	jpeg_destroy_decompress(&JpegInfo);
+		result = ilLoadFromJpegStruct( &JpegInfo );
+
+		jpeg_finish_decompress( &JpegInfo );
+		jpeg_destroy_decompress( &JpegInfo );
+	}
 	return result;
 }
 
 
-typedef struct {
-	struct jpeg_destination_mgr pub;
-	JOCTET *buffer;
-	ILboolean bah;
+typedef struct
+{
+	struct jpeg_destination_mgr		pub;
+	JOCTET							*buffer;
+	ILboolean						bah;
 } iwrite_mgr;
 
 typedef iwrite_mgr *iwrite_ptr;
@@ -378,7 +390,7 @@ init_destination(j_compress_ptr cinfo)
 {
 	iwrite_ptr dest = (iwrite_ptr)cinfo->dest;
 	dest->buffer = (JOCTET *)
-      (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
+	  (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
 				  OUTPUT_BUF_SIZE * sizeof(JOCTET));
 
 	dest->pub.next_output_byte = dest->buffer;
@@ -476,14 +488,12 @@ ILboolean ilSaveJpegL(ILvoid *Lump, ILuint Size)
 // is also responsible for calling jpeg_finish_compress in case the
 // caller still needs to compressor for something.
 // 
-ILboolean ILAPIENTRY ilSaveFromJpegStruct(ILvoid* JpegCompressPtr)
+ILboolean ILAPIENTRY ilSaveFromJpegStruct(j_compress_ptr JpegInfo)
 {
 	void (*errorHandler)(j_common_ptr);
 	JSAMPROW	row_pointer[1];
 	ILimage		*Temp;
 	ILenum		Origin;
-	j_compress_ptr JpegInfo = (j_compress_ptr)JpegCompressPtr;
-
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -729,7 +739,6 @@ ILboolean iLoadJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size)
 
 	if (!ilTexImage(Image.JPGWidth, Image.JPGHeight, 1, (ILubyte)Image.DIBChannels, iCurImage->Format, IL_UNSIGNED_BYTE, NULL)) {
 		ijlFree(&Image);
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
@@ -897,10 +906,6 @@ ILboolean iSaveJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size)
 #endif//IL_USE_IJL
 
 
-#endif//IL_NO_JPG
 
-// Keep the entry points
-#if defined(IL_NO_JPG) || defined(IL_USE_IJL)
-	ILboolean ILAPIENTRY ilLoadFromJpegStruct(ILvoid *JpegDecompressorPtr) { return IL_FALSE; }
-	ILboolean ILAPIENTRY ilSaveFromJpegStruct(ILvoid *JpegCompressorPtr) { return IL_FALSE; }
-#endif
+
+#endif//IL_NO_JPG

@@ -414,13 +414,11 @@ ILimage *iNeuQuant(ILimage *Image)
 
 	NewImage = (ILimage*)calloc(sizeof(ILimage), 1);
 	if (NewImage == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		ilCloseImage(TempImage);
 		return NULL;
 	}
 	NewImage->Data = (ILubyte*)ialloc(TempImage->SizeOfData / 3);
 	if (NewImage->Data == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		ilCloseImage(TempImage);
 		ifree(NewImage);
 		return NULL;
@@ -437,7 +435,6 @@ ILimage *iNeuQuant(ILimage *Image)
 	NewImage->Pal.PalType = IL_PAL_BGR24;
 	NewImage->Pal.Palette = (ILubyte*)ialloc(NewImage->Pal.PalSize);
 	if (NewImage->Pal.Palette == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		ilCloseImage(TempImage);
 		ifree(NewImage);
 		return NULL;

@@ -21,7 +21,6 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 #define CHECK_ALLOC() 	if (NewData == NULL) { \
 							if (Data != Buffer) \
 								ifree(Data); \
-							ilSetError(IL_OUT_OF_MEMORY); \
 							return IL_FALSE; \
 						}
 
@@ -54,7 +53,6 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 	if (DestFormat == SrcFormat) {
 		NewData = (ILubyte*)ialloc(NumPix * BpcDest);
 		if (NewData == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 		memcpy(NewData, Data, NumPix * BpcDest);
@@ -1032,7 +1030,6 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 					NewData = (ILubyte*)ialloc(iCurImage->SizeOfData);
 					NewImage->Pal.Palette = (ILubyte*)ialloc(768);
 					if (NewData == NULL || NewImage->Pal.Palette) {
-						ilSetError(IL_OUT_OF_MEMORY);
 						ifree(NewImage);
 						return IL_FALSE;
 					}
@@ -1085,7 +1082,6 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 
 	NewData = (ILubyte*)ialloc(Size * BpcDest);
 	if (NewData == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 

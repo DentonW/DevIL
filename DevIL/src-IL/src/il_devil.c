@@ -22,7 +22,6 @@ ILAPI ILimage* ILAPIENTRY ilNewImage(ILuint Width, ILuint Height, ILuint Depth, 
 {
 	ILimage *Image = (ILimage*)ialloc(sizeof(ILimage));
 	if (Image == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return NULL;
 	}
 	Image->Width = Width == 0 ? 1 : Width;
@@ -72,7 +71,6 @@ ILAPI ILimage* ILAPIENTRY ilNewImage(ILuint Width, ILuint Height, ILuint Depth, 
 
 	Image->Data = (ILubyte*)ialloc(Image->SizeOfData);
 	if (Image->Data == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		ifree(Image);
 		return NULL;
 	}
@@ -133,7 +131,6 @@ ILAPI ILboolean ILAPIENTRY ilTexImage_(ILimage *Image, ILuint Width, ILuint Heig
 		ifree(Image->Data);
 	Image->Data = (ILubyte*)ialloc(Image->SizeOfData);
 	if (Image->Data == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 
@@ -544,7 +541,6 @@ ILAPI ILboolean ILAPIENTRY ilClearImage_(ILimage *Image)
 			ifree(Image->Pal.Palette);
 		Image->Pal.Palette = (ILubyte*)ialloc(4);
 		if (!Image->Pal.Palette) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 
@@ -758,7 +754,6 @@ ILboolean iCopySubImage(ILimage *Dest, ILimage *Src)
 		ilCopyImageAttr(DestTemp, SrcTemp);
 		DestTemp->Data = (ILubyte*)ialloc(SrcTemp->SizeOfData);
 		if (!DestTemp->Data) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 		memcpy(DestTemp->Data, SrcTemp->Data, SrcTemp->SizeOfData);
@@ -766,7 +761,6 @@ ILboolean iCopySubImage(ILimage *Dest, ILimage *Src)
 		if (SrcTemp->Next) {
 			DestTemp->Next = (ILimage*)calloc(1, sizeof(ILimage));
 			if (!DestTemp->Next) {
-				ilSetError(IL_OUT_OF_MEMORY);
 				return IL_FALSE;
 			}
 		}
@@ -785,7 +779,6 @@ ILboolean iCopySubImages(ILimage *Dest, ILimage *Src)
 	if (Src->Layers) {
 		Dest->Layers = (ILimage*)calloc(1, sizeof(ILimage));
 		if (!Dest->Layers) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 		if (!iCopySubImage(Dest->Layers, Src->Layers))
@@ -796,7 +789,6 @@ ILboolean iCopySubImages(ILimage *Dest, ILimage *Src)
 	if (Src->Mipmaps) {
 		Dest->Mipmaps = (ILimage*)calloc(1, sizeof(ILimage));
 		if (!Dest->Mipmaps) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 		if (!iCopySubImage(Dest->Mipmaps, Src->Mipmaps))
@@ -807,7 +799,6 @@ ILboolean iCopySubImages(ILimage *Dest, ILimage *Src)
 	if (Src->Next) {
 		Dest->Next = (ILimage*)calloc(1, sizeof(ILimage));
 		if (!Dest->Next) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 		if (!iCopySubImage(Dest->Next, Src->Next))
@@ -852,7 +843,6 @@ ILAPI ILboolean ILAPIENTRY ilCopyImageAttr(ILimage *Dest, ILimage *Src)
 	if (Src->AnimList && Src->AnimSize) {
 		Dest->AnimList = (ILuint*)ialloc(Src->AnimSize * sizeof(ILuint));
 		if (Dest->AnimList == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 		memcpy(Dest->AnimList, Src->AnimList, Src->AnimSize * sizeof(ILuint));
@@ -860,7 +850,6 @@ ILAPI ILboolean ILAPIENTRY ilCopyImageAttr(ILimage *Dest, ILimage *Src)
 	if (Src->Profile) {
 		Dest->Profile = (ILubyte*)ialloc(Src->ProfileSize);
 		if (Dest->Profile == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 		memcpy(Dest->Profile, Src->Profile, Src->ProfileSize);
@@ -869,7 +858,6 @@ ILAPI ILboolean ILAPIENTRY ilCopyImageAttr(ILimage *Dest, ILimage *Src)
 	if (Src->Pal.Palette) {
 		Dest->Pal.Palette = (ILubyte*)ialloc(Src->Pal.PalSize);
 		if (Dest->Pal.Palette == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 		memcpy(Dest->Pal.Palette, Src->Pal.Palette, Src->Pal.PalSize);
@@ -934,7 +922,6 @@ ILAPI ILimage* ILAPIENTRY ilCopyImage_(ILimage *Src)
 
 	Dest = ilNewImage(Src->Width, Src->Height, Src->Depth, Src->Bpp, Src->Bpc);
 	if (Dest == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return NULL;
 	}
 
@@ -1018,7 +1005,6 @@ ILAPI ILboolean ILAPIENTRY ilResizeImage(ILimage *Image, ILuint Width, ILuint He
 
 	Image->Data = (ILubyte*)ialloc(Image->SizeOfData);
 	if (Image->Data == NULL) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 

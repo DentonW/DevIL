@@ -299,7 +299,6 @@ ILimage *ilReadAsciiPpm(PPMINFO *Info)
 	Size = Info->Width * Info->Height * Info->Bpp;
 
 	if (!ilTexImage(Info->Width, Info->Height, 1, (ILubyte)(Info->Bpp), 0, IL_UNSIGNED_BYTE, NULL)) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
@@ -366,7 +365,6 @@ ILimage *ilReadBinaryPpm(PPMINFO *Info)
 	Size = Info->Width * Info->Height * Info->Bpp;
 
 	if (!ilTexImage(Info->Width, Info->Height, 1, (ILubyte)(Info->Bpp), 0, IL_UNSIGNED_BYTE, NULL)) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
@@ -396,7 +394,6 @@ ILimage *ilReadBitPbm(PPMINFO *Info)
 	BitFile = bfile(iGetFile());
 
 	if (!ilTexImage(Info->Width, Info->Height, 1, (ILubyte)(Info->Bpp), 0, IL_UNSIGNED_BYTE, NULL) || !BitFile) {
-		ilSetError(IL_OUT_OF_MEMORY);
 		return IL_FALSE;
 	}
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;

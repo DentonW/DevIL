@@ -61,7 +61,7 @@ END
 IDD_DIALOG_ABOUT DIALOGEX 0, 0, 278, 220
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "About DevIL"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,113,198,50,14
     GROUPBOX        "Info",IDC_STATIC,7,7,264,69
@@ -125,6 +125,29 @@ BEGIN
     EDITTEXT        IDC_BATCH_NEWEXT,21,66,44,14,ES_AUTOHSCROLL
 END
 
+IDD_DIALOG_PROPERTIES DIALOG DISCARDABLE  0, 0, 243, 158
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Image Properties"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,81,137,50,14
+    GROUPBOX        "Info",IDC_STATIC,7,7,229,119
+    LTEXT           "Filename:",IDC_STATIC,16,24,31,8
+    LTEXT           "Width:",IDC_STATIC,25,43,22,8
+    LTEXT           "Height:",IDC_STATIC,23,62,24,8
+    LTEXT           "Depth:",IDC_STATIC,25,81,22,8
+    LTEXT           "Filename",IDC_PROP_FILENAME,61,24,169,8
+    LTEXT           "Width",IDC_PROP_WIDTH,61,43,42,8
+    LTEXT           "Height",IDC_PROP_HEIGHT,61,62,42,8
+    LTEXT           "Depth",IDC_PROP_DEPTH,61,81,42,8
+    LTEXT           "Size:",IDC_STATIC,31,100,16,8
+    LTEXT           "Size",IDC_PROP_SIZE,61,100,41,8
+    LTEXT           "byte(s)",IDC_STATIC,111,100,22,8
+    LTEXT           "pixel(s)",IDC_STATIC,111,81,22,8
+    LTEXT           "pixel(s)",IDC_STATIC,111,62,22,8
+    LTEXT           "pixel(s)",IDC_STATIC,111,43,22,8
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -138,6 +161,7 @@ BEGIN
         MENUITEM "&Open...\tCtrl+O",            ID_FILE_LOAD
         MENUITEM "Open &URL...\tCtrl+U",        ID_FILE_OPENURL
         MENUITEM "&Save...\tCtrl+S",            ID_FILE_SAVE
+        MENUITEM "&Image Properties",           ID_FILE_PROPERTIES
         MENUITEM "&Print",                      ID_FILE_PRINT
         MENUITEM "E&xit\tEsc",                  ID_FILE_EXIT
     END
@@ -244,6 +268,14 @@ BEGIN
         RIGHTMARGIN, 193
         TOPMARGIN, 7
         BOTTOMMARGIN, 131
+    END
+
+    IDD_DIALOG_PROPERTIES, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 236
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 151
     END
 END
 #endif    // APSTUDIO_INVOKED

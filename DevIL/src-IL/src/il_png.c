@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2001 by Denton Woods
 // Last modified: 02/01/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/il_png.c
+// Filename: il/il_png.c
 //
 // Description: Portable network graphics file (.png) functions
 //
@@ -18,7 +18,7 @@
 #include "il_manip.h"
 
 #if PNG_LIBPNG_VER < 10200
-	#warning DevIL was designed with libpng 1.2.0 or higher in mind.  Consider upgrading at www.libpng.org
+	//#warning DevIL was designed with libpng 1.2.0 or higher in mind.  Consider upgrading at www.libpng.org
 #endif
 
 ILboolean	iIsValidPng(ILvoid);
@@ -162,7 +162,6 @@ ILboolean iLoadPngInternal()
 		iCurImage->Pal.PalType = IL_PAL_RGB24;  // just another guess...
 		iCurImage->Pal.Palette = (ILubyte*)ialloc(png_ptr->num_palette * 3);
 		if (iCurImage->Pal.Palette == NULL) {
-			ilSetError(IL_OUT_OF_MEMORY);
 			return IL_FALSE;
 		}
 		memcpy(iCurImage->Pal.Palette, png_ptr->palette, png_ptr->num_palette * 3);
