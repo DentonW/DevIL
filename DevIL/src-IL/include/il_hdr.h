@@ -22,7 +22,7 @@
 
 typedef struct HDRHEADER
 {
-	char Signature[11]; //must be "#?RADIANCE"
+	char Signature[10]; //must be "#?RADIANCE"
 	ILuint Width, Height;
 } IL_PACKSTRUCT HDRHEADER;
 
