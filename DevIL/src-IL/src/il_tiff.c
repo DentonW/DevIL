@@ -181,8 +181,8 @@ void errorHandler(const char* mod, const char* fmt, va_list ap)
 ILboolean iLoadTiffInternal()
 {
 	TIFF		*tif;
-	ILushort	bpp, photometric;
-	ILushort	*sampleinfo, extrasamples;
+	uint16	w, h, d, photometric, planarconfig;
+	uint16	samplesperpixel, bitspersample, *sampleinfo, extrasamples;
 	ILubyte		*pImageData;
 	ILuint		i, ProfileLen, DirCount = 0;
 	ILvoid		*Buffer;
@@ -201,8 +201,8 @@ ILboolean iLoadTiffInternal()
 	TIFFSetErrorHandler(NULL);
 
 	//for debugging only
-	TIFFSetWarningHandler(warningHandler);
-	TIFFSetErrorHandler(errorHandler);
+	//TIFFSetWarningHandler(warningHandler);
+	//TIFFSetErrorHandler(errorHandler);
 
 		tif = iTIFFOpen("r");
 		if (tif == NULL) {
@@ -211,10 +211,10 @@ ILboolean iLoadTiffInternal()
 	}
 
 	do {
-	    DirCount++;
+		DirCount++;
 	} while (TIFFReadDirectory(tif));
 
-
+/*
 	if (!ilTexImage(1, 1, 1, 1, IL_RGBA, IL_UNSIGNED_BYTE, NULL)) {
 		TIFFClose(tif);
 		return IL_FALSE;
@@ -229,45 +229,112 @@ ILboolean iLoadTiffInternal()
 		Image = Image->Next;
 	}
 	iCurImage->NumNext = DirCount - 1;
-
-	Image = iCurImage;
+*/
+	Image = NULL;
 	for (i = 0; i < DirCount; i++) {
 		TIFFSetDirectory(tif, (tdir_t)i);
-		TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &Image->Width);
-		TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &Image->Height);
-		TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &bpp);
+		TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
+		TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
+		TIFFGetFieldDefaulted(tif, TIFFTAG_IMAGEDEPTH, &d);
+		TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samplesperpixel);
+		TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &bitspersample);
+		TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES, &extrasamples, &sampleinfo);
 
 		//added 2003-08-31
 		//1 bpp tiffs are not neccessarily greyscale, they can
 		//have a palette (photometric == 3)...get this information
 		TIFFGetFieldDefaulted(tif, TIFFTAG_PHOTOMETRIC, &photometric);
+		TIFFGetFieldDefaulted(tif, TIFFTAG_PLANARCONFIG, &planarconfig);
+/*
+    //TODO: finish the manual greyscale/palette loading code
+		if (samplesperpixel - extrasamples == 1) { //luminance or palette
+			ILubyte* strip;
+			tsize_t stripsize;
+			ILuint y;
+			uint32 rowsperstrip;
 
-		if (bpp == 4) {
-			TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES, &extrasamples, &sampleinfo); 
-			if (!sampleinfo || sampleinfo[0] == EXTRASAMPLE_UNSPECIFIED) {
-				si = EXTRASAMPLE_ASSOCALPHA;
-				TIFFSetField(tif, TIFFTAG_EXTRASAMPLES, 1, &si);
+			if(!Image) {
+				if(!ilTexImage(w, h, 1, 1, IL_LUMINANCE, IL_UNSIGNED_BYTE, NULL)) {
+					TIFFClose(tif);
+					return IL_FALSE;
+				}
+				iCurImage->NumNext = 0;
+				Image = iCurImage;
 			}
-		}
+			else {
+				Image->Next = ilNewImage(w, h, 1, 1, 1);
+				if(Image->Next == NULL) {
+					TIFFClose(tif);
+					return IL_FALSE;
+				}
+				Image = Image->Next;
+				iCurImage->NumNext++;
+			}
 
-		if (!ilResizeImage(Image, Image->Width, Image->Height, 1, 4, 1)) {
-			TIFFClose(tif);
-			return IL_FALSE;
-		}
-		Image->Format = IL_RGBA;
-		Image->Type = IL_UNSIGNED_BYTE;
+			TIFFGetField(tif, TIFFTAG_ROWSPERSTRIP, &rowsperstrip);
+			stripsize = TIFFStripSize(tif);
 
-		// Siigron: added u_long cast to shut up compiler warning
-		//TODO: get paletted tiffs as not-rgba-data??
-		//2003-08-31: changed flag from 1 (exit on error) to 0 (keep decoding)
-		//this lets me view text.tif, but can give crashes with unsupported
-		//tiffs...
-		//2003-09-04: keep flag 1 for official version for now
-		if (!TIFFReadRGBAImage(tif, Image->Width, Image->Height, (uint32*)Image->Data, 1)) {
-			TIFFClose(tif);
-			ilSetError(IL_LIB_TIFF_ERROR);
-			return IL_FALSE;
+			strip = ialloc(stripsize);
+
+			for(y = 0; y < h; y += rowsperstrip) {
+				//if(y + rowsperstrip > h)
+				//	stripsize = (stripsize*(h - y))/rowsperstrip;
+				if (TIFFReadEncodedStrip(tif, TIFFComputeStrip(tif, y, 0), strip, stripsize) == -1) {
+					ilSetError(IL_LIB_TIFF_ERROR);
+					ifree(strip);
+					TIFFClose(tif);
+					return IL_FALSE;
+				}
+			}
+
+			ifree(strip);
 		}
+		else*/ {//rgb or rgba
+
+			if(!Image) {
+				if(!ilTexImage(w, h, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL)) {
+					TIFFClose(tif);
+					return IL_FALSE;
+				}
+				iCurImage->NumNext = 0;
+				Image = iCurImage;
+			}
+			else {
+				Image->Next = ilNewImage(w, h, 1, 4, 1);
+				if(Image->Next == NULL) {
+					TIFFClose(tif);
+					return IL_FALSE;
+				}
+				Image = Image->Next;
+				iCurImage->NumNext++;
+			}
+
+			if (samplesperpixel == 4) {
+				TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES, &extrasamples, &sampleinfo);
+				if (!sampleinfo || sampleinfo[0] == EXTRASAMPLE_UNSPECIFIED) {
+					si = EXTRASAMPLE_ASSOCALPHA;
+					TIFFSetField(tif, TIFFTAG_EXTRASAMPLES, 1, &si);
+				}
+			}
+/*
+			if (!ilResizeImage(Image, Image->Width, Image->Height, 1, 4, 1)) {
+				TIFFClose(tif);
+				return IL_FALSE;
+			}*/
+			Image->Format = IL_RGBA;
+			Image->Type = IL_UNSIGNED_BYTE;
+
+			// Siigron: added u_long cast to shut up compiler warning
+			//2003-08-31: changed flag from 1 (exit on error) to 0 (keep decoding)
+			//this lets me view text.tif, but can give crashes with unsupported
+			//tiffs...
+			//2003-09-04: keep flag 1 for official version for now
+			if (!TIFFReadRGBAImage(tif, Image->Width, Image->Height, (uint32*)Image->Data, 0)) {
+				TIFFClose(tif);
+				ilSetError(IL_LIB_TIFF_ERROR);
+				return IL_FALSE;
+			}
+		} //else rgb or rgba
 
 		if (TIFFGetField(tif, TIFFTAG_ICCPROFILE, &ProfileLen, &Buffer)) {
 			if (Image->Profile && Image->ProfileSize)
@@ -286,19 +353,19 @@ ILboolean iLoadTiffInternal()
 		}
 
 		Image->Origin = IL_ORIGIN_LOWER_LEFT;  // eiu...dunno if this is right
-
+/*
 		Image = Image->Next;
 		if (Image == NULL)  // Should never happen except when we reach the end, but check anyway.
-			break;
-	}
+			break;*/
+	} //for tiff directories
 
 	//TODO: put switch into the loop??
-	switch (bpp)
+	switch (samplesperpixel)
 	{
 		case 1:
 			//added 2003-08-31 to keep palettized tiffs colored
 			if(photometric != 3)
-			  ilConvertImage(IL_LUMINANCE, IL_UNSIGNED_BYTE);
+				ilConvertImage(IL_LUMINANCE, IL_UNSIGNED_BYTE);
 			else //strip alpha as tiff supports no alpha palettes
 				ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
 			break;
