@@ -12,6 +12,7 @@
 - Added support for the Paint Shop Pro file format (.psp).
 - Added the last bit of code to load TIFF files from memory buffers.
 - Fixed the out-of-date Intel JPEG Library support.
+- Rewrote .gif support.
 
 
 1.3.1
