@@ -297,7 +297,7 @@ ILboolean iLoadTiffInternal()
 
 			if (photometric == PHOTOMETRIC_PALETTE) { //read palette
 				uint16 *red, *green, *blue;
-				ILboolean is16bitpalette = IL_FALSE;
+				//ILboolean is16bitpalette = IL_FALSE;
 				ILubyte *entry;
 				uint32 count = 1 << bitspersample, j;
 
