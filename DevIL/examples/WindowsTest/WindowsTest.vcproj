@@ -3,8 +3,8 @@
 	ProjectType="Visual C++"
 	Version="7.00"
 	Name="WindowsTest"
-	ProjectGUID="{F1E90057-40E5-4650-8AC1-259AC327A9E1}"
-	Keyword="Win32Proj">
+	SccProjectName=""
+	SccLocalPath="">
 	<Platforms>
 		<Platform
 			Name="Win32"/>
@@ -12,33 +12,44 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="Debug"
-			IntermediateDirectory="Debug"
+			OutputDirectory=".\../bin/debug"
+			IntermediateDirectory=".\obj/debug"
 			ConfigurationType="1"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
-				MinimalRebuild="TRUE"
+				PreprocessorDefinitions="WIN32,_DEBUG,_WINDOWS"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="5"
-				UsePrecompiledHeader="0"
+				RuntimeLibrary="3"
+				PrecompiledHeaderFile=".\obj/debug/WindowsTest.pch"
+				AssemblerListingLocation=".\obj/debug/"
+				ObjectFile=".\obj/debug/"
+				ProgramDataBaseFileName=".\obj/debug/"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
+				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="4"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/WindowsTest.exe"
+				AdditionalOptions="/MACHINE:I386"
+				AdditionalDependencies="colorpicker.lib"
+				OutputFile=".\../bin/debug/WindowsTest.exe"
 				LinkIncremental="2"
+				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/WindowsTest.pdb"
-				SubSystem="2"
-				TargetMachine="1"/>
+				ProgramDatabaseFile=".\../bin/debug/WindowsTest.pdb"
+				SubSystem="2"/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="_DEBUG"
+				MkTypLibCompatible="TRUE"
+				SuppressStartupBanner="TRUE"
+				TargetEnvironment="1"
+				TypeLibraryName=".\../bin/debug/WindowsTest.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -46,7 +57,9 @@
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1033"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -54,36 +67,43 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="Release"
-			IntermediateDirectory="Release"
+			OutputDirectory=".\../bin"
+			IntermediateDirectory=".\obj"
 			ConfigurationType="1"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
 				InlineFunctionExpansion="1"
-				OmitFramePointers="TRUE"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
+				PreprocessorDefinitions="WIN32,NDEBUG,_WINDOWS"
 				StringPooling="TRUE"
-				RuntimeLibrary="4"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
-				UsePrecompiledHeader="0"
+				PrecompiledHeaderFile=".\obj/WindowsTest.pch"
+				AssemblerListingLocation=".\obj/"
+				ObjectFile=".\obj/"
+				ProgramDataBaseFileName=".\obj/"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"/>
+				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/WindowsTest.exe"
+				AdditionalOptions="/MACHINE:I386"
+				AdditionalDependencies="colorpicker.lib"
+				OutputFile=".\../bin/WindowsTest.exe"
 				LinkIncremental="1"
-				GenerateDebugInformation="FALSE"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="1"/>
+				SuppressStartupBanner="TRUE"
+				ProgramDatabaseFile=".\../bin/WindowsTest.pdb"
+				SubSystem="2"/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="TRUE"
+				SuppressStartupBanner="TRUE"
+				TargetEnvironment="1"
+				TypeLibraryName=".\../bin/WindowsTest.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -91,7 +111,9 @@
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -101,50 +123,29 @@
 	<Files>
 		<Filter
 			Name="Source Files"
-			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
+			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
-				RelativePath="BatchConv.cpp">
+				RelativePath=".\BatchConv.cpp">
 			</File>
 			<File
-				RelativePath="WindowsTest.cpp">
+				RelativePath=".\WindowsTest.cpp">
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc">
+			Filter="h;hpp;hxx;hm;inl">
 			<File
-				RelativePath="resource.h">
+				RelativePath=".\resource.h">
 			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
 			<File
-				RelativePath="resources\3d.ico">
+				RelativePath=".\resources\OpenIL Logo.ico">
 			</File>
 			<File
-				RelativePath="resources\bmp.ico">
-			</File>
-			<File
-				RelativePath="resources\gif.ico">
-			</File>
-			<File
-				RelativePath="resources\graphic.ico">
-			</File>
-			<File
-				RelativePath="resources\jpg.ico">
-			</File>
-			<File
-				RelativePath="resources\OpenIL Address Bar Logo.ico">
-			</File>
-			<File
-				RelativePath="resources\OpenIL Logo.ico">
-			</File>
-			<File
-				RelativePath="resources\psd.ico">
-			</File>
-			<File
-				RelativePath="WindowsTest.rc">
+				RelativePath=".\WindowsTest.rc">
 			</File>
 		</Filter>
 	</Files>

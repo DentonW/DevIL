@@ -3,45 +3,60 @@
 	ProjectType="Visual C++"
 	Version="7.00"
 	Name="IL"
-	ProjectGUID="{0ED493BD-A61D-49C5-B130-CC0AE0F2C1FA}"
-	Keyword="Win32Proj">
+	SccProjectName="IL"
+	SccLocalPath="..\..">
 	<Platforms>
 		<Platform
 			Name="Win32"/>
 	</Platforms>
 	<Configurations>
 		<Configuration
-			Name="Debug|Win32"
-			OutputDirectory="../../lib"
-			IntermediateDirectory="../src/obj/debug"
+			Name="Dynamic|Win32"
+			OutputDirectory=".\../../lib"
+			IntermediateDirectory=".\../src/obj/dynamic"
 			ConfigurationType="2"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="../include; ../../iflibs/libjpeg"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;IL_EXPORTS"
-				MinimalRebuild="TRUE"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				UsePrecompiledHeader="0"
+				Optimization="1"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="../include,../../extlibs/libjpeg"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;IL_EXPORTS;MNG_USE_DLL"
+				StringPooling="TRUE"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="TRUE"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile=".\../src/obj/dynamic/IL.pch"
+				AssemblerListingLocation=".\../src/obj/dynamic/"
+				ObjectFile=".\../src/obj/dynamic/"
+				ProgramDataBaseFileName=".\../src/obj/dynamic/"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="4"/>
+				SuppressStartupBanner="TRUE"
+				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/DevIL-d.dll"
-				LinkIncremental="2"
-				ModuleDefinitionFile="il.def"
-				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/IL.pdb"
-				SubSystem="2"
-				ImportLibrary="$(OutDir)/DevIL-d.lib"
-				TargetMachine="1"/>
+				AdditionalOptions="/MACHINE:I386"
+				AdditionalDependencies="delayimp.lib C:\DevIL\extlibs\lib\libmng.lib"
+				OutputFile="../../lib/DevIL-l.dll"
+				LinkIncremental="1"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="../../extlibs/lib"
+				ModuleDefinitionFile=".\il.def"
+				DelayLoadDLLs="libpng3.dll,lcms.dll"
+				ProgramDatabaseFile=".\../../lib/DevIL-l.pdb"
+				OptimizeForWindows98="1"
+				ImportLibrary=".\../../lib/DevIL-l.lib"/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="TRUE"
+				SuppressStartupBanner="TRUE"
+				TargetEnvironment="1"
+				TypeLibraryName=".\../../lib/IL.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine="..\..\projects\msvc\insdll.bat $(TargetPath)"/>
@@ -50,7 +65,9 @@
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -58,41 +75,49 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="../../lib"
-			IntermediateDirectory="../src/obj"
+			OutputDirectory=".\../../lib"
+			IntermediateDirectory=".\../src/obj"
 			ConfigurationType="2"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="1"
 				InlineFunctionExpansion="1"
-				FavorSizeOrSpeed="2"
-				OmitFramePointers="TRUE"
-				AdditionalIncludeDirectories="../include; ../../iflibs/libjpeg"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;IL_EXPORTS"
+				AdditionalIncludeDirectories="../include,../../extlibs/libjpeg"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;IL_EXPORTS;IL_STATIC_LIB;MNG_USE_DLL"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile=".\../src/obj/IL.pch"
+				AssemblerListingLocation=".\../src/obj/"
+				ObjectFile=".\../src/obj/"
+				ProgramDataBaseFileName=".\../src/obj/"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"
-				CompileAs="1"/>
+				SuppressStartupBanner="TRUE"
+				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/DevIL.dll"
+				AdditionalOptions="/MACHINE:I386"
+				OutputFile="../../lib/DevIL.dll"
 				LinkIncremental="1"
-				ModuleDefinitionFile="il.def"
-				GenerateDebugInformation="FALSE"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				ImportLibrary="$(OutDir)/DevIL.lib"
-				TargetMachine="1"/>
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="../../extlibs/lib"
+				ModuleDefinitionFile=".\il.def"
+				ProgramDatabaseFile=".\../../lib/DevIL.pdb"
+				OptimizeForWindows98="1"
+				ImportLibrary=".\../../lib/DevIL.lib"/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="TRUE"
+				SuppressStartupBanner="TRUE"
+				TargetEnvironment="1"
+				TypeLibraryName=".\../../lib/IL.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine="..\..\projects\msvc\insdll.bat $(TargetPath)"/>
@@ -101,7 +126,70 @@
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+		</Configuration>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory=".\../../lib/debug"
+			IntermediateDirectory=".\../src/obj/debug"
+			ConfigurationType="2"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="../include,../../extlibs/libjpeg"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;IL_EXPORTS"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile=".\../src/obj/debug/IL.pch"
+				AssemblerListingLocation=".\../src/obj/debug/"
+				ObjectFile=".\../src/obj/debug/"
+				ProgramDataBaseFileName=".\../src/obj/debug/"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				DebugInformationFormat="4"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalOptions="/MACHINE:I386"
+				AdditionalDependencies="odbc32.lib odbccp32.lib"
+				OutputFile="../../lib/debug/DevIL-d.dll"
+				LinkIncremental="2"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="../../extlibs/lib/debug"
+				ModuleDefinitionFile=".\il.def"
+				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile=".\../../lib/debug/DevIL-d.pdb"
+				ImportLibrary=".\../../lib/debug/DevIL-d.lib"/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="_DEBUG"
+				MkTypLibCompatible="TRUE"
+				SuppressStartupBanner="TRUE"
+				TargetEnvironment="1"
+				TypeLibraryName=".\../../lib/debug/IL.tlb"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="..\..\projects\msvc\insdll.bat $(TargetPath)"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1033"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -111,9 +199,9 @@
 	<Files>
 		<Filter
 			Name="Source Files"
-			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
+			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
-				RelativePath="il.def">
+				RelativePath=".\il.def">
 			</File>
 			<File
 				RelativePath="..\src\il_alloc.c">
@@ -135,6 +223,9 @@
 			</File>
 			<File
 				RelativePath="..\src\il_dcx.c">
+			</File>
+			<File
+				RelativePath="..\src\il_dds-save.c">
 			</File>
 			<File
 				RelativePath="..\src\il_dds.c">
@@ -256,9 +347,9 @@
 		</Filter>
 		<Filter
 			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc">
+			Filter="h;hpp;hxx;hm;inl">
 			<File
-				RelativePath="..\..\include\IL\il.h">
+				RelativePath="..\..\include\il\il.h">
 			</File>
 			<File
 				RelativePath="..\include\il_alloc.h">
@@ -341,23 +432,20 @@
 			<File
 				RelativePath="..\include\il_targa.h">
 			</File>
-			<File
-				RelativePath="resource.h">
-			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
 			<File
-				RelativePath="resources\IL Logo.ico">
+				RelativePath=".\resources\IL Logo.ico">
 			</File>
 			<File
-				RelativePath="IL.rc">
+				RelativePath=".\IL.rc">
 			</File>
 		</Filter>
 		<Filter
 			Name="Text Files"
-			Filter="">
+			Filter="txt">
 			<File
 				RelativePath="..\..\AUTHORS">
 			</File>
@@ -371,7 +459,7 @@
 				RelativePath="..\..\ChangeLog">
 			</File>
 			<File
-				RelativePath="..\..\Libraries.txt">
+				RelativePath="..\..\MSVC++.txt">
 			</File>
 			<File
 				RelativePath="..\..\README.unix">
@@ -381,6 +469,9 @@
 			</File>
 			<File
 				RelativePath="..\..\VERSION">
+			</File>
+			<File
+				RelativePath="..\..\libraries.txt">
 			</File>
 		</Filter>
 	</Files>

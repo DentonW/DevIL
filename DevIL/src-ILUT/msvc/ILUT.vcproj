@@ -3,46 +3,58 @@
 	ProjectType="Visual C++"
 	Version="7.00"
 	Name="ILUT"
-	ProjectGUID="{7703E5F1-DE8D-4F65-A09D-0F991246431E}"
-	Keyword="Win32Proj">
+	SccProjectName="ILUT"
+	SccLocalPath="..\..">
 	<Platforms>
 		<Platform
 			Name="Win32"/>
 	</Platforms>
 	<Configurations>
 		<Configuration
-			Name="Debug|Win32"
-			OutputDirectory="../../lib"
-			IntermediateDirectory="../src/obj/debug"
+			Name="Dynamic|Win32"
+			OutputDirectory=".\../../lib"
+			IntermediateDirectory=".\../src/obj/dynamic"
 			ConfigurationType="2"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="../include; ../../iflibs/libjpeg"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;ILUT_EXPORTS"
-				MinimalRebuild="TRUE"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				UsePrecompiledHeader="0"
+				Optimization="1"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="../include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ILUT_EXPORTS"
+				StringPooling="TRUE"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="TRUE"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile=".\../src/obj/dynamic/ILUT.pch"
+				AssemblerListingLocation=".\../src/obj/dynamic/"
+				ObjectFile=".\../src/obj/dynamic/"
+				ProgramDataBaseFileName=".\../src/obj/dynamic/"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="4"/>
+				SuppressStartupBanner="TRUE"
+				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="devil-d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib"
-				OutputFile="$(OutDir)/ILUT-d.dll"
-				LinkIncremental="2"
-				ModuleDefinitionFile="ilut.def"
-				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/ILUT.pdb"
-				SubSystem="2"
-				ImportLibrary="$(OutDir)/ILUT-d.lib"
-				TargetMachine="1"/>
+				AdditionalOptions="/MACHINE:I386"
+				AdditionalDependencies="delayimp.lib odbc32.lib odbccp32.lib"
+				OutputFile="../../lib/ilut-l.dll"
+				LinkIncremental="1"
+				SuppressStartupBanner="TRUE"
+				ModuleDefinitionFile=".\ilut.def"
+				DelayLoadDLLs="d3d8.dll,sdl.dll"
+				ProgramDatabaseFile=".\../../lib/ilut-l.pdb"
+				ImportLibrary=".\../../lib/ilut-l.lib"/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="TRUE"
+				SuppressStartupBanner="TRUE"
+				TargetEnvironment="1"
+				TypeLibraryName=".\../../lib/ILUT.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine="..\..\projects\msvc\insdll.bat $(TargetPath)"/>
@@ -51,7 +63,9 @@
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -59,40 +73,49 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="../../lib"
-			IntermediateDirectory="../src/obj"
+			OutputDirectory=".\../../lib"
+			IntermediateDirectory=".\../src/obj"
 			ConfigurationType="2"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="1"
 				InlineFunctionExpansion="1"
-				OmitFramePointers="TRUE"
-				AdditionalIncludeDirectories="../include; ../../iflibs/libjpeg"
+				AdditionalIncludeDirectories="../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ILUT_EXPORTS"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile=".\../src/obj/ILUT.pch"
+				AssemblerListingLocation=".\../src/obj/"
+				ObjectFile=".\../src/obj/"
+				ProgramDataBaseFileName=".\../src/obj/"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"/>
+				SuppressStartupBanner="TRUE"
+				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="devil.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib"
-				OutputFile="$(OutDir)/ILUT.dll"
+				AdditionalOptions="/MACHINE:I386"
+				AdditionalDependencies="delayimp.lib odbc32.lib odbccp32.lib"
+				OutputFile=".\../../lib/ILUT.dll"
 				LinkIncremental="1"
-				ModuleDefinitionFile="ilut.def"
-				GenerateDebugInformation="TRUE"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				ImportLibrary="$(OutDir)/ILUT.lib"
-				TargetMachine="1"/>
+				SuppressStartupBanner="TRUE"
+				ModuleDefinitionFile=".\ilut.def"
+				DelayLoadDLLs="d3d8.dll,sdl.dll"
+				ProgramDatabaseFile=".\../../lib/ILUT.pdb"
+				ImportLibrary=".\../../lib/ILUT.lib"/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="TRUE"
+				SuppressStartupBanner="TRUE"
+				TargetEnvironment="1"
+				TypeLibraryName=".\../../lib/ILUT.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine="..\..\projects\msvc\insdll.bat $(TargetPath)"/>
@@ -101,7 +124,70 @@
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+		</Configuration>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory=".\../../lib/debug"
+			IntermediateDirectory=".\../src/obj/debug"
+			ConfigurationType="2"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="../include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;ILUT_EXPORTS"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile=".\../src/obj/debug/ILUT.pch"
+				AssemblerListingLocation=".\../src/obj/debug/"
+				ObjectFile=".\../src/obj/debug/"
+				ProgramDataBaseFileName=".\../src/obj/debug/"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				DebugInformationFormat="4"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalOptions="/MACHINE:I386"
+				AdditionalDependencies="delayimp.lib odbc32.lib odbccp32.lib"
+				OutputFile="../../lib/debug/ilut-d.dll"
+				LinkIncremental="2"
+				SuppressStartupBanner="TRUE"
+				ModuleDefinitionFile=".\ilut.def"
+				DelayLoadDLLs="d3d8.dll,sdl.dll"
+				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile=".\../../lib/debug/ilut-d.pdb"
+				ImportLibrary=".\../../lib/debug/ilut-d.lib"/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="_DEBUG"
+				MkTypLibCompatible="TRUE"
+				SuppressStartupBanner="TRUE"
+				TargetEnvironment="1"
+				TypeLibraryName=".\../../lib/debug/ILUT.tlb"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="..\..\projects\msvc\insdll.bat $(TargetPath)"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1033"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -111,12 +197,9 @@
 	<Files>
 		<Filter
 			Name="Source Files"
-			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
+			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
-				RelativePath="ilut.def">
-			</File>
-			<File
-				RelativePath="..\src\ilut_allegro.c">
+				RelativePath=".\ilut.def">
 			</File>
 			<File
 				RelativePath="..\src\ilut_directx.c">
@@ -142,9 +225,9 @@
 		</Filter>
 		<Filter
 			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc">
+			Filter="h;hpp;hxx;hm;inl">
 			<File
-				RelativePath="..\..\include\IL\ilut.h">
+				RelativePath="..\..\include\il\ilut.h">
 			</File>
 			<File
 				RelativePath="..\include\ilut_allegro.h">
@@ -162,17 +245,17 @@
 				RelativePath="..\include\ilut_states.h">
 			</File>
 			<File
-				RelativePath="resource.h">
+				RelativePath=".\resource.h">
 			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
 			<File
-				RelativePath="resources\IL Logo.ico">
+				RelativePath=".\resources\IL Logo.ico">
 			</File>
 			<File
-				RelativePath="ILUT.rc">
+				RelativePath=".\ILUT.rc">
 			</File>
 		</Filter>
 	</Files>

@@ -466,7 +466,7 @@ ILboolean ILAPIENTRY ilutGetWinClipboard()
 
 ILboolean ILAPIENTRY ilutWinPrint(ILuint XPos, ILuint YPos, ILuint Width, ILuint Height, HDC hDC)
 {
-#if !_WIN32_WCE && !(_WIN32 && __GNUC__)
+#if !defined(_WIN32_WCE) && !(defined(_WIN32) && defined(__GNUC__))
 	PRINTDLG	Pd;
 	DOCINFO		Di;
 	HBITMAP		Bitmap, hReplaced;
@@ -528,7 +528,7 @@ ILboolean ILAPIENTRY ilutLoadResource(HINSTANCE hInst, ILint ID, const ILstring 
 }
 
 
-#if !_WIN32_WCE && !(_WIN32 && __GNUC__)
+#if !defined(_WIN32_WCE) && !(defined(_WIN32) && defined(__GNUC__))
 #define BUFFSIZE 8192  // Change to suit the efficiency.
 ILboolean ILAPIENTRY ilutWinLoadUrl(const ILstring Url)
 {
