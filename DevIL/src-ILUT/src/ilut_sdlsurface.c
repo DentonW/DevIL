@@ -49,7 +49,7 @@ ILpal *Pal;
 SDL_Surface * ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags)
 {
 	SDL_Surface *Bitmap;
-	ILuint	i = 0, j = 0, Pad, BppPal;
+	ILuint	i = 0, Pad, BppPal;
 	ILubyte	*Dest;
 
 	ilutCurImage = ilGetCurImage();
