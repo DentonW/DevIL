@@ -130,6 +130,7 @@ ILboolean ILAPIENTRY ilApplyProfile(const ILstring InProfile, const ILstring Out
 		cmsCloseProfile(hInProfile);
 	cmsCloseProfile(hOutProfile);
 
-	return IL_TRUE;
 #endif//IL_NO_LCMS
+
+	return IL_TRUE;
 }

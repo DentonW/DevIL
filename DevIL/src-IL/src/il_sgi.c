@@ -91,16 +91,6 @@ ILvoid iGetSgiHead(iSgiHeader *Header)
 	Header->ColMap = GetBigInt();
 	iread(&Header->Dummy, 1, 404);
 
-	printf ("%s\n",FName);
-	printf ("\tStorage %d\n",Header->Storage);
-	printf ("\tBPC %d\n",Header->Bpc);
-	printf ("\tDim %d\n",Header->Dim);
-	printf ("\tSize ( %d x %d x %d )\n",
-			Header->XSize,Header->YSize,Header->ZSize);
-	printf ("\tPixmin, Pixmax %d , %d\n",Header->PixMin,Header->PixMax);
-	printf ("\tDummy1, %d\n",Header->Dummy1);
-	printf ("\tName, %s\n",Header->Name);
-	printf ("\tColmap, %d\n",Header->ColMap);
 	return;
 }
 
