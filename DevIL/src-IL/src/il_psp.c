@@ -348,18 +348,20 @@ ILboolean ReadLayerBlock(ILuint BlockLen)
 		return IL_FALSE;
 	}
 
-	for (i = 0; i < Bitmap.NumChannels; i++) {
+	/*for (i = 0; i < Bitmap.NumChannels; i++) {
 		Channels[i] = (ILubyte*)ialloc(LayerInfo.ImageRect.x2 * LayerInfo.ImageRect.y2);
 		if (Channels[i] == NULL) {
 			ifree(Channels);
 			return IL_FALSE;
 		}
-	}
+	}*/
 
 	NumChannels = Bitmap.NumChannels;
 
 	for (i = 0; i < NumChannels; i++) {
 		Channels[i] = GetChannel();
+		if (Channels[i] == NULL)
+			return IL_FALSE;
 	}
 
 	return IL_TRUE;
@@ -423,14 +425,15 @@ ILboolean ReadAlphaBlock(ILuint BlockLen)
 	}
 
 
-	Alpha = (ILubyte*)ialloc(AlphaInfo.AlphaRect.x2 * AlphaInfo.AlphaRect.y2);
+	/*Alpha = (ILubyte*)ialloc(AlphaInfo.AlphaRect.x2 * AlphaInfo.AlphaRect.y2);
 	if (Alpha == NULL) {
 		return IL_FALSE;
-	}
+	}*/
 
 
 	Alpha = GetChannel();
-
+	if (Alpha == NULL)
+		return IL_FALSE;
 
 	return IL_TRUE;
 }
@@ -452,10 +455,13 @@ ILubyte *GetChannel()
 
 	if (Block.HeadID[0] != 0x7E || Block.HeadID[1] != 0x42 ||
 		Block.HeadID[2] != 0x4B || Block.HeadID[3] != 0x00) {
+			ilSetError(IL_ILLEGAL_FILE_VALUE);
 			return NULL;
 	}
-	if (Block.BlockID != PSP_CHANNEL_BLOCK)
+	if (Block.BlockID != PSP_CHANNEL_BLOCK) {
+		ilSetError(IL_ILLEGAL_FILE_VALUE);
 		return NULL;
+	}
 
 
 	if (Header.MajorVersion >= 4) {
@@ -486,7 +492,8 @@ ILubyte *GetChannel()
 			break;
 
 		case PSP_COMP_RLE:
-			UncompRLE(CompData, Data, Channel.CompLen);
+			if (!UncompRLE(CompData, Data, Channel.CompLen))
+				return IL_FALSE;
 			break;
 
 		default:

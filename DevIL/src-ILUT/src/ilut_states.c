@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Toolkit Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 08/30/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 05/18/2002 <--Y2K Compliant! =]
 //
-// Filename: openilut/states.c
+// Filename: src-ILUT/src/ilut_states.c
 //
 // Description: The state machine
 //
@@ -17,7 +17,7 @@
 
 
 const char *_ilutVendor		= "Abysmal Software";
-const char *_ilutVersion	= "Developer's Image Library Utility Toolkit (ILUT) 1.4.0";
+const char *_ilutVersion	= "Developer's Image Library Utility Toolkit (ILUT) 1.4.2";
 
 
 // Set all states to their defaults

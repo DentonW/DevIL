@@ -41,6 +41,16 @@ typedef struct IMAGEDESC
 	ILushort	Height;
 	ILubyte		ImageInfo;
 } IL_PACKSTRUCT IMAGEDESC;
+
+typedef struct GFXCONTROL
+{
+	ILubyte		Size;
+	ILubyte		Packed;
+	ILushort	Delay;
+	ILubyte		Transparent;
+	ILubyte		Terminator;
+	ILboolean	Used;
+} IL_PACKSTRUCT GFXCONTROL;
 #ifdef _WIN32
 	#pragma pack(pop, gif_struct)
 #endif
@@ -51,9 +61,10 @@ ILboolean ilLoadGifF(ILHANDLE File);
 ILboolean iIsValidGif(ILvoid);
 ILboolean GetPalette(ILubyte Info, ILpal *Pal);
 ILboolean GetImages(ILpal *GlobalPal);
-ILboolean SkipExtensions(ILvoid);
-ILboolean GifGetData(ILvoid);
+ILboolean SkipExtensions(GFXCONTROL *Gfx);
+ILboolean GifGetData(ILubyte *Data);
 ILboolean RemoveInterlace(ILvoid);
 ILboolean CopyPalette(ILpal *Dest, ILpal *Src);
+ILboolean ConvertTransparent(ILimage *Image, ILubyte TransColour);
 
 #endif//GIF_H

@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 02/02/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/il_states.c
+// Filename: src-IL/src/il_states.c
 //
 // Description: State machine
 //
@@ -17,7 +17,7 @@
 #include <stdlib.h>
 
 const ILstring _ilVendor	= IL_TEXT("Abysmal Software");
-const ILstring _ilVersion	= IL_TEXT("Developer's Image Library (DevIL) 1.4.0");
+const ILstring _ilVersion	= IL_TEXT("Developer's Image Library (DevIL) 1.4.2");
 
 
 //! Set all states to their defaults.

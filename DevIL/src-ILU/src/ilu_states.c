@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 10/12/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 05/18/2002 <--Y2K Compliant! =]
 //
-// Filename: openilu/states.c
+// Filename: src-ILU/src/ilu_states.c
 //
 // Description: The state machine
 //
@@ -16,8 +16,8 @@
 #include "ilu_alloc.h"
 
 
-const ILstring _iluVendor		= IL_TEXT("Abysmal Software");
-const ILstring _iluVersion		= IL_TEXT("Developer's Image Library Utilities (ILU) 1.4.0");
+const ILstring _iluVendor	= IL_TEXT("Abysmal Software");
+const ILstring _iluVersion	= IL_TEXT("Developer's Image Library Utilities (ILU) 1.4.2");
 
 
 const ILstring ILAPIENTRY iluGetString(ILenum StringName)

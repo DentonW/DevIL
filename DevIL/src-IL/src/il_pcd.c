@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 05/18/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/pcd.c
+// Filename: src-IL/src/il_pcd.c
 //
 // Description: Reads from a Kodak PhotoCD (.pcd) file.
 //		Note:  The code here is sloppy - I had to convert it from Pascal,

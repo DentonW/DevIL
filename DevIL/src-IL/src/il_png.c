@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
+// Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 02/01/2002 <--Y2K Compliant! =]
 //
-// Filename: il/il_png.c
+// Filename: src-IL/src/il_png.c
 //
 // Description: Portable network graphics file (.png) functions
 //

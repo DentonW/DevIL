@@ -8,8 +8,9 @@
 //
 // Description: Reads from a Graphics Interchange Format (.gif) file.
 //
-//  This code is based on code released to the public domain by Javier Arevalo
-//    that can be found at http://www.programmersheaven.com/zone10/cat452/
+//  The LZW decompression code is based on code released to the public domain
+//    by Javier Arevalo and can be found at
+//    http://www.programmersheaven.com/zone10/cat452
 //
 //-----------------------------------------------------------------------------
 
@@ -146,6 +147,8 @@ ILboolean iLoadGifInternal()
 		return IL_FALSE;
 	}
 
+	GlobalPal.Palette = NULL;
+	GlobalPal.PalSize = 0;
 	iread(&Header, sizeof(Header), 1);
 
 	if (!strnicmp(Header.Sig, "GIF87A", 6)) {
@@ -164,12 +167,18 @@ ILboolean iLoadGifInternal()
 
 	// Check for a global colour map.
 	if (Header.ColourInfo & (1 << 7)) {
-		if (!GetPalette(Header.ColourInfo, &GlobalPal))
+		if (!GetPalette(Header.ColourInfo, &GlobalPal)) {
 			return IL_FALSE;
+		}
 	}
 
 	if (!GetImages(&GlobalPal))
 		return IL_FALSE;
+
+	if (GlobalPal.Palette && GlobalPal.PalSize)
+		ifree(GlobalPal.Palette);
+	GlobalPal.Palette = NULL;
+	GlobalPal.PalSize = 0;
 
 	ilFixImage();
 
@@ -193,52 +202,122 @@ ILboolean GetPalette(ILubyte Info, ILpal *Pal)
 ILboolean GetImages(ILpal *GlobalPal)
 {
 	IMAGEDESC	ImageDesc;
+	GFXCONTROL	Gfx;
+	ILboolean	BaseImage = IL_TRUE;
+	ILimage		*Image = iCurImage;
+	ILuint		NumImages = 0, i;
+	ILubyte		*TempData;
+
+	Gfx.Used = IL_TRUE;
+
+	while (!ieof()) {
+		if (!SkipExtensions(&Gfx))
+			return IL_FALSE;
+
+		// Either of these means that we've reached the end of the data stream.
+		if (iread(&ImageDesc, sizeof(ImageDesc), 1) != 1)
+			break;
+		if (ImageDesc.Separator != 0x2C)
+			break;
 
 
-	if (!SkipExtensions())
-		return IL_FALSE;
+		if (!BaseImage) {
+			NumImages++;
+			Image->Next = ilNewImage(iCurImage->Width, iCurImage->Height, 1, 1, 1);
+			if (!Image->Next)
+				return IL_FALSE;
 
-	iread(&ImageDesc, sizeof(ImageDesc), 1);
+			//if ((Gfx.Packed & 0x1C) >> 2 == 1)
+			memcpy(Image->Next->Data, Image->Data, Image->SizeOfData);
 
-	if (ImageDesc.ImageInfo & (1 << 7)) {
-		if (!GetPalette(ImageDesc.ImageInfo, &iCurImage->Pal)) {
+			if (ImageDesc.Width != iCurImage->Width || ImageDesc.Height != iCurImage->Height) {
+				TempData = (ILubyte*)ialloc(ImageDesc.Width * ImageDesc.Height);
+				if (TempData == NULL) {
+					// @TODO:  Clean up more thoroughly here?
+					return IL_FALSE;
+				}
+			}
+			else {
+				TempData = Image->Next->Data;
+			}
+
+			Image = Image->Next;
+			Image->Format = IL_COLOUR_INDEX;
+			Image->Origin = IL_ORIGIN_UPPER_LEFT;
+		}
+		else {
+			BaseImage = IL_FALSE;
+			TempData = iCurImage->Data;
+		}
+
+		Image->OffX = ImageDesc.OffX;
+		Image->OffY = ImageDesc.OffY;
+
+
+		// Check to see if the image has its own palette.
+		if (ImageDesc.ImageInfo & (1 << 7)) {
+			if (!GetPalette(ImageDesc.ImageInfo, &iCurImage->Pal)) {
+				return IL_FALSE;
+			}
+		}
+		else {
+			if (!CopyPalette(&Image->Pal, GlobalPal)) {
+				return IL_FALSE;
+			}
+		}
+
+
+		if (!GifGetData(TempData)) {
+			ilSetError(IL_ILLEGAL_FILE_VALUE);
 			return IL_FALSE;
 		}
-	}
-	else {
-		if (!CopyPalette(&iCurImage->Pal, GlobalPal)) {
-			return IL_FALSE;
+
+		if (TempData != Image->Data) {
+			for (i = 0; i < ImageDesc.Height; i++) {
+				memcpy(&Image->Data[(Image->OffY + i) * Image->Width + Image->OffX],
+					&TempData[i * ImageDesc.Width], ImageDesc.Width);
+			}
+
+			ifree(TempData);
 		}
+
+		if (ImageDesc.ImageInfo & (1 << 6)) {  // Image is interlaced.
+			if (!RemoveInterlace())
+				return IL_FALSE;
+		}
+
+		// See if there was a valid graphics control extension.
+		if (!Gfx.Used) {
+			Gfx.Used = IL_TRUE;
+			Image->Duration = Gfx.Delay * 10;  // We want it in milliseconds.
+
+			// See if a transparent colour is defined.
+			if (Gfx.Packed & 1) {
+				if (!ConvertTransparent(Image, Gfx.Transparent)) {
+					return IL_FALSE;
+				}
+			}
+		}
+
+		// Terminates each block.
+		if (igetc() != 0x00)
+			break;
 	}
 
-
-	if (!SkipExtensions())
-		return IL_FALSE;
-
-	if (!GifGetData()) {
-		ilSetError(IL_ILLEGAL_FILE_VALUE);
-		return IL_FALSE;
-	}
-
-	if (ImageDesc.ImageInfo & (1 << 6)) {  // Image is interlaced.
-		if (!RemoveInterlace())
-			return IL_FALSE;
-	}
-
-
+	iCurImage->NumNext = NumImages;
 
 	return IL_TRUE;
 }
 
 
-ILboolean SkipExtensions()
+ILboolean SkipExtensions(GFXCONTROL *Gfx)
 {
 	static ILint	Code;
 	static ILint	Label;
 	static ILint	Size;
 
 	if (GifType == GIF87A)
-		return IL_TRUE;  // No extensions in the gif87a format.
+		return IL_TRUE;  // No extensions in the GIF87a format.
 
 	do {
 		Code = igetc();
@@ -248,19 +327,34 @@ ILboolean SkipExtensions()
 		}
 
 		Label = igetc();
-		/*if (Label != 0xF9 && Label != 0xFE && Label != 0x01) {
-			ilSetError(IL_ILLEGAL_FILE_VALUE);
-			return IL_FALSE;
-		}*/
 
-		do {
-			Size = igetc();
-			iseek(Size, IL_SEEK_CUR);
-		} while (Size != -1 && Size != 0);
+		switch (Label)
+		{
+			case 0xF9:
+				if (iread(Gfx, sizeof(GFXCONTROL) - sizeof(ILboolean), 1) != 1) {
+					ilSetError(IL_FILE_READ_ERROR);
+					return IL_FALSE;
+				}
+				Gfx->Used = IL_FALSE;
+
+				break;
+
+			/*case 0xFE:
+				break;
+
+			case 0x01:
+				break;*/
+
+			default:
+				do {
+					Size = igetc();
+					iseek(Size, IL_SEEK_CUR);
+				} while (!ieof() && Size != 0);
+		}
 
 		// @TODO:  Handle this better.
-		if (Size == -1) {
-			ilSetError(IL_ILLEGAL_FILE_VALUE);
+		if (ieof()) {
+			ilSetError(IL_FILE_READ_ERROR);
 			return IL_FALSE;
 		}
 	} while (1);
@@ -333,13 +427,12 @@ ILint get_next_code(void)
 }
 
 
-ILboolean GifGetData()
+ILboolean GifGetData(ILubyte *Data)
 {
 	ILubyte	*sp;
 	ILint	code, fc, oc;
 	ILubyte	size;
 	ILint	c;
-	ILubyte	*Data = iCurImage->Data;
 
 	size = igetc();
 	if (size < 2 || 9 < size) {
@@ -423,13 +516,11 @@ ILboolean GifGetData()
 ILboolean RemoveInterlace()
 {
 	ILubyte *NewData;
-	ILuint	i, j;
+	ILuint	i, j = 0;
 
 	NewData = (ILubyte*)ialloc(iCurImage->SizeOfData);
 	if (NewData == NULL)
 		return IL_FALSE;
-
-	j = 0;
 
 	for (i = 0; i < iCurImage->Height; i += 8, j++) {
 		memcpy(&NewData[i * iCurImage->Bps], &iCurImage->Data[j * iCurImage->Bps], iCurImage->Bps);
@@ -472,5 +563,38 @@ ILboolean CopyPalette(ILpal *Dest, ILpal *Src)
 	return IL_TRUE;
 }
 
+
+// Uses the transparent colour index to make an alpha channel.
+ILboolean ConvertTransparent(ILimage *Image, ILubyte TransColour)
+{
+	ILubyte	*Palette;
+	ILuint	i, j;
+
+	if (!Image->Pal.Palette || !Image->Pal.PalSize) {
+		ilSetError(IL_INTERNAL_ERROR);
+		return IL_FALSE;
+	}
+
+	Palette = (ILubyte*)ialloc(Image->Pal.PalSize / 3 * 4);
+	if (Palette == NULL)
+		return IL_FALSE;
+
+	for (i = 0, j = 0; i < Image->Pal.PalSize; i += 3, j += 4) {
+		Palette[j  ] = Image->Pal.Palette[i  ];
+		Palette[j+1] = Image->Pal.Palette[i+1];
+		Palette[j+2] = Image->Pal.Palette[i+2];
+		if (j/4 == TransColour)
+			Palette[j+3] = 0x00;
+		else
+			Palette[j+3] = 0xFF;
+	}
+
+	ifree(Image->Pal.Palette);
+	Image->Pal.Palette = Palette;
+	Image->Pal.PalSize = Image->Pal.PalSize / 3 * 4;
+	Image->Pal.PalType = IL_PAL_RGBA32;
+
+	return IL_TRUE;
+}
 
 #endif //IL_NO_GIF
