@@ -275,6 +275,13 @@ typedef void ILvoid;
 #define IL_INTERLACE_MODE					0x063A
 
 
+// Quantization definitions
+#define IL_QUANTIZATION_MODE				0x0640
+#define IL_WU_QUANT							0x0641
+#define IL_NEU_QUANT						0x0642
+#define IL_NEU_QUANT_SAMPLE					0x0643
+
+
 // Hints
 #define IL_FASTEST							0x0660
 #define IL_LESS_MEM							0x0661

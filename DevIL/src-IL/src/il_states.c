@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 08/30/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 02/02/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/states.c
+// Filename: openil/il_states.c
 //
 // Description: State machine
 //
@@ -48,6 +48,9 @@ ILvoid ilDefaultStates()
 	ilStates[ilCurrentPos].ilPngAuthName = NULL;
 	ilStates[ilCurrentPos].ilPngTitle = NULL;
 	ilStates[ilCurrentPos].ilPngDescription = NULL;
+
+	ilStates[ilCurrentPos].ilQuantMode = IL_WU_QUANT;
+	ilStates[ilCurrentPos].ilNeuSample = 15;
 
 
 
@@ -333,6 +336,13 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 		case IL_INTERLACE_MODE:
 			*Param = ilStates[ilCurrentPos].ilInterlace;
 			break;
+		case IL_QUANTIZATION_MODE:
+			*Param = ilStates[ilCurrentPos].ilQuantMode;
+			break;
+		case IL_NEU_QUANT_SAMPLE:
+			*Param = ilStates[ilCurrentPos].ilNeuSample;
+			break;
+
 		case IL_IMAGE_WIDTH:
 			if (iCurImage == NULL) {
 				ilSetError(IL_ILLEGAL_OPERATION);
@@ -901,6 +911,19 @@ ILvoid ILAPIENTRY ilSetInteger(ILenum Mode, ILint Param)
 		case IL_ORIGIN_MODE:
 			ilOriginFunc(Param);
 			return;
+		case IL_QUANTIZATION_MODE:
+			if (Param == IL_WU_QUANT || Param == IL_NEU_QUANT) {
+				ilStates[ilCurrentPos].ilQuantMode = Param;
+				return;
+			}
+			break;
+		case IL_NEU_QUANT_SAMPLE:
+			if (Param >= 1 && Param <= 30) {
+				ilStates[ilCurrentPos].ilNeuSample = Param;
+				return;
+			}
+			break;
+
 
 
 		default:
@@ -928,6 +951,10 @@ ILint iGetInt(ILenum Mode)
 			return ilStates[ilCurrentPos].ilBmpRle;
 		case IL_SGI_RLE:
 			return ilStates[ilCurrentPos].ilSgiRle;
+		case IL_QUANTIZATION_MODE:
+			return ilStates[ilCurrentPos].ilQuantMode;
+		case IL_NEU_QUANT_SAMPLE:
+			return ilStates[ilCurrentPos].ilNeuSample;
 
 
 	}

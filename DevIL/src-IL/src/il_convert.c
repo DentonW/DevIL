@@ -185,13 +185,12 @@ ILimage *iConvertPalette(ILimage *Image, ILenum DestFormat)
 }
 
 
-// In quantizer.c
+// In il_quantizer.c
 ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols);
+// In il_neuquant.c
+ILimage *iNeuQuant(ILimage *Image);
 
 // Converts an image from one format to another
-//	Note:  This assumes everything is in unsigned char format right now...
-//	Someone suggested using an intermediate format to reduce the length of
-//	this function, but I feel like it would be way more trouble than it's worth...
 ILAPI ILimage* ILAPIENTRY iConvertImage(ILenum DestFormat, ILenum DestType)
 {
 	static ILimage	*NewImage, *CurImage;
@@ -213,7 +212,10 @@ ILAPI ILimage* ILAPIENTRY iConvertImage(ILenum DestFormat, ILenum DestType)
 		NewImage = iConvertPalette(iCurImage, DestFormat);
 	}
 	else if (DestFormat == IL_COLOUR_INDEX && iCurImage->Format != IL_LUMINANCE) {
-		return iQuantizeImage(iCurImage, 256);
+		if (iGetInt(IL_QUANTIZATION_MODE) == IL_NEU_QUANT)
+			return iNeuQuant(iCurImage);
+		else // Assume IL_WU_QUANT otherwise.
+			return iQuantizeImage(iCurImage, 256);
 	}
 	else {
 		NewImage = (ILimage*)calloc(1, sizeof(ILimage));  // Much better to have it all set to 0.

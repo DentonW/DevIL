@@ -191,6 +191,9 @@
 				RelativePath="..\src\il_mng.c">
 			</File>
 			<File
+				RelativePath="..\src\il_neuquant.c">
+			</File>
+			<File
 				RelativePath="..\src\il_pal.c">
 			</File>
 			<File

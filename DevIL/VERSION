@@ -22,6 +22,7 @@
 - Added some more permissable Modes to ilSetInteger.
 - Changed a malloc to ialloc in il_profiles.c.
 - Added Kenneth Hurley's contributions to the DDS code.
+- Added NeuQuant code and defines for controlling quantization.
 
 
 1.2.4

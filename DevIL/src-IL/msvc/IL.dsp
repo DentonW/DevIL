@@ -263,6 +263,10 @@ SOURCE=..\src\il_mng.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\il_neuquant.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\il_pal.c
 # End Source File
 # Begin Source File

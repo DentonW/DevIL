@@ -30,8 +30,6 @@
 //-----------------------------------------------------------------------------
 
 #include "il_internal.h"
-//#include "color_ut.h"
-//#include "octree.h"
 
 #define MAXCOLOR	256
 #define	RED			2
@@ -417,6 +415,9 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 	TempImage = iConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
 	iCurImage = NewImage;
 
+	if (TempImage == NULL)
+		return NULL;
+
 	buffer = Image->Data;
 	WindW = Width = Image->Width;
 	WindH = Height = Image->Height;
@@ -551,16 +552,13 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 		ilSetError(IL_OUT_OF_MEMORY);
 		return NULL;
 	}
-	NewImage->Width = Image->Width;
-	NewImage->Height = Image->Height;
-	NewImage->Depth = Image->Depth;
+	ilCopyImageAttr(NewImage, Image);
 	NewImage->Bpp = 1;
 	NewImage->Bps = Image->Width;
 	NewImage->SizeOfPlane = NewImage->Bps * Image->Height;
 	NewImage->SizeOfData = NewImage->SizeOfPlane;
 	NewImage->Format = IL_COLOUR_INDEX;
 	NewImage->Type = IL_UNSIGNED_BYTE;
-	NewImage->Origin = Image->Origin;
 
 	NewImage->Pal.Palette = Palette;
 	NewImage->Pal.PalSize = NumCols * 3;

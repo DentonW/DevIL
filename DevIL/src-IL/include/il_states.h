@@ -50,6 +50,9 @@ typedef struct IL_STATES
 	ILenum		ilCompression;
 	// Interlace states
 	ILenum		ilInterlace;
+	// Quantization states
+	ILenum		ilQuantMode;
+	ILuint		ilNeuSample;
 
 
 	//

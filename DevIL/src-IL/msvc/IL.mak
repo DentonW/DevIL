@@ -68,6 +68,7 @@ CLEAN :
 	-@erase "$(INTDIR)\il_manip.obj"
 	-@erase "$(INTDIR)\il_mdl.obj"
 	-@erase "$(INTDIR)\il_mng.obj"
+	-@erase "$(INTDIR)\il_neuquant.obj"
 	-@erase "$(INTDIR)\il_pal.obj"
 	-@erase "$(INTDIR)\il_pcd.obj"
 	-@erase "$(INTDIR)\il_pcx.obj"
@@ -124,6 +125,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_doom.obj" \
 	"$(INTDIR)\il_endian.obj" \
 	"$(INTDIR)\il_error.obj" \
+	"$(INTDIR)\il_fastconv.obj" \
 	"$(INTDIR)\il_files.obj" \
 	"$(INTDIR)\il_gif.obj" \
 	"$(INTDIR)\il_header.obj" \
@@ -143,6 +145,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_png.obj" \
 	"$(INTDIR)\il_pnm.obj" \
 	"$(INTDIR)\il_profiles.obj" \
+	"$(INTDIR)\il_psd.obj" \
 	"$(INTDIR)\il_quantizer.obj" \
 	"$(INTDIR)\il_raw.obj" \
 	"$(INTDIR)\il_rawdata.obj" \
@@ -156,8 +159,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_utility.obj" \
 	"$(INTDIR)\il_wal.obj" \
 	"$(INTDIR)\IL.res" \
-	"$(INTDIR)\il_psd.obj" \
-	"$(INTDIR)\il_fastconv.obj"
+	"$(INTDIR)\il_neuquant.obj"
 
 "$(OUTDIR)\DevIL-d.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -216,6 +218,7 @@ CLEAN :
 	-@erase "$(INTDIR)\il_manip.obj"
 	-@erase "$(INTDIR)\il_mdl.obj"
 	-@erase "$(INTDIR)\il_mng.obj"
+	-@erase "$(INTDIR)\il_neuquant.obj"
 	-@erase "$(INTDIR)\il_pal.obj"
 	-@erase "$(INTDIR)\il_pcd.obj"
 	-@erase "$(INTDIR)\il_pcx.obj"
@@ -269,6 +272,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_doom.obj" \
 	"$(INTDIR)\il_endian.obj" \
 	"$(INTDIR)\il_error.obj" \
+	"$(INTDIR)\il_fastconv.obj" \
 	"$(INTDIR)\il_files.obj" \
 	"$(INTDIR)\il_gif.obj" \
 	"$(INTDIR)\il_header.obj" \
@@ -288,6 +292,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_png.obj" \
 	"$(INTDIR)\il_pnm.obj" \
 	"$(INTDIR)\il_profiles.obj" \
+	"$(INTDIR)\il_psd.obj" \
 	"$(INTDIR)\il_quantizer.obj" \
 	"$(INTDIR)\il_raw.obj" \
 	"$(INTDIR)\il_rawdata.obj" \
@@ -301,8 +306,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_utility.obj" \
 	"$(INTDIR)\il_wal.obj" \
 	"$(INTDIR)\IL.res" \
-	"$(INTDIR)\il_psd.obj" \
-	"$(INTDIR)\il_fastconv.obj"
+	"$(INTDIR)\il_neuquant.obj"
 
 "$(OUTDIR)\DevIL-l.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -361,6 +365,7 @@ CLEAN :
 	-@erase "$(INTDIR)\il_manip.obj"
 	-@erase "$(INTDIR)\il_mdl.obj"
 	-@erase "$(INTDIR)\il_mng.obj"
+	-@erase "$(INTDIR)\il_neuquant.obj"
 	-@erase "$(INTDIR)\il_pal.obj"
 	-@erase "$(INTDIR)\il_pcd.obj"
 	-@erase "$(INTDIR)\il_pcx.obj"
@@ -414,6 +419,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_doom.obj" \
 	"$(INTDIR)\il_endian.obj" \
 	"$(INTDIR)\il_error.obj" \
+	"$(INTDIR)\il_fastconv.obj" \
 	"$(INTDIR)\il_files.obj" \
 	"$(INTDIR)\il_gif.obj" \
 	"$(INTDIR)\il_header.obj" \
@@ -433,6 +439,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_png.obj" \
 	"$(INTDIR)\il_pnm.obj" \
 	"$(INTDIR)\il_profiles.obj" \
+	"$(INTDIR)\il_psd.obj" \
 	"$(INTDIR)\il_quantizer.obj" \
 	"$(INTDIR)\il_raw.obj" \
 	"$(INTDIR)\il_rawdata.obj" \
@@ -446,8 +453,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_utility.obj" \
 	"$(INTDIR)\il_wal.obj" \
 	"$(INTDIR)\IL.res" \
-	"$(INTDIR)\il_psd.obj" \
-	"$(INTDIR)\il_fastconv.obj"
+	"$(INTDIR)\il_neuquant.obj"
 
 "$(OUTDIR)\DevIL.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -658,6 +664,12 @@ SOURCE=..\src\il_mdl.c
 SOURCE=..\src\il_mng.c
 
 "$(INTDIR)\il_mng.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+SOURCE=..\src\il_neuquant.c
+
+"$(INTDIR)\il_neuquant.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
