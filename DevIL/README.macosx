@@ -90,8 +90,15 @@ sh autogen.sh --enable-PIC --enable-shared --enable-static --prefix=/usr/local
 make
 sudo make install
 
+to use fink you must set the environment variables
 
+tcsh:
+setenv LDFLAGS -L/sw/lib
+setenv CFLAGS -I/sw/includee -L/sw/lib
 
+sh:
+export LDFLAGS=-L/sw/lib
+export CFLAGS=-I/sw/includee -L/sw/lib
 
 Usage:
 ------
