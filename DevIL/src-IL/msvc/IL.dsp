@@ -303,10 +303,6 @@ SOURCE=..\src\il_psd.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\il_psp.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\il_quantizer.c
 # End Source File
 # Begin Source File
