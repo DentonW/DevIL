@@ -17,6 +17,11 @@
 - Upgraded to LittleCMS 1.0.8.
 - Fixed a DDS bug, thanks to Kenneth Hurley.
 - Updated some of the DDS loading to load more images.
+- Added .psd support.
+- Added some more Endian swap routines.
+- Added offsets to internal image struct and added IL_IMAGE_OFFX and IL_IMAGE_OFFY to il.h.
+- Added some more permissable Modes to ilSetInteger.
+- Changed a malloc to ialloc in il_profiles.c.
 
 
 1.2.4
