@@ -34,17 +34,14 @@ __inline__ void *vec_malloc( ILuint size ) {
     return mem_ptr.ptr;
 }
 
-void vec_memclear( ILvoid *ptr, ILuint size ) {
-    vector unsigned int vec = vec_splat_u32(0);
-    while( size <= 8 ) {
-        vec_st(vec,0,(unsigned int*)ptr);
-        ptr += 8;
-    }
-    while( size >= 0 ){
-       *(unsigned char*)ptr = 0;
-       ptr++;
-       size--;
-    }
+__inline__ void *vec_calloc( ILuint, ILuint );
+__inline__ void *vec_calloc( ILuint count, ILuint size ) {
+    union {
+        vector unsigned char vec;
+        void *ptr;
+    } mem_ptr;
+    mem_ptr.ptr = (void*)calloc(count,size);
+    return mem_ptr.ptr;
 }
 #endif
 
