@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilutWinSaveImage</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../ilut/f00195.htm">Previous</A></font> <font color="white">|</font> <font color="gray">Next</font>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilutWinSaveImage</h2>
+<font size=-1>
+<p>The <b>ilutWinSaveImage</b> function saves a HBITMAP to an image file.</p>
+</font>
+<pre><code>
+<b>ILboolean ilutWinSaveImage(
+  char</b><i> *FileName,</i><b>
+  HBITMAP</b><i> Bitmap</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>FileName</i></dt>
+<dd>Name of the image file to save to.</dd>
+<dt><i>Bitmap</i></dt>
+<dd>Win32 HBITMAP to save from.</dd>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>ilutWinSaveImage</b> saves <i>Bitmap</i> to <i>FileName</i>.  This function is the complement of <a href="../ilut/f00195.htm">ilutWinLoadImage</a>.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+None
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00053.htm">ilSaveImage</a>, <a href="../ilut/f00195.htm">ilutWinLoadImage</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

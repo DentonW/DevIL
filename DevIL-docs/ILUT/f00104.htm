@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilutGetBoolean, ilutGetBooleanv, ilutGetInteger, ilutGetIntegerv</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../ilut/f00186.htm">Previous</A></font> <font color="white">|</font> <A HREF="../ilut/f00128.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilutGetBoolean, ilutGetBooleanv, ilutGetInteger, ilutGetIntegerv</h2>
+<font size=-1>
+<p>These functions return the value of a selected mode.</p>
+</font>
+<pre><code>
+<b>ILboolean ilutGetBoolean(
+  ILenum</b><i> Mode</i><b>
+);</b>
+<p>
+<b>ILvoid ilutGetBooleanv(
+  ILenum</b><i> Mode,</i><b>
+  ILboolean</b><i> *Param</i><b>
+);</b>
+<p>
+<b>ILboolean ilutGetInteger(
+  ILenum</b><i> Mode</i><b>
+);</b>
+<p>
+<b>ILvoid ilutGetIntegerv(
+  ILenum</b><i> Mode,</i><b>
+  ILboolean</b><i> *Param</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Mode</i></dt>
+<dd>The mode value to be returned.  The following values are accepted:</dd>
+<p>
+<dl>
+<dt>ILUT_VERSION_NUM</dt>
+<dd>Returns the version number of the shared library.  This can be checked against the ILUT_VERSION #define.</dd>
+<dt>ILUT_PALETTE_MODE</dt>
+<dd>Whether ilut uses palettes or converts the image to truecolour before sending it to the renderer.</dd>
+<dt>ILUT_OPENGL_CONV</dt>
+<dd>Whether to use GL_RGB8 or GL_RGB, etc. when passing data to OpenGL only.</dd>
+</dl>
+<p>
+<dt><i>Param</i></dt>
+<dd>When used, the value is stored here instead of returned.</dd>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+The <b>ilutGetBoolean</b> and <b>ilutGetInteger</b> functions return the value of a selected mode.  The <b>ilutGetBooleanv</b> and <b>ilutGetIntegerv</b> functions return the mode value in the <i>Param</i> parameter.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+ILUT_INVALID_ENUM - <i>Mode</i> was an invalid enum.
+<br>
+ILUT_INVALID_PARAM - <i>Param</i> was NULL.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00027.htm">ilGetBoolean, ilGetBooleanv, ilGetInteger, ilGetIntegerv</a>, <a href="../ilu/f00150.htm">iluGetInteger, iluGetIntegerv</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

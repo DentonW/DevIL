@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, iluEnlargeCanvas</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../ilu/f00181.htm">Previous</A></font> <font color="white">|</font> <A HREF="../ilu/f00193.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>iluEnlargeCanvas</h2>
+<font size=-1>
+<p>The <b>iluEnlargeCanvas</b> function enlarges the image while leaving the original data unchanged.</p>
+</font>
+<pre><code>
+<b>ILboolean iluEnlargeCanvas(
+  ILuint</b><i> Width,</i><b>
+  ILuint</b><i> Height,</i><b>
+  ILuint</b><i> Depth</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Width</i></dt>
+<dd>New image width - must be larger than the current image's width.</dd>
+<dt><i>Height</i></dt>
+<dd>New image height - must be larger than the current image's height.</dd>
+<dt><i>Depth</i></dt>
+<dd>New image depth - must be larger than the current image's depth.</dd>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>iluEnlargeCanvas</b> enlarges the "canvas" of the current image, clearing the background to the colour specified in <a href="../il/f00124.htm">ilClearColour</a>.  To control the placement of the image, use <a href="../ilu/f00166.htm">iluImageParameter</a>.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+ILU_ILLEGAL_OPERATION - There is currently no image bound.  Use <a href="../il/f00026.htm">ilGenImages</a> and <a href="../il/f00013.htm">ilBindImage</a> before calling this function.  This error can also be used if any of the parameter dimensions are smaller than the original image's dimensions.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00026.htm">ilGenImages</a>, <a href="../il/f00013.htm">ilBindImage</a>, <a href="../il/f00124.htm">ilClearColour</a>, <a href="../ilu/f00166.htm">iluImageParameter</a>, 
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilutEnable, ilutDisable</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../ilut/f00215.htm">Previous</A></font> <font color="white">|</font> <A HREF="../ilut/f00186.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilutEnable, ilutDisable</h2>
+<font size=-1>
+<p>These functions enable or disable an ILUT state.</p>
+</font>
+<pre><code>
+<b>ILboolean ilutEnable(
+  ILenum</b><i> Mode</i><b>
+);
+<p>
+ILboolean ilutDisable(
+  ILenum</b><i> Mode</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Mode</i></dt>
+<dd>Mode to enable/disable.</dd>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>ilutEnable</b> enables a mode specified by <i>Mode</i>.  <b>ilutDisable</b> disables a mode specified by <i>Mode</i>.
+<p>
+A list of available modes and their meaning:
+<p>
+<dl>
+<dt>ILUT_PALETTE_MODE</dt>
+<dd>Does nothing currently.</dd>
+<p>
+<dt>ILUT_OPENGL_CONV</dt>
+<dd>When enabled, DevIL passes GL_RGB8 and GL_RGBA8 to OpenGL instead of GL_RGB and GL_RGBA.  This can give better visual quality on some nVidia-based cards (at the price of increased memory usage).</dd>
+</dl>
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+ILUT_INVALID_ENUM - <i>Mode</i> was of an unsupported value.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../ilut/f00109.htm">ilutIsEnabled, ilutIsDisabled</a>, <a href="../il/f00024.htm">ilEnable, ilDisable</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

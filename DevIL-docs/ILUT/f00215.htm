@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilutD3D8Texture, ilutD3D8TexFromFile, ilutD3D8TexFromFileInMemory, ilutD3D8TexFromFileHandle, ilutD3D8TexFromResource</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../ilut/f00216.htm">Previous</A></font> <font color="white">|</font> <A HREF="../ilut/f00103.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilutD3D8Texture, ilutD3D8TexFromFile, ilutD3D8TexFromFileInMemory, ilutD3D8TexFromFileHandle, ilutD3D8TexFromResource</h2>
+<font size=-1>
+<p>These functions create Direct3D 8 textures from images.</p>
+</font>
+<pre><code>
+<b>IDirect3DTexture8 *ilutD3D8Texture(
+  IDirect3DDevice8</b><i> *Device</i><b>
+);
+<br>
+ILboolean ilutD3D8TexFromFile(
+  IDirect3DDevice8</b><i> *Device,</i><b>
+  char</b><i> *FileName,</i><b>
+  IDirect3DTexture8</b><i> **Texture</i><b>
+);
+<br>
+ILboolean ilutD3D8TexFromFileInMemory(
+  IDirect3DDevice8</b><i> *Device,</i><b>
+  ILvoid</b><i> *Lump,</i><b>
+  ILuint</b><i> Size,</i><b>
+  IDirect3DTexture8</b><i> **Texture</i><b>
+);
+<br>
+ILboolean ilutD3D8TexFromFileHandle(
+  IDirect3DDevice8</b><i> *Device,</i><b>
+  ILHANDLE</b><i> File,</i><b>
+  IDirect3DTexture8</b><i> **Texture</i><b>
+);
+<br>
+ILboolean ilutD3D8TexFromResource(
+  IDirect3DDevice8</b><i> *Device,</i><b>
+  HMODULE</b><i> SrcModule,</i><b>
+  char</b><i> *SrcResource,</i><b>
+  IDirect3DTexture8</b><i> **Texture</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Device</i></dt>
+<dd>Pointer to a D3D8 device to load the texture into.</dd>
+<dt><i>FileName</i></dt>
+<dd>Name of the image file to load.</dd>
+<dt><i>Texture</i></dt>
+<dd>Pointer to load the D3D8 texture into.</dd>
+<dt><i>Lump</i></dt>
+<dd>Pointer to memory containing an image "file".</dd>
+<dt><i>Size</i></dt>
+<dd>Contains the size of <i>Lump</i>.</dd>
+<dt><i></i></dt>
+<dd></dd>
+<dt><i></i></dt>
+<dd></dd>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+These functions are designed to behave exactly like the the D3DX toolkit's D3D texture functions.  In most instances, these functions can be used a drop-in replacement for parts of D3DX.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+ILUT_ILLEGAL_OPERATION - There is currently no image bound.  Use <a href="../il/f00026.htm">ilGenImages</a> and <a href="../il/f00013.htm">ilBindImage</a> before calling this function.
+<br>
+ILUT_OUT_OF_MEMORY - Could not allocate enough memory for the new bitmap.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00026.htm">ilGenImages</a>, <a href="../il/f00013.htm">ilBindImage</a>, <a href="../il/f00152.htm">ilLoad, ilLoadF, ilLoadL</a>, <a href="../il/f00039.htm">ilLoadImage</a>, <a href="../ilut/f00216.htm">ilutD3D8MipFunc</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

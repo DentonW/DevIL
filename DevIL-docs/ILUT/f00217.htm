@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilutSetInteger</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../ilut/f00188.htm">Previous</A></font> <font color="white">|</font> <A HREF="../ilut/f00177.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilutSetInteger</h2>
+<font size=-1>
+<p>The <b>ilutSetInteger</b> function sets the value of a selected mode.</p>
+</font>
+<pre><code>
+<b>ILvoid ilutSetInteger(
+  ILenum</b><i> Mode,</i><b>
+  ILint</b><i> Param</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Mode</i></dt>
+<dd>The mode value to be returned.  The following values are accepted:</dd>
+<p>
+
+<p>
+<dl>
+<dt>ILUT_MAXTEX_WIDTH</dt>
+<dd>Not used yet.</dd>
+<dt>ILUT_MAXTEX_HEIGHT</dt>
+<dd>Not used yet.</dd>
+<dt>ILUT_MAXTEX_DEPTH</dt>
+<dd>Not used yet.</dd>
+<dt>ILUT_D3D_MIPLEVELS</dt>
+<dd>Please refer to <a href="../ilut/f00216.htm">ilutD3D8MipFunc</a>.</dd>
+<p>
+
+<dt><i>Param</i></dt>
+<dd>The value to set the mode with.</dd>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>ilutSetInteger</b> is <a href="../ilut/f00104.htm">ilutGetInteger</a>'s counterpart.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+IL_INVALID_ENUM - <i>Mode</i> was an invalid enum.
+<br>
+IL_INVALID_PARAM - <i>Param</i> was not in range.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00207.htm">ilSetInteger</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, iluContrast</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../ilu/f00147.htm">Previous</A></font> <font color="white">|</font> <A HREF="../ilu/f00134.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>iluContrast</h2>
+<font size=-1>
+<p>The <b>iluContrast</b> function changes the contrast of an image.</p>
+</font>
+<pre><code>
+<b>ILboolean iluContrast(
+  ILfloat</b><i> Contrast</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Contrast</i></dt>
+<dd>The factor to contrast by.</dd>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>iluContrast</b> changes the contrast of an image by using interpolation and extrapolation.  Common values for <i>Contrast</i> are in the range -0.5 to 1.7.  Anything below 0.0 generates a negative of the image with varying contrast.  1.0 outputs the original image.  0.0 - 1.0 lowers the contrast of the image.  1.0 - 1.7 increases the contrast of the image.  This effect is caused by interpolating (or extrapolating) the source image with a totally grey image.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+ILU_ILLEGAL_OPERATION - There is currently no image bound.  Use <a href="../il/f00026.htm">ilGenImages</a> and <a href="../il/f00013.htm">ilBindImage</a> before calling this function.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00026.htm">ilGenImages</a>, <a href="../il/f00013.htm">ilBindImage</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>
