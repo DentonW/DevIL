@@ -5,7 +5,7 @@
 #endif
 #include <IL/il.h>
 #include <IL/ilu.h>
-#define ILUT_USE_OPENGL
+//#define ILUT_USE_OPENGL
 #include <IL/ilut.h>
 #include "3dtest.h"
 #include <math.h>
@@ -29,7 +29,7 @@ ILuint	ActiveImage = 0;
 
 int main(int argc, char** argv)
 {
-	char Test[6] = { 0, 0, 0, 0, 0, 0 };
+	//char Test[6] = { 0, 0, 0, 0, 0, 0 };
 
 	if (argc < 2) {
 		//cout << "Please specify a filename." << endl;

@@ -2,7 +2,7 @@
 
 CC=gcc
 OBJECTS=3dtest.o
-LIBS=-lIL -lILU -lILUT -lGL -lGLU -lglut
+LIBS=-lIL -lILU -lILUT -lGL -lGLU -lglut -lXext -lXi -lXmu
 
 all: DevIL_test3d
 

@@ -1,0 +1,5 @@
+*.o
+*.objects
+*.depends
+DevIL_test
+test.tga
