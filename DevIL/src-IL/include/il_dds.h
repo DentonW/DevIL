@@ -175,7 +175,7 @@ ILboolean	ReadData(ILvoid);
 ILboolean	AllocImage(ILvoid);
 ILboolean	Decompress(ILvoid);
 ILboolean	ReadMipmaps(ILvoid);
-ILvoid		DecodePixelFormat(ILvoid);
+ILuint		DecodePixelFormat(ILvoid);
 ILboolean	DecompressARGB(ILvoid);
 ILboolean	DecompressDXT1(ILvoid);
 ILboolean	DecompressDXT2(ILvoid);
