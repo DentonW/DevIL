@@ -484,10 +484,9 @@ ILboolean iSaveTiffInternal(char *Filename)
 	}
 
         
-        // Packbits makes file bigger most of the times
-	/*if (iGetHint(IL_COMPRESSION_HINT) == IL_USE_COMPRESSION)
+	if (iGetHint(IL_COMPRESSION_HINT) == IL_USE_COMPRESSION)
 		Compression = COMPRESSION_PACKBITS;
-	else*/
+	else
         Compression = COMPRESSION_NONE;
 
 	if (iCurImage->Format == IL_COLOUR_INDEX) {
