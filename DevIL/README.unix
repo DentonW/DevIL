@@ -62,9 +62,7 @@ Libraries needed to compile DevIL* :
 They are all autodetected by the ./configure script. But if you want to include
 one of those format, you have just to install the corresponding lib :
 
-libjpeg available at 
-libungif available at 
-libtiff available at 
+(libs listed in libraries.txt)
 
 or in your distro/port ftp/site/whatever_you_want :-)
 
