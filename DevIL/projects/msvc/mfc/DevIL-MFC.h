@@ -19,6 +19,15 @@
 
 #include <IL/ilut.h>
 
+// Internal to IL but makes things easier for us:
+struct ILimage;
+ILAPI ILimage*	ILAPIENTRY iConvertImage(ILenum DestFormat, ILenum DestType);
+ILAPI ILubyte*	ILAPIENTRY iGetPaddedData(ILimage *Image);
+ILAPI ILimage*	ILAPIENTRY ilGetCurImage(ILvoid);
+ILAPI ILvoid	ILAPIENTRY ilCloseImage(ILimage *Image);
+ILAPI ILvoid	ILAPIENTRY iBindImageTemp(ILvoid);
+
+// Functions for the static library.
 CBitmap *ilutConvertToCBitmap();
 CBitmap *ilutMFCLoadImage(const ILstring FileName);
 
