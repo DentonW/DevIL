@@ -25,6 +25,17 @@
 	#warning DevIL was designed with libpng 1.2.0 or higher in mind.  Consider upgrading at www.libpng.org
 #endif
 
+
+#ifdef _WIN32
+	#if (defined(IL_USE_PRAGMA_LIBS))
+		#if defined(_MSC_VER) || defined(__BORLANDC__)
+			#pragma comment(lib, "DevIL_libpng.lib")
+			#pragma comment(lib, "DevIL_zlib.lib")
+		#endif
+	#endif
+#endif
+
+
 ILboolean	iIsValidPng(ILvoid);
 ILboolean	iLoadPngInternal(ILvoid);
 ILboolean	iSavePngInternal(ILvoid);

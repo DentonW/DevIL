@@ -9,10 +9,13 @@ INCLUDE_DIRECTORIES(
 
 SET(DevILU_SRCS ${DevILU_SRCS} ${DEVIL_INCS} )
 
+SET(LIBRARY_OUTPUT_PATH		${SET_LIB_DEST_DIR}	)
+
 #
 # for windows add the .def and .rc files to the source list
 #
 IF(WIN32)
+	ADD_DEFINITIONS(-DIL_USE_PRAGMA_LIBS)
 	IF(BUILD_SHARED_LIBS)
 		ADD_DEFINITIONS(-DILU_DLL)
 		SET(DevILU_SRCS ${DevILU_SRCS} msvc/ilu.def msvc/ilu.rc )

@@ -3,9 +3,11 @@ PROJECT(LIBMNG)
 
 FILE(GLOB LIBMNG_SRCS *.c *.h )
 
+SET(LIBRARY_OUTPUT_PATH		${SET_LIB_DEST_DIR}	)
 
 # for windows add the .def and .rc files to the source list on DLL builds
 IF(WIN32)
+	ADD_DEFINITIONS(-DIL_USE_PRAGMA_LIBS)
   IF(BUILD_SHARED_LIBS)
     ADD_DEFINITIONS(-DMNG_DLL -DMNG_BUILD_DLL)
     SET(LIBTIFF_SRCS ${LIBMNG_SRCS} libmng.def libmng.rc  )

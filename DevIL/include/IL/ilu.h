@@ -22,23 +22,15 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-/*
+
+
 #ifdef _WIN32
-	#if (!defined(_IL_BUILD_LIBRARY)) && (!defined(IL_SKIP_PRAGMA_LIBS))
+	#if (defined(IL_USE_PRAGMA_LIBS)) && (!defined(_IL_BUILD_LIBRARY))
 		#if defined(_MSC_VER) || defined(__BORLANDC__)
-			#ifndef IL_STATIC_LIB
-				#pragma comment(lib, "DevILU_DLL.lib")
-			#else
-				#ifdef  IL_DEBUG
-					#pragma comment(lib, "DevILU_DBG.lib")
-				#else
-					#pragma comment(lib, "DevILU.lib")
-				#endif//IL_DEBUG
-			#endif
+			#pragma comment(lib, "DevILU.lib")
 		#endif
 	#endif
 #endif
-*/
 
 
 #define ILU_VERSION_1_6_7 1

@@ -18,6 +18,13 @@
 	#include <windows.h>
 #endif//_WIN32
 
+#ifdef _WIN32
+	#if (defined(IL_USE_PRAGMA_LIBS))
+		#if defined(_MSC_VER) || defined(__BORLANDC__)
+			#pragma comment(lib, "DevIL.lib")
+		#endif
+	#endif
+#endif
 
 /* Only needed for MSVC++ unless extended to actually do something =) */
 #if defined(_WIN32) && defined(_MSC_VER)

@@ -22,6 +22,17 @@
 #define MAGIC_HEADER1	0x4949
 #define MAGIC_HEADER2	0x4D4D
 
+
+
+#ifdef _WIN32
+	#if (defined(IL_USE_PRAGMA_LIBS))
+		#if defined(_MSC_VER) || defined(__BORLANDC__)
+			#pragma comment(lib, "DevIL_libtiff.lib")
+		#endif
+	#endif
+#endif
+
+
 /*----------------------------------------------------------------------------*/
 
 // No need for a separate header

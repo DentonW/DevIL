@@ -2,10 +2,12 @@ PROJECT(ZLIB)
 
 FILE(GLOB ZLIB_SRCS *.c *.h )
 
+SET(LIBRARY_OUTPUT_PATH		${SET_LIB_DEST_DIR}	)
 
 
 # for windows add the .def and .rc files to the source list
 IF(WIN32)
+	ADD_DEFINITIONS(-DIL_USE_PRAGMA_LIBS)
   IF(BUILD_SHARED_LIBS)
     ADD_DEFINITIONS(-DZLIB_DLL)
     SET(ZLIB_SRCS ${ZLIB_SRCS} zlib.def zlib.rc  )

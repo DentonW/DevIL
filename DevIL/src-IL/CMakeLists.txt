@@ -10,11 +10,13 @@ INCLUDE_DIRECTORIES(
 
 SET(DevIL_SRCS ${DevIL_SRCS} ${DEVIL_INCS} )
 
+SET(LIBRARY_OUTPUT_PATH		${SET_LIB_DEST_DIR}	)
 
 #
 # for windows add the .def and .rc files to the source list
 #
 IF(WIN32)
+	ADD_DEFINITIONS(-DIL_USE_PRAGMA_LIBS)
 	IF(BUILD_SHARED_LIBS)
 		ADD_DEFINITIONS(-DIL_DLL -DMNG_DLL -DMNG_USE_DLL -DJPEGDLL)
 		SET(DevIL_SRCS ${DevIL_SRCS} msvc/il.def msvc/il.rc )

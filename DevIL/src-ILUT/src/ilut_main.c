@@ -18,6 +18,17 @@
 	//#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
 
+
+#ifdef _WIN32
+	#if (defined(IL_USE_PRAGMA_LIBS))
+		#if defined(_MSC_VER) || defined(__BORLANDC__)
+			#pragma comment(lib, "DevILU.lib")
+		#endif
+	#endif
+#endif
+
+
+
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
 	hModule;  lpReserved;

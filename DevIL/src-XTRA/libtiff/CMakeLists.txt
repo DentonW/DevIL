@@ -53,8 +53,12 @@ SET(LIBTIFF_SRCS
 	tif_zip.c
 )
 
+SET(LIBRARY_OUTPUT_PATH		${SET_LIB_DEST_DIR}	)
+
+
 # for windows add the .def and .rc files to the source list on DLL builds
 IF(WIN32)
+	ADD_DEFINITIONS(-DIL_USE_PRAGMA_LIBS)
   SET(LIBTIFF_SRCS ${LIBTIFF_SRCS} tif_win32.c  )
   IF(BUILD_SHARED_LIBS)
     ADD_DEFINITIONS(-DLIBTIFF_DLL)
