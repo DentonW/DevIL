@@ -13,7 +13,7 @@
 /* #undef IL_NO_DOOM */
 /* #undef IL_NO_GIF */
 /* #undef IL_NO_ICO */
-#define IL_NO_JPG 1
+/* #undef IL_NO_JPG */
 #define IL_NO_LCMS 1
 /* #undef IL_NO_LIF */
 /* #undef IL_NO_MDL */
@@ -22,7 +22,7 @@
 /* #undef IL_NO_PCX */
 /* #undef IL_NO_PIC */
 /* #undef IL_NO_PIX */
-#define IL_NO_PNG 1
+/* #undef IL_NO_PNG */
 /* #undef IL_NO_PNM */
 /* #undef IL_NO_PSD */
 /* #undef IL_NO_PSP */
@@ -30,23 +30,23 @@
 /* #undef IL_NO_RAW */
 /* #undef IL_NO_SGI */
 /* #undef IL_NO_TGA */
-#define IL_NO_TIF 1
+/* #undef IL_NO_TIF */
 /* #undef IL_NO_WAL */
 /* #undef IL_NO_XPM */
-/* #undef IL_USE_JPEGLIB_UNMODIFIED */
+#define IL_USE_JPEGLIB_UNMODIFIED 1
 
 /* Supported api (ilut) */
 
 /* #undef ILUT_USE_ALLEGRO */
-/* #undef ILUT_USE_DIRECTX8 */
+#define ILUT_USE_DIRECTX8 1
 /* #undef ILUT_USE_DIRECTX9 */
-/* #undef ILUT_USE_OPENGL */
+#define ILUT_USE_OPENGL 1
 /* #undef ILUT_USE_SDL */
-/* #undef ILUT_USE_WIN32 */
+#define ILUT_USE_WIN32 1
 
 
 /* Define if you have the <dlfcn.h> header file. */
-#define HAVE_DLFCN_H 1
+/* #undef HAVE_DLFCN_H */
 
 /* Name of package */
 #define PACKAGE "DevIL"
@@ -56,8 +56,8 @@
 
 /* Define if your processor stores words with the most significant byte first
    (like Motorola and SPARC, unlike Intel and VAX). */
-#define WORDS_BIGENDIAN 1
+/* #undef WORDS_BIGENDIAN */
 
 /* Define if the X Window System is missing or not being used. */
-/* #undef X_DISPLAY_MISSING */
+#define X_DISPLAY_MISSING 1
 #endif /* __CONFIG_H__ */
