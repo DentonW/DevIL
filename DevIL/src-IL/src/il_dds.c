@@ -381,6 +381,11 @@ ILvoid DecodePixelFormat()
 				BlockSize *= 16;
 				break;
 
+			case IL_MAKEFOURCC('R', 'X', 'G', 'B'):
+				CompFormat = PF_RXGB;
+				BlockSize *= 16;
+				break;
+
 			default:
 				CompFormat = PF_UNKNOWN;
 				BlockSize *= 16;
@@ -442,6 +447,7 @@ ILvoid AdjustVolumeTexture(DDSHEAD *Head)
 		case PF_DXT4:
 		case PF_DXT5:
 		case PF_3DC:
+		case PF_RXGB:
 			Head->LinearSize = IL_MAX(1,Head->Width/4) * IL_MAX(1,Head->Height/4) * 16;
 			break;
 	}
@@ -506,6 +512,9 @@ ILboolean ReadData()
 
 ILboolean AllocImage()
 {
+	ILubyte channels = 4;
+	ILenum format = IL_RGBA;
+
 	switch (CompFormat)
 	{
 		case PF_RGB:
@@ -531,7 +540,12 @@ ILboolean AllocImage()
 				return IL_FALSE;
 			break;
 		default:
-			if (!ilTexImage(Width, Height, Depth, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL))
+			if (CompFormat == PF_RXGB) {
+				channels = 3; //normal map
+				format = IL_RGB;
+			}
+
+			if (!ilTexImage(Width, Height, Depth, channels, format, IL_UNSIGNED_BYTE, NULL))
 				return IL_FALSE;
 			if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
 				iCurImage->DxtcData = (ILubyte*)ialloc(Head.LinearSize);
@@ -578,6 +592,9 @@ ILboolean Decompress()
 		case PF_3DC:
 			return Decompress3Dc();
 
+		case PF_RXGB:
+		  return DecompressRXGB();
+
 		case PF_UNKNOWN:
 			return IL_FALSE;
 	}
@@ -594,7 +611,7 @@ ILboolean ReadMipmaps()
 	ILuint	LastLinear;
 	ILuint	minW, minH;
 
-	if (CompFormat == PF_RGB || CompFormat == PF_3DC)
+	if (CompFormat == PF_RGB || CompFormat == PF_3DC || CompFormat == PF_RXGB)
 		Bpp = 3;
 	else if (CompFormat == PF_LUMINANCE)
 		Bpp = 1;
@@ -620,9 +637,10 @@ ILboolean ReadMipmaps()
 		case PF_DXT5:
 			CompFactor = 4;
 			break;
+		case PF_RXGB:
 		case PF_3DC:
-			//This is officially 4, but that's bullshit :) There's no alpha data in
-			//3dc images
+			//This is officially 4 for 3dc, but that's bullshit :) There's no
+			//alpha data in 3dc images
 			CompFactor = 3;
 			break;
 		default:
@@ -1101,6 +1119,132 @@ ILboolean	Decompress3Dc()
 
 	return IL_TRUE;
 }
+
+//This is nearly exactly the same as DecompressDXT5...
+//I have to clean up this file (put common code in
+//helper functions etc)
+ILboolean DecompressRXGB()
+{
+	int			x, y, z, i, j, k, Select;
+	ILubyte		*Temp;
+	Color565	*color_0, *color_1;
+	Color8888	colours[4], *col;
+	ILuint		bitmask, Offset;
+	ILubyte		alphas[8], *alphamask;
+	ILuint		bits;
+
+	Temp = CompData;
+	for (z = 0; z < Depth; z++) {
+		for (y = 0; y < Height; y += 4) {
+			for (x = 0; x < Width; x += 4) {
+				if (y >= Height || x >= Width)
+					break;
+				alphas[0] = Temp[0];
+				alphas[1] = Temp[1];
+				alphamask = Temp + 2;
+				Temp += 8;
+				color_0 = ((Color565*)Temp);
+				color_1 = ((Color565*)(Temp+2));
+				bitmask = ((ILuint*)Temp)[1];
+				Temp += 8;
+
+				colours[0].r = color_0->nRed << 3;
+				colours[0].g = color_0->nGreen << 2;
+				colours[0].b = color_0->nBlue << 3;
+				colours[0].a = 0xFF;
+
+				colours[1].r = color_1->nRed << 3;
+				colours[1].g = color_1->nGreen << 2;
+				colours[1].b = color_1->nBlue << 3;
+				colours[1].a = 0xFF;
+
+				// Four-color block: derive the other two colors.    
+				// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
+				// These 2-bit codes correspond to the 2-bit fields 
+				// stored in the 64-bit block.
+				colours[2].b = (2 * colours[0].b + colours[1].b + 1) / 3;
+				colours[2].g = (2 * colours[0].g + colours[1].g + 1) / 3;
+				colours[2].r = (2 * colours[0].r + colours[1].r + 1) / 3;
+				colours[2].a = 0xFF;
+
+				colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
+				colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
+				colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
+				colours[3].a = 0xFF;
+
+				k = 0;
+				for (j = 0; j < 4; j++) {
+					for (i = 0; i < 4; i++, k++) {
+
+						Select = (bitmask & (0x03 << k*2)) >> k*2;
+						col = &colours[Select];
+
+						// only put pixels out < width or height
+						if (((x + i) < Width) && ((y + j) < Height)) {
+							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp;
+							Image->Data[Offset + 0] = col->r;
+							Image->Data[Offset + 1] = col->g;
+							Image->Data[Offset + 2] = col->b;
+						}
+					}
+				}
+
+				// 8-alpha or 6-alpha block?    
+				if (alphas[0] > alphas[1]) {    
+					// 8-alpha block:  derive the other six alphas.    
+					// Bit code 000 = alpha_0, 001 = alpha_1, others are interpolated.
+					alphas[2] = (6 * alphas[0] + 1 * alphas[1] + 3) / 7;	// bit code 010
+					alphas[3] = (5 * alphas[0] + 2 * alphas[1] + 3) / 7;	// bit code 011
+					alphas[4] = (4 * alphas[0] + 3 * alphas[1] + 3) / 7;	// bit code 100
+					alphas[5] = (3 * alphas[0] + 4 * alphas[1] + 3) / 7;	// bit code 101
+					alphas[6] = (2 * alphas[0] + 5 * alphas[1] + 3) / 7;	// bit code 110
+					alphas[7] = (1 * alphas[0] + 6 * alphas[1] + 3) / 7;	// bit code 111
+				}
+				else {
+					// 6-alpha block.
+					// Bit code 000 = alpha_0, 001 = alpha_1, others are interpolated.
+					alphas[2] = (4 * alphas[0] + 1 * alphas[1] + 2) / 5;	// Bit code 010
+					alphas[3] = (3 * alphas[0] + 2 * alphas[1] + 2) / 5;	// Bit code 011
+					alphas[4] = (2 * alphas[0] + 3 * alphas[1] + 2) / 5;	// Bit code 100
+					alphas[5] = (1 * alphas[0] + 4 * alphas[1] + 2) / 5;	// Bit code 101
+					alphas[6] = 0x00;										// Bit code 110
+					alphas[7] = 0xFF;										// Bit code 111
+				}
+
+				// Note: Have to separate the next two loops,
+				//	it operates on a 6-byte system.
+				// First three bytes
+				bits = *((ILint*)alphamask);
+				for (j = 0; j < 2; j++) {
+					for (i = 0; i < 4; i++) {
+						// only put pixels out < width or height
+						if (((x + i) < Width) && ((y + j) < Height)) {
+							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp + 0;
+							Image->Data[Offset] = alphas[bits & 0x07];
+						}
+						bits >>= 3;
+					}
+				}
+
+				// Last three bytes
+				bits = *((ILint*)&alphamask[3]);
+				for (j = 2; j < 4; j++) {
+					for (i = 0; i < 4; i++) {
+						// only put pixels out < width or height
+						if (((x + i) < Width) && ((y + j) < Height)) {
+							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp + 0;
+							Image->Data[Offset] = alphas[bits & 0x07];
+						}
+						bits >>= 3;
+					}
+				}
+			}
+		}
+	}
+
+	return IL_TRUE;
+}
+
 
 ILvoid CorrectPreMult()
 {
