@@ -129,14 +129,18 @@ ILboolean iIsValidHdr()
 	if (Read != 10)
 		return IL_FALSE;
 
-	return !strnicmp(Head, "#?RADIANCE", 10);
+	return
+		strnicmp(Head, "#?RADIANCE", 10) == 0
+		|| strnicmp(Head, "#?RGBE", 6) == 0;
 }
 
 
 // Internal function used to check if the HEADER is a valid .hdr header.
 ILboolean iCheckHdr(HDRHEADER *Header)
 {
-	return !strnicmp(Header->Signature, "#?RADIANCE", 10);
+	return
+		strnicmp(Header->Signature, "#?RADIANCE", 10) == 0
+		|| strnicmp(Header->Signature, "#?RGBE", 6) == 0;
 }
 
 
