@@ -1,9 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cpp Wrapper", "..\..\Cpp Wrapper\Cpp Wrapper.vcproj", "{51CA777D-8B5E-4BC4-85D8-FCBE29107F54}"
 	ProjectSection(ProjectDependencies) = postProject
-		{98884911-2B7F-45C7-B0FD-CB909E8CB7C1} = {98884911-2B7F-45C7-B0FD-CB909E8CB7C1}
-		{BAC3571A-7AD2-40BD-B920-88443D73F84F} = {BAC3571A-7AD2-40BD-B920-88443D73F84F}
-		{A4563D37-173F-4459-BDC5-9F42992AEF45} = {A4563D37-173F-4459-BDC5-9F42992AEF45}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IL", "..\..\src-IL\msvc\IL.vcproj", "{BAC3571A-7AD2-40BD-B920-88443D73F84F}"
@@ -20,40 +17,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ILUT", "..\..\src-ILUT\msvc
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StressTest", "..\..\test\Stress\StressTest.vcproj", "{64E70789-DB1E-45BC-8251-91914E50A608}"
 	ProjectSection(ProjectDependencies) = postProject
-		{98884911-2B7F-45C7-B0FD-CB909E8CB7C1} = {98884911-2B7F-45C7-B0FD-CB909E8CB7C1}
-		{BAC3571A-7AD2-40BD-B920-88443D73F84F} = {BAC3571A-7AD2-40BD-B920-88443D73F84F}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowsTest", "..\..\Examples\WindowsTest\WindowsTest.vcproj", "{AC2C92BA-19F8-4622-8FD6-9596F842D33C}"
-	ProjectSection(ProjectDependencies) = postProject
-		{98884911-2B7F-45C7-B0FD-CB909E8CB7C1} = {98884911-2B7F-45C7-B0FD-CB909E8CB7C1}
-		{BAC3571A-7AD2-40BD-B920-88443D73F84F} = {BAC3571A-7AD2-40BD-B920-88443D73F84F}
-		{A4563D37-173F-4459-BDC5-9F42992AEF45} = {A4563D37-173F-4459-BDC5-9F42992AEF45}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lcmsdll", "extlibs\lcmsdll.vcproj", "{75EE92E6-DF8D-4FB1-89C0-B2BA687D1144}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libjpeg", "extlibs\LibJpeg.vcproj", "{A0FEEAD3-97BB-45E2-BFD0-1EB5A292DAEC}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmng", "extlibs\libmng.vcproj", "{C82A8ADB-AADE-4D50-B6E8-912E69F08106}"
-	ProjectSection(ProjectDependencies) = postProject
-		{A0FEEAD3-97BB-45E2-BFD0-1EB5A292DAEC} = {A0FEEAD3-97BB-45E2-BFD0-1EB5A292DAEC}
-		{75EE92E6-DF8D-4FB1-89C0-B2BA687D1144} = {75EE92E6-DF8D-4FB1-89C0-B2BA687D1144}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libpng", "extlibs\libpng.vcproj", "{F878F855-3003-4CE6-882F-43972FC04963}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Libtiff", "extlibs\Libtiff.vcproj", "{CEE499C8-A604-4592-A4B1-F6D68100C0AE}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "extlibs\zlib.vcproj", "{3FD80B28-BF8A-4512-92CE-E1A2A458CF6B}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -91,42 +57,6 @@ Global
 		{AC2C92BA-19F8-4622-8FD6-9596F842D33C}.Debug.ActiveCfg = Debug|Win32
 		{AC2C92BA-19F8-4622-8FD6-9596F842D33C}.Dynamic.ActiveCfg = Dynamic|Win32
 		{AC2C92BA-19F8-4622-8FD6-9596F842D33C}.Release.ActiveCfg = Release|Win32
-		{75EE92E6-DF8D-4FB1-89C0-B2BA687D1144}.Debug.ActiveCfg = Debug|Win32
-		{75EE92E6-DF8D-4FB1-89C0-B2BA687D1144}.Debug.Build.0 = Debug|Win32
-		{75EE92E6-DF8D-4FB1-89C0-B2BA687D1144}.Dynamic.ActiveCfg = Dynamic|Win32
-		{75EE92E6-DF8D-4FB1-89C0-B2BA687D1144}.Dynamic.Build.0 = Dynamic|Win32
-		{75EE92E6-DF8D-4FB1-89C0-B2BA687D1144}.Release.ActiveCfg = Release|Win32
-		{75EE92E6-DF8D-4FB1-89C0-B2BA687D1144}.Release.Build.0 = Release|Win32
-		{A0FEEAD3-97BB-45E2-BFD0-1EB5A292DAEC}.Debug.ActiveCfg = Debug|Win32
-		{A0FEEAD3-97BB-45E2-BFD0-1EB5A292DAEC}.Debug.Build.0 = Debug|Win32
-		{A0FEEAD3-97BB-45E2-BFD0-1EB5A292DAEC}.Dynamic.ActiveCfg = Dynamic|Win32
-		{A0FEEAD3-97BB-45E2-BFD0-1EB5A292DAEC}.Dynamic.Build.0 = Dynamic|Win32
-		{A0FEEAD3-97BB-45E2-BFD0-1EB5A292DAEC}.Release.ActiveCfg = Release|Win32
-		{A0FEEAD3-97BB-45E2-BFD0-1EB5A292DAEC}.Release.Build.0 = Release|Win32
-		{C82A8ADB-AADE-4D50-B6E8-912E69F08106}.Debug.ActiveCfg = Debug|Win32
-		{C82A8ADB-AADE-4D50-B6E8-912E69F08106}.Debug.Build.0 = Debug|Win32
-		{C82A8ADB-AADE-4D50-B6E8-912E69F08106}.Dynamic.ActiveCfg = Dynamic|Win32
-		{C82A8ADB-AADE-4D50-B6E8-912E69F08106}.Dynamic.Build.0 = Dynamic|Win32
-		{C82A8ADB-AADE-4D50-B6E8-912E69F08106}.Release.ActiveCfg = Release|Win32
-		{C82A8ADB-AADE-4D50-B6E8-912E69F08106}.Release.Build.0 = Release|Win32
-		{F878F855-3003-4CE6-882F-43972FC04963}.Debug.ActiveCfg = Debug|Win32
-		{F878F855-3003-4CE6-882F-43972FC04963}.Debug.Build.0 = Debug|Win32
-		{F878F855-3003-4CE6-882F-43972FC04963}.Dynamic.ActiveCfg = Dynamic|Win32
-		{F878F855-3003-4CE6-882F-43972FC04963}.Dynamic.Build.0 = Dynamic|Win32
-		{F878F855-3003-4CE6-882F-43972FC04963}.Release.ActiveCfg = Release|Win32
-		{F878F855-3003-4CE6-882F-43972FC04963}.Release.Build.0 = Release|Win32
-		{CEE499C8-A604-4592-A4B1-F6D68100C0AE}.Debug.ActiveCfg = Debug|Win32
-		{CEE499C8-A604-4592-A4B1-F6D68100C0AE}.Debug.Build.0 = Debug|Win32
-		{CEE499C8-A604-4592-A4B1-F6D68100C0AE}.Dynamic.ActiveCfg = Dynamic|Win32
-		{CEE499C8-A604-4592-A4B1-F6D68100C0AE}.Dynamic.Build.0 = Dynamic|Win32
-		{CEE499C8-A604-4592-A4B1-F6D68100C0AE}.Release.ActiveCfg = Release|Win32
-		{CEE499C8-A604-4592-A4B1-F6D68100C0AE}.Release.Build.0 = Release|Win32
-		{3FD80B28-BF8A-4512-92CE-E1A2A458CF6B}.Debug.ActiveCfg = Debug|Win32
-		{3FD80B28-BF8A-4512-92CE-E1A2A458CF6B}.Debug.Build.0 = Debug|Win32
-		{3FD80B28-BF8A-4512-92CE-E1A2A458CF6B}.Dynamic.ActiveCfg = Dynamic|Win32
-		{3FD80B28-BF8A-4512-92CE-E1A2A458CF6B}.Dynamic.Build.0 = Dynamic|Win32
-		{3FD80B28-BF8A-4512-92CE-E1A2A458CF6B}.Release.ActiveCfg = Release|Win32
-		{3FD80B28-BF8A-4512-92CE-E1A2A458CF6B}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

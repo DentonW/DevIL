@@ -15,8 +15,8 @@
 
 #include <d3d8.h>
 #include <d3dx8tex.h>
-#pragma comment(lib, "d3d8.lib")
-#pragma comment(lib, "d3dx8.lib")
+//pragma comment(lib, "d3d8.lib")
+//pragma comment(lib, "d3dx8.lib")
 
 ILimage*	MakeD3D8Compliant(IDirect3DDevice8 *Device, D3DFORMAT *DestFormat);
 ILenum		GetD3D8Compat(ILenum Format);

@@ -27,7 +27,8 @@
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="TRUE"
+				BufferSecurityCheck="FALSE"
+				EnableEnhancedInstructionSet="0"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\../src/obj/dynamic/ILU.pch"
 				AssemblerListingLocation=".\../src/obj/dynamic/"
@@ -92,6 +93,7 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;IL_STATIC_LIB"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				BufferSecurityCheck="TRUE"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\../src/obj/debug/ILU.pch"
 				AssemblerListingLocation=".\../src/obj/debug/"
@@ -105,7 +107,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				OutputFile="$(OutDir)/DevILU_DBG.lib"
-				IgnoreDefaultLibraryNames=""/>
+				IgnoreDefaultLibraryNames="DevIL_DBG.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
@@ -143,13 +145,12 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="1"
-				InlineFunctionExpansion="1"
+				Optimization="2"
 				AdditionalIncludeDirectories="../include;../../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;IL_STATIC_LIB"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="TRUE"
+				BufferSecurityCheck="FALSE"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\../src/obj/ILU.pch"
 				AssemblerListingLocation=".\../src/obj/"
@@ -162,7 +163,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				OutputFile="$(OutDir)/DevILU.lib"
-				IgnoreDefaultLibraryNames="DevIL.lib lcms.lib libjpeg.lib libmng.lib libpng.lib libtiff.lib zlib.lib"/>
+				IgnoreDefaultLibraryNames="DevIL.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
@@ -649,12 +650,6 @@
 		<Filter
 			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
-			<File
-				RelativePath="resources\IL Logo.ico">
-			</File>
-			<File
-				RelativePath="ILU.rc">
-			</File>
 		</Filter>
 	</Files>
 	<Globals>

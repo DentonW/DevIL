@@ -1,0 +1,81 @@
+# Project: ILU
+# Makefile created by Dev-C++ 4.9.8.10
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = 
+OBJ  = .objects/ilu_utilities.o .objects/ilu_alloc.o .objects/ilu_error.o .objects/ilu_filter.o .objects/ilu_filter_rcg.o .objects/ilu_internal.o .objects/ilu_main.o .objects/ilu_manip.o .objects/ilu_mipmap.o .objects/ilu_noise.o .objects/ilu_region.o .objects/ilu_rotate.o .objects/ilu_scale2d.o .objects/ilu_scale3d.o .objects/ilu_scale.o .objects/ilu_scaling.o .objects/ilu_states.o $(RES)
+LINKOBJ  = .objects/ilu_utilities.o .objects/ilu_alloc.o .objects/ilu_error.o .objects/ilu_filter.o .objects/ilu_filter_rcg.o .objects/ilu_internal.o .objects/ilu_main.o .objects/ilu_manip.o .objects/ilu_mipmap.o .objects/ilu_noise.o .objects/ilu_region.o .objects/ilu_rotate.o .objects/ilu_scale2d.o .objects/ilu_scale3d.o .objects/ilu_scale.o .objects/ilu_scaling.o .objects/ilu_states.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib" -L"C:/Libraries/libjpeg/lib" -L"C:/Libraries/libpng/lib" -L"C:/Libraries/libmng/lib" -L"C:/Libraries/libtiff/lib" -L"C:/Libraries/lcms/lib/Dev-Cpp" ../../../lib/libIL.a 
+INCS =  -I"C:/Dev-Cpp/include"  -I"C:/Libraries/libjpeg"  -I"C:/Libraries/libpng"  -I"C:/Libraries/libtiff"  -I"C:/Libraries/libmng"  -I"C:/Libraries/zlib"  -I"C:/Libraries/lcms/include"  -I"C:/Libraries/DevIL/include"  -I"C:/Libraries/DevIL/src-ILU/include" 
+CXXINCS =  -I"C:/Dev-Cpp/include/c++"  -I"C:/Dev-Cpp/include/c++/mingw32"  -I"C:/Dev-Cpp/include/c++/backward"  -I"C:/Dev-Cpp/include"  -I"C:/Libraries/DevIL/include"  -I"C:/Libraries/DevIL/src-ILU/include" 
+BIN  = ../../../lib/ILU.dll
+CXXFLAGS = $(CXXINCS) 
+CFLAGS = $(INCS) 
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before ../../../lib/ILU.dll all-after
+
+
+clean: clean-custom
+	rm -f $(OBJ) $(BIN)
+
+DLLWRAP=dllwrap.exe
+DEFFILE=../../../lib/libILU.def
+STATICLIB=../../../lib/libILU.a
+
+$(BIN): $(LINKOBJ)
+	$(DLLWRAP) --output-def $(DEFFILE) --implib $(STATICLIB) $(LINKOBJ) $(LIBS) -o $(BIN)
+
+.objects/ilu_utilities.o: ../../../src-ILU/src/ilu_utilities.c
+	$(CC) -c ../../../src-ILU/src/ilu_utilities.c -o .objects/ilu_utilities.o $(CFLAGS)
+
+.objects/ilu_alloc.o: ../../../src-ILU/src/ilu_alloc.c
+	$(CC) -c ../../../src-ILU/src/ilu_alloc.c -o .objects/ilu_alloc.o $(CFLAGS)
+
+.objects/ilu_error.o: ../../../src-ILU/src/ilu_error.c
+	$(CC) -c ../../../src-ILU/src/ilu_error.c -o .objects/ilu_error.o $(CFLAGS)
+
+.objects/ilu_filter.o: ../../../src-ILU/src/ilu_filter.c
+	$(CC) -c ../../../src-ILU/src/ilu_filter.c -o .objects/ilu_filter.o $(CFLAGS)
+
+.objects/ilu_filter_rcg.o: ../../../src-ILU/src/ilu_filter_rcg.c
+	$(CC) -c ../../../src-ILU/src/ilu_filter_rcg.c -o .objects/ilu_filter_rcg.o $(CFLAGS)
+
+.objects/ilu_internal.o: ../../../src-ILU/src/ilu_internal.c
+	$(CC) -c ../../../src-ILU/src/ilu_internal.c -o .objects/ilu_internal.o $(CFLAGS)
+
+.objects/ilu_main.o: ../../../src-ILU/src/ilu_main.c
+	$(CC) -c ../../../src-ILU/src/ilu_main.c -o .objects/ilu_main.o $(CFLAGS)
+
+.objects/ilu_manip.o: ../../../src-ILU/src/ilu_manip.c
+	$(CC) -c ../../../src-ILU/src/ilu_manip.c -o .objects/ilu_manip.o $(CFLAGS)
+
+.objects/ilu_mipmap.o: ../../../src-ILU/src/ilu_mipmap.c
+	$(CC) -c ../../../src-ILU/src/ilu_mipmap.c -o .objects/ilu_mipmap.o $(CFLAGS)
+
+.objects/ilu_noise.o: ../../../src-ILU/src/ilu_noise.c
+	$(CC) -c ../../../src-ILU/src/ilu_noise.c -o .objects/ilu_noise.o $(CFLAGS)
+
+.objects/ilu_region.o: ../../../src-ILU/src/ilu_region.c
+	$(CC) -c ../../../src-ILU/src/ilu_region.c -o .objects/ilu_region.o $(CFLAGS)
+
+.objects/ilu_rotate.o: ../../../src-ILU/src/ilu_rotate.c
+	$(CC) -c ../../../src-ILU/src/ilu_rotate.c -o .objects/ilu_rotate.o $(CFLAGS)
+
+.objects/ilu_scale2d.o: ../../../src-ILU/src/ilu_scale2d.c
+	$(CC) -c ../../../src-ILU/src/ilu_scale2d.c -o .objects/ilu_scale2d.o $(CFLAGS)
+
+.objects/ilu_scale3d.o: ../../../src-ILU/src/ilu_scale3d.c
+	$(CC) -c ../../../src-ILU/src/ilu_scale3d.c -o .objects/ilu_scale3d.o $(CFLAGS)
+
+.objects/ilu_scale.o: ../../../src-ILU/src/ilu_scale.c
+	$(CC) -c ../../../src-ILU/src/ilu_scale.c -o .objects/ilu_scale.o $(CFLAGS)
+
+.objects/ilu_scaling.o: ../../../src-ILU/src/ilu_scaling.c
+	$(CC) -c ../../../src-ILU/src/ilu_scaling.c -o .objects/ilu_scaling.o $(CFLAGS)
+
+.objects/ilu_states.o: ../../../src-ILU/src/ilu_states.c
+	$(CC) -c ../../../src-ILU/src/ilu_states.c -o .objects/ilu_states.o $(CFLAGS)

@@ -1,0 +1,186 @@
+# Project: IL
+# Makefile created by Dev-C++ 4.9.8.10
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = 
+OBJ  = .objects/il_xpm.o .objects/il_alloc.o .objects/il_bits.o .objects/il_bmp.o .objects/il_convbuff.o .objects/il_convert.o .objects/il_cut.o .objects/il_dcx.o .objects/il_dds.o .objects/il_dds-save.o .objects/il_devil.o .objects/il_doom.o .objects/il_endian.o .objects/il_error.o .objects/il_fastconv.o .objects/il_files.o .objects/il_gif.o .objects/il_hdr.o .objects/il_header.o .objects/il_icon.o .objects/il_internal.o .objects/il_io.o .objects/il_jpeg.o .objects/il_lif.o .objects/il_main.o .objects/il_manip.o .objects/il_mdl.o .objects/il_mng.o .objects/il_neuquant.o .objects/il_pal.o .objects/il_pcd.o .objects/il_pcx.o .objects/il_pic.o .objects/il_pix.o .objects/il_png.o .objects/il_pnm.o .objects/il_profiles.o .objects/il_psd.o .objects/il_psp.o .objects/il_pxr.o .objects/il_quantizer.o .objects/il_raw.o .objects/il_rawdata.o .objects/il_register.o .objects/il_rle.o .objects/il_sgi.o .objects/il_stack.o .objects/il_states.o .objects/il_targa.o .objects/il_tiff.o .objects/il_utility.o .objects/il_wal.o $(RES)
+LINKOBJ  = .objects/il_xpm.o .objects/il_alloc.o .objects/il_bits.o .objects/il_bmp.o .objects/il_convbuff.o .objects/il_convert.o .objects/il_cut.o .objects/il_dcx.o .objects/il_dds.o .objects/il_dds-save.o .objects/il_devil.o .objects/il_doom.o .objects/il_endian.o .objects/il_error.o .objects/il_fastconv.o .objects/il_files.o .objects/il_gif.o .objects/il_hdr.o .objects/il_header.o .objects/il_icon.o .objects/il_internal.o .objects/il_io.o .objects/il_jpeg.o .objects/il_lif.o .objects/il_main.o .objects/il_manip.o .objects/il_mdl.o .objects/il_mng.o .objects/il_neuquant.o .objects/il_pal.o .objects/il_pcd.o .objects/il_pcx.o .objects/il_pic.o .objects/il_pix.o .objects/il_png.o .objects/il_pnm.o .objects/il_profiles.o .objects/il_psd.o .objects/il_psp.o .objects/il_pxr.o .objects/il_quantizer.o .objects/il_raw.o .objects/il_rawdata.o .objects/il_register.o .objects/il_rle.o .objects/il_sgi.o .objects/il_stack.o .objects/il_states.o .objects/il_targa.o .objects/il_tiff.o .objects/il_utility.o .objects/il_wal.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib" -L"C:/Libraries/libjpeg/lib" -L"C:/Libraries/libpng/lib" -L"C:/Libraries/libmng/lib" -L"C:/Libraries/libtiff/lib" -L"C:/Libraries/lcms/lib/Dev-Cpp" --no-export-all-symbols --add-stdcall-alias ../../../../zlib/lib/libz.a ../../../../libtiff/lib/libtiff.a ../../../../libpng/lib/libpng.a ../../../../libjpeg/lib/libjpeg.a ../../../../libmng/lib/libmng.a ../../../../lcms/lib/DevCpp/liblcms.a 
+INCS =  -I"C:/Dev-Cpp/include"  -I"C:/Libraries/libjpeg"  -I"C:/Libraries/libpng"  -I"C:/Libraries/libtiff"  -I"C:/Libraries/libmng"  -I"C:/Libraries/zlib"  -I"C:/Libraries/lcms/include"  -I"C:/Libraries/DevIL/include"  -I"C:/Libraries/DevIL/src-IL/include" 
+CXXINCS =  -I"C:/Dev-Cpp/include/c++"  -I"C:/Dev-Cpp/include/c++/mingw32"  -I"C:/Dev-Cpp/include/c++/backward"  -I"C:/Dev-Cpp/include"  -I"C:/Libraries/DevIL/include"  -I"C:/Libraries/DevIL/src-IL/include" 
+BIN  = ../../../lib/IL.dll
+CXXFLAGS = $(CXXINCS)-DBUILDING_DLL=1  
+CFLAGS = $(INCS)-DBUILDING_DLL=1  
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before ../../../lib/IL.dll all-after
+
+
+clean: clean-custom
+	rm -f $(OBJ) $(BIN)
+
+DLLWRAP=dllwrap.exe
+DEFFILE=../../../lib/libIL.def
+STATICLIB=../../../lib/libIL.a
+
+$(BIN): $(LINKOBJ)
+	$(DLLWRAP) --output-def $(DEFFILE) --implib $(STATICLIB) $(LINKOBJ) $(LIBS) -o $(BIN)
+
+.objects/il_xpm.o: ../../../src-IL/src/il_xpm.c
+	$(CC) -c ../../../src-IL/src/il_xpm.c -o .objects/il_xpm.o $(CFLAGS)
+
+.objects/il_alloc.o: ../../../src-IL/src/il_alloc.c
+	$(CC) -c ../../../src-IL/src/il_alloc.c -o .objects/il_alloc.o $(CFLAGS)
+
+.objects/il_bits.o: ../../../src-IL/src/il_bits.c
+	$(CC) -c ../../../src-IL/src/il_bits.c -o .objects/il_bits.o $(CFLAGS)
+
+.objects/il_bmp.o: ../../../src-IL/src/il_bmp.c
+	$(CC) -c ../../../src-IL/src/il_bmp.c -o .objects/il_bmp.o $(CFLAGS)
+
+.objects/il_convbuff.o: ../../../src-IL/src/il_convbuff.c
+	$(CC) -c ../../../src-IL/src/il_convbuff.c -o .objects/il_convbuff.o $(CFLAGS)
+
+.objects/il_convert.o: ../../../src-IL/src/il_convert.c
+	$(CC) -c ../../../src-IL/src/il_convert.c -o .objects/il_convert.o $(CFLAGS)
+
+.objects/il_cut.o: ../../../src-IL/src/il_cut.c
+	$(CC) -c ../../../src-IL/src/il_cut.c -o .objects/il_cut.o $(CFLAGS)
+
+.objects/il_dcx.o: ../../../src-IL/src/il_dcx.c
+	$(CC) -c ../../../src-IL/src/il_dcx.c -o .objects/il_dcx.o $(CFLAGS)
+
+.objects/il_dds.o: ../../../src-IL/src/il_dds.c
+	$(CC) -c ../../../src-IL/src/il_dds.c -o .objects/il_dds.o $(CFLAGS)
+
+.objects/il_dds-save.o: ../../../src-IL/src/il_dds-save.c
+	$(CC) -c ../../../src-IL/src/il_dds-save.c -o .objects/il_dds-save.o $(CFLAGS)
+
+.objects/il_devil.o: ../../../src-IL/src/il_devil.c
+	$(CC) -c ../../../src-IL/src/il_devil.c -o .objects/il_devil.o $(CFLAGS)
+
+.objects/il_doom.o: ../../../src-IL/src/il_doom.c
+	$(CC) -c ../../../src-IL/src/il_doom.c -o .objects/il_doom.o $(CFLAGS)
+
+.objects/il_endian.o: ../../../src-IL/src/il_endian.c
+	$(CC) -c ../../../src-IL/src/il_endian.c -o .objects/il_endian.o $(CFLAGS)
+
+.objects/il_error.o: ../../../src-IL/src/il_error.c
+	$(CC) -c ../../../src-IL/src/il_error.c -o .objects/il_error.o $(CFLAGS)
+
+.objects/il_fastconv.o: ../../../src-IL/src/il_fastconv.c
+	$(CC) -c ../../../src-IL/src/il_fastconv.c -o .objects/il_fastconv.o $(CFLAGS)
+
+.objects/il_files.o: ../../../src-IL/src/il_files.c
+	$(CC) -c ../../../src-IL/src/il_files.c -o .objects/il_files.o $(CFLAGS)
+
+.objects/il_gif.o: ../../../src-IL/src/il_gif.c
+	$(CC) -c ../../../src-IL/src/il_gif.c -o .objects/il_gif.o $(CFLAGS)
+
+.objects/il_hdr.o: ../../../src-IL/src/il_hdr.c
+	$(CC) -c ../../../src-IL/src/il_hdr.c -o .objects/il_hdr.o $(CFLAGS)
+
+.objects/il_header.o: ../../../src-IL/src/il_header.c
+	$(CC) -c ../../../src-IL/src/il_header.c -o .objects/il_header.o $(CFLAGS)
+
+.objects/il_icon.o: ../../../src-IL/src/il_icon.c
+	$(CC) -c ../../../src-IL/src/il_icon.c -o .objects/il_icon.o $(CFLAGS)
+
+.objects/il_internal.o: ../../../src-IL/src/il_internal.c
+	$(CC) -c ../../../src-IL/src/il_internal.c -o .objects/il_internal.o $(CFLAGS)
+
+.objects/il_io.o: ../../../src-IL/src/il_io.c
+	$(CC) -c ../../../src-IL/src/il_io.c -o .objects/il_io.o $(CFLAGS)
+
+.objects/il_jpeg.o: ../../../src-IL/src/il_jpeg.c
+	$(CC) -c ../../../src-IL/src/il_jpeg.c -o .objects/il_jpeg.o $(CFLAGS)
+
+.objects/il_lif.o: ../../../src-IL/src/il_lif.c
+	$(CC) -c ../../../src-IL/src/il_lif.c -o .objects/il_lif.o $(CFLAGS)
+
+.objects/il_main.o: ../../../src-IL/src/il_main.c
+	$(CC) -c ../../../src-IL/src/il_main.c -o .objects/il_main.o $(CFLAGS)
+
+.objects/il_manip.o: ../../../src-IL/src/il_manip.c
+	$(CC) -c ../../../src-IL/src/il_manip.c -o .objects/il_manip.o $(CFLAGS)
+
+.objects/il_mdl.o: ../../../src-IL/src/il_mdl.c
+	$(CC) -c ../../../src-IL/src/il_mdl.c -o .objects/il_mdl.o $(CFLAGS)
+
+.objects/il_mng.o: ../../../src-IL/src/il_mng.c
+	$(CC) -c ../../../src-IL/src/il_mng.c -o .objects/il_mng.o $(CFLAGS)
+
+.objects/il_neuquant.o: ../../../src-IL/src/il_neuquant.c
+	$(CC) -c ../../../src-IL/src/il_neuquant.c -o .objects/il_neuquant.o $(CFLAGS)
+
+.objects/il_pal.o: ../../../src-IL/src/il_pal.c
+	$(CC) -c ../../../src-IL/src/il_pal.c -o .objects/il_pal.o $(CFLAGS)
+
+.objects/il_pcd.o: ../../../src-IL/src/il_pcd.c
+	$(CC) -c ../../../src-IL/src/il_pcd.c -o .objects/il_pcd.o $(CFLAGS)
+
+.objects/il_pcx.o: ../../../src-IL/src/il_pcx.c
+	$(CC) -c ../../../src-IL/src/il_pcx.c -o .objects/il_pcx.o $(CFLAGS)
+
+.objects/il_pic.o: ../../../src-IL/src/il_pic.c
+	$(CC) -c ../../../src-IL/src/il_pic.c -o .objects/il_pic.o $(CFLAGS)
+
+.objects/il_pix.o: ../../../src-IL/src/il_pix.c
+	$(CC) -c ../../../src-IL/src/il_pix.c -o .objects/il_pix.o $(CFLAGS)
+
+.objects/il_png.o: ../../../src-IL/src/il_png.c
+	$(CC) -c ../../../src-IL/src/il_png.c -o .objects/il_png.o $(CFLAGS)
+
+.objects/il_pnm.o: ../../../src-IL/src/il_pnm.c
+	$(CC) -c ../../../src-IL/src/il_pnm.c -o .objects/il_pnm.o $(CFLAGS)
+
+.objects/il_profiles.o: ../../../src-IL/src/il_profiles.c
+	$(CC) -c ../../../src-IL/src/il_profiles.c -o .objects/il_profiles.o $(CFLAGS)
+
+.objects/il_psd.o: ../../../src-IL/src/il_psd.c
+	$(CC) -c ../../../src-IL/src/il_psd.c -o .objects/il_psd.o $(CFLAGS)
+
+.objects/il_psp.o: ../../../src-IL/src/il_psp.c
+	$(CC) -c ../../../src-IL/src/il_psp.c -o .objects/il_psp.o $(CFLAGS)
+
+.objects/il_pxr.o: ../../../src-IL/src/il_pxr.c
+	$(CC) -c ../../../src-IL/src/il_pxr.c -o .objects/il_pxr.o $(CFLAGS)
+
+.objects/il_quantizer.o: ../../../src-IL/src/il_quantizer.c
+	$(CC) -c ../../../src-IL/src/il_quantizer.c -o .objects/il_quantizer.o $(CFLAGS)
+
+.objects/il_raw.o: ../../../src-IL/src/il_raw.c
+	$(CC) -c ../../../src-IL/src/il_raw.c -o .objects/il_raw.o $(CFLAGS)
+
+.objects/il_rawdata.o: ../../../src-IL/src/il_rawdata.c
+	$(CC) -c ../../../src-IL/src/il_rawdata.c -o .objects/il_rawdata.o $(CFLAGS)
+
+.objects/il_register.o: ../../../src-IL/src/il_register.c
+	$(CC) -c ../../../src-IL/src/il_register.c -o .objects/il_register.o $(CFLAGS)
+
+.objects/il_rle.o: ../../../src-IL/src/il_rle.c
+	$(CC) -c ../../../src-IL/src/il_rle.c -o .objects/il_rle.o $(CFLAGS)
+
+.objects/il_sgi.o: ../../../src-IL/src/il_sgi.c
+	$(CC) -c ../../../src-IL/src/il_sgi.c -o .objects/il_sgi.o $(CFLAGS)
+
+.objects/il_stack.o: ../../../src-IL/src/il_stack.c
+	$(CC) -c ../../../src-IL/src/il_stack.c -o .objects/il_stack.o $(CFLAGS)
+
+.objects/il_states.o: ../../../src-IL/src/il_states.c
+	$(CC) -c ../../../src-IL/src/il_states.c -o .objects/il_states.o $(CFLAGS)
+
+.objects/il_targa.o: ../../../src-IL/src/il_targa.c
+	$(CC) -c ../../../src-IL/src/il_targa.c -o .objects/il_targa.o $(CFLAGS)
+
+.objects/il_tiff.o: ../../../src-IL/src/il_tiff.c
+	$(CC) -c ../../../src-IL/src/il_tiff.c -o .objects/il_tiff.o $(CFLAGS)
+
+.objects/il_utility.o: ../../../src-IL/src/il_utility.c
+	$(CC) -c ../../../src-IL/src/il_utility.c -o .objects/il_utility.o $(CFLAGS)
+
+.objects/il_wal.o: ../../../src-IL/src/il_wal.c
+	$(CC) -c ../../../src-IL/src/il_wal.c -o .objects/il_wal.o $(CFLAGS)

@@ -2,3 +2,6 @@
 *.lib
 *.so
 *.exp
+*.a
+*.def
+

@@ -13,19 +13,34 @@
 #include "il_internal.h"
 #ifndef IL_NO_LCMS
 
+#ifdef PACKAGE_NAME
+#define IL_PACKAGE_NAME PACKAGE_NAME;
+#undef  PACKAGE_NAME
+#endif
+
 #ifndef _WIN32
 	#define NON_WINDOWS 1
 	#include <lcms/lcms.h>
 #else
 //	#ifndef IL_DEBUG
-//		#pragma comment(lib, "lcms108.lib")
+//		pragma comment(lib, "lcms108.lib")
 //	#else
-//		#pragma comment(lib, "debug/lcms108.lib")
+//		pragma comment(lib, "debug/lcms108.lib")
 //	#endif
 	#include <lcms.h>
 #endif//_WIN32
 
+#ifdef PACKAGE_NAME
+#undef PACKAGE_NAME
+#endif
+
+#ifdef IL_PACKAGE_NAME
+#define PACKAGE_NAME IL_PACKAGE_NAME
+#undef  IL_PACKAGE_NAME
+#endif
+
 #endif//IL_NO_LCMS
+
 ILboolean ILAPIENTRY ilApplyProfile(const ILstring InProfile, const ILstring OutProfile)
 {
 #ifndef IL_NO_LCMS

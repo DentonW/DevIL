@@ -47,16 +47,18 @@
 			#pragma intrinsic(strcmp)
 			#pragma intrinsic(strlen)
 			#pragma intrinsic(strcpy)
+			/*
 			#if _MSC_VER >= 1300  // Erroneous size_t conversion warnings
-				#pragma warning(disable : 4267)
+				pragma warning(disable : 4267)
 			#endif
-			#pragma comment(linker, "/NODEFAULTLIB:libc")
-			#pragma comment(linker, "/NODEFAULTLIB:libcd")
-			#pragma comment(linker, "/NODEFAULTLIB:libcmt.lib")
+			pragma comment(linker, "/NODEFAULTLIB:libc")
+			pragma comment(linker, "/NODEFAULTLIB:libcd")
+			pragma comment(linker, "/NODEFAULTLIB:libcmt.lib")
 			#ifdef _DEBUG
-				#pragma comment(linker, "/NODEFAULTLIB:libcmtd")
-				#pragma comment(linker, "/NODEFAULTLIB:msvcrt.lib")
+				pragma comment(linker, "/NODEFAULTLIB:libcmtd")
+				pragma comment(linker, "/NODEFAULTLIB:msvcrt.lib")
 			#endif // _DEBUG
+			*/
 		#endif // _MSC_VER > 1000
 	#endif
 	#define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers
@@ -197,44 +199,44 @@ char *iGetString(ILenum StringName);  // Internal version of ilGetString
 #if _MSC_VER && !_WIN32_WCE
 	#ifndef IL_NO_JPG
 		#ifdef IL_USE_IJL
-			#pragma comment(lib, "ijl15.lib")
+			//pragma comment(lib, "ijl15.lib")
 		#else
 			#ifndef IL_DEBUG
-				#pragma comment(lib, "libjpeg.lib")
+				//pragma comment(lib, "libjpeg.lib")
 			#else
-				#pragma comment(lib, "debug/libjpeg.lib")
+				//ragma comment(lib, "debug/libjpeg.lib")
 			#endif
 		#endif
 	#endif
 	#ifndef IL_NO_MNG
 		#ifndef IL_DEBUG
-			#pragma comment(lib, "libmng.lib")
-			#pragma comment(lib, "libjpeg.lib")  // For JNG support.
+			//pragma comment(lib, "libmng.lib")
+			//pragma comment(lib, "libjpeg.lib")  // For JNG support.
 		#else
-			#pragma comment(lib, "debug/libmng.lib")
-			#pragma comment(lib, "debug/libjpeg.lib")  // For JNG support.
+			//pragma comment(lib, "debug/libmng.lib")
+			//pragma comment(lib, "debug/libjpeg.lib")  // For JNG support.
 		#endif
 	#endif
 	#ifndef IL_NO_PNG
 		#ifndef IL_DEBUG
-			#pragma comment(lib, "libpng.lib")
+			//pragma comment(lib, "libpng.lib")
 		#else
-			#pragma comment(lib, "debug/libpng.lib")
+			//pragma comment(lib, "debug/libpng.lib")
 		#endif
 	#endif
 	#ifndef IL_NO_TIF
 		#ifndef IL_DEBUG
-			#pragma comment(lib, "libtiff.lib")
+			//pragma comment(lib, "libtiff.lib")
 		#else
-			#pragma comment(lib, "debug/libtiff.lib")
+			//pragma comment(lib, "debug/libtiff.lib")
 		#endif
 	#endif
 
 	#if !defined(IL_NO_MNG) || !defined(IL_NO_PNG)
 		#ifndef IL_DEBUG
-			#pragma comment(lib, "zlib.lib")
+			//pragma comment(lib, "zlib.lib")
 		#else
-			#pragma comment(lib, "debug/zlib.lib")
+			//pragma comment(lib, "debug/zlib.lib")
 		#endif
 	#endif
 #endif

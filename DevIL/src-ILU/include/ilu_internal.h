@@ -21,7 +21,7 @@
 		#pragma once
 		#pragma intrinsic(memcpy)
 		#pragma intrinsic(memset)
-		#pragma comment(linker, "/NODEFAULTLIB:libc")
+		//pragma comment(linker, "/NODEFAULTLIB:libc")
 		#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
 	#endif // _MSC_VER > 1000
 #endif

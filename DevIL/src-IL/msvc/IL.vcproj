@@ -22,16 +22,17 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;../../extlibs/libjpeg;../../include;../../extlibs/libpng;../../extlibs/libtiff/libtiff;../../extlibs/littlecms/include;../../extlibs/libmng;../../extlibs/zlib"
+				AdditionalIncludeDirectories="../include;../../include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;IL_STATIC_LIB"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				BufferSecurityCheck="TRUE"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\../src/obj/debug/IL.pch"
 				AssemblerListingLocation=".\../src/obj/debug/"
 				ObjectFile=".\../src/obj/debug/"
 				ProgramDataBaseFileName=".\../src/obj/debug/"
-				WarningLevel="3"
+				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="4"/>
 			<Tool
@@ -79,9 +80,11 @@
 				Name="VCCLCompilerTool"
 				Optimization="1"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../include;../../extlibs/libjpeg;../../include;../../extlibs/libpng;../../extlibs/libtiff/libtiff;../../extlibs/littlecms/include;../../extlibs/libmng;../../extlibs/zlib"
+				AdditionalIncludeDirectories="../include;../../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;ZLIB_DLL;PNG_USE_DLL;MNG_USE_DLL;"
+				StringPooling="TRUE"
 				RuntimeLibrary="2"
+				BufferSecurityCheck="FALSE"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\../src/obj/dynamic/IL.pch"
 				AssemblerListingLocation=".\../src/obj/dynamic/"
@@ -93,11 +96,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="zlib_DLL.lib libpng_DLL.lib libmng_DLL.lib libtiff_DLL.lib lcms_DLL.lib libjpeg_DLL.lib"
+				AdditionalDependencies="libz_DLL.lib libpng_DLL.lib libmng_DLL.lib libtiff_DLL.lib littlecms_DLL.lib libjpeg_DLL.lib"
 				OutputFile="$(OutDir)/DevIL.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="../../extlibs/lib"
+				AdditionalLibraryDirectories=""
 				IgnoreAllDefaultLibraries="FALSE"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile=".\il.def"
@@ -145,13 +148,12 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="1"
-				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../include;../../extlibs/libjpeg;../../include;../../extlibs/libpng;../../extlibs/libtiff/libtiff;../../extlibs/littlecms/include;../../extlibs/libmng;../../extlibs/zlib"
+				Optimization="2"
+				AdditionalIncludeDirectories="../include;../../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;IL_STATIC_LIB"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="TRUE"
+				BufferSecurityCheck="FALSE"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\../src/obj/IL.pch"
 				AssemblerListingLocation=".\../src/obj/"
@@ -164,7 +166,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				OutputFile="$(OutDir)/DevIL.lib"
-				IgnoreDefaultLibraryNames="lcms.lib libjpeg.lib libmng.lib libpng.lib libtiff.lib zlib.lib"/>
+				IgnoreDefaultLibraryNames=""/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
@@ -1600,12 +1602,6 @@
 		<Filter
 			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
-			<File
-				RelativePath="resources\IL Logo.ico">
-			</File>
-			<File
-				RelativePath="IL.rc">
-			</File>
 		</Filter>
 		<Filter
 			Name="Text Files"

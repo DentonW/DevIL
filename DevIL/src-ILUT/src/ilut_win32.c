@@ -17,7 +17,7 @@
 #include <windows.h>
 
 // For ilutWinLoadUrl().
-#pragma comment(lib, "wininet.lib")
+//pragma comment(lib, "wininet.lib")
 
 #if !_WIN32_WCE && (_WIN32 && __GNUC__)
 	PRINTDLG	Pd;

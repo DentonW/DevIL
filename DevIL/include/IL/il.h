@@ -95,14 +95,14 @@ extern "C" {
 	#if defined(_MSC_VER) || defined(__BORLANDC__)
 		#ifndef IL_STATIC_LIB
 			#ifndef _IL_BUILD_LIBRARY
-				#pragma comment(lib, "Devil_DLL.lib")
+				pragma comment(lib, "Devil_DLL.lib")
 			#endif
 		#else
 			#ifndef _IL_BUILD_LIBRARY
 				#ifdef  IL_DEBUG
-					#pragma comment(lib, "Devil_DBG.lib")
+					pragma comment(lib, "Devil_DBG.lib")
 				#else
-					#pragma comment(lib, "Devil.lib")
+					pragma comment(lib, "Devil.lib")
 				#endif//IL_DEBUG
 			#endif
 		#endif

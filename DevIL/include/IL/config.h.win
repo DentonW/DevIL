@@ -15,7 +15,7 @@
 /* #undef IL_NO_HDR */
 /* #undef IL_NO_ICO */
 /* #undef IL_NO_JPG */
-#define IL_NO_LCMS 1
+/* #undef IL_NO_LCMS */
 /* #undef IL_NO_LIF */
 /* #undef IL_NO_MDL */
 /* #undef IL_NO_MNG */

@@ -1,0 +1,57 @@
+# Project: ILUT
+# Makefile created by Dev-C++ 4.9.8.10
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = 
+OBJ  = .objects/ilut_win32.o .objects/ilut_allegro.o .objects/ilut_directx9.o .objects/ilut_directx.o .objects/ilut_internal.o .objects/ilut_main.o .objects/ilut_opengl.o .objects/ilut_sdlsurface.o .objects/ilut_states.o $(RES)
+LINKOBJ  = .objects/ilut_win32.o .objects/ilut_allegro.o .objects/ilut_directx9.o .objects/ilut_directx.o .objects/ilut_internal.o .objects/ilut_main.o .objects/ilut_opengl.o .objects/ilut_sdlsurface.o .objects/ilut_states.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib" -L"C:/Libraries/libjpeg/lib" -L"C:/Libraries/libpng/lib" -L"C:/Libraries/libmng/lib" -L"C:/Libraries/libtiff/lib" -L"C:/Libraries/lcms/lib/Dev-Cpp" ../../../lib/libIL.a ../../../lib/libILU.a -lopengl32 -lglu32 -lgdi32 
+INCS =  -I"C:/Dev-Cpp/include"  -I"C:/Libraries/libjpeg"  -I"C:/Libraries/libpng"  -I"C:/Libraries/libtiff"  -I"C:/Libraries/libmng"  -I"C:/Libraries/zlib"  -I"C:/Libraries/lcms/include"  -I"C:/Libraries/DevIL/include"  -I"C:/Libraries/DevIL/src-ILUT/include" 
+CXXINCS =  -I"C:/Dev-Cpp/include/c++"  -I"C:/Dev-Cpp/include/c++/mingw32"  -I"C:/Dev-Cpp/include/c++/backward"  -I"C:/Dev-Cpp/include"  -I"C:/Libraries/DevIL/include"  -I"C:/Libraries/DevIL/src-ILUT/include" 
+BIN  = ../../../lib/ILUT.dll
+CXXFLAGS = $(CXXINCS) 
+CFLAGS = $(INCS) 
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before ../../../lib/ILUT.dll all-after
+
+
+clean: clean-custom
+	rm -f $(OBJ) $(BIN)
+
+DLLWRAP=dllwrap.exe
+DEFFILE=../../../lib/libILUT.def
+STATICLIB=../../../lib/libILUT.a
+
+$(BIN): $(LINKOBJ)
+	$(DLLWRAP) --output-def $(DEFFILE) --implib $(STATICLIB) $(LINKOBJ) $(LIBS) -o $(BIN)
+
+.objects/ilut_win32.o: ../../../src-ILUT/src/ilut_win32.c
+	$(CC) -c ../../../src-ILUT/src/ilut_win32.c -o .objects/ilut_win32.o $(CFLAGS)
+
+.objects/ilut_allegro.o: ../../../src-ILUT/src/ilut_allegro.c
+	$(CC) -c ../../../src-ILUT/src/ilut_allegro.c -o .objects/ilut_allegro.o $(CFLAGS)
+
+.objects/ilut_directx9.o: ../../../src-ILUT/src/ilut_directx9.c
+	$(CC) -c ../../../src-ILUT/src/ilut_directx9.c -o .objects/ilut_directx9.o $(CFLAGS)
+
+.objects/ilut_directx.o: ../../../src-ILUT/src/ilut_directx.c
+	$(CC) -c ../../../src-ILUT/src/ilut_directx.c -o .objects/ilut_directx.o $(CFLAGS)
+
+.objects/ilut_internal.o: ../../../src-ILUT/src/ilut_internal.c
+	$(CC) -c ../../../src-ILUT/src/ilut_internal.c -o .objects/ilut_internal.o $(CFLAGS)
+
+.objects/ilut_main.o: ../../../src-ILUT/src/ilut_main.c
+	$(CC) -c ../../../src-ILUT/src/ilut_main.c -o .objects/ilut_main.o $(CFLAGS)
+
+.objects/ilut_opengl.o: ../../../src-ILUT/src/ilut_opengl.c
+	$(CC) -c ../../../src-ILUT/src/ilut_opengl.c -o .objects/ilut_opengl.o $(CFLAGS)
+
+.objects/ilut_sdlsurface.o: ../../../src-ILUT/src/ilut_sdlsurface.c
+	$(CC) -c ../../../src-ILUT/src/ilut_sdlsurface.c -o .objects/ilut_sdlsurface.o $(CFLAGS)
+
+.objects/ilut_states.o: ../../../src-ILUT/src/ilut_states.c
+	$(CC) -c ../../../src-ILUT/src/ilut_states.c -o .objects/ilut_states.o $(CFLAGS)

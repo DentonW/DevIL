@@ -21,13 +21,12 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="1"
-				InlineFunctionExpansion="1"
+				Optimization="2"
 				AdditionalIncludeDirectories="../include;../../include;../../../../PC/_inc/DX"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;IL_STATIC_LIB"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="TRUE"
+				BufferSecurityCheck="FALSE"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\../src/obj/ILUT.pch"
 				AssemblerListingLocation=".\../src/obj/"
@@ -40,7 +39,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				OutputFile="$(OutDir)/DevILUT.lib"
-				IgnoreDefaultLibraryNames="DevIL.lib DevILU.lib lcms.lib libjpeg.lib libmng.lib libpng.lib libtiff.lib zlib.lib"/>
+				IgnoreDefaultLibraryNames="DevIL.lib DevILU.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
@@ -83,6 +82,7 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;IL_STATIC_LIB"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				BufferSecurityCheck="TRUE"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\../src/obj/debug/ILUT.pch"
 				AssemblerListingLocation=".\../src/obj/debug/"
@@ -96,7 +96,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				OutputFile="$(OutDir)/DevILUT_DBG.lib"
-				IgnoreDefaultLibraryNames=""/>
+				IgnoreDefaultLibraryNames="DevIL.lib DevILU.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
@@ -140,7 +140,7 @@
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="TRUE"
+				BufferSecurityCheck="FALSE"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\../src/obj/dynamic/ILUT.pch"
 				AssemblerListingLocation=".\../src/obj/dynamic/"
@@ -152,7 +152,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="DevIL_DLL.lib DevILU_DLL.lib opengl32.lib  glu32.lib Wininet.lib"
+				AdditionalDependencies="DevIL_DLL.lib DevILU_DLL.lib opengl32.lib  glu32.lib wininet.lib"
 				ShowProgress="0"
 				OutputFile="$(OutDir)/DevILUT.dll"
 				LinkIncremental="1"
@@ -470,12 +470,6 @@
 		<Filter
 			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
-			<File
-				RelativePath="resources\IL Logo.ico">
-			</File>
-			<File
-				RelativePath="ILUT.rc">
-			</File>
 		</Filter>
 	</Files>
 	<Globals>
