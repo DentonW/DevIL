@@ -179,7 +179,6 @@ ILboolean ilLoadHdrL(ILvoid *Lump, ILuint Size)
 ILboolean iLoadHdrInternal()
 {
 	HDRHEADER	Header;
-	ILboolean	bHdr = IL_TRUE;
 	ILfloat *data;
 	ILubyte *scanline;
 	ILuint i, j, e, r, g, b;
@@ -234,10 +233,7 @@ ILboolean iLoadHdrInternal()
 	iUnCache();
 	ifree(scanline);
 
-
-	ilFixImage();
-
-	return bHdr;
+	return ilFixImage();
 }
 
 ILvoid ReadScanline(ILubyte *scanline, ILuint w) {
