@@ -142,7 +142,7 @@ ILboolean iBuild1DMipmaps_(ILuint Width)
 	ILimage *MipMap;
 	ILuint i, j, c;
 
-	if (CurMipMap->Width <= 1) {  // Already at the last mipmap
+	if (CurMipMap != NULL && CurMipMap->Width <= 1) {  // Already at the last mipmap
 		CurMipMap->Next = NULL;  // Terminate the list
 		return IL_TRUE;
 	}
@@ -171,6 +171,7 @@ ILboolean iBuild1DMipmaps_(ILuint Width)
 
 	if (CurMipMap == NULL) {  // First mipmap
 		iluCurImage->Mipmaps = MipMap;
+		CurMipMap = iluCurImage;
 	}
 	else {
 		CurMipMap->Next = MipMap;
@@ -178,11 +179,13 @@ ILboolean iBuild1DMipmaps_(ILuint Width)
 
 	for (c = 0; c < CurMipMap->Bpp; c++) {  // 8-12-2001
 		for (i = 0, j = 0; i < Width; i++) {
-			MipMap->Data[i * MipMap->Bpp + c] =  CurMipMap->Data[(j++ * MipMap->Bpp) + c];
-						MipMap->Data[i * MipMap->Bpp + c] += CurMipMap->Data[(j++ * MipMap->Bpp) + c];
-						MipMap->Data[i * MipMap->Bpp + c] >>= 1;
+			//the old code that was here had overflow problems...(result was clamped
+			//to byte before the shift)
+			MipMap->Data[i * MipMap->Bpp + c] =
+				(CurMipMap->Data[(j++ * MipMap->Bpp) + c] + CurMipMap->Data[(j++ * MipMap->Bpp) + c]) >> 1;
 		}
 	}
+
 	// 8-11-2001
 	CurMipMap = MipMap;
 	iBuild1DMipmaps_(MipMap->Width >> 1);
@@ -197,7 +200,7 @@ ILboolean iBuild1DMipmapsVertical_(ILuint Height)
 	ILimage *MipMap, *Src;
 	ILuint i = 0, j = 0, c;
 
-	if (CurMipMap->Height <= 1) {  // Already at the last mipmap
+	if (CurMipMap != NULL && CurMipMap->Height <= 1) {  // Already at the last mipmap
 		CurMipMap->Next = NULL;  // Terminate the list
 		return IL_TRUE;
 	}
@@ -236,9 +239,10 @@ ILboolean iBuild1DMipmapsVertical_(ILuint Height)
 	for (c = 0; c < CurMipMap->Bpp; c++) {  // 8-12-2001
 		//j = 0;
 		for (i = 0, j = 0; i < Height; i++) {
-			MipMap->Data[i * MipMap->Bpp + c] =  CurMipMap->Data[(j++ * MipMap->Bpp) + c];
-						MipMap->Data[i * MipMap->Bpp + c] += CurMipMap->Data[(j++ * MipMap->Bpp) + c];
-						MipMap->Data[i * MipMap->Bpp + c] >>= 1;
+			//the old code that was here had overflow problems...(result was clamped
+			//to byte before the shift)
+			MipMap->Data[i * MipMap->Bpp + c] =
+				(CurMipMap->Data[(j++ * MipMap->Bpp) + c] + CurMipMap->Data[(j++ * MipMap->Bpp) + c]) >> 1;
 		}
 	}
 	// 8-11-2001
