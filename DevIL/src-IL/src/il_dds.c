@@ -214,8 +214,12 @@ ILboolean iLoadDdsCubemapInternal()
 
 	CompData = NULL;
 
-	if (CompFormat == PF_RGB || CompFormat == PF_3DC)
+	if (CompFormat == PF_RGB || CompFormat == PF_3DC || CompFormat == PF_RXGB)
 		Bpp = 3;
+	else if (CompFormat == PF_LUMINANCE)
+		Bpp = 1;
+	else if (CompFormat == PF_LUMINANCE_ALPHA)
+		Bpp = 2;
 	else
 		Bpp = 4;
 
@@ -679,7 +683,9 @@ ILboolean ReadMipmaps()
 		if (Head.Flags1 & DDS_LINEARSIZE) {
 			minW = Width;
 			minH = Height;
-			if ((CompFormat != PF_RGB) && (CompFormat != PF_ARGB)) {
+			if (CompFormat != PF_RGB && CompFormat != PF_ARGB
+				&& CompFormat != PF_LUMINANCE
+				&& CompFormat != PF_LUMINANCE_ALPHA){
 				minW = IL_MAX(4, Width);
 				minH = IL_MAX(4, Height);
 				Head.LinearSize = (minW * minH * Depth * Bpp) / CompFactor;
