@@ -220,7 +220,7 @@ distclean-tags:
 
 maintainer-clean-tags:
 
-distdir = $(PACKAGE)-$(VERSION)
+distdir = $(PACKAGE)
 top_distdir = $(distdir)
 
 # This target untars the dist file and tries a VPATH configuration.  Then
