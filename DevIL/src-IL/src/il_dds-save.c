@@ -517,10 +517,14 @@ ILvoid GenAlphaBitMask(ILubyte a0, ILubyte a1, ILuint Num, ILubyte *In, ILubyte 
 			Dist = abs((ILint)In[i] - (ILint)Alphas[j]);
 			if (Dist < Closest) {
 				Closest = Dist;
-				ByteMask[i] = j;
-				if (Out)
-					Out[i] = Alphas[j];
+				M[i] = j;
 			}
+		}
+	}
+
+	if (Out) {
+		for (i = 0; i < 16; i++) {
+			Out[i] = Alphas[M[i]];
 		}
 	}
 

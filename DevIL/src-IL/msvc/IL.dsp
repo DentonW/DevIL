@@ -375,10 +375,6 @@ SOURCE=..\include\il_dcx.h
 # End Source File
 # Begin Source File
 
-SOURCE="..\include\il_dds-save.h"
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\il_dds.h
 # End Source File
 # Begin Source File

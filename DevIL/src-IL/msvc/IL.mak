@@ -132,6 +132,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_convert.obj" \
 	"$(INTDIR)\il_cut.obj" \
 	"$(INTDIR)\il_dcx.obj" \
+	"$(INTDIR)\il_dds-save.obj" \
 	"$(INTDIR)\il_dds.obj" \
 	"$(INTDIR)\il_devil.obj" \
 	"$(INTDIR)\il_doom.obj" \
@@ -172,7 +173,6 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_utility.obj" \
 	"$(INTDIR)\il_wal.obj" \
 	"$(INTDIR)\IL.res" \
-	"$(INTDIR)\il_dds-save.obj" \
 	"..\..\extlibs\lib\debug\LibJpeg.lib" \
 	"..\..\extlibs\lib\debug\lcmsd.lib" \
 	"..\..\extlibs\lib\debug\Libtiff.lib"
@@ -295,6 +295,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_convert.obj" \
 	"$(INTDIR)\il_cut.obj" \
 	"$(INTDIR)\il_dcx.obj" \
+	"$(INTDIR)\il_dds-save.obj" \
 	"$(INTDIR)\il_dds.obj" \
 	"$(INTDIR)\il_devil.obj" \
 	"$(INTDIR)\il_doom.obj" \
@@ -335,7 +336,6 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_utility.obj" \
 	"$(INTDIR)\il_wal.obj" \
 	"$(INTDIR)\IL.res" \
-	"$(INTDIR)\il_dds-save.obj" \
 	"..\..\extlibs\libjpeg\libjpeg.lib" \
 	"..\..\extlibs\lib\lcms.lib" \
 	"..\..\extlibs\lib\Libtiff.lib"
@@ -458,6 +458,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_convert.obj" \
 	"$(INTDIR)\il_cut.obj" \
 	"$(INTDIR)\il_dcx.obj" \
+	"$(INTDIR)\il_dds-save.obj" \
 	"$(INTDIR)\il_dds.obj" \
 	"$(INTDIR)\il_devil.obj" \
 	"$(INTDIR)\il_doom.obj" \
@@ -498,7 +499,6 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_utility.obj" \
 	"$(INTDIR)\il_wal.obj" \
 	"$(INTDIR)\IL.res" \
-	"$(INTDIR)\il_dds-save.obj" \
 	"..\..\extlibs\libjpeg\libjpeg.lib" \
 	"..\..\extlibs\lib\lcms.lib" \
 	"..\..\extlibs\lib\Libtiff.lib"
