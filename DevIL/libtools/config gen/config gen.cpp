@@ -47,8 +47,8 @@ int main(int argc, char **argv)
 
 	TestInc("gl.h",			"gl",	"ILUT_USE_OPENGL",	true);
 	TestInc("d3d8.h",		NULL,	"ILUT_USE_DIRECTX8",true);
-	// Temporary fix for the SDL main() linker bug.
-	//TestInc("sdl.h",		NULL,	"ILUT_USE_SDL",		true);
+	TestInc("d3d9.h",		NULL,	"ILUT_USE_DIRECTX9",true);
+	TestInc("sdl.h",		NULL,	"ILUT_USE_SDL",		true);
 	TestInc("windows.h",	NULL,	"ILUT_USE_WIN32",	true);
 
 	Out << endl << "#endif /* __CONFIG_H__ */" << endl;
