@@ -171,7 +171,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_utility.obj" \
 	"$(INTDIR)\il_wal.obj" \
 	"$(INTDIR)\IL.res" \
-	"..\..\iflibs\lib\debug\LibJpeg.lib"
+	"..\..\extlibs\lib\debug\LibJpeg.lib"
 
 "$(OUTDIR)\DevIL-d.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -431,7 +431,7 @@ CLEAN :
 "$(INTDIR)" :
     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
 
-CPP_PROJ=/nologo /MD /W3 /GX /O1 /I "../include" /I "../../extlibs/libjpeg" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /D "IL_STATIC_LIB" /Fp"$(INTDIR)\IL.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_PROJ=/nologo /MD /W3 /GX /O1 /I "../include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /D "IL_STATIC_LIB" /Fp"$(INTDIR)\IL.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /win32 
 RSC_PROJ=/l 0x409 /fo"$(INTDIR)\IL.res" /d "NDEBUG" 
 BSC32=bscmake.exe
@@ -488,7 +488,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_utility.obj" \
 	"$(INTDIR)\il_wal.obj" \
 	"$(INTDIR)\IL.res" \
-	"..\..\iflibs\libjpeg\libjpeg.lib"
+	"..\..\extlibs\libjpeg\libjpeg.lib"
 
 "$(OUTDIR)\DevIL.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -837,12 +837,12 @@ SOURCE=.\IL.rc
 !IF  "$(CFG)" == "IL - Win32 Debug"
 
 "libjpeg - Win32 Debug" : 
-   cd "\DevIL\iflibs\libjpeg"
+   cd "\DevIL\extlibs\libjpeg"
    $(MAKE) /$(MAKEFLAGS) /F .\LibJpeg.mak CFG="libjpeg - Win32 Debug" 
    cd "..\..\src-IL\msvc"
 
 "libjpeg - Win32 DebugCLEAN" : 
-   cd "\DevIL\iflibs\libjpeg"
+   cd "\DevIL\extlibs\libjpeg"
    $(MAKE) /$(MAKEFLAGS) /F .\LibJpeg.mak CFG="libjpeg - Win32 Debug" RECURSE=1 CLEAN 
    cd "..\..\src-IL\msvc"
 
@@ -851,12 +851,12 @@ SOURCE=.\IL.rc
 !ELSEIF  "$(CFG)" == "IL - Win32 Release"
 
 "libjpeg - Win32 Release" : 
-   cd "\DevIL\iflibs\libjpeg"
+   cd "\DevIL\extlibs\libjpeg"
    $(MAKE) /$(MAKEFLAGS) /F .\LibJpeg.mak CFG="libjpeg - Win32 Release" 
    cd "..\..\src-IL\msvc"
 
 "libjpeg - Win32 ReleaseCLEAN" : 
-   cd "\DevIL\iflibs\libjpeg"
+   cd "\DevIL\extlibs\libjpeg"
    $(MAKE) /$(MAKEFLAGS) /F .\LibJpeg.mak CFG="libjpeg - Win32 Release" RECURSE=1 CLEAN 
    cd "..\..\src-IL\msvc"
 

@@ -317,7 +317,6 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 	switch (Mode)
 	{
 		// Integer values
-
 		case IL_VERSION_NUM:
 			*Param = IL_VERSION;
 			break;
@@ -525,8 +524,28 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 			break;
 
 
-		// Boolean values
+		// Format-specific values
+		case IL_TGA_CREATE_STAMP:
+			*Param = ilStates[ilCurrentPos].ilTgaCreateStamp;
+		case IL_JPG_QUALITY:
+			*Param = ilStates[ilCurrentPos].ilJpgQuality;
+		case IL_PNG_INTERLACE:
+			*Param = ilStates[ilCurrentPos].ilPngInterlace;
+		case IL_TGA_RLE:
+			*Param = ilStates[ilCurrentPos].ilTgaRle;
+		case IL_BMP_RLE:
+			*Param = ilStates[ilCurrentPos].ilBmpRle;
+		case IL_SGI_RLE:
+			*Param = ilStates[ilCurrentPos].ilSgiRle;
+		case IL_JPG_SAVE_FORMAT:
+			*Param = ilStates[ilCurrentPos].ilJpgFormat;
+		case IL_QUANTIZATION_MODE:
+			*Param = ilStates[ilCurrentPos].ilQuantMode;
+		case IL_NEU_QUANT_SAMPLE:
+			*Param = ilStates[ilCurrentPos].ilNeuSample;
 
+
+		// Boolean values
 		case IL_CONV_PAL:
 			*Param = ilStates[ilCurrentPos].ilAutoConvPal;
 			break;
@@ -881,6 +900,12 @@ ILvoid ILAPIENTRY ilSetInteger(ILenum Mode, ILint Param)
 				return;
 			}
 			break;
+		case IL_JPG_SAVE_FORMAT:
+			if (Param == IL_JFIF || Param == IL_EXIF) {
+				ilStates[ilCurrentPos].ilJpgFormat = Param;
+				return;
+			}
+			break;
 		case IL_IMAGE_OFFX:
 			if (iCurImage == NULL) {
 				ilSetError(IL_ILLEGAL_OPERATION);
@@ -951,6 +976,8 @@ ILint iGetInt(ILenum Mode)
 			return ilStates[ilCurrentPos].ilBmpRle;
 		case IL_SGI_RLE:
 			return ilStates[ilCurrentPos].ilSgiRle;
+		case IL_JPG_SAVE_FORMAT:
+			return ilStates[ilCurrentPos].ilJpgFormat;
 		case IL_QUANTIZATION_MODE:
 			return ilStates[ilCurrentPos].ilQuantMode;
 		case IL_NEU_QUANT_SAMPLE:

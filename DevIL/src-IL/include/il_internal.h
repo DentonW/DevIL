@@ -370,9 +370,9 @@ ILboolean ilIsValidJpgL(ILvoid *Lump, ILuint Size);
 ILboolean ilLoadJpeg(const ILstring FileName);
 ILboolean ilLoadJpegF(ILHANDLE File);
 ILboolean ilLoadJpegL(ILvoid *Lump, ILuint Size);
-ILboolean ilSaveJpeg(const ILstring FileName, ILenum Type);
-ILboolean ilSaveJpegF(ILHANDLE File, ILenum Type);
-ILboolean ilSaveJpegL(ILvoid *Lump, ILuint Size, ILenum Type);
+ILboolean ilSaveJpeg(const ILstring FileName);
+ILboolean ilSaveJpegF(ILHANDLE File);
+ILboolean ilSaveJpegL(ILvoid *Lump, ILuint Size);
 
 ILboolean ilLoadLbm(const ILstring FileName);
 ILboolean ilLoadLbmF(ILHANDLE File);

@@ -51,6 +51,7 @@ extern "C" {
 //#define IL_DEBUG
 //#define IL_STATIC_LIB
 //#define IL_NO_LCMS
+//#define IL_USE_JPEGLIB_UNMODIFIED
 
 #ifdef _WIN32_WCE
 	#define IL_NO_GIF
@@ -325,6 +326,7 @@ typedef void ILvoid;
 #define IL_TIF_HOSTCOMPUTER_STRING			0x071E
 #define IL_TIF_DOCUMENTNAME_STRING			0x071F
 #define IL_TIF_AUTHNAME_STRING				0x0720
+#define IL_JPG_SAVE_FORMAT					0x0721
 
 
 // Values

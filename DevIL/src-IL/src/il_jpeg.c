@@ -425,7 +425,7 @@ devil_jpeg_write_init(j_compress_ptr cinfo)
 }
 
 //! Writes a Jpeg file
-ILboolean ilSaveJpeg(const ILstring FileName, ILenum Type)
+ILboolean ilSaveJpeg(const ILstring FileName)
 {
 	ILHANDLE	JpegFile;
 	ILboolean	bJpeg = IL_FALSE;
@@ -451,7 +451,7 @@ ILboolean ilSaveJpeg(const ILstring FileName, ILenum Type)
 
 
 //! Writes a Jpeg to an already-opened file
-ILboolean ilSaveJpegF(ILHANDLE File, ILenum Type)
+ILboolean ilSaveJpegF(ILHANDLE File)
 {
 	iSetOutputFile(File);
 	return iSaveJpegInternal(Type);
@@ -459,7 +459,7 @@ ILboolean ilSaveJpegF(ILHANDLE File, ILenum Type)
 
 
 //! Writes a Jpeg to a memory "lump"
-ILboolean ilSaveJpegL(ILvoid *Lump, ILuint Size, ILenum Type)
+ILboolean ilSaveJpegL(ILvoid *Lump, ILuint Size)
 {
 	iSetOutputLump(Lump, Size);
 	return iSaveJpegInternal(Type);
@@ -535,13 +535,13 @@ ILboolean ILAPIENTRY ilSaveFromJpegStruct(j_compress_ptr JpegInfo)
 
 
 // Internal function used to save the Jpeg.
-ILboolean iSaveJpegInternal(ILenum Type)
+ILboolean iSaveJpegInternal()
 {
 	struct		jpeg_compress_struct JpegInfo;
 	struct		jpeg_error_mgr Error;
 	JSAMPROW	row_pointer[1];
 	ILimage		*Temp;
-	ILenum		Origin;
+	ILenum		Origin, Type;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -587,6 +587,8 @@ ILboolean iSaveJpegInternal(ILenum Type)
 
 	jpeg_set_defaults(&JpegInfo);
 
+#ifndef IL_USE_JPEGLIB_UNMODIFIED
+	Type = iGetInt(IL_JPG_SAVE_FORMAT);
 	if (Type == IL_EXIF) {
 	  JpegInfo.write_JFIF_header = FALSE;
 	  JpegInfo.write_EXIF_header = TRUE;
@@ -594,6 +596,9 @@ ILboolean iSaveJpegInternal(ILenum Type)
 	  JpegInfo.write_JFIF_header = TRUE;
 	  JpegInfo.write_EXIF_header = FALSE;
 	}
+#else
+	JpegInfo.write_JFIF_header = TRUE;
+#endif//IL_USE_JPEGLIB_UNMODIFIED
 
 	jpeg_set_quality(&JpegInfo, iGetInt(IL_JPG_QUALITY), IL_TRUE);
 

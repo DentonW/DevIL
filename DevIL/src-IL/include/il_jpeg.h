@@ -20,7 +20,7 @@ ILboolean iIsValidJpg(ILvoid);
 
 #ifndef IL_USE_IJL
 	ILboolean iLoadJpegInternal(ILvoid);
-	ILboolean iSaveJpegInternal(ILenum);
+	ILboolean iSaveJpegInternal(ILvoid);
 #else
 	ILboolean iLoadJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size);
 	ILboolean iSaveJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size);
