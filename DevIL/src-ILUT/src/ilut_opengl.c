@@ -108,14 +108,14 @@ GLuint ILAPIENTRY ilutGLBindTexImage()
 	if (Image == NULL)
 		return 0;
 
-	glGenTextures(1, &TexID);
-	glBindTexture(GL_TEXTURE_2D, TexID);
-
 	if (ilutGetBoolean(ILUT_GL_AUTODETECT_TEXTURE_TARGET)) {
 		if (HasCubemapHardware && Image->CubeFlags != 0)
 			Target = ILGL_TEXTURE_CUBE_MAP;
 		
 	}
+
+	glGenTextures(1, &TexID);
+	glBindTexture(Target, TexID);
 
 	if (Target == GL_TEXTURE_2D) {
 		glTexParameteri(Target, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -224,7 +224,7 @@ ILboolean ILAPIENTRY ilutGLTexImage_(GLuint Level, GLuint Target, ILimage *Image
 	ImageCopy = MakeGLCompliant(Image);
 	if (ImageCopy == NULL)
 		return IL_FALSE;
-	
+
 	glTexImage2D(
 			Target, 
 			Level, 
@@ -235,7 +235,7 @@ ILboolean ILAPIENTRY ilutGLTexImage_(GLuint Level, GLuint Target, ILimage *Image
 			ImageCopy->Format,
 			ImageCopy->Type,
 			ImageCopy->Data);	
-	
+
 	if (Image != ImageCopy)
 		ilCloseImage(ImageCopy);
 
@@ -270,7 +270,7 @@ ILboolean ILAPIENTRY ilutGLTexImage(GLuint Level)
 	ilutCurImage = ilGetCurImage();
 
 	if (!ilutGetBoolean(ILUT_GL_AUTODETECT_TEXTURE_TARGET))
-		return ilutGLTexImage_(0, GL_TEXTURE_2D, ilGetCurImage());
+		return ilutGLTexImage_(Level, GL_TEXTURE_2D, ilGetCurImage());
 	else {
 		//autodetect texture target
 
@@ -278,13 +278,13 @@ ILboolean ILAPIENTRY ilutGLTexImage(GLuint Level)
 		if (ilutCurImage->CubeFlags != 0 && HasCubemapHardware) { //bind to cubemap
 			Temp = ilutCurImage;
 			while(Temp != NULL && Temp->CubeFlags != 0) {
-				ilutGLTexImage_(0, iToGLCube(Temp->CubeFlags), Temp);
+				ilutGLTexImage_(Level, iToGLCube(Temp->CubeFlags), Temp);
 				Temp = Temp->Next;
 			}
 			return IL_TRUE; //TODO: check for errors??
 		}
 		else  //2d texture
-			return ilutGLTexImage_(0, GL_TEXTURE_2D, ilGetCurImage());
+			return ilutGLTexImage_(Level, GL_TEXTURE_2D, ilGetCurImage());
 	}
 }
 
