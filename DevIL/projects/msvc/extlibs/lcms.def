@@ -1,5 +1,3 @@
-LIBRARY     LCMS.DLL
-
 EXPORTS
     _cmsICCcolorSpace            = _cmsICCcolorSpace
     _cmsSaveProfile              = _cmsSaveProfile

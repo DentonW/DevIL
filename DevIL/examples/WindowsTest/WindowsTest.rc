@@ -223,6 +223,7 @@ BEGIN
         MENUITEM "&Mirror",                     ID_EFFECTS_MIRROR
         MENUITEM "&Rotate",                     ID_EFFECTS_FILTERS_ROTATE
         MENUITEM "&Scale",                      ID_EFFECTS_FILTERS_SCALE
+        MENUITEM "&ScaleBOX",                   ID_EFFECTS_FILTERS_SCALEBOX
     END
     POPUP "&Help"
     BEGIN

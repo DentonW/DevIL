@@ -1,0 +1,19 @@
+PROJECT(LCMS)
+
+FILE(GLOB LCMS_SRCS *.c *.h )
+
+
+#
+# for windows add the .def and .rc files to the source list
+#
+IF(WIN32)
+	IF(BUILD_SHARED_LIBS)
+		ADD_DEFINITIONS(-DLCMS_DLL_BUILD)
+		SET(LCMS_SRCS ${LCMS_SRCS} LCMS.def )
+	ENDIF(BUILD_SHARED_LIBS)
+ENDIF(WIN32)
+
+
+SOURCE_GROUP(code FILES ${LCMS_SRCS} )
+
+ADD_LIBRARY(DevIL_lcms LCMS_SRCS)

@@ -49,15 +49,58 @@ ILboolean ILAPIENTRY iluScale(ILuint Width, ILuint Height, ILuint Depth)
 	if (iluCurImage->Width == Width && iluCurImage->Height == Height && iluCurImage->Depth == Depth)
 		return IL_TRUE;
 
-	switch (iluFilter)
+
+	if( (iluCurImage->Width<Width) || (iluCurImage->Height<Height) ) // only do special scale if there is some zoom?
 	{
-		case ILU_SCALE_BOX:
-		case ILU_SCALE_TRIANGLE:
-		case ILU_SCALE_BELL:
-		case ILU_SCALE_BSPLINE:
-		case ILU_SCALE_LANCZOS3:
-		case ILU_SCALE_MITCHELL:
-			return iluScaleAdvanced(Width, Height, iluFilter);
+		switch (iluFilter)
+		{
+			case ILU_SCALE_BOX:
+			case ILU_SCALE_TRIANGLE:
+			case ILU_SCALE_BELL:
+			case ILU_SCALE_BSPLINE:
+			case ILU_SCALE_LANCZOS3:
+			case ILU_SCALE_MITCHELL:
+
+				iluCurImage = ilGetCurImage();
+				if (iluCurImage == NULL) {
+					ilSetError(ILU_ILLEGAL_OPERATION);
+					return IL_FALSE;
+				}
+
+				// Not supported yet.
+				if (iluCurImage->Type != IL_UNSIGNED_BYTE ||
+					iluCurImage->Format == IL_COLOUR_INDEX ||
+					iluCurImage->Depth > 1) {
+						ilSetError(ILU_ILLEGAL_OPERATION);
+						return IL_FALSE;
+				}
+
+				if(iluCurImage->Width>Width) // shrink width first
+				{
+					Origin = iluCurImage->Origin;
+					Temp = iluScale_(iluCurImage, Width, iluCurImage->Height, iluCurImage->Depth);
+					if (Temp != NULL)
+					{
+						ilTexImage(Temp->Width, Temp->Height, Temp->Depth, Temp->Bpp, Temp->Format, Temp->Type, Temp->Data);
+						iluCurImage->Origin = Origin;
+						ilCloseImage(Temp);
+					}
+				}
+				else
+				if(iluCurImage->Height>Height) // shrink height first
+				{
+					Origin = iluCurImage->Origin;
+					Temp = iluScale_(iluCurImage, iluCurImage->Width, Height, iluCurImage->Depth);
+					if (Temp != NULL)
+					{
+						ilTexImage(Temp->Width, Temp->Height, Temp->Depth, Temp->Bpp, Temp->Format, Temp->Type, Temp->Data);
+						iluCurImage->Origin = Origin;
+						ilCloseImage(Temp);
+					}
+				}
+
+				return iluScaleAdvanced(Width, Height, iluFilter);
+		}
 	}
 
 

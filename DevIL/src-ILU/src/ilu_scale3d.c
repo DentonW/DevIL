@@ -310,3 +310,4 @@ ILimage *iluScale3DLinear_(ILimage *Image, ILimage *Scaled, ILuint Width, ILuint
 	return Scaled;
 }
 */
+

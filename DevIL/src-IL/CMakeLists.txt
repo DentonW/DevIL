@@ -1,0 +1,49 @@
+PROJECT(DevIL)
+
+FILE(GLOB DevIL_SRCS src/*.c include/*.h )
+
+INCLUDE_DIRECTORIES(
+
+	${DevIL_SOURCE_DIR}/include
+	${DevIL_SOURCE_DIR}/../include
+)
+
+SET(DevIL_SRCS ${DevIL_SRCS} ${DEVIL_INCS} )
+
+
+#
+# for windows add the .def and .rc files to the source list
+#
+IF(WIN32)
+	IF(BUILD_SHARED_LIBS)
+		ADD_DEFINITIONS(-DIL_DLL -DMNG_DLL -DMNG_USE_DLL -DJPEGDLL)
+		SET(DevIL_SRCS ${DevIL_SRCS} msvc/il.def msvc/il.rc )
+	ELSE(BUILD_SHARED_LIBS)
+		ADD_DEFINITIONS(-DIL_STATIC_LIB -DJPEGSTATIC)
+	ENDIF(BUILD_SHARED_LIBS)
+ENDIF(WIN32)
+
+SOURCE_GROUP(code FILES ${DevIL_SRCS} )
+
+ADD_LIBRARY(DevIL DevIL_SRCS)
+
+## add link sub library info
+
+TARGET_LINK_LIBRARIES(DevIL
+	DevIL_lcms
+	DevIL_libjpeg
+	DevIL_libmng
+	DevIL_libpng
+	DevIL_libtiff
+	DevIL_zlib
+)
+
+INCLUDE_DIRECTORIES(
+
+	 ${LCMS_SOURCE_DIR}
+	 ${LIBJPEG_SOURCE_DIR}
+	 ${LIBMNG_SOURCE_DIR}
+	 ${LIBPNG_SOURCE_DIR}
+	 ${LIBTIFF_SOURCE_DIR}
+	 ${ZLIB_SOURCE_DIR}
+)

@@ -1,0 +1,32 @@
+
+PROJECT(LIBMNG)
+
+FILE(GLOB LIBMNG_SRCS *.c *.h )
+
+
+# for windows add the .def and .rc files to the source list on DLL builds
+IF(WIN32)
+  IF(BUILD_SHARED_LIBS)
+    ADD_DEFINITIONS(-DMNG_DLL -DMNG_BUILD_DLL)
+    SET(LIBTIFF_SRCS ${LIBMNG_SRCS} libmng.def libmng.rc  )
+  ENDIF(BUILD_SHARED_LIBS)   
+ENDIF(WIN32)
+
+SOURCE_GROUP(code FILES ${LIBMNG_SRCS} )
+
+ADD_LIBRARY(DevIL_libmng LIBMNG_SRCS)
+
+
+TARGET_LINK_LIBRARIES(DevIL_libmng
+
+	DevIL_lcms
+	DevIL_libjpeg
+	DevIL_zlib
+)
+
+INCLUDE_DIRECTORIES(
+
+	 ${LCMS_SOURCE_DIR}
+	 ${LIBJPEG_SOURCE_DIR}
+	 ${ZLIB_SOURCE_DIR}
+)

@@ -8,18 +8,24 @@
 //
 // Description:  Sample implementation of a Direct3D 8.0a image viewer.
 //
+//
+// 20040801 XIX: DX9 update, hopefully :)
+//
 //-----------------------------------------------------------------------------
 
 
 #define STRICT
 #include <stdio.h>
 #include <math.h>
-#include <D3DX8.h>
+
+#include <D3DX9.h>
+
+#include "dxstdafx.h"
+
 #include "D3DApp.h"
 #include "D3DFile.h"
 #include "D3DFont.h"
 #include "D3DUtil.h"
-#include "DXUtil.h"
 
 #ifdef  _DEBUG
 #define IL_DEBUG
@@ -27,8 +33,8 @@
 #include <il/ilut.h>
 
 
-#pragma comment(lib, "d3d8.lib")
-#pragma comment(lib, "d3dx8.lib")
+#pragma comment(lib, "d3d9.lib")
+#pragma comment(lib, "d3dx9.lib")
 #pragma comment(lib, "winmm.lib")
 
 
@@ -71,10 +77,10 @@ VERTEX g_vVertices[4] =
 class CMyD3DApplication : public CD3DApplication
 {
     CD3DFont* m_pFont;
-    LPDIRECT3DTEXTURE8 m_pTexture;
-    LPDIRECT3DVERTEXBUFFER8  m_pVB;
+    LPDIRECT3DTEXTURE9 m_pTexture;
+    LPDIRECT3DVERTEXBUFFER9  m_pVB;
 
-    HRESULT ConfirmDevice( D3DCAPS8*, DWORD, D3DFORMAT );
+    HRESULT ConfirmDevice( D3DCAPS9*, DWORD, D3DFORMAT );
 
 protected:
     HRESULT OneTimeSceneInit();
@@ -121,7 +127,7 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, INT )
 CMyD3DApplication::CMyD3DApplication()
 {
     m_strWindowTitle    = _T("DevIL Direct3D Test");
-    m_bUseDepthBuffer   = TRUE;
+//    m_bUseDepthBuffer   = TRUE;
 
     m_pFont				= new CD3DFont( _T("Arial"), 12, D3DFONT_BOLD );
     m_pTexture			= NULL;
@@ -174,7 +180,7 @@ HRESULT CMyD3DApplication::Render()
     {
         // Draw the quad, with the volume texture
         m_pd3dDevice->SetTexture( 0, m_pTexture );
-        m_pd3dDevice->SetVertexShader( D3DFVF_VERTEX );
+//        m_pd3dDevice->SetVertexShader( D3DFVF_VERTEX );
         m_pd3dDevice->SetStreamSource( 0, m_pVB, sizeof(VERTEX) );
         m_pd3dDevice->DrawPrimitive( D3DPT_TRIANGLESTRIP, 0, 2);
 

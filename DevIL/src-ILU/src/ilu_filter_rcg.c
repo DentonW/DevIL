@@ -599,6 +599,7 @@ __zoom_cleanup:
 } /* zoom */
 
 
+
 ILuint iluScaleAdvanced(ILuint Width, ILuint Height, ILenum Filter)
 {
 	double (*f)() = filter;

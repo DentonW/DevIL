@@ -1,0 +1,41 @@
+PROJECT(DevILU)
+
+FILE(GLOB DevILU_SRCS src/*.c include/*.h )
+
+INCLUDE_DIRECTORIES(
+
+	${DevILU_SOURCE_DIR}/include
+)
+
+SET(DevILU_SRCS ${DevILU_SRCS} ${DEVIL_INCS} )
+
+#
+# for windows add the .def and .rc files to the source list
+#
+IF(WIN32)
+	IF(BUILD_SHARED_LIBS)
+		ADD_DEFINITIONS(-DILU_DLL)
+		SET(DevILU_SRCS ${DevILU_SRCS} msvc/ilu.def msvc/ilu.rc )
+	ELSE(BUILD_SHARED_LIBS)
+		ADD_DEFINITIONS(-DIL_STATIC_LIB)
+	ENDIF(BUILD_SHARED_LIBS)
+ENDIF(WIN32)
+
+
+SOURCE_GROUP(code FILES ${DevILU_SRCS} )
+
+ADD_LIBRARY(DevILU DevILU_SRCS)
+
+
+## add link sub library info
+
+TARGET_LINK_LIBRARIES(DevILU
+
+	DevIL
+)
+
+INCLUDE_DIRECTORIES(
+
+	${DevIL_SOURCE_DIR}/../include
+	${DevIL_SOURCE_DIR}/include
+)

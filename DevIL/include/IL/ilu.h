@@ -24,18 +24,15 @@ extern "C" {
 #endif
 /*
 #ifdef _WIN32
-	#if defined(_MSC_VER) || defined(__BORLANDC__)
-		#ifndef IL_STATIC_LIB
-			pragma comment(lib, "DevIL_DLL.lib")
-			#ifndef _IL_BUILD_LIBRARY
-				pragma comment(lib, "DevILU_DLL.lib")
-			#endif
-		#else
-			#ifndef _IL_BUILD_LIBRARY
+	#if (!defined(_IL_BUILD_LIBRARY)) && (!defined(IL_SKIP_PRAGMA_LIBS))
+		#if defined(_MSC_VER) || defined(__BORLANDC__)
+			#ifndef IL_STATIC_LIB
+				#pragma comment(lib, "DevILU_DLL.lib")
+			#else
 				#ifdef  IL_DEBUG
-					pragma comment(lib, "DevILU_DBG.lib")
+					#pragma comment(lib, "DevILU_DBG.lib")
 				#else
-					pragma comment(lib, "DevILU.lib")
+					#pragma comment(lib, "DevILU.lib")
 				#endif//IL_DEBUG
 			#endif
 		#endif

@@ -117,6 +117,25 @@
 #endif
 */
 
+#ifdef _WIN32
+	#if (!defined(_IL_BUILD_LIBRARY)) && (!defined(IL_SKIP_PRAGMA_LIBS))
+		#if defined(_MSC_VER) || defined(__BORLANDC__)
+			#ifndef IL_STATIC_LIB
+				#pragma comment(lib, "DevILUT_DLL.lib")
+			#else
+				#ifdef  IL_DEBUG
+					#pragma comment(lib, "DevILUT_DBG.lib")
+				#else
+					#pragma comment(lib, "DevILUT.lib")
+				#endif//IL_DEBUG
+			#endif
+		#endif
+	#endif
+#endif
+
+
+
+
 #include "IL/config.h"
 
 //////////////
@@ -138,26 +157,35 @@
 	#endif//__APPLE__
 #endif
 
-// ImageLib Utility Toolkit's Allegro Functions
-#ifdef ILUT_USE_ALLEGRO
-	#include <allegro.h>
-#endif//ILUT_USE_ALLEGRO
-
-#ifdef ILUT_USE_SDL
-	#include <SDL.h>
-#endif
 
 #ifdef ILUT_USE_WIN32
 	//#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
 #endif
 
+
+//
+// If we can avoid including these in all cases thing tend to break less
+// and we can keep all of them defined as available
+//
+// Kriss
+//
+
+// ImageLib Utility Toolkit's Allegro Functions
+#ifdef ILUT_USE_ALLEGRO
+//	#include <allegro.h>
+#endif//ILUT_USE_ALLEGRO
+
+#ifdef ILUT_USE_SDL
+//	#include <SDL.h>
+#endif
+
 #ifdef ILUT_USE_DIRECTX8
-	#include <d3d8.h>
+//	#include <d3d8.h>
 #endif//ILUT_USE_DIRECTX9
 
 #ifdef ILUT_USE_DIRECTX9
-	#include <d3d9.h>
+//	#include <d3d9.h>
 #endif//ILUT_USE_DIRECTX9
 
 
@@ -206,15 +234,15 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 // ImageLib Utility Toolkit's Allegro Functions
 #ifdef ILUT_USE_ALLEGRO
 	ILAPI BITMAP* ILAPIENTRY ilutAllegLoadImage(const ILstring FileName);
-	ILAPI BITMAP* ILAPIENTRY ilutConvertToAlleg(PALETTE Pal);
+	ILAPI BITMAP* ILAPIENTRY ilutConvertToAlleg( unsigned char Pal[256][4]);
 #endif//ILUT_USE_ALLEGRO
 
 
 // ImageLib Utility Toolkit's SDL Functions
 #ifdef ILUT_USE_SDL
-	ILAPI SDL_Surface* ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags);
-	ILAPI SDL_Surface* ILAPIENTRY ilutSDLSurfaceLoadImage(const ILstring FileName);
-	ILAPI ILboolean    ILAPIENTRY ilutSDLSurfaceFromBitmap(SDL_Surface *Bitmap);
+	ILAPI struct SDL_Surface* ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags);
+	ILAPI struct SDL_Surface* ILAPIENTRY ilutSDLSurfaceLoadImage(const ILstring FileName);
+	ILAPI ILboolean    ILAPIENTRY ilutSDLSurfaceFromBitmap(struct SDL_Surface *Bitmap);
 #endif//ILUT_USE_SDL
 
 

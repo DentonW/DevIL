@@ -1,0 +1,46 @@
+PROJECT(DevILUT)
+
+FILE(GLOB DevILUT_SRCS src/*.c include/*.h )
+
+INCLUDE_DIRECTORIES(
+
+	${DevILUT_SOURCE_DIR}/include
+)
+
+SET(DevILUT_SRCS ${DevILUT_SRCS} ${DEVIL_INCS} )
+
+
+
+#
+# for windows add the .def and .rc files to the source list
+#
+IF(WIN32)
+	ADD_DEFINITIONS(-DALLEGRO_MSVC)
+	IF(BUILD_SHARED_LIBS)
+		ADD_DEFINITIONS(-DILUT_DLL)
+		SET(DevILUT_SRCS ${DevILUT_SRCS} msvc/ilut.def msvc/ilut.rc )
+	ELSE(BUILD_SHARED_LIBS)
+		ADD_DEFINITIONS(-DIL_STATIC_LIB)
+	ENDIF(BUILD_SHARED_LIBS)
+ENDIF(WIN32)
+
+
+SOURCE_GROUP(code FILES ${DevILUT_SRCS} )
+
+ADD_LIBRARY(DevILUT DevILUT_SRCS)
+
+
+## add link sub library info
+
+TARGET_LINK_LIBRARIES(DevILUT
+
+	DevIL
+	DevILU
+)
+
+INCLUDE_DIRECTORIES(
+
+	${DevIL_SOURCE_DIR}/../include
+	${DevIL_SOURCE_DIR}/include
+	${DevILU_SOURCE_DIR}/include
+)

@@ -21,6 +21,17 @@
 extern "C" {
 #endif
 
+
+//
+// hardcoded config.h.win? everything will be available in the provided libs so...
+//
+#if defined(_MSC_VER) || defined(_WIN32)
+#include "IL/config.h.win"
+#else
+#include "IL/config.h"
+#endif
+
+
 //#define IL_NO_BMP
 //#define IL_NO_CUT
 //#define IL_NO_CHEAD
@@ -92,17 +103,15 @@ extern "C" {
 
 /*
 #ifdef _WIN32
-	#if defined(_MSC_VER) || defined(__BORLANDC__)
-		#ifndef IL_STATIC_LIB
-			#ifndef _IL_BUILD_LIBRARY
-				pragma comment(lib, "Devil_DLL.lib")
-			#endif
-		#else
-			#ifndef _IL_BUILD_LIBRARY
+	#if (!defined(_IL_BUILD_LIBRARY)) && (!defined(IL_SKIP_PRAGMA_LIBS))
+		#if defined(_MSC_VER) || defined(__BORLANDC__)
+			#ifndef IL_STATIC_LIB
+				#pragma comment(lib, "DevIL_DLL.lib")
+			#else
 				#ifdef  IL_DEBUG
-					pragma comment(lib, "Devil_DBG.lib")
+					#pragma comment(lib, "DevIL_DBG.lib")
 				#else
-					pragma comment(lib, "Devil.lib")
+					#pragma comment(lib, "DevIL.lib")
 				#endif//IL_DEBUG
 			#endif
 		#endif

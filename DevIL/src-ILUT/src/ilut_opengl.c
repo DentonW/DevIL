@@ -18,6 +18,13 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef _MSC_VER
+	#pragma comment(lib, "opengl32.lib")
+	#pragma comment(lib, "Glu32.lib")
+//	#pragma comment(lib, "freeglut.lib")
+#endif
+
+
 //used for automatic texture target detection
 #define ILGL_TEXTURE_CUBE_MAP				0x8513
 #define ILGL_TEXTURE_BINDING_CUBE_MAP		0x8514

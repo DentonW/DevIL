@@ -17,7 +17,7 @@
 #include <SDL.h>
 
 #ifdef  _MSC_VER
-	//pragma comment(lib, "sdl.lib")
+	#pragma comment(lib, "sdl.lib")
 #endif//_MSC_VER
 
 int isBigEndian;

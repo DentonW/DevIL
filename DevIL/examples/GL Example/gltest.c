@@ -36,12 +36,13 @@
 // Easier to do this than change the project's settings in MSVC++. (I'm lazy!)
 //
 #ifdef _MSC_VER
-#	pragma comment(lib, "opengl32.lib")
-#	pragma comment(lib, "freeglut13.lib")
+
+	#pragma comment(lib, "freeglut.lib")
 
 // Prevent the console window from popping up.
-#	pragma comment(linker, "/entry:mainCRTStartup")
-#	pragma comment(linker, "/subsystem:windows")
+//#pragma comment(linker, "/entry:mainCRTStartup")
+//#pragma comment(linker, "/subsystem:windows")
+
 #endif
 
 char	*FileName;
@@ -62,7 +63,7 @@ void HandleDevILErrors ()
 	}
 }
 
-
+extern int main(int argc, char** argv);
 
 int main(int argc, char** argv)
 {
@@ -76,9 +77,15 @@ int main(int argc, char** argv)
 	//
 	// Check if the shared lib's version matches the executable's version.
 	//
-	if (ilGetInteger (IL_VERSION_NUM)   < IL_VERSION ||
-			ilGetInteger (ILU_VERSION_NUM)  < ILU_VERSION ||
-			ilGetInteger (ILUT_VERSION_NUM) < ILUT_VERSION) {
+
+
+
+//
+// fixed to get the right numbers frpm the right library call...
+//
+	if (ilGetInteger(IL_VERSION_NUM) < IL_VERSION ||
+		iluGetInteger(ILU_VERSION_NUM) < ILU_VERSION ||
+		ilutGetInteger(ILUT_VERSION_NUM) < ILUT_VERSION) {
 		printf ("DevIL library is out of date! Please upgrade\n");
 		return 2;
 	}
