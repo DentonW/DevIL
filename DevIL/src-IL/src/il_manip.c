@@ -759,6 +759,15 @@ ILvoid ILAPIENTRY ilSetAlpha( ILdouble AlphaValue ) {
     ILboolean ret = IL_FALSE;
     ILuint i,j,Size;
     
+	union
+	{
+        ILubyte alpha_byte;
+        ILushort alpha_short;
+        ILuint alpha_int;
+        ILfloat alpha_float;
+        ILdouble alpha_double;
+	} Alpha;
+    
     if (iCurImage == NULL) {
         ilSetError(IL_ILLEGAL_OPERATION);
         return;
@@ -785,14 +794,6 @@ ILvoid ILAPIENTRY ilSetAlpha( ILdouble AlphaValue ) {
     Size = iCurImage->Width * iCurImage->Height * iCurImage->Depth * iCurImage->Bpp;
     
     if( !ret ) return;
-
-    union {
-        ILubyte alpha_byte;
-        ILushort alpha_short;
-        ILuint alpha_int;
-        ILfloat alpha_float;
-        ILdouble alpha_double;
-    } Alpha;
 
     switch (iCurImage->Type) {
         case IL_BYTE:
@@ -830,6 +831,15 @@ ILvoid ILAPIENTRY ilModAlpha( ILdouble AlphaValue ) {
     ILuint AlphaOff = 0;
     ILboolean ret = IL_FALSE;
     ILuint i,j,Size;
+
+    union {
+        ILubyte alpha_byte;
+        ILushort alpha_short;
+        ILuint alpha_int;
+        ILfloat alpha_float;
+        ILdouble alpha_double;
+    } Alpha;
+
     
     if( iCurImage == NULL ) {
         ilSetError(IL_ILLEGAL_OPERATION);
@@ -857,14 +867,6 @@ ILvoid ILAPIENTRY ilModAlpha( ILdouble AlphaValue ) {
     Size = iCurImage->Width * iCurImage->Height * iCurImage->Depth * iCurImage->Bpp;
     
     if( !ret ) return;
-
-    union {
-        ILubyte alpha_byte;
-        ILushort alpha_short;
-        ILuint alpha_int;
-        ILfloat alpha_float;
-        ILdouble alpha_double;
-    } Alpha;
 
     switch (iCurImage->Type) {
         case IL_BYTE:
