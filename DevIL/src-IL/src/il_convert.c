@@ -441,7 +441,7 @@ ILboolean ilSwapColours()
 			return IL_FALSE;
 	}
 
-	if (iCurImage->Bpp == IL_COLOUR_INDEX) {
+	if (iCurImage->Format == IL_COLOUR_INDEX) {
 		for (; i < iCurImage->Pal.PalSize; i += PalBpp) {
 				Temp = iCurImage->Pal.Palette[i];
 				iCurImage->Pal.Palette[i] = iCurImage->Pal.Palette[i+2];
