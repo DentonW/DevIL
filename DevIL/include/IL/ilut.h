@@ -105,10 +105,10 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 	//#ifdef __GNUC__ //__CYGWIN32__ (Cygwin seems to not define this with DevIL builds)
 		#include "config.h"
 
-		// Temporary fix for the SDL main() linker bug.
+		/*// Temporary fix for the SDL main() linker bug.
 		#ifdef  ILUT_USE_SDL
 		#undef  ILUT_USE_SDL
-		#endif//ILUT_USE_SDL
+		#endif//ILUT_USE_SDL*/
 
 	/*#else
 	  	#define ILUT_USE_WIN32
