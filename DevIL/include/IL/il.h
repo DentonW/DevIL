@@ -27,7 +27,7 @@ extern "C" {
 //#define IL_NO_DCX
 //#define IL_NO_DDS
 //#define IL_NO_DOOM
-//#define IL_NO_GIF
+#define IL_NO_GIF
 //#define IL_NO_ICO
 //#define IL_NO_JPG
 //#define IL_NO_LIF

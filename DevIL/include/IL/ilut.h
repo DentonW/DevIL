@@ -90,7 +90,7 @@ ILAPI ILvoid		ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param);
 
 // The different rendering api's...more to be added later?
 #define ILUT_OPENGL		0
-#define ILUT_ALLEGRO		1
+#define ILUT_ALLEGRO	1
 #define ILUT_WIN32		2
 
 
@@ -108,7 +108,7 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 	  	#define ILUT_USE_WIN32
 		#define ILUT_USE_OPENGL
 		//#define ILUT_USE_SDL
-		#define ILUT_USE_DIRECTX8
+		//#define ILUT_USE_DIRECTX8
 	#endif
 #elif BEOS  // Don't know the #define
 	#define ILUT_USE_BEOS

@@ -11,7 +11,7 @@ Libtiff for .tif support from http://www.libtiff.org/
 Libmng for .mng and .jng support from http://www.libmng.com/
 Libungif for .gif support from http://prtr-13.ucsc.edu/~badger/software/libungif/
 Little CMS for color profiles (ILU) from http://www.littlecms.com/
-Colour Picker lib for WindowsTest from http://www.fluidstudios.com/publications.html
+Colour Picker lib for WindowsTest from http://www.fluidstudios.com/freeware.html
 Freeglut (or glut) for GLTest from http://freeglut.sourceforge.net
 glext.h from http://oss.sgi.com/projects/ogl-sample/ABI/glext.h (as <gl/glext.h> if using OpenGL)
 
