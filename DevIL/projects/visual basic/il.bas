@@ -5,7 +5,7 @@ Attribute VB_Name = "Module1"
 ' Copyright (C) 2000-2002 by Denton Woods
 ' Converted from il.h by Rune Kock (rune@vupti.com)
 ' based on the earlier conversion by Timo Heister (Timo-Heister@gmx.de)
-' Last modified:  05 January 2002, based on il.h dated 02/05/2002
+' Last modified:  05 February 2002, based on il.h dated 02/05/2002
 '
 ' Filename: il.bas
 '
