@@ -188,10 +188,13 @@ ILuint ILAPIENTRY ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize, ILenum DXTCFo
 		}
 	}
 
-	iSetOutputLump(Buffer, BufferSize);
-	Compress(iCurImage, DXTCFormat);
+	if (DXTCFormat == iCurImage->DxtcFormat && iCurImage->DxtcSize && iCurImage->DxtcData) {
+		memcpy(Buffer, iCurImage->DxtcData, IL_MIN(BufferSize, iCurImage->DxtcSize));
+		return IL_TRUE;
+	}
 
-	return IL_TRUE;
+	iSetOutputLump(Buffer, BufferSize);
+	return Compress(iCurImage, DXTCFormat);
 }
 
 
