@@ -1,4 +1,4 @@
-Credits as of 12/04/2001
+Credits as of 01/11/2002
 ------------------------
 
 If I inadvertently omitted anyone's name from this list, please e-mail me at
@@ -8,6 +8,8 @@ denton@imagelib.org to remedy the problem.
 James Joplin, alias jayjay (rjoplin@webzone.net)
 for all his invaluable help and encouragement with DevIL.  Couldn't have done
 it done it without ya, bud.
+
+Edouard Gomez for his invaluable help.
 
 All the #flipCode gang for their support.
 
@@ -196,3 +198,8 @@ heights (flipped), even though the specs say that it is valid.
 
 Matthias Stiller and Andre Normann for their invaluable help with getting
 DevIL to work on Big Endian machines.
+
+Jean-Francois Richard for the Python bindings of DevIL.
+
+Nick Marley for post-build information in MSVC++.
+
