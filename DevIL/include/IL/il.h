@@ -48,6 +48,7 @@ extern "C" {
 //#define IL_NO_TGA
 //#define IL_NO_TIF
 //#define IL_NO_WAL
+//#define IL_NO_XPM
 
 // Compiling Options
 #define IL_INLINE_ASM
@@ -219,6 +220,7 @@ typedef void			ILvoid;
 #define IL_PSP								0x043B
 #define IL_PIX								0x043C
 #define IL_PXR								0x043D
+#define IL_XPM								0x043E
 
 #define IL_JASC_PAL							0x0475
 

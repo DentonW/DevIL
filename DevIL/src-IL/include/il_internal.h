@@ -505,6 +505,8 @@ ILboolean ilLoadWalF(ILHANDLE File);
 ILboolean ilLoadWalL(ILvoid *Lump, ILuint Size);
 
 ILboolean ilLoadXpm(const ILstring FileName);
+ILboolean ilLoadXpmF(ILHANDLE File);
+ILboolean ilLoadXpmL(ILvoid *Lump, ILuint Size);
 
 
 #endif//INTERNAL_H

@@ -32,6 +32,7 @@
 - Added support for more formats with IL_TYPE_UNKNOWN.
 - Added .pix support.
 - Added .pxr support.
+- Added .xpm support.
 
 
 
