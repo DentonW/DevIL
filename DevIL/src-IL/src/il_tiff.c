@@ -12,13 +12,11 @@
 
 
 #include "il_internal.h"
+#undef IL_NO_TIF
+
 #ifndef IL_NO_TIF
 
-#ifdef MACOSX
-#include <libtiff/tiffio.h>
-#else
 #include <tiffio.h>
-#endif
 
 #include <time.h>
 #include "il_manip.h"
