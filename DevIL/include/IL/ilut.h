@@ -211,6 +211,7 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 		//#define WIN32_LEAN_AND_MEAN
 		#include <windows.h>
 		ILAPI HBITMAP	ILAPIENTRY ilutConvertToHBitmap(HDC hDC);
+		ILAPI HBITMAP	ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice);
 		ILAPI ILvoid	ILAPIENTRY ilutFreePaddedData(ILubyte *Data);
 		ILAPI ILvoid	ILAPIENTRY ilutGetBmpInfo(BITMAPINFO *Info);
 		ILAPI HPALETTE	ILAPIENTRY ilutGetHPal(ILvoid);
