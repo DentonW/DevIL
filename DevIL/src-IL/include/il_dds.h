@@ -43,8 +43,8 @@ typedef struct DDSHEAD
 	ILuint	GBitMask;			// mask for green bits
 	ILuint	BBitMask;			// mask for blue bits
 	ILuint	RGBAlphaBitMask;	// mask for alpha channel
-	
-    ILuint	ddsCaps1, ddsCaps2, ddsCaps3, ddsCaps4; // direct draw surface capabilities
+
+	ILuint	ddsCaps1, ddsCaps2, ddsCaps3, ddsCaps4; // direct draw surface capabilities
 	ILuint	TextureStage;
 } IL_PACKSTRUCT DDSHEAD;
 #ifdef _WIN32
@@ -146,7 +146,8 @@ enum PixFormat
 	PF_DXT3,
 	PF_DXT4,
 	PF_DXT5,
-	PF_UNKNOWN
+	PF_3DC,
+	PF_UNKNOWN = 0xFF
 };
 
 // Global variables
@@ -177,20 +178,23 @@ ILboolean	DecompressDXT2(ILvoid);
 ILboolean	DecompressDXT3(ILvoid);
 ILboolean	DecompressDXT4(ILvoid);
 ILboolean	DecompressDXT5(ILvoid);
+ILboolean	Decompress3Dc(ILvoid);
 ILvoid		CorrectPreMult(ILvoid);
 ILvoid		GetBitsFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight);
 ILboolean	iSaveDdsInternal(ILvoid);
 ILboolean	WriteHeader(ILimage *Image, ILenum DXTCFormat);
 ILushort	*CompressTo565(ILimage *Image);
+ILubyte		*CompressTo88(ILimage *Image);
 ILuint		Compress(ILimage *Image, ILenum DXTCFormat);
 ILboolean	GetBlock(ILushort *Block, ILushort *Data, ILimage *Image, ILuint XPos, ILuint YPos);
 ILboolean	GetAlphaBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XPos, ILuint YPos);
+ILboolean	Get3DcBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XPos, ILuint YPos, int channel);
 ILvoid		ShortToColor565(ILushort Pixel, Color565 *Colour);
 ILvoid		ShortToColor888(ILushort Pixel, Color888 *Colour);
 ILushort	Color565ToShort(Color565 *Colour);
 ILushort	Color888ToShort(Color888 *Colour);
 ILuint		GenBitMask(ILushort ex0, ILushort ex1, ILuint NumCols, ILushort *In, ILubyte *Alpha, Color888 *OutCol);
-ILvoid		GenAlphaBitMask(ILubyte a0, ILubyte a1, ILuint Num, ILubyte *In, ILubyte *Mask, ILubyte *Out);
+ILvoid		GenAlphaBitMask(ILubyte a0, ILubyte a1, ILubyte *In, ILubyte *Mask, ILubyte *Out);
 ILuint		RMSAlpha(ILubyte *Orig, ILubyte *Test);
 ILuint		Distance(Color888 *c1, Color888 *c2);
 ILvoid		ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1);
