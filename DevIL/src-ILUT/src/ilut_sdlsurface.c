@@ -21,6 +21,7 @@
 #endif//_MSC_VER
 
 int isBigEndian;
+int rmask, gmask, bmask, amask;
 
 ILvoid InitSDL()
 {
