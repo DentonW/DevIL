@@ -337,6 +337,42 @@ ILboolean ILAPIENTRY ilutGLBuildMipmaps()
 }
 
 
+ILboolean ILAPIENTRY ilutGLSubTex(GLuint TexID, ILuint XOff, ILuint YOff)
+{
+	ILimage	*Image;
+	ILuint Width, Height;
+
+	ilutCurImage = ilGetCurImage();
+	if (ilutCurImage == NULL) {
+		ilSetError(ILUT_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	Image = MakeGLCompliant(ilutCurImage);
+	if (Image == NULL)
+		return IL_FALSE;
+
+	glBindTexture(GL_TEXTURE_2D, TexID);
+
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH,  &Width);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &Height);
+
+	if (Image->Width + XOff > Width || Image->Height + YOff > Height) {
+		ilSetError(ILUT_BAD_DIMENSIONS);
+		return IL_FALSE;
+	}
+
+	glTexSubImage2D(GL_TEXTURE_2D, 0, XOff, YOff, Image->Width, Image->Height, Image->Format,
+			Image->Type, Image->Data);
+
+	if (Image != ilutCurImage)
+		ilCloseImage(Image);
+
+	return IL_TRUE;
+}
+
+
+
 ILimage* MakeGLCompliant(ILimage *Src)
 {
 	ILimage		*Dest = Src, *Temp;
