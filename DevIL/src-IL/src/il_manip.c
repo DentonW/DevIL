@@ -798,24 +798,24 @@ ILvoid ILAPIENTRY ilSetAlpha( ILdouble AlphaValue ) {
     switch (iCurImage->Type) {
         case IL_BYTE:
         case IL_UNSIGNED_BYTE:
-            Alpha.alpha_byte = AlphaValue * 0x000000FF;
+            Alpha.alpha_byte = (ILubyte)(AlphaValue * 0x000000FF + .5);
             for (i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
                 iCurImage->Data[i] = Alpha.alpha_byte;
             break;
         case IL_SHORT:
         case IL_UNSIGNED_SHORT:
-            Alpha.alpha_short = AlphaValue * 0x0000FFFF;
+            Alpha.alpha_short = (ILushort)(AlphaValue * 0x0000FFFF + .5);
             for (i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
                 ((ILushort*)iCurImage->Data)[i] = Alpha.alpha_short;
             break;
         case IL_INT:
         case IL_UNSIGNED_INT:
-            Alpha.alpha_int = AlphaValue * 0xFFFFFFFF;
+            Alpha.alpha_int = (ILuint)(AlphaValue * 0xFFFFFFFF + .5);
             for (i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
                 ((ILuint*)iCurImage->Data)[i] = Alpha.alpha_int;
             break;
         case IL_FLOAT:
-            Alpha.alpha_float = AlphaValue;
+            Alpha.alpha_float = (ILfloat)AlphaValue;
             for (i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
                 ((ILfloat*)iCurImage->Data)[i] = Alpha.alpha_float;
             break;
@@ -871,24 +871,24 @@ ILvoid ILAPIENTRY ilModAlpha( ILdouble AlphaValue ) {
     switch (iCurImage->Type) {
         case IL_BYTE:
         case IL_UNSIGNED_BYTE:
-            Alpha.alpha_byte = AlphaValue * 0x000000FF;
+            Alpha.alpha_byte = (ILubyte)(AlphaValue * 0x000000FF + .5);
             for (i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
                 iCurImage->Data[i] = Alpha.alpha_byte;
             break;
         case IL_SHORT:
         case IL_UNSIGNED_SHORT:
-            Alpha.alpha_short = AlphaValue * 0x0000FFFF;
+            Alpha.alpha_short = (ILushort)(AlphaValue * 0x0000FFFF + .5);
             for (i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
                 ((ILushort*)iCurImage->Data)[i] = Alpha.alpha_short;
             break;
         case IL_INT:
         case IL_UNSIGNED_INT:
-            Alpha.alpha_int = AlphaValue * 0xFFFFFFFF;
+            Alpha.alpha_int = (ILuint)(AlphaValue * 0xFFFFFFFF + .5);
             for (i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
                 ((ILuint*)iCurImage->Data)[i] = Alpha.alpha_int;
             break;
         case IL_FLOAT:
-            Alpha.alpha_float = AlphaValue;
+            Alpha.alpha_float = (ILfloat)AlphaValue;
             for (i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
                 ((ILfloat*)iCurImage->Data)[i] = Alpha.alpha_float;
             break;
