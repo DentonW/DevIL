@@ -575,10 +575,10 @@ ILAPI ILboolean		ILAPIENTRY ilSaveFromJpegStruct(ILvoid* JpegCompressorPtr);
 #endif
 
 
-
 #ifdef __cplusplus
 }
 #endif
 
 #endif // __IL_H__
 #endif // __il_h__
+
