@@ -33,62 +33,141 @@ ILboolean ilutWin32Init()
 
 HBITMAP ILAPIENTRY ilutConvertToHBitmap(HDC hDC)
 {
-	ILubyte		*Data, *BmpBits;
+	ILubyte		*Data;
 	HBITMAP		hBitmap;
-	BITMAPINFO	bmi;
 	ILimage		*TempImage;
+	ILuint		pad, i, j, k, l, m, n;
+	ILpal		*palImg;
 
-	TempImage = ilutCurImage = ilGetCurImage();
+	//reserve space for palette in every case...
+	ILubyte		*buff[sizeof(BITMAPINFOHEADER) + 256*sizeof(RGBQUAD)];
+	BITMAPINFO	*info = (BITMAPINFO*)buff;
+	RGBQUAD		*pal = info->bmiColors;
+
+	ilutCurImage = ilutCurImage = ilGetCurImage();
 	if (ilutCurImage == NULL) {
 		ilSetError(ILUT_ILLEGAL_OPERATION);
 		return NULL;
 	}
 
-	// @TODO:  Add support for palette'd images.
-	if (ilutCurImage->Bpp < 3)
-		TempImage = iConvertImage(ilutCurImage, IL_BGR, IL_UNSIGNED_BYTE);
-	else if (ilutCurImage->Bpc > 1)
+	if (ilutCurImage->Type != IL_UNSIGNED_BYTE)
 		TempImage = iConvertImage(ilutCurImage, ilutCurImage->Format, IL_UNSIGNED_BYTE);
+	else
+		TempImage = ilutCurImage;
 	if (TempImage == NULL)
-		return 0;
+		return NULL;
 
 	//changed 2003-09-09: use Temp!
 	ilSetCurImage(TempImage);
 
-	Data = ilutGetPaddedData();
-	if (Data == NULL) {
-		//added 2003-09-09: clean up
-		ilSetCurImage(ilutCurImage);
-		if (TempImage != ilutCurImage)
-			ilCloseImage(TempImage);
-		return 0;
+	hBitmap = CreateCompatibleBitmap(hDC, ilutCurImage->Width, ilutCurImage->Height);
+	if(hBitmap == NULL) {
+		ilSetError(IL_UNKNOWN_ERROR);
+		return NULL;
 	}
 
-	ilutGetBmpInfo(&bmi);
+	info->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	info->bmiHeader.biWidth = TempImage->Width;
+	if(TempImage->Origin == IL_ORIGIN_UPPER_LEFT)
+		info->bmiHeader.biHeight = -(ILint)TempImage->Height;
+	else
+		info->bmiHeader.biHeight = TempImage->Height;
+	info->bmiHeader.biPlanes = 1;
+	info->bmiHeader.biCompression = 0;
+	info->bmiHeader.biSizeImage = 0;
+	info->bmiHeader.biXPelsPerMeter = 0;
+	info->bmiHeader.biYPelsPerMeter = 0;
+	info->bmiHeader.biClrUsed = 0;
+	info->bmiHeader.biClrImportant = 0;
 
-	/*DIB_PAL_COLORS*/
-	hBitmap = CreateDIBSection(hDC, &bmi, DIB_RGB_COLORS, (void**)&BmpBits, NULL, 0);
-	if (!hBitmap || !BmpBits) {
-		ilSetCurImage(ilutCurImage);
-		if (TempImage != ilutCurImage)
+	pad = (4 - TempImage->Bps%4)%4;
+	if(pad == 0 && TempImage->Format != IL_RGB && TempImage->Format != IL_RGBA) {
+		Data = TempImage->Data;
+	}
+	else {
+		if (TempImage->Format == IL_RGBA) {//strip alpha during byte swapping for faster upload to gdi
+			//recalculate pad because it changes when bpp change
+			pad = (4 - (3*TempImage->Width)%4)%4;
+			Data = ialloc((TempImage->Width + pad)*TempImage->Height*3);
+		}
+		else
+			Data = ialloc((TempImage->Width + pad)*TempImage->Height*TempImage->Bpp);
+		if (Data == NULL) {
+			ilSetCurImage(TempImage);
 			ilCloseImage(TempImage);
-		ilSetError(ILUT_ILLEGAL_OPERATION);
-		return 0;
+			ilSetError(IL_OUT_OF_MEMORY);
+			return hBitmap;
+		}
+		if (TempImage->Format == IL_RGB || TempImage->Format == IL_RGBA) {
+			//swap bytes
+			m = (TempImage->Format == IL_RGB)?3:4;
+			k = l = 0;
+			for (j = 0; j < TempImage->Height; j++) {
+				for (i = 0, n = 0; i < 3*TempImage->Width; i += 3, n += m) {
+					Data[l + i] = TempImage->Data[k + n + 2];
+					Data[l + i + 1] = TempImage->Data[k + n + 1];
+					Data[l + i + 2] = TempImage->Data[k + n];
+				}
+
+				k += TempImage->Bps;
+				l += 3*TempImage->Width + pad;
+			}
+		}
+		else
+			for (i = 0; i < TempImage->Height; i++)
+				memcpy(Data + i*(TempImage->Bps + pad), TempImage->Data + i*TempImage->Bps, TempImage->Bps);
 	}
 
-	memcpy(BmpBits, Data, (ilutCurImage->Bps + (4 - (ilutCurImage->Bps % 4)) % 4) * ilutCurImage->Height);
+	switch(TempImage->Format) {
 
-	// Platform SDK - Windows GDI - Device-Independent Bitmaps
-	//Bitmap = CreateBitmap(ilutCurImage->Width, ilutCurImage->Height, 1, ilutCurImage->Bpp * 8, Data);
-	//SetBitmapBits(Bitmap, ilutCurImage->SizeOfData, ilutCurImage->Data);
+		case IL_LUMINANCE:
+		case IL_LUMINANCE_ALPHA:
+		case IL_COLOUR_INDEX:
+			if (TempImage->Format != IL_COLOUR_INDEX) {
+				//generate greyscale palette
+				for (i = 0; i < 256; i++)
+					pal[i].rgbRed = pal[i].rgbGreen = pal[i].rgbBlue = i;
+			}
+			else {
+				palImg = iConvertPal(&TempImage->Pal, IL_PAL_BGR32);
+				if (palImg != NULL) {
+					memcpy(pal, palImg->Palette, palImg->PalSize);
+					ilClosePal(palImg);
+				}
+				else {
+					ilSetError(IL_INVALID_PARAM);
+					//generate greyscale palette
+					for (i = 0; i < 256; i++)
+						pal[i].rgbRed = pal[i].rgbGreen = pal[i].rgbBlue = i;
+				}
+			}
+			info->bmiHeader.biBitCount = 8;
+			break;
 
-	ifree(Data);
+		case IL_RGB:
+		case IL_BGR:
+		case IL_RGBA: //alpha is removed during byte swapping
+			info->bmiHeader.biBitCount = 24;
+			break;
 
-	//changed 2003-09-09: re-set the original current image
-	ilSetCurImage(ilutCurImage);
+		case IL_BGRA:
+			info->bmiHeader.biBitCount = 32;
+			break;
 
-	if (TempImage != ilutCurImage)
+		/*default:
+			ilSetError(IL_FORMAT_NOT_SUPPORTED);
+			return hBitmap;*/
+	}
+
+	if (ilutCurImage != TempImage) {
+		ilSetCurImage(ilutCurImage);
 		ilCloseImage(TempImage);
+	}
+
+	SetDIBits(hDC, hBitmap, 0, ilutCurImage->Height, Data, info, DIB_RGB_COLORS);
+
+	if(!(pad == 0 && ilutCurImage->Format != IL_RGB && ilutCurImage->Format != IL_RGBA))
+		ifree(Data);
 
 	return hBitmap;
 }
