@@ -166,7 +166,7 @@ ILboolean iLoadGifInternal()
 
 	// Check for a global colour map.
 	if (Header.ColourInfo & (1 << 7)) {
-		if (!GetPalette(Header.ColourInfo, &GlobalPal)) {
+		if (!iGetPalette(Header.ColourInfo, &GlobalPal)) {
 			return IL_FALSE;
 		}
 	}
@@ -185,7 +185,7 @@ ILboolean iLoadGifInternal()
 }
 
 
-ILboolean GetPalette(ILubyte Info, ILpal *Pal)
+ILboolean iGetPalette(ILubyte Info, ILpal *Pal)
 {
 	Pal->PalSize = (1 << ((Info & 0x7) + 1)) * 3;
 	Pal->PalType = IL_PAL_RGB24;
@@ -266,12 +266,12 @@ ILboolean GetImages(ILpal *GlobalPal)
 
 		// Check to see if the image has its own palette.
 		if (ImageDesc.ImageInfo & (1 << 7)) {
-			if (!GetPalette(ImageDesc.ImageInfo, &Image->Pal)) {
+			if (!iGetPalette(ImageDesc.ImageInfo, &Image->Pal)) {
 				goto error_clean;
 			}
 		}
 		else {
-			if (!CopyPalette(&Image->Pal, GlobalPal)) {
+			if (!iCopyPalette(&Image->Pal, GlobalPal)) {
 				goto error_clean;
 			}
 		}
@@ -581,7 +581,7 @@ ILboolean RemoveInterlace()
 
 
 // Assumes that Dest has nothing in it.
-ILboolean CopyPalette(ILpal *Dest, ILpal *Src)
+ILboolean iCopyPalette(ILpal *Dest, ILpal *Src)
 {
 	if (Src->Palette == NULL || Src->PalSize == 0)
 		return IL_FALSE;
