@@ -9456,6 +9456,24 @@ else
 fi
 
 
+if test "$no_pxr"  = "yes"  ; then
+  cat >>confdefs.h <<\EOF
+#define IL_NO_PXR 1
+EOF
+
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PXR "
+fi
+
+if test x$no_pxr != "xyes"; then
+  IL_NO_PXR_TRUE=
+  IL_NO_PXR_FALSE='#'
+else
+  IL_NO_PXR_TRUE='#'
+  IL_NO_PXR_FALSE=
+fi
+
+
 if test "$no_raw"  = "yes"  ; then
   cat >>confdefs.h <<\EOF
 #define IL_NO_RAW 1
@@ -9524,6 +9542,7 @@ else
   IL_NO_TIF_FALSE=
 fi
 
+
 if test "$no_wal"  = "yes"  ; then
   cat >>confdefs.h <<\EOF
 #define IL_NO_WAL 1
@@ -9540,6 +9559,25 @@ else
   IL_NO_WAL_TRUE='#'
   IL_NO_WAL_FALSE=
 fi
+
+
+if test "$no_xpm"  = "yes"  ; then
+  cat >>confdefs.h <<\EOF
+#define IL_NO_XPM 1
+EOF
+
+else
+  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"XPM "
+fi
+
+if test x$no_xpm != "xyes"; then
+  IL_NO_XPM_TRUE=
+  IL_NO_XPM_FALSE='#'
+else
+  IL_NO_XPM_TRUE='#'
+  IL_NO_XPM_FALSE=
+fi
+
 
 echo "$as_me:9519: result:  " >&5
 echo "${ECHO_T} " >&6
