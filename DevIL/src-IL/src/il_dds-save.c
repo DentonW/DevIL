@@ -172,56 +172,66 @@ ILushort *CompressTo565(ILimage *Image)
 	ILuint		i, j;
 
 	if ((Image->Type != IL_UNSIGNED_BYTE && Image->Type != IL_BYTE) || Image->Format == IL_COLOUR_INDEX) {
-		TempImage = iConvertImage(IL_BGR, IL_UNSIGNED_BYTE);  // Needs to be BGRA.
+		TempImage = iConvertImage(IL_BGR, IL_UNSIGNED_BYTE);  // @TODO: Needs to be BGRA.
 		if (TempImage == NULL)
 			return NULL;
+	}
+	else {
+		TempImage = Image;
 	}
 
 	Data = (ILushort*)ialloc(iCurImage->Width * iCurImage->Height * 2);
 	if (Data == NULL) {
 		ilSetError(IL_OUT_OF_MEMORY);
-		ilCloseImage(TempImage);
+		if (TempImage != Image)
+			ilCloseImage(TempImage);
 		return NULL;
 	}
 
 	switch (Image->Format)
 	{
 		case IL_RGB:
-			for (i = 0, j = 0; i < iCurImage->SizeOfPlane; i += 3, j++) {
-				Data[j]  = (iCurImage->Data[i  ] >> 3) << 11;
-				Data[j] |= (iCurImage->Data[i+1] >> 2) << 5;
-				Data[j] |=  iCurImage->Data[i+2] >> 3;
+			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 3, j++) {
+				Data[j]  = (TempImage->Data[i  ] >> 3) << 11;
+				Data[j] |= (TempImage->Data[i+1] >> 2) << 5;
+				Data[j] |=  TempImage->Data[i+2] >> 3;
 			}
 			break;
 
 		case IL_RGBA:
-			for (i = 0, j = 0; i < iCurImage->SizeOfPlane; i += 4, j++) {
-				Data[j]  = (iCurImage->Data[i  ] >> 3) << 11;
-				Data[j] |= (iCurImage->Data[i+1] >> 2) << 5;
-				Data[j] |=  iCurImage->Data[i+2] >> 3;
+			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 4, j++) {
+				Data[j]  = (TempImage->Data[i  ] >> 3) << 11;
+				Data[j] |= (TempImage->Data[i+1] >> 2) << 5;
+				Data[j] |=  TempImage->Data[i+2] >> 3;
 			}
 			break;
 
 		case IL_BGR:
-			for (i = 0, j = 0; i < iCurImage->SizeOfPlane; i += 3, j++) {
-				Data[j]  = (iCurImage->Data[i+2] >> 3) << 11;
-				Data[j] |= (iCurImage->Data[i+1] >> 2) << 5;
-				Data[j] |=  iCurImage->Data[i  ] >> 3;
+			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 3, j++) {
+				Data[j]  = (TempImage->Data[i+2] >> 3) << 11;
+				Data[j] |= (TempImage->Data[i+1] >> 2) << 5;
+				Data[j] |=  TempImage->Data[i  ] >> 3;
 			}
 			break;
 
 		case IL_BGRA:
-			for (i = 0, j = 0; i < iCurImage->SizeOfPlane; i += 4, j++) {
-				Data[j]  = (iCurImage->Data[i+2] >> 3) << 11;
-				Data[j] |= (iCurImage->Data[i+1] >> 2) << 5;
-				Data[j] |=  iCurImage->Data[i  ] >> 3;
+			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 4, j++) {
+				Data[j]  = (TempImage->Data[i+2] >> 3) << 11;
+				Data[j] |= (TempImage->Data[i+1] >> 2) << 5;
+				Data[j] |=  TempImage->Data[i  ] >> 3;
 			}
 			break;
 
 		case IL_LUMINANCE:
+			if (TempImage != Image)
+				ilCloseImage(TempImage);
+			ifree(Data);
 			return NULL;
 			//break;
 	}
+
+	if (TempImage != Image)
+		ilCloseImage(TempImage);
 
 	return Data;
 }
