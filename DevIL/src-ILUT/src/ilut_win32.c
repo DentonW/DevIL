@@ -408,12 +408,14 @@ ILboolean ILAPIENTRY ilutSetHBitmap(HBITMAP Bitmap)
 
 	// @TODO:  Implement this shitz0rz!
 	if (Info[0].bmiHeader.biBitCount < 24) {
+		ReleaseDC(hWnd, hDC); //added 20040527
 		return IL_FALSE;
 	}
 
 	Buffer1 = (ILubyte*)ialloc(Info[0].bmiHeader.biSizeImage);
 	Buffer2 = (ILubyte*)ialloc(Info[0].bmiHeader.biSizeImage);
 	if (Buffer1 == NULL || Buffer2 == NULL) {
+		ReleaseDC(hWnd, hDC); //added 20040527
 		ifree(Buffer1);
 		ifree(Buffer2);
 		return IL_FALSE;
@@ -440,6 +442,7 @@ ILboolean ILAPIENTRY ilutSetHBitmap(HBITMAP Bitmap)
 	}
 	ilutCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
 
+	ReleaseDC(hWnd, hDC); //added 20040527
 	ifree(Buffer1);
 	ifree(Buffer2);
 
