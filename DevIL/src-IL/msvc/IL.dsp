@@ -479,10 +479,6 @@ SOURCE=..\include\il_psd.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\il_psp.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\il_q2pal.h
 # End Source File
 # Begin Source File
