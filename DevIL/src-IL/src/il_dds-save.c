@@ -77,6 +77,7 @@ ILboolean iSaveDdsInternal()
 		ilFlipImage();
 
 	DXTCFormat = iGetInt(IL_DXTC_FORMAT);
+DXTCFormat = IL_DXT5;
 	WriteHeader(iCurImage, DXTCFormat);
 	Compress(iCurImage, DXTCFormat);
 
@@ -222,11 +223,12 @@ ILushort *CompressTo565(ILimage *Image)
 			break;
 
 		case IL_LUMINANCE:
-			if (TempImage != Image)
-				ilCloseImage(TempImage);
-			ifree(Data);
-			return NULL;
-			//break;
+			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i++, j++) {
+				Data[j]  = (TempImage->Data[i] >> 3) << 11;
+				Data[j] |= (TempImage->Data[i] >> 2) << 5;
+				Data[j] |=  TempImage->Data[i] >> 3;
+			}
+			break;
 	}
 
 	if (TempImage != Image)
@@ -239,8 +241,8 @@ ILushort *CompressTo565(ILimage *Image)
 ILboolean Compress(ILimage *Image, ILenum DXTCFormat)
 {
 	ILushort	*Data, Block[16], ex0, ex1;
-	ILuint		x, y, i, BitMask;
-	ILubyte		*Alpha, AlphaBlock[16];
+	ILuint		x, y, i, BitMask, Rms1, Rms2;
+	ILubyte		*Alpha, AlphaBlock[16], AlphaBitMask[6], AlphaOut[16], a0, a1;
 	ILboolean	HasAlpha;
 
 	Data = CompressTo565(Image);
@@ -281,7 +283,7 @@ ILboolean Compress(ILimage *Image, ILenum DXTCFormat)
 			}
 			break;
 
-		case IL_DXT2:
+		/*case IL_DXT2:
 			for (y = 0; y < Image->Height; y += 4) {
 				for (x = 0; x < Image->Width; x += 4) {
 					GetAlphaBlock(AlphaBlock, Alpha, Image, x, y);
@@ -298,7 +300,7 @@ ILboolean Compress(ILimage *Image, ILenum DXTCFormat)
 					SaveLittleUInt(BitMask);
 				}		
 			}
-			break;
+			break;*/
 
 		case IL_DXT3:
 			for (y = 0; y < Image->Height; y += 4) {
@@ -318,18 +320,34 @@ ILboolean Compress(ILimage *Image, ILenum DXTCFormat)
 			}
 			break;
 
-		/*case IL_DXT5:
+		case IL_DXT5:
 			for (y = 0; y < Image->Height; y += 4) {
 				for (x = 0; x < Image->Width; x += 4) {
+					GetAlphaBlock(AlphaBlock, Alpha, Image, x, y);
+					ChooseAlphaEndpoints(AlphaBlock, &a0, &a1);
+					GenAlphaBitMask(a0, a1, 6, AlphaBlock, AlphaBitMask, AlphaOut);
+					Rms2 = RMSAlpha(AlphaBlock, AlphaOut);
+					GenAlphaBitMask(a0, a1, 8, AlphaBlock, AlphaBitMask, AlphaOut);
+					Rms1 = RMSAlpha(AlphaBlock, AlphaOut);
+					if (Rms2 <= Rms1) {  // Yeah, we have to regenerate...
+						GenAlphaBitMask(a0, a1, 6, AlphaBlock, AlphaBitMask, AlphaOut);
+						Rms2 = a1;
+						a1 = a0;
+						a0 = Rms2;
+					}
+					iputc(a0);
+					iputc(a1);
+					iwrite(AlphaBitMask, 1, 6);
+
 					GetBlock(Block, Data, Image, x, y);
 					ChooseEndpoints(Block, &ex0, &ex1);
 					SaveLittleUShort(ex0);
 					SaveLittleUShort(ex1);
-					BitMask = GenBitMask(ex0, ex1, 4, Block, NULL);
+					BitMask = GenBitMask(ex0, ex1, 4, Block, NULL, NULL);
 					SaveLittleUInt(BitMask);
 				}		
 			}
-			break;*/
+			break;
 	}
 
 
@@ -463,6 +481,77 @@ ILuint GenBitMask(ILushort ex0, ILushort ex1, ILuint NumCols, ILushort *In, ILub
 }
 
 
+ILvoid GenAlphaBitMask(ILubyte a0, ILubyte a1, ILuint Num, ILubyte *In, ILubyte *Mask, ILubyte *Out)
+{
+	ILubyte Alphas[8], M[16];
+	ILuint	i, j, Closest, Dist;
+
+	Alphas[0] = a0;
+	Alphas[1] = a1;
+
+	// 8-alpha or 6-alpha block?    
+	if (Num == 8) {    
+		// 8-alpha block:  derive the other six alphas.    
+		// Bit code 000 = alpha_0, 001 = alpha_1, others are interpolated.
+		Alphas[2] = (6 * Alphas[0] + 1 * Alphas[1] + 3) / 7;	// bit code 010
+		Alphas[3] = (5 * Alphas[0] + 2 * Alphas[1] + 3) / 7;	// bit code 011
+		Alphas[4] = (4 * Alphas[0] + 3 * Alphas[1] + 3) / 7;	// bit code 100
+		Alphas[5] = (3 * Alphas[0] + 4 * Alphas[1] + 3) / 7;	// bit code 101
+		Alphas[6] = (2 * Alphas[0] + 5 * Alphas[1] + 3) / 7;	// bit code 110
+		Alphas[7] = (1 * Alphas[0] + 6 * Alphas[1] + 3) / 7;	// bit code 111  
+	}    
+	else {  
+		// 6-alpha block.    
+		// Bit code 000 = alpha_0, 001 = alpha_1, others are interpolated.
+		Alphas[2] = (4 * Alphas[0] + 1 * Alphas[1] + 2) / 5;	// Bit code 010
+		Alphas[3] = (3 * Alphas[0] + 2 * Alphas[1] + 2) / 5;	// Bit code 011
+		Alphas[4] = (2 * Alphas[0] + 3 * Alphas[1] + 2) / 5;	// Bit code 100
+		Alphas[5] = (1 * Alphas[0] + 4 * Alphas[1] + 2) / 5;	// Bit code 101
+		Alphas[6] = 0x00;										// Bit code 110
+		Alphas[7] = 0xFF;										// Bit code 111
+	}
+
+	for (i = 0; i < 16; i++) {
+		Closest = UINT_MAX;
+		for (j = 0; j < 8; j++) {
+			Dist = abs((ILint)In[i] - (ILint)Alphas[j]);
+			if (Dist < Closest) {
+				Closest = Dist;
+				ByteMask[i] = j;
+				if (Out)
+					Out[i] = Alphas[j];
+			}
+		}
+	}
+
+	// First three bytes.
+	Mask[0] = (M[0]) | (M[1] << 3) | ((M[2] & 0x03) << 6);
+	Mask[1] = (M[2] & 0x04) | (M[3] << 1) | (M[4] << 4) | ((M[5] & 0x01) << 7);
+	Mask[2] = (M[5] & 0x06) | (M[6] << 2) | (M[7] << 5);
+
+	// Second three bytes.
+	Mask[3] = (M[8]) | (M[9] << 3) | ((M[10] & 0x03) << 6);
+	Mask[4] = (M[10] & 0x04) | (M[11] << 1) | (M[12] << 4) | ((M[13] & 0x01) << 7);
+	Mask[5] = (M[13] & 0x06) | (M[14] << 2) | (M[15] << 5);
+
+	return;
+}
+
+
+ILuint RMSAlpha(ILubyte *Orig, ILubyte *Test)
+{
+	ILuint RMS = 0, i;
+
+	for (i = 0; i < 16; i++) {
+		RMS += abs(Orig[i] - Test[i]);
+	}
+
+	RMS /= 16;
+
+	return RMS;
+}
+
+
 ILuint Distance(Color888 *c1, Color888 *c2)
 {
 	return  (c1->r - c2->r) * (c1->r - c2->r) +
@@ -489,6 +578,26 @@ ILvoid ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1)
 				*ex0 = Block[i];
 				*ex1 = Block[j];
 			}
+		}
+	}
+
+	return;
+}
+
+
+ILvoid ChooseAlphaEndpoints(ILubyte *Block, ILubyte *a0, ILubyte *a1)
+{
+	ILuint	i;
+	ILuint	Lowest = 0xFF, Highest = 0;
+
+	for (i = 0; i < 16; i++) {
+		if (Block[i] < Lowest) {
+			*a1 = Block[i];  // a1 is the lower of the two.
+			Lowest = Block[i];
+		}
+		else if (Block[i] > Highest) {
+			*a0 = Block[i];  // a0 is the higher of the two.
+			Highest = Block[i];
 		}
 	}
 
