@@ -945,7 +945,7 @@ ILboolean ILAPIENTRY iluGammaCorrect(ILfloat Gamma)
 //
 
 
-ILvoid iApplyMatrix(ILimage *Image, ILfloat Mat[3][3])
+ILvoid iApplyMatrix(ILimage *Image, ILfloat Mat[4][4])
 {
 	ILubyte	*Data = Image->Data;
 	ILuint	i;
