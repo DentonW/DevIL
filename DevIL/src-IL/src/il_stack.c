@@ -36,22 +36,13 @@ ILvoid ILAPIENTRY ilGenImages(ILsizei Num, ILuint *Images)
 
 	do {
 		if (FreeNames != NULL) {  // If any have been deleted, then reuse their image names.
-			while (FreeNames != NULL && ImageStack[FreeNames->Name] != NULL) {
-				TempFree = FreeNames->Next;
-				ifree(FreeNames);
-				FreeNames = TempFree;
-			}
-			if (FreeNames) {
-				TempFree = FreeNames->Next;
-				Images[Index] = FreeNames->Name;
-				ImageStack[FreeNames->Name] = ilNewImage(1, 1, 1, 1, 1);
-				ifree(FreeNames);
-				FreeNames = TempFree;
-			}
-		}
-
-		if (FreeNames == NULL) {  // None have been deleted before.
-			if (LastUsed >= StackSize)
+                        TempFree = FreeNames->Next;
+                        Images[Index] = FreeNames->Name;
+                        ImageStack[FreeNames->Name] = ilNewImage(1, 1, 1, 1, 1);
+                        ifree(FreeNames);
+                        FreeNames = TempFree;
+		} else {
+                        if (LastUsed >= StackSize)
 				if (!iEnlargeStack())
 					return;
 			Images[Index] = LastUsed;
@@ -294,8 +285,8 @@ ILboolean ILAPIENTRY ilActiveMipmap(ILuint Number)
 	}
 
 	iCurImage = iCurImage->Mipmaps;
-	Number--;  // Skip 0 (parent image)
-	for (Current = 0; Current < Number; Current++) {
+	//Number--;  // Skip 0 (parent image)
+	for (Current = 1; Current < Number; Current++) {
 		iCurImage = iCurImage->Next;
 		if (iCurImage == NULL) {
 			ilSetError(IL_INTERNAL_ERROR);
@@ -376,8 +367,8 @@ ILboolean ILAPIENTRY ilActiveLayer(ILuint Number)
 	}
 
 	iCurImage = iCurImage->Layers;
-	Number--;  // Skip 0 (parent image)
-	for (Current = 0; Current < Number; Current++) {
+	//Number--;  // Skip 0 (parent image)
+	for (Current = 1; Current < Number; Current++) {
 		iCurImage = iCurImage->Layers;
 		if (iCurImage == NULL) {
 			ilSetError(IL_INTERNAL_ERROR);
