@@ -22,3 +22,13 @@ found at http://openil.sourceforge.net/libs/LibSrc.zip
 
 Intel Jpeg Library from
  http://developer.intel.com/software/products/perflib/ijl/index.htm
+
+
+MAC OS X
+These library are not still uploaded !!!!
+
+Source of external framework, downloaded from the previous sites
+http://openil.sourceforge.net/libs/FrameworksSrc.sitx
+
+Compiled version
+http://openil.sourceforge.net/libs/FrameworksBin.sitx
