@@ -189,7 +189,7 @@ ILboolean Setup()
 	glMatrixMode(GL_PROJECTION);  // We want to use the projection matrix.
 	glLoadIdentity();  // Loads the identity matrix into the current matrix.
 
-	// Lets OpenILUT know to use its OpenGL functions.
+	// Lets ILUT know to use its OpenGL functions.
 	ilutRenderer(ILUT_OPENGL);
 	// Goes through all steps of sending the image to OpenGL.
 	TexID = ilutGLBindTexImage();

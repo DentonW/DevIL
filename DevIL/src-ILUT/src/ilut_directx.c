@@ -171,28 +171,105 @@ ILboolean ILAPIENTRY ilutD3D8VolTexFromFileHandle(IDirect3DDevice8 *Device, ILHA
 }
 
 
+D3DFORMAT D3DGetDXTCNum(ILenum DXTCFormat)
+{
+	switch (DXTCFormat)
+	{
+		case IL_DXT1:
+			return D3DFMT_DXT1;
+		case IL_DXT3:
+			return D3DFMT_DXT3;
+		case IL_DXT5:
+			return D3DFMT_DXT5;
+	}
+
+	return 0;
+}
+
+
 IDirect3DTexture8* ILAPIENTRY ilutD3D8Texture(IDirect3DDevice8 *Device)
 {
 	static IDirect3DTexture8 *Texture;
 	static D3DLOCKED_RECT Rect;
 	static D3DFORMAT Format;
-	static ILimage *Image;
+	static ILimage	*Image;
+	static ILenum	DXTCFormat;
+	static ILuint	Size;
+	static ILubyte	*Buffer;
 
-	ilutCurImage = ilGetCurImage();
+	Image = ilutCurImage = ilGetCurImage();
 	if (ilutCurImage == NULL) {
 		ilSetError(ILUT_ILLEGAL_OPERATION);
 		return NULL;
 	}
 
+	if (!FormatsChecked)
+		CheckFormats(Device);
+
+	if (ilutGetBoolean(ILUT_D3D_USE_DXTC) && FormatSupported[3] && FormatSupported[4] && FormatSupported[5]) {
+		if (ilutCurImage->DxtcData != NULL && ilutCurImage->DxtcSize != 0) {
+			Format = D3DGetDXTCNum(ilutCurImage->DxtcFormat);
+
+			if (FAILED(IDirect3DDevice8_CreateTexture(Device, ilutCurImage->Width,
+				ilutCurImage->Height, ilutGetInteger(ILUT_D3D_MIPLEVELS), 0, Format,
+				D3DPOOL_MANAGED, &Texture)))
+					return NULL;
+			if (FAILED(IDirect3DTexture8_LockRect(Texture, 0, &Rect, NULL, 0)))
+				return NULL;
+			memcpy(Rect.pBits, ilutCurImage->DxtcData, ilutCurImage->DxtcSize);
+			goto success;
+		}
+
+		if (ilutGetBoolean(ILUT_GL_GEN_S3TC)) {
+			DXTCFormat = ilutGetInteger(ILUT_DXTC_FORMAT);
+
+			Size = ilGetDXTCData(NULL, 0, DXTCFormat);
+			if (Size != 0) {
+				Buffer = (ILubyte*)ialloc(Size);
+				if (Buffer == NULL)
+					return NULL;
+				Size = ilGetDXTCData(Buffer, Size, DXTCFormat);
+				if (Size == 0) {
+					ifree(Buffer);
+					return NULL;
+				}
+
+				Format = D3DGetDXTCNum(DXTCFormat);
+				if (FAILED(IDirect3DDevice8_CreateTexture(Device, ilutCurImage->Width,
+					ilutCurImage->Height, ilutGetInteger(ILUT_D3D_MIPLEVELS), 0, Format,
+					D3DPOOL_MANAGED, &Texture))) {
+						ifree(Buffer);
+						return NULL;
+				}
+				if (FAILED(IDirect3DTexture8_LockRect(Texture, 0, &Rect, NULL, 0))) {
+					ifree(Buffer);
+					return NULL;
+				}
+				memcpy(Rect.pBits, Buffer, Size);
+				ifree(Buffer);
+				goto success;
+			}
+		}
+	}
+
+
 	Image = MakeD3D8Compliant(Device, &Format);
-	if (Image == NULL)
+	if (Image == NULL) {
+		if (Image != ilutCurImage)
+			ilCloseImage(Image);
 		return NULL;
-	if (FAILED(IDirect3DDevice8_CreateTexture(Device, Image->Width, Image->Height, ilutGetInteger(ILUT_D3D_MIPLEVELS), 0, Format, D3DPOOL_MANAGED, &Texture)))
+	}
+	if (FAILED(IDirect3DDevice8_CreateTexture(Device, Image->Width, Image->Height,
+		ilutGetInteger(ILUT_D3D_MIPLEVELS), 0, Format, D3DPOOL_MANAGED, &Texture))) {
+		if (Image != ilutCurImage)
+			ilCloseImage(Image);
 		return NULL;
+	}
 	if (FAILED(IDirect3DTexture8_LockRect(Texture, 0, &Rect, NULL, 0)))
 		return NULL;
-
 	memcpy(Rect.pBits, Image->Data, Image->SizeOfPlane);
+
+success:
 	IDirect3DTexture8_UnlockRect(Texture, 0);
 	// Just let D3DX filter for us.
 	D3DXFilterTexture(Texture, NULL, D3DX_DEFAULT, D3DX_FILTER_BOX);
@@ -216,6 +293,9 @@ IDirect3DVolumeTexture8* ILAPIENTRY ilutD3D8VolumeTexture(IDirect3DDevice8 *Devi
 		ilSetError(ILUT_ILLEGAL_OPERATION);
 		return NULL;
 	}
+
+	if (!FormatsChecked)
+		CheckFormats(Device);
 
 	Image = MakeD3D8Compliant(Device, &Format);
 	if (Image == NULL)
@@ -241,9 +321,6 @@ ILimage *MakeD3D8Compliant(IDirect3DDevice8 *Device, D3DFORMAT *DestFormat)
 {
 	static ILubyte *Data;
 	static ILimage *Converted, *Scaled, *CurImage;
-
-	if (!FormatsChecked)
-		CheckFormats(Device);
 
 	*DestFormat = D3DFMT_A8R8G8B8;
 

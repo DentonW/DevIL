@@ -125,12 +125,9 @@ typedef struct DXTAlphaBlock3BitLinear
 #define DDS_CUBEMAP_NEGATIVEZ	0x00008000L
 
 
-// Remove!
-#ifndef MAKEFOURCC
-    #define MAKEFOURCC(ch0, ch1, ch2, ch3)                              \
-                ((ILint)(ILbyte)(ch0) | ((ILint)(ILbyte)(ch1) << 8) |   \
-                ((ILint)(ILbyte)(ch2) << 16) | ((ILint)(ILbyte)(ch3) << 24 ))
-#endif //defined(MAKEFOURCC)
+#define IL_MAKEFOURCC(ch0, ch1, ch2, ch3)                              \
+            ((ILint)(ILbyte)(ch0) | ((ILint)(ILbyte)(ch1) << 8) |   \
+            ((ILint)(ILbyte)(ch2) << 16) | ((ILint)(ILbyte)(ch3) << 24 ))
 
 enum PixFormat
 {

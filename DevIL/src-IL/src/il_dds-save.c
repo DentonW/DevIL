@@ -78,7 +78,6 @@ ILboolean iSaveDdsInternal()
 		ilFlipImage();
 
 	DXTCFormat = iGetInt(IL_DXTC_FORMAT);
-// DXTCFormat = IL_DXT5;  // Just a test...
 	WriteHeader(iCurImage, DXTCFormat);
 	Compress(iCurImage, DXTCFormat);
 
@@ -106,19 +105,19 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat)
 	switch (DXTCFormat)
 	{
 		case IL_DXT1:
-			FourCC = MAKEFOURCC('D','X','T','1');
+			FourCC = IL_MAKEFOURCC('D','X','T','1');
 			break;
 		case IL_DXT2:
-			FourCC = MAKEFOURCC('D','X','T','2');
+			FourCC = IL_MAKEFOURCC('D','X','T','2');
 			break;
 		case IL_DXT3:
-			FourCC = MAKEFOURCC('D','X','T','3');
+			FourCC = IL_MAKEFOURCC('D','X','T','3');
 			break;
 		case IL_DXT4:
-			FourCC = MAKEFOURCC('D','X','T','4');
+			FourCC = IL_MAKEFOURCC('D','X','T','4');
 			break;
 		case IL_DXT5:
-			FourCC = MAKEFOURCC('D','X','T','5');
+			FourCC = IL_MAKEFOURCC('D','X','T','5');
 			break;
 		default:
 			// Error!

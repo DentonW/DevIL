@@ -106,7 +106,7 @@ GLuint ILAPIENTRY ilutGLBindTexImage()
 }
 
 
-ILuint GetDXTCNum(ILenum DXTCFormat)
+ILuint GLGetDXTCNum(ILenum DXTCFormat)
 {
 	switch (DXTCFormat)
 	{
@@ -142,7 +142,7 @@ ILboolean ILAPIENTRY ilutGLTexImage(GLuint Level)
 
 	if (ilutGetBoolean(ILUT_GL_USE_S3TC)) {
 		if (ilutCurImage->DxtcData != NULL && ilutCurImage->DxtcSize != 0 && ilGLCompressed2D != NULL) {
-			DXTCFormat = GetDXTCNum(ilutCurImage->DxtcFormat);
+			DXTCFormat = GLGetDXTCNum(ilutCurImage->DxtcFormat);
 			ilGLCompressed2D(GL_TEXTURE_2D, 0, DXTCFormat, ilutCurImage->Width,
 				ilutCurImage->Height, 0, ilutCurImage->DxtcSize, ilutCurImage->DxtcData);
 			return IL_TRUE;
@@ -162,7 +162,7 @@ ILboolean ILAPIENTRY ilutGLTexImage(GLuint Level)
 					return IL_FALSE;
 				}
 
-				DXTCFormat = GetDXTCNum(DXTCFormat);
+				DXTCFormat = GLGetDXTCNum(DXTCFormat);
 				ilGLCompressed2D(GL_TEXTURE_2D, 0, DXTCFormat, ilutCurImage->Width,
 					ilutCurImage->Height, 0, Size, Buffer);
 				ifree(Buffer);

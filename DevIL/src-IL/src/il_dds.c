@@ -467,27 +467,27 @@ ILvoid DecodePixelFormat()
 		BlockSize = ((Head.Width + 3)/4) * ((Head.Height + 3)/4) * ((Head.Depth + 3)/4);
 		switch (Head.FourCC)
 		{
-			case MAKEFOURCC('D','X','T','1'):
+			case IL_MAKEFOURCC('D','X','T','1'):
 				CompFormat = PF_DXT1;
 				BlockSize *= 8;
 				break;
 
-			case MAKEFOURCC('D','X','T','2'):
+			case IL_MAKEFOURCC('D','X','T','2'):
 				CompFormat = PF_DXT2;
 				BlockSize *= 16;
 				break;
 
-			case MAKEFOURCC('D','X','T','3'):
+			case IL_MAKEFOURCC('D','X','T','3'):
 				CompFormat = PF_DXT3;
 				BlockSize *= 16;
 				break;
 
-			case MAKEFOURCC('D','X','T','4'):
+			case IL_MAKEFOURCC('D','X','T','4'):
 				CompFormat = PF_DXT4;
 				BlockSize *= 16;
 				break;
 
-			case MAKEFOURCC('D','X','T','5'):
+			case IL_MAKEFOURCC('D','X','T','5'):
 				CompFormat = PF_DXT5;
 				BlockSize *= 16;
 				break;
