@@ -907,6 +907,11 @@ ILboolean ILAPIENTRY ilApplyPal(const ILstring FileName)
 	ILenum		Origin;
 //	COL_CUBE	*Cubes;
 
+        if( iCurImage == NULL ) {
+            ilSetError(IL_ILLEGAL_OPERATION);
+            return IL_FALSE;
+        }
+
 	NewData = (ILubyte*)ialloc(iCurImage->Width * iCurImage->Height * iCurImage->Depth);
 	if (NewData == NULL) {
 		return IL_FALSE;
@@ -964,7 +969,6 @@ ILboolean ILAPIENTRY ilApplyPal(const ILstring FileName)
 				NewData[i] = iCurImage->Pal.Palette[iCurImage->Data[i]];
 			}
 			break;
-
 		case IL_RGB:
 		case IL_RGBA:
 			/*Cube = (COL_CUBE*)ialloc(NumColours * sizeof(COL_CUBE));
@@ -983,11 +987,6 @@ ILboolean ILAPIENTRY ilApplyPal(const ILstring FileName)
 				CurSort++;
 				NumColours++;
 			}*/
-
-
-
-
-
 			for (i = 0; i < CurImage->SizeOfData; i += CurImage->Bpp) {
 				Same = IL_TRUE;
 				if (i != 0) {
@@ -1048,7 +1047,8 @@ ILboolean ILAPIENTRY ilApplyPal(const ILstring FileName)
 			break;
 
 		case IL_LUMINANCE:
-			for (i = 0; i < CurImage->SizeOfData; i++) {
+                case IL_LUMINANCE_APLHA:
+			for (i = 0; i < CurImage->SizeOfData; i += CurImage->Bpp ) {
 				for (j = 0; j < NumColours; j++) {
 					// No need to perform a sqrt.
 					PalInfo[j] = ((ILuint)CurImage->Data[i] - (ILuint)Image.Pal.Palette[j * 3]) *
