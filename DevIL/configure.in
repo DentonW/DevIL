@@ -37,7 +37,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.38 $)
+AC_REVISION($Revision: 1.39 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -67,7 +67,9 @@ int main() {
 	vector unsigned int vec;
 	vec = vec_splat_u32(0);
 	return 0;
-}], [ AC_MSG_RESULT(yes) AC_DEFINE([ALTIVEC]) CFLAGS="$CFLAGS_TMP -faltivec"], CFLAGS=$CFLAGS_TMP; [AC_MSG_RESULT(no)] );
+}], [AC_DEFINE([ALTIVEC])]
+	[CFLAGS="$CFLAGS_TMP -faltivec";]
+	[AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)] );
 
 CFLAGS="-Wall -funroll-loops -ffast-math -fomit-frame-pointer -fexpensive-optimizations $CFLAGS"
 LIBIL_CFLAGS="$CFLAGS"
@@ -594,7 +596,7 @@ case "$target" in
 	;;
 *-*-*)
 	AC_CHECK_LIB(GL,glLoadIdentity,[LIBGL="-lGL"])
-	AC_CHECK_LIB(GLU,gluPerspective,[LIBGL="-lGLU"],,$LIBGL)
+	AC_CHECK_LIB(GLU,gluPerspective,[LIBGL="-lGLU"])
 	;;
 esac
    if test "x$have_gl_hdr" != "xyes" ; then
