@@ -1,6 +1,6 @@
 ###################################
 #    Djgpp Makefile for DevIL     #
-#    Last Modified:  01/10/2001   #
+#    Last Modified:  02/01/2001   #
 ###################################
 
 # Uncomment any of the following lines to define them
@@ -68,7 +68,7 @@ ILOBJ=	$(ILODIR)/il_bits.o $(ILODIR)/il_bmp.o $(ILODIR)/il_convert.o $(ILODIR)/i
 		$(ILODIR)/il_files.o $(ILODIR)/il_icon.o $(ILODIR)/il_wal.o \
 		$(ILODIR)/il_mdl.o $(ILODIR)/il_quantizer.o $(ILODIR)/il_convbuff.o \
 		$(ILODIR)/il_lif.o $(ILODIR)/il_alloc.o $(ILODIR)/il_dds.o $(ILODIR)/il_profiles.o \
-		$(ILODIR)/il_dcx.o
+		$(ILODIR)/il_dcx.o $(ILODIR)/il_psd.o $(ILODIR)/il_fastconv.o
 
 
 ILUDIR=  ./../../src-ILU/src
