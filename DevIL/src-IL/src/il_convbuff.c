@@ -1177,38 +1177,39 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 			}
 			break;
 
+		// @TODO:  Handle signed better.
 		case IL_FLOAT:
 			FloatPtr = (ILfloat*)NewData;
 			switch (SrcType)
 			{
 				case IL_UNSIGNED_BYTE:
 					for (i = 0; i < Size; i++) {
-						FloatPtr[i] = ((ILubyte*)Buffer)[i];
+						FloatPtr[i] = ((ILubyte*)Buffer)[i] / (ILfloat)UCHAR_MAX;
 					}
 					break;
 				case IL_BYTE:
 					for (i = 0; i < Size; i++) {
-						FloatPtr[i] = ((ILbyte*)Buffer)[i];
+						FloatPtr[i] = ((ILbyte*)Buffer)[i] / (ILfloat)UCHAR_MAX;
 					}
 					break;
 				case IL_UNSIGNED_SHORT:
 					for (i = 0; i < Size; i++) {
-						FloatPtr[i] = ((ILushort*)Buffer)[i];
+						FloatPtr[i] = ((ILushort*)Buffer)[i] / (ILfloat)USHRT_MAX;
 					}
 					break;
 				case IL_SHORT:
 					for (i = 0; i < Size; i++) {
-						FloatPtr[i] = ((ILshort*)Buffer)[i];
+						FloatPtr[i] = ((ILshort*)Buffer)[i] / (ILfloat)USHRT_MAX;
 					}
 					break;
 				case IL_UNSIGNED_INT:
 					for (i = 0; i < Size; i++) {
-						FloatPtr[i] = (ILfloat)((ILuint*)Buffer)[i];
+						FloatPtr[i] = (ILfloat)((ILuint*)Buffer)[i] / (ILfloat)UINT_MAX;
 					}
 					break;
 				case IL_INT:
 					for (i = 0; i < Size; i++) {
-						FloatPtr[i] = (ILfloat)((ILint*)Buffer)[i];
+						FloatPtr[i] = (ILfloat)((ILint*)Buffer)[i] / (ILfloat)UINT_MAX;
 					}
 					break;
 				case IL_DOUBLE:
@@ -1225,32 +1226,32 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 			{
 				case IL_UNSIGNED_BYTE:
 					for (i = 0; i < Size; i++) {
-						DblPtr[i] = ((ILubyte*)Buffer)[i];
+						DblPtr[i] = ((ILubyte*)Buffer)[i] / (ILdouble)UCHAR_MAX;
 					}
 					break;
 				case IL_BYTE:
 					for (i = 0; i < Size; i++) {
-						DblPtr[i] = ((ILbyte*)Buffer)[i];
+						DblPtr[i] = ((ILbyte*)Buffer)[i] / (ILdouble)UCHAR_MAX;
 					}
 					break;
 				case IL_UNSIGNED_SHORT:
 					for (i = 0; i < Size; i++) {
-						DblPtr[i] = ((ILushort*)Buffer)[i];
+						DblPtr[i] = ((ILushort*)Buffer)[i] / (ILdouble)USHRT_MAX;
 					}
 					break;
 				case IL_SHORT:
 					for (i = 0; i < Size; i++) {
-						DblPtr[i] = ((ILshort*)Buffer)[i];
+						DblPtr[i] = ((ILshort*)Buffer)[i] / (ILdouble)USHRT_MAX;
 					}
 					break;
 				case IL_UNSIGNED_INT:
 					for (i = 0; i < Size; i++) {
-						DblPtr[i] = ((ILuint*)Buffer)[i];
+						DblPtr[i] = ((ILuint*)Buffer)[i] / (ILdouble)UINT_MAX;
 					}
 					break;
 				case IL_INT:
 					for (i = 0; i < Size; i++) {
-						DblPtr[i] = ((ILint*)Buffer)[i];
+						DblPtr[i] = ((ILint*)Buffer)[i] / (ILdouble)UINT_MAX;
 					}
 					break;
 				case IL_FLOAT:

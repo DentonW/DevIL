@@ -1,3 +1,11 @@
+1.5.7
+-----
+
+- Fixed conversion to IL_FLOAT and IL_DOUBLE types.
+
+
+
+
 1.5.6
 -----
 

@@ -67,6 +67,10 @@
 #endif
 
 
+#define IL_MAX(a,b) (((a) > (b)) ? (a) : (b))
+#define IL_MIN(a,b) (((a) < (b)) ? (a) : (b))
+
+
 // Basic Palette struct
 typedef struct ILpal
 {

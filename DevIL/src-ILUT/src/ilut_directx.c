@@ -21,6 +21,7 @@
 ILimage*	MakeD3D8Compliant(IDirect3DDevice8 *Device, D3DFORMAT *DestFormat);
 ILenum		GetD3D8Compat(ILenum Format);
 D3DFORMAT	GetD3DFormat(ILenum Format);
+ILboolean	iD3DCreateMipmaps(IDirect3DTexture8 *Texture, ILimage *Image);
 
 ILboolean	FormatsChecked = IL_FALSE;
 ILboolean	FormatSupported[6] =
@@ -189,13 +190,13 @@ D3DFORMAT D3DGetDXTCNum(ILenum DXTCFormat)
 
 IDirect3DTexture8* ILAPIENTRY ilutD3D8Texture(IDirect3DDevice8 *Device)
 {
-	static IDirect3DTexture8 *Texture;
-	static D3DLOCKED_RECT Rect;
-	static D3DFORMAT Format;
-	static ILimage	*Image;
-	static ILenum	DXTCFormat;
-	static ILuint	Size;
-	static ILubyte	*Buffer;
+	IDirect3DTexture8 *Texture;
+	D3DLOCKED_RECT Rect;
+	D3DFORMAT Format;
+	ILimage	*Image;
+	ILenum	DXTCFormat;
+	ILuint	Size;
+	ILubyte	*Buffer;
 
 	Image = ilutCurImage = ilGetCurImage();
 	if (ilutCurImage == NULL) {
@@ -271,7 +272,8 @@ IDirect3DTexture8* ILAPIENTRY ilutD3D8Texture(IDirect3DDevice8 *Device)
 success:
 	IDirect3DTexture8_UnlockRect(Texture, 0);
 	// Just let D3DX filter for us.
-	D3DXFilterTexture(Texture, NULL, D3DX_DEFAULT, D3DX_FILTER_BOX);
+	//D3DXFilterTexture(Texture, NULL, D3DX_DEFAULT, D3DX_FILTER_BOX);
+	iD3DCreateMipmaps(Texture, Image);
 
 	if (Image != ilutCurImage)
 		ilCloseImage(Image);
@@ -305,7 +307,8 @@ IDirect3DVolumeTexture8* ILAPIENTRY ilutD3D8VolumeTexture(IDirect3DDevice8 *Devi
 		return NULL;
 
 	memcpy(Box.pBits, Image->Data, Image->SizeOfData);
-	IDirect3DVolumeTexture8_UnlockBox(Texture, 0);
+	if (!IDirect3DVolumeTexture8_UnlockBox(Texture, 0))
+		return IL_FALSE;
 
 	// We don't want to have mipmaps for such a large image.
 
@@ -359,6 +362,53 @@ ILimage *MakeD3D8Compliant(IDirect3DDevice8 *Device, D3DFORMAT *DestFormat)
 	return Converted;
 }
 
+
+ILboolean iD3DCreateMipmaps(IDirect3DTexture8 *Texture, ILimage *Image)
+{
+	D3DLOCKED_RECT	Rect;
+	D3DSURFACE_DESC	Desc;
+	ILuint			NumMips, Width, Height, i;
+	ILimage			*CurImage, *MipImage, *Temp;
+
+	NumMips = IDirect3DTexture8_GetLevelCount(Texture);
+	Width = Image->Width;
+	Height = Image->Height;
+
+	CurImage = ilGetCurImage();
+	MipImage = ilCopyImage_(CurImage);
+	ilSetCurImage(MipImage);
+	if (!iluBuildMipmaps()) {
+		ilCloseImage(MipImage);
+		ilSetCurImage(CurImage);
+		return IL_FALSE;
+	}
+	ilSetCurImage(CurImage);
+	Temp = MipImage->Mipmaps;
+
+	// Counts the base texture as 1.
+	for (i = 1; i < NumMips && Temp != NULL; i++) {
+		if (FAILED(IDirect3DTexture8_LockRect(Texture, i, &Rect, NULL, 0)))
+			return IL_FALSE;
+
+		Width = IL_MAX(1, Width / 2);
+		Height = IL_MAX(1, Height / 2);
+
+		IDirect3DTexture8_GetLevelDesc(Texture, i, &Desc);
+		if (Desc.Width != Width || Desc.Height != Height) {
+			IDirect3DTexture8_UnlockRect(Texture, i);
+			return IL_FALSE;
+		}
+
+		memcpy(Rect.pBits, Temp->Data, Temp->SizeOfData);
+
+		IDirect3DTexture8_UnlockRect(Texture, i);
+		Temp = Temp->Next;
+	}
+
+	ilCloseImage(MipImage);
+
+	return IL_TRUE;
+}
 
 
 //
