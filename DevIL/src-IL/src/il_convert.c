@@ -408,6 +408,7 @@ ILboolean ilSwapColours()
 			iCurImage->Format = IL_RGBA;
 			break;
 		case IL_LUMINANCE:
+		case IL_LUMINANCE_ALPHA:
 			return IL_TRUE;  // No need to do anything to luminance images.
 		case IL_COLOUR_INDEX:
 			switch (iCurImage->Pal.PalType)
