@@ -137,10 +137,10 @@ ILenum ilDetermineTypeF(ILHANDLE File)
 		return IL_BMP;
 	#endif
 
-	/*#ifndef IL_NO_GIF
+	#ifndef IL_NO_GIF
 	if (ilIsValidGifF(File))
 		return IL_GIF;
-	#endif*/
+	#endif
 
 	#ifndef IL_NO_LIF
 	if (ilIsValidLifF(File))
@@ -216,10 +216,10 @@ ILenum ilDetermineTypeL(ILvoid *Lump, ILuint Size)
 		return IL_BMP;
 	#endif
 
-	/*#ifndef IL_NO_GIF
+	#ifndef IL_NO_GIF
 	if (ilIsValidGifL(Lump, Size))
 		return IL_GIF;
-	#endif*/
+	#endif
 
 	#ifndef IL_NO_LIF
 	if (ilIsValidLifL(Lump, Size))
@@ -299,10 +299,10 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, const ILstring FileName)
 			return ilIsValidBmp(FileName);
 		#endif
 
-		/*#ifndef IL_NO_GIF
+		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilIsValidGif(FileName);
-		#endif*/
+		#endif
 
 		#ifndef IL_NO_LIF
 		case IL_LIF:
@@ -384,10 +384,10 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 			return ilIsValidBmpF(File);
 		#endif
 
-		/*#ifndef IL_NO_GIF
+		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilIsValidGifF(File);
-		#endif*/
+		#endif
 
 		#ifndef IL_NO_LIF
 		case IL_LIF:
@@ -464,10 +464,10 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, ILvoid *Lump, ILuint Size)
 			return ilIsValidBmpL(Lump, Size);
 		#endif
 
-		/*#ifndef IL_NO_GIF
+		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilIsValidGifL(Lump, Size);
-		#endif*/
+		#endif
 
 		#ifndef IL_NO_LIF
 		case IL_LIF:
@@ -551,11 +551,11 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, const ILstring FileName)
 		case IL_BMP:
 			return ilLoadBmp(FileName);
 		#endif
-
-		/*#ifndef IL_NO_GIF
+                
+                #ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilLoadGif(FileName);
-		#endif*/
+		#endif
 
 		#ifndef IL_NO_CUT
 		case IL_CUT:
@@ -708,10 +708,10 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadBmpF(File);
 		#endif
 
-		/*#ifndef IL_NO_GIF
+		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilLoadGifF(File);
-		#endif*/
+		#endif
 
 		#ifndef IL_NO_CUT
 		case IL_CUT:
@@ -856,10 +856,10 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, ILvoid *Lump, ILuint Size)
 			return ilLoadBmpL(Lump, Size);
 		#endif
 
-		/*#ifndef IL_NO_GIF
+		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilLoadGifL(Lump, Size);
-		#endif*/
+		#endif
 
 		#ifndef IL_NO_CUT
 		case IL_CUT:
@@ -1021,11 +1021,11 @@ ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 		}
 		#endif
 
-		/*#ifndef IL_NO_GIF
+		#ifndef IL_NO_GIF
 		if (!iStrCmp(Ext, IL_TEXT("gif"))) {
 			return ilLoadGif(FileName);
 		}
-		#endif*/
+		#endif
 
 		#ifndef IL_NO_CUT
 		if (!iStrCmp(Ext, IL_TEXT("cut"))) {
