@@ -166,7 +166,7 @@ void ResizeFunc(int NewWidth, int NewHeight)
 	glLoadIdentity ();
 
 	glViewport (0, 0, NewWidth, NewHeight);
-	glOrtho    (0, Width, 0, Height, -1, 1);
+	glOrtho    (0, Width, Height, 0, -1, 1);
 }
 
 
@@ -233,7 +233,7 @@ ILboolean Setup()
 	// We're done with our image, so we go ahead and delete it.
 	ilDeleteImages(1, &ImgId);
 
-	glOrtho(0, Width, 0, Height, -1, 1);  // Set up an orthographic projection with OpenGL.
+	glOrtho(0, Width, Height, 0, -1, 1);  // Set up an orthographic projection with OpenGL.
 
 	return IL_TRUE;
 }
