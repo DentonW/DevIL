@@ -18,6 +18,7 @@
 #else
 #include <GL/glut.h>
 #endif
+#define ILUT_USE_OPENGL
 #include <IL/il.h>
 #include <IL/ilu.h>
 #include <IL/ilut.h>
