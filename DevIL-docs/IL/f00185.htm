@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilRegisterNumImages</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00184.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00155.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilRegisterNumImages</h2>
+<font size=-1>
+<p>The <b>ilRegisterMipNum</b> function registers the current image's number of "next" images.</p>
+</font>
+<pre><code>
+<b>ILboolean ilRegisterNumImages(
+  ILuint</b><i> Num</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Num</i></dt>
+<dd>Number of images in the animation chain to create.</dd>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>ilRegisterNumImages</b> tells OpenIL the number of images in the current image's animation chain.  The "next" images can then be chosen and modified via <a href="../il/f00008.htm">ilActiveImage</a>.  This function is to be used from within functions that have been registered via <a href="../il/f00153.htm">ilRegisterLoad</a>.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+None
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00008.htm">ilActiveImage</a>, <a href="../il/f00184.htm">ilRegisterMipNum</a>, <a href="../il/f00153.htm">ilRegisterLoad</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

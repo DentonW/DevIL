@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilPushAttrib</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00048.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00154.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilPushAttrib</h2>
+<font size=-1>
+<p>The <b>ilPushAttrib</b> function pushes the states indicated by bits onto the state stack.</p>
+</font>
+<pre><code>
+<b>ILvoid ilPushAttrib(
+  ILuint</b><i> Bits</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Bits</i></dt>
+<dd>Attribute bits to push.  Values accepted are:</dd>
+<dl>
+<dt>IL_ORIGIN_BIT</dt>
+<dd>Preserves the origin state set by <a href="../il/f00046.htm">ilOriginFunc</a>.</dd>
+<dt>IL_FILE_BIT</dt>
+<dd>Preserves whether OpenIL is allowed to overwrite files when saving (set by <a href="../il/f00024.htm">ilEnable, ilDisable</a>).</dd>
+<dt>IL_PAL_BIT</dt>
+<dd>Preserves whether OpenIL is supposed to convert palette'd to truecolour images (set by <a href="../il/f00024.htm">ilEnable, ilDisable</a>).</dd>
+<dt>IL_ALL_ATTRIB_BITS</dt>
+<dd>Preserves all OpenIL states and attributes.</dd>
+</dl>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>ilPushAttrib</b> pushes a new set of modes and attributes onto the state stack, allowing for "a fresh start".
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+IL_STACK_OVERFLOW - The stack was pushed more times than the current OpenIL implementation allows.  Use <a href="../il/f00048.htm">ilPopAttrib</a> to clear the stack.  OpenIL implementations must support a stack depth of at least 32.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00048.htm">ilPopAttrib</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

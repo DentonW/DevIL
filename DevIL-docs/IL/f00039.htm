@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilLoadImage</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00152.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00179.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilLoadImage</h2>
+<font size=-1>
+<p>The <b>ilLoadImage</b> function loads an image from a file.</p>
+</font>
+<pre><code>
+<b>ILboolean ilLoadImage(
+  char</b><i> *FileName</i>
+<b>);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>FileName</i></dt>
+<dd>Specifies which file to load an image from.</dd>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+The <b>ilLoadImage</b> function allows a general interface to the specific internal file-loading routines.  The approach <b>ilLoadImage</b> takes toward determining image types is three-pronged.  First, it finds the extension and checks to see if any user-registered functions (registered through <a href="../il/f00153.htm">ilRegisterLoad</a>) match the extension.  If nothing matches, it takes the extension and determines which function to call based on it.  Lastly, it attempts to identify the image based on various image header verification functions, such as ilIsValidPngF.  If all this checking fails, IL_FALSE is returned with no modification to the current bound image.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+IL_COULD_NOT_OPEN_FILE - The file pointed to by <i>FileName</i> could not be opened.  Either the file does not exist or is in use by another process.
+<br>
+IL_ILLEGAL_OPERATION - There is currently no image bound.  Use <a href="../il/f00026.htm">ilGenImages</a> and <a href="../il/f00013.htm">ilBindImage</a> before calling this function.
+<br>
+IL_INVALID_EXTENSION - The file could not be loaded based on extension or header.
+<br>
+IL_INVALID_PARAM - <i>FileName</i> was not valid.  It was most likely NULL.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00026.htm">ilGenImages</a>, <a href="../il/f00013.htm">ilBindImage</a>, <a href="../il/f00152.htm">ilLoad, ilLoadF, ilLoadL</a>, <a href="../il/f00179.htm">ilLoadPal</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

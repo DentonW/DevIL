@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilGetAlpha</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00026.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00027.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilGetAlpha</h2>
+<font size=-1>
+<p>The <b>ilGetAlpha</b> function returns the alpha channel of the currently bound image.</p>
+</font>
+<pre><code>
+<b>ILubyte *ilGetAlpha(
+  ILenum</b><i> Type</i><b>
+);</b>
+
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Type</i></dt>
+<dd>The type (IL_UNSIGNED_BYTE, IL_FLOAT, etc.) that you want the alpha in.</dd>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>ilGetAlpha</b> returns a copy of the alpha data in the currently bound image.  You must free this data yourself, since it is a copy.  If there is no alpha in the current image, <b>ilGetAlpha</b> returns an array of data filled with 0xFF but does not modify the original image.  The data returned by <b>ilGetAlpha</b> has the same dimensions as the currently bound image, so use <a href="../il/f00027.htm">ilGetInteger</a> to determine the correct dimensions.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+IL_ILLEGAL_OPERATION - There is currently no image bound.  Use <a href="../il/f00026.htm">ilGenImages</a> and <a href="../il/f00013.htm">ilBindImage</a> before calling this function.
+<br>
+IL_INVALID_PARAM - <i>Type</i> was not a legal value.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00026.htm">ilGenImages</a>, <a href="../il/f00013.htm">ilBindImage</a>, <a href="../il/f00027.htm">ilGetInteger</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

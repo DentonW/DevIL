@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilLoad, ilLoadF, ilLoadL</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00127.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00039.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilLoad, ilLoadF, ilLoadL</h2>
+<font size=-1>
+<p>These functions load a specific type of image from a file, file handle or memory "lump".</p>
+</font>
+<pre><code>
+<b>ILboolean ilLoad(
+  ILenum</b><i> Type,</i><b>
+  char</b><i> *FileName</i><b>
+);
+<p>
+ILboolean ilLoadF(
+  ILenum</b><i> Type,</i><b>
+  ILHANDLE</b><i> File</i><b>
+);
+<p>
+ILboolean ilLoadL(
+  ILenum</b><i> Type,</i><b>
+  ILvoid</b><i> *Lump,</i><b>
+  ILuint</b><i> Size</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Type</i></dt>
+<dd></dd>
+<dl>
+<dt>IL_TYPE_UNKNOWN</dt>
+<dd>Tells DevIL to try to determine the type of image present in <i>FileName</i>, <i>File</i> or <i>Lump</i>.</dd>
+<dt>IL_BMP</dt>
+<dd>Load the image as a Microsoft bitmap (.bmp).</dd>
+<dt>IL_CUT</dt>
+<dd>Load the image as a .cut image.</dd>
+<dt>IL_DDS</dt>
+<dd>Load the image as a DirectDraw Surface (.dds) image.</dd>
+<dt>IL_DOOM</dt>
+<dd>Load the image as a Doom texture.</dd>
+<dt>IL_DOOM_FLAT</dt>
+<dd>Load the image as a Doom flat (floor).</dd>
+<dt>IL_GIF</dt>
+<dd>Load the image as a Graphics Interchange Format (.gif) file.</dd>
+<dt>IL_ICO</dt>
+<dd>Load the image as a Microsoft icon (.ico).</dd>
+<dt>IL_JPG</dt>
+<dd>Load the image as a Jpeg (.jpg).</dd>
+<dt>IL_LIF</dt>
+<dd>Load the image as a Homeworld .lif file.</dd>
+<dt>IL_MNG</dt>
+<dd>Load the image as a .mng file.</dd>
+<dt>IL_PCD</dt>
+<dd>Load the image as a .pcd image.</dd>
+<dt>IL_PCX</dt>
+<dd>Load the image as a PCX.</dd>
+<dt>IL_PIC</dt>
+<dd>Load the image as a .pic image.</dd>
+<dt>IL_PNG</dt>
+<dd>Load the image as a Portable Network Graphics (.png) image.</dd>
+<dt>IL_PNM</dt>
+<dd>Load the image as a Portable AnyMap (.pbm, .pgm or .ppm).</dd>
+<dt>IL_PSD</dt>
+<dd>Load the image as an Adobe Photoshop (.psd) image.</dd>
+<dt>IL_PSP</dt>
+<dd>Load the image as a Paint Shop Pro (.psp) image.</dd>
+<dt>IL_SGI</dt>
+<dd>Load the image as a SGI (.bw, .rgb, .rgba or .sgi).</dd>
+<dt>IL_TGA</dt>
+<dd>Load the image as a TrueVision Targa.</dd>
+<dt>IL_TIF</dt>
+<dd>Load the image as a TIFF (.tif or .tiff) image.</dd>
+<dt>IL_RAW</dt>
+<dd>Load the image as raw data with a 13-byte header.</dd>
+<dt>IL_JASC_PAL</dt>
+<dd>Load the file into the current image's palette as a Paint Shop Pro (Jasc) palette.</dd>
+</dl>
+<dt><i>FileName</i></dt>
+<dd>The filename of a file to open.</dd>
+<dt><i>File</i></dt>
+<dd>Pointer to a file handle to read from.</dd>
+<dt><i>Lump</i></dt>
+<dd>Pointer to a memory "lump" to read from.</dd>
+<dt><i>Size</i></dt>
+<dd>Size of the memory "lump".  If zero, no bounds-checking is done.</dd>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>ilLoad</b> can be used much in the same way <a href="../il/f00039.htm">ilLoadImage</a> is used, except with <b>ilLoad</b>, it is possible to force OpenIL to load a file as a specific image format, no matter what the extension.  <b>ilLoadF</b> is useful for when an image is being read from some type of resource or .pak-type file, as is <b>ilLoadL</b>.  To provide support for other languages than C/C++, <a href="../il/f00056.htm">ilSetFileCallbacks</a> was introduced to allow loading from file handles in these languages via <b>ilLoadF</b>.
+<p>
+Due to limitations in the external libraries used, <b>ilLoadF</b> and <b>ilLoadL</b> do not support all the formats <b>ilLoad</b> does.  <b>ilLoadF</b> is missing support for IL_TIF images.  <b>ilLoadL</b> also lacks support for the IL_TIF format.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+IL_ILLEGAL_OPERATION - There is currently no image bound.  Use <a href="../il/f00026.htm">ilGenImages</a> and <a href="../il/f00013.htm">ilBindImage</a> before calling this function.
+<br>
+IL_COULD_NOT_OPEN_FILE - The file pointed to by <i>FileName</i> could not be opened.  Either the file does not exist or is in use by another process.
+<br>
+IL_INVALID_ENUM - <i>Type</i> was of an invalid value.
+<br>
+IL_INVALID_PARAM - <I>FileName</i>, <i>File</i> or <i>Lump</i> was NULL.
+<br>
+IL_INVALID_FILE_HEADER - The file had an invalid header and could not be loaded.
+<br>
+IL_ILLEGAL_FILE_VALUE - The file could not be loaded due to an invalid value present.
+<br>
+IL_OUT_OF_MEMORY - Could not allocate memory for the new image data.
+<br>
+IL_LIB_JPEG_ERROR - Error occurred when trying to load a jpeg.
+<br>
+IL_LIB_PNG_ERROR - Error occurred when trying to load a png.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00026.htm">ilGenImages</a>, <a href="../il/f00013.htm">ilBindImage</a>, <a href="../il/f00039.htm">ilLoadImage</a>, <a href="../il/f00164.htm">ilSave</a>, <a href="../il/f00053.htm">ilSaveImage</a>, <a href="../il/f00056.htm">ilSetFileCallbacks</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

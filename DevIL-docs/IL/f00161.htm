@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilSetSharedPal</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00056.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00202.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilSetSharedPal</h2>
+<font size=-1>
+<p>The <b>ilSetSharedPal</b> function sets the shared palette.</p>
+</font>
+<pre><code>
+<b>ILvoid ilSetSharedPal(
+  ILubyte</b><i> *Pal,</i><b>
+  ILuint</b><i> PalSize,</i><b>
+  ILenum</b><i> PalType</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Pal</i></dt>
+<dd>Palette to copy to OpenIL's internal shared palette.</dd>
+<dt><i>PalSize</i></dt>
+<dd>Size of <i>Palette</i> in bytes.</dd>
+<dt><i>PalType</i></dt>
+<dd>Type of the palette.  Accepted values are:</dd>
+<p>
+<dl>
+<dd>IL_PAL_RGB24</dd>
+<dd>IL_PAL_RGB32</dd>
+<dd>IL_PAL_RGBA32</dd>
+<dd>IL_PAL_RGB16_TGA</dd>
+<dd>IL_PAL_BGR24</dd>
+<dd>IL_PAL_BGR32</dd>
+<dd>IL_PAL_BGRA32</dd>
+<dd>IL_PAL_BGR16_TGA</dd>
+</dl>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>ilSetSharedPal</b> sets the palette to be used when loading images that are colour-indexed but contain no internal palette.  Examples of these types of files are .cut and Doom files.  By default, the shared palette is the default Doom palette.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+IL_INVALID_PARAM - <i>Pal</i> was NULL, or <i>PalSize</i> was 0.
+<br>
+IL_OUT_OF_MEMORY - Could not allocate memory for the shared palette.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00072.htm">ilSetDoomPal</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

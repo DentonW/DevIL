@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilGetString</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00165.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00126.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilGetString</h2>
+<font size=-1>
+<p>The <b>ilGetString</b> function returns a string describing the OpenIL implementation.</p>
+</font>
+<pre><code>
+<b>const char* ilGetString(
+  ILenum</b><i> StringName</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>StringName</i></dt>
+<dd>Enum that describes the string to be retrieved.</dd>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>ilGetString</b> returns a constant human-readable string describing the current OpenIL implementation.  Values accepted for <i>StringName</i> are:
+<p>
+<dd>IL_VENDOR - Describes the OpenIL vendor (currently Abysmal Software).</dd><br>
+<dd>IL_VERSION - String describing the current OpenIL version.  Use <a href="../il/f00027.htm">ilGetInteger</a> with IL_VERSION_NUM to actually check for version differences.</dd>
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+IL_INVALID_ENUM - <i>StringName</i> was an invalid enum type.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../ilu/f00095.htm">iluGetString</a>, <
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

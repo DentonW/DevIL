@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilGetBoolean, ilGetBooleanv, ilGetInteger, ilGetIntegerv</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00210.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00125.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilGetBoolean, ilGetBooleanv, ilGetInteger, ilGetIntegerv</h2>
+<font size=-1>
+<p>These functions return the value of a selected mode.</p>
+</font>
+<pre><code>
+<b>ILboolean ilGetBoolean(
+  ILenum</b><i> Mode</i><b>
+);</b>
+<p>
+<b>ILvoid ilGetBooleanv(
+  ILenum</b><i> Mode,</i><b>
+  ILboolean</b><i> *Param</i><b>
+);</b>
+<p>
+<b>ILint ilGetInteger(
+  ILenum</b><i> Mode</i><b>
+);</b>
+<p>
+<b>ILvoid ilGetIntegerv(
+  ILenum</b><i> Mode,</i><b>
+  ILint</b><i> *Param</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Mode</i></dt>
+<dd>The mode value to be returned.  The following values are accepted:</dd>
+<p>
+<dl>
+<dt>IL_FILE_MODE</dt>
+<dd>Returns whether file overwriting when saving is enabled.</dd>
+<dt>IL_CONV_PAL</dt>
+<dd>Returns whether palette'd images are converted to their base palettes types on load - e.g. converted to a BGRA image.</dd>
+<dt>IL_ORIGIN_SET</dt>
+<dd>Returns whether all images loaded and saved adhere to a specific origin.</dd>
+<dt>IL_ORIGIN_MODE</dt>
+<dd>Returns the current origin position.  Returned values can be:</dd>
+<dl>
+<dt>IL_ORIGIN_LOWER_LEFT</dt>
+<dd>The origin is in the lower left corner.</dd>
+<dt>IL_ORIGIN_UPPER_LEFT</dt>
+<dd>The origin is in the upper left corner.</dd>
+</dl>
+<dt>IL_FORMAT_SET</dt>
+<dd>Returns whether all images loaded are converted to a specific format.</dd>
+<dt>IL_FORMAT_MODE</dt>
+<dd>Returns the format images are converted to upon loading.</dd>
+<dt>IL_TYPE_SET</dt>
+<dd>Returns whether all images loaded are converted to a specific type.</dd>
+<dt>IL_TYPE_MODE</dt>
+<dd>Returns the type images are converted to upon loading.</dd>
+<dt>IL_VERSION_NUM</dt>
+<dd>Returns the version number of the shared library.  This can be checked against the IL_VERSION #define.</dd>
+<dt>IL_IMAGE_WIDTH</dt>
+<dd>Returns the current image's width.</dd>
+<dt>IL_IMAGE_HEIGHT</dt>
+<dd>Returns the current image's height.</dd>
+<dt>IL_IMAGE_BYTES_PER_PIXEL</dt>
+<dd>Returns the bytes per pixel of the current image's data.</dd>
+<dt>IL_IMAGE_BITS_PER_PIXEL</dt>
+<dd>Returns the bits per pixel of the current image's data.</dd>
+<dt>IL_IMAGE_FORMAT</dt>
+<dd>Returns the current image's format.</dd>
+<dt>IL_IMAGE_TYPE</dt>
+<dd>Returns the current image's type.</dd>
+<dt>IL_NUM_IMAGES</dt>
+<dd>Returns the number of images in the current image animation chain.</dd>
+<dt>IL_NUM_MIPMAPS</dt>
+<dd>Returns the number of mipmaps of the current image.</dd>
+<dt>IL_PALETTE_TYPE</dt>
+<dd>Returns the palette type of the current image.</dd>
+<dt>IL_PALETTE_BPP</dt>
+<dd>Returns the bytes per pixel of the current image's palette.</dd>
+<dt>IL_PALETTE_NUM_COLS</dt>
+<dd>Returns the number of colours of the current image's palette.</dd>
+<dt>IL_ACTIVE_IMAGE</dt>
+<dd>Returns the current image number.</dd>
+<dt>IL_ACTIVE_LAYER</dt>
+<dd>Returns the current layer number.</dd>
+<dt>IL_ACTIVE_MIPMAP</dt>
+<dd>Returns the current mipmap number.</dd>
+<dt>IL_CUR_IMAGE</dt>
+<dd>Returns the current bound image name.</dd>
+<dt>IL_USE_KEY_COLOUR</dt>
+<dd>Returns whether DevIL uses a key colour (not used yet).</dd>
+</dl>
+<p>
+<dt><i>Param</i></dt>
+<dd>When used, the value is stored here instead of returned.</dd>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+The <b>ilGetBoolean</b> and <b>ilGetInteger</b> functions return the value of a selected mode.  The <b>ilGetBooleanv</b> and <b>ilGetIntegerv</b> functions return the mode value in the <i>Param</i> parameter.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+IL_INVALID_ENUM - <i>Mode</i> was an invalid enum.
+<br>
+IL_INVALID_PARAM - <i>Param</i> was NULL.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00024.htm">ilEnable, ilDisable</a>, <a href="../il/f00046.htm">ilOriginFunc</a>, <a href="../ilu/f00150.htm">iluGetInteger, iluGetIntegerv</a>, <a href="../ilut/f00104.htm">ilutGetBoolean, ilutGetBooleanv, ilutGetInteger, ilutGetIntegerv</a>, <a href="../il/f00207.htm">ilSetInteger</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

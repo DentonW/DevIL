@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilSetString</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00161.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00204.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilSetString</h2>
+<font size=-1>
+<p>The <b>ilSetString</b> function allows you to set strings to be written to files.</p>
+</font>
+<pre><code>
+<b>ILvoid ilSetString(
+  ILenum</b><i> Mode</i><b>
+  char</b><i> *String</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Mode</i></dt>
+<dd>Specifies the string to be set.  The following values are accepted:</dd>
+<p>
+<dl>
+<dt>IL_TGA_ID_STRING</dt>
+<dd>Specifies a string for the identification field of a .tga file.  The maximum length is 254 characters.</dd>
+<dt>IL_TGA_AUTHNAME_STRING</dt>
+<dd>Specifies the author's name for a .tga file, to be put in the extensions field.  The maximum length is 40 characters.</dd>
+<dt>IL_TGA_AUTHCOMMENT_STRING</dt>
+<dd>Specifies any author's comments for a .tga file, to be put in the extensions field.  The maximum length is 80 characters.</dd>
+<dt>IL_PNG_AUTHNAME_STRING</dt>
+<dd>Specifies the author's name for a .png file.  The maximum length is 255 characters.</dd>
+<dt>IL_PNG_TITLE_STRING</dt>
+<dd>Specifies the title of the image for a .png file.  The maximum length is 255 characters.</dd>
+<dt>IL_PNG_DESCRIPTION_STRING</dt>
+<dd>Specifies a short description of the image for a .png file.  The maximum length is 255 characters.</dd>
+<dt>IL_TIF_DESCRIPTION_STRING</dt>
+<dd>Specifies a short description of the image for a .tif file.  The maximum length is 255 characters.</dd>
+<dt>IL_TIF_HOSTCOMPUTER_STRING</dt>
+<dd>Specifies the host computer's name for a .tif file.  The maximum length is 255 characters.</dd>
+<dt>IL_TIF_DOCUMENTNAME_STRING</dt>
+<dd>Specifies the name of the image for a .tif file.  The maximum length is 255 characters.</dd>
+<dt>IL_TIF_AUTHNAME_STRING</dt>
+<dd>Specifies the author's name for a .tif file.  The maximum length is 255 characters.</dd>
+</dl>
+<p>
+<dt><i>String</i></dt>
+<dd>String to use for setting a string field of a specified image format.</dd>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>ilSetString</b> gives DevIL users the option to set strings in certain file formats that have fields for strings, making DevIL highly customizable.  Choose one of the acceptable parameters for <i>Mode</i> and specify any string you want.  If the string is too long, it will be truncated when writing to the file.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+IL_INVALID_ENUM - <i>Mode</i> was an invalid enum.
+<br>
+IL_INVALID_PARAM - <i>String</i> was NULL.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00027.htm">ilGetBoolean, ilGetBooleanv, ilGetInteger, ilGetIntegerv</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>

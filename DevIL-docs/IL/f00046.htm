@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>DevIL Documentation, ilOriginFunc</TITLE>
+<STYLE TYPE = "text/css">
+ 	A:link		{color: 0000FF;}
+	A:link		{text-decoration: none;}
+	A:visited	{color: 000080;}
+	A:visited	{text-decoration: none;}
+	A:active	{color: 000080;}
+	A:active	{text-decoration: none;}
+	A:hover		{color: 000080;}
+	A:hover		{text-decoration: underline;}
+</STYLE>
+
+</HEAD>
+
+<BODY TOPMARGIN=0 bgcolor="white">
+<FONT face="verdana">
+
+<IMG SRC="..\images\devil.gif">
+<br>
+<TABLE width="100%" COLS=2 BORDER=0 bgcolor="navy">
+<TR ALIGN=RIGHT>
+
+<TD ALIGN=LEFT>
+<FONT color="white">DevIL Documentation</FONT>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP><A HREF="..\index.htm">Home</A> <font color="white">|</font> <font color="gray"><A HREF="../il/f00179.htm">Previous</A></font> <font color="white">|</font> <A HREF="../il/f00191.htm">Next</A>
+</TD>
+
+</TR>
+</TABLE>
+<h2>ilOriginFunc</h2>
+<font size=-1>
+<p>The <b>ilOriginFunc</b> sets the default origin to be used when loading images.</p>
+</font>
+<pre><code>
+<b>ILboolean ilOriginFunc(
+  ILenum</b><i> Mode</i><b>
+);</b>
+</code></pre>
+<br>
+<h4>Parameters</h4>
+<font size=-1>
+<p>
+<dl>
+<dt><i>Mode</i></dt>
+<dd>An enum specifying the origin to be used.  Accepted values are:</dd>
+<p>
+<dl>
+<dt>IL_ORIGIN_LOWER_LEFT</dt>
+<dd>The origin is in the lower left of the image.</dd>
+<dt>IL_ORIGIN_UPPER_LEFT</dt>
+<dd>The origin is in the upper left of the image.</dd>
+</dl>
+</dl>
+</p>
+</font>
+<h4>Remarks</h4>
+<font size=-1>
+<p>
+<b>ilOriginFunc</b> sets the origin to be used when loading all images, so that any image with a different origin will be flipped to have the set origin.  This behaviour is actually disabled by default but can be enabled using <a href="../il/f00024.htm">ilEnable</a> with the IL_ORIGIN_SET parameter.
+</p>
+</font>
+<h4>Error Codes</h4>
+<font size=-1>
+<p>
+IL_INVALID_PARAM - <i>Mode</i> was of an invalid value.
+</p>
+</font>
+<h4>See Also</h4>
+<font size=-1>
+<p>
+<a href="../il/f00152.htm">ilLoad, ilLoadF, ilLoadL</a>, <a href="../il/f00039.htm">ilLoadImage</a>
+</p><br>
+</font>
+</FONT>
+</BODY>
+</HTML>
