@@ -23,9 +23,19 @@ ILvoid _SwapUShort(ILushort *s)
 			mov ah, [ebx  ]
 			mov [ebx], ax
 		}
-	#else
+        #else
+            #ifdef MACOSX
+                register ILubyte t0,t1;
+                
+                t0 = ((ILubyte*)s)[0];
+                t1 = ((ILubyte*)s)[1];
+            
+                ((ILubyte*)s)[0] = t1;
+                ((ILubyte*)s)[1] = t0;
+            #else
 		*s = (*s>>8) | (*s<<8);
-	#endif//USE_WIN32_ASM
+            #endif
+        #endif//USE_WIN32_ASM
 }
 
 ILvoid _SwapShort(ILshort *s)
@@ -38,7 +48,17 @@ ILvoid _SwapShort(ILshort *s)
 			mov [ebx], ax
 		}
 	#else
+            #ifdef MACOSX
+                register ILubyte t0,t1;
+                
+                t0 = ((ILubyte*)s)[0];
+                t1 = ((ILubyte*)s)[1];
+            
+                ((ILubyte*)s)[0] = t1;
+                ((ILubyte*)s)[1] = t0;
+            #else
 		*s = (*s>>8) | (*s<<8);
+            #endif
 	#endif//USE_WIN32_ASM
 }
 
@@ -52,8 +72,22 @@ ILvoid _SwapUInt(ILuint *i)
 			mov [ebx], eax
 		}
 	#else
+            #ifdef MACOSX
+                register ILubyte t0,t1,t2,t3;
+                
+                t0 = ((ILubyte*)i)[0];
+                t1 = ((ILubyte*)i)[1];
+                t2 = ((ILubyte*)i)[2];
+                t3 = ((ILubyte*)i)[3];
+            
+                ((ILubyte*)i)[0] = t3;
+                ((ILubyte*)i)[1] = t2;
+                ((ILubyte*)i)[2] = t1;
+                ((ILubyte*)i)[3] = t0;
+            #else
 		*i = (*i>>24) | ((*i>>8) & 0xff00) | ((*i<<8) & 0xff0000) | (*i<<24);
-	#endif//USE_WIN32_ASM
+            #endif
+        #endif//USE_WIN32_ASM
 }
 
 ILvoid _SwapInt(ILint *i)
@@ -66,7 +100,22 @@ ILvoid _SwapInt(ILint *i)
 			mov [ebx], eax
 		}
 	#else
+		#ifdef MACOSX
+
+                register ILubyte t0,t1,t2,t3;
+                
+                t0 = ((ILubyte*)i)[0];
+                t1 = ((ILubyte*)i)[1];
+                t2 = ((ILubyte*)i)[2];
+                t3 = ((ILubyte*)i)[3];
+            
+                ((ILubyte*)i)[0] = t3;
+                ((ILubyte*)i)[1] = t2;
+                ((ILubyte*)i)[2] = t1;
+                ((ILubyte*)i)[3] = t0;
+            #else
 		*i = (*i>>24) | ((*i>>8) & 0xff00) | ((*i<<8) & 0xff0000) | (*i<<24);
+            #endif
 	#endif//USE_WIN32_ASM
 }
 
@@ -83,26 +132,40 @@ ILdouble _SwapDouble(ILdouble d)
 
 ILvoid _SwapFloat(ILfloat *f)
 {
-	ILubyte Temp[4];
-	*((ILfloat*)Temp) = *f;
-	((ILubyte*)f)[0] = Temp[3];
-	((ILubyte*)f)[1] = Temp[2];
-	((ILubyte*)f)[2] = Temp[1];
-	((ILubyte*)f)[3] = Temp[0];
+        register ILubyte t0,t1,t2,t3;
+        
+        t0 = ((ILubyte*)f)[0];
+        t1 = ((ILubyte*)f)[1];
+        t2 = ((ILubyte*)f)[2];
+        t3 = ((ILubyte*)f)[3];
+    
+        ((ILubyte*)f)[0] = t3;
+        ((ILubyte*)f)[1] = t2;
+        ((ILubyte*)f)[2] = t1;
+        ((ILubyte*)f)[3] = t0;
 }
 
 ILvoid _SwapDouble(ILdouble *d)
 {
-	ILubyte Temp[8];
-	*((ILdouble*)Temp) = *d;
-	((ILubyte*)d)[0] = Temp[7];
-	((ILubyte*)d)[1] = Temp[6];
-	((ILubyte*)d)[2] = Temp[5];
-	((ILubyte*)d)[3] = Temp[4];
-	((ILubyte*)d)[4] = Temp[3];
-	((ILubyte*)d)[5] = Temp[2];
-	((ILubyte*)d)[6] = Temp[1];
-	((ILubyte*)d)[7] = Temp[0];
+	register ILubyte t0,t1,t2,t3,t4,t5,t6,t7;
+        
+        t0 = ((ILubyte*)d)[0];
+        t1 = ((ILubyte*)d)[1];
+        t2 = ((ILubyte*)d)[2];
+        t3 = ((ILubyte*)d)[3];
+        t4 = ((ILubyte*)d)[4];
+        t5 = ((ILubyte*)d)[5];
+        t6 = ((ILubyte*)d)[6];
+        t7 = ((ILubyte*)d)[7];
+        
+        ((ILubyte*)d)[0] = t7;
+        ((ILubyte*)d)[1] = t6;
+        ((ILubyte*)d)[2] = t5;
+        ((ILubyte*)d)[3] = t4;
+        ((ILubyte*)d)[4] = t3;
+        ((ILubyte*)d)[5] = t2;
+        ((ILubyte*)d)[6] = t1;
+        ((ILubyte*)d)[7] = t0;
 }
 
 
@@ -356,7 +419,7 @@ ILvoid EndianSwapData(void *_Image)
 	ILdouble	*DblS, *DblD;
 
 	ILimage *Image = (ILimage*)_Image;
-
+        
 	switch (Image->Type)
 	{
 		case IL_BYTE:
