@@ -3,10 +3,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cpp Wrapper", "..\..\Cpp Wr
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IL", "..\..\src-IL\msvc\IL.vcproj", "{BAC3571A-7AD2-40BD-B920-88443D73F84F}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ILU", "..\..\src-ILU\msvc\ILU.vcproj", "{98884911-2B7F-45C7-B0FD-CB909E8CB7C1}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -23,6 +19,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowsTest", "..\..\Exampl
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IL", "..\..\src-IL\msvc\IL.vcproj", "{0F088168-B0B4-4350-9E6A-7FB271C76D39}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -33,12 +33,6 @@ Global
 		{51CA777D-8B5E-4BC4-85D8-FCBE29107F54}.Debug.ActiveCfg = Debug|Win32
 		{51CA777D-8B5E-4BC4-85D8-FCBE29107F54}.Dynamic.ActiveCfg = Dynamic|Win32
 		{51CA777D-8B5E-4BC4-85D8-FCBE29107F54}.Release.ActiveCfg = Release|Win32
-		{BAC3571A-7AD2-40BD-B920-88443D73F84F}.Debug.ActiveCfg = Debug|Win32
-		{BAC3571A-7AD2-40BD-B920-88443D73F84F}.Debug.Build.0 = Debug|Win32
-		{BAC3571A-7AD2-40BD-B920-88443D73F84F}.Dynamic.ActiveCfg = Dynamic|Win32
-		{BAC3571A-7AD2-40BD-B920-88443D73F84F}.Dynamic.Build.0 = Dynamic|Win32
-		{BAC3571A-7AD2-40BD-B920-88443D73F84F}.Release.ActiveCfg = Release|Win32
-		{BAC3571A-7AD2-40BD-B920-88443D73F84F}.Release.Build.0 = Release|Win32
 		{98884911-2B7F-45C7-B0FD-CB909E8CB7C1}.Debug.ActiveCfg = Debug|Win32
 		{98884911-2B7F-45C7-B0FD-CB909E8CB7C1}.Debug.Build.0 = Debug|Win32
 		{98884911-2B7F-45C7-B0FD-CB909E8CB7C1}.Dynamic.ActiveCfg = Dynamic|Win32
@@ -57,6 +51,12 @@ Global
 		{AC2C92BA-19F8-4622-8FD6-9596F842D33C}.Debug.ActiveCfg = Debug|Win32
 		{AC2C92BA-19F8-4622-8FD6-9596F842D33C}.Dynamic.ActiveCfg = Dynamic|Win32
 		{AC2C92BA-19F8-4622-8FD6-9596F842D33C}.Release.ActiveCfg = Release|Win32
+		{0F088168-B0B4-4350-9E6A-7FB271C76D39}.Debug.ActiveCfg = Debug|Win32
+		{0F088168-B0B4-4350-9E6A-7FB271C76D39}.Debug.Build.0 = Debug|Win32
+		{0F088168-B0B4-4350-9E6A-7FB271C76D39}.Dynamic.ActiveCfg = Dynamic|Win32
+		{0F088168-B0B4-4350-9E6A-7FB271C76D39}.Dynamic.Build.0 = Dynamic|Win32
+		{0F088168-B0B4-4350-9E6A-7FB271C76D39}.Release.ActiveCfg = Release|Win32
+		{0F088168-B0B4-4350-9E6A-7FB271C76D39}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

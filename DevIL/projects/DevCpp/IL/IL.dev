@@ -12,7 +12,7 @@ ResourceIncludes=
 MakeIncludes=
 Compiler=-DBUILDING_DLL=1_@@_
 CppCompiler=-DBUILDING_DLL=1_@@_
-Linker=--no-export-all-symbols --add-stdcall-alias_@@_../../../../zlib/lib/libz.a_@@_../../../../libtiff/lib/libtiff.a_@@_../../../../libpng/lib/libpng.a_@@_../../../../libjpeg/lib/libjpeg.a_@@_../../../../libmng/lib/libmng.a_@@_../../../../lcms/lib/DevCpp/liblcms.a_@@_
+Linker=--no-export-all-symbols --add-stdcall-alias_@@_-lz_@@_-ltiff_@@_-lpng_@@_-ljpeg_@@_-lmng_@@_-llcms_@@_
 IsCpp=0
 Icon=
 ExeOutput=..\..\..\lib

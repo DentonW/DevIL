@@ -29,13 +29,14 @@ ilGetBoolean
 ilGetBooleanv
 ilGetBppFormat
 ilGetBppPal
-ilGetBppType
+ilGetBpcType
 ilGetClear
 ilGetCurImage
 ilGetCurName
 ilGetData
 ilGetDXTCData
 ilGetError
+ilGetFormatBpp
 ilGetInteger
 ilGetIntegerv
 ilGetLumpPos
