@@ -14,6 +14,8 @@ class ILTest : public CPPUNIT_NS::TestFixture
   CPPUNIT_TEST( TestilBindImage );
   CPPUNIT_TEST( TestilClearColour );  
   CPPUNIT_TEST( TestilClearImage );  
+  CPPUNIT_TEST( TestilCloneImage );  
+  CPPUNIT_TEST( TestilConvertImage );  
   CPPUNIT_TEST( TestilSaveF );
   CPPUNIT_TEST_SUITE_END();
 
@@ -25,6 +27,8 @@ public:
   void TestilBindImage();
   void TestilClearColour();
   void TestilClearImage();
+  void TestilCloneImage();
+  void TestilConvertImage();
   void TestilSaveF();
 
 };

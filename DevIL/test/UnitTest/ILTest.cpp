@@ -3,6 +3,8 @@
 #include "ILTest.h"
 #include <IL/il.h>
 
+#define CHECK_NO_ERROR()   CPPUNIT_ASSERT(ilGetError() == IL_NO_ERROR)
+
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( ILTest );
 
@@ -25,7 +27,9 @@ void ILTest::tearDown()
   while (ilGetError() != IL_NO_ERROR) {;}
 
   ilResetMemory();
+  ilShutDown();
   CPPUNIT_ASSERT(ilGetError() == IL_NO_ERROR);
+
 
   CPPUNIT_ASSERT_MESSAGE("Received Error from ilGetError", lResult == IL_NO_ERROR);
 }
@@ -111,6 +115,85 @@ void ILTest::TestilClearImage()
   ilSaveF(IL_BMP,lBuffer);
   fclose(lBuffer);
 
+}
+
+void ILTest::TestilCloneImage()
+{
+  ILuint MainImage[1];
+  ilGenImages(1, MainImage);
+  ilBindImage(MainImage[0]);
+  CHECK_NO_ERROR();
+
+  ilLoadImage(".\\Data\\Logo.png");
+  CHECK_NO_ERROR();
+
+  const ILuint lIndex = ilCloneCurImage();
+  CHECK_NO_ERROR();
+  CPPUNIT_ASSERT(lIndex != MainImage[0]);
+
+  ilBindImage(lIndex);
+  CHECK_NO_ERROR();
+
+  ilClearColour(1.0, 0.0, 0.0, 0.0);
+  ilClearImage();
+
+  FILE * lBuffer = fopen(".\\results\\ilCloneImage_Cloned.bmp", "wb");
+  ilSaveF(IL_BMP,lBuffer);
+  fclose(lBuffer);
+
+
+  ilBindImage(MainImage[0]);
+  lBuffer = fopen(".\\results\\ilCloneImage_Original.bmp", "wb");
+  ilSaveF(IL_BMP,lBuffer);
+  fclose(lBuffer);
+}
+
+void ILTest::TestilConvertImage()
+{
+  ILuint MainImage = 0;
+
+  ilGenImages(1, &MainImage);
+  ilBindImage(MainImage);
+  CHECK_NO_ERROR();
+
+  ilLoadImage(".\\Data\\Logo.png");
+
+  ILenum lDestFormat[6] =  {
+							               IL_RGB, 
+							               IL_RGBA, 
+							               IL_BGR,
+							               IL_BGRA, 
+							               IL_LUMINANCE, 
+							               IL_COLOUR_INDEX,
+                           };
+  
+  ILenum lDestType[8] = {
+                          IL_BYTE, 
+                          IL_UNSIGNED_BYTE,
+                          IL_SHORT, 
+                          IL_UNSIGNED_SHORT, 
+                          IL_INT, 
+                          IL_UNSIGNED_INT, 
+                          IL_FLOAT, 
+                          IL_DOUBLE, 
+                        };
+   
+   for (unsigned int i=0; i < 5; ++i)
+     for (unsigned int j=0; j < 8; ++j)
+     {
+       ilConvertImage(lDestFormat[i], lDestType[j]);
+       CHECK_NO_ERROR();
+     }   
+
+  ilConvertImage(lDestFormat[5], lDestType[0]);
+  ilConvertImage(lDestFormat[5], lDestType[1]);
+  CHECK_NO_ERROR();
+
+  for (unsigned int j=2; j < 8; ++j)
+  {
+   ilConvertImage(lDestFormat[5], lDestType[j]);
+   CPPUNIT_ASSERT(ilGetError() == IL_INVALID_CONVERSION);
+  }      
 }
 
 void ILTest::TestilSaveF()
