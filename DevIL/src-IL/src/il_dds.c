@@ -238,8 +238,6 @@ ILboolean iLoadDdsCubemapInternal()
 				ilActiveImage(i);
 			}
 
-			Image->CubeFlags = CubemapDirections[i];
-
 			if (!ReadData())
 				return IL_FALSE;
 
@@ -248,6 +246,8 @@ ILboolean iLoadDdsCubemapInternal()
 					ifree(CompData);
 				return IL_FALSE;
 			}
+
+			Image->CubeFlags = CubemapDirections[i];
 
 			if (!Decompress()) {
 				if (CompData)
