@@ -24,8 +24,8 @@ mFree  ifree_ptr = NULL;
 
 
 #ifdef ALTIVEC
-__inline__ void *vec_malloc( ILuint );
-__inline__ void *vec_malloc( ILuint size ) {
+__inline__ ILvoid *vec_malloc( ILuint );
+__inline__ ILvoid *vec_malloc( ILuint size ) {
     union {
         vector unsigned char vec;
         void *ptr;
@@ -34,14 +34,24 @@ __inline__ void *vec_malloc( ILuint size ) {
     return mem_ptr.ptr;
 }
 
-__inline__ void *vec_calloc( ILuint, ILuint );
-__inline__ void *vec_calloc( ILuint count, ILuint size ) {
+__inline__ ILvoid *vec_calloc( ILuint, ILuint );
+__inline__ ILvoid *vec_calloc( ILuint count, ILuint size ) {
     union {
         vector unsigned char vec;
         void *ptr;
     } mem_ptr;
     mem_ptr.ptr = (void*)calloc(count,size);
     return mem_ptr.ptr;
+}
+
+__inline__ ILvoid *vec_align_buffer( ILvoid *buffer, ILuint size ) {
+    if( (size_t)buffer % 16 != 0 ) {
+        void *aligned_buffer = vec_malloc( size );
+        memset( aligned_buffer, buffer, size );
+        ifree( buffer );
+        return aligned_buffer;
+    }
+    return buffer;
 }
 #endif
 
