@@ -11,4 +11,5 @@ noinst_HEADERS  = il_targa.h    il_doompal.h \
                   il_internal.h il_pcx.h \
                   il_states.h   il_dds.h \
                   il_stack.h    il_pic.h \
-                  il_psd.h      il_psp.h
+                  il_psd.h      il_psp.h \
+                  il_gif.h
