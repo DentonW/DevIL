@@ -381,7 +381,7 @@ typedef void           ILvoid;
 
 
 // Values
-#define IL_VERSION_NUM          0x0DE2
+#define IL_VERSION_NUM           0x0DE2
 #define IL_IMAGE_WIDTH           0x0DE4
 #define IL_IMAGE_HEIGHT          0x0DE5
 #define IL_IMAGE_DEPTH           0x0DE6

@@ -44,79 +44,80 @@ extern "C" {
 */
 
 
-#define ILU_VERSION_1_6_7					1
-#define ILU_VERSION							167
+#define ILU_VERSION_1_6_7 1
+#define ILU_VERSION       167
 
 
-#define ILU_FILTER							0x2600
-#define ILU_NEAREST							0x2601
-#define ILU_LINEAR							0x2602
-#define ILU_BILINEAR						0x2603
-#define ILU_SCALE_BOX						0x2604
-#define ILU_SCALE_TRIANGLE					0x2605
-#define ILU_SCALE_BELL						0x2606
-#define ILU_SCALE_BSPLINE					0x2607
-#define ILU_SCALE_LANCZOS3					0x2608
-#define ILU_SCALE_MITCHELL					0x2609
+#define ILU_FILTER         0x2600
+#define ILU_NEAREST        0x2601
+#define ILU_LINEAR         0x2602
+#define ILU_BILINEAR       0x2603
+#define ILU_SCALE_BOX      0x2604
+#define ILU_SCALE_TRIANGLE 0x2605
+#define ILU_SCALE_BELL     0x2606
+#define ILU_SCALE_BSPLINE  0x2607
+#define ILU_SCALE_LANCZOS3 0x2608
+#define ILU_SCALE_MITCHELL 0x2609
 
 
 // Error types
-#define ILU_INVALID_ENUM					0x0501
-#define ILU_OUT_OF_MEMORY					0x0502
-#define ILU_INTERNAL_ERROR					0x0504
-#define ILU_INVALID_VALUE					0x0505
-#define ILU_ILLEGAL_OPERATION				0x0506
-#define ILU_INVALID_PARAM					0x0509
+#define ILU_INVALID_ENUM      0x0501
+#define ILU_OUT_OF_MEMORY     0x0502
+#define ILU_INTERNAL_ERROR    0x0504
+#define ILU_INVALID_VALUE     0x0505
+#define ILU_ILLEGAL_OPERATION 0x0506
+#define ILU_INVALID_PARAM     0x0509
 
 
 // Values
-#define ILU_PLACEMENT						0x0700
-#define ILU_LOWER_LEFT						0x0701
-#define ILU_LOWER_RIGHT						0x0702
-#define ILU_UPPER_LEFT						0x0703
-#define ILU_UPPER_RIGHT						0x0704
-#define ILU_CENTER							0x0705
-#define ILU_CONVOLUTION_MATRIX				0x0710
-#define ILU_VERSION_NUM						IL_VERSION_NUM
-#define ILU_VENDOR							IL_VENDOR
+#define ILU_PLACEMENT          0x0700
+#define ILU_LOWER_LEFT         0x0701
+#define ILU_LOWER_RIGHT        0x0702
+#define ILU_UPPER_LEFT         0x0703
+#define ILU_UPPER_RIGHT        0x0704
+#define ILU_CENTER             0x0705
+#define ILU_CONVOLUTION_MATRIX 0x0710
+  
+#define ILU_VERSION_NUM IL_VERSION_NUM
+#define ILU_VENDOR      IL_VENDOR
 
 
 // Filters
 /*
-#define ILU_FILTER_BLUR						0x0803
-#define ILU_FILTER_GAUSSIAN_3x3				0x0804
-#define ILU_FILTER_GAUSSIAN_5X5				0x0805
-#define ILU_FILTER_EMBOSS1					0x0807
-#define ILU_FILTER_EMBOSS2					0x0808
-#define ILU_FILTER_LAPLACIAN1				0x080A
-#define ILU_FILTER_LAPLACIAN2				0x080B
-#define ILU_FILTER_LAPLACIAN3				0x080C
-#define ILU_FILTER_LAPLACIAN4				0x080D
-#define ILU_FILTER_SHARPEN1					0x080E
-#define ILU_FILTER_SHARPEN2					0x080F
-#define ILU_FILTER_SHARPEN3					0x0810
+#define ILU_FILTER_BLUR         0x0803
+#define ILU_FILTER_GAUSSIAN_3x3 0x0804
+#define ILU_FILTER_GAUSSIAN_5X5 0x0805
+#define ILU_FILTER_EMBOSS1      0x0807
+#define ILU_FILTER_EMBOSS2      0x0808
+#define ILU_FILTER_LAPLACIAN1   0x080A
+#define ILU_FILTER_LAPLACIAN2   0x080B
+#define ILU_FILTER_LAPLACIAN3   0x080C
+#define ILU_FILTER_LAPLACIAN4   0x080D
+#define ILU_FILTER_SHARPEN1     0x080E
+#define ILU_FILTER_SHARPEN2     0x080F
+#define ILU_FILTER_SHARPEN3     0x0810
 */
 
 
 typedef struct ILinfo
 {
-	ILuint	Id;					// the image's id
-	ILubyte	*Data;				// the image's data
-	ILuint	Width;				// the image's width
-	ILuint	Height;				// the image's height
-	ILuint	Depth;				// the image's depth
-	ILubyte	Bpp;				// bytes per pixel (not bits) of the image
-	ILuint	SizeOfData;			// the total size of the data (in bytes)
-	ILenum	Format;				// image format (in IL enum style)
-	ILenum	Type;				// image type (in IL enum style)
-	ILenum	Origin;				// origin of the image
-	ILubyte	*Palette;			// the image's palette
-	ILenum	PalType;			// palette type
-	ILuint	PalSize;			// palette size
-	ILenum	CubeFlags;			// flags for what cube map sides are present
-	ILuint	NumNext;			// number of images following
-	ILuint	NumMips;			// number of mipmaps
-	ILuint	NumLayers;			// number of layers
+	ILuint  Id;         // the image's id
+	ILubyte *Data;      // the image's data
+	ILuint  Width;      // the image's width
+	ILuint  Height;     // the image's height
+	ILuint  Depth;      // the image's depth
+	ILubyte Bpp;        // bytes per pixel (not bits) of the image
+	ILuint  SizeOfData; // the total size of the data (in bytes)
+	ILenum  Format;     // image format (in IL enum style)
+	ILenum  Type;       // image type (in IL enum style)
+	ILenum  Origin;     // origin of the image
+	ILubyte *Palette;   // the image's palette
+	ILenum  PalType;    // palette type
+	ILuint  PalSize;    // palette size
+	ILenum  CubeFlags;  // flags for what cube map sides are present
+	ILuint  NumNext;    // number of images following
+	ILuint  NumMips;    // number of mipmaps
+	ILuint  NumLayers;  // number of layers
 } ILinfo;
 
 
@@ -177,10 +178,10 @@ ILAPI ILboolean      ILAPIENTRY iluSharpen(ILfloat Factor, ILuint Iter);
 ILAPI ILboolean      ILAPIENTRY iluSwapColours(ILvoid);
 ILAPI ILboolean      ILAPIENTRY iluWave(ILfloat Angle);
 
-#define iluColorsUsed	iluColoursUsed
-#define iluSwapColors	iluSwapColours
-#define iluReplaceColor	iluReplaceColour
-#define iluScaleColor	iluScaleColour
+#define iluColorsUsed   iluColoursUsed
+#define iluSwapColors   iluSwapColours
+#define iluReplaceColor iluReplaceColour
+#define iluScaleColor   iluScaleColour
 
 #ifdef __cplusplus
 }

@@ -119,7 +119,7 @@ ILAPI ILvoid         ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param);
 #define	ILUT_DIRECT3D9 4
 
 
-ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
+ILAPI ILboolean ILAPIENTRY ilutRenderer(ILenum Renderer);
 
 // Includes specific config
 #ifdef DJGPP

@@ -24,53 +24,53 @@ extern "C" {
 // Basic Palette struct
 typedef struct ILpal
 {
-	ILubyte	*Palette;		// the image palette (if any)
-	ILuint	PalSize;		// size of the palette (in bytes)
-	ILenum	PalType;		// the palette types below (0x0500 range)
+	ILubyte* Palette; // the image palette (if any)
+	ILuint   PalSize; // size of the palette (in bytes)
+	ILenum   PalType; // the palette types below (0x0500 range)
 } ILpal;
 
 
 // The Fundamental Image struct
 typedef struct ILimage
 {
-	ILuint	Width;				// the image's width
-	ILuint	Height;				// the image's height
-	ILuint	Depth;				// the image's depth
-	ILubyte	Bpp;				// bytes per pixel (now number of channels)
-	ILubyte	Bpc;				// bytes per channel
-	ILuint	Bps;				// bytes per scanline (components for IL)
-	ILubyte	*Data;				// the image data
-	ILuint	SizeOfData;			// the total size of the data (in bytes)
-	ILuint	SizeOfPlane;		// SizeOfData in a 2d image, size of each plane slice in a 3d image (in bytes)
-	ILenum	Format;				// image format (in IL enum style)
-	ILenum	Type;				// image type (in IL enum style)
-	ILenum	Origin;				// origin of the image
-	ILpal	Pal;				// palette details
-	ILuint	Duration;			// length of the time to display this "frame"
-	ILenum	CubeFlags;			// cube map flags for sides present in chain
-	struct	ILimage *Mipmaps;	// mipmapped versions of this image terminated by a NULL - usu. NULL
-	struct	ILimage *Next;		// next image in the chain - usu. NULL
-	struct	ILimage *Layers;	// subsequent layers in the chain - usu. NULL
-	ILuint	NumNext;			// number of images following this one (0 when not parent)
-	ILuint	NumMips;			// number of mipmaps (0 when not parent)
-	ILuint	NumLayers;			// number of layers (0 when not parent)
-	ILuint	*AnimList;			// animation list
-	ILuint	AnimSize;			// animation list size
-	ILvoid	*Profile;			// colour profile
-	ILuint	ProfileSize;		// colour profile size
-	ILuint	OffX, OffY;			// offset of the image
-	ILubyte	*DxtcData;			// compressed data
-	ILenum	DxtcFormat;			// compressed data format
-	ILuint	DxtcSize;			// compressed data size
+	ILuint          Width;       // the image's width
+	ILuint          Height;      // the image's height
+	ILuint          Depth;       // the image's depth
+	ILubyte         Bpp;         // bytes per pixel (now number of channels)
+	ILubyte         Bpc;         // bytes per channel
+	ILuint          Bps;         // bytes per scanline (components for IL)
+	ILubyte*        Data;        // the image data
+	ILuint          SizeOfData;  // the total size of the data (in bytes)
+	ILuint          SizeOfPlane; // SizeOfData in a 2d image, size of each plane slice in a 3d image (in bytes)
+	ILenum          Format;      // image format (in IL enum style)
+	ILenum          Type;        // image type (in IL enum style)
+	ILenum          Origin;      // origin of the image
+	ILpal           Pal;         // palette details
+	ILuint          Duration;    // length of the time to display this "frame"
+	ILenum          CubeFlags;   // cube map flags for sides present in chain
+	struct ILimage* Mipmaps;     // mipmapped versions of this image terminated by a NULL - usu. NULL
+	struct ILimage* Next;        // next image in the chain - usu. NULL
+	struct ILimage* Layers;      // subsequent layers in the chain - usu. NULL
+	ILuint          NumNext;     // number of images following this one (0 when not parent)
+	ILuint	      NumMips;     // number of mipmaps (0 when not parent)
+	ILuint          NumLayers;   // number of layers (0 when not parent)
+	ILuint*         AnimList;    // animation list
+	ILuint          AnimSize;    // animation list size
+	ILvoid*         Profile;     // colour profile
+	ILuint          ProfileSize; // colour profile size
+	ILuint          OffX, OffY;  // offset of the image
+	ILubyte*        DxtcData;    // compressed data
+	ILenum          DxtcFormat;  // compressed data format
+	ILuint          DxtcSize;    // compressed data size
 } ILimage;
 
 
 // Memory functions
-ILAPI ILvoid*	ILAPIENTRY ialloc(ILuint Size);
-ILAPI ILvoid	ILAPIENTRY ifree(ILvoid *Ptr);
-ILAPI ILvoid*	ILAPIENTRY icalloc(ILuint Size, ILuint Num);
+ILAPI ILvoid* ILAPIENTRY ialloc(ILuint Size);
+ILAPI ILvoid  ILAPIENTRY ifree(ILvoid *Ptr);
+ILAPI ILvoid* ILAPIENTRY icalloc(ILuint Size, ILuint Num);
 #ifdef ALTIVEC_GCC
-ILAPI ILvoid*	ILAPIENTRY ivec_align_buffer(ILvoid *buffer, ILuint size);
+ILAPI ILvoid* ILAPIENTRY ivec_align_buffer(ILvoid *buffer, ILuint size);
 #endif
 
 // Internal library functions in IL
@@ -82,15 +82,15 @@ ILAPI ILvoid   ILAPIENTRY ilSetPal(ILpal *Pal);
 //
 // Utility functions
 //
-ILAPI ILubyte	ILAPIENTRY ilGetBppFormat(ILenum Format);
-ILAPI ILenum	ILAPIENTRY ilGetFormatBpp(ILubyte Bpp);
-ILAPI ILubyte	ILAPIENTRY ilGetBpcType(ILenum Type);
-ILAPI ILenum	ILAPIENTRY ilGetTypeBpc(ILubyte Bpc);
-ILAPI ILubyte	ILAPIENTRY ilGetBppPal(ILenum PalType);
-ILAPI ILenum	ILAPIENTRY ilGetPalBaseType(ILenum PalType);
-ILAPI ILuint	ILAPIENTRY ilNextPower2(ILuint Num);
-ILAPI ILenum	ILAPIENTRY ilTypeFromExt(const ILstring FileName);
-ILAPI ILvoid	ILAPIENTRY ilReplaceCurImage(ILimage *Image);
+ILAPI ILubyte ILAPIENTRY ilGetBppFormat(ILenum Format);
+ILAPI ILenum  ILAPIENTRY ilGetFormatBpp(ILubyte Bpp);
+ILAPI ILubyte ILAPIENTRY ilGetBpcType(ILenum Type);
+ILAPI ILenum  ILAPIENTRY ilGetTypeBpc(ILubyte Bpc);
+ILAPI ILubyte ILAPIENTRY ilGetBppPal(ILenum PalType);
+ILAPI ILenum  ILAPIENTRY ilGetPalBaseType(ILenum PalType);
+ILAPI ILuint  ILAPIENTRY ilNextPower2(ILuint Num);
+ILAPI ILenum  ILAPIENTRY ilTypeFromExt(const ILstring FileName);
+ILAPI ILvoid  ILAPIENTRY ilReplaceCurImage(ILimage *Image);
 
 //
 // Image functions
