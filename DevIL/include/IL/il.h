@@ -71,14 +71,14 @@ extern "C" {
 	#define IL_NO_LCMS
 #endif//DJGPP
 
-#ifdef __APPLE__
+/*#ifdef __APPLE__
 	#define IL_NO_GIF
 	#define IL_NO_JPG
 	#define IL_NO_MNG
 	#define IL_NO_PNG
 	#define IL_NO_TIF
 	#define IL_NO_LCMS
-#endif//__APPLE__
+#endif//__APPLE__*/
 
 
 #ifdef _WIN32
