@@ -672,8 +672,8 @@ ILubyte* ILAPIENTRY ilGetAlpha(ILenum Type)
 	ILuint		*AlphaInt;
 	ILdouble	*AlphaDbl;
 	ILuint		i, j, Bpc, Size, AlphaOff;
-        
-        if (iCurImage == NULL) {
+
+	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
