@@ -171,7 +171,7 @@ ILboolean iLoadGifInternal()
 		}
 	}
 
-	if (!GetImages(&GlobalPal))
+	if (!GetImages(&GlobalPal, &Header))
 		return IL_FALSE;
 
 	if (GlobalPal.Palette && GlobalPal.PalSize)
@@ -187,6 +187,8 @@ ILboolean iLoadGifInternal()
 
 ILboolean iGetPalette(ILubyte Info, ILpal *Pal)
 {
+	// The ld(palettes bpp - 1) is stored in the lower
+	// 3 bits of Info (weird gif format ... :) )
 	Pal->PalSize = (1 << ((Info & 0x7) + 1)) * 3;
 	Pal->PalType = IL_PAL_RGB24;
 	Pal->Palette = (ILubyte*)ialloc(Pal->PalSize);
@@ -202,22 +204,26 @@ ILboolean iGetPalette(ILubyte Info, ILpal *Pal)
 }
 
 
-ILboolean GetImages(ILpal *GlobalPal)
+ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 {
-	IMAGEDESC	ImageDesc;
+	IMAGEDESC	ImageDesc, OldImageDesc;
 	GFXCONTROL	Gfx;
 	ILboolean	BaseImage = IL_TRUE;
 	ILimage		*Image = iCurImage, *TempImage = NULL;
 	ILuint		NumImages = 0, i;
-	ILubyte		*TempData = NULL;
 
 	Gfx.Used = IL_TRUE;
 
 	while (!ieof()) {
+		ILubyte DisposalMethod = 1;
+
 		i = itell();
 		if (!SkipExtensions(&Gfx))
 			goto error_clean;
 		i = itell();
+		if (!Gfx.Used)
+			DisposalMethod = (Gfx.Packed & 0x1C) >> 2;
+
 
 		// Either of these means that we've reached the end of the data stream.
 		if (iread(&ImageDesc, sizeof(ImageDesc), 1) != 1) {
@@ -237,19 +243,30 @@ ILboolean GetImages(ILpal *GlobalPal)
 			if (Image->Next == NULL)
 				goto error_clean;
 
-			// Each image is based on the previous image, so copy the previous data.
-			//if ((Gfx.Packed & 0x1C) >> 2 == 1)
-			memcpy(Image->Next->Data, Image->Data, Image->SizeOfData);
+			//20040612: DisposalMethod controls how the new images data is to be combined
+			//with the old image. 0 means that it doesn't matter how they are combined,
+			//1 means keep the old image, 2 means set to background color, 3 is
+			//load the image that was in place before the current (this is not implemented
+			//here! (TODO?))
+			if (DisposalMethod == 2 || DisposalMethod == 3)
+				//Note that this is actually wrong to: If the image has a local
+				//color table, we should really search for the best fit of the
+				//background color table and use that index (?). Furthermore,
+				//we should only memset the part of the image that is not read
+				//later (if we are sure that no parts of the read image are transparent).
+				if (!Gfx.Used && Gfx.Packed & 0x1)
+					memset(Image->Next->Data, Gfx.Transparent, Image->SizeOfData);
+				else
+					memset(Image->Next->Data, GifHead->Background, Image->SizeOfData);
+			else if (DisposalMethod == 1 || DisposalMethod == 0)
+				memcpy(Image->Next->Data, Image->Data, Image->SizeOfData);
 
-			if (ImageDesc.Width != iCurImage->Width || ImageDesc.Height != iCurImage->Height) {
-				TempData = (ILubyte*)ialloc(ImageDesc.Width * ImageDesc.Height);
-				if (TempData == NULL) {
+			//Interlacing has to be removed after the image was copied (line above)
+			if (OldImageDesc.ImageInfo & (1 << 6)) {  // Image is interlaced.
+				if (!RemoveInterlace(Image))
 					goto error_clean;
-				}
 			}
-			else {
-				TempData = Image->Next->Data;
-			}
+
 
 			Image = Image->Next;
 			Image->Format = IL_COLOUR_INDEX;
@@ -257,7 +274,11 @@ ILboolean GetImages(ILpal *GlobalPal)
 		}
 		else {
 			BaseImage = IL_FALSE;
-			TempData = iCurImage->Data;
+			if (!Gfx.Used && Gfx.Packed & 0x1)
+				memset(Image->Data, Gfx.Transparent, Image->SizeOfData);
+			else
+				memset(Image->Data, GifHead->Background, Image->SizeOfData);
+			//memset(Image->Data, GifHead->Background, Image->SizeOfData);
 		}
 
 		Image->OffX = ImageDesc.OffX;
@@ -277,24 +298,10 @@ ILboolean GetImages(ILpal *GlobalPal)
 		}
 
 
-		if (!GifGetData(TempData, Image->SizeOfData)) {
+		if (!GifGetData(Image->Data + ImageDesc.OffX + ImageDesc.OffY*Image->Width, Image->SizeOfData,
+				ImageDesc.Width, ImageDesc.Height, Image->Width, &Gfx)) {
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
 			goto error_clean;
-		}
-
-		if (TempData != Image->Data) {
-			for (i = 0; i < ImageDesc.Height; i++) {
-				memcpy(&Image->Data[(Image->OffY + i) * Image->Width + Image->OffX],
-					&TempData[i * ImageDesc.Width], ImageDesc.Width);
-			}
-
-			ifree(TempData);
-			TempData = NULL;
-		}
-
-		if (ImageDesc.ImageInfo & (1 << 6)) {  // Image is interlaced.
-			if (!RemoveInterlace())
-				goto error_clean;
 		}
 
 		// See if there was a valid graphics control extension.
@@ -314,8 +321,18 @@ ILboolean GetImages(ILpal *GlobalPal)
 
 		// Terminates each block.
 		if (igetc() != 0x00)
-			break;
+			iseek(-1, IL_SEEK_CUR);
+		//	break;
+
+		OldImageDesc = ImageDesc;
 	}
+
+	//Deinterlace last image
+	if (ImageDesc.ImageInfo & (1 << 6)) {  // Image is interlaced.
+		if (!RemoveInterlace(Image))
+			goto error_clean;
+	}
+
 
 	iCurImage->NumNext = NumImages;
 	if (BaseImage)  // Was not able to load any images in...
@@ -324,7 +341,6 @@ ILboolean GetImages(ILpal *GlobalPal)
 	return IL_TRUE;
 
 error_clean:
-	ifree(TempData);
 	Image = iCurImage->Next;
 	while (Image) {
 		TempImage = Image;
@@ -453,13 +469,16 @@ ILint get_next_code(void)
 }
 
 
-ILboolean GifGetData(ILubyte *Data, ILuint ImageSize)
+ILboolean GifGetData(ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Height, ILuint Stride, GFXCONTROL *Gfx)
 {
 	ILubyte	*sp;
 	ILint	code, fc, oc;
-	ILubyte	size;
+	ILubyte	size, DisposalMethod = 0;
 	ILint	c;
-	ILuint	i = 0;
+	ILuint	i = 0, Read = 0;
+
+	if (!Gfx->Used)
+		DisposalMethod = (Gfx->Packed & 0x1C) >> 2;
 
 	size = igetc();
 	if (size < 2 || 9 < size) {
@@ -485,7 +504,7 @@ ILboolean GifGetData(ILubyte *Data, ILuint ImageSize)
 	oc = fc = 0;
 	sp = stack;
 
-	while ((c = get_next_code()) != ending && i < ImageSize) {
+	while ((c = get_next_code()) != ending && Read < Height) {
 		if (c == clear) {
 			curr_size = size + 1;
 			slot = newcodes;
@@ -496,9 +515,17 @@ ILboolean GifGetData(ILubyte *Data, ILuint ImageSize)
 			if (c >= slot)
 				c = 0;
 			oc = fc = c;
-			//if (i < ImageSize)
+
+			if (DisposalMethod == 1 && !Gfx->Used && Gfx->Transparent == c && (Gfx->Packed & 0x1) != 0)
+				i++;
+			else
 				Data[i++] = c;
-			//*Data++ = c;
+
+			if (i == Width) {
+				Data += Stride;
+				i = 0;
+				Read += 1;
+			}
 		}
 		else {
 			code = c;
@@ -523,11 +550,20 @@ ILboolean GifGetData(ILubyte *Data, ILuint ImageSize)
 			}
 			while (sp > stack) {
 				sp--;
-				//if (i < ImageSize)
+
+				if (DisposalMethod == 1 && !Gfx->Used && Gfx->Transparent == *sp && (Gfx->Packed & 0x1) != 0)
+					i++;
+				else
 					Data[i++] = *sp;
-				//*Data++ = *sp;
+
+				if (i == Width) {
+					Data += Stride;
+					i = 0;
+					Read += 1;
+				}
 			}
 		}
+
 	}
 
 	ifree(stack);
@@ -548,33 +584,33 @@ ILboolean GifGetData(ILubyte *Data, ILuint ImageSize)
       Group 4 : Every 2nd. row, starting with row 1.              (Pass 4)
 */
 
-ILboolean RemoveInterlace()
+ILboolean RemoveInterlace(ILimage *image)
 {
 	ILubyte *NewData;
 	ILuint	i, j = 0;
 
-	NewData = (ILubyte*)ialloc(iCurImage->SizeOfData);
+	NewData = (ILubyte*)ialloc(image->SizeOfData);
 	if (NewData == NULL)
 		return IL_FALSE;
 
-	for (i = 0; i < iCurImage->Height; i += 8, j++) {
-		memcpy(&NewData[i * iCurImage->Bps], &iCurImage->Data[j * iCurImage->Bps], iCurImage->Bps);
+	for (i = 0; i < image->Height; i += 8, j++) {
+		memcpy(&NewData[i * image->Bps], &image->Data[j * image->Bps], image->Bps);
 	}
 
-	for (i = 4; i < iCurImage->Height; i += 8, j++) {
-		memcpy(&NewData[i * iCurImage->Bps], &iCurImage->Data[j * iCurImage->Bps], iCurImage->Bps);
+	for (i = 4; i < image->Height; i += 8, j++) {
+		memcpy(&NewData[i * image->Bps], &image->Data[j * image->Bps], image->Bps);
 	}
 
-	for (i = 2; i < iCurImage->Height; i += 4, j++) {
-		memcpy(&NewData[i * iCurImage->Bps], &iCurImage->Data[j * iCurImage->Bps], iCurImage->Bps);
+	for (i = 2; i < image->Height; i += 4, j++) {
+		memcpy(&NewData[i * image->Bps], &image->Data[j * image->Bps], image->Bps);
 	}
 
-	for (i = 1; i < iCurImage->Height; i += 2, j++) {
-		memcpy(&NewData[i * iCurImage->Bps], &iCurImage->Data[j * iCurImage->Bps], iCurImage->Bps);
+	for (i = 1; i < image->Height; i += 2, j++) {
+		memcpy(&NewData[i * image->Bps], &image->Data[j * image->Bps], image->Bps);
 	}
 
-	ifree(iCurImage->Data);
-	iCurImage->Data = NewData;
+	ifree(image->Data);
+	image->Data = NewData;
 
 	return IL_TRUE;
 }
