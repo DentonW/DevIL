@@ -66,7 +66,7 @@ ILboolean iLoadIconInternal()
 	ICOIMAGE	*IconImages = NULL;
 	ILimage		*Image = NULL;
 	ILint		i;
-	ILuint		Size, PadSize, j, k, l, m, /*NumImages = 0,*/ CurAndByte, PadCount, AndBytes;
+	ILuint		Size, PadSize, ANDPadSize, j, k, l, m, x, w, CurAndByte, AndBytes;
 	ILboolean	BaseCreated = IL_FALSE;
 
 	if (iCurImage == NULL) {
@@ -144,22 +144,19 @@ ILboolean iLoadIconInternal()
 			IconImages[i].Pal = NULL;
 		}
 
-		PadSize = (IconImages[i].Head.Width >> 3) % 4;  // Has to be DWORD-aligned.
+		PadSize = (4 - ((IconImages[i].Head.Width*IconImages[i].Head.BitCount + 7) / 8) % 4) % 4;  // Has to be DWORD-aligned.
+		ANDPadSize = (4 - ((IconImages[i].Head.Width + 7) / 8) % 4) % 4;  // AND is 1 bit/pixel
 
-		if (IconImages[i].Head.BitCount == 1) {
-			Size = ((IconImages[i].Head.Width >> 3) + PadSize) * (IconImages[i].Head.Height / 2);
-		}
-		else {
-			Size = (IconImages[i].Head.Width * (IconImages[i].Head.Height / 2) * IconImages[i].Head.BitCount) >> 3;
-		}
+		Size = ((IconImages[i].Head.Width*IconImages[i].Head.BitCount + 7) / 8 + PadSize)
+							* (IconImages[i].Head.Height / 2);
+
 		IconImages[i].Data = (ILubyte*)ialloc(Size);
 		if (IconImages[i].Data == NULL)
 			goto file_read_error;
 		if (iread(IconImages[i].Data, 1, Size) != Size)
 			goto file_read_error;
 
-		//Size = (IconImages[i].Head.Width * (IconImages[i].Head.Height / 2)) >> 3;  // 1 bpp
-		Size = ((IconImages[i].Head.Width >> 3) + PadSize) * (IconImages[i].Head.Height / 2);
+		Size = (((IconImages[i].Head.Width + 7) /8) + ANDPadSize) * (IconImages[i].Head.Height / 2);
 		IconImages[i].AND = (ILubyte*)ialloc(Size);
 		if (IconImages[i].AND == NULL)
 			goto file_read_error;
@@ -188,27 +185,30 @@ ILboolean iLoadIconInternal()
 		}
 		Image->Type = IL_UNSIGNED_BYTE;
 
-		j = 0;  k = 0;  l = 128;  CurAndByte = 0;  PadCount = 0;
-		PadSize = (IconImages[i].Head.Width >> 3) % 4;
-		AndBytes = (IconImages[i].Head.Width >> 3);
+		j = 0;  k = 0;  l = 128;  CurAndByte = 0; x = 0;
+		w = IconImages[i].Head.Width;
+		PadSize = (4 - ((w*IconImages[i].Head.BitCount + 7) / 8) % 4) % 4;  // Has to be DWORD-aligned.
+		ANDPadSize = (4 - ((w + 7) / 8) % 4) % 4;  // AND is 1 bit/pixel
+		AndBytes = (w + 7) / 8;
 
 		if (IconImages[i].Head.BitCount == 1) {
 			for (; j < Image->SizeOfData; k++) {
-				for (m = 128; m; m >>= 1) {
+				for (m = 128; m && x < w; m >>= 1) {
 					Image->Data[j] = IconImages[i].Pal[!!(IconImages[i].Data[k] & m) * 4];
 					Image->Data[j+1] = IconImages[i].Pal[!!(IconImages[i].Data[k] & m) * 4 + 1];
 					Image->Data[j+2] = IconImages[i].Pal[!!(IconImages[i].Data[k] & m) * 4 + 2];
 					Image->Data[j+3] = (IconImages[i].AND[CurAndByte] & l) != 0 ? 0 : 255;
 					j += 4;
 					l >>= 1;
+					++x;
 				}
-				if (l == 0) {
+				if (l == 0 || x == w) {
 					l = 128;
 					CurAndByte++;
-					if (++PadCount == AndBytes) {
-						CurAndByte += PadSize;
+					if (x == w) {
+						CurAndByte += ANDPadSize;
 						k += PadSize;
-						PadCount = 0;
+						x = 0;
 					}
 				}
 			}
@@ -220,17 +220,25 @@ ILboolean iLoadIconInternal()
 				Image->Data[j+2] = IconImages[i].Pal[((IconImages[i].Data[k] & 0xF0) >> 4) * 4 + 2];
 				Image->Data[j+3] = (IconImages[i].AND[CurAndByte] & l) != 0 ? 0 : 255;
 				l >>= 1;
-				Image->Data[j+4] = IconImages[i].Pal[(IconImages[i].Data[k] & 0x0F) * 4];
-				Image->Data[j+5] = IconImages[i].Pal[(IconImages[i].Data[k] & 0x0F) * 4 + 1];
-				Image->Data[j+6] = IconImages[i].Pal[(IconImages[i].Data[k] & 0x0F) * 4 + 2];
-				Image->Data[j+7] = (IconImages[i].AND[CurAndByte] & l) != 0 ? 0 : 255;
-				l >>= 1;
-				if (l == 0) {
+				++x;
+				if(x < w) {
+					Image->Data[j+4] = IconImages[i].Pal[(IconImages[i].Data[k] & 0x0F) * 4];
+					Image->Data[j+5] = IconImages[i].Pal[(IconImages[i].Data[k] & 0x0F) * 4 + 1];
+					Image->Data[j+6] = IconImages[i].Pal[(IconImages[i].Data[k] & 0x0F) * 4 + 2];
+					Image->Data[j+7] = (IconImages[i].AND[CurAndByte] & l) != 0 ? 0 : 255;
+					l >>= 1;
+					++x;
+				}
+				else
+					j -= 4;
+
+				if (l == 0 || x == w) {
 					l = 128;
 					CurAndByte++;
-					if (++PadCount == AndBytes) {
-						CurAndByte += PadSize;
-						PadCount = 0;
+					if (x == w) {
+						CurAndByte += ANDPadSize;
+						k += PadSize;
+						x = 0;
 					}
 				}
 			}
@@ -242,12 +250,14 @@ ILboolean iLoadIconInternal()
 				Image->Data[j+2] = IconImages[i].Pal[IconImages[i].Data[k] * 4 + 2];
 				Image->Data[j+3] = (IconImages[i].AND[CurAndByte] & l) != 0 ? 0 : 255;
 				l >>= 1;
-				if (l == 0) {
+				++x;
+				if (l == 0 || x == w) {
 					l = 128;
 					CurAndByte++;
-					if (++PadCount == AndBytes) {
-						CurAndByte += PadSize;
-						PadCount = 0;
+					if (x == w) {
+						CurAndByte += ANDPadSize;
+						k += PadSize;
+						x = 0;
 					}
 				}
 			}
@@ -259,12 +269,14 @@ ILboolean iLoadIconInternal()
 				Image->Data[j+2] = IconImages[i].Data[k+2];
 				Image->Data[j+3] = (IconImages[i].AND[CurAndByte] & l) != 0 ? 0 : 255;
 				l >>= 1;
-				if (l == 0) {
+				++x;
+				if (l == 0 || x == w) {
 					l = 128;
 					CurAndByte++;
-					if (++PadCount == AndBytes) {
-						CurAndByte += PadSize;
-						PadCount = 0;
+					if (x == w) {
+						CurAndByte += ANDPadSize;
+						k += PadSize;
+						x = 0;
 					}
 				}
 			}
