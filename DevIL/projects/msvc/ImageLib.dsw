@@ -3,14 +3,10 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "Benchmark"="..\..\test\BENCHMARK\Benchmark.dsp" - Package Owner=<4>
+Project: "Benchmark"=..\..\test\BENCHMARK\Benchmark.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
-    begin source code control
-    Benchmark
-    ..\..\test\benchmark
-    end source code control
 }}}
 
 Package=<4>
@@ -29,10 +25,6 @@ Project: "Cpp Wrapper"="..\..\Cpp Wrapper\Cpp Wrapper.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
-    begin source code control
-    Cpp Wrapper
-    ..\..
-    end source code control
 }}}
 
 Package=<4>
@@ -54,10 +46,6 @@ Project: "IL"="..\..\src-IL\msvc\IL.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
-    begin source code control
-    IL
-    ..\..
-    end source code control
 }}}
 
 Package=<4>
@@ -73,10 +61,6 @@ Project: "ILU"="..\..\src-ILU\msvc\ILU.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
-    begin source code control
-    ILU
-    ..\..
-    end source code control
 }}}
 
 Package=<4>
@@ -92,10 +76,6 @@ Project: "ILUT"="..\..\src-ILUT\msvc\ILUT.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
-    begin source code control
-    ILUT
-    ..\..
-    end source code control
 }}}
 
 Package=<4>
@@ -110,14 +90,10 @@ Package=<4>
 
 ###############################################################################
 
-Project: "StressTest"="..\..\test\Stress\StressTest.dsp" - Package Owner=<4>
+Project: "StressTest"=..\..\test\Stress\StressTest.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
-    begin source code control
-    StressTest
-    ..\..\test\stress
-    end source code control
 }}}
 
 Package=<4>
@@ -126,39 +102,22 @@ Package=<4>
 
 ###############################################################################
 
-Project: "WindowsTest"="..\..\Examples\WindowsTest\WindowsTest.dsp" - Package Owner=<4>
+Project: "WindowsTest"=..\..\Examples\WindowsTest\WindowsTest.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
-    begin source code control
-    WindowsTest
-    ..\..\examples\windowstest
-    end source code control
 }}}
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name IL
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name ILU
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name ILUT
-    End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "jpegtran"="..\..\iflibs\libjpeg\jpegtran.dsp" - Package Owner=<4>
+Project: "jpegtran"=..\..\extlibs\libjpeg\jpegtran.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
-    begin source code control
-    jpegtran
-    ..\..\iflibs\libjpeg
-    end source code control
 }}}
 
 Package=<4>
@@ -170,14 +129,10 @@ Package=<4>
 
 ###############################################################################
 
-Project: "libjpeg"="..\..\iflibs\libjpeg\LibJpeg.dsp" - Package Owner=<4>
+Project: "libjpeg"=..\..\extlibs\libjpeg\LibJpeg.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
-    begin source code control
-    LibJpeg
-    ..\..\iflibs\libjpeg
-    end source code control
 }}}
 
 Package=<4>
@@ -190,10 +145,6 @@ Global:
 
 Package=<5>
 {{{
-    begin source code control
-    ImageLib
-    .
-    end source code control
 }}}
 
 Package=<3>

@@ -37,21 +37,10 @@ INTDIR=.\obj
 OutDir=.\../bin
 # End Custom Macros
 
-!IF "$(RECURSE)" == "0" 
-
 ALL : "$(OUTDIR)\WindowsTest.exe"
 
-!ELSE 
 
-ALL : "OpenILUT - Win32 Release" "OpenILU - Win32 Release" "OpenIL - Win32 Release" "$(OUTDIR)\WindowsTest.exe"
-
-!ENDIF 
-
-!IF "$(RECURSE)" == "1" 
-CLEAN :"OpenIL - Win32 ReleaseCLEAN" "OpenILU - Win32 ReleaseCLEAN" "OpenILUT - Win32 ReleaseCLEAN" 
-!ELSE 
 CLEAN :
-!ENDIF 
 	-@erase "$(INTDIR)\BatchConv.obj"
 	-@erase "$(INTDIR)\vc60.idb"
 	-@erase "$(INTDIR)\WindowsTest.obj"
@@ -76,10 +65,7 @@ LINK32_FLAGS=user32.lib gdi32.lib comdlg32.lib shell32.lib colorpicker.lib /nolo
 LINK32_OBJS= \
 	"$(INTDIR)\BatchConv.obj" \
 	"$(INTDIR)\WindowsTest.obj" \
-	"$(INTDIR)\WindowsTest.res" \
-	"..\..\lib\DevIL.lib" \
-	"..\..\lib\ilu.lib" \
-	"..\..\lib\ilut.lib"
+	"$(INTDIR)\WindowsTest.res"
 
 "$(OUTDIR)\WindowsTest.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -94,21 +80,10 @@ INTDIR=.\obj/debug
 OutDir=.\../bin/debug
 # End Custom Macros
 
-!IF "$(RECURSE)" == "0" 
-
 ALL : "$(OUTDIR)\WindowsTest.exe"
 
-!ELSE 
 
-ALL : "OpenILUT - Win32 Debug" "OpenILU - Win32 Debug" "OpenIL - Win32 Debug" "$(OUTDIR)\WindowsTest.exe"
-
-!ENDIF 
-
-!IF "$(RECURSE)" == "1" 
-CLEAN :"OpenIL - Win32 DebugCLEAN" "OpenILU - Win32 DebugCLEAN" "OpenILUT - Win32 DebugCLEAN" 
-!ELSE 
 CLEAN :
-!ENDIF 
 	-@erase "$(INTDIR)\BatchConv.obj"
 	-@erase "$(INTDIR)\vc60.idb"
 	-@erase "$(INTDIR)\vc60.pdb"
@@ -136,10 +111,7 @@ LINK32_FLAGS=user32.lib gdi32.lib comdlg32.lib shell32.lib colorpicker.lib /nolo
 LINK32_OBJS= \
 	"$(INTDIR)\BatchConv.obj" \
 	"$(INTDIR)\WindowsTest.obj" \
-	"$(INTDIR)\WindowsTest.res" \
-	"..\..\lib\debug\DevIL-d.lib" \
-	"..\..\lib\debug\ilu-d.lib" \
-	"..\..\lib\debug\ilut-d.lib"
+	"$(INTDIR)\WindowsTest.res"
 
 "$(OUTDIR)\WindowsTest.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -204,84 +176,6 @@ SOURCE=.\WindowsTest.rc
 "$(INTDIR)\WindowsTest.res" : $(SOURCE) "$(INTDIR)"
 	$(RSC) $(RSC_PROJ) $(SOURCE)
 
-
-!IF  "$(CFG)" == "WindowsTest - Win32 Release"
-
-"OpenIL - Win32 Release" : 
-   cd "\ImageLib\OpenIL"
-   $(MAKE) /$(MAKEFLAGS) /F .\OpenIL.mak CFG="OpenIL - Win32 Release" 
-   cd "..\Examples\WindowsTest"
-
-"OpenIL - Win32 ReleaseCLEAN" : 
-   cd "\ImageLib\OpenIL"
-   $(MAKE) /$(MAKEFLAGS) /F .\OpenIL.mak CFG="OpenIL - Win32 Release" RECURSE=1 CLEAN 
-   cd "..\Examples\WindowsTest"
-
-!ELSEIF  "$(CFG)" == "WindowsTest - Win32 Debug"
-
-"OpenIL - Win32 Debug" : 
-   cd "\ImageLib\OpenIL"
-   $(MAKE) /$(MAKEFLAGS) /F .\OpenIL.mak CFG="OpenIL - Win32 Debug" 
-   cd "..\Examples\WindowsTest"
-
-"OpenIL - Win32 DebugCLEAN" : 
-   cd "\ImageLib\OpenIL"
-   $(MAKE) /$(MAKEFLAGS) /F .\OpenIL.mak CFG="OpenIL - Win32 Debug" RECURSE=1 CLEAN 
-   cd "..\Examples\WindowsTest"
-
-!ENDIF 
-
-!IF  "$(CFG)" == "WindowsTest - Win32 Release"
-
-"OpenILU - Win32 Release" : 
-   cd "\ImageLib\OpenILU"
-   $(MAKE) /$(MAKEFLAGS) /F .\OpenILU.mak CFG="OpenILU - Win32 Release" 
-   cd "..\Examples\WindowsTest"
-
-"OpenILU - Win32 ReleaseCLEAN" : 
-   cd "\ImageLib\OpenILU"
-   $(MAKE) /$(MAKEFLAGS) /F .\OpenILU.mak CFG="OpenILU - Win32 Release" RECURSE=1 CLEAN 
-   cd "..\Examples\WindowsTest"
-
-!ELSEIF  "$(CFG)" == "WindowsTest - Win32 Debug"
-
-"OpenILU - Win32 Debug" : 
-   cd "\ImageLib\OpenILU"
-   $(MAKE) /$(MAKEFLAGS) /F .\OpenILU.mak CFG="OpenILU - Win32 Debug" 
-   cd "..\Examples\WindowsTest"
-
-"OpenILU - Win32 DebugCLEAN" : 
-   cd "\ImageLib\OpenILU"
-   $(MAKE) /$(MAKEFLAGS) /F .\OpenILU.mak CFG="OpenILU - Win32 Debug" RECURSE=1 CLEAN 
-   cd "..\Examples\WindowsTest"
-
-!ENDIF 
-
-!IF  "$(CFG)" == "WindowsTest - Win32 Release"
-
-"OpenILUT - Win32 Release" : 
-   cd "\ImageLib\OpenILUT"
-   $(MAKE) /$(MAKEFLAGS) /F .\OpenILUT.mak CFG="OpenILUT - Win32 Release" 
-   cd "..\Examples\WindowsTest"
-
-"OpenILUT - Win32 ReleaseCLEAN" : 
-   cd "\ImageLib\OpenILUT"
-   $(MAKE) /$(MAKEFLAGS) /F .\OpenILUT.mak CFG="OpenILUT - Win32 Release" RECURSE=1 CLEAN 
-   cd "..\Examples\WindowsTest"
-
-!ELSEIF  "$(CFG)" == "WindowsTest - Win32 Debug"
-
-"OpenILUT - Win32 Debug" : 
-   cd "\ImageLib\OpenILUT"
-   $(MAKE) /$(MAKEFLAGS) /F .\OpenILUT.mak CFG="OpenILUT - Win32 Debug" 
-   cd "..\Examples\WindowsTest"
-
-"OpenILUT - Win32 DebugCLEAN" : 
-   cd "\ImageLib\OpenILUT"
-   $(MAKE) /$(MAKEFLAGS) /F .\OpenILUT.mak CFG="OpenILUT - Win32 Debug" RECURSE=1 CLEAN 
-   cd "..\Examples\WindowsTest"
-
-!ENDIF 
 
 
 !ENDIF 

@@ -19,9 +19,9 @@
 // For ilutWinLoadUrl().
 #pragma comment(lib, "wininet.lib")
 
-#ifndef _WIN32_WCE
+/*#if !_WIN32_WCE && (_WIN32 && __GNUC__)
 	PRINTDLG	Pd;
-#endif//_WIN32_WCE
+#endif//_WIN32_WCE*/
 
 ILboolean ilutWin32Init()
 {
@@ -466,7 +466,7 @@ ILboolean ILAPIENTRY ilutGetWinClipboard()
 
 ILboolean ILAPIENTRY ilutWinPrint(ILuint XPos, ILuint YPos, ILuint Width, ILuint Height, HDC hDC)
 {
-#ifndef _WIN32_WCE
+#if !_WIN32_WCE && !(_WIN32 && __GNUC__)
 	PRINTDLG	Pd;
 	DOCINFO		Di;
 	HBITMAP		Bitmap, hReplaced;
@@ -513,7 +513,7 @@ ILboolean ILAPIENTRY ilutWinPrint(ILuint XPos, ILuint YPos, ILuint Width, ILuint
 	DeleteObject(hReplaced);
 	DeleteDC(Pd.hDC);
 
-#endif//_WIN32_WCE
+#endif
 
 	return IL_TRUE;
 }
@@ -528,7 +528,7 @@ ILboolean ILAPIENTRY ilutLoadResource(HINSTANCE hInst, ILint ID, const ILstring 
 }
 
 
-#if !_WIN32_WCE && !__CYGWIN32__
+#if !_WIN32_WCE && !(_WIN32 && __GNUC__)
 #define BUFFSIZE 8192  // Change to suit the efficiency.
 ILboolean ILAPIENTRY ilutWinLoadUrl(const ILstring Url)
 {

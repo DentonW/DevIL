@@ -539,10 +539,6 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 			*Param = ilStates[ilCurrentPos].ilSgiRle;
 		case IL_JPG_SAVE_FORMAT:
 			*Param = ilStates[ilCurrentPos].ilJpgFormat;
-		case IL_QUANTIZATION_MODE:
-			*Param = ilStates[ilCurrentPos].ilQuantMode;
-		case IL_NEU_QUANT_SAMPLE:
-			*Param = ilStates[ilCurrentPos].ilNeuSample;
 
 
 		// Boolean values

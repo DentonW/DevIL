@@ -1,3 +1,7 @@
+#ifdef  _DEBUG
+#define IL_DEBUG
+#endif//_DEBUG
+
 #include <il\il.h>
 #include <windows.h>
 #include <direct.h>

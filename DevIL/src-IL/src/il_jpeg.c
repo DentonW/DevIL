@@ -443,7 +443,7 @@ ILboolean ilSaveJpeg(const ILstring FileName)
 		return bJpeg;
 	}
 
-	bJpeg = ilSaveJpegF(JpegFile, Type);
+	bJpeg = ilSaveJpegF(JpegFile);
 	iclosew(JpegFile);
 
 	return bJpeg;
@@ -454,7 +454,7 @@ ILboolean ilSaveJpeg(const ILstring FileName)
 ILboolean ilSaveJpegF(ILHANDLE File)
 {
 	iSetOutputFile(File);
-	return iSaveJpegInternal(Type);
+	return iSaveJpegInternal();
 }
 
 
@@ -462,7 +462,7 @@ ILboolean ilSaveJpegF(ILHANDLE File)
 ILboolean ilSaveJpegL(ILvoid *Lump, ILuint Size)
 {
 	iSetOutputLump(Lump, Size);
-	return iSaveJpegInternal(Type);
+	return iSaveJpegInternal();
 }
 
 

@@ -431,7 +431,7 @@ CLEAN :
 "$(INTDIR)" :
     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
 
-CPP_PROJ=/nologo /MD /W3 /GX /O1 /I "../include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /D "IL_STATIC_LIB" /Fp"$(INTDIR)\IL.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_PROJ=/nologo /MD /W3 /GX /O1 /I "../include" /I "../../extlibs/libjpeg" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "IL_EXPORTS" /D "IL_STATIC_LIB" /Fp"$(INTDIR)\IL.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /win32 
 RSC_PROJ=/l 0x409 /fo"$(INTDIR)\IL.res" /d "NDEBUG" 
 BSC32=bscmake.exe
