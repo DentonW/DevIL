@@ -367,7 +367,7 @@ ILboolean iUncompressSmall(PCXHEAD *Header)
 			return IL_FALSE;
 	}
 
-	if (Header->NumPlanes == 1) {
+	if (Header->NumPlanes == 1 && Header->Bpp == 1) {
 		for (j = 0; j < iCurImage->Height; j++) {
 			i = 0; //number of written pixels
 			while (i < iCurImage->Width) {
@@ -407,8 +407,10 @@ ILboolean iUncompressSmall(PCXHEAD *Header)
 				igetc();	// Skip pad byte
 		}
 	}
-	else {   // 4-bit images
-		Bps = Header->Bps * Header->NumPlanes * 2;
+	else if (Header->NumPlanes == 4 && Header->Bpp == 1){   // 4-bit images
+		//changed decoding 2003-09-10 (was buggy)...could need a speedup
+
+		Bps = Header->Bps * Header->NumPlanes * 8;
 		iCurImage->Pal.Palette = (ILubyte*)ialloc(16 * 3);  // Size of palette always (48 bytes).
 		ScanLine = (ILubyte*)ialloc(Bps);
 		if (iCurImage->Pal.Palette == NULL || ScanLine == NULL) {
@@ -422,39 +424,51 @@ ILboolean iUncompressSmall(PCXHEAD *Header)
 
 		memset(iCurImage->Data, 0, iCurImage->SizeOfData);
 
+		if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST)
+			iPreCache(iCurImage->SizeOfData / 4);
 		for (y = 0; y < iCurImage->Height; y++) {
-			for (c = 0; c < Header->NumPlanes; c++) {
-				x = 0;
-				while (x < Bps) {
-					if (iread(&HeadByte, 1, 1) != 1)
+			x = 0;
+			while (x < Bps) {
+				if (iread(&HeadByte, 1, 1) != 1) {
+					iUnCache();
+					ifree(ScanLine);
+					return IL_FALSE;
+				}
+				if ((HeadByte & 0xC0) == 0xC0) {
+					HeadByte &= 0x3F;
+					if (iread(&Colour, 1, 1) != 1) {
+						iUnCache();
+						ifree(ScanLine);
 						return IL_FALSE;
-					if ((HeadByte & 0xC0) == 0xC0) {
-						HeadByte &= 0x3F;
-						if (iread(&Colour, 1, 1) != 1)
-							return IL_FALSE;
-						for (i = 0; i < HeadByte; i++) {
-							k = 128;
-							for (j = 0; j < 8; j++) {
-								ScanLine[x++] = !!(Colour & k);
-								k >>= 1;
-							}
-						}
 					}
-					else {
+					for (i = 0; i < HeadByte; i++) {
 						k = 128;
-						for (j = 0; j < 8; j++) {
-							ScanLine[x++] = !!(HeadByte & k);
+						for (j = 0; j < 8 && x < Bps; j++) {
+							ScanLine[x++] = (Colour & k)?1:0;
 							k >>= 1;
 						}
 					}
 				}
-
-				for (x = 0; x < iCurImage->Width; x++) {  // 'Cleverly' ignores the pad bytes. ;)
-					iCurImage->Data[y * iCurImage->Width + x] += ScanLine[x] << c;
+				else {
+					k = 128;
+					for (j = 0; j < 8 && x < Bps; j++) {
+						ScanLine[x++] = (HeadByte & k)?1:0;
+						k >>= 1;
+					}
 				}
 			}
+
+			for (x = 0; x < iCurImage->Width; x++) {  // 'Cleverly' ignores the pad bytes. ;)
+				for(c = 0; c < Header->NumPlanes; c++)
+					iCurImage->Data[y * iCurImage->Width + x] |= ScanLine[x + c*Header->Bps*8] << c;
+			}
 		}
+		iUnCache();
 		ifree(ScanLine);
+	}
+	else {
+		ilSetError(IL_FORMAT_NOT_SUPPORTED);
+		return IL_FALSE;
 	}
 
 	return IL_TRUE;
