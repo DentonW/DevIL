@@ -76,6 +76,7 @@ void ILTest::TestilActiveImage()
 	itoa (i,lBuffer,10);
 	lFinalFilename = lFilename + lBuffer + ".bmp";
 	FILE * lBuffer = fopen(lFinalFilename.c_str() , "wb");
+	CPPUNIT_ASSERT(lBuffer != NULL);
 	ilSaveF(IL_BMP,lBuffer);
 	fclose(lBuffer);
   }

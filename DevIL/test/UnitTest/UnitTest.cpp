@@ -49,7 +49,7 @@ void TestClipboard()
   iluInit();
 
   FILE * lBuffer = fopen("D:\\result.bmp", "wb");
-  ilutGetWinClipboard();
+//  ilutGetWinClipboard();
   ilSaveF(IL_BMP,lBuffer);
   assert(ilGetError() == IL_NO_ERROR);
   fclose(lBuffer);
