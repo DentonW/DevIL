@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Sources
-// Copyright (C) 2000-2001 by Denton Woods
+// Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 05/28/2001 <--Y2K Compliant! =]
 //
-// Filename: openilu/filter.h
+// Filename: src-ILU/include/ilu_filter.h
 //
 // Description: Applies filters to an image.
 //

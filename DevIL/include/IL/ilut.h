@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 06/11/2002 <--Y2K Compliant! =]
 //
-// Filename: il/ilut.h
+// Filename: IL/ilut.h
 //
 // Description: The main include file for ILUT
 //

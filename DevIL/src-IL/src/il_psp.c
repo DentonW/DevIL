@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 05/04/2002 <--Y2K Compliant! =]
 //
-// Filename: il/il_psp.c
+// Filename: src-IL/src/il_psp.c
 //
 // Description: Reads a Paint Shop Pro file.
 //
@@ -204,8 +204,8 @@ ILboolean ReadGenAttributes()
 
 	if (iread(&AttHead, sizeof(AttHead), 1) != 1)
 		return IL_FALSE;
-	AttHead.BlockID = UShort(AttHead.BlockID);
-	AttHead.BlockLen = UInt(AttHead.BlockLen);
+	UShort(&AttHead.BlockID);
+	UInt(&AttHead.BlockLen);
 
 	if (AttHead.HeadID[0] != 0x7E || AttHead.HeadID[1] != 0x42 ||
 		AttHead.HeadID[2] != 0x4B || AttHead.HeadID[3] != 0x00) {
@@ -257,14 +257,14 @@ ILboolean ParseChunks()
 		if (Header.MajorVersion == 3)
 			Block.BlockLen = GetLittleUInt();
 		else
-			Block.BlockLen = UInt(Block.BlockLen);
+			UInt(&Block.BlockLen);
 
 		if (Block.HeadID[0] != 0x7E || Block.HeadID[1] != 0x42 ||
 			Block.HeadID[2] != 0x4B || Block.HeadID[3] != 0x00) {
 				return IL_TRUE;
 		}
-		Block.BlockID = UShort(Block.BlockID);
-		Block.BlockLen = UInt(Block.BlockLen);
+		UShort(&Block.BlockID);
+		UInt(&Block.BlockLen);
 
 		Pos = itell();
 
@@ -315,7 +315,7 @@ ILboolean ReadLayerBlock(ILuint BlockLen)
 	if (Header.MajorVersion == 3)
 		Block.BlockLen = GetLittleUInt();
 	else
-		Block.BlockLen = UInt(Block.BlockLen);
+		UInt(&Block.BlockLen);
 
 	if (Block.HeadID[0] != 0x7E || Block.HeadID[1] != 0x42 ||
 		Block.HeadID[2] != 0x4B || Block.HeadID[3] != 0x00) {
@@ -394,13 +394,13 @@ ILboolean ReadAlphaBlock(ILuint BlockLen)
 			iseek(Padding, IL_SEEK_CUR);
 	}
 
-	// Alpha channel-header
+	// Alpha channel header
 	if (iread(&Block, 1, sizeof(Block)) != sizeof(Block))
 		return IL_FALSE;
 	if (Header.MajorVersion == 3)
 		Block.BlockLen = GetLittleUInt();
 	else
-		Block.BlockLen = UInt(Block.BlockLen);
+		UInt(&Block.BlockLen);
 
 	if (Block.HeadID[0] != 0x7E || Block.HeadID[1] != 0x42 ||
 		Block.HeadID[2] != 0x4B || Block.HeadID[3] != 0x00) {
@@ -461,7 +461,7 @@ ILubyte *GetChannel()
 	if (Header.MajorVersion == 3)
 		Block.BlockLen = GetLittleUInt();
 	else
-		Block.BlockLen = UInt(Block.BlockLen);
+		UInt(&Block.BlockLen);
 
 	if (Block.HeadID[0] != 0x7E || Block.HeadID[1] != 0x42 ||
 		Block.HeadID[2] != 0x4B || Block.HeadID[3] != 0x00) {

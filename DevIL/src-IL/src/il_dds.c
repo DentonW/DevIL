@@ -101,27 +101,27 @@ ILboolean iGetDdsHead(DDSHEAD *Header)
 	if (iread(Header, sizeof(DDSHEAD), 1) != 1)
 		return IL_FALSE;
 
-	Header->Size1			= Int(Header->Size1);
-	Header->Flags1			= Int(Header->Flags1);
-	Header->Height			= Int(Header->Height);
-	Header->Width			= Int(Header->Width);
-	Header->LinearSize		= Int(Header->LinearSize);
-	Header->Depth			= Int(Header->Depth);
-	Header->MipMapCount		= Int(Header->MipMapCount);
-	Header->AlphaBitDepth	= Int(Header->AlphaBitDepth);
-	Header->Size2			= Int(Header->Size2);
-	Header->Flags2			= Int(Header->Flags2);
-	Header->FourCC			= Int(Header->FourCC);
-	Header->RGBBitCount		= Int(Header->RGBBitCount);
-	Header->RBitMask		= Int(Header->RBitMask);
-	Header->GBitMask		= Int(Header->GBitMask);
-	Header->BBitMask		= Int(Header->BBitMask);
-	Header->RGBAlphaBitMask	= Int(Header->RGBAlphaBitMask);
-	Header->ddsCaps1		= Int(Header->ddsCaps1);
-	Header->ddsCaps2		= Int(Header->ddsCaps2);
-	Header->ddsCaps3		= Int(Header->ddsCaps3);
-	Header->ddsCaps4		= Int(Header->ddsCaps4);
-	Header->TextureStage	= Int(Header->TextureStage);
+	Int(&Header->Size1);
+	Int(&Header->Flags1);
+	Int(&Header->Height);
+	Int(&Header->Width);
+	Int(&Header->LinearSize);
+	Int(&Header->Depth);
+	Int(&Header->MipMapCount);
+	Int(&Header->AlphaBitDepth);
+	Int(&Header->Size2);
+	Int(&Header->Flags2);
+	Int(&Header->FourCC);
+	Int(&Header->RGBBitCount);
+	Int(&Header->RBitMask);
+	Int(&Header->GBitMask);
+	Int(&Header->BBitMask);
+	Int(&Header->RGBAlphaBitMask);
+	Int(&Header->ddsCaps1);
+	Int(&Header->ddsCaps2);
+	Int(&Header->ddsCaps3);
+	Int(&Header->ddsCaps4);
+	Int(&Header->TextureStage);
 
 	if (Head.Depth == 0)
 		Head.Depth = 1;

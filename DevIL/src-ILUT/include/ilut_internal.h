@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 02/07/2002 <--Y2K Compliant! =]
 //
-// Filename: openilut/internal.h
+// Filename: src-ILUT/include/ilut_internal.h
 //
 // Description: Internal stuff for ILUT
 //
@@ -33,93 +33,15 @@
 #endif
 
 #include <IL/ilut.h>
+#include <IL/devil_internal_exports.h>
 
 #include <stdlib.h>
-#include "ilut_error.h"
-
-
-#define IL_MAX(a,b) (((a) > (b)) ? (a) : (b))
-#define IL_MIN(a,b) (((a) < (b)) ? (a) : (b))
-
-
-// Basic Palette struct
-typedef struct ILpal
-{
-	ILubyte	*Palette;		// the image palette (if any)
-	ILuint	PalSize;		// size of the palette (in bytes)
-	ILenum	PalType;		// the palette types below (0x0500 range)
-} ILpal;
-
-
-// The Fundamental Image struct
-typedef struct ILimage
-{
-	ILuint	Width;				// the image's width
-	ILuint	Height;				// the image's height
-	ILuint	Depth;				// the image's depth
-	ILubyte	Bpp;				// bytes per pixel (now number of channels)
-	ILubyte	Bpc;				// bytes per channel
-	ILuint	Bps;				// bytes per scanline (components for IL)
-	ILubyte	*Data;				// the image data
-	ILuint	SizeOfData;			// the total size of the data (in bytes)
-	ILuint	SizeOfPlane;		// SizeOfData in a 2d image, size of each plane slice in a 3d image (in bytes)
-	ILenum	Format;				// image format (in IL enum style)
-	ILenum	Type;				// image type (in IL enum style)
-	ILenum	Origin;				// origin of the image
-	ILpal	Pal;				// palette details
-	ILuint	Duration;			// length of the time to display this "frame"
-	ILenum	CubeFlags;			// cube map flags for sides present in chain
-	struct	ILimage *Mipmaps;	// mipmapped versions of this image terminated by a NULL - usu. NULL
-	struct	ILimage *Next;		// next image in the chain - usu. NULL
-	struct	ILimage *Layers;	// subsequent layers in the chain - usu. NULL
-	ILuint	NumNext;			// number of images following this one (0 when not parent)
-	ILuint	NumMips;			// number of mipmaps (0 when not parent)
-	ILuint	NumLayers;			// number of layers (0 when not parent)
-	ILuint	*AnimList;			// animation list
-	ILuint	AnimSize;			// animation list size
-	ILvoid	*Profile;			// colour profile
-	ILuint	ProfileSize;		// colour profile size
-	ILuint	OffX, OffY;			// offset of the image
-	ILubyte	*DxtcData;			// compressed data
-	ILenum	DxtcFormat;			// compressed data format
-	ILuint	DxtcSize;			// compressed data size
-} ILimage;
 
 
 extern ILimage *ilutCurImage;
 
 
-ILimage	*MakeGLCompliant(ILimage *Image);
 ILvoid	ilutDefaultStates(ILvoid);
-
-
-// Internal library functions in DevIL
-ILAPI ILvoid		ILAPIENTRY iBindImageTemp(ILvoid);
-ILAPI ILvoid		ILAPIENTRY ilCloseImage(ILimage *Image);
-ILAPI ILimage*		ILAPIENTRY iConvertImage(ILimage *Image, ILenum DestFormat, ILenum DestType);
-ILAPI ILimage*		ILAPIENTRY ilCopyImage_(ILimage *Src);
-ILAPI ILboolean		ILAPIENTRY ilCopyImageAttr(ILimage *Dest, ILimage *Src);
-ILAPI ILpal*		ILAPIENTRY iCopyPal(ILvoid);
-ILAPI ILimage*		ILAPIENTRY ilGetCurImage(ILvoid);
-ILAPI ILuint		ILAPIENTRY ilGetCurName(ILvoid);
-ILAPI ILubyte*		ILAPIENTRY iGetFlipped(ILimage *Image);
-ILAPI ILboolean		ILAPIENTRY ilIsValidPal(ILpal *Palette);
-ILAPI ILenum		ILAPIENTRY ilTypeFromExt(const char *FileName);
-ILAPI ILimage*		ILAPIENTRY ilNewImage(ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILubyte Bpc);
-ILAPI ILvoid		ILAPIENTRY ilSetCurImage(ILimage *Image);
-ILAPI ILvoid		ILAPIENTRY ilSetError(ILenum Error);
-ILAPI ILvoid*		ILAPIENTRY ialloc(ILuint Size);
-ILAPI ILvoid		ILAPIENTRY ifree(ILvoid *Ptr);
-
-ILAPI ILubyte		ILAPIENTRY ilGetBppFormat(ILenum Format);
-ILAPI ILubyte		ILAPIENTRY ilGetBppPal(ILenum PalType);
-ILAPI ILubyte		ILAPIENTRY ilGetBppType(ILenum Type);
-ILAPI ILenum		ILAPIENTRY ilGetPalBaseType(ILenum PalType);
-ILAPI ILuint		ILAPIENTRY ilNextPower2(ILuint Num);
-
-
-// Internal library functions in ILU
-ILAPI ILimage* ILAPIENTRY iluScale_(ILimage *Image, ILuint Width, ILuint Height, ILuint Depth);
 
 
 // ImageLib Utility Toolkit's OpenGL Functions

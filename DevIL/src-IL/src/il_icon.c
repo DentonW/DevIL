@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2001 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2001-2002 by Denton Woods
+// Last modified: 06/13/2001 <--Y2K Compliant! =]
 //
-// Filename: openil/icon.c
+// Filename: src-IL/src/il_icon.c
 //
 // Description: Reads from a Windows icon (.ico) file.
 //
@@ -76,6 +76,9 @@ ILboolean iLoadIconInternal()
 
 	if (iread(&IconDir, sizeof(ICODIR), 1) != 1)
 		goto file_read_error;
+	Short(&IconDir.Count);
+	Short(&IconDir.Type);
+
 	DirEntries = (ICODIRENTRY*)ialloc(sizeof(ICODIRENTRY) * IconDir.Count);
 	IconImages = (ICOIMAGE*)ialloc(sizeof(ICOIMAGE) * IconDir.Count);
 	if (DirEntries == NULL || IconImages == NULL)
@@ -89,9 +92,26 @@ ILboolean iLoadIconInternal()
 		goto file_read_error;
 
 	for (i = 0; i < IconDir.Count; i++) {
+		Short(&DirEntries[i].Planes);
+		Short(&DirEntries[i].Bpp);
+		UInt(&DirEntries[i].SizeOfData);
+		UInt(&DirEntries[i].Offset);
+
 		iseek(DirEntries[i].Offset, IL_SEEK_SET);
 		if (iread(&IconImages[i].Head, sizeof(INFOHEAD), 1) != 1)
 			goto file_read_error;
+
+		Int(&IconImages[i].Head.Size);
+		Int(&IconImages[i].Head.Width);
+		Int(&IconImages[i].Head.Height);
+		Short(&IconImages[i].Head.Planes);
+		Short(&IconImages[i].Head.BitCount);
+		Int(&IconImages[i].Head.Compression);
+		Int(&IconImages[i].Head.SizeImage);
+		Int(&IconImages[i].Head.XPixPerMeter);
+		Int(&IconImages[i].Head.YPixPerMeter);
+		Int(&IconImages[i].Head.ColourUsed);
+		Int(&IconImages[i].Head.ColourImportant);
 
 		if (IconImages[i].Head.BitCount < 8) {
 			if (IconImages[i].Head.ColourUsed == 0) {

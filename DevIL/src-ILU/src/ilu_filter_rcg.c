@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Sources
-// Copyright (C) 2000-2001 by Denton Woods
+// Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 10/12/2001 <--Y2K Compliant! =]
 //
-// Filename: openilu/filter_rcg.c
+// Filename: src-ILU/src/ilu_filter_rcg.c
 //
 // Description: Scales an image.  Based on the Graphic Gems III source.
 //

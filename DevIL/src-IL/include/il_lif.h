@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2001 by Denton Woods
 // Last modified: 05/25/2001 <--Y2K Compliant! =]
 //
-// Filename: openil/lif.c
+// Filename: src-IL/include/il_lif.c
 //
 // Description: Reads a Homeworld image.
 //

@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 05/13/2002 <--Y2K Compliant! =]
 //
-// Filename: il/il_bmp.h
+// Filename: src-IL/include/il_bmp.h
 //
 // Description: Reads and writes to a bitmap (.bmp) file.
 //

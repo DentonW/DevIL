@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
+// Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 08/26/2001 <--Y2K Compliant! =]
 //
-// Filename: openil/manip.c
+// Filename: src-IL/src/il_manip.c
 //
 // Description: Image manipulation
 //

@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 05/18/2002 <--Y2K Compliant! =]
 //
-// Filename: il/il_gif.h
+// Filename: src-IL/include/il_gif.h
 //
 // Description: Reads from a Graphics Interchange Format (.gif) file.
 //

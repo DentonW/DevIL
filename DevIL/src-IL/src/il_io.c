@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 05/28/2002 <--Y2K Compliant! =]
 //
-// Filename: il/il_io.c
+// Filename: src-IL/src/il_io.c
 //
 // Description: Determines image types and loads images
 //

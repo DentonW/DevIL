@@ -63,7 +63,7 @@ ILboolean ilIsValidSgiF(ILHANDLE File)
 
 /*----------------------------------------------------------------------------*/
 
-/*! Checks if Lump is a valid .sgi lump. */
+//! Checks if Lump is a valid .sgi lump.
 ILboolean ilIsValidSgiL(ILvoid *Lump, ILuint Size)
 {
 	FName = NULL;
@@ -73,21 +73,21 @@ ILboolean ilIsValidSgiL(ILvoid *Lump, ILuint Size)
 
 /*----------------------------------------------------------------------------*/
 
-/* Internal function used to get the .sgi header from the current file.*/
+// Internal function used to get the .sgi header from the current file.
 ILboolean iGetSgiHead(iSgiHeader *Header)
 {
 	if (iread(Header, sizeof(iSgiHeader), 1) != 1)
 		return IL_FALSE;
 
-	Header->MagicNum	= BigUShort(Header->MagicNum);
-	Header->Dim			= BigUShort(Header->Dim);
-	Header->XSize		= BigUShort(Header->XSize);
-	Header->YSize		= BigUShort(Header->YSize);
-	Header->ZSize		= BigUShort(Header->ZSize);
-	Header->PixMin		= BigInt(Header->PixMin);
-	Header->PixMax		= BigInt(Header->PixMax);
-	Header->Dummy1		= BigInt(Header->Dummy1);
-	Header->ColMap		= BigInt(Header->ColMap);
+	BigUShort(&Header->MagicNum);
+	BigUShort(&Header->Dim);
+	BigUShort(&Header->XSize);
+	BigUShort(&Header->YSize);
+	BigUShort(&Header->ZSize);
+	BigInt(&Header->PixMin);
+	BigInt(&Header->PixMax);
+	BigInt(&Header->Dummy1);
+	BigInt(&Header->ColMap);
 
 	return IL_TRUE;
 }

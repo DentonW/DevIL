@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 01/29/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/il_psd.c
+// Filename: src-IL/src/il_psd.c
 //
 // Description: Reads from a PhotoShop (.psd) file.
 //
@@ -74,12 +74,12 @@ ILboolean iGetPsdHead(PSDHEAD *Header)
 	if (iread(Header, sizeof(PSDHEAD), 1) != 1)
 		return IL_FALSE;
 
-	Header->Version		= BigUShort(Header->Version);
-	Header->Channels	= BigUShort(Header->Channels);
-	Header->Height		= BigUInt(Header->Height);
-	Header->Width		= BigUInt(Header->Width);
-	Header->Depth		= BigUShort(Header->Depth);
-	Header->Mode		= BigUShort(Header->Mode);
+	BigUShort(&Header->Version);
+	BigUShort(&Header->Channels);
+	BigUInt(&Header->Height);
+	BigUInt(&Header->Width);
+	BigUShort(&Header->Depth);
+	BigUShort(&Header->Mode);
 
 	return IL_TRUE;
 }
@@ -685,7 +685,7 @@ ILboolean ParseResources(ILuint ResourceSize, ILubyte *Resources)
 		Resources += 4;
 
 		ID = *((ILushort*)Resources);
-		ID = BigUShort(ID);
+		BigUShort(&ID);
 		Resources += 2;
 
 		NameLen = *Resources++;
@@ -695,7 +695,7 @@ ILboolean ParseResources(ILuint ResourceSize, ILubyte *Resources)
 
 		// Get the resource data size.
 		Size = *((ILuint*)Resources);
-		Size = BigUInt(Size);
+		BigUInt(&Size);
 		Resources += 4;
 
 		ResourceSize -= (4 + 2 + 1 + NameLen);

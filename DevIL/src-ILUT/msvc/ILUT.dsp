@@ -93,7 +93,7 @@ LINK32=link.exe
 # Begin Special Build Tool
 TargetName=ilut-l
 SOURCE="$(InputPath)"
-PostBuild_Cmds=..\..\projects\msvc\insdll.bat ..\..\lib\$(TargetName).dll 
+PostBuild_Cmds=..\..\projects\msvc\insdll.bat ..\..\lib\$(TargetName).dll
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "ILUT - Win32 Release"
@@ -127,7 +127,7 @@ LINK32=link.exe
 # Begin Special Build Tool
 TargetName=ILUT
 SOURCE="$(InputPath)"
-PostBuild_Cmds=..\..\projects\msvc\insdll.bat ..\..\lib\$(TargetName).dll 
+PostBuild_Cmds=..\..\projects\msvc\insdll.bat ..\..\lib\$(TargetName).dll
 # End Special Build Tool
 
 !ENDIF 
@@ -195,15 +195,11 @@ SOURCE=..\src\ilut_win32.c
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
+SOURCE=..\..\include\IL\devil_internal_exports.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\il\ilut.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\ilut_allegro.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\ilut_error.h
 # End Source File
 # Begin Source File
 

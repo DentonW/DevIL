@@ -2,9 +2,9 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/18/2002 <--Y2K Compliant! =]
+// Last modified: 06/13/2002 <--Y2K Compliant! =]
 //
-// Filename: il/il_gif.c
+// Filename: src-IL/src/il_gif.c
 //
 // Description: Reads from a Graphics Interchange Format (.gif) file.
 //
@@ -146,6 +146,9 @@ ILboolean iLoadGifInternal()
 	if (iread(&Header, sizeof(Header), 1) != 1)
 		return IL_FALSE;
 
+	UShort(&Header.Width);
+	UShort(&Header.Height);
+
 	if (!strnicmp(Header.Sig, "GIF87A", 6)) {
 		GifType = GIF87A;
 	}
@@ -223,7 +226,10 @@ ILboolean GetImages(ILpal *GlobalPal)
 		}
 		if (ImageDesc.Separator != 0x2C)
 			break;
-
+		UShort(&ImageDesc.OffX);
+		UShort(&ImageDesc.OffY);
+		UShort(&ImageDesc.Width);
+		UShort(&ImageDesc.Height);
 
 		if (!BaseImage) {
 			NumImages++;
@@ -340,6 +346,7 @@ ILboolean SkipExtensions(GFXCONTROL *Gfx)
 			case 0xF9:
 				if (iread(Gfx, sizeof(GFXCONTROL) - sizeof(ILboolean), 1) != 1)
 					return IL_FALSE;
+				UShort(&Gfx->Delay);
 				Gfx->Used = IL_FALSE;
 
 				break;

@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
+// Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 05/25/2001 <--Y2K Compliant! =]
 //
-// Filename: openil/lif.c
+// Filename: src-IL/src/il_lif.c
 //
 // Description: Reads a Homeworld image.
 //
@@ -69,15 +69,15 @@ ILboolean iGetLifHead(LIF_HEAD *Header)
 	if (iread(Header, sizeof(LIF_HEAD), 1) != 1)
 		return IL_FALSE;
 
-	Header->Version		= UInt(Header->Version);
-	Header->Flags		= UInt(Header->Flags);
-	Header->Width		= UInt(Header->Width);
-	Header->Height		= UInt(Header->Height);
-	Header->PaletteCRC	= UInt(Header->PaletteCRC);
-	Header->ImageCRC	= UInt(Header->ImageCRC);
-	Header->PalOffset	= UInt(Header->PalOffset);
-	Header->TeamEffect0	= UInt(Header->TeamEffect0);
-	Header->TeamEffect1	= UInt(Header->TeamEffect1);
+	UInt(&Header->Version);
+	UInt(&Header->Flags);
+	UInt(&Header->Width);
+	UInt(&Header->Height);
+	UInt(&Header->PaletteCRC);
+	UInt(&Header->ImageCRC);
+	UInt(&Header->PalOffset);
+	UInt(&Header->TeamEffect0);
+	UInt(&Header->TeamEffect1);
 
 	return IL_TRUE;
 }

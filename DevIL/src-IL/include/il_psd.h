@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2001 by Denton Woods
 // Last modified: 01/23/2001 <--Y2K Compliant! =]
 //
-// Filename: openil/il_psd.c
+// Filename: src-IL/include/il_il_psd.c
 //
 // Description: Reads from a PhotoShop (.psd) file.
 //

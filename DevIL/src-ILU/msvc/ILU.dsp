@@ -90,7 +90,7 @@ LINK32=link.exe
 # Begin Special Build Tool
 TargetName=ILU
 SOURCE="$(InputPath)"
-PostBuild_Cmds=..\..\projects\msvc\insdll.bat ..\..\lib\$(TargetName).dll 
+PostBuild_Cmds=..\..\projects\msvc\insdll.bat ..\..\lib\$(TargetName).dll
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "ILU - Win32 Dynamic"
@@ -122,7 +122,7 @@ LINK32=link.exe
 # Begin Special Build Tool
 TargetName=ilu-l
 SOURCE="$(InputPath)"
-PostBuild_Cmds=..\..\projects\msvc\insdll.bat ..\..\lib\$(TargetName).dll 
+PostBuild_Cmds=..\..\projects\msvc\insdll.bat ..\..\lib\$(TargetName).dll
 # End Special Build Tool
 
 !ENDIF 
@@ -201,11 +201,11 @@ SOURCE=..\src\ilu_utilities.c
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\include\il\ilu.h
+SOURCE=..\..\include\IL\devil_internal_exports.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\ilu_error.h
+SOURCE=..\..\include\il\ilu.h
 # End Source File
 # Begin Source File
 

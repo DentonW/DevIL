@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 01/29/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/il_endian.h
+// Filename: src-IL/include/il_endian.h
 //
 // Description: Handles Endian-ness
 //
@@ -49,13 +49,12 @@
 #endif
 
 
-// From the DooM sources
-ILushort	_SwapUShort(ILushort s);
-ILshort		_SwapShort(ILshort s);
-ILuint		_SwapUInt(ILuint i);
-ILint		_SwapInt(ILint i);
-ILfloat		_SwapFloat(ILfloat f);
-ILdouble	_SwapDouble(ILdouble d);
+ILvoid	_SwapUShort(ILushort *s);
+ILvoid	_SwapShort(ILshort *s);
+ILvoid	_SwapUInt(ILuint *i);
+ILvoid	_SwapInt(ILint *i);
+ILvoid	_SwapFloat(ILfloat *f);
+ILvoid	_SwapDouble(ILdouble *d);
 
 
 // Only seem to work on unsigned values properly...

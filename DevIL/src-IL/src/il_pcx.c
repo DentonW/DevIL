@@ -70,16 +70,16 @@ ILboolean iGetPcxHead(PCXHEAD *Head)
 	if (iread(Head, sizeof(PCXHEAD), 1) != 1)
 		return IL_FALSE;
 
-	Head->Xmin			= UShort(Head->Xmin);
-	Head->Ymin			= UShort(Head->Ymin);
-	Head->Xmax			= UShort(Head->Xmax);
-	Head->Ymax			= UShort(Head->Ymax);
-	Head->HDpi			= UShort(Head->HDpi);
-	Head->VDpi			= UShort(Head->VDpi);
-	Head->Bps			= UShort(Head->Bps);
-	Head->PaletteInfo	= UShort(Head->PaletteInfo);
-	Head->HScreenSize	= UShort(Head->HScreenSize);
-	Head->VScreenSize	= UShort(Head->VScreenSize);
+	UShort(&Head->Xmin);
+	UShort(&Head->Ymin);
+	UShort(&Head->Xmax);
+	UShort(&Head->Ymax);
+	UShort(&Head->HDpi);
+	UShort(&Head->VDpi);
+	UShort(&Head->Bps);
+	UShort(&Head->PaletteInfo);
+	UShort(&Head->HScreenSize);
+	UShort(&Head->VScreenSize);
 
 	return IL_TRUE;
 }

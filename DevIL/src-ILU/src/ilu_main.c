@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Sources
-// Copyright (C) 2000-2001 by Denton Woods
+// Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 05/20/2001 <--Y2K Compliant! =]
 //
-// Filename: openilu/main.c
+// Filename: src-ILU/src/ilu_main.c
 //
 // Description: Startup functions
 //

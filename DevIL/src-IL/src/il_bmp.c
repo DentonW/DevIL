@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 05/12/2001 <--Y2K Compliant! =]
 //
-// Filename: il/il_bmp.c
+// Filename: src-IL/src/il_bmp.c
 //
 // Description: Reads from and writes to a bitmap (.bmp) file.
 //
@@ -72,21 +72,21 @@ ILboolean iGetBmpHead(BMPHEAD *Header)
 	if (iread(Header, sizeof(BMPHEAD), 1) != 1)
 		return IL_FALSE;
 
-	Header->bfType			= UShort(Header->bfType);
-	Header->bfSize			= Int(Header->bfSize);
-	Header->bfReserved		= UInt(Header->bfReserved);
-	Header->bfDataOff		= Int(Header->bfDataOff);
-	Header->biSize			= Int(Header->biSize);
-	Header->biWidth			= Int(Header->biWidth);
-	Header->biHeight		= Int(Header->biHeight);
-	Header->biPlanes		= Short(Header->biPlanes);
-	Header->biBitCount		= Short(Header->biBitCount);
-	Header->biCompression	= Int(Header->biCompression);
-	Header->biSizeImage		= Int(Header->biSizeImage);
-	Header->biXPelsPerMeter	= Int(Header->biXPelsPerMeter);
-	Header->biYPelsPerMeter	= Int(Header->biYPelsPerMeter);
-	Header->biClrUsed		= Int(Header->biClrUsed);
-	Header->biClrImportant	= Int(Header->biClrImportant);
+	UShort(&Header->bfType);
+	Int(&Header->bfSize);
+	UInt(&Header->bfReserved);
+	Int(&Header->bfDataOff);
+	Int(&Header->biSize);
+	Int(&Header->biWidth);
+	Int(&Header->biHeight);
+	Short(&Header->biPlanes);
+	Short(&Header->biBitCount);
+	Int(&Header->biCompression);
+	Int(&Header->biSizeImage);
+	Int(&Header->biXPelsPerMeter);
+	Int(&Header->biYPelsPerMeter);
+	Int(&Header->biClrUsed);
+	Int(&Header->biClrImportant);
 
 	return IL_TRUE;
 }
@@ -97,16 +97,16 @@ ILboolean iGetOS2Head(OS2_HEAD *Header)
 	if (iread(Header, sizeof(OS2_HEAD), 1) != 1)
 		return IL_FALSE;
 
-	Header->bfType		= UShort(Header->bfType);
-	Header->biSize		= UInt(Header->biSize);
-	Header->xHotspot	= Short(Header->xHotspot);
-	Header->yHotspot	= Short(Header->yHotspot);
-	Header->DataOff		= UInt(Header->DataOff);
-	Header->cbFix		= UInt(Header->cbFix);
-	Header->cx			= UShort(Header->cx);
-	Header->cy			= UShort(Header->cy);
-	Header->cPlanes		= UShort(Header->cPlanes);
-	Header->cBitCount	= UShort(Header->cBitCount);
+	UShort(&Header->bfType);
+	UInt(&Header->biSize);
+	Short(&Header->xHotspot);
+	Short(&Header->yHotspot);
+	UInt(&Header->DataOff);
+	UInt(&Header->cbFix);
+	UInt(&Header->cx);
+	UInt(&Header->cy);
+	UShort(&Header->cPlanes);
+	UShort(&Header->cBitCount);
 
 	iseek((ILint)Header->cbFix - 12, IL_SEEK_CUR);  // Skip rest of header, if any.
 

@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 08/30/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 06/13/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/convert.c
+// Filename: src-IL/src/il_convbuff.c
 //
 // Description: Converts between several image formats
 //

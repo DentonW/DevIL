@@ -2,6 +2,9 @@
 -----
 
 - Fixed conversion to IL_FLOAT and IL_DOUBLE types.
+- Rewrote a lot of the Endian conversion routines.
+- Added missing Endian conversion to .gif and .ico files.
+- Removed the unneeded il(u/t)_error.h files.
 
 
 

@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 02/21/2002 <--Y2K Compliant! =]
 //
-// Filename: il/il_dds.h
+// Filename: src-IL/include/il_dds.h
 //
 // Description: Reads from a DirectDraw Surface (.dds) file.
 //

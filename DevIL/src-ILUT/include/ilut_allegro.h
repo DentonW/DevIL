@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
-// ImageLib Sources
-// Copyright (C) 2000 by Denton Woods
-// Last modified:  4/20/2000 <--Y2K Compliant! =]
+// ImageLib Utility Toolkit Sources
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 04/20/2002 <--Y2K Compliant! =]
 //
-// Filename: openilut/alleg.h (Don't want to conflict with allegro.h)
+// Filename: src-ILUT/include/ilut_alleg.h (Don't want to conflict with allegro.h)
 //
 // Description:
 //

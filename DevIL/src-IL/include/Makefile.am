@@ -2,7 +2,7 @@ noinst_HEADERS  = il_targa.h    il_doompal.h \
                   il_jpeg.h     il_pnm.h \
                   il_endian.h   il_lif.h \
                   il_q2pal.h    il_alloc.h \
-                  il_error.h    il_manip.h \
+                  il_manip.h \
                   il_register.h il_bits.h \
                   il_files.h    il_mdl.h \
                   il_rle.h      il_bmp.h \

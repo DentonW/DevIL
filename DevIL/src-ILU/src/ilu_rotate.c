@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 05/25/2002 <--Y2K Compliant! =]
 //
-// Filename: openilu/ilu_rotate.c
+// Filename: src-ILU/src/ilu_rotate.c
 //
 // Description: Rotates an image.
 //

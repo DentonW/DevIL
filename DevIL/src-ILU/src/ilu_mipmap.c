@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Sources
-// Copyright (C) 2000-2001 by Denton Woods
+// Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 08/11/2001 <--Y2K Compliant! =]
 //
-// Filename: openilu/manip.c
+// Filename: src-ILU/src/ilu_manip.c
 //
 // Description: Generates mipmaps for the current image
 //

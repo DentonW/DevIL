@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 02/20/2002 <--Y2K Compliant! =]
 //
-// Filename: ilu/ilu_error.c
+// Filename: src-ILU/src/ilu_error.c
 //
 // Description: Error functions
 //
@@ -12,9 +12,6 @@
 
 
 #include "ilu_internal.h"
-
-// We can use ilSetError() in ILU, because it *is* exported, but there is
-//	no prototype in il.h, so we define it in il_error.h of ILU
 
 static const ILstring iluErrorStrings[IL_FILE_READ_ERROR - IL_INVALID_ENUM + 1] = {
 	IL_TEXT("invalid enumerant"),

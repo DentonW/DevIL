@@ -42,11 +42,11 @@ ILboolean iGetPixHead(PIXHEAD *Header)
 	if (iread(Header, sizeof(PIXHEAD), 1) != 1)
 		return IL_FALSE;
 
-	Header->Width	= BigUShort(Header->Width);
-	Header->Height	= BigUShort(Header->Height);
-	Header->OffX	= BigUShort(Header->OffX);
-	Header->OffY	= BigUShort(Header->OffY);
-	Header->Bpp		= BigUShort(Header->Bpp);
+	BigUShort(&Header->Width);
+	BigUShort(&Header->Height);
+	BigUShort(&Header->OffX);
+	BigUShort(&Header->OffY);
+	BigUShort(&Header->Bpp);
 
 	return IL_TRUE;
 }

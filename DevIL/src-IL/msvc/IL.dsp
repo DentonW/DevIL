@@ -93,7 +93,7 @@ LINK32=link.exe
 # Begin Special Build Tool
 TargetName=DevIL-l
 SOURCE="$(InputPath)"
-PostBuild_Cmds=..\..\projects\msvc\insdll.bat ..\..\lib\$(TargetName).dll 
+PostBuild_Cmds=..\..\projects\msvc\insdll.bat ..\..\lib\$(TargetName).dll
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "IL - Win32 Release"
@@ -375,6 +375,10 @@ SOURCE=..\..\include\IL\config.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\IL\devil_internal_exports.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\il\il.h
 # End Source File
 # Begin Source File
@@ -404,10 +408,6 @@ SOURCE=..\include\il_doompal.h
 # Begin Source File
 
 SOURCE=..\include\il_endian.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\il_error.h
 # End Source File
 # Begin Source File
 

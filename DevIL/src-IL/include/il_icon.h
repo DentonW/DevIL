@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
+// Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 05/25/2001 <--Y2K Compliant! =]
 //
-// Filename: openil/icon.h
+// Filename: src-IL/include/il_icon.h
 //
 // Description: Reads from a Windows icon (.ico) file.
 //
@@ -19,13 +19,15 @@
 ILboolean iLoadIconInternal();
 
 
+#ifdef _WIN32
+	#pragma pack(push, ico_struct, 1)
+#endif
 typedef struct ICODIR
 {
 	ILshort		Reserved;	// Reserved (must be 0)
 	ILshort		Type;		// Type (1 for icons, 2 for cursors)
 	ILshort		Count;		// How many different images?
-} ICODIR;
-
+} IL_PACKSTRUCT ICODIR;
 
 typedef struct ICODIRENTRY
 {
@@ -37,8 +39,7 @@ typedef struct ICODIRENTRY
 	ILshort		Bpp;			// Bits per pixel
 	ILuint		SizeOfData;		// How many bytes in this resource?
 	ILuint		Offset;			// Offset from beginning of the file
-} ICODIRENTRY;
-
+} IL_PACKSTRUCT ICODIRENTRY;
 
 typedef struct INFOHEAD
 {
@@ -53,8 +54,7 @@ typedef struct INFOHEAD
 	ILint		YPixPerMeter;
 	ILint		ColourUsed;
 	ILint		ColourImportant;
-} INFOHEAD;
-
+} IL_PACKSTRUCT INFOHEAD;
 
 typedef struct ICOIMAGE
 {
@@ -63,6 +63,9 @@ typedef struct ICOIMAGE
 	ILubyte		*Data;	// XOR mask
 	ILubyte		*AND;	// AND mask
 } ICOIMAGE;
+#ifdef _WIN32
+	#pragma pack(pop, ico_struct)
+#endif
 
 
 #endif//ICON_H

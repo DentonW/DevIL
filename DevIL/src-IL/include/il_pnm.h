@@ -1,12 +1,12 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
+// Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 05/25/2001 <--Y2K Compliant! =]
 //
-// Filename: openil/pnm.h
+// Filename: src-IL/include/il_pnm.h
 //
-// Description: Reads/writes pbm/pgm/ppm formats
+// Description: Reads/writes to/from pbm/pgm/ppm formats
 //
 //-----------------------------------------------------------------------------
 

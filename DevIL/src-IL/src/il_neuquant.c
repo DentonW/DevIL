@@ -25,9 +25,9 @@
 // by Denton Woods
 // Last modified: 02/02/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/il_neuquant.c
+// Filename: src-IL/src/il_neuquant.c
 //
-// Description:  Heavily modified by Denton Woods.
+// Description: Heavily modified by Denton Woods.
 //
 //-----------------------------------------------------------------------------
 

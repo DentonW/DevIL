@@ -3,7 +3,7 @@
 // ImageLib Sources
 // Copyright (C) 2002 by Denton Woods
 // Copyright (C) 2002 Nelson Rush.
-// Last modified:  05/18/2002
+// Last modified: 05/18/2002
 //
 // Filename: src-ILUT/src/ilut_sdlsurface.c
 //

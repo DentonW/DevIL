@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
+// Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 10/20/2001 <--Y2K Compliant! =]
 //
-// Filename: openil/register.c
+// Filename: src-IL/src/il_register.c
 //
 // Description: Allows the caller to specify user-defined callback functions
 //				 to open files DevIL does not support, to parse files

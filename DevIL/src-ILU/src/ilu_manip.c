@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 02/16/2002 <--Y2K Compliant! =]
 //
-// Filename: ilu/ilu-manip.c
+// Filename: src-ILU/src/ilu_manip.c
 //
 // Description: Manipulates an image in several ways.
 //

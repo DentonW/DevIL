@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 02/16/2002 <--Y2K Compliant! =]
 //
-// Filename: il/il_jpeg.h
+// Filename: src-IL/include/il_jpeg.h
 //
 // Description: Jpeg (.jpg) functions
 //

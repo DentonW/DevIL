@@ -23,7 +23,7 @@
 // by Denton Woods
 // Last modified: 02/02/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/il_quantizer.c
+// Filename: src-IL/src/il_quantizer.c
 //
 // Description:  Heavily modified by Denton Woods.
 //

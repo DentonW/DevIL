@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Toolkit Sources
-// Copyright (C) 2000-2001 by Denton Woods
+// Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 05/28/2001 <--Y2K Compliant! =]
 //
-// Filename: openilut/win32.c
+// Filename: src-ILUT/src/ilut_win32.c
 //
 // Description: Windows functions for images
 //

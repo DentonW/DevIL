@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
+// Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 05/02/2002 <--Y2K Compliant! =]
 //
-// Filename: il/il_psp.h
+// Filename: src-IL/include/il_psp.h
 //
 // Description: Reads a Paint Shop Pro file.
 //

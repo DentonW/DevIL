@@ -80,12 +80,12 @@ ILboolean iGetTgaHead(TARGAHEAD *Header)
 	if (iread(Header, sizeof(TARGAHEAD), 1) != 1)
 		return IL_FALSE;
 
-	Header->FirstEntry	= Short(Header->FirstEntry);
-	Header->ColMapLen	= Short(Header->ColMapLen);
-	Header->OriginX		= Short(Header->OriginX);
-	Header->OriginY		= Short(Header->OriginY);
-	Header->Width		= UShort(Header->Width);
-	Header->Height		= UShort(Header->Height);
+	Short(&Header->FirstEntry);
+	Short(&Header->ColMapLen);
+	Short(&Header->OriginX);
+	Short(&Header->OriginY);
+	UShort(&Header->Width);
+	UShort(&Header->Height);
 
 	return IL_TRUE;
 }

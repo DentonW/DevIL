@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
+// Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 12/03/2001 <--Y2K Compliant! =]
 //
-// Filename: openil/dcx.h
+// Filename: src-IL/include/il_dcx.h
 //
 // Description: Reads from a .dcx file.
 //

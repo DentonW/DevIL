@@ -72,13 +72,13 @@ ILboolean iGetPicHead(PIC_HEAD *Header)
 	if (iread(Header, sizeof(PIC_HEAD), 1) != 1)
 		return IL_FALSE;
 
-	Header->Magic	= Int(Header->Magic);
+	Int(&Header->Magic);
 	//iread(&Header->Version, sizeof(ILfloat), 1);  // wtf?  A float?!
-	Header->Width	= Short(Header->Width);
-	Header->Height	= Short(Header->Height);
+	Short(&Header->Width);
+	Short(&Header->Height);
 	//iread(&Header->Ratio, sizeof(ILfloat), 1);
-	Header->Fields	= Short(Header->Fields);
-	Header->Padding	= Short(Header->Padding);
+	Short(&Header->Fields);
+	Short(&Header->Padding);
 
 	return IL_TRUE;
 }

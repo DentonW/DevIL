@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 02/19/2002 <--Y2K Compliant! =]
 //
-// Filename: il/il_devil.c
+// Filename: src-IL/src/il_devil.c
 //
 // Description: Functions for working with the ILimage's and the current image
 //
