@@ -150,6 +150,7 @@ enum PixFormat
 	PF_3DC,
 	PF_LUMINANCE,
 	PF_LUMINANCE_ALPHA,
+	PF_RXGB, //Doom3 normal maps
 	PF_UNKNOWN = 0xFF
 };
 
@@ -182,6 +183,7 @@ ILboolean	DecompressDXT3(ILvoid);
 ILboolean	DecompressDXT4(ILvoid);
 ILboolean	DecompressDXT5(ILvoid);
 ILboolean	Decompress3Dc(ILvoid);
+ILboolean	DecompressRXGB(ILvoid);
 ILvoid		CorrectPreMult(ILvoid);
 ILvoid		GetBitsFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight);
 ILboolean	iSaveDdsInternal(ILvoid);
