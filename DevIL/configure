@@ -8929,69 +8929,6 @@ else
   LIBMNG=""
 fi
 
-if test "$no_gif" = "no" ; then
-   echo "$as_me:8958: checking for DGifOpenFileName in -lungif" >&5
-echo $ECHO_N "checking for DGifOpenFileName in -lungif... $ECHO_C" >&6
-if test "${ac_cv_lib_ungif_DGifOpenFileName+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lungif  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-#line 8966 "configure"
-#include "confdefs.h"
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char DGifOpenFileName ();
-int
-main ()
-{
-DGifOpenFileName ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:8985: \"$ac_link\"") >&5
-  (eval $ac_link) 2>&5
-  ac_status=$?
-  echo "$as_me:8988: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:8991: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:8994: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_ungif_DGifOpenFileName=yes
-else
-  echo "$as_me: failed program was:" >&5
-cat conftest.$ac_ext >&5
-ac_cv_lib_ungif_DGifOpenFileName=no
-fi
-rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:9005: result: $ac_cv_lib_ungif_DGifOpenFileName" >&5
-echo "${ECHO_T}$ac_cv_lib_ungif_DGifOpenFileName" >&6
-if test $ac_cv_lib_ungif_DGifOpenFileName = yes; then
-  LIBGIF="-lungif"
-else
-  LIBGIF=""
-fi
-
-   if test "$LIBGIF" != "-lungif" ; then
-     no_gif="yes"
-   fi
-else
-  LIBGIF=""
-fi
-
 if test "$use_sdl" = "yes" ; then
   # Extract the first word of "sdl-config", so it can be a program name with args.
 set dummy sdl-config; ac_word=$2
