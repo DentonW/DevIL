@@ -571,7 +571,10 @@ ILboolean ReadMipmaps()
 
 	StartImage = Image;
 
-	if (!(Head.Flags1 & DDS_MIPMAPCOUNT)) {
+	if (!(Head.Flags1 & DDS_MIPMAPCOUNT) || Head.MipMapCount == 0) {
+		//some .dds-files have their mipmap flag set,
+		//but a mipmapcount of 0. Because mipMapCount is an uint, 0 - 1 gives
+		//overflow - don't let this happen:
 		Head.MipMapCount = 1;
 	}
 
@@ -597,6 +600,7 @@ ILboolean ReadMipmaps()
 		if (Height == 0) 
 			Height = 1;
 
+		//TODO: mipmaps don't keep DXT data???
 		Image->Next = ilNewImage(Width, Height, Depth, Bpp, 1);
 		if (Image->Next == NULL)
 			goto mip_fail;
