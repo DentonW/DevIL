@@ -19,7 +19,7 @@
 
 
 const char *_ilutVendor		= "Abysmal Software";
-const char *_ilutVersion	= "Developer's Image Library Utility Toolkit (ILUT) 1.6.1";
+const char *_ilutVersion	= "Developer's Image Library Utility Toolkit (ILUT) 1.6.6";
 
 
 // Set all states to their defaults
@@ -42,15 +42,15 @@ ILvoid ILAPIENTRY ilutD3D8MipFunc(ILuint NumLevels)
 }
 
 
-const char* ILAPIENTRY ilutGetString(ILenum StringName)
+const ILstring ILAPIENTRY ilutGetString(ILenum StringName)
 {
 	switch (StringName)
 	{
-		case IL_VENDOR:
-			return (const char*)_ilutVendor;
+		case ILUT_VENDOR:
+			return (const ILstring)_ilutVendor;
 		//changed 2003-09-04
-		case IL_VERSION_NUM:
-			return (const char*)_ilutVersion;
+		case ILUT_VERSION_NUM:
+			return (const ILstring)_ilutVersion;
 		default:
 			ilSetError(ILUT_INVALID_PARAM);
 			break;
