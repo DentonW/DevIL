@@ -51,6 +51,7 @@
 			#pragma comment(linker, "/NODEFAULTLIB:libcd")
 			#pragma comment(linker, "/NODEFAULTLIB:libcmt.lib")
 			#ifdef _DEBUG
+				#pragma comment(linker, "/NODEFAULTLIB:libcmtd")
 				#pragma comment(linker, "/NODEFAULTLIB:msvcrt.lib")
 			#endif // _DEBUG
 		#endif // _MSC_VER > 1000

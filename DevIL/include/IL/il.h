@@ -27,13 +27,13 @@ extern "C" {
 //#define IL_NO_DCX
 //#define IL_NO_DDS
 //#define IL_NO_DOOM
-#define IL_NO_GIF
+//#define IL_NO_GIF
 //#define IL_NO_ICO
 //#define IL_NO_JPG
 //#define IL_NO_LIF
 //#define IL_NO_LBM
 //#define IL_NO_MDL
-//#define IL_NO_MNG
+#define IL_NO_MNG
 //#define IL_NO_PCD
 //#define IL_NO_PCX
 //#define IL_NO_PIC
@@ -51,7 +51,7 @@ extern "C" {
 //#define IL_DEBUG
 //#define IL_STATIC_LIB
 //#define IL_NO_LCMS
-//#define IL_USE_JPEGLIB_UNMODIFIED
+#define IL_USE_JPEGLIB_UNMODIFIED
 
 #ifdef _WIN32_WCE
 	#define IL_NO_GIF

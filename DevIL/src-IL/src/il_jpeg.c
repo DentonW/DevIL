@@ -541,7 +541,7 @@ ILboolean iSaveJpegInternal()
 	struct		jpeg_error_mgr Error;
 	JSAMPROW	row_pointer[1];
 	ILimage		*Temp;
-	ILenum		Origin, Type;
+	ILenum		Origin, Type=0;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);

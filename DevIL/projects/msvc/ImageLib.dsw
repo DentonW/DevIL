@@ -54,16 +54,13 @@ Package=<4>
     Project_Dep_Name libjpeg
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name lcmsdll
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name Libtiff
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name libmng
+    Project_Dep_Name libpng
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name libpng
+    Project_Dep_Name lcms108
     End Project Dependency
 }}}
 
@@ -102,7 +99,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "Libtiff"=extlibs\Libtiff.dsp - Package Owner=<4>
+Project: "Libtiff"=.\extlibs\Libtiff.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -150,7 +147,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "lcmsdll"=extlibs\lcmsdll.dsp - Package Owner=<4>
+Project: "lcms108"=.\extlibs\lcms108.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -162,7 +159,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "libjpeg"=extlibs\LibJpeg.dsp - Package Owner=<4>
+Project: "lcmsdll"=.\extlibs\lcmsdll.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -174,7 +171,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "libmng"=extlibs\libmng.dsp - Package Owner=<4>
+Project: "libjpeg"=.\extlibs\LibJpeg.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -186,7 +183,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "libpng"=extlibs\libpng.dsp - Package Owner=<4>
+Project: "libpng"=.\extlibs\libpng.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -201,7 +198,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "zlib"=extlibs\zlib.dsp - Package Owner=<4>
+Project: "zlib"=.\extlibs\zlib.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

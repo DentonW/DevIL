@@ -133,10 +133,6 @@ SOURCE=..\..\..\extlibs\Libjpeg\jcdctmgr.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\extlibs\Libjpeg\jcexif.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\extlibs\Libjpeg\jchuff.c
 # End Source File
 # Begin Source File
@@ -209,10 +205,6 @@ SOURCE=..\..\..\extlibs\Libjpeg\jddctmgr.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\extlibs\Libjpeg\jdexif.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\extlibs\Libjpeg\jdhuff.c
 # End Source File
 # Begin Source File
@@ -254,10 +246,6 @@ SOURCE=..\..\..\extlibs\Libjpeg\jdtrans.c
 # Begin Source File
 
 SOURCE=..\..\..\extlibs\Libjpeg\jerror.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\extlibs\Libjpeg\jexifsup.c
 # End Source File
 # Begin Source File
 
@@ -366,50 +354,6 @@ SOURCE=..\..\..\extlibs\Libjpeg\jdhuff.h
 # Begin Source File
 
 SOURCE=..\..\..\extlibs\Libjpeg\jerror.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\extlibs\Libjpeg\jexif.h
-
-!IF  "$(CFG)" == "libjpeg - Win32 Release"
-
-# Begin Custom Build
-InputPath=..\..\..\extlibs\Libjpeg\jexif.h
-InputName=jexif
-
-"..\include\$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\include
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "libjpeg - Win32 Debug"
-
-# Begin Custom Build
-InputPath=..\..\..\extlibs\Libjpeg\jexif.h
-InputName=jexif
-
-"..\include\$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\include
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "libjpeg - Win32 Dynamic"
-
-# Begin Custom Build
-InputPath=..\..\..\extlibs\Libjpeg\jexif.h
-InputName=jexif
-
-"..\include\$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\include
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\extlibs\Libjpeg\jexifint.h
 # End Source File
 # Begin Source File
 
