@@ -1522,6 +1522,24 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 	return NewData;
 }
 
+void clampFloat(float *f)
+{
+	if (*f < 0.0f) *f = 0.0f;
+	if (*f > 1.0f) *f = 1.0f;
+}
+
+void clampDouble(double *d)
+{
+	if (*d < 0.0f) *d = 0.0f;
+	if (*d > 1.0f) *d = 1.0f;
+}
+
+//this define controls if floats and doubles are clampled to [0..1]
+//during conversion. It takes a little more time, but it is the correct
+//way of doing this. If you are sure your floats are always valid,
+//you can undefine this value...
+#define CLAMP_FLOATS
+#define CLAMP_DOUBLES
 
 // Really shouldn't have to check for default, as in above ilConvertBuffer().
 ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestType, ILvoid *Buffer)
@@ -1530,8 +1548,8 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 	ILubyte		*NewData, *BytePtr;
 	ILushort	*ShortPtr;
 	ILuint		*IntPtr;
-	ILfloat		*FloatPtr;
-	ILdouble	*DblPtr;
+	ILfloat		*FloatPtr, tempFloat;
+	ILdouble	*DblPtr, tempDouble;
 
 	BpcSrc = ilGetBppType(SrcType);
 	BpcDest = ilGetBppType(DestType);
@@ -1567,12 +1585,24 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 					break;
 				case IL_FLOAT:
 					for (i = 0; i < Size; i++) {
-						BytePtr[i] = (ILubyte)( ((ILfloat*)Buffer)[i] * UCHAR_MAX);
+						#ifdef CLAMP_FLOATS
+							tempFloat = ((ILfloat*)Buffer)[i];
+							clampFloat(&tempFloat);
+							BytePtr[i] = (ILubyte)(tempFloat * UCHAR_MAX);
+						#else
+							BytePtr[i] = (ILubyte)( ((ILfloat*)Buffer)[i] * UCHAR_MAX);
+						#endif
 					}
 					break;
 				case IL_DOUBLE:
 					for (i = 0; i < Size; i++) {
-						BytePtr[i] = (ILubyte)( ((ILdouble*)Buffer)[i] * UCHAR_MAX);
+						#ifdef CLAMP_DOUBLES
+							tempDouble = ((ILdouble*)Buffer)[i];
+							clampDouble(&tempDouble);
+							BytePtr[i] = (ILubyte)(tempDouble * UCHAR_MAX);
+						#else
+							BytePtr[i] = (ILubyte)( ((ILdouble*)Buffer)[i] * UCHAR_MAX);
+						#endif
 					}
 					break;
 			}
@@ -1597,12 +1627,24 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 					break;
 				case IL_FLOAT:
 					for (i = 0; i < Size; i++) {
-						ShortPtr[i] = (ILushort)( ((ILfloat*)Buffer)[i] * USHRT_MAX);
+						#ifdef CLAMP_FLOATS
+							tempFloat = ((ILfloat*)Buffer)[i];
+							clampFloat(&tempFloat);
+							ShortPtr[i] = (ILushort)(tempFloat * USHRT_MAX);
+						#else
+							ShortPtr[i] = (ILushort)( ((ILfloat*)Buffer)[i] * USHRT_MAX);
+						#endif
 					}
 					break;
 				case IL_DOUBLE:
 					for (i = 0; i < Size; i++) {
-						ShortPtr[i] = (ILushort)( ((ILdouble*)Buffer)[i] * USHRT_MAX);
+						#ifdef CLAMP_DOUBLES
+							tempDouble = ((ILdouble*)Buffer)[i];
+							clampDouble(&tempDouble);
+							ShortPtr[i] = (ILushort)(tempDouble * USHRT_MAX);
+						#else
+							ShortPtr[i] = (ILushort)( ((ILdouble*)Buffer)[i] * USHRT_MAX);
+						#endif
 					}
 					break;
 			}
@@ -1627,12 +1669,24 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 					break;
 				case IL_FLOAT:
 					for (i = 0; i < Size; i++) {
-						IntPtr[i] = (ILuint)( ((ILfloat*)Buffer)[i] * UINT_MAX);
+						#ifdef CLAMP_FLOATS
+							tempFloat = ((ILfloat*)Buffer)[i];
+							clampFloat(&tempFloat);
+							IntPtr[i] = (ILuint)(tempFloat * UINT_MAX);
+						#else
+							IntPtr[i] = (ILuint)( ((ILfloat*)Buffer)[i] * UINT_MAX);
+						#endif
 					}
 					break;
 				case IL_DOUBLE:
 					for (i = 0; i < Size; i++) {
-						IntPtr[i] = (ILuint)( ((ILdouble*)Buffer)[i] * UINT_MAX);
+						#ifdef CLAMP_DOUBLES
+							tempDouble = ((ILdouble*)Buffer)[i];
+							clampDouble(&tempDouble);
+							IntPtr[i] = (ILuint)(tempDouble * UINT_MAX);
+						#else
+							IntPtr[i] = (ILuint)( ((ILdouble*)Buffer)[i] * UINT_MAX);
+						#endif
 					}
 					break;
 			}
