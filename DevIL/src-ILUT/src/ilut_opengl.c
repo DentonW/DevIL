@@ -50,8 +50,8 @@ ILboolean HasCubemapHardware = IL_FALSE;
 ILboolean ilutGLInit()
 {
 	// Use PROXY_TEXTURE_2D with glTexImage2D() to test more accurately...
-	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &MaxTexW);
-	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &MaxTexH);
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE, (GLint*)&MaxTexW);
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE, (GLint*)&MaxTexH);
 	if (MaxTexW == 0 || MaxTexH == 0)
 		MaxTexW = MaxTexH = 256;  // Trying this because of the VooDoo series of cards...
 
@@ -451,7 +451,7 @@ ILboolean ILAPIENTRY ilutGLScreen()
 		return IL_FALSE;
 	}
 
-	glGetIntegerv(GL_VIEWPORT, ViewPort);
+	glGetIntegerv(GL_VIEWPORT, (GLint*)ViewPort);
 
 	ilTexImage(ViewPort[2], ViewPort[3], 1, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL);
 	ilutCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
@@ -508,8 +508,8 @@ ILboolean ILAPIENTRY ilutGLSetTex(GLuint TexID)
 
 	glBindTexture(GL_TEXTURE_2D, TexID);
 
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH,  &Width);
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &Height);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH,  (GLint*)&Width);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, (GLint*)&Height);
 
 	Data = (ILubyte*)ialloc(Width * Height * 4);
 	if (Data == NULL) {
