@@ -44,18 +44,18 @@ extern "C" {
 // Attribute Bits
 #define ILUT_OPENGL_BIT						0x00000001
 #define ILUT_D3D_BIT						0x00000002
-#define ILUT_ALL_ATTRIB_BITS					0x000FFFFF
+#define ILUT_ALL_ATTRIB_BITS				0x000FFFFF
 
 
 // Error Types
 #define ILUT_INVALID_ENUM					0x0501
 #define ILUT_OUT_OF_MEMORY					0x0502
 #define ILUT_INVALID_VALUE					0x0505
-#define ILUT_ILLEGAL_OPERATION					0x0506
+#define ILUT_ILLEGAL_OPERATION				0x0506
 #define ILUT_INVALID_PARAM					0x0509
-#define ILUT_COULD_NOT_OPEN_FILE				0x050A
+#define ILUT_COULD_NOT_OPEN_FILE			0x050A
 #define ILUT_STACK_OVERFLOW					0x050E
-#define ILUT_STACK_UNDERFLOW					0x050F
+#define ILUT_STACK_UNDERFLOW				0x050F
 #define ILUT_NOT_SUPPORTED					0x0550
 
 
@@ -104,6 +104,12 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 #elif _WIN32
 	//#ifdef __GNUC__ //__CYGWIN32__ (Cygwin seems to not define this with DevIL builds)
 		#include "config.h"
+
+		// Temporary fix for the SDL main() linker bug.
+		#ifdef  ILUT_USE_SDL
+		#undef  ILUT_USE_SDL
+		#endif//ILUT_USE_SDL
+
 	/*#else
 	  	#define ILUT_USE_WIN32
 		#define ILUT_USE_OPENGL

@@ -35,9 +35,9 @@ ILboolean ILAPIENTRY ilLoadPal(const ILstring FileName)
 	}
 
 #ifndef _WIN32_WCE
-	PalFile = fopen(FileName, "rt");
+	f = fopen(FileName, "rt");
 #else
-	PalFile = _wfopen(FileName, L"rt");
+	f = _wfopen(FileName, L"rt");
 #endif//_WIN32_WCE
 	if (f == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);

@@ -820,15 +820,24 @@ ILboolean iSaveBitmapInternal()
 	SaveLittleUInt(0);  // Will come back and change later in this function (filesize)
 	SaveLittleUInt(0);  // Reserved
 
+	if (iCurImage->Format == IL_LUMINANCE) {
+		TempImage = iConvertImage(IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
+		if (TempImage == NULL)
+			return IL_FALSE;
+	}
+	else {
+		TempImage = iCurImage;
+	}
+
 	// If the current image has a palette, take care of it
-	TempPal = &iCurImage->Pal;
-	if (iCurImage->Pal.PalSize && iCurImage->Pal.Palette && iCurImage->Pal.PalType != IL_PAL_NONE) {
-		// If the palette in .bmp format, write it directly
-		if (iCurImage->Pal.PalType == IL_PAL_BGR32) {
-			TempPal = &iCurImage->Pal;
+	TempPal = &TempImage->Pal;
+	if (TempImage->Pal.PalSize && TempImage->Pal.Palette && TempImage->Pal.PalType != IL_PAL_NONE) {
+		// If the palette is in .bmp format, write it directly.
+		if (TempImage->Pal.PalType == IL_PAL_BGR32) {
+			TempPal = &TempImage->Pal;
 		}
 		else {
-			TempPal = iConvertPal(&iCurImage->Pal, IL_PAL_BGR32);
+			TempPal = iConvertPal(&TempImage->Pal, IL_PAL_BGR32);
 			if (TempPal == NULL) {
 				return IL_FALSE;
 			}
@@ -847,7 +856,7 @@ ILboolean iSaveBitmapInternal()
 		SaveLittleInt(iCurImage->Height);
 
 	SaveLittleUShort(1);  // Number of planes
-	SaveLittleUShort((ILushort)((ILushort)iCurImage->Bpp << 3));  // Bpp
+	SaveLittleUShort((ILushort)((ILushort)TempImage->Bpp << 3));  // Bpp
 	SaveLittleInt(0);  // Compression
 	SaveLittleInt(0);  // Size of image (Obsolete)
 	SaveLittleInt(0);  // (Obsolete)
@@ -859,8 +868,8 @@ ILboolean iSaveBitmapInternal()
 		SaveLittleInt(0);
 	SaveLittleInt(0);  // Important colour (none)
 
-	if (iCurImage->Format != IL_BGR && iCurImage->Format != IL_BGRA && iCurImage->Format != IL_COLOUR_INDEX) {
-		if (iCurImage->Format == IL_RGBA)
+	if (TempImage->Format != IL_BGR && TempImage->Format != IL_BGRA && TempImage->Format != IL_COLOUR_INDEX) {
+		if (TempImage->Format == IL_RGBA)
 			TempImage = iConvertImage(IL_BGRA, IL_UNSIGNED_BYTE);
 		else
 			TempImage = iConvertImage(IL_BGR, IL_UNSIGNED_BYTE);
@@ -868,8 +877,8 @@ ILboolean iSaveBitmapInternal()
 		if (TempImage == NULL)
 			return IL_FALSE;
 	}
-	else if (iCurImage->Bpc > 1) {
-		TempImage = iConvertImage(iCurImage->Format, IL_UNSIGNED_BYTE);
+	else if (TempImage->Bpc > 1) {
+		TempImage = iConvertImage(TempImage->Format, IL_UNSIGNED_BYTE);
 		if (TempImage == NULL)
 			return IL_FALSE;
 	}
