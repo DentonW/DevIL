@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 7.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DevIL-MFC", "DevIL-MFC.vcproj", "{A5D0C1E9-A877-48AF-AF0A-E9795C5B9877}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{A5D0C1E9-A877-48AF-AF0A-E9795C5B9877}.Debug.ActiveCfg = Debug|Win32
+		{A5D0C1E9-A877-48AF-AF0A-E9795C5B9877}.Debug.Build.0 = Debug|Win32
+		{A5D0C1E9-A877-48AF-AF0A-E9795C5B9877}.Release.ActiveCfg = Release|Win32
+		{A5D0C1E9-A877-48AF-AF0A-E9795C5B9877}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
