@@ -59,12 +59,12 @@ typedef struct GFXCONTROL
 ILboolean iLoadGifInternal(ILvoid);
 ILboolean ilLoadGifF(ILHANDLE File);
 ILboolean iIsValidGif(ILvoid);
-ILboolean GetPalette(ILubyte Info, ILpal *Pal);
+ILboolean iGetPalette(ILubyte Info, ILpal *Pal);
 ILboolean GetImages(ILpal *GlobalPal);
 ILboolean SkipExtensions(GFXCONTROL *Gfx);
 ILboolean GifGetData(ILubyte *Data, ILuint ImageSize);
 ILboolean RemoveInterlace(ILvoid);
-ILboolean CopyPalette(ILpal *Dest, ILpal *Src);
+ILboolean iCopyPalette(ILpal *Dest, ILpal *Src);
 ILboolean ConvertTransparent(ILimage *Image, ILubyte TransColour);
 
 #endif//GIF_H
