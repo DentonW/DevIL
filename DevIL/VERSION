@@ -1,4 +1,4 @@
-1.2.5
+1.3.0
 -----
 
 - Reworked sources tree.
@@ -13,8 +13,10 @@
 - Added colour-indexed support to .tif saving.
 - Fixed colour-indexed support with .bmp saving.
 - Added MSVC++ 7 solutions and projects.
-
-
+- Fixed an ilConvertImage bug when a colour profile was present in the image.
+- Upgraded to LittleCMS 1.0.8.
+- Fixed a DDS bug, thanks to Kenneth Hurley.
+- Updated some of the DDS loading to load more images.
 
 
 1.2.4
