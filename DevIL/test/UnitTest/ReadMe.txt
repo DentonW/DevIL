@@ -19,5 +19,8 @@ UnitTest.cpp
 This program allows to see how each interface method can be used in openIL
 
 NOTE: This program depends on cppunit, which can be found on Sourceforge.net. 
+      Currently this test several routines in ILTest.
+ 
+      It runs the test on the shell, and report it's results.
 
 
