@@ -15,6 +15,10 @@
 #ifndef IL_NO_XPM
 #include <ctype.h>
 
+//If this is defined, only xpm files with 1 char/pixel
+//can be loaded. They load somewhat faster then, though
+//(not much).
+//#define XPM_DONT_USE_HASHTABLE
 
 ILboolean iLoadXpmInternal(ILvoid);
 
@@ -63,6 +67,102 @@ ILboolean ilLoadXpmL(ILvoid *Lump, ILuint Size)
 	return iLoadXpmInternal();
 }
 
+typedef ILubyte XpmPixel[4];
+#define XPM_MAX_CHAR_PER_PIXEL 2
+
+
+#ifndef XPM_DONT_USE_HASHTABLE
+
+//The following hash table code was inspired by the xpm
+//loading code of xv, one of the best image viewers of X11
+
+//For xpm files with more than one character/pixel, it is
+//impractical to use a simple lookup table for the
+//character-to-color mapping (because the table requires
+//2^(chars/pixel) entries, this is quite big).
+//Because of that, a hash table is used for the mapping.
+//The hash table has 257 entries, and collisions are
+//resolved by chaining.
+
+//257 is the smallest prime > 256
+#define XPM_HASH_LEN 257
+
+typedef struct XPMHASHENTRY
+{
+	ILubyte ColourName[XPM_MAX_CHAR_PER_PIXEL];
+	XpmPixel ColourValue;
+	struct XPMHASHENTRY *Next;
+} XPMHASHENTRY;
+
+
+static ILuint XpmHash(const ILubyte* name, int len)
+{
+	ILint i, sum;
+	for (sum = i = 0; i < len; ++i)
+		sum += name[i];
+	return sum % XPM_HASH_LEN;
+}
+
+
+XPMHASHENTRY** XpmCreateHashTable()
+{
+	XPMHASHENTRY** Table =
+		(XPMHASHENTRY**)ialloc(XPM_HASH_LEN*sizeof(XPMHASHENTRY*));
+	if (Table != NULL)
+		memset(Table, 0, XPM_HASH_LEN*sizeof(XPMHASHENTRY*));
+	return Table;
+}
+
+
+void XpmDestroyHashTable(XPMHASHENTRY **Table)
+{
+	ILint i;
+	XPMHASHENTRY* Entry;
+
+	for (i = 0; i < XPM_HASH_LEN; ++i) {
+		while (Table[i] != NULL) {
+			Entry = Table[i]->Next;
+			ifree(Table[i]);
+			Table[i] = Entry;
+		}
+	}
+
+	ifree(Table);
+}
+
+
+void XpmInsertEntry(XPMHASHENTRY **Table, const ILubyte* Name, int Len, XpmPixel Colour)
+{
+	XPMHASHENTRY* NewEntry;
+	ILuint Index;
+	Index = XpmHash(Name, Len);
+
+	NewEntry = (XPMHASHENTRY*)ialloc(sizeof(XPMHASHENTRY));
+	if (NewEntry != NULL) {
+		NewEntry->Next = Table[Index];
+		memcpy(NewEntry->ColourName, Name, Len);
+		memcpy(NewEntry->ColourValue, Colour, sizeof(Colour));
+		Table[Index] = NewEntry;
+	}
+}
+
+
+void XpmGetEntry(XPMHASHENTRY **Table, const ILubyte* Name, int Len, XpmPixel Colour)
+{
+	XPMHASHENTRY* Entry;
+	ILuint Index;
+
+	Index = XpmHash(Name, Len);
+	Entry = Table[Index];
+	while (Entry != NULL && strncmp(Entry->ColourName, Name, Len) != 0)
+		Entry = Entry->Next;
+
+	if (Entry != NULL)
+		memcpy(Colour, Entry->ColourValue, sizeof(Colour));
+}
+
+#endif //XPM_DONT_USE_HASHTABLE
+
 
 ILint XpmGetsInternal(char *Buffer, ILint MaxLen)
 {
@@ -74,8 +174,19 @@ ILint XpmGetsInternal(char *Buffer, ILint MaxLen)
 	while ((Current = igetc()) != -1 && i < MaxLen - 1) {
 		if (Current == IL_EOF)
 			return 0;
-		if (Current == '\n')
+		if (Current == '\n') //unix line ending
 			break;
+		if (Current == '\r') { //dos/mac line ending
+			Current = igetc();
+			if (Current == '\n') //dos line ending
+				break;
+
+			if (Current == -1)
+				break;
+
+			Buffer[i++] = Current;
+			continue;
+		}
 
 		Buffer[i++] = Current;
 	}
@@ -148,9 +259,7 @@ ILint XpmGetInt(char *Buffer, ILint Size, ILint *Position)
 }
 
 
-typedef ILubyte XpmPixel[4];
-
-ILvoid XpmPredefCol(char *Buff, XpmPixel *Colour)
+ILboolean XpmPredefCol(char *Buff, XpmPixel *Colour)
 {
 	ILint len;
 	ILint val = 128;
@@ -160,7 +269,7 @@ ILvoid XpmPredefCol(char *Buff, XpmPixel *Colour)
 		(*Colour)[1] = 0;
 		(*Colour)[2] = 0;
 		(*Colour)[3] = 0;
-		return;
+		return IL_TRUE;
 	}
 
 	(*Colour)[3] = 255;
@@ -169,54 +278,54 @@ ILvoid XpmPredefCol(char *Buff, XpmPixel *Colour)
 		(*Colour)[0] = 0;
 		(*Colour)[1] = 0;
 		(*Colour)[2] = 0;
-		return;
+		return IL_TRUE;
 	}
 	if (!stricmp(Buff, "white")) {
 		(*Colour)[0] = 255;
 		(*Colour)[1] = 255;
 		(*Colour)[2] = 255;
-		return;
+		return IL_TRUE;
 	}
 	if (!stricmp(Buff, "red")) {
 		(*Colour)[0] = 255;
 		(*Colour)[1] = 0;
 		(*Colour)[2] = 0;
-		return;
+		return IL_TRUE;
 	}
 	if (!stricmp(Buff, "green")) {
 		(*Colour)[0] = 0;
 		(*Colour)[1] = 255;
 		(*Colour)[2] = 0;
-		return;
+		return IL_TRUE;
 	}
 	if (!stricmp(Buff, "blue")) {
 		(*Colour)[0] = 0;
 		(*Colour)[1] = 0;
 		(*Colour)[2] = 255;
-		return;
+		return IL_TRUE;
 	}
 	if (!stricmp(Buff, "yellow")) {
 		(*Colour)[0] = 255;
 		(*Colour)[1] = 255;
 		(*Colour)[2] = 0;
-		return;
+		return IL_TRUE;
 	}
 	if (!stricmp(Buff, "cyan")) {
 		(*Colour)[0] = 0;
 		(*Colour)[1] = 255;
 		(*Colour)[2] = 255;
-		return;
+		return IL_TRUE;
 	}
 	if (!stricmp(Buff, "gray")) {
 		(*Colour)[0] = 128;
 		(*Colour)[1] = 128;
 		(*Colour)[2] = 128;
-		return;
+		return IL_TRUE;
 	}
 
 	//check for grayXXX codes (added 20040218)
 	len = strlen(Buff);
-	if (len >= 5) {
+	if (len >= 4) {
 		if (Buff[0] == 'g' || Buff[0] == 'G'
 			|| Buff[1] == 'r' || Buff[1] == 'R'
 			|| Buff[2] == 'a' || Buff[2] == 'A'
@@ -233,7 +342,7 @@ ILvoid XpmPredefCol(char *Buff, XpmPixel *Colour)
 			(*Colour)[0] = val;
 			(*Colour)[1] = val;
 			(*Colour)[2] = val;
-			return;
+			return IL_TRUE;
 		}
 	}
 
@@ -244,16 +353,21 @@ ILvoid XpmPredefCol(char *Buff, XpmPixel *Colour)
 	(*Colour)[1] = 0;
 	(*Colour)[2] = 0;
 
-	return;
+	return IL_FALSE;
 }
 
 
-
-ILboolean XpmGetColour(char *Buffer, ILint Size, XpmPixel *Colours)
+#ifndef XPM_DONT_USE_HASHTABLE
+ILboolean XpmGetColour(char *Buffer, ILint Size, int Len, XPMHASHENTRY **Table)
+#else
+ILboolean XpmGetColour(char *Buffer, ILint Size, int Len, XpmPixel* Colours)
+#endif
 {
-	ILint	i = 0, j, strLen = 0;
-	ILubyte	Pos, ColBuff[3];
-	char	Buff[1024];
+	ILint		i = 0, j, strLen = 0;
+	ILubyte		ColBuff[3];
+	char		Buff[1024];
+	XpmPixel	Colour;
+	ILubyte		Name[XPM_MAX_CHAR_PER_PIXEL];
 
 	for ( ; i < Size; i++) {
 		if (Buffer[i] == '\"')
@@ -264,8 +378,10 @@ ILboolean XpmGetColour(char *Buffer, ILint Size, XpmPixel *Colours)
 	if (i >= Size)
 		return IL_FALSE;
 
-	// Get the character.
-	Pos = Buffer[i++];
+	// Get the characters.
+	for (j = 0; j < Len; ++j) {
+		Name[j] = Buffer[i++];
+	}
 
 	// Skip to the colour definition.
 	for ( ; i < Size; i++) {
@@ -274,8 +390,17 @@ ILboolean XpmGetColour(char *Buffer, ILint Size, XpmPixel *Colours)
 	}
 	i++;  // Skip the 'c'.
 
-	if (i >= Size)
-		return IL_FALSE;
+	if (i >= Size || Buffer[i] != ' ') { // no 'c' found...assume black
+#ifndef XPM_DONT_USE_HASHTABLE
+		memset(Colour, 0, sizeof(Colour));
+		Colour[3] = 255;
+		XpmInsertEntry(Table, Name, Len, Colour);
+#else
+		memset(Colours[Name[0]], 0, sizeof(Colour));
+		Colours[Name[0]][3] = 255;
+#endif
+		return IL_TRUE;
+	}
 
 	for ( ; i < Size; i++) {
 		if (Buffer[i] != ' ')
@@ -311,9 +436,9 @@ ILboolean XpmGetColour(char *Buffer, ILint Size, XpmPixel *Colours)
 			}
 
 			ColBuff[2] = 0; // add terminating '\0' char
-			Colours[Pos][j] = (ILubyte)strtol(ColBuff, NULL, 16);
+			Colour[j] = (ILubyte)strtol(ColBuff, NULL, 16);
 		}
-		Colours[Pos][3] = 255;  // Full alpha.
+		Colour[3] = 255;  // Full alpha.
 	}
 	else {
 		for (j = 0; i < Size; i++) {
@@ -326,8 +451,15 @@ ILboolean XpmGetColour(char *Buffer, ILint Size, XpmPixel *Colours)
 		if (i >= Size)
 			return IL_FALSE;
 
-		XpmPredefCol(Buff, &Colours[Pos]);
+		if (!XpmPredefCol(Buff, &Colour))
+			return IL_FALSE;
 	}
+
+#ifndef XPM_DONT_USE_HASHTABLE
+	XpmInsertEntry(Table, Name, Len, Colour);
+#else
+	memcpy(Colours[Name[0]], Colour, sizeof(Colour));
+#endif
 
 	return IL_TRUE;
 }
@@ -335,57 +467,106 @@ ILboolean XpmGetColour(char *Buffer, ILint Size, XpmPixel *Colours)
 
 ILboolean iLoadXpmInternal()
 {
-	ILubyte		Buffer[1024];
-	ILint		Size, Pos, Width, Height, NumColours, i, x, y, Offset;
+#define BUFFER_SIZE 2000
+	ILubyte			Buffer[BUFFER_SIZE], *Data;
+	ILint			Size, Pos, Width, Height, NumColours, i, x, y;
+	ILint			CharsPerPixel;
+#ifndef XPM_DONT_USE_HASHTABLE
+	XPMHASHENTRY	**HashTable;
+#else
 	XpmPixel	*Colours;
+	ILint		Offset;
+#endif
 
-	Size = XpmGetsInternal(Buffer, 1024);
+	Size = XpmGetsInternal(Buffer, BUFFER_SIZE);
 	if (strncmp("/* XPM */", Buffer, strlen("/* XPM */"))) {
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
 	}
 
-	Size = XpmGets(Buffer, 1024);
+	Size = XpmGets(Buffer, BUFFER_SIZE);
 	// @TODO:  Actually check the variable name here.
 
-	Size = XpmGets(Buffer, 1024);
+	Size = XpmGets(Buffer, BUFFER_SIZE);
 	Pos = 0;
 	Width = XpmGetInt(Buffer, Size, &Pos);
 	Height = XpmGetInt(Buffer, Size, &Pos);
 	NumColours = XpmGetInt(Buffer, Size, &Pos);
+	CharsPerPixel = XpmGetInt(Buffer, Size, &Pos);
 
+#ifdef XPM_DONT_USE_HASHTABLE
+	if (CharsPerPixel != 1) {
+		ilSetError(IL_FORMAT_NOT_SUPPORTED);
+		return IL_FALSE;
+	}
+#endif
+
+	if (CharsPerPixel > XPM_MAX_CHAR_PER_PIXEL
+		|| Width*CharsPerPixel > BUFFER_SIZE) {
+		ilSetError(IL_FORMAT_NOT_SUPPORTED);
+		return IL_FALSE;
+	}
+
+#ifndef XPM_DONT_USE_HASHTABLE
+	HashTable = XpmCreateHashTable();
+	if (HashTable == NULL)
+		return IL_FALSE;
+#else
 	Colours = ialloc(256 * sizeof(XpmPixel));
 	if (Colours == NULL)
 		return IL_FALSE;
+#endif
 
 	for (i = 0; i < NumColours; i++) {
-		Size = XpmGets(Buffer, 1024);
-		if (!XpmGetColour(Buffer, Size, Colours)) {
+		Size = XpmGets(Buffer, BUFFER_SIZE);
+#ifndef XPM_DONT_USE_HASHTABLE
+		if (!XpmGetColour(Buffer, Size, CharsPerPixel, HashTable)) {
+			XpmDestroyHashTable(HashTable);
+#else
+		if (!XpmGetColour(Buffer, Size, CharsPerPixel, Colours)) {
 			ifree(Colours);
+#endif
 			return IL_FALSE;
 		}
 	}
 	
-	if (!ilTexImage(Width, Height, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL))
+	if (!ilTexImage(Width, Height, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL)) {
+#ifndef XPM_DONT_USE_HASHTABLE
+		XpmDestroyHashTable(HashTable);
+#else
+		ifree(Colours);
+#endif
 		return IL_FALSE;
-	
+	}
+
+	Data = iCurImage->Data;
 	for (y = 0; y < Height; y++) {
-		Size = XpmGets(Buffer, 1024);
+		Size = XpmGets(Buffer, BUFFER_SIZE);
 		for (x = 0; x < Width; x++) {
-			Offset = y * iCurImage->Bps + x * iCurImage->Bpp;
-			iCurImage->Data[Offset++] = Colours[Buffer[x+1]][0];
-			iCurImage->Data[Offset++] = Colours[Buffer[x+1]][1];
-			iCurImage->Data[Offset++] = Colours[Buffer[x+1]][2];
-			iCurImage->Data[Offset++] = Colours[Buffer[x+1]][3];
+#ifndef XPM_DONT_USE_HASHTABLE
+			XpmGetEntry(HashTable, &Buffer[1 + x*CharsPerPixel], CharsPerPixel, &Data[(x << 2)]);
+#else
+			Offset = (x << 2);
+			Data[Offset + 0] = Colours[Buffer[x + 1]][0];
+			Data[Offset + 1] = Colours[Buffer[x + 1]][1];
+			Data[Offset + 2] = Colours[Buffer[x + 1]][2];
+			Data[Offset + 3] = Colours[Buffer[x + 1]][3];
+#endif
 		}
+		Data += iCurImage->Bps;
 	}
 
 	//added 20040218
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 
+#ifndef XPM_DONT_USE_HASHTABLE
+	XpmDestroyHashTable(HashTable);
+#else
 	ifree(Colours);
+#endif
 
 	return IL_TRUE;
+#undef BUFFER_SIZE
 }
 
 #endif//IL_NO_XPM
