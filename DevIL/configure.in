@@ -30,7 +30,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.8 $)
+AC_REVISION($Revision: 1.9 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -217,7 +217,7 @@ AC_CHECK_HEADER(lcms/lcms.h, ,no_lcms="yes")
 AC_CHECK_HEADER(libmng.h, ,no_mng="yes")
 AC_CHECK_HEADER(GL/gl.h, , use_opengl="no")
 AC_CHECK_HEADER(d3d8.h, , use_directx="no")
-AC_CHECK_HEADER(win32.h, , use_win32="no")
+AC_CHECK_HEADER(windows.h, , use_win32="no")
 
 dnl
 dnl Now we can check for bin libraries
