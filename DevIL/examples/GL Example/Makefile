@@ -2,7 +2,7 @@
 
 CC       = gcc
 CFLAGS   = -Wall
-INCLUDES = -I$(HOME)/usr/DevIL/include
+INCLUDES = 
 LIBS     = -lX11 -lm -lGL -lGLU -lglut -lIL -lILU -lILUT -lXext -lXi -lXmu
 
 SRC     = gltest.c
