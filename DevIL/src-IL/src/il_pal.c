@@ -1047,7 +1047,7 @@ ILboolean ILAPIENTRY ilApplyPal(const ILstring FileName)
 			break;
 
 		case IL_LUMINANCE:
-                case IL_LUMINANCE_APLHA:
+		case IL_LUMINANCE_ALPHA:
 			for (i = 0; i < CurImage->SizeOfData; i += CurImage->Bpp ) {
 				for (j = 0; j < NumColours; j++) {
 					// No need to perform a sqrt.

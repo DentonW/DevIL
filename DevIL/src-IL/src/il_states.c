@@ -365,66 +365,69 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 	switch (Mode)
 	{
 		// Integer values
-		case IL_VERSION_NUM:
-			*Param = IL_VERSION;
+		case IL_COMPRESS_MODE:
+			*Param = ilStates[ilCurrentPos].ilCompression;
 			break;
-		case IL_ORIGIN_MODE:
-			*Param = ilStates[ilCurrentPos].ilOriginMode;
+		case IL_CUR_IMAGE:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			*Param = ilGetCurName();
 			break;
 		case IL_FORMAT_MODE:
 			*Param = ilStates[ilCurrentPos].ilFormatMode;
 			break;
-		case IL_TYPE_MODE:
-			*Param = ilStates[ilCurrentPos].ilTypeMode;
-			break;
-		case IL_COMPRESS_MODE:
-			*Param = ilStates[ilCurrentPos].ilCompression;
-			break;
 		case IL_INTERLACE_MODE:
 			*Param = ilStates[ilCurrentPos].ilInterlace;
-			break;
-		case IL_QUANTIZATION_MODE:
-			*Param = ilStates[ilCurrentPos].ilQuantMode;
-			break;
-		case IL_NEU_QUANT_SAMPLE:
-			*Param = ilStates[ilCurrentPos].ilNeuSample;
-			break;
-		case IL_MAX_QUANT_INDEXS:
-			*Param = ilStates[ilCurrentPos].ilQuantMaxIndexs;
 			break;
 		case IL_KEEP_DXTC_DATA:
 			*Param = ilStates[ilCurrentPos].ilKeepDxtcData;
 			break;
+		case IL_ORIGIN_MODE:
+			*Param = ilStates[ilCurrentPos].ilOriginMode;
+			break;
+		case IL_MAX_QUANT_INDEXS:
+			*Param = ilStates[ilCurrentPos].ilQuantMaxIndexs;
+			break;
+		case IL_NEU_QUANT_SAMPLE:
+			*Param = ilStates[ilCurrentPos].ilNeuSample;
+			break;
+		case IL_QUANTIZATION_MODE:
+			*Param = ilStates[ilCurrentPos].ilQuantMode;
+			break;
+		case IL_TYPE_MODE:
+			*Param = ilStates[ilCurrentPos].ilTypeMode;
+			break;
+		case IL_VERSION_NUM:
+			*Param = IL_VERSION;
+			break;
 
-		case IL_IMAGE_WIDTH:
+		// Image specific values
+		case IL_ACTIVE_IMAGE:
+		case IL_ACTIVE_MIPMAP:
+		case IL_ACTIVE_LAYER:
 			if (iCurImage == NULL) {
 				ilSetError(IL_ILLEGAL_OPERATION);
 				break;
 			}
-			*Param = iCurImage->Width;
+			*Param = iGetActiveNum(Mode);
 			break;
-		case IL_IMAGE_HEIGHT:
+
+		case IL_DXTC_DATA_FORMAT:
 			if (iCurImage == NULL) {
 				ilSetError(IL_ILLEGAL_OPERATION);
 				break;
 			}
-			*Param = iCurImage->Height;
-			break;
-		case IL_IMAGE_DEPTH:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
+			if (iCurImage->DxtcData == NULL || iCurImage->DxtcSize == 0) {
+				*Param = IL_DXT_NO_COMP;
 				break;
 			}
-			*Param = iCurImage->Depth;
+			*Param = iCurImage->DxtcFormat;
 			break;
-		case IL_IMAGE_BYTES_PER_PIXEL:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			//changed 20040610 to channel count (Bpp) times Byte per channel
-			*Param = iCurImage->Bpp*iCurImage->Bpc;
-			break;
+
+			////
+
 		case IL_IMAGE_BITS_PER_PIXEL:
 			if (iCurImage == NULL) {
 				ilSetError(IL_ILLEGAL_OPERATION);
@@ -433,68 +436,13 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 			//changed 20040610 to channel count (Bpp) times Byte per channel
 			*Param = (iCurImage->Bpp << 3)*iCurImage->Bpc;
 			break;
-                case IL_IMAGE_CHANNELS:
+		case IL_IMAGE_BYTES_PER_PIXEL:
 			if (iCurImage == NULL) {
 				ilSetError(IL_ILLEGAL_OPERATION);
 				break;
 			}
-			*Param = iCurImage->Bpp / iCurImage->Bpc;
-			break;
-		case IL_IMAGE_SIZE_OF_DATA:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->SizeOfData;
-			break;
-		case IL_IMAGE_FORMAT:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->Format;
-			break;
-		case IL_IMAGE_TYPE:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->Type;
-			break;
-		case IL_NUM_IMAGES:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->NumNext;
-			break;
-		case IL_NUM_MIPMAPS:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->NumMips;
-			break;
-		case IL_NUM_LAYERS:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->NumMips;
-			break;
-		case IL_IMAGE_DURATION:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->Duration;
-			break;
-		case IL_IMAGE_PLANESIZE:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->SizeOfPlane;
+			//changed 20040610 to channel count (Bpp) times Byte per channel
+			*Param = iCurImage->Bpp*iCurImage->Bpc;
 			break;
 		case IL_IMAGE_BPC:
 			if (iCurImage == NULL) {
@@ -510,6 +458,48 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 			}
 			*Param = iCurImage->Bpp / iCurImage->Bpc;
 			break;
+		case IL_IMAGE_CUBEFLAGS:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			*Param = iCurImage->CubeFlags;
+			break;
+		case IL_IMAGE_DEPTH:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			*Param = iCurImage->Depth;
+			break;
+		case IL_IMAGE_DURATION:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			*Param = iCurImage->Duration;
+			break;
+		case IL_IMAGE_FORMAT:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			*Param = iCurImage->Format;
+			break;
+		case IL_IMAGE_HEIGHT:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			*Param = iCurImage->Height;
+			break;
+		case IL_IMAGE_SIZE_OF_DATA:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			*Param = iCurImage->SizeOfData;
+			break;
 		case IL_IMAGE_OFFX:
 		case IL_IMAGE_OFFY:
 			if (iCurImage == NULL) {
@@ -521,13 +511,6 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 			else  // IL_IMAGE_OFFY
 				*Param = iCurImage->OffY;
 			break;
-		case IL_IMAGE_CUBEFLAGS:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->CubeFlags;
-			break;
 		case IL_IMAGE_ORIGIN:
 			if (iCurImage == NULL) {
 				ilSetError(IL_ILLEGAL_OPERATION);
@@ -535,24 +518,50 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 			}
 			*Param = iCurImage->Origin;
 			break;
-
-		case IL_ACTIVE_IMAGE:
-		case IL_ACTIVE_MIPMAP:
-		case IL_ACTIVE_LAYER:
+		case IL_IMAGE_PLANESIZE:
 			if (iCurImage == NULL) {
 				ilSetError(IL_ILLEGAL_OPERATION);
 				break;
 			}
-			*Param = iGetActiveNum(Mode);
+			*Param = iCurImage->SizeOfPlane;
 			break;
-
-		case IL_CUR_IMAGE:
+		case IL_IMAGE_TYPE:
 			if (iCurImage == NULL) {
 				ilSetError(IL_ILLEGAL_OPERATION);
 				break;
 			}
-			*Param = ilGetCurName();
+			*Param = iCurImage->Type;
 			break;
+		case IL_IMAGE_WIDTH:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			*Param = iCurImage->Width;
+			break;
+		case IL_NUM_IMAGES:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			*Param = iCurImage->NumNext;
+			break;
+		case IL_NUM_LAYERS:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			*Param = iCurImage->NumMips;
+			break;
+		case IL_NUM_MIPMAPS:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			*Param = iCurImage->NumMips;
+			break;
+
+			////
 
 		case IL_PALETTE_TYPE:
 			if (iCurImage == NULL) {
@@ -599,52 +608,38 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 					*Param = IL_BGRA;
 			}
 			break;
-		case IL_DXTC_DATA_FORMAT:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			if (iCurImage->DxtcData == NULL || iCurImage->DxtcSize == 0) {
-				*Param = IL_DXT_NO_COMP;
-				break;
-			}
-			*Param = iCurImage->DxtcFormat;
-			break;
-
 
 		// Format-specific values
-		case IL_TGA_CREATE_STAMP:
-			*Param = ilStates[ilCurrentPos].ilTgaCreateStamp;
-			break;
-		case IL_JPG_QUALITY:
-			*Param = ilStates[ilCurrentPos].ilJpgQuality;
-			break;
-		case IL_PNG_INTERLACE:
-			*Param = ilStates[ilCurrentPos].ilPngInterlace;
-			break;
-		case IL_TGA_RLE:
-			*Param = ilStates[ilCurrentPos].ilTgaRle;
-			break;
 		case IL_BMP_RLE:
 			*Param = ilStates[ilCurrentPos].ilBmpRle;
-			break;
-		case IL_SGI_RLE:
-			*Param = ilStates[ilCurrentPos].ilSgiRle;
-			break;
-		case IL_JPG_SAVE_FORMAT:
-			*Param = ilStates[ilCurrentPos].ilJpgFormat;
 			break;
 		case IL_DXTC_FORMAT:
 			*Param = ilStates[ilCurrentPos].ilDxtcFormat;
 			break;
+		case IL_JPG_QUALITY:
+			*Param = ilStates[ilCurrentPos].ilJpgQuality;
+			break;
+		case IL_JPG_SAVE_FORMAT:
+			*Param = ilStates[ilCurrentPos].ilJpgFormat;
+			break;
 		case IL_PCD_PICNUM:
 			*Param = ilStates[ilCurrentPos].ilPcdPicNum;
 			break;
-
 		case IL_PNG_ALPHA_INDEX:
 			*Param = ilStates[ilCurrentPos].ilPngAlphaIndex;
 			break;
-
+		case IL_PNG_INTERLACE:
+			*Param = ilStates[ilCurrentPos].ilPngInterlace;
+			break;
+		case IL_SGI_RLE:
+			*Param = ilStates[ilCurrentPos].ilSgiRle;
+			break;
+		case IL_TGA_CREATE_STAMP:
+			*Param = ilStates[ilCurrentPos].ilTgaCreateStamp;
+			break;
+		case IL_TGA_RLE:
+			*Param = ilStates[ilCurrentPos].ilTgaRle;
+			break;
 
 		// Boolean values
 		case IL_CONV_PAL:
@@ -668,7 +663,6 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 		case IL_USE_KEY_COLOUR:
 			*Param = ilStates[ilCurrentPos].ilUseKeyColour;
 			break;
-
 
 		default:
 			ilSetError(IL_INVALID_ENUM);
@@ -1036,9 +1030,80 @@ ILvoid ILAPIENTRY ilSetInteger(ILenum Mode, ILint Param)
 {
 	switch (Mode)
 	{
-		case IL_TGA_CREATE_STAMP:
+		// Integer values
+		case IL_FORMAT_MODE:
+			ilFormatFunc(Param);
+			return;
+		case IL_KEEP_DXTC_DATA:
 			if (Param == IL_FALSE || Param == IL_TRUE) {
-				ilStates[ilCurrentPos].ilTgaCreateStamp = Param;
+				ilStates[ilCurrentPos].ilKeepDxtcData = Param;
+				return;
+			}
+			break;
+		case IL_MAX_QUANT_INDEXS:
+			if (Param >= 2 && Param <= 256) {
+				ilStates[ilCurrentPos].ilQuantMaxIndexs = Param;
+				return;
+			}
+			break;
+		case IL_NEU_QUANT_SAMPLE:
+			if (Param >= 1 && Param <= 30) {
+				ilStates[ilCurrentPos].ilNeuSample = Param;
+				return;
+			}
+			break;
+		case IL_ORIGIN_MODE:
+			ilOriginFunc(Param);
+			return;
+		case IL_QUANTIZATION_MODE:
+			if (Param == IL_WU_QUANT || Param == IL_NEU_QUANT) {
+				ilStates[ilCurrentPos].ilQuantMode = Param;
+				return;
+			}
+			break;
+		case IL_TYPE_MODE:
+			ilTypeFunc(Param);
+			return;
+
+		// Image specific values
+		case IL_IMAGE_DURATION:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			iCurImage->Duration = Param;
+			return;
+		case IL_IMAGE_OFFX:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			iCurImage->OffX = Param;
+			return;
+		case IL_IMAGE_OFFY:
+			if (iCurImage == NULL) {
+				ilSetError(IL_ILLEGAL_OPERATION);
+				break;
+			}
+			iCurImage->OffY = Param;
+			return;
+
+		// Format specific values
+		case IL_BMP_RLE:
+			if (Param == IL_FALSE || Param == IL_TRUE) {
+				ilStates[ilCurrentPos].ilBmpRle = Param;
+				return;
+			}
+			break;
+		case IL_DXTC_FORMAT:
+			if (Param >= IL_DXT1 || Param <= IL_DXT5) {
+				ilStates[ilCurrentPos].ilDxtcFormat = Param;
+				return;
+			}
+			break;
+		case IL_JPG_SAVE_FORMAT:
+			if (Param == IL_JFIF || Param == IL_EXIF) {
+				ilStates[ilCurrentPos].ilJpgFormat = Param;
 				return;
 			}
 			break;
@@ -1054,21 +1119,15 @@ ILvoid ILAPIENTRY ilSetInteger(ILenum Mode, ILint Param)
 				return;
 			}
 			break;
+		case IL_PCD_PICNUM:
+			if (Param >= 0 || Param <= 2) {
+				ilStates[ilCurrentPos].ilPcdPicNum = Param;
+				return;
+			}
+			break;
 		case IL_PNG_ALPHA_INDEX:
 			if (Param >= -1 || Param <= 255) {
 				ilStates[ilCurrentPos].ilPngAlphaIndex=Param;
-				return;
-			}
-			break;
-		case IL_TGA_RLE:
-			if (Param == IL_FALSE || Param == IL_TRUE) {
-				ilStates[ilCurrentPos].ilTgaRle = Param;
-				return;
-			}
-			break;
-		case IL_BMP_RLE:
-			if (Param == IL_FALSE || Param == IL_TRUE) {
-				ilStates[ilCurrentPos].ilBmpRle = Param;
 				return;
 			}
 			break;
@@ -1078,81 +1137,18 @@ ILvoid ILAPIENTRY ilSetInteger(ILenum Mode, ILint Param)
 				return;
 			}
 			break;
-		case IL_JPG_SAVE_FORMAT:
-			if (Param == IL_JFIF || Param == IL_EXIF) {
-				ilStates[ilCurrentPos].ilJpgFormat = Param;
-				return;
-			}
-			break;
-		case IL_DXTC_FORMAT:
-			if (Param >= IL_DXT1 || Param <= IL_DXT5) {
-				ilStates[ilCurrentPos].ilDxtcFormat = Param;
-				return;
-			}
-			break;
-		case IL_PCD_PICNUM:
-			if (Param >= 0 || Param <= 2) {
-				ilStates[ilCurrentPos].ilPcdPicNum = Param;
-				return;
-			}
-			break;
-		case IL_IMAGE_OFFX:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			iCurImage->OffX = Param;
-			return;
-		case IL_IMAGE_OFFY:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			iCurImage->OffY = Param;
-			return;
-		case IL_IMAGE_DURATION:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			iCurImage->Duration = Param;
-			return;
-		case IL_FORMAT_MODE:
-			ilFormatFunc(Param);
-			return;
-		case IL_TYPE_MODE:
-			ilTypeFunc(Param);
-			return;
-		case IL_ORIGIN_MODE:
-			ilOriginFunc(Param);
-			return;
-		case IL_QUANTIZATION_MODE:
-			if (Param == IL_WU_QUANT || Param == IL_NEU_QUANT) {
-				ilStates[ilCurrentPos].ilQuantMode = Param;
-				return;
-			}
-			break;
-		case IL_NEU_QUANT_SAMPLE:
-			if (Param >= 1 && Param <= 30) {
-				ilStates[ilCurrentPos].ilNeuSample = Param;
-				return;
-			}
-			break;
-
-		case IL_MAX_QUANT_INDEXS:
-			if (Param >= 2 && Param <= 256) {
-				ilStates[ilCurrentPos].ilQuantMaxIndexs = Param;
-				return;
-			}
-			break;
-
-		case IL_KEEP_DXTC_DATA:
+		case IL_TGA_CREATE_STAMP:
 			if (Param == IL_FALSE || Param == IL_TRUE) {
-				ilStates[ilCurrentPos].ilKeepDxtcData = Param;
+				ilStates[ilCurrentPos].ilTgaCreateStamp = Param;
 				return;
 			}
 			break;
-
+		case IL_TGA_RLE:
+			if (Param == IL_FALSE || Param == IL_TRUE) {
+				ilStates[ilCurrentPos].ilTgaRle = Param;
+				return;
+			}
+			break;
 
 		default:
 			ilSetError(IL_INVALID_ENUM);
