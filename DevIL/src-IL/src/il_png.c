@@ -562,6 +562,9 @@ ILboolean iSavePngInternal()
 		case IL_LUMINANCE:
 			PngType = PNG_COLOR_TYPE_GRAY;
 			break;
+		case IL_LUMINANCE_ALPHA: //added 20050328
+			PngType = PNG_COLOR_TYPE_GRAY_ALPHA;
+			break;
 		case IL_RGB:
 		case IL_BGR:
 			PngType = PNG_COLOR_TYPE_RGB;
