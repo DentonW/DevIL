@@ -3,7 +3,7 @@ Microsoft eMbedded Visual Tools Workspace File, Format Version 3.00
 
 ###############################################################################
 
-Project: "DevIL"=.\DevIL\DevIL.vcp - Package Owner=<4>
+Project: "DevIL"=.\IL\IL.vcp - Package Owner=<4>
 
 Package=<5>
 {{{
