@@ -131,6 +131,8 @@ DevIL TODO:
 - Add TWAIN support.
 
 
+- iluRotate3D
+
 
 - Look at other rescaling algorithms:
 
