@@ -47,6 +47,9 @@
 /* Defined to 1 if Altivec technology is available in the processor */
 #undef ALTIVEC
 
+/* Defined to 1 if the gcc has the altivec extension enabled */
+#undef ALTIVEC_GCC
+
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
