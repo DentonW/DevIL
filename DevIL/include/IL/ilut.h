@@ -128,6 +128,7 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 	#define ILUT_USE_WIN32
 #elif _WIN32
 	//#ifdef __GNUC__ //__CYGWIN32__ (Cygwin seems to not define this with DevIL builds)
+        #define ILUT_USE_WIN32
 		#include "config.h"
 
 		/*// Temporary fix for the SDL main() linker bug.
@@ -211,6 +212,7 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 		//#define WIN32_LEAN_AND_MEAN
 		#include <windows.h>
 		ILAPI HBITMAP	ILAPIENTRY ilutConvertToHBitmap(HDC hDC);
+
 		ILAPI HBITMAP	ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice);
 		ILAPI ILvoid	ILAPIENTRY ilutFreePaddedData(ILubyte *Data);
 		ILAPI ILvoid	ILAPIENTRY ilutGetBmpInfo(BITMAPINFO *Info);
