@@ -368,6 +368,7 @@ typedef void			ILvoid;
 #define IL_DXT_NO_COMP						0x070B
 #define IL_KEEP_DXTC_DATA					0x070C
 #define IL_DXTC_DATA_FORMAT					0x070D
+#define IL_3DC								0x070E
 
 
 // Cube map definitions
