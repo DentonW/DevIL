@@ -64,7 +64,7 @@ ILboolean iLoadIconInternal()
 	ICODIR		IconDir;
 	ICODIRENTRY	*DirEntries;
 	ICOIMAGE	*IconImages;
-	ILimage		*Image;
+	ILimage		*Image=NULL;
 	ILint		i;
 	ILuint		Size, PadSize, j, k, l, m, /*NumImages = 0,*/ CurAndByte, PadCount, AndBytes;
 	ILboolean	BaseCreated = IL_FALSE;

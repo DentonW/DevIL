@@ -255,10 +255,10 @@ ILint readpng_init()
 
 ILboolean readpng_get_image(ILdouble display_exponent)
 {
-    ILdouble	screen_gamma = 1.0, image_gamma;
 	ILuint		i;
     png_bytepp	row_pointers = NULL;
 	ILuint		width, height, channels;
+	ILdouble	screen_gamma = 1.0, image_gamma;
 	ILuint		bit_depth;
 
 
@@ -433,14 +433,14 @@ ILvoid flush_data(png_structp png_ptr)
 // Internal function used to save the Png.
 ILboolean iSavePngInternal()
 {
+	png_structp	png_ptr;
+	png_infop	info_ptr;
+	png_text	text[3];
 	ILenum		PngType;
 	ILuint		BitDepth, i, j;
 	ILubyte		**RowPtr;
 	ILimage		*Temp = NULL;
 	ILpal		*TempPal = NULL;
-	png_structp	png_ptr;
-	png_infop	info_ptr;
-	png_text	text[3];
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);

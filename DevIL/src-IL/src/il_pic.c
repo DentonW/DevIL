@@ -240,8 +240,9 @@ static ILuint readScanlines(ILuint *image,
 
 static ILuint readScanline(ILubyte *scan, ILint width, CHANNEL *channel, ILint bytes)
 {
-	ILint		noCol, status;
+	ILint		noCol;
 	ILint		off[4];
+	ILuint		status;
 	
 	while (channel) {
 		noCol = 0;

@@ -821,6 +821,7 @@ ILboolean iSaveBitmapInternal()
 	SaveLittleUInt(0);  // Reserved
 
 	// If the current image has a palette, take care of it
+	TempPal = &iCurImage->Pal;
 	if (iCurImage->Pal.PalSize && iCurImage->Pal.Palette && iCurImage->Pal.PalType != IL_PAL_NONE) {
 		// If the palette in .bmp format, write it directly
 		if (iCurImage->Pal.PalType == IL_PAL_BGR32) {

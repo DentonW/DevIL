@@ -739,7 +739,7 @@ ILboolean ILAPIENTRY ilApplyPal(const ILstring FileName)
 {
 	ILimage		Image, *CurImage = iCurImage;
 	ILubyte		*NewData;
-	ILuint		*PalInfo, NumColours, NumPix, MaxDist, DistEntry, i, j;
+	ILuint		*PalInfo, NumColours, NumPix, MaxDist, DistEntry=0, i, j;
 	ILint		Dist1, Dist2, Dist3;
 	ILboolean	Same;
 	ILenum		Origin;

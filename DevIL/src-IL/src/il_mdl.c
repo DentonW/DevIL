@@ -66,7 +66,7 @@ ILboolean iLoadMdlInternal()
 	ILuint		Id, Version, NumTex, TexOff, TexDataOff, Position, ImageNum;
 	ILubyte		*TempPal;
 	TEX_HEAD	TexHead;
-	ILimage		*BaseImage;
+	ILimage		*BaseImage=NULL;
 	ILboolean	BaseCreated = IL_FALSE;
 
 	if (iCurImage == NULL) {

@@ -32,7 +32,7 @@ ILboolean ilIsValidDds(const ILstring FileName)
 	ILHANDLE	DdsFile;
 	ILboolean	bDds = IL_FALSE;
 
-	if (!iCheckExtension(FileName, TEXT("dds"))) {
+	if (!iCheckExtension(FileName, IL_TEXT("dds"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bDds;
 	}
@@ -464,7 +464,7 @@ ILboolean Decompress()
 ILboolean ReadMipmaps()
 {
 	ILint	i;
-	ILuint	CompFactor;
+	ILuint	CompFactor=0;
 	ILubyte	Bpp;
 	ILimage	*startImage;
 	ILuint	LastLinear;

@@ -24,8 +24,8 @@ ILimage *iluScale3DLinear_(ILimage *Image, ILimage *Scaled, ILuint Width, ILuint
 ILimage *iluScale3DBilinear_(ILimage *Image, ILimage *Scaled, ILuint Width, ILuint Height, ILuint Depth);
 
 static ILuint	Size, NewX1, NewX2, NewY1, NewY2, NewZ1, NewZ2, x, y, z, c;
-static ILdouble	ScaleX, ScaleY, ScaleZ, NewX, x1, x2, t1, t2, t3, t4, f, ft;
-static ILdouble	Table[2][2][4];  // Assumes we don't have larger than 32-bit images.
+static ILdouble	ScaleX, ScaleY, ScaleZ, x1, x2, t1, t2, t4, f, ft;
+//static ILdouble	Table[2][2][4];  // Assumes we don't have larger than 32-bit images.
 static ILuint	ImgBps, SclBps, ImgPlane, SclPlane;
 static ILushort	*ShortPtr, *SShortPtr;
 static ILuint	*IntPtr, *SIntPtr;

@@ -195,8 +195,7 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols);
 ILAPI ILimage* ILAPIENTRY iConvertImage(ILenum DestFormat, ILenum DestType)
 {
 	static ILimage	*NewImage, *CurImage;
-	static ILuint	i, j, c, Size;
-	static ILfloat	Resultf;
+	static ILuint	i;
 
 	CurImage = iCurImage;
 	if (iCurImage == NULL) {

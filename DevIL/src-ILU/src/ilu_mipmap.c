@@ -34,7 +34,6 @@ ILboolean iluBuild2DMipmaps()
 	ILimage		*Temp;
 	ILboolean	Resized = IL_FALSE;
 	ILuint		Width, Height;
-	ILenum		Filter = iluFilter;
 
 	iluCurImage = Original = ilGetCurImage();
 	if (Original == NULL) {
@@ -57,7 +56,7 @@ ILboolean iluBuild2DMipmaps()
 		ilSetCurImage(Temp);
 		iluImageParameter(ILU_FILTER, ILU_BILINEAR);
 		iluScale(Width, Height, 1);
-		iluImageParameter(ILU_FILTER, Filter);
+		iluImageParameter(ILU_FILTER, iluFilter);
 		iluCurImage = ilGetCurImage();
 	}
 
@@ -80,7 +79,6 @@ ILboolean iluBuild3DMipmaps()
 	ILimage		*Temp;
 	ILboolean	Resized = IL_FALSE;
 	ILuint		Width, Height, Depth;
-	ILenum		Filter = iluFilter;
 
 	iluCurImage = Original = ilGetCurImage();
 	if (Original == NULL) {

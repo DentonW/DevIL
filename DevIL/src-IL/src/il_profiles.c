@@ -31,7 +31,7 @@ ILboolean ILAPIENTRY ilApplyProfile(const ILstring InProfile, const ILstring Out
 	cmsHPROFILE		hInProfile, hOutProfile;
 	cmsHTRANSFORM	hTransform;
 	ILbyte			*Temp;
-	ILint			Format;
+	ILint			Format=0;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);

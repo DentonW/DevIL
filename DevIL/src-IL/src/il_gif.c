@@ -92,6 +92,11 @@ ILboolean ilLoadGif(const ILstring FileName)
 	ILubyte			*BaseData = NULL;
 	ILuint			x, y, BaseW, BaseH, CurW, CurH, XOff, YOff;
 
+	if (iCurImage == NULL) {
+		ilSetError(IL_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
 	GifFile = DGifOpenFileName(FileName);
 	if (GifFile == NULL) {
 		LibErr = GifLastError();
@@ -117,6 +122,7 @@ ILboolean ilLoadGif(const ILstring FileName)
 		return IL_FALSE;
 	}
 
+	BaseW = 0;  BaseH = 0;  // Just to get rid of warnings about 'possibly being uninitialized'.
 	iCurImage->NumNext = GifFile->ImageCount - 1;
 	for (k = 0; k < GifFile->ImageCount; k++) {
 		if (k == 0) {

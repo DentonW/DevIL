@@ -68,8 +68,6 @@ ILvoid ILAPIENTRY ilGenImages(ILsizei Num, ILuint *Images)
 //! Makes Image the current active image - similar to glBindTexture().
 ILvoid ILAPIENTRY ilBindImage(ILuint Image)
 {
-	iFree	*TempFree = FreeNames;
-
 	if (ImageStack == NULL || StackSize == 0) {
 		if (!iEnlargeStack()) {
 			return;
@@ -421,6 +419,10 @@ ILuint ILAPIENTRY ilCreateSubImage(ILenum Type, ILuint Num)
 			iCurImage->NumLayers = Num;
 			SubImage = iCurImage->Layers;
 			break;
+
+		default:
+			ilSetError(IL_INVALID_ENUM);
+			return IL_FALSE;
 	}
 
 	if (SubImage == NULL) {

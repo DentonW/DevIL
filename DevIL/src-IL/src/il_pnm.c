@@ -610,6 +610,11 @@ ILboolean iSavePnmInternal()
 			ilprintf("P6\n");
 			TempImage = iConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
 			break;
+		default:
+			ilSetError(IL_INVALID_FILE_HEADER);
+			if (Origin == IL_ORIGIN_LOWER_LEFT)
+				ilFlipImage();
+			return IL_FALSE;
 	}
 
 	if (TempImage == NULL) {

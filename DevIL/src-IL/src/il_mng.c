@@ -69,8 +69,6 @@ mng_bool mymngclosestream(mng_handle mng)
 //---------------------------------------------------------------------------------------------
 mng_bool mymngreadstream(mng_handle mng, mng_ptr buffer, mng_uint32 size, mng_uint32 *bytesread)
 {
-	mng;
-
 	// read the requested amount of data from the file
 	*bytesread = iread(buffer, 1, size);
 
@@ -83,7 +81,6 @@ mng_bool mymngreadstream(mng_handle mng, mng_ptr buffer, mng_uint32 size, mng_ui
 //---------------------------------------------------------------------------------------------
 mng_bool mymngwritedata(mng_handle mng, mng_ptr buffer, mng_uint32 size, mng_uint32 *byteswritten)
 {
-	mng;
 	*byteswritten = iwrite(buffer, 1, size);
 
 	if (*byteswritten < size) {
