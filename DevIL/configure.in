@@ -30,7 +30,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.10 $)
+AC_REVISION($Revision: 1.11 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -203,7 +203,7 @@ case "$host" in
   *)
 		use_win32="no"
 		use_directx="no"
-		VERSIONINFO="-version-info $(DEVIL_LTVERSION)"
+		VERSIONINFO="-version-info $DEVIL_LTVERSION"
               ;;
 esac
 AC_SUBST(VERSIONINFO)
