@@ -241,7 +241,7 @@ ILboolean iLoadMngInternal()
 	mng_setcb_errorproc(mng, mymngerror);
     mng_setcb_openstream(mng, mymngopenstream);
     mng_setcb_closestream(mng, mymngclosestream);
-    mng_setcb_readdata(mng, mymngreadstream);
+    mng_setcb_readdata(mng, (mng_readdata)mymngreadstream);
 	mng_setcb_gettickcount(mng, mymnggetticks);
 	mng_setcb_settimer(mng, mymngsettimer);
 	mng_setcb_processheader(mng, mymngprocessheader);
