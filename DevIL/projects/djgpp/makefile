@@ -69,7 +69,8 @@ ILOBJ=	$(ILODIR)/il_bits.o $(ILODIR)/il_bmp.o $(ILODIR)/il_convert.o $(ILODIR)/i
 		$(ILODIR)/il_mdl.o $(ILODIR)/il_quantizer.o $(ILODIR)/il_convbuff.o \
 		$(ILODIR)/il_lif.o $(ILODIR)/il_alloc.o $(ILODIR)/il_dds.o $(ILODIR)/il_profiles.o \
 		$(ILODIR)/il_dcx.o $(ILODIR)/il_psd.o $(ILODIR)/il_fastconv.o \
-		$(ILODIR)/il_psp.o $(ILODIR)/il_dds-save.o $(ILODIR)/il_neuquant.o
+		$(ILODIR)/il_psp.o $(ILODIR)/il_dds-save.o $(ILODIR)/il_neuquant.o \
+		$(ILODIR)/il_pix.o $(ILODIR)/il_pxr.o $(ILODIR)/il_xpm.o
 
 
 ILUDIR=  ./../../src-ILU/src
