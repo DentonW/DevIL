@@ -328,7 +328,7 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 	}
 
 	//Deinterlace last image
-	if (ImageDesc.ImageInfo & (1 << 6)) {  // Image is interlaced.
+	if (OldImageDesc.ImageInfo & (1 << 6)) {  // Image is interlaced.
 		if (!RemoveInterlace(Image))
 			goto error_clean;
 	}
