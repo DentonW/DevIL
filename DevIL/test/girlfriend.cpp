@@ -14,11 +14,12 @@ int main()
 	cin >> SizeA;
 	cout << "Enter the Measurement (in inches) at the Nipple: ";
 	cin >> SizeB;
-	SizeD = (SizeA + 5);
-	SizeC = (SizeB - SizeD);
+	//SizeD = (SizeA + 5);
+	//SizeC = (SizeB - SizeD);
+	SizeC = SizeB - SizeA;
 
-	if (SizeD % 2)
-		SizeD++;
+	//if (SizeD % 2)
+	//	SizeD++;
 	if (SizeC < 0) {
 		cout << "\n" << "Now, that's less than a mouthful!!" << endl;
 		return 0;
@@ -61,7 +62,7 @@ int main()
 			return 0;
 	}
 
-	cout << "Bra Size: " << SizeD << SizeE.c_str() << endl;
+	cout << "Bra Size: " << SizeA << SizeE.c_str() << endl;
 
 	return 0;
 }
