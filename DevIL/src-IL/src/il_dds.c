@@ -151,7 +151,10 @@ ILboolean iCheckDds(DDSHEAD *Head)
 {
 	if (strnicmp(Head->Signature, "DDS ", 4))
 		return IL_FALSE;
-	if (Head->Size1 != 124)
+	//note that if Size1 is "DDS " this is not a valid dds file according
+	//to the file spec. Some broken tool out there seems to produce files
+	//with this value in the size field, so we support reading them...
+	if (Head->Size1 != 124 && Head->Size1 != IL_MAKEFOURCC('D', 'D', 'S', ' '))
 		return IL_FALSE;
 	if (Head->Size2 != 32)
 		return IL_FALSE;
@@ -293,12 +296,10 @@ ILboolean iLoadDdsInternal()
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
 	}
-	/*else if (CompFormat == PF_3DC) {
-		ilSetError(IL_FORMAT_NOT_SUPPORTED);
-		return IL_FALSE;
-	}*/
+
 	// Microsoft bug, they're not following their own documentation.
-	if (!(Head.Flags1 & (DDS_LINEARSIZE | DDS_PITCH))) {
+	if (!(Head.Flags1 & (DDS_LINEARSIZE | DDS_PITCH))
+		|| Head.LinearSize == 0) {
 		Head.Flags1 |= DDS_LINEARSIZE;
 		Head.LinearSize = BlockSize;
 	}
@@ -386,11 +387,20 @@ ILvoid DecodePixelFormat()
 				break;
 		}
 	} else {
-	// This dds texture isn't compressed so write out ARGB format
-		if (Head.Flags2 & DDS_ALPHAPIXELS) {
-			CompFormat = PF_ARGB;
-		} else {
-			CompFormat = PF_RGB;
+		// This dds texture isn't compressed so write out ARGB or luminance format
+		if (Head.Flags2 & DDS_LUMINANCE) {
+			if (Head.Flags2 & DDS_ALPHAPIXELS) {
+				CompFormat = PF_LUMINANCE_ALPHA;
+			} else {
+				CompFormat = PF_LUMINANCE;
+			}
+		}
+		else {
+			if (Head.Flags2 & DDS_ALPHAPIXELS) {
+				CompFormat = PF_ARGB;
+			} else {
+				CompFormat = PF_RGB;
+			}
 		}
 		BlockSize = (Head.Width * Head.Height * Head.Depth * (Head.RGBBitCount >> 3));
 	}
@@ -417,6 +427,8 @@ ILvoid AdjustVolumeTexture(DDSHEAD *Head)
 	{
 		case PF_ARGB:
 		case PF_RGB:
+		case PF_LUMINANCE:
+		case PF_LUMINANCE_ALPHA:
 			Head->LinearSize = IL_MAX(1,Head->Width) * IL_MAX(1,Head->Height) *
 				(Head->RGBBitCount / 8);
 			break;
@@ -447,12 +459,6 @@ ILboolean ReadData()
 	ILuint	Bps;
 	ILint	y, z;
 	ILubyte	*Temp;
-	ILuint	Bpp;
-
-	if (CompFormat == PF_RGB || CompFormat == PF_3DC)
-		Bpp = 3;
-	else
-		Bpp = 4;
 
 	if (CompData) {
 		ifree(CompData);
@@ -510,6 +516,14 @@ ILboolean AllocImage()
 			if (!ilTexImage(Width, Height, Depth, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL))
 				return IL_FALSE;
 			break;
+		case PF_LUMINANCE:
+			if (!ilTexImage(Width, Height, Depth, 1, IL_LUMINANCE, IL_UNSIGNED_BYTE, NULL))
+				return IL_FALSE;
+			break;
+		case PF_LUMINANCE_ALPHA:
+			if (!ilTexImage(Width, Height, Depth, 2, IL_LUMINANCE_ALPHA, IL_UNSIGNED_BYTE, NULL))
+				return IL_FALSE;
+			break;
 		case PF_3DC:
 			//right now there's no OpenGL api to use the compressed 3dc data, so
 			//throw it away (I don't know how DirectX works, though)?
@@ -542,6 +556,8 @@ ILboolean Decompress()
 	{
 		case PF_ARGB:
 		case PF_RGB:
+		case PF_LUMINANCE:
+		case PF_LUMINANCE_ALPHA:
 			return DecompressARGB();
 
 		case PF_DXT1:
@@ -580,11 +596,37 @@ ILboolean ReadMipmaps()
 
 	if (CompFormat == PF_RGB || CompFormat == PF_3DC)
 		Bpp = 3;
+	else if (CompFormat == PF_LUMINANCE)
+		Bpp = 1;
+	else if (CompFormat == PF_LUMINANCE_ALPHA)
+		Bpp = 2;
 	else
 		Bpp = 4;
 
-	if (Head.Flags1 & DDS_LINEARSIZE) {
-		CompFactor = (Width * Height * Depth * Bpp) / Head.LinearSize;
+	//This doesn't work for images which first mipmap (= the image
+	//itself) has width or height < 4
+	//if (Head.Flags1 & DDS_LINEARSIZE) {
+	//	CompFactor = (Width * Height * Depth * Bpp) / Head.LinearSize;
+	//}
+	switch(CompFormat)
+	{
+		case PF_DXT1:
+			//This is officially 6, we have 8 here because DXT1 may contain alpha
+			CompFactor = 8;
+			break;
+		case PF_DXT2:
+		case PF_DXT3:
+		case PF_DXT4:
+		case PF_DXT5:
+			CompFactor = 4;
+			break;
+		case PF_3DC:
+			//This is officially 4, but that's bullshit :) There's no alpha data in
+			//3dc images
+			CompFactor = 3;
+			break;
+		default:
+			CompFactor = 1;
 	}
 
 	StartImage = Image;
@@ -1092,8 +1134,11 @@ ILboolean DecompressARGB()
 		Temp += (Head.RGBBitCount / 8);
 
 		Image->Data[i]   = ((ReadI & Head.RBitMask) >> RedR) << RedL;
-		Image->Data[i+1] = ((ReadI & Head.GBitMask) >> GreenR) << GreenL;
-		Image->Data[i+2] = ((ReadI & Head.BBitMask) >> BlueR) << BlueL;
+
+		if(Image->Bpp >= 3) {
+			Image->Data[i+1] = ((ReadI & Head.GBitMask) >> GreenR) << GreenL;
+			Image->Data[i+2] = ((ReadI & Head.BBitMask) >> BlueR) << BlueL;
+		}
 
 		if (Image->Bpp == 4) {
 			Image->Data[i+3] = ((ReadI & Head.RGBAlphaBitMask) >> AlphaR) << AlphaL;
@@ -1102,6 +1147,15 @@ ILboolean DecompressARGB()
 			}
 			else if (AlphaL >= 4) {
 				Image->Data[i+3] = Image->Data[i+3] | (Image->Data[i+3] >> 4);
+			}
+		}
+		else if (Image->Bpp == 2) {
+			Image->Data[i+1] = ((ReadI & Head.RGBAlphaBitMask) >> AlphaR) << AlphaL;
+			if (AlphaL >= 7) {
+				Image->Data[i+1] = Image->Data[i+1] ? 0xFF : 0x00;
+			}
+			else if (AlphaL >= 4) {
+				Image->Data[i+1] = Image->Data[i+1] | (Image->Data[i+3] >> 4);
 			}
 		}
 	}
