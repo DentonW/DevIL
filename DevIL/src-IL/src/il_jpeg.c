@@ -493,7 +493,7 @@ ILboolean iSaveJpegInternal()
 
 	jpeg_set_defaults(&JpegInfo);
 
-#ifndef IL_USE_JPEGLIB_UNMODIFIED
+/*#ifndef IL_USE_JPEGLIB_UNMODIFIED
 	Type = iGetInt(IL_JPG_SAVE_FORMAT);
 	if (Type == IL_EXIF) {
 		JpegInfo.write_JFIF_header = FALSE;
@@ -502,11 +502,11 @@ ILboolean iSaveJpegInternal()
 	else if (Type == IL_JFIF) {
 		JpegInfo.write_JFIF_header = TRUE;
 		JpegInfo.write_EXIF_header = FALSE;
-	}
-#else
+	} EXIF not present int libjpeg...
+#else*/
 	Type = Type;
 	JpegInfo.write_JFIF_header = TRUE;
-#endif//IL_USE_JPEGLIB_UNMODIFIED
+//#endif//IL_USE_JPEGLIB_UNMODIFIED
 
 	jpeg_set_quality(&JpegInfo, iGetInt(IL_JPG_QUALITY), IL_TRUE);
 
