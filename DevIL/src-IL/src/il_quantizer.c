@@ -10,21 +10,22 @@
 //
 // Wu's Color Quantizer Algorithm:
 // Author: Xiaolin Wu
-//         Dept. of Computer Science
-//         Univ. of Western Ontario
-//         London, Ontario N6A 5B7
-//         wu@csd.uwo.ca
+//			Dept. of Computer Science
+//			Univ. of Western Ontario
+//			London, Ontario N6A 5B7
+//			wu@csd.uwo.ca
+//			http://www.csd.uwo.ca/faculty/wu/
 //-----------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
 // by Denton Woods
-// Last modified:  05/18/2001 <--Y2K Compliant! =]
+// Last modified: 02/02/2002 <--Y2K Compliant! =]
 //
-// Filename: openil/quant/quantizer.c
+// Filename: openil/il_quantizer.c
 //
-// Description:  Heavily modified by DooMWiz.
+// Description:  Heavily modified by Denton Woods.
 //
 //-----------------------------------------------------------------------------
 
