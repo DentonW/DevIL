@@ -19,7 +19,7 @@
 #include "il_internal.h"
 #ifndef IL_NO_JPG
 	#ifndef IL_USE_IJL
-                #ifdef RGB_RED
+		#ifdef RGB_RED
 			#undef RGB_RED
 			#undef RGB_GREEN
 			#undef RGB_BLUE
@@ -27,13 +27,13 @@
 		#define RGB_RED		0
 		#define RGB_GREEN	1
 		#define RGB_BLUE	2
-                
-                #ifdef MACOSX
-                #include <libjpeg/jpeglib.h>
-                #else
-                #include "jpeglib.h"
-                #endif
-                
+
+		#ifdef MACOSX
+			#include <libjpeg/jpeglib.h>
+		#else
+			#include "jpeglib.h"
+		#endif
+
 		#if JPEG_LIB_VERSION < 62
 			#warning DevIL was designed with libjpeg 6b or higher in mind.  Consider upgrading at www.ijg.org
 		#endif
@@ -689,12 +689,12 @@ ILboolean ilSaveJpegL(ILvoid *Lump, ILuint Size)
 // Internal function used to save the Jpeg.
 ILboolean iSaveJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size)
 {
-    JPEG_CORE_PROPERTIES	Image;
+	JPEG_CORE_PROPERTIES	Image;
 	ILuint	Quality;
 	ILimage	*TempImage;
 	ILubyte	*TempData;
 
-        imemclear(&Image, sizeof(JPEG_CORE_PROPERTIES));
+	imemclear(&Image, sizeof(JPEG_CORE_PROPERTIES));
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -826,6 +826,9 @@ ILboolean ILAPIENTRY ilLoadFromJpegStruct(ILvoid *_JpegInfo)
 	ILuint	Returned;
 	j_decompress_ptr JpegInfo = (j_decompress_ptr)_JpegInfo;
 
+	//added on 2003-08-31 as explained in sf bug 596793
+	jpgErrorOccured = IL_FALSE;
+
 	// sam. errorHandler = JpegInfo->err->error_exit;
 	// sam. JpegInfo->err->error_exit = ExitErrorHandle;
 	jpeg_start_decompress((j_decompress_ptr)JpegInfo);
@@ -896,6 +899,9 @@ ILboolean ILAPIENTRY ilSaveFromJpegStruct(ILvoid *_JpegInfo)
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
+
+	//added on 2003-08-31 as explained in sf bug 596793
+	jpgErrorOccured = IL_FALSE;
 
 	errorHandler = JpegInfo->err->error_exit;
 	JpegInfo->err->error_exit = ExitErrorHandle;
