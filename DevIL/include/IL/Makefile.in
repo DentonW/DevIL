@@ -98,7 +98,7 @@ sdl_config = @sdl_config@
 
 ILincludedir = $(includedir)/IL
 
-ILinclude_HEADERS = il.h ilu.h ilut.h il_wrap.h config.h
+ILinclude_HEADERS = il.h ilu.h ilut.h il_wrap.h config.h devil_internal_exports.h
 mkinstalldirs = $(SHELL) $(top_srcdir)/libtools/mkinstalldirs
 CONFIG_HEADER = config.h
 CONFIG_CLEAN_FILES = 
