@@ -1,0 +1,57 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTest.vcproj", "{0034DB28-C836-4002-B277-5B7BCD9893CB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{60313301-5E8F-4404-987F-CA8BAE815B1F} = {60313301-5E8F-4404-987F-CA8BAE815B1F}
+		{0F088168-B0B4-4350-9E6A-7FB271C76D39} = {0F088168-B0B4-4350-9E6A-7FB271C76D39}
+		{55B66AD7-F031-4B89-86DD-55E19636CB54} = {55B66AD7-F031-4B89-86DD-55E19636CB54}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IL", "..\..\src-IL\msvc\IL.vcproj", "{0F088168-B0B4-4350-9E6A-7FB271C76D39}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ILU", "..\..\src-ILU\msvc\ILU.vcproj", "{55B66AD7-F031-4B89-86DD-55E19636CB54}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ILUT", "..\..\src-ILUT\msvc\ILUT.vcproj", "{60313301-5E8F-4404-987F-CA8BAE815B1F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Dynamic = Dynamic
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{0034DB28-C836-4002-B277-5B7BCD9893CB}.Debug.ActiveCfg = Debug|Win32
+		{0034DB28-C836-4002-B277-5B7BCD9893CB}.Debug.Build.0 = Debug|Win32
+		{0034DB28-C836-4002-B277-5B7BCD9893CB}.Dynamic.ActiveCfg = Debug|Win32
+		{0034DB28-C836-4002-B277-5B7BCD9893CB}.Dynamic.Build.0 = Debug|Win32
+		{0034DB28-C836-4002-B277-5B7BCD9893CB}.Release.ActiveCfg = Release|Win32
+		{0034DB28-C836-4002-B277-5B7BCD9893CB}.Release.Build.0 = Release|Win32
+		{0F088168-B0B4-4350-9E6A-7FB271C76D39}.Debug.ActiveCfg = Debug|Win32
+		{0F088168-B0B4-4350-9E6A-7FB271C76D39}.Debug.Build.0 = Debug|Win32
+		{0F088168-B0B4-4350-9E6A-7FB271C76D39}.Dynamic.ActiveCfg = Dynamic|Win32
+		{0F088168-B0B4-4350-9E6A-7FB271C76D39}.Dynamic.Build.0 = Dynamic|Win32
+		{0F088168-B0B4-4350-9E6A-7FB271C76D39}.Release.ActiveCfg = Release|Win32
+		{0F088168-B0B4-4350-9E6A-7FB271C76D39}.Release.Build.0 = Release|Win32
+		{55B66AD7-F031-4B89-86DD-55E19636CB54}.Debug.ActiveCfg = Debug|Win32
+		{55B66AD7-F031-4B89-86DD-55E19636CB54}.Debug.Build.0 = Debug|Win32
+		{55B66AD7-F031-4B89-86DD-55E19636CB54}.Dynamic.ActiveCfg = Dynamic|Win32
+		{55B66AD7-F031-4B89-86DD-55E19636CB54}.Dynamic.Build.0 = Dynamic|Win32
+		{55B66AD7-F031-4B89-86DD-55E19636CB54}.Release.ActiveCfg = Release|Win32
+		{55B66AD7-F031-4B89-86DD-55E19636CB54}.Release.Build.0 = Release|Win32
+		{60313301-5E8F-4404-987F-CA8BAE815B1F}.Debug.ActiveCfg = Debug|Win32
+		{60313301-5E8F-4404-987F-CA8BAE815B1F}.Debug.Build.0 = Debug|Win32
+		{60313301-5E8F-4404-987F-CA8BAE815B1F}.Dynamic.ActiveCfg = Dynamic|Win32
+		{60313301-5E8F-4404-987F-CA8BAE815B1F}.Dynamic.Build.0 = Dynamic|Win32
+		{60313301-5E8F-4404-987F-CA8BAE815B1F}.Release.ActiveCfg = Release|Win32
+		{60313301-5E8F-4404-987F-CA8BAE815B1F}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
