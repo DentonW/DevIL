@@ -79,7 +79,8 @@ extern "C" {
 
 
 // Values
-#define ILUT_VERSION_NUM					0x0DE2
+#define ILUT_VERSION_NUM					IL_VERSION_NUM
+#define ILUT_VENDOR							IL_VENDOR
 
 
 // ImageLib Utility Toolkit Functions
@@ -89,7 +90,7 @@ ILAPI ILboolean		ILAPIENTRY ilutGetBoolean(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilutGetBooleanv(ILenum Mode, ILboolean *Param);
 ILAPI ILint			ILAPIENTRY ilutGetInteger(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilutGetIntegerv(ILenum Mode, ILint *Param);
-ILAPI const char*	ILAPIENTRY ilutGetString(ILenum StringName);
+ILAPI const ILstring		ILAPIENTRY ilutGetString(ILenum StringName);
 ILAPI ILvoid		ILAPIENTRY ilutInit(ILvoid);
 ILAPI ILboolean		ILAPIENTRY ilutIsDisabled(ILenum Mode);
 ILAPI ILboolean		ILAPIENTRY ilutIsEnabled(ILenum Mode);
