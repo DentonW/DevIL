@@ -110,6 +110,5 @@ ILvoid ILAPIENTRY iluImageParameter(ILenum PName, ILenum Param)
 			ilSetError(ILU_INVALID_ENUM);
 			return;
 	}
-
 	return;
 }
