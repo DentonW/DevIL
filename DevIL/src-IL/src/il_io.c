@@ -1316,7 +1316,7 @@ ILuint ILAPIENTRY ilSaveF(ILenum Type, ILHANDLE File)
 
 		#ifndef IL_NO_PNG
 		case IL_PNG:
-			Ret = ilSavePngF(file);
+			Ret = ilSavePngF(File);
 			break;	
 		#endif
 
