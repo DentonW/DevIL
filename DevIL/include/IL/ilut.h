@@ -102,12 +102,13 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 #elif _WIN32_WCE
 	#define ILUT_USE_WIN32
 #elif _WIN32
-	#define ILUT_USE_WIN32
-	#define ILUT_USE_OPENGL
-	//#define ILUT_USE_SDL
-	#define ILUT_USE_DIRECTX8
 	#ifdef __CYGWIN32__
-		#undef ILUT_USE_DIRECTX8
+		#include "config.h"
+	#else
+	  	#define ILUT_USE_WIN32
+		#define ILUT_USE_OPENGL
+		//#define ILUT_USE_SDL
+		#define ILUT_USE_DIRECTX8
 	#endif
 #elif BEOS  // Don't know the #define
 	#define ILUT_USE_BEOS
@@ -115,6 +116,10 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 #elif MACOSX
 	#define ILUT_USE_OPENGL
 #else
+	/*
+	* We are surely using a *nix so the configure script
+	* may have written the configured config.h header
+	*/
 	#include "config.h"
 #endif
 
