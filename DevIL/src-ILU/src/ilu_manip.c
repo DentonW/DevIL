@@ -468,9 +468,10 @@ ILboolean ILAPIENTRY iluInvertAlpha()
 //! Inverts the colours in the image
 ILboolean ILAPIENTRY iluNegative()
 {
-	ILuint		i, j, *IntPtr, NumPix;
+	ILuint		i, j, c, *IntPtr, NumPix, Bpp;
 	ILubyte		*Data;
 	ILushort	*ShortPtr;
+	ILubyte		*RegionMask;
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
@@ -491,32 +492,72 @@ ILboolean ILAPIENTRY iluNegative()
 		i = iluCurImage->SizeOfData;
 	}
 
+	RegionMask = iScanFill();
 	
 	// @TODO:  Optimize this some.
 
 	NumPix = i / iluCurImage->Bpc;
-	switch (iluCurImage->Bpc)
-	{
-		case 1:
-			for (j = 0; j < NumPix; j++, Data++) {
-				*(Data) = ~*(Data);
-			}
-			break;
+	Bpp = iluCurImage->Bpp;
 
-		case 2:
-			ShortPtr = (ILushort*)Data;
-			for (j = 0; j < NumPix; j++, ShortPtr++) {
-				*(ShortPtr) = ~*(ShortPtr);
-			}
-			break;
+	if (RegionMask) {
+		switch (iluCurImage->Bpc)
+		{
+			case 1:
+				for (j = 0, i = 0; j < NumPix; j += Bpp, i++, Data += Bpp) {
+					for (c = 0; c < Bpp; c++) {
+						if (RegionMask[i])
+							*(Data+c) = ~*(Data+c);
+					}
+				}
+				break;
 
-		case 4:
-			IntPtr = (ILuint*)Data;
-			for (j = 0; j < NumPix; j++, IntPtr++) {
-				*(IntPtr) = ~*(IntPtr);
-			}
-			break;
+			case 2:
+				ShortPtr = (ILushort*)Data;
+				for (j = 0, i = 0; j < NumPix; j += Bpp, i++, ShortPtr += Bpp) {
+					for (c = 0; c < Bpp; c++) {
+						if (RegionMask[i])
+							*(ShortPtr+c) = ~*(ShortPtr+c);
+					}
+				}
+				break;
+
+			case 4:
+				IntPtr = (ILuint*)Data;
+				for (j = 0, i = 0; j < NumPix; j += Bpp, i++, IntPtr += Bpp) {
+					for (c = 0; c < Bpp; c++) {
+						if (RegionMask[i])
+							*(IntPtr+c) = ~*(IntPtr+c);
+					}
+				}
+				break;
+		}
 	}
+	else {
+		switch (iluCurImage->Bpc)
+		{
+			case 1:
+				for (j = 0; j < NumPix; j++, Data++) {
+					*(Data) = ~*(Data);
+				}
+				break;
+
+			case 2:
+				ShortPtr = (ILushort*)Data;
+				for (j = 0; j < NumPix; j++, ShortPtr++) {
+					*(ShortPtr) = ~*(ShortPtr);
+				}
+				break;
+
+			case 4:
+				IntPtr = (ILuint*)Data;
+				for (j = 0; j < NumPix; j++, IntPtr++) {
+					*(IntPtr) = ~*(IntPtr);
+				}
+				break;
+		}
+	}
+
+	ifree(RegionMask);
 
 	return IL_TRUE;
 }
@@ -848,7 +889,7 @@ ILboolean ILAPIENTRY iluEqualize()
     ILuint	i = 0; // index variable
 	ILuint	j = 0; // index variable
 	ILuint	Sum=0;
-	ILuint	NumPixels;
+	ILuint	NumPixels, Bpp;
 	ILint	Intensity;
 	ILfloat	Scale;
 	ILint	IntensityNew;
@@ -865,13 +906,20 @@ ILboolean ILAPIENTRY iluEqualize()
 		return 0;
 	}
 
-	NumPixels = iluCurImage->Width * iluCurImage->Height * iluCurImage->Depth;
-
 	// @TODO:  Change to work with other types!
-	/*if (iluCurImage->Bpc > 1) {
-		ilSetError(IL_ILLEGAL_OPERATION);
+	if (iluCurImage->Bpc > 1) {
+		ilSetError(ILU_INTERNAL_ERROR);
 		return IL_FALSE;
-	}*/
+	}
+
+	if (iluCurImage->Format == IL_COLOUR_INDEX) {
+		NumPixels = iluCurImage->Pal.PalSize / ilGetBppPal(iluCurImage->Pal.PalType);
+		Bpp = ilGetBppPal(iluCurImage->Pal.PalType);
+	}
+	else {
+		NumPixels = iluCurImage->Width * iluCurImage->Height * iluCurImage->Depth;
+		Bpp = iluCurImage->Bpp;
+	}
 
 	// Clear the tables.
 	memset(Histogram, 0, 256 * sizeof(ILuint));
@@ -893,8 +941,6 @@ ILboolean ILAPIENTRY iluEqualize()
 		Sum = 0;
 	}
 
-	if (iluCurImage->Format == IL_COLOUR_INDEX)
-		NumPixels = iluCurImage->Pal.PalSize / ilGetBppPal(iluCurImage->Pal.PalType);
 
 	BytePtr = (iluCurImage->Format == IL_COLOUR_INDEX) ? iluCurImage->Pal.Palette : iluCurImage->Data;
 	ShortPtr = (ILushort*)iluCurImage->Data;
@@ -913,26 +959,32 @@ ILboolean ILAPIENTRY iluEqualize()
 		switch (iluCurImage->Bpc)
 		{
 			case 1:
-				// Calculate new pixel
+				// Calculate new pixel(s)
 				NewColour[0] = (ILuint)(BytePtr[i * iluCurImage->Bpp] * Scale);
-				NewColour[1] = (ILuint)(BytePtr[i * iluCurImage->Bpp + 1] * Scale);
-				NewColour[2] = (ILuint)(BytePtr[i * iluCurImage->Bpp + 2] * Scale);
+				if (Bpp >= 3) {
+					NewColour[1] = (ILuint)(BytePtr[i * iluCurImage->Bpp + 1] * Scale);
+					NewColour[2] = (ILuint)(BytePtr[i * iluCurImage->Bpp + 2] * Scale);
+				}
 
 				// Clamp values
 				if (NewColour[0] > UCHAR_MAX)
 					NewColour[0] = UCHAR_MAX;
-				if (NewColour[1] > UCHAR_MAX)
-					NewColour[1] = UCHAR_MAX;
-				if (NewColour[2] > UCHAR_MAX)
-					NewColour[2] = UCHAR_MAX;
+				if (Bpp >= 3) {
+					if (NewColour[1] > UCHAR_MAX)
+						NewColour[1] = UCHAR_MAX;
+					if (NewColour[2] > UCHAR_MAX)
+						NewColour[2] = UCHAR_MAX;
+				}
 
-				// Store pixel
-				BytePtr[i * iluCurImage->Bpp]		= (ILubyte)NewColour[0];
-				BytePtr[i * iluCurImage->Bpp + 1]	= (ILubyte)NewColour[1];
-				BytePtr[i * iluCurImage->Bpp + 2]	= (ILubyte)NewColour[2];
+				// Store pixel(s)
+				BytePtr[i * iluCurImage->Bpp] = (ILubyte)NewColour[0];
+				if (Bpp >= 3) {
+					BytePtr[i * iluCurImage->Bpp + 1]	= (ILubyte)NewColour[1];
+					BytePtr[i * iluCurImage->Bpp + 2]	= (ILubyte)NewColour[2];
+				}
 				break;
 
-			case 2:
+			/*case 2:
 				// Calculate new pixel
 				NewColour[0] = (ILuint)(ShortPtr[i * iluCurImage->Bpp] * Scale);
 				NewColour[1] = (ILuint)(ShortPtr[i * iluCurImage->Bpp + 1] * Scale);
@@ -970,7 +1022,7 @@ ILboolean ILAPIENTRY iluEqualize()
 				IntPtr[i * 4 * iluCurImage->Bpp]		= NewColour[0];
 				IntPtr[i * 4 * iluCurImage->Bpp + 1]	= NewColour[1];
 				IntPtr[i * 4 * iluCurImage->Bpp + 2]	= NewColour[2];
-				break;
+				break;*/
 		}
 	}
 

@@ -276,6 +276,68 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 					}
 					break;
 
+				case IL_LUMINANCE_ALPHA:
+					NewData = (ILubyte*)ialloc(NumPix * BpcDest / 3 * 2);
+					CHECK_ALLOC();
+					Size = NumPix / 3;
+					switch (DestType)
+					{
+						case IL_UNSIGNED_BYTE:
+						case IL_BYTE:
+							for (i = 0; i < Size; i++) {
+								Resultf = 0;
+								for (c = 0; c < 3; c++) {
+									Resultf += ((ILubyte*)(Data))[i * 3 + c] * LumFactor[c];
+								}
+								NewData[i*2] = (ILubyte)Resultf;
+								NewData[i*2+1] = UCHAR_MAX;
+							}
+							break;
+						case IL_UNSIGNED_SHORT:
+						case IL_SHORT:
+							for (i = 0; i < Size; i++) {
+								Resultf = 0;
+								for (c = 0; c < 3; c++) {
+									Resultf += ((ILushort*)(Data))[i * 3 + c] * LumFactor[c];
+								}
+								((ILushort*)(NewData))[i*2] = (ILushort)Resultf;
+								((ILushort*)(NewData))[i*2+1] = USHRT_MAX;
+							}
+							break;
+						case IL_UNSIGNED_INT:
+						case IL_INT:
+							for (i = 0; i < Size; i++) {
+								Resultf = 0;
+								for (c = 0; c < 3; c++) {
+									Resultf += ((ILuint*)(Data))[i * 3 + c] * LumFactor[c];
+								}
+								((ILuint*)(NewData))[i*2] = (ILuint)Resultf;
+								((ILuint*)(NewData))[i*2+1] = UINT_MAX;
+							}
+							break;
+						case IL_FLOAT:
+							for (i = 0; i < Size; i++) {
+								Resultf = 0;
+								for (c = 0; c < 3; c++) {
+									Resultf += ((ILfloat*)(Data))[i * 3 + c] * LumFactor[c];
+								}
+								((ILfloat*)(NewData))[i*2] = Resultf;
+								((ILfloat*)(NewData))[i*2+1] = 1.0f;
+							}
+							break;
+						case IL_DOUBLE:
+							for (i = 0; i < Size; i++) {
+								Resultd = 0;
+								for (c = 0; c < 3; c++) {
+									Resultd += ((ILdouble*)(Data))[i * 3 + c] * LumFactor[c];
+								}
+								((ILdouble*)(NewData))[i*2] = Resultd;
+								((ILdouble*)(NewData))[i*2+1] = 1.0;
+							}
+							break;
+					}
+					break;
+
 				default:
 					ilSetError(IL_INVALID_CONVERSION);
 					if (Data != Buffer)
@@ -482,6 +544,68 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 									Resultd += ((ILdouble*)(Data))[i * 4 + c] * LumFactor[c];
 								}
 								((ILdouble*)(NewData))[i] = Resultd;
+							}
+							break;
+					}
+					break;
+
+				case IL_LUMINANCE_ALPHA:
+					NewData = (ILubyte*)ialloc(NumPix * BpcDest / 4 * 2);
+					CHECK_ALLOC();
+					Size = NumPix / 4 * 2;
+					switch (DestType)
+					{
+						case IL_UNSIGNED_BYTE:
+						case IL_BYTE:
+							for (i = 0; i < Size; i += 2) {
+								Resultf = 0.0f;
+								for (c = 0; c < 3; c++) {
+									Resultf += ((ILubyte*)(Data))[i * 2 + c] * LumFactor[c];
+								}
+								NewData[i] = (ILubyte)Resultf;
+								NewData[i+1] = ((ILubyte*)(Data))[i * 2 + 3];
+							}
+							break;
+						case IL_UNSIGNED_SHORT:
+						case IL_SHORT:
+							for (i = 0; i < Size; i += 2) {
+								Resultf = 0.0f;
+								for (c = 0; c < 3; c++) {
+									Resultf += ((ILushort*)(Data))[i * 2 + c] * LumFactor[c];
+								}
+								((ILushort*)(NewData))[i] = (ILushort)Resultf;
+								((ILushort*)(NewData))[i+1] = ((ILushort*)(Data))[i * 2 + 3];
+							}
+							break;
+						case IL_UNSIGNED_INT:
+						case IL_INT:
+							for (i = 0; i < Size; i += 2) {
+								Resultd = 0.0;
+								for (c = 0; c < 3; c++) {
+									Resultd += ((ILuint*)(Data))[i * 2 + c] * LumFactor[c];
+								}
+								((ILuint*)(NewData))[i] = (ILuint)Resultd;
+								((ILuint*)(NewData))[i+1] = ((ILuint*)(Data))[i * 2 + 3];
+							}
+							break;
+						case IL_FLOAT:
+							for (i = 0; i < Size; i += 2) {
+								Resultd = 0.0;
+								for (c = 0; c < 3; c++) {
+									Resultd += ((ILfloat*)(Data))[i * 2 + c] * LumFactor[c];
+								}
+								((ILfloat*)(NewData))[i] = (ILfloat)Resultd;
+								((ILfloat*)(NewData))[i+1] = ((ILfloat*)(Data))[i * 2 + 3];
+							}
+							break;
+						case IL_DOUBLE:
+							for (i = 0; i < Size; i += 2) {
+								Resultd = 0.0;
+								for (c = 0; c < 3; c++) {
+									Resultd += ((ILdouble*)(Data))[i * 2 + c] * LumFactor[c];
+								}
+								((ILdouble*)(NewData))[i] = Resultd;
+								((ILdouble*)(NewData))[i+1] = ((ILdouble*)(Data))[i * 2 + 3];
 							}
 							break;
 					}
@@ -703,6 +827,68 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 					}
 					break;
 
+				case IL_LUMINANCE_ALPHA:
+					NewData = (ILubyte*)ialloc(NumPix * BpcDest / 3 * 2);
+					CHECK_ALLOC();
+					Size = NumPix / 3;
+					switch (DestType)
+					{
+						case IL_UNSIGNED_BYTE:
+						case IL_BYTE:
+							for (i = 0; i < Size; i++) {
+								Resultf = 0;
+								for (c = 0; c < 3; c++) {
+									Resultf += ((ILubyte*)(Data))[i * 3 + c] * LumFactor[c];
+								}
+								NewData[i*2] = (ILubyte)Resultf;
+								NewData[i*2+1] = UCHAR_MAX;
+							}
+							break;
+						case IL_UNSIGNED_SHORT:
+						case IL_SHORT:
+							for (i = 0; i < Size; i++) {
+								Resultf = 0;
+								for (c = 0; c < 3; c++) {
+									Resultf += ((ILushort*)(Data))[i * 3 + c] * LumFactor[c];
+								}
+								((ILushort*)(NewData))[i*2] = (ILushort)Resultf;
+								((ILushort*)(NewData))[i*2+1] = USHRT_MAX;
+							}
+							break;
+						case IL_UNSIGNED_INT:
+						case IL_INT:
+							for (i = 0; i < Size; i++) {
+								Resultf = 0;
+								for (c = 0; c < 3; c++) {
+									Resultf += ((ILuint*)(Data))[i * 3 + c] * LumFactor[c];
+								}
+								((ILuint*)(NewData))[i*2] = (ILuint)Resultf;
+								((ILuint*)(NewData))[i*2+1] = UINT_MAX;
+							}
+							break;
+						case IL_FLOAT:
+							for (i = 0; i < Size; i++) {
+								Resultf = 0;
+								for (c = 0; c < 3; c++) {
+									Resultf += ((ILfloat*)(Data))[i * 3 + c] * LumFactor[c];
+								}
+								((ILfloat*)(NewData))[i*2] = Resultf;
+								((ILfloat*)(NewData))[i*2+1] = 1.0f;
+							}
+							break;
+						case IL_DOUBLE:
+							for (i = 0; i < Size; i++) {
+								Resultd = 0;
+								for (c = 0; c < 3; c++) {
+									Resultd += ((ILdouble*)(Data))[i * 3 + c] * LumFactor[c];
+								}
+								((ILdouble*)(NewData))[i*2] = Resultd;
+								((ILdouble*)(NewData))[i*2+1] = 1.0;
+							}
+							break;
+					}
+					break;
+
 				default:
 					ilSetError(IL_INVALID_CONVERSION);
 					if (Data != Buffer)
@@ -914,6 +1100,68 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 					}
 					break;
 
+				case IL_LUMINANCE_ALPHA:
+					NewData = (ILubyte*)ialloc(NumPix * BpcDest / 4 * 2);
+					CHECK_ALLOC();
+					Size = NumPix / 4 * 2;
+					switch (DestType)
+					{
+						case IL_UNSIGNED_BYTE:
+						case IL_BYTE:
+							for (i = 0; i < Size; i += 2) {
+								Resultf = 0.0f;
+								for (c = 0; c < 3; c++) {
+									Resultf += ((ILubyte*)(Data))[i * 2 + c] * LumFactor[c];
+								}
+								NewData[i] = (ILubyte)Resultf;
+								NewData[i+1] = ((ILubyte*)(Data))[i * 2 + 3];
+							}
+							break;
+						case IL_UNSIGNED_SHORT:
+						case IL_SHORT:
+							for (i = 0; i < Size; i += 2) {
+								Resultf = 0.0f;
+								for (c = 0; c < 3; c++) {
+									Resultf += ((ILushort*)(Data))[i * 2 + c] * LumFactor[c];
+								}
+								((ILushort*)(NewData))[i] = (ILushort)Resultf;
+								((ILushort*)(NewData))[i+1] = ((ILushort*)(Data))[i * 2 + 3];
+							}
+							break;
+						case IL_UNSIGNED_INT:
+						case IL_INT:
+							for (i = 0; i < Size; i += 2) {
+								Resultd = 0.0;
+								for (c = 0; c < 3; c++) {
+									Resultd += ((ILuint*)(Data))[i * 2 + c] * LumFactor[c];
+								}
+								((ILuint*)(NewData))[i] = (ILuint)Resultd;
+								((ILuint*)(NewData))[i+1] = ((ILuint*)(Data))[i * 2 + 3];
+							}
+							break;
+						case IL_FLOAT:
+							for (i = 0; i < Size; i += 2) {
+								Resultd = 0.0;
+								for (c = 0; c < 3; c++) {
+									Resultd += ((ILfloat*)(Data))[i * 2 + c] * LumFactor[c];
+								}
+								((ILfloat*)(NewData))[i] = (ILfloat)Resultd;
+								((ILfloat*)(NewData))[i+1] = ((ILfloat*)(Data))[i * 2 + 3];
+							}
+							break;
+						case IL_DOUBLE:
+							for (i = 0; i < Size; i += 2) {
+								Resultd = 0.0;
+								for (c = 0; c < 3; c++) {
+									Resultd += ((ILdouble*)(Data))[i * 2 + c] * LumFactor[c];
+								}
+								((ILdouble*)(NewData))[i] = Resultd;
+								((ILdouble*)(NewData))[i+1] = ((ILdouble*)(Data))[i * 2 + 3];
+							}
+							break;
+					}
+					break;
+
 				default:
 					ilSetError(IL_INVALID_CONVERSION);
 					if (Data != Buffer)
@@ -1021,6 +1269,219 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 									((ILdouble*)(NewData))[j + c] = ((ILdouble*)(Data))[i];
 								}
 								((ILdouble*)(NewData))[j + 3] = 1.0;  // Full opacity
+							}
+							break;
+					}
+					break;
+
+				case IL_LUMINANCE_ALPHA:
+					NewData = (ILubyte*)ialloc(NumPix * BpcDest * 2);
+					CHECK_ALLOC();
+
+					switch (DestType)
+					{
+						case IL_UNSIGNED_BYTE:
+						case IL_BYTE:
+							for (i = 0; i < NumPix; i++) {
+								NewData[i * 2] = ((ILubyte*)(Data))[i];
+								NewData[i * 2 + 1] = UCHAR_MAX;  // Full opacity
+							}
+							break;
+						case IL_UNSIGNED_SHORT:
+						case IL_SHORT:
+							for (i = 0; i < NumPix; i++) {
+								((ILushort*)(NewData))[i * 2] = ((ILushort*)(Data))[i];
+								((ILushort*)(NewData))[i * 2 + 1] = USHRT_MAX;  // Full opacity
+							}
+							break;
+						case IL_UNSIGNED_INT:
+						case IL_INT:
+							for (i = 0; i < NumPix; i++) {
+								((ILuint*)(NewData))[i * 2] = ((ILuint*)(Data))[i];
+								((ILuint*)(NewData))[i * 2 + 1] = UINT_MAX;  // Full opacity
+							}
+							break;
+						case IL_FLOAT:
+							for (i = 0; i < NumPix; i++) {
+								((ILfloat*)(NewData))[i * 2] = ((ILfloat*)(Data))[i];
+								((ILfloat*)(NewData))[i * 2 + 1] = 1.0f;  // Full opacity
+							}
+							break;
+						case IL_DOUBLE:
+							for (i = 0; i < NumPix; i++) {
+								((ILdouble*)(NewData))[i * 2] = ((ILdouble*)(Data))[i];
+								((ILdouble*)(NewData))[i * 2 + 1] = 1.0;  // Full opacity
+							}
+							break;
+					}
+					break;
+
+
+				/*case IL_COLOUR_INDEX:
+					NewData = (ILubyte*)ialloc(iCurImage->SizeOfData);
+					NewImage->Pal.Palette = (ILubyte*)ialloc(768);
+					if (NewData == NULL || NewImage->Pal.Palette) {
+						ifree(NewImage);
+						return IL_FALSE;
+					}
+
+					// Fill the palette
+					for (i = 0; i < 256; i++) {
+						for (c = 0; c < 3; c++) {
+							NewImage->Pal.Palette[i * 3 + c] = (ILubyte)i;
+						}
+					}
+					// Copy the data
+					for (i = 0; i < iCurImage->SizeOfData; i++) {
+						NewData[i] = iCurImage->Data[i];
+					}
+					break;*/
+
+				default:
+					ilSetError(IL_INVALID_CONVERSION);
+					if (Data != Buffer)
+						ifree(Data);
+					return NULL;
+			}
+			break;
+
+
+		case IL_LUMINANCE_ALPHA:
+			switch (DestFormat)
+			{
+				case IL_RGB:
+				case IL_BGR:
+					NewData = (ILubyte*)ialloc(NumPix * BpcDest / 2 * 3);
+					CHECK_ALLOC();
+
+					switch (DestType)
+					{
+						case IL_UNSIGNED_BYTE:
+						case IL_BYTE:
+							for (i = 0, j = 0; i < NumPix; i += 2, j += 3) {
+								for (c = 0; c < 3; c++) {
+									NewData[j + c] = ((ILubyte*)(Data))[i];
+								}
+							}
+							break;
+						case IL_UNSIGNED_SHORT:
+						case IL_SHORT:
+							for (i = 0, j = 0; i < NumPix; i += 2, j += 3) {
+								for (c = 0; c < 3; c++) {
+									((ILushort*)(NewData))[j + c] = ((ILushort*)(Data))[i];
+								}
+							}
+							break;
+						case IL_UNSIGNED_INT:
+						case IL_INT:
+							for (i = 0, j = 0; i < NumPix; i += 2, j += 3) {
+								for (c = 0; c < 3; c++) {
+									((ILuint*)(NewData))[j + c] = ((ILuint*)(Data))[i];
+								}
+							}
+							break;
+						case IL_FLOAT:
+							for (i = 0, j = 0; i < NumPix; i += 2, j += 3) {
+								for (c = 0; c < 3; c++) {
+									((ILfloat*)(NewData))[j + c] = ((ILfloat*)(Data))[i];
+								}
+							}
+							break;
+						case IL_DOUBLE:
+							for (i = 0, j = 0; i < NumPix; i += 2, j += 3) {
+								for (c = 0; c < 3; c++) {
+									((ILdouble*)(NewData))[j + c] = ((ILdouble*)(Data))[i];
+								}
+							}
+							break;
+					}
+					break;
+
+				case IL_RGBA:
+				case IL_BGRA:
+					NewData = (ILubyte*)ialloc(NumPix * BpcDest / 2 * 4);
+					CHECK_ALLOC();
+
+					switch (DestType)
+					{
+						case IL_UNSIGNED_BYTE:
+						case IL_BYTE:
+							for (i = 0, j = 0; i < NumPix; i += 2, j += 4) {
+								for (c = 0; c < 3; c++) {
+									NewData[j + c] = ((ILubyte*)(Data))[i];
+								}
+								NewData[j + 3] = ((ILubyte*)(Data))[i+1];
+							}
+							break;
+						case IL_UNSIGNED_SHORT:
+						case IL_SHORT:
+							for (i = 0, j = 0; i < NumPix; i += 2, j += 4) {
+								for (c = 0; c < 3; c++) {
+									((ILushort*)(NewData))[j + c] = ((ILushort*)(Data))[i];
+								}
+								((ILushort*)(NewData))[j + 3] = ((ILushort*)(Data))[i+1];
+							}
+							break;
+						case IL_UNSIGNED_INT:
+						case IL_INT:
+							for (i = 0, j = 0; i < NumPix; i += 2, j += 4) {
+								for (c = 0; c < 3; c++) {
+									((ILuint*)(NewData))[j + c] = ((ILuint*)(Data))[i];
+								}
+								((ILuint*)(NewData))[j + 3] = ((ILuint*)(Data))[i+1];
+							}
+							break;
+						case IL_FLOAT:
+							for (i = 0, j = 0; i < NumPix; i += 2, j += 4) {
+								for (c = 0; c < 3; c++) {
+									((ILfloat*)(NewData))[j + c] = ((ILfloat*)(Data))[i];
+								}
+								((ILfloat*)(NewData))[j + 3] = ((ILfloat*)(Data))[i+1];
+							}
+							break;
+						case IL_DOUBLE:
+							for (i = 0, j = 0; i < NumPix; i += 2, j += 4) {
+								for (c = 0; c < 3; c++) {
+									((ILdouble*)(NewData))[j + c] = ((ILdouble*)(Data))[i];
+								}
+								((ILdouble*)(NewData))[j + 3] = ((ILdouble*)(Data))[i+1];
+							}
+							break;
+					}
+					break;
+
+				case IL_LUMINANCE:
+					NewData = (ILubyte*)ialloc(NumPix * BpcDest / 2);
+					CHECK_ALLOC();
+
+					switch (DestType)
+					{
+						case IL_UNSIGNED_BYTE:
+						case IL_BYTE:
+							for (i = 0, j = 0; i < NumPix; i += 2, j++) {
+								NewData[j] = ((ILubyte*)(Data))[i];
+							}
+							break;
+						case IL_UNSIGNED_SHORT:
+						case IL_SHORT:
+							for (i = 0, j = 0; i < NumPix; i += 2, j++) {
+								((ILushort*)(NewData))[j] = ((ILushort*)(Data))[i];
+							}
+							break;
+						case IL_UNSIGNED_INT:
+						case IL_INT:
+							for (i = 0, j = 0; i < NumPix; i += 2, j++) {
+								((ILuint*)(NewData))[j] = ((ILuint*)(Data))[i];
+							}
+							break;
+						case IL_FLOAT:
+							for (i = 0, j = 0; i < NumPix; i += 2, j++) {
+								((ILfloat*)(NewData))[j] = ((ILfloat*)(Data))[i];
+							}
+							break;
+						case IL_DOUBLE:
+							for (i = 0, j = 0; i < NumPix; i += 2, j++) {
+								((ILdouble*)(NewData))[j] = ((ILdouble*)(Data))[i];
 							}
 							break;
 					}

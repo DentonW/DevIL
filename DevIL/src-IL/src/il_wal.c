@@ -92,7 +92,7 @@ ILboolean iLoadWalInternal()
 		return IL_FALSE;
 
 	for (i = 0; i < 3; i++) {
-		Mipmaps[i] = (ILimage*)calloc(sizeof(ILimage), 1);
+		Mipmaps[i] = (ILimage*)icalloc(sizeof(ILimage), 1);
 		if (Mipmaps[i] == NULL)
 			goto cleanup_error;
 		Mipmaps[i]->Pal.Palette = (ILubyte*)ialloc(768);

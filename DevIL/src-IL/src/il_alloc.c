@@ -19,6 +19,9 @@
 //mAlloc ialloc;
 //mFree  ifree;
 
+mAlloc ialloc_ptr = NULL;
+mFree  ifree_ptr = NULL;
+
 
 ILvoid* ILAPIENTRY DefaultAllocFunc(ILuint Size)
 {
@@ -45,6 +48,19 @@ ILvoid ILAPIENTRY ifree(ILvoid *Ptr)
 }
 
 
+ILvoid* ILAPIENTRY icalloc(ILuint Size, ILuint Num)
+{
+	ILvoid *Ptr;
+
+	Ptr = ialloc(Size * Num);
+	if (Ptr == NULL)
+		return NULL;
+	memset(Ptr, 0, Size * Num);
+
+	return Ptr;
+}
+
+
 ILvoid ILAPIENTRY DefaultFreeFunc(ILvoid *Ptr)
 {
 	if (Ptr)
@@ -63,10 +79,24 @@ ILvoid ILAPIENTRY ilResetMemory()
 
 ILvoid ILAPIENTRY ilSetMemory(mAlloc AllocFunc, mFree FreeFunc)
 {
-	if (AllocFunc == NULL || FreeFunc == NULL) {
+	/*if (AllocFunc == NULL || FreeFunc == NULL) {
 		ilSetError(IL_INVALID_PARAM);
 		return;
+	}*/
+
+	if (AllocFunc == NULL || FreeFunc == NULL) {
+		if (ialloc_ptr == NULL || ifree_ptr == NULL) {
+			ialloc_ptr = DefaultAllocFunc;
+			ifree_ptr = DefaultFreeFunc;
+		}
+
+		// If not, we have the special case used by ilInit, so that
+		//	ilSetMemory can be called before ilInit to control all
+		//	memory usage of DevIL.
+
+		return;
 	}
+
 	ialloc_ptr = AllocFunc;
 	ifree_ptr = FreeFunc;
 	return;

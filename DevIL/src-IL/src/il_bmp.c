@@ -368,7 +368,7 @@ ILboolean ilReadUncompBmp(BMPHEAD *Header)
 							k = 128;
 							for (c = 0; c < 8; c++) {
 								iCurImage->Data[j * iCurImage->Width + i] = 
-									(!!(ByteData & k) == 1 ? 255 : 0);
+									(!!(ByteData & k) == 1 ? 1 : 0);
 								k >>= 1;
 								if (++i >= iCurImage->Width)
 									break;
@@ -391,7 +391,7 @@ ILboolean ilReadUncompBmp(BMPHEAD *Header)
 							k = 128;
 							for (c = 0; c < 8; c++) {
 								iCurImage->Data[j * iCurImage->Width + i] = 
-									(!!(ByteData & k) == 1 ? 255 : 0);
+									(!!(ByteData & k) == 1 ? 1 : 0);
 								k >>= 1;
 								if (++i >= iCurImage->Width)
 									break;
@@ -869,7 +869,7 @@ ILboolean iGetOS2Bmp(OS2_HEAD *Header)
 				k = 128;
 				for (c = 0; c < 8; c++) {
 					iCurImage->Data[j * iCurImage->Width + i] =
-						(!!(ByteData & k) == 1 ? 255 : 0);
+						(!!(ByteData & k) == 1 ? 1 : 0);
 					k >>= 1;
 					if (++i >= iCurImage->Width)
 						break;

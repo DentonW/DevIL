@@ -589,14 +589,8 @@ ILAPI ILpal* ILAPIENTRY iConvertPal(ILpal *Pal, ILenum DestFormat)
 	if (NewPal == NULL) {
 		return NULL;
 	}
-	NewPal->Palette = (ILubyte*)ialloc(Pal->PalSize);
-	if (NewPal->Palette == NULL) {
-		ifree(NewPal);
-		return IL_FALSE;
-	}
 	NewPal->PalSize = Pal->PalSize;
 	NewPal->PalType = Pal->PalType;
-	memcpy(NewPal->Palette, Pal->Palette, Pal->PalSize);
 
 	switch (DestFormat)
 	{
@@ -606,9 +600,9 @@ ILAPI ILpal* ILAPIENTRY iConvertPal(ILpal *Pal, ILenum DestFormat)
 			{
 				case IL_PAL_RGB24:
 					NewPal->Palette = (ILubyte*)ialloc(Pal->PalSize);
+					if (NewPal->Palette == NULL)
+						goto alloc_error;
 					if (DestFormat == IL_PAL_BGR24) {
-						if (NewPal->Palette == NULL)
-							goto alloc_error;
 						j = ilGetBppPal(Pal->PalType);
 						for (i = 0; i < Pal->PalSize; i += j) {
 							NewPal->Palette[i] = Pal->Palette[i+2];
@@ -624,9 +618,9 @@ ILAPI ILpal* ILAPIENTRY iConvertPal(ILpal *Pal, ILenum DestFormat)
 
 				case IL_PAL_BGR24:
 					NewPal->Palette = (ILubyte*)ialloc(Pal->PalSize);
+					if (NewPal->Palette == NULL)
+						goto alloc_error;
 					if (DestFormat == IL_PAL_RGB24) {
-						if (NewPal->Palette == NULL)
-							goto alloc_error;
 						j = ilGetBppPal(Pal->PalType);
 						for (i = 0; i < Pal->PalSize; i += j) {
 							NewPal->Palette[i] = Pal->Palette[i+2];
@@ -763,6 +757,9 @@ ILAPI ILpal* ILAPIENTRY iConvertPal(ILpal *Pal, ILenum DestFormat)
 							NewPal->Palette[i+3] = Pal->Palette[i+3];
 						}
 					}
+					else {
+						memcpy(NewPal->Palette, Pal->Palette, Pal->PalSize);
+					}
 					NewPal->PalType = DestFormat;
 					break;
 				
@@ -800,6 +797,9 @@ ILAPI ILpal* ILAPIENTRY iConvertPal(ILpal *Pal, ILenum DestFormat)
 							NewPal->Palette[i+2] = Pal->Palette[i];
 							NewPal->Palette[i+3] = Pal->Palette[i+3];
 						}
+					}
+					else {
+						memcpy(NewPal->Palette, Pal->Palette, Pal->PalSize);
 					}
 					NewPal->PalType = DestFormat;
 					break;

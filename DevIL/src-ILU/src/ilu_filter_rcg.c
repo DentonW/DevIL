@@ -368,7 +368,7 @@ int i;						/* ILubyte column in source bitmap being processed */
 		fscale = 1.0 / xscale;
 
 		contribX->n = 0;
-		contribX->p = (CONTRIB *)calloc((int) (width * 2 + 1),
+		contribX->p = (CONTRIB *)icalloc((int) (width * 2 + 1),
 				sizeof(CONTRIB));
 		if (contribX->p == NULL) {
 			return -1;
@@ -398,7 +398,7 @@ int i;						/* ILubyte column in source bitmap being processed */
 	{
 		/* Expanding image */
 		contribX->n = 0;
-		contribX->p = (CONTRIB *)calloc((int) (fwidth * 2 + 1),
+		contribX->p = (CONTRIB*)icalloc((int) (fwidth * 2 + 1),
 				sizeof(CONTRIB));
 		if (contribX->p == NULL) {
 			return -1;
@@ -461,7 +461,7 @@ double fwidth;
 
 	/* Build y weights */
 	/* pre-calculate filter contributions for a column */
-	contribY = (CLIST *)calloc(dst->Height, sizeof(CLIST));
+	contribY = (CLIST*)icalloc(dst->Height, sizeof(CLIST));
 	if (contribY == NULL) {
 		ifree(tmp);
 		return -1;
@@ -476,7 +476,7 @@ double fwidth;
 		for(i = 0; i < (ILint)dst->Height; ++i)
 		{
 			contribY[i].n = 0;
-			contribY[i].p = (CONTRIB*)calloc((int) (width * 2 + 1),
+			contribY[i].p = (CONTRIB*)icalloc((int) (width * 2 + 1),
 					sizeof(CONTRIB));
 			if(contribY[i].p == NULL) {
 				ifree(tmp);
@@ -504,7 +504,7 @@ double fwidth;
 	} else {
 		for(i = 0; i < (ILint)dst->Height; ++i) {
 			contribY[i].n = 0;
-			contribY[i].p = (CONTRIB *)calloc((int) (fwidth * 2 + 1),
+			contribY[i].p = (CONTRIB*)icalloc((int) (fwidth * 2 + 1),
 					sizeof(CONTRIB));
 			if (contribY[i].p == NULL) {
 				ifree(tmp);

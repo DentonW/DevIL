@@ -18,7 +18,7 @@
 #include "il_manip.h"
 
 #if PNG_LIBPNG_VER < 10200
-	//#warning DevIL was designed with libpng 1.2.0 or higher in mind.  Consider upgrading at www.libpng.org
+	#warning DevIL was designed with libpng 1.2.0 or higher in mind.  Consider upgrading at www.libpng.org
 #endif
 
 ILboolean	iIsValidPng(ILvoid);
@@ -204,14 +204,20 @@ static ILvoid png_read(png_structp png_ptr, png_bytep data, png_size_t length)
 }
 
 
-static void png_error_warn(png_structp png_ptr, png_const_charp message)
+static void png_error_func(png_structp png_ptr, png_const_charp message)
+{
+	ilSetError(IL_LIB_PNG_ERROR);
+	return;
+}
+
+static void png_warn_func(png_structp png_ptr, png_const_charp message)
 {
 	return;
 }
 
 ILint readpng_init()
 {
-    png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_warn, png_error_warn);
+    png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_func, png_warn_func);
     if (!png_ptr)
         return 4;   /* out of memory */
 
@@ -236,8 +242,8 @@ ILint readpng_init()
     }
 
 
-	png_set_read_fn(png_ptr, NULL, &png_read);
-	png_set_error_fn(png_ptr, NULL, &png_error_warn, &png_error_warn);
+	png_set_read_fn(png_ptr, NULL, png_read);
+	png_set_error_fn(png_ptr, NULL, png_error_func, png_warn_func);
 
 //	png_set_sig_bytes(png_ptr, 8);  /* we already read the 8 signature bytes */
 
@@ -458,7 +464,7 @@ ILboolean iSavePngInternal()
 	* the library version is compatible with the one used at compile time,
 	* in case we are using dynamically linked libraries.  REQUIRED.
 	*/
-	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_warn, png_error_warn);
+	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_func, png_warn_func);
 	if (png_ptr == NULL) {
 		ilSetError(IL_LIB_PNG_ERROR);
 		return IL_FALSE;

@@ -65,6 +65,8 @@ typedef struct ILimage
 // Memory functions
 ILAPI ILvoid*	ILAPIENTRY ialloc(ILuint Size);
 ILAPI ILvoid	ILAPIENTRY ifree(ILvoid *Ptr);
+ILAPI ILvoid*	ILAPIENTRY icalloc(ILuint Size, ILuint Num);
+
 
 
 // Internal library functions in IL

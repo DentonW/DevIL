@@ -1,4 +1,4 @@
-Credits as of 06/04/2002
+Credits as of 06/24/2002
 ------------------------
 
 If I inadvertently omitted anyone's name from this list, please e-mail me at
@@ -218,4 +218,6 @@ Marc Gregoire for sending images that DevIL would not load.
 Alberto Barbati for noticing that the IL_NEU_QUANT_SAMPLE mode wasn't being used properly.
 
 Ryan Butterfoss for his contributions to the DDS saving code.
+
+Computer Graphics (C Version) book by Hearn and Baker for the arbitrary polygon filling code.
 

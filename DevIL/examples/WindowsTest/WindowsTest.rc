@@ -169,6 +169,7 @@ BEGIN
     BEGIN
         MENUITEM "&Colour Indexed",             ID_CONVERT_PALETTE
         MENUITEM "&Luminance",                  ID_CONVERT_LUMINANCE
+        MENUITEM "L&uminance Alpha",            ID_CONVERT_LUMINANCEALPHA
         MENUITEM "&Rgb",                        ID_CONVERT_RGB
         MENUITEM "Rgba",                        ID_CONVERT_RGBA
         MENUITEM "&Bgr",                        ID_CONVERT_BGR

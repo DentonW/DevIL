@@ -532,7 +532,7 @@ ILboolean IsInit = IL_FALSE;
 // ONLY call at startup.
 ILvoid ILAPIENTRY ilInit()
 {
-	ilResetMemory();  // Do first, since it handles allocations.
+	ilSetMemory(NULL, NULL);  // Do first, since it handles allocations.
 	ilSetError(IL_NO_ERROR);
 	ilDefaultStates();  // Set states to their defaults.
 	// Sets default file-reading callbacks.
@@ -610,7 +610,8 @@ ILAPI ILvoid ILAPIENTRY iBindImageTemp()
 		if (!iEnlargeStack())
 			return;
 
-//	LastUsed = 1;
+	if (LastUsed <2 )
+		LastUsed = 2;
 	CurName = 1;
 	ParentImage = IL_TRUE;
 	if (!ImageStack[1])

@@ -92,7 +92,7 @@ ILAPI ILimage* ILAPIENTRY iluRotate_(ILimage *Image, ILfloat Angle)
 	ILushort	*ShortPtr;
 	ILuint		*IntPtr;
 
-	Rotated = (ILimage*)calloc(1, sizeof(ILimage));
+	Rotated = (ILimage*)icalloc(1, sizeof(ILimage));
 	if (Rotated == NULL)
 		return NULL;
 	if (ilCopyImageAttr(Rotated, Image) == IL_FALSE) {

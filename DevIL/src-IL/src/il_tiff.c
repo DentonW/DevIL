@@ -26,7 +26,7 @@
 ILboolean	iLoadTiffInternal(ILvoid);
 char*		iMakeString(ILvoid);
 TIFF*		iTIFFOpen(char *Mode);
-ILboolean	iSaveTiffInternal(ILvoid);
+ILboolean	iSaveTiffInternal(char *Filename);
 
 /*----------------------------------------------------------------------------*/
 
@@ -432,7 +432,8 @@ ILboolean ilSaveTiff(const ILstring FileName)
 		return bTiff;
 	}
 
-	bTiff = ilSaveTiffF(TiffFile);
+	//bTiff = ilSaveTiffF(TiffFile);
+	bTiff = iSaveTiffInternal(FileName);
 	iclosew(TiffFile);
 
 	return bTiff;
@@ -442,23 +443,27 @@ ILboolean ilSaveTiff(const ILstring FileName)
 //! Writes a Tiff to an already-opened file
 ILboolean ilSaveTiffF(ILHANDLE File)
 {
-	iSetOutputFile(File);
-	return iSaveTiffInternal();
+//	iSetOutputFile(File);
+//	return iSaveTiffInternal();
+	ilSetError(IL_FILE_READ_ERROR);
+	return IL_FALSE;
 }
 
 
 //! Writes a Tiff to a memory "lump"
 ILboolean ilSaveTiffL(ILvoid *Lump, ILuint Size)
 {
-	iSetOutputLump(Lump, Size);
-	return iSaveTiffInternal();
+//	iSetOutputLump(Lump, Size);
+//	return iSaveTiffInternal();
+	ilSetError(IL_FILE_READ_ERROR);
+	return IL_FALSE;
 }
 
 
 // @TODO:  Accept palettes!
 
 // Internal function used to save the Tiff.
-ILboolean iSaveTiffInternal()
+ILboolean iSaveTiffInternal(char *Filename)
 {
 	ILenum	Format;
 	ILenum	Compression;
@@ -491,8 +496,8 @@ ILboolean iSaveTiffInternal()
 		TempImage = iCurImage;
 	}
 	
-	//File = TIFFOpen(FileName, "w");
-	File = iTIFFOpen("w");
+	File = TIFFOpen(Filename, "w");
+	//File = iTIFFOpen("w");
 	if (File == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
 		return IL_FALSE;
@@ -523,7 +528,7 @@ ILboolean iSaveTiffInternal()
 		TIFFSetField(File, TIFFTAG_IMAGEDESCRIPTION,
 					iGetString(IL_TIF_DESCRIPTION_STRING));
 	TIFFSetField(File, TIFFTAG_DATETIME, iMakeString());
-	
+
 	TIFFSetField(File, TIFFTAG_ORIENTATION,
 		TempImage->Origin == IL_ORIGIN_UPPER_LEFT ? ORIENTATION_TOPLEFT :
 													 ORIENTATION_BOTLEFT);

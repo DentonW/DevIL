@@ -24,8 +24,8 @@
 //#include <sdl.h>
 #include "resource.h"
 
-//#pragma comment(lib, "sdl.lib")
-//#pragma comment(lib, "sdlmain.lib")
+#pragma comment(lib, "sdl.lib")
+#pragma comment(lib, "sdlmain.lib")
 #pragma comment(lib, "colorpicker.lib")
 
 
@@ -310,7 +310,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	ILclampf			Red, Green, Blue;
 	ILubyte				*AlphaChannel;
 	ILenum				Origin;
-
 
 	switch (message)
 	{
@@ -698,6 +697,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 				case ID_CONVERT_LUMINANCE:
 					ilConvertImage(IL_LUMINANCE, ilGetInteger(IL_IMAGE_TYPE));
+					break;
+
+				case ID_CONVERT_LUMINANCEALPHA:
+					ilConvertImage(IL_LUMINANCE_ALPHA, ilGetInteger(IL_IMAGE_TYPE));
 					break;
 
 				case ID_EDIT_VIEWALPHA:

@@ -5,7 +5,7 @@ libILU_la_SOURCES = ilu_alloc.c       ilu_internal.c  ilu_noise.c \
                     ilu_rotate.c      ilu_scaling.c   ilu_filter.c \
                     ilu_manip.c       ilu_scale2d.c   ilu_states.c \
                     ilu_filter_rcg.c  ilu_mipmap.c    ilu_scale3d.c \
-                    ilu_utilities.c
+                    ilu_utilities.c   ilu_region.c
 
 CFLAGS = @LIBILU_CFLAGS@
 

@@ -277,7 +277,7 @@ ILboolean GetImages(ILpal *GlobalPal)
 		}
 
 
-		if (!GifGetData(TempData)) {
+		if (!GifGetData(TempData, Image->SizeOfData)) {
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
 			goto error_clean;
 		}
@@ -309,6 +309,8 @@ ILboolean GetImages(ILpal *GlobalPal)
 				}
 			}
 		}
+
+		i = itell();
 
 		// Terminates each block.
 		if (igetc() != 0x00)
@@ -451,12 +453,13 @@ ILint get_next_code(void)
 }
 
 
-ILboolean GifGetData(ILubyte *Data)
+ILboolean GifGetData(ILubyte *Data, ILuint ImageSize)
 {
 	ILubyte	*sp;
 	ILint	code, fc, oc;
 	ILubyte	size;
 	ILint	c;
+	ILuint	i = 0;
 
 	size = igetc();
 	if (size < 2 || 9 < size) {
@@ -482,7 +485,7 @@ ILboolean GifGetData(ILubyte *Data)
 	oc = fc = 0;
 	sp = stack;
 
-	while ((c = get_next_code()) != ending) {
+	while ((c = get_next_code()) != ending && i < ImageSize) {
 		if (c == clear) {
 			curr_size = size + 1;
 			slot = newcodes;
@@ -493,7 +496,9 @@ ILboolean GifGetData(ILubyte *Data)
 			if (c >= slot)
 				c = 0;
 			oc = fc = c;
-			*Data++ = c;
+			//if (i < ImageSize)
+				Data[i++] = c;
+			//*Data++ = c;
 		}
 		else {
 			code = c;
@@ -518,7 +523,9 @@ ILboolean GifGetData(ILubyte *Data)
 			}
 			while (sp > stack) {
 				sp--;
-				*Data++ = *sp;
+				//if (i < ImageSize)
+					Data[i++] = *sp;
+				//*Data++ = *sp;
 			}
 		}
 	}

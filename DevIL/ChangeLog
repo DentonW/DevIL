@@ -1,3 +1,24 @@
+1.6.5
+-----
+
+- Created a stress test application.
+- Found out that you have to set PNG_NO_STDIO when compiling libpng on Win32,
+  or else it will try to write via fprintf on an error, causing a crash.
+- Fixed a similar problem with libjpeg, though you don't have to recompile.
+- Fixed a problem converting palette'd images to higher than IL_UNSIGNED_BYTE.
+- Changed 1-bit .bmp files to use 0 and 1 instead of 0 and 255 (using a palette).
+- Fixed a divide by 0 in iluPixelize() if the pixel size was 0.
+- Fixed some problems with iluEqualize().
+- Found and fixed three memory leaks using Paul Nettle's memory manager.
+- Changed the filters to properly work on images with higher than 8-bit channels.
+- Fixed some uninitialized values when using ilConvertImage on palette'd images.
+- Fixed a problem saving .dds mipmaps.
+- Fixed a bug saving .dds files with blocks of all the same colour.
+- Added support for the IL_LUMINANCE_ALPHA format.
+- Fixed a bug loading corrupt .gif files.
+- Added region checking in ILU.
+
+
 1.6.1
 -----
 

@@ -62,7 +62,7 @@ ILboolean iIsValidGif(ILvoid);
 ILboolean GetPalette(ILubyte Info, ILpal *Pal);
 ILboolean GetImages(ILpal *GlobalPal);
 ILboolean SkipExtensions(GFXCONTROL *Gfx);
-ILboolean GifGetData(ILubyte *Data);
+ILboolean GifGetData(ILubyte *Data, ILuint ImageSize);
 ILboolean RemoveInterlace(ILvoid);
 ILboolean CopyPalette(ILpal *Dest, ILpal *Src);
 ILboolean ConvertTransparent(ILimage *Image, ILubyte TransColour);

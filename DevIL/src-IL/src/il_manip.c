@@ -671,7 +671,7 @@ ILubyte* ILAPIENTRY ilGetAlpha(ILenum Type)
 	ILushort	*AlphaShort;
 	ILuint		*AlphaInt;
 	ILdouble	*AlphaDbl;
-	ILuint		i, j, Bpc, Size;
+	ILuint		i, j, Bpc, Size, AlphaOff;
 
 	Bpc = ilGetBppType(Type);
 	if (Bpc == 0) {
@@ -708,18 +708,23 @@ ILubyte* ILAPIENTRY ilGetAlpha(ILenum Type)
 			return Alpha;
 	}
 
+	if (TempImage->Format == IL_LUMINANCE_ALPHA)
+		AlphaOff = 2;
+	else
+		AlphaOff = 4;
+
 	switch (TempImage->Type)
 	{
 		case IL_BYTE:
 		case IL_UNSIGNED_BYTE:
-			for (i = 3, j = 0; i < Size; i += 4, j++)
+			for (i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
 				Alpha[j] = TempImage->Data[i];
 			break;
 
 		case IL_SHORT:
 		case IL_UNSIGNED_SHORT:
 			AlphaShort = (ILushort*)Alpha;
-			for (i = 3, j = 0; i < Size; i += 4, j++)
+			for (i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
 				AlphaShort[j] = ((ILushort*)TempImage->Data)[i];
 			break;
 
@@ -727,13 +732,13 @@ ILubyte* ILAPIENTRY ilGetAlpha(ILenum Type)
 		case IL_UNSIGNED_INT:
 		case IL_FLOAT:  // Can throw float in here, because it's the same size.
 			AlphaInt = (ILuint*)Alpha;
-			for (i = 3, j = 0; i < Size; i += 4, j++)
+			for (i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
 				AlphaInt[j] = ((ILuint*)TempImage->Data)[i];
 			break;
 
 		case IL_DOUBLE:
 			AlphaDbl = (ILdouble*)Alpha;
-			for (i = 3, j = 0; i < Size; i += 4, j++)
+			for (i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
 				AlphaDbl[j] = ((ILdouble*)TempImage->Data)[i];
 			break;
 	}

@@ -304,6 +304,7 @@ ILboolean iLoadJpegInternal()
 
 	JpegInfo.err = jpeg_std_error( &Error );		// init standard error handlers
 	Error.error_exit = iJpegErrorExit;				// add our exit handler
+	Error.output_message = OutputMsg;
 
 	if ( (result = setjmp( JpegJumpBuffer ) == 0) != IL_FALSE )
 	{

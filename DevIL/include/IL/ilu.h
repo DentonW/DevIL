@@ -25,7 +25,7 @@ extern "C" {
 
 #ifdef _WIN32
 	#ifndef IL_STATIC_LIB
-		#ifdef  _MSC_VER
+		#if defined(_MSC_VER) || defined(__BORLANDC__)
 			#ifndef _ILU_BUILD_LIBRARY
 				#ifdef IL_DEBUG
 					#pragma comment(lib, "ilu-d.lib")
@@ -33,7 +33,7 @@ extern "C" {
 					#pragma comment(lib, "ilu.lib")
 				#endif//_DEBUG
 			#endif//_ILU_BUILD_LIBRARY
-		#endif//_MSC_VER
+		#endif//_MSC_VER || __BORLANDC__
 	#endif//IL_STATIC_LIB
 #endif//_WIN32
 
@@ -112,6 +112,17 @@ typedef struct ILinfo
 } ILinfo;
 
 
+typedef struct ILpointf
+{
+	ILfloat x, y;
+} ILpointf;
+
+typedef struct ILpointi
+{
+	ILint x, y;
+} ILpointi;
+
+
 // ImageLib Utility Functions
 ILAPI ILboolean			ILAPIENTRY iluAlienify(ILvoid);
 ILAPI ILboolean			ILAPIENTRY iluBlurAvg(ILuint Iter);
@@ -145,8 +156,8 @@ ILAPI ILboolean			ILAPIENTRY iluMirror(ILvoid);
 ILAPI ILboolean			ILAPIENTRY iluNegative(ILvoid);
 ILAPI ILboolean			ILAPIENTRY iluNoisify(ILclampf Tolerance);
 ILAPI ILboolean			ILAPIENTRY iluPixelize(ILuint PixSize);
-//ILAPI ILvoid			ILAPIENTRY iluRegionf(ILfloat ULx, ILfloat ULy, ILfloat BRx, ILfloat BRy);
-//ILAPI ILvoid			ILAPIENTRY iluRegioni(ILuint ULx, ILuint ULy, ILuint BRx, ILuint BRy);
+ILAPI ILvoid			ILAPIENTRY iluRegionfv(ILpointf *Points, ILuint n);
+ILAPI ILvoid			ILAPIENTRY iluRegioniv(ILpointi *Points, ILuint n);
 ILAPI ILboolean			ILAPIENTRY iluReplaceColour(ILubyte Red, ILubyte Green, ILubyte Blue, ILfloat Tolerance);
 ILAPI ILboolean			ILAPIENTRY iluRotate(ILfloat Angle);
 ILAPI ILboolean			ILAPIENTRY iluRotate3D(ILfloat x, ILfloat y, ILfloat z, ILfloat Angle);

@@ -89,7 +89,7 @@ extern "C" {
 #ifdef _WIN32
 	//#define IL_USE_IJL  // Whether we use the Intel Jpeg Library (else use libjpeg).
 	#ifndef IL_STATIC_LIB
-		#ifdef  _MSC_VER
+		#if defined(_MSC_VER) || defined(__BORLANDC__)
 			#ifndef _IL_BUILD_LIBRARY
 				#ifdef  IL_DEBUG
 					#pragma comment(lib, "devil-d.lib")
@@ -97,7 +97,7 @@ extern "C" {
 					#pragma comment(lib, "devil.lib")
 				#endif//IL_DEBUG
 			#endif//_IL_BUILD_LIBRARY
-		#endif//_MSC_VER
+		#endif//_MSC_VER || __BORLANDC__
 	#endif//IL_STATIC_LIB
 #endif//_WIN32
 
@@ -141,6 +141,7 @@ typedef void			ILvoid;
 #define IL_BGR								0x80E0
 #define IL_BGRA								0x80E1
 #define IL_LUMINANCE						0x1909
+#define IL_LUMINANCE_ALPHA					0x190A
 
 
 #define IL_BYTE								0x1400
@@ -554,8 +555,8 @@ ILAPI ILboolean		ILAPIENTRY ilLoadDataF(ILHANDLE File, ILuint Width, ILuint Heig
 ILAPI ILboolean		ILAPIENTRY ilLoadDataL(ILvoid *Lump, ILuint Size, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp);
 ILAPI ILboolean		ILAPIENTRY ilSaveData(const ILstring FileName);
 
-ILAPI ILboolean	ILAPIENTRY ilLoadFromJpegStruct(ILvoid* JpegDecompressorPtr);
-ILAPI ILboolean	ILAPIENTRY ilSaveFromJpegStruct(ILvoid* JpegCompressorPtr);
+ILAPI ILboolean		ILAPIENTRY ilLoadFromJpegStruct(ILvoid* JpegDecompressorPtr);
+ILAPI ILboolean		ILAPIENTRY ilSaveFromJpegStruct(ILvoid* JpegCompressorPtr);
 
 // For all those weirdos that spell "colour" without the 'u'.
 #define ilClearColor	ilClearColour

@@ -36,7 +36,6 @@
 
 #include "il_files.h"
 #include "il_endian.h"
-#include "il_alloc.h"
 
 // Windows-specific
 #ifdef _WIN32

@@ -33,6 +33,8 @@ iluMirror
 iluNegative
 iluNoisify
 iluPixelize
+iluRegionfv
+iluRegioniv
 iluReplaceColour
 iluRotate
 iluRotate3D

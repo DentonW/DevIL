@@ -173,6 +173,10 @@ SOURCE=..\src\ilu_noise.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\ilu_region.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\ilu_rotate.c
 # End Source File
 # Begin Source File
@@ -218,6 +222,10 @@ SOURCE=..\include\ilu_internal.h
 # Begin Source File
 
 SOURCE=..\include\ilu_mipmap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\ilu_region.h
 # End Source File
 # Begin Source File
 

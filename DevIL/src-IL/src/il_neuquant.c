@@ -413,7 +413,7 @@ ILimage *iNeuQuant(ILimage *Image)
 	learn();
 	unbiasnet();
 
-	NewImage = (ILimage*)calloc(sizeof(ILimage), 1);
+	NewImage = (ILimage*)icalloc(sizeof(ILimage), 1);
 	if (NewImage == NULL) {
 		ilCloseImage(TempImage);
 		return NULL;

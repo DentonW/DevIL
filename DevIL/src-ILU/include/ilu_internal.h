@@ -82,6 +82,7 @@ ILfloat	ilCos(ILfloat Angle);
 ILfloat	ilSin(ILfloat Angle);
 ILint	ilRound(ILfloat Num);
 ILuint	iluScaleAdvanced(ILuint Width, ILuint Height, ILenum Filter);
+ILubyte	*iScanFill(ILvoid);
 
 
 #endif//INTERNAL_H

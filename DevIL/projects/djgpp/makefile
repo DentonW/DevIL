@@ -1,6 +1,6 @@
 ###################################
 #    Djgpp Makefile for DevIL     #
-#    Last Modified:  05/27/2002   #
+#    Last Modified: 07/13/2002    #
 ###################################
 
 # Uncomment any of the following lines to define them
@@ -83,7 +83,8 @@ ILUOBJ=	$(ILUODIR)/ilu_error.o $(ILUODIR)/ilu_filter.o $(ILUODIR)/ilu_internal.o
 		$(ILUODIR)/ilu_manip.o $(ILUODIR)/ilu_mipmap.o $(ILUODIR)/ilu_filter_rcg.o \
 		$(ILUODIR)/ilu_noise.o $(ILUODIR)/ilu_rotate.o $(ILUODIR)/ilu_scale.o \
 		$(ILUODIR)/ilu_states.o $(ILUODIR)/ilu_utilities.o $(ILUODIR)/ilu_main.o \
-		$(ILUODIR)/ilu_alloc.o $(ILUODIR)/ilu_scale2d.o $(ILUODIR)/ilu_scale3d.o
+		$(ILUODIR)/ilu_alloc.o $(ILUODIR)/ilu_scale2d.o $(ILUODIR)/ilu_scale3d.o \
+		$(ILUODIR)/ilu_region.o
 
 
 ILUTDIR=	./../../src-ILUT/src

@@ -21,16 +21,19 @@
 //	This will probably use Perlin noise and parameters in the future.
 ILboolean ILAPIENTRY iluNoisify(ILclampf Tolerance)
 {
-	ILuint		i, c, Factor, Factor2, NumPix;
+	ILuint		i, j, c, Factor, Factor2, NumPix;
 	ILint		Val;
 	ILushort	*ShortPtr;
 	ILuint		*IntPtr;
+	ILubyte		*RegionMask;
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
 		ilSetError(ILU_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
+
+	RegionMask = iScanFill();
 
 	// @TODO:  Change this to work correctly without time()!
 	//srand(time(NULL));
@@ -43,7 +46,11 @@ ILboolean ILAPIENTRY iluNoisify(ILclampf Tolerance)
 			if (Factor == 0)
 				return IL_TRUE;
 			Factor2 = Factor + Factor;
-			for (i = 0; i < NumPix; i += iluCurImage->Bpp) {
+			for (i = 0, j = 0; i < NumPix; i += iluCurImage->Bpp, j++) {
+				if (RegionMask) {
+					if (!RegionMask[j])
+						continue;
+				}
 				Val = (ILint)((ILint)(rand() % Factor2) - Factor);
 				for (c = 0; c < iluCurImage->Bpp; c++) {
 					if ((ILint)iluCurImage->Data[i + c] + Val > UCHAR_MAX)
@@ -61,7 +68,11 @@ ILboolean ILAPIENTRY iluNoisify(ILclampf Tolerance)
 				return IL_TRUE;
 			Factor2 = Factor + Factor;
 			ShortPtr = (ILushort*)iluCurImage->Data;
-			for (i = 0; i < NumPix; i += iluCurImage->Bpp) {
+			for (i = 0, j = 0; i < NumPix; i += iluCurImage->Bpp, j++) {
+				if (RegionMask) {
+					if (!RegionMask[j])
+						continue;
+				}
 				Val = (ILint)((ILint)(rand() % Factor2) - Factor);
 				for (c = 0; c < iluCurImage->Bpp; c++) {
 					if ((ILint)ShortPtr[i + c] + Val > USHRT_MAX)
@@ -79,7 +90,11 @@ ILboolean ILAPIENTRY iluNoisify(ILclampf Tolerance)
 				return IL_TRUE;
 			Factor2 = Factor + Factor;
 			IntPtr = (ILuint*)iluCurImage->Data;
-			for (i = 0; i < NumPix; i += iluCurImage->Bpp) {
+			for (i = 0, j = 0; i < NumPix; i += iluCurImage->Bpp, j++) {
+				if (RegionMask) {
+					if (!RegionMask[j])
+						continue;
+				}
 				Val = (ILint)((ILint)(rand() % Factor2) - Factor);
 				for (c = 0; c < iluCurImage->Bpp; c++) {
 					if (IntPtr[i + c] + Val > UINT_MAX)
@@ -92,6 +107,8 @@ ILboolean ILAPIENTRY iluNoisify(ILclampf Tolerance)
 			}
 			break;
 	}
+
+	ifree(RegionMask);
 
 	return IL_TRUE;
 }

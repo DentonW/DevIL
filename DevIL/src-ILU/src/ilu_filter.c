@@ -21,10 +21,11 @@
 //! Pixelizes an image
 ILboolean ILAPIENTRY iluPixelize(ILuint PixSize)
 {
-	ILuint		x, y, z, i, j, k, c, Total, Tested;
+	ILuint		x, y, z, i, j, k, c, r, Total, Tested;
 	ILushort	*ShortPtr;
 	ILuint		*IntPtr;
 	ILdouble	*DblPtr, DblTotal, DblTested;
+	ILubyte		*RegionMask;
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
@@ -32,8 +33,14 @@ ILboolean ILAPIENTRY iluPixelize(ILuint PixSize)
 		return IL_FALSE;
 	}
 
+	if (PixSize == 0)
+		PixSize = 1;
+	r = 0;
+
 	if (iluCurImage->Format == IL_COLOUR_INDEX)
 		ilConvertImage(ilGetPalBaseType(iluCurImage->Pal.PalType), IL_UNSIGNED_BYTE);
+
+	RegionMask = iScanFill();
 
 	switch (iluCurImage->Bpc)
 	{
@@ -56,6 +63,10 @@ ILboolean ILAPIENTRY iluPixelize(ILuint PixSize)
 							for (k = 0; k < PixSize && z+k < iluCurImage->Depth; k++) {
 								for (j = 0; j < PixSize && y+j < iluCurImage->Height; j++) {
 									for (i = 0; i < PixSize && x+i < iluCurImage->Width; i++, Tested++) {
+										if (RegionMask) {
+											if (!RegionMask[(y+j) * iluCurImage->Width + (x+i)])
+												continue;
+										}
 										iluCurImage->Data[(z+k) * iluCurImage->SizeOfPlane + (y+j)
 											* iluCurImage->Bps + (x+i) * iluCurImage->Bpp + c] =
 											Total;
@@ -72,7 +83,7 @@ ILboolean ILAPIENTRY iluPixelize(ILuint PixSize)
 			iluCurImage->Bps /= 2;
 			for (z = 0; z < iluCurImage->Depth; z += PixSize) {
 				for (y = 0; y < iluCurImage->Height; y += PixSize) {
-					for (x = 0; x < iluCurImage->Width; x += PixSize) {
+					for (x = 0; x < iluCurImage->Width; x += PixSize, r += PixSize) {
 						for (c = 0; c < iluCurImage->Bpp; c++) {
 							Total = 0;  Tested = 0;
 							for (k = 0; k < PixSize && z+k < iluCurImage->Depth; k++) {
@@ -88,9 +99,11 @@ ILboolean ILAPIENTRY iluPixelize(ILuint PixSize)
 							for (k = 0; k < PixSize && z+k < iluCurImage->Depth; k++) {
 								for (j = 0; j < PixSize && y+j < iluCurImage->Height; j++) {
 									for (i = 0; i < PixSize && x+i < iluCurImage->Width; i++, Tested++) {
-										ShortPtr[(z+k) * iluCurImage->SizeOfPlane + (y+j)
-											* iluCurImage->Bps + (x+i) * iluCurImage->Bpp + c] =
-											Total;
+										if (RegionMask[r+i]) {
+											ShortPtr[(z+k) * iluCurImage->SizeOfPlane + (y+j)
+												* iluCurImage->Bps + (x+i) * iluCurImage->Bpp + c] =
+												Total;
+										}
 									}
 								}
 							}
@@ -105,7 +118,7 @@ ILboolean ILAPIENTRY iluPixelize(ILuint PixSize)
 			iluCurImage->Bps /= 4;
 			for (z = 0; z < iluCurImage->Depth; z += PixSize) {
 				for (y = 0; y < iluCurImage->Height; y += PixSize) {
-					for (x = 0; x < iluCurImage->Width; x += PixSize) {
+					for (x = 0; x < iluCurImage->Width; x += PixSize, r += PixSize) {
 						for (c = 0; c < iluCurImage->Bpp; c++) {
 							Total = 0;  Tested = 0;
 							for (k = 0; k < PixSize && z+k < iluCurImage->Depth; k++) {
@@ -121,9 +134,11 @@ ILboolean ILAPIENTRY iluPixelize(ILuint PixSize)
 							for (k = 0; k < PixSize && z+k < iluCurImage->Depth; k++) {
 								for (j = 0; j < PixSize && y+j < iluCurImage->Height; j++) {
 									for (i = 0; i < PixSize && x+i < iluCurImage->Width; i++, Tested++) {
-										IntPtr[(z+k) * iluCurImage->SizeOfPlane + (y+j)
-											* iluCurImage->Bps + (x+i) * iluCurImage->Bpp + c] =
-											Total;
+										if (RegionMask[r+i]) {
+											IntPtr[(z+k) * iluCurImage->SizeOfPlane + (y+j)
+												* iluCurImage->Bps + (x+i) * iluCurImage->Bpp + c] =
+												Total;
+										}
 									}
 								}
 							}
@@ -138,7 +153,7 @@ ILboolean ILAPIENTRY iluPixelize(ILuint PixSize)
 			iluCurImage->Bps /= 8;
 			for (z = 0; z < iluCurImage->Depth; z += PixSize) {
 				for (y = 0; y < iluCurImage->Height; y += PixSize) {
-					for (x = 0; x < iluCurImage->Width; x += PixSize) {
+					for (x = 0; x < iluCurImage->Width; x += PixSize, r += PixSize) {
 						for (c = 0; c < iluCurImage->Bpp; c++) {
 							DblTotal = 0.0;  DblTested = 0.0;
 							for (k = 0; k < PixSize && z+k < iluCurImage->Depth; k++) {
@@ -154,9 +169,11 @@ ILboolean ILAPIENTRY iluPixelize(ILuint PixSize)
 							for (k = 0; k < PixSize && z+k < iluCurImage->Depth; k++) {
 								for (j = 0; j < PixSize && y+j < iluCurImage->Height; j++) {
 									for (i = 0; i < PixSize && x+i < iluCurImage->Width; i++, DblTested++) {
-										DblPtr[(z+k) * iluCurImage->SizeOfPlane + (y+j)
-											* iluCurImage->Bps + (x+i) * iluCurImage->Bpp + c] =
-											DblTotal;
+										if (RegionMask[r+i]) {
+											DblPtr[(z+k) * iluCurImage->SizeOfPlane + (y+j)
+												* iluCurImage->Bps + (x+i) * iluCurImage->Bpp + c] =
+												DblTotal;
+										}
 									}
 								}
 							}
@@ -167,6 +184,8 @@ ILboolean ILAPIENTRY iluPixelize(ILuint PixSize)
 			iluCurImage->Bps *= 8;
 			break;
 	}
+
+	ifree(RegionMask);
 
 	return IL_TRUE;
 }
@@ -182,7 +201,7 @@ ILubyte *Filter(ILimage *Image, ILushort Filt)
 {
     ILint		x, y, c, LastX, LastY, Offsets[9];
 	ILuint		i, Temp, z;
-	ILubyte		*Data, *ImgData, *NewData;
+	ILubyte		*Data, *ImgData, *NewData, *RegionMask;
 	ILdouble	Num;
 
 	if (Image == NULL) {
@@ -195,6 +214,8 @@ ILubyte *Filter(ILimage *Image, ILushort Filt)
 		return NULL;
 	}
 
+	RegionMask = iScanFill();
+
 	Filt *= 11;
 	// Preserve original data.
 	ImgData = Image->Data;
@@ -205,11 +226,20 @@ ILubyte *Filter(ILimage *Image, ILushort Filt)
 		LastY = Image->Height - 1;
 		for (y = 1; y < LastY; y++) {
 			for (x = 1; x < LastX; x++) {
+				Offsets[4] = ((y  ) * Image->Width + (x  )) * Image->Bpp;
+				if (RegionMask) {
+					if (!RegionMask[y * Image->Width + x]) {
+						for (c = 0; c < Image->Bpp; c++) {
+							Data[Offsets[4]+c] = Image->Data[Offsets[4]+c];
+						}
+						continue;
+					}
+				}
+
 				Offsets[0] = ((y-1) * Image->Width + (x-1)) * Image->Bpp;
 				Offsets[1] = ((y-1) * Image->Width + (x  )) * Image->Bpp;
 				Offsets[2] = ((y-1) * Image->Width + (x+1)) * Image->Bpp;
 				Offsets[3] = ((y  ) * Image->Width + (x-1)) * Image->Bpp;
-				Offsets[4] = ((y  ) * Image->Width + (x  )) * Image->Bpp;
 				Offsets[5] = ((y  ) * Image->Width + (x+1)) * Image->Bpp;
 				Offsets[6] = ((y+1) * Image->Width + (x-1)) * Image->Bpp;
 				Offsets[7] = ((y+1) * Image->Width + (x  )) * Image->Bpp;
@@ -269,6 +299,12 @@ ILubyte *Filter(ILimage *Image, ILushort Filt)
 
 		// First row
 		for (x = 1; x < (ILint)Image->Width-1; x++) {
+			if (RegionMask) {
+				if (!RegionMask[x]) {
+					Data[y + x * Image->Bpp + c] = Image->Data[y + x * Image->Bpp + c];
+					continue;
+				}
+			}
 			for (c = 0; c < Image->Bpp; c++) {
 				Num =   Image->Data[(x-1) * Image->Bpp + c] * Filters[Filt] +
 						Image->Data[x * Image->Bpp + c] * Filters[Filt+1]+
@@ -291,6 +327,12 @@ ILubyte *Filter(ILimage *Image, ILushort Filt)
 		// Last row
 		y = (Image->Height - 1) * Image->Bps;
 		for (x = 1; x < (ILint)Image->Width-1; x++) {
+			if (RegionMask) {
+				if (!RegionMask[(Image->Height - 1) * Image->Width + x]) {
+					Data[y + x * Image->Bpp + c] = Image->Data[y + x * Image->Bpp + c];
+					continue;
+				}
+			}
 			for (c = 0; c < Image->Bpp; c++) {
 				Num =   Image->Data[y - Image->Bps + (x-1) * Image->Bpp + c] * Filters[Filt] +
 						Image->Data[y - Image->Bps + x * Image->Bpp + c] * Filters[Filt+1]+
@@ -312,6 +354,12 @@ ILubyte *Filter(ILimage *Image, ILushort Filt)
 
 		// Left side
 		for (i = 1, y = Image->Bps; i < Image->Height-1; i++, y += Image->Bps) {
+			if (RegionMask) {
+				if (!RegionMask[y / Image->Bpp]) {
+					Data[y + c] = Image->Data[y + c];
+					continue;
+				}
+			}
 			for (c = 0; c < Image->Bpp; c++) {
 				Num =   Image->Data[y - Image->Bps + c] * Filters[Filt] +
 						Image->Data[y - Image->Bps + Image->Bpp + c] * Filters[Filt+1]+
@@ -333,6 +381,14 @@ ILubyte *Filter(ILimage *Image, ILushort Filt)
 
 		// Right side
 		for (i = 1, y = Image->Bps * 2 - Image->Bpp; i < Image->Height-1; i++, y += Image->Bps) {
+			if (RegionMask) {
+				if (!RegionMask[y / Image->Bpp + (Image->Width - 1)]) {
+					for (c = 0; c < Image->Bpp; c++) {
+						Data[y + c] = Image->Data[y + c];
+					}
+					continue;
+				}
+			}
 			for (c = 0; c < Image->Bpp; c++) {
 				Num =   Image->Data[y - Image->Bps + c] * Filters[Filt] +
 						Image->Data[y - Image->Bps + Image->Bpp + c] * Filters[Filt+1]+
@@ -357,6 +413,8 @@ ILubyte *Filter(ILimage *Image, ILushort Filt)
 		Data += Image->SizeOfPlane;
 	}
 
+	ifree(RegionMask);
+
 	// Restore original data.
 	Image->Data = ImgData;
 	Data = NewData;
@@ -369,7 +427,8 @@ ILboolean ILAPIENTRY iluEdgeDetectP()
 {
 	ILubyte		*HPass, *VPass;
 	ILuint		i;
-	ILboolean	Palette = IL_FALSE;
+	ILboolean	Palette = IL_FALSE, Converted = IL_FALSE;
+	ILenum		Type;
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
@@ -381,11 +440,20 @@ ILboolean ILAPIENTRY iluEdgeDetectP()
 		Palette = IL_TRUE;
 		ilConvertImage(ilGetPalBaseType(iluCurImage->Pal.PalType), IL_UNSIGNED_BYTE);
 	}
+	else if (iluCurImage->Type > IL_UNSIGNED_BYTE) {
+		Converted = IL_TRUE;
+		Type = iluCurImage->Type;
+		ilConvertImage(iluCurImage->Format, IL_UNSIGNED_BYTE);
+	}
+
 
 	HPass = Filter(iluCurImage, 4);
 	VPass = Filter(iluCurImage, 5);
-	if (!HPass || !VPass)
+	if (!HPass || !VPass) {
+		ifree(HPass);
+		ifree(VPass);
 		return IL_FALSE;
+	}
 
 	// Combine the two passes
 	//	Optimization by Matt Denham
@@ -407,6 +475,8 @@ ILboolean ILAPIENTRY iluEdgeDetectP()
 
 	if (Palette)
 		ilConvertImage(IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
+	else if (Converted)
+		ilConvertImage(iluCurImage->Format, Type);
 
 	return IL_TRUE;
 }
@@ -416,7 +486,8 @@ ILboolean ILAPIENTRY iluEdgeDetectS()
 {
 	ILubyte		*HPass, *VPass;
 	ILuint		i;
-	ILboolean	Palette = IL_FALSE;
+	ILboolean	Palette = IL_FALSE, Converted = IL_FALSE;
+	ILenum		Type;
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
@@ -428,11 +499,19 @@ ILboolean ILAPIENTRY iluEdgeDetectS()
 		Palette = IL_TRUE;
 		ilConvertImage(ilGetPalBaseType(iluCurImage->Pal.PalType), IL_UNSIGNED_BYTE);
 	}
+	else if (iluCurImage->Type > IL_UNSIGNED_BYTE) {
+		Converted = IL_TRUE;
+		Type = iluCurImage->Type;
+		ilConvertImage(iluCurImage->Format, IL_UNSIGNED_BYTE);
+	}
 
 	HPass = Filter(iluCurImage, 2);
 	VPass = Filter(iluCurImage, 3);
-	if (!HPass || !VPass)
+	if (!HPass || !VPass) {
+		ifree(HPass);
+		ifree(VPass);
 		return IL_FALSE;
+	}
 
 	// Combine the two passes
 	//	Optimization by Matt Denham
@@ -454,6 +533,8 @@ ILboolean ILAPIENTRY iluEdgeDetectS()
 
 	if (Palette)
 		ilConvertImage(IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
+	else if (Converted)
+		ilConvertImage(iluCurImage->Format, Type);
 
 	return IL_TRUE;
 }
@@ -463,7 +544,8 @@ ILboolean ILAPIENTRY iluBlurAvg(ILuint Iter)
 {
 	ILubyte		*Data;
 	ILuint		i;
-	ILboolean	Palette = IL_FALSE;
+	ILboolean	Palette = IL_FALSE, Converted = IL_FALSE;
+	ILenum		Type;
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
@@ -474,6 +556,11 @@ ILboolean ILAPIENTRY iluBlurAvg(ILuint Iter)
 	if (iluCurImage->Format == IL_COLOUR_INDEX) {
 		Palette = IL_TRUE;
 		ilConvertImage(ilGetPalBaseType(iluCurImage->Pal.PalType), IL_UNSIGNED_BYTE);
+	}
+	else if (iluCurImage->Type > IL_UNSIGNED_BYTE) {
+		Converted = IL_TRUE;
+		Type = iluCurImage->Type;
+		ilConvertImage(iluCurImage->Format, IL_UNSIGNED_BYTE);
 	}
 
 	for (i = 0; i < Iter; i++) {
@@ -486,6 +573,8 @@ ILboolean ILAPIENTRY iluBlurAvg(ILuint Iter)
 
 	if (Palette)
 		ilConvertImage(IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
+	else if (Converted)
+		ilConvertImage(iluCurImage->Format, Type);
 
 	return IL_TRUE;
 }
@@ -495,7 +584,8 @@ ILboolean ILAPIENTRY iluBlurGaussian(ILuint Iter)
 {
 	ILubyte		*Data;
 	ILuint		i;
-	ILboolean	Palette = IL_FALSE;
+	ILboolean	Palette = IL_FALSE, Converted = IL_FALSE;
+	ILenum		Type;
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
@@ -506,6 +596,11 @@ ILboolean ILAPIENTRY iluBlurGaussian(ILuint Iter)
 	if (iluCurImage->Format == IL_COLOUR_INDEX) {
 		Palette = IL_TRUE;
 		ilConvertImage(ilGetPalBaseType(iluCurImage->Pal.PalType), IL_UNSIGNED_BYTE);
+	}
+	else if (iluCurImage->Type > IL_UNSIGNED_BYTE) {
+		Converted = IL_TRUE;
+		Type = iluCurImage->Type;
+		ilConvertImage(iluCurImage->Format, IL_UNSIGNED_BYTE);
 	}
 
 	for (i = 0; i < Iter; i++) {
@@ -518,6 +613,8 @@ ILboolean ILAPIENTRY iluBlurGaussian(ILuint Iter)
 
 	if (Palette)
 		ilConvertImage(IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
+	else if (Converted)
+		ilConvertImage(iluCurImage->Format, Type);
 
 	return IL_TRUE;
 }
@@ -526,7 +623,8 @@ ILboolean ILAPIENTRY iluBlurGaussian(ILuint Iter)
 ILboolean ILAPIENTRY iluEmboss()
 {
 	ILubyte		*Data;
-	ILboolean	Palette = IL_FALSE;
+	ILboolean	Palette = IL_FALSE, Converted = IL_FALSE;
+	ILenum		Type;
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
@@ -538,6 +636,11 @@ ILboolean ILAPIENTRY iluEmboss()
 		Palette = IL_TRUE;
 		ilConvertImage(ilGetPalBaseType(iluCurImage->Pal.PalType), IL_UNSIGNED_BYTE);
 	}
+	else if (iluCurImage->Type > IL_UNSIGNED_BYTE) {
+		Converted = IL_TRUE;
+		Type = iluCurImage->Type;
+		ilConvertImage(iluCurImage->Format, IL_UNSIGNED_BYTE);
+	}
 
 	Data = Filter(iluCurImage, 6);
 	if (!Data)
@@ -547,6 +650,8 @@ ILboolean ILAPIENTRY iluEmboss()
 
 	if (Palette)
 		ilConvertImage(IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
+	else if (Converted)
+		ilConvertImage(iluCurImage->Format, Type);
 
 	return IL_TRUE;
 }
@@ -586,7 +691,8 @@ ILboolean ILAPIENTRY iluEmboss()
 ILboolean ILAPIENTRY iluEdgeDetectE()
 {
 	ILubyte		*Data;
-	ILboolean	Palette = IL_FALSE;
+	ILboolean	Palette = IL_FALSE, Converted = IL_FALSE;
+	ILenum		Type;
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
@@ -598,6 +704,11 @@ ILboolean ILAPIENTRY iluEdgeDetectE()
 		Palette = IL_TRUE;
 		ilConvertImage(ilGetPalBaseType(iluCurImage->Pal.PalType), IL_UNSIGNED_BYTE);
 	}
+	else if (iluCurImage->Type > IL_UNSIGNED_BYTE) {
+		Converted = IL_TRUE;
+		Type = iluCurImage->Type;
+		ilConvertImage(iluCurImage->Format, IL_UNSIGNED_BYTE);
+	}
 
 	Data = Filter(iluCurImage, 7);
 	if (!Data)
@@ -607,6 +718,8 @@ ILboolean ILAPIENTRY iluEdgeDetectE()
 
 	if (Palette)
 		ilConvertImage(IL_COLOUR_INDEX, IL_UNSIGNED_BYTE);
+	else if (Converted)
+		ilConvertImage(iluCurImage->Format, Type);
 
 	return IL_TRUE;
 }
@@ -1121,3 +1234,4 @@ ILboolean ILAPIENTRY iluSharpen(ILfloat Factor, ILuint Iter)
 
 	return IL_TRUE;
 }
+

@@ -247,13 +247,13 @@ double fwidth;				/* filter width (support) */
 	yscale = (double) dst->ysize / (double) src->ysize;
 
 	/* pre-calculate filter contributions for a row */
-	contrib = (CLIST *)calloc(dst->xsize, sizeof(CLIST));
+	contrib = (CLIST*)icalloc(dst->xsize, sizeof(CLIST));
 	if(xscale < 1.0) {
 		width = fwidth / xscale;
 		fscale = 1.0 / xscale;
 		for(i = 0; i < dst->xsize; ++i) {
 			contrib[i].n = 0;
-			contrib[i].p = (CONTRIB *)calloc((int) (width * 2 + 1),
+			contrib[i].p = (CONTRIB*)icalloc((int) (width * 2 + 1),
 					sizeof(CONTRIB));
 			center = (double) i / xscale;
 			left = ceil(center - width);
@@ -276,8 +276,7 @@ double fwidth;				/* filter width (support) */
 	} else {
 		for(i = 0; i < dst->xsize; ++i) {
 			contrib[i].n = 0;
-			contrib[i].p = (CONTRIB *)calloc((int) (fwidth * 2 + 1),
-					sizeof(CONTRIB));
+			contrib[i].p = (CONTRIB*)icalloc((int) (fwidth * 2 + 1), sizeof(CONTRIB));
 			center = (double) i / xscale;
 			left = ceil(center - fwidth);
 			right = floor(center + fwidth);
@@ -299,7 +298,7 @@ double fwidth;				/* filter width (support) */
 	}
 
 	/* apply filter to zoom horizontally from src to tmp */
-	raster = (Pixel *)calloc(src->xsize, sizeof(Pixel));
+	raster = (Pixel*)icalloc(src->xsize, sizeof(Pixel));
 	for(k = 0; k < tmp->ysize; ++k) {
 		get_row(raster, src, k);
 		for(i = 0; i < tmp->xsize; ++i) {
@@ -321,14 +320,13 @@ double fwidth;				/* filter width (support) */
 	ifree(contrib);
 
 	/* pre-calculate filter contributions for a column */
-	contrib = (CLIST *)calloc(dst->ysize, sizeof(CLIST));
+	contrib = (CLIST*)icalloc(dst->ysize, sizeof(CLIST));
 	if(yscale < 1.0) {
 		width = fwidth / yscale;
 		fscale = 1.0 / yscale;
 		for(i = 0; i < dst->ysize; ++i) {
 			contrib[i].n = 0;
-			contrib[i].p = (CONTRIB *)calloc((int) (width * 2 + 1),
-					sizeof(CONTRIB));
+			contrib[i].p = (CONTRIB*)icalloc((int) (width * 2 + 1), sizeof(CONTRIB));
 			center = (double) i / yscale;
 			left = ceil(center - width);
 			right = floor(center + width);
@@ -350,7 +348,7 @@ double fwidth;				/* filter width (support) */
 	} else {
 		for(i = 0; i < dst->ysize; ++i) {
 			contrib[i].n = 0;
-			contrib[i].p = (CONTRIB *)calloc((int) (fwidth * 2 + 1),
+			contrib[i].p = (CONTRIB*)icalloc((int) (fwidth * 2 + 1),
 					sizeof(CONTRIB));
 			center = (double) i / yscale;
 			left = ceil(center - fwidth);
@@ -373,7 +371,7 @@ double fwidth;				/* filter width (support) */
 	}
 
 	/* apply filter to zoom vertically from tmp to dst */
-	raster = (Pixel *)calloc(tmp->ysize, sizeof(Pixel));
+	raster = (Pixel*)icalloc(tmp->ysize, sizeof(Pixel));
 	for(k = 0; k < dst->xsize; ++k) {
 		get_column(raster, tmp, k);
 		for(i = 0; i < dst->ysize; ++i) {

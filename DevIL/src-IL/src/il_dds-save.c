@@ -79,7 +79,7 @@ ILboolean iSaveDdsInternal()
 	WriteHeader(iCurImage, DXTCFormat);
 	
 	numMipMaps = ilGetInteger(IL_NUM_MIPMAPS);
-	for (counter = 0; counter < numMipMaps; counter++) {
+	for (counter = 0; counter <= numMipMaps; counter++) {
 		ilActiveMipmap(counter);
 
 		if (iCurImage->Origin != IL_ORIGIN_UPPER_LEFT) {
@@ -157,7 +157,7 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat)
 	}
 	SaveLittleUInt(LinearSize);	// LinearSize
 	SaveLittleUInt(0);			// Depth
-	SaveLittleUInt(ilGetInteger(IL_NUM_MIPMAPS));			// MipMapCount
+	SaveLittleUInt(ilGetInteger(IL_NUM_MIPMAPS) + 1);  // MipMapCount
 	SaveLittleUInt(0);			// AlphaBitDepth
 
 	for (i = 0; i < 10; i++)
@@ -631,7 +631,7 @@ ILvoid ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1)
 {
 	ILuint		i, j;
 	Color888	Colours[16];
-	ILuint		Farthest = 0, d;
+	ILint		Farthest = -1, d;
 
 	for (i = 0; i < 16; i++) {
 		ShortToColor888(Block[i], &Colours[i]);

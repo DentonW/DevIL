@@ -23,6 +23,8 @@ ILAPI ILubyte ILAPIENTRY ilGetBppFormat(ILenum Format)
 			return 1;
 		case IL_LUMINANCE:
 			return 1;
+		case IL_LUMINANCE_ALPHA:
+			return 2;
 		case IL_RGB:
 			return 3;
 		case IL_BGR:

@@ -26,7 +26,7 @@ extern "C" {
 
 #ifdef _WIN32
 	#ifndef IL_STATIC_LIB
-		#ifdef  _MSC_VER
+		#if defined(_MSC_VER) || defined(__BORLANDC__)
 			#ifndef _ILUT_BUILD_LIBRARY
 				#ifdef IL_DEBUG
 					#pragma comment(lib, "ilut-d.lib")
@@ -34,7 +34,7 @@ extern "C" {
 					#pragma comment(lib, "ilut.lib")
 				#endif//_DEBUG
 			#endif//_ILUT_BUILD_LIBRARY
-		#endif//_MSC_VER
+		#endif//_MSC_VER || __BORLANDC__
 	#endif//IL_STATIC_LIB
 #endif//_WIN32
 

@@ -30,9 +30,6 @@ typedef struct iFree
 ILboolean	iEnlargeStack(ILvoid);
 ILvoid		iFreeMem(ILvoid);
 
-// In alloc.c
-void		AddToAtexit();
-
 // Globals for il_stack.c
 ILuint		StackSize = 0;
 ILuint		LastUsed = 0;

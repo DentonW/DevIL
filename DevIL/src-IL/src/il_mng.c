@@ -24,7 +24,7 @@
 //---------------------------------------------------------------------------------------------
 mng_ptr MNG_DECL mymngalloc(mng_size_t size)
 {
-	return (mng_ptr)calloc(1, size);
+	return (mng_ptr)icalloc(1, size);
 }
 
 

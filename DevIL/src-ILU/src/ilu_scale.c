@@ -98,7 +98,7 @@ ILAPI ILimage* ILAPIENTRY iluScale_(ILimage *Image, ILuint Width, ILuint Height,
 	}
 
 	// So we don't replicate this 3 times (one in each iluScalexD_() function.
-	Scaled = (ILimage*)calloc(1, sizeof(ILimage));
+	Scaled = (ILimage*)icalloc(1, sizeof(ILimage));
 	if (ilCopyImageAttr(Scaled, ToScale) == IL_FALSE) {
 		ilCloseImage(Scaled);
 		if (ToScale != Image)
