@@ -739,9 +739,8 @@ ILboolean DecompressDXT5()
 	ILubyte		alphas[8], *alphamask;
 	ILuint		bits;
 
-
 	Temp = CompData;
-	for (z = 0; z < Height; z++) {
+	for (z = 0; z < Depth; z++) {
 		for (y = 0; y < Height; y += 4) {
 			for (x = 0; x < Width; x += 4) {
 				if (y >= Height || x >= Width)

@@ -303,10 +303,15 @@ ILuint GenBitMask(ILushort ex0, ILushort ex1, ILuint NumCols, ILushort *In, Colo
 
 	ShortToColor888(ex0, &Colours[0]);
 	ShortToColor888(ex1, &Colours[1]);
-	Colours[2].r = (2 * Colours[0].r + Colours[1].r + 1) / 3;
-	Colours[2].g = (2 * Colours[0].g + Colours[1].g + 1) / 3;
-	Colours[2].b = (2 * Colours[0].b + Colours[1].b + 1) / 3;
-	if (NumCols == 4) {
+	if (NumCols == 3) {
+		Colours[2].r = (Colours[0].r + Colours[1].r) / 2;
+		Colours[2].g = (Colours[0].g + Colours[1].g) / 2;
+		Colours[2].b = (Colours[0].b + Colours[1].b) / 2;
+	}
+	else {  // NumCols == 4
+		Colours[2].r = (2 * Colours[0].r + Colours[1].r + 1) / 3;
+		Colours[2].g = (2 * Colours[0].g + Colours[1].g + 1) / 3;
+		Colours[2].b = (2 * Colours[0].b + Colours[1].b + 1) / 3;
 		Colours[3].r = (Colours[0].r + 2 * Colours[1].r + 1) / 3;
 		Colours[3].g = (Colours[0].g + 2 * Colours[1].g + 1) / 3;
 		Colours[3].b = (Colours[0].b + 2 * Colours[1].b + 1) / 3;
@@ -343,82 +348,6 @@ ILuint Distance(Color888 *c1, Color888 *c2)
 			(c1->g - c2->g) * (c1->g - c2->g) +
 			(c1->b - c2->b) * (c1->b - c2->b);
 }
-
-
-ILvoid RMS(Color888 *Block, ILuint *Values)
-{
-	ILuint Mean[3], i;
-
-	for (i = 0, Mean[0] = 0; i < 16; i++) {
-		Mean[0] += Block[i].r;
-	}
-	for (i = 0, Mean[1] = 0; i < 16; i++) {
-		Mean[1] += Block[i].g;
-	}
-	for (i = 0, Mean[2] = 0; i < 16; i++) {
-		Mean[2] += Block[i].b;
-	}
-
-	Mean[0] /= 16;
-	Mean[1] /= 16;
-	Mean[2] /= 16;
-
-	for (i = 0, Values[0] = 0; i < 16; i++) {
-		Values[0] += (Mean[0] - Block[i].r) * (Mean[0] - Block[i].r);
-	}
-	for (i = 0, Values[0] = 0; i < 16; i++) {
-		Values[1] += (Mean[1] - Block[i].g) * (Mean[1] - Block[i].g);
-	}
-	for (i = 0, Values[0] = 0; i < 16; i++) {
-		Values[2] += (Mean[2] - Block[i].b) * (Mean[2] - Block[i].b);
-	}
-
-	Values[0] = (ILuint)sqrt(Values[0]);
-	Values[1] = (ILuint)sqrt(Values[1]);
-	Values[2] = (ILuint)sqrt(Values[2]);
-
-	return;
-}
-
-
-/*ILvoid ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1)
-{
-	ILuint		i, j, RMSVals[16][16][3], RMSBlock[3];
-	ILubyte		Out[16];
-	Color888	Colours[16];
-	ILuint		Closest = UINT_MAX, DistAvg;
-
-	for (i = 0; i < 16; i++) {
-		ShortToColor888(Block[i], &Colours[i]);
-	}
-	RMS(Colours, RMSBlock);
-
-	for (i = 0; i < 16; i++) {
-		for (j = 0; j < 16; j++) {  // Compares against itself, but oh well...
-			GenBitMask(Block[i], Block[j], 4, Block, Colours);
-			RMS(Colours, RMSVals[i][j]);
-		}
-	}
-
-	for (i = 0; i < 16; i++) {
-		for (j = 0; j < 16; j++) {
-			if (i == j)
-				continue;
-
-			DistAvg =  (abs(RMSBlock[0] - RMSVals[i][j][0]) + 
-						abs(RMSBlock[1] - RMSVals[i][j][1]) + 
-						abs(RMSBlock[2] - RMSVals[i][j][2])) / 3;
-			if (DistAvg < Closest) {
-				*ex0 = Block[i];
-				*ex1 = Block[j];
-				Closest = DistAvg;
-			}
-		}
-	}
-
-	return;
-}*/
-
 
 
 ILvoid ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1)
