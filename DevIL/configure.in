@@ -37,7 +37,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.40 $)
+AC_REVISION($Revision: 1.41 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -511,8 +511,15 @@ AC_CHECK_HEADER(tiffio.h, ,no_tiff="yes")
 AC_CHECK_HEADER(png.h, ,no_png="yes")
 AC_CHECK_HEADER(lcms/lcms.h, ,no_lcms="yes")
 AC_CHECK_HEADER(libmng.h, ,no_mng="yes")
-AC_CHECK_HEADER(GL/gl.h, , use_opengl="no")
 AC_CHECK_HEADER(d3d8.h, , use_directx="no")
+case "$target" in
+ 	*apple-darwin*)
+		AC_CHECK_HEADER(OpenGL/gl.h, [have_gl_hdr=yes], use_opengl="no")
+							;;
+	*)
+		AC_CHECK_HEADER(GL/gl.h, [have_gl_hdr=yes], use_opengl="no")
+							;;
+esac
 AC_CHECK_HEADER(SDL.h, , use_sdl="no")
 AC_CHECK_HEADER(zlib.h, LIBZ="-lz", LIBZ="")
 AC_SUBST(LIBZ)
@@ -595,7 +602,6 @@ AC_SUBST(HSDL)
 
 
 if test "$use_opengl" = "yes" ; then
-AC_CHECK_HEADER(GL/gl.h, [have_gl_hdr=yes])
 case "$target" in
 *-*-cygwin* | *-*-mingw32*)
 	LIBGL="-lopengl32 -lglu32"
