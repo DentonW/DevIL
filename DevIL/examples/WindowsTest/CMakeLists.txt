@@ -11,6 +11,7 @@ INCLUDE_DIRECTORIES(
 
 LINK_DIRECTORIES(
 
+	${DEVIL_LIB_DEST_DIR}
 	${CMAKE_CURRENT_SOURCE_DIR}
 	${DevIL_XTRA_SOURCE_DIR}/colorpicker
 )
@@ -48,11 +49,18 @@ INCLUDE_DIRECTORIES(
 
 
 #
-# Copy dlls into the output dir, so stuff just works from vcc
+# Copy all needed dlls into the output dir, so stuff just works from vcc
 #
 IF(WIN32)
+IF(BUILD_SHARED_LIBS)
+
 	ADD_CUSTOM_COMMAND( TARGET Example_WindowsTest POST_BUILD COMMAND ${CMAKE_COMMAND} ARGS -E copy
 		${DevIL_XTRA_SOURCE_DIR}/colorpicker/ColorPicker.dll
 		${CMAKE_CFG_INTDIR}
 	)
+	ADD_CUSTOM_COMMAND( TARGET Example_WindowsTest POST_BUILD COMMAND ${CMAKE_COMMAND} ARGS -E copy
+		${DEVIL_LIB_DEST_DIR}/*.dll
+		${CMAKE_CFG_INTDIR}
+	)
+ENDIF(BUILD_SHARED_LIBS)
 ENDIF(WIN32)
