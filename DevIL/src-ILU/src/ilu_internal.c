@@ -17,9 +17,9 @@
 
 ILdouble IL_PI      = 3.1415926535897932384626;
 ILdouble IL_DEGCONV = 0.0174532925199432957692;
-#if !defined(__APPLE__)
+//#if !defined(__APPLE__)
 	ILimage *iluCurImage = NULL;
-#endif
+//#endif
 
 
 // Anyway we can inline these next 3 functions in pure C without making them macros?
