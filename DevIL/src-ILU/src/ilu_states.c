@@ -16,7 +16,11 @@
 
 
 const ILstring _iluVendor	= IL_TEXT("Abysmal Software");
-const ILstring _iluVersion	= IL_TEXT("Developer's Image Library Utilities (ILU) 1.6.6");
+
+//use a define to enable the ## __DATE__ construct
+#define VERSION_STRING "Developer's Image Library Utilities (ILU) 1.6.6 " ## __DATE__
+const ILstring _iluVersion	= IL_TEXT(VERSION_STRING);
+#undef VESION_STRING
 
 
 const ILstring ILAPIENTRY iluGetString(ILenum StringName)
