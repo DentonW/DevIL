@@ -48,25 +48,25 @@ SDL_Surface * ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags)
 	ILuint	i = 0, j = 0, Pad, BppPal;
 	ILubyte	*Dest;
 
-	iCurImage = ilGetCurImage();
+	ilutCurImage = ilGetCurImage();
 
-	if (iCurImage == NULL) {
+	if (ilutCurImage == NULL) {
 		ilSetError(ILUT_ILLEGAL_OPERATION);
 		return NULL;
 	}
 
 	// Should be IL_BGR(A).
-	if (iCurImage->Format == IL_RGB || iCurImage->Format == IL_RGBA) {
+	if (ilutCurImage->Format == IL_RGB || ilutCurImage->Format == IL_RGBA) {
 		if (!isBigEndian)
 			iluSwapColours();
 	}
 
-	if (iCurImage->Origin == IL_ORIGIN_LOWER_LEFT)
+	if (ilutCurImage->Origin == IL_ORIGIN_LOWER_LEFT)
 		iluFlipImage();
-	if (iCurImage->Type > IL_UNSIGNED_BYTE) {}  // Can't do anything about this right now...
-	if (iCurImage->Type == IL_BYTE) {}  // Can't do anything about this right now...
+	if (ilutCurImage->Type > IL_UNSIGNED_BYTE) {}  // Can't do anything about this right now...
+	if (ilutCurImage->Type == IL_BYTE) {}  // Can't do anything about this right now...
 
-	Bitmap = SDL_CreateRGBSurface(flags,iCurImage->Width,iCurImage->Height,iCurImage->Bpp * 8,
+	Bitmap = SDL_CreateRGBSurface(flags,ilutCurImage->Width,ilutCurImage->Height,ilutCurImage->Bpp * 8,
 					rmask,gmask,bmask,amask);
 
 	if (Bitmap == NULL) {
@@ -77,15 +77,15 @@ SDL_Surface * ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags)
 	if (SDL_MUSTLOCK(Bitmap))
 		SDL_LockSurface(Bitmap);
 
-	Pad = Bitmap->pitch - iCurImage->Bps;
+	Pad = Bitmap->pitch - ilutCurImage->Bps;
 	if (Pad == 0) {
-		memcpy(Bitmap->pixels, iCurImage->Data, iCurImage->SizeOfData);
+		memcpy(Bitmap->pixels, ilutCurImage->Data, ilutCurImage->SizeOfData);
 	}
 	else {  // Must pad the lines on some images.
 		Dest = Bitmap->pixels;
-		for (i = 0; i < iCurImage->Height; i++) {
-			memcpy(Dest, iCurImage->Data + i * iCurImage->Bps, iCurImage->Bps);
-			memset(Dest + iCurImage->Bps, 0, Pad);
+		for (i = 0; i < ilutCurImage->Height; i++) {
+			memcpy(Dest, ilutCurImage->Data + i * ilutCurImage->Bps, ilutCurImage->Bps);
+			memset(Dest + ilutCurImage->Bps, 0, Pad);
 			Dest += Bitmap->pitch;
 		}
 	}
@@ -93,27 +93,27 @@ SDL_Surface * ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags)
 	if (SDL_MUSTLOCK(Bitmap))
 		SDL_UnlockSurface(Bitmap);
 
-	if (iCurImage->Bpp == 1) {
-		BppPal = ilGetBppPal(iCurImage->Pal.PalType);
-		switch (iCurImage->Pal.PalType)
+	if (ilutCurImage->Bpp == 1) {
+		BppPal = ilGetBppPal(ilutCurImage->Pal.PalType);
+		switch (ilutCurImage->Pal.PalType)
 		{
 			case IL_PAL_RGB24:
 			case IL_PAL_RGB32:
 			case IL_PAL_RGBA32:
-				for (i = 0; i < iCurImage->Pal.PalSize / BppPal; i++) {
-					(Bitmap->format)->palette->colors[i].r = iCurImage->Pal.Palette[i*BppPal+0];
-					(Bitmap->format)->palette->colors[i].g = iCurImage->Pal.Palette[i*BppPal+1];
-					(Bitmap->format)->palette->colors[i].b = iCurImage->Pal.Palette[i*BppPal+2];
+				for (i = 0; i < ilutCurImage->Pal.PalSize / BppPal; i++) {
+					(Bitmap->format)->palette->colors[i].r = ilutCurImage->Pal.Palette[i*BppPal+0];
+					(Bitmap->format)->palette->colors[i].g = ilutCurImage->Pal.Palette[i*BppPal+1];
+					(Bitmap->format)->palette->colors[i].b = ilutCurImage->Pal.Palette[i*BppPal+2];
 					(Bitmap->format)->palette->colors[i].unused = 255;
 				}
 				break;
 			case IL_PAL_BGR24:
 			case IL_PAL_BGR32:
 			case IL_PAL_BGRA32:
-				for (i = 0; i < iCurImage->Pal.PalSize / BppPal; i++) {
-					(Bitmap->format)->palette->colors[i].b = iCurImage->Pal.Palette[i*BppPal+0];
-					(Bitmap->format)->palette->colors[i].g = iCurImage->Pal.Palette[i*BppPal+1];
-					(Bitmap->format)->palette->colors[i].r = iCurImage->Pal.Palette[i*BppPal+2];
+				for (i = 0; i < ilutCurImage->Pal.PalSize / BppPal; i++) {
+					(Bitmap->format)->palette->colors[i].b = ilutCurImage->Pal.Palette[i*BppPal+0];
+					(Bitmap->format)->palette->colors[i].g = ilutCurImage->Pal.Palette[i*BppPal+1];
+					(Bitmap->format)->palette->colors[i].r = ilutCurImage->Pal.Palette[i*BppPal+2];
 					(Bitmap->format)->palette->colors[i].unused = 255;
 				}
 				break;
@@ -147,8 +147,8 @@ SDL_Surface* ILAPIENTRY ilutSDLSurfaceLoadImage(char *FileName)
 // Unfinished
 ILboolean ILAPIENTRY ilutSDLSurfaceFromBitmap(SDL_Surface *Bitmap)
 {
-	iCurImage = ilGetCurImage();
-	if (iCurImage == NULL) {
+	ilutCurImage = ilGetCurImage();
+	if (ilutCurImage == NULL) {
 		ilSetError(ILUT_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}

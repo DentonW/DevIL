@@ -14,5 +14,5 @@
 #include "ilut_internal.h"
 
 #if !defined(__APPLE__)
-	ILimage *iCurImage = NULL;
+	ILimage *ilutCurImage = NULL;
 #endif

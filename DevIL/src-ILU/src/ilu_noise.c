@@ -27,32 +27,32 @@ ILboolean ILAPIENTRY iluNoisify(ILclampf Tolerance)
 	ILushort	*ShortPtr;
 	ILuint		*IntPtr;
 
-	iCurImage = ilGetCurImage();
-	if (iCurImage == NULL) {
+	iluCurImage = ilGetCurImage();
+	if (iluCurImage == NULL) {
 		ilSetError(ILU_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
 	// @TODO:  Change this to work correctly without time()!
 	//srand(time(NULL));
-	NumPix = iCurImage->SizeOfData / iCurImage->Bpc;
+	NumPix = iluCurImage->SizeOfData / iluCurImage->Bpc;
 
-	switch (iCurImage->Bpc)
+	switch (iluCurImage->Bpc)
 	{
 		case 1:
 			Factor = (ILubyte)(Tolerance * (UCHAR_MAX / 2));
 			if (Factor == 0)
 				return IL_TRUE;
 			Factor2 = Factor + Factor;
-			for (i = 0; i < NumPix; i += iCurImage->Bpp) {
+			for (i = 0; i < NumPix; i += iluCurImage->Bpp) {
 				Val = (ILint)((ILint)(rand() % Factor2) - Factor);
-				for (c = 0; c < iCurImage->Bpp; c++) {
-					if ((ILint)iCurImage->Data[i + c] + Val > UCHAR_MAX)
-						iCurImage->Data[i + c] = UCHAR_MAX;
-					else if ((ILint)iCurImage->Data[i + c] + Val < 0)
-						iCurImage->Data[i + c] = 0;
+				for (c = 0; c < iluCurImage->Bpp; c++) {
+					if ((ILint)iluCurImage->Data[i + c] + Val > UCHAR_MAX)
+						iluCurImage->Data[i + c] = UCHAR_MAX;
+					else if ((ILint)iluCurImage->Data[i + c] + Val < 0)
+						iluCurImage->Data[i + c] = 0;
 					else
-						iCurImage->Data[i + c] += Val;
+						iluCurImage->Data[i + c] += Val;
 				}
 			}
 			break;
@@ -61,10 +61,10 @@ ILboolean ILAPIENTRY iluNoisify(ILclampf Tolerance)
 			if (Factor == 0)
 				return IL_TRUE;
 			Factor2 = Factor + Factor;
-			ShortPtr = (ILushort*)iCurImage->Data;
-			for (i = 0; i < NumPix; i += iCurImage->Bpp) {
+			ShortPtr = (ILushort*)iluCurImage->Data;
+			for (i = 0; i < NumPix; i += iluCurImage->Bpp) {
 				Val = (ILint)((ILint)(rand() % Factor2) - Factor);
-				for (c = 0; c < iCurImage->Bpp; c++) {
+				for (c = 0; c < iluCurImage->Bpp; c++) {
 					if ((ILint)ShortPtr[i + c] + Val > USHRT_MAX)
 						ShortPtr[i + c] = USHRT_MAX;
 					else if ((ILint)ShortPtr[i + c] + Val < 0)
@@ -79,10 +79,10 @@ ILboolean ILAPIENTRY iluNoisify(ILclampf Tolerance)
 			if (Factor == 0)
 				return IL_TRUE;
 			Factor2 = Factor + Factor;
-			IntPtr = (ILuint*)iCurImage->Data;
-			for (i = 0; i < NumPix; i += iCurImage->Bpp) {
+			IntPtr = (ILuint*)iluCurImage->Data;
+			for (i = 0; i < NumPix; i += iluCurImage->Bpp) {
 				Val = (ILint)((ILint)(rand() % Factor2) - Factor);
-				for (c = 0; c < iCurImage->Bpp; c++) {
+				for (c = 0; c < iluCurImage->Bpp; c++) {
 					if (IntPtr[i + c] + Val > UINT_MAX)
 						IntPtr[i + c] = UINT_MAX;
 					else if ((ILint)IntPtr[i + c] + Val < 0)
@@ -184,23 +184,23 @@ ILboolean ILAPIENTRY iluNoisify()
 	ILuint x, y, c;
 	ILint Val;
 
-	iCurImage = ilGetCurImage();
-	if (iCurImage == NULL) {
+	iluCurImage = ilGetCurImage();
+	if (iluCurImage == NULL) {
 		ilSetError(ILU_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
-	for (y = 0; y < iCurImage->Height; y++) {
-		for (x = 0; x < iCurImage->Width; x++) {
+	for (y = 0; y < iluCurImage->Height; y++) {
+		for (x = 0; x < iluCurImage->Width; x++) {
 			Val = (ILint)(PerlinNoise(x, y) * 50.0);
 
-			for (c = 0; c < iCurImage->Bpp; c++) {
-				if ((ILint)iCurImage->Data[y * iCurImage->Bps + x * iCurImage->Bpp + c] + Val > 255)
-					iCurImage->Data[y * iCurImage->Bps + x * iCurImage->Bpp + c] = 255;
-				else if ((ILint)iCurImage->Data[y * iCurImage->Bps + x * iCurImage->Bpp + c] + Val < 0)
-					iCurImage->Data[y * iCurImage->Bps + x * iCurImage->Bpp + c] = 0;
+			for (c = 0; c < iluCurImage->Bpp; c++) {
+				if ((ILint)iluCurImage->Data[y * iluCurImage->Bps + x * iluCurImage->Bpp + c] + Val > 255)
+					iluCurImage->Data[y * iluCurImage->Bps + x * iluCurImage->Bpp + c] = 255;
+				else if ((ILint)iluCurImage->Data[y * iluCurImage->Bps + x * iluCurImage->Bpp + c] + Val < 0)
+					iluCurImage->Data[y * iluCurImage->Bps + x * iluCurImage->Bpp + c] = 0;
 				else
-					iCurImage->Data[y * iCurImage->Bps + x * iCurImage->Bpp + c] += Val;
+					iluCurImage->Data[y * iluCurImage->Bps + x * iluCurImage->Bpp + c] += Val;
 			}
 		}
 	}

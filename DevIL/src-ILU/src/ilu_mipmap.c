@@ -36,7 +36,7 @@ ILboolean iluBuild2DMipmaps()
 	ILuint		Width, Height;
 	ILenum		Filter = iluFilter;
 
-	iCurImage = Original = ilGetCurImage();
+	iluCurImage = Original = ilGetCurImage();
 	if (Original == NULL) {
 		ilSetError(ILU_ILLEGAL_OPERATION);
 		return IL_FALSE;
@@ -49,25 +49,25 @@ ILboolean iluBuild2DMipmaps()
 	}
 	Original->NumMips = 0;
 
-	Width = ilNextPower2(iCurImage->Width);
-	Height = ilNextPower2(iCurImage->Height);
-	if (iCurImage->Width != Width || iCurImage->Height != Height) {
+	Width = ilNextPower2(iluCurImage->Width);
+	Height = ilNextPower2(iluCurImage->Height);
+	if (iluCurImage->Width != Width || iluCurImage->Height != Height) {
 		Resized = IL_TRUE;
 		Temp = ilCopyImage_(ilGetCurImage());
 		ilSetCurImage(Temp);
 		iluImageParameter(ILU_FILTER, ILU_BILINEAR);
 		iluScale(Width, Height, 1);
 		iluImageParameter(ILU_FILTER, Filter);
-		iCurImage = ilGetCurImage();
+		iluCurImage = ilGetCurImage();
 	}
 
 	CurMipMap = NULL;
-	iBuild2DMipmaps_(iCurImage->Width >> 1, iCurImage->Height >> 1);
+	iBuild2DMipmaps_(iluCurImage->Width >> 1, iluCurImage->Height >> 1);
 
 	if (Resized) {
-		Original->Mipmaps = iCurImage->Mipmaps;
-		iCurImage->Mipmaps = NULL;
-		ilCloseImage(iCurImage);
+		Original->Mipmaps = iluCurImage->Mipmaps;
+		iluCurImage->Mipmaps = NULL;
+		ilCloseImage(iluCurImage);
 		ilSetCurImage(Original);
 	}
 
@@ -82,7 +82,7 @@ ILboolean iluBuild3DMipmaps()
 	ILuint		Width, Height, Depth;
 	ILenum		Filter = iluFilter;
 
-	iCurImage = Original = ilGetCurImage();
+	iluCurImage = Original = ilGetCurImage();
 	if (Original == NULL) {
 		ilSetError(ILU_ILLEGAL_OPERATION);
 		return IL_FALSE;
@@ -95,26 +95,26 @@ ILboolean iluBuild3DMipmaps()
 	}
 	Original->NumMips = 0;
 
-	Width = ilNextPower2(iCurImage->Width);
-	Height = ilNextPower2(iCurImage->Height);
-	Depth = ilNextPower2(iCurImage->Depth);
-	if (iCurImage->Width != Width || iCurImage->Height != Height || iCurImage->Depth != Depth) {
+	Width = ilNextPower2(iluCurImage->Width);
+	Height = ilNextPower2(iluCurImage->Height);
+	Depth = ilNextPower2(iluCurImage->Depth);
+	if (iluCurImage->Width != Width || iluCurImage->Height != Height || iluCurImage->Depth != Depth) {
 		Resized = IL_TRUE;
 		Temp = ilCopyImage_(ilGetCurImage());
 		ilSetCurImage(Temp);
 		iluImageParameter(ILU_FILTER, ILU_BILINEAR);
 		iluScale(Width, Height, Depth);
 		iluImageParameter(ILU_FILTER, iluFilter);
-		iCurImage = ilGetCurImage();
+		iluCurImage = ilGetCurImage();
 	}
 
 	CurMipMap = NULL;
-	iBuild3DMipmaps_(iCurImage->Width >> 1, iCurImage->Height >> 1, iCurImage->Depth >> 1);
+	iBuild3DMipmaps_(iluCurImage->Width >> 1, iluCurImage->Height >> 1, iluCurImage->Depth >> 1);
 
 	if (Resized) {
-		Original->Mipmaps = iCurImage->Mipmaps;
-		iCurImage->Mipmaps = NULL;
-		ilCloseImage(iCurImage);
+		Original->Mipmaps = iluCurImage->Mipmaps;
+		iluCurImage->Mipmaps = NULL;
+		ilCloseImage(iluCurImage);
 		ilSetCurImage(Original);
 	}
 
@@ -124,15 +124,15 @@ ILboolean iluBuild3DMipmaps()
 
 ILboolean ILAPIENTRY iluBuildMipmaps()
 {
-	iCurImage = ilGetCurImage();
-	if (iCurImage == NULL) {
+	iluCurImage = ilGetCurImage();
+	if (iluCurImage == NULL) {
 		ilSetError(ILU_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
-	if (iCurImage->Depth > 1)
+	if (iluCurImage->Depth > 1)
 		return iluBuild3DMipmaps();
-	/*if (iCurImage->Height <= 1)
+	/*if (iluCurImage->Height <= 1)
 		return iluBuild1DMipmaps();*/  // 8-8-2001
 	return iluBuild2DMipmaps();
 }
@@ -148,7 +148,7 @@ ILboolean iBuild1DMipmaps_(ILuint Width)
 		return IL_TRUE;
 	}
 
-	MipMap = ilNewImage(Width, 1, 1, iCurImage->Bpp, iCurImage->Bpc);
+	MipMap = ilNewImage(Width, 1, 1, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (MipMap == NULL) {
 		ilSetError(IL_OUT_OF_MEMORY);
 		if (CurMipMap != NULL)
@@ -157,18 +157,18 @@ ILboolean iBuild1DMipmaps_(ILuint Width)
 	}
 
 	// Copies attributes
-	MipMap->Origin = iCurImage->Origin;  // 8-11-2001
-	MipMap->Format = iCurImage->Format;
-	MipMap->Type = iCurImage->Type;
-	MipMap->Pal.PalSize = iCurImage->Pal.PalSize;
-	MipMap->Pal.PalType = iCurImage->Pal.PalType;
-	if (iCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
-		MipMap->Pal.Palette = (ILubyte*)malloc(iCurImage->Pal.PalSize);  // check?
-		memcpy(MipMap->Pal.Palette, iCurImage->Pal.Palette, MipMap->Pal.PalSize);
+	MipMap->Origin = iluCurImage->Origin;  // 8-11-2001
+	MipMap->Format = iluCurImage->Format;
+	MipMap->Type = iluCurImage->Type;
+	MipMap->Pal.PalSize = iluCurImage->Pal.PalSize;
+	MipMap->Pal.PalType = iluCurImage->Pal.PalType;
+	if (iluCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
+		MipMap->Pal.Palette = (ILubyte*)malloc(iluCurImage->Pal.PalSize);  // check?
+		memcpy(MipMap->Pal.Palette, iluCurImage->Pal.Palette, MipMap->Pal.PalSize);
 	}
 
 	if (CurMipMap == NULL) {  // First mipmap
-		iCurImage->Mipmaps = MipMap;
+		iluCurImage->Mipmaps = MipMap;
 	}
 	else {
 		CurMipMap->Next = MipMap;
@@ -201,7 +201,7 @@ ILboolean iBuild1DMipmapsVertical_(ILuint Height)
 		return IL_TRUE;
 	}
 
-	MipMap = ilNewImage(1, Height, 1, iCurImage->Bpp, iCurImage->Bpc);
+	MipMap = ilNewImage(1, Height, 1, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (MipMap == NULL) {
 		ilSetError(IL_OUT_OF_MEMORY);
 		if (CurMipMap != NULL)
@@ -210,19 +210,19 @@ ILboolean iBuild1DMipmapsVertical_(ILuint Height)
 	}
 
 	// Copies attributes
-	MipMap->Origin = iCurImage->Origin;  // 8-11-2001
-	MipMap->Format = iCurImage->Format;
-	MipMap->Type = iCurImage->Type;
-	MipMap->Pal.PalSize = iCurImage->Pal.PalSize;
-	MipMap->Pal.PalType = iCurImage->Pal.PalType;
-	if (iCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
-		MipMap->Pal.Palette = (ILubyte*)malloc(iCurImage->Pal.PalSize);  // check?
-		memcpy(MipMap->Pal.Palette, iCurImage->Pal.Palette, MipMap->Pal.PalSize);
+	MipMap->Origin = iluCurImage->Origin;  // 8-11-2001
+	MipMap->Format = iluCurImage->Format;
+	MipMap->Type = iluCurImage->Type;
+	MipMap->Pal.PalSize = iluCurImage->Pal.PalSize;
+	MipMap->Pal.PalType = iluCurImage->Pal.PalType;
+	if (iluCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
+		MipMap->Pal.Palette = (ILubyte*)malloc(iluCurImage->Pal.PalSize);  // check?
+		memcpy(MipMap->Pal.Palette, iluCurImage->Pal.Palette, MipMap->Pal.PalSize);
 	}
 
 	if (CurMipMap == NULL) {  // First mipmap
-		iCurImage->Mipmaps = MipMap;
-		Src = iCurImage;
+		iluCurImage->Mipmaps = MipMap;
+		Src = iluCurImage;
 	}
 	else {
 		CurMipMap->Next = MipMap;
@@ -265,7 +265,7 @@ ILboolean iBuild2DMipmaps_(ILuint Width, ILuint Height)
 			return iBuild1DMipmapsVertical_(Height);
 		}
 	}
-	else if (iCurImage->Width <= 1 && iCurImage->Height <= 1) {  // 8-9-2001 - Not sure...
+	else if (iluCurImage->Width <= 1 && iluCurImage->Height <= 1) {  // 8-9-2001 - Not sure...
 		ilSetError(ILU_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
@@ -282,7 +282,7 @@ ILboolean iBuild2DMipmaps_(ILuint Width, ILuint Height)
 		return iBuild1DMipmapsVertical_(Height);  // 8-9-2001
 	}
 
-	MipMap = ilNewImage(Width, Height, 1, iCurImage->Bpp, iCurImage->Bpc);
+	MipMap = ilNewImage(Width, Height, 1, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (MipMap == NULL) {
 		ilSetError(IL_OUT_OF_MEMORY);
 		if (CurMipMap != NULL)
@@ -291,19 +291,19 @@ ILboolean iBuild2DMipmaps_(ILuint Width, ILuint Height)
 	}
 
 	// Copies attributes
-	MipMap->Origin = iCurImage->Origin;  // 8-11-2001
-	MipMap->Format = iCurImage->Format;
-	MipMap->Type = iCurImage->Type;
-	MipMap->Pal.PalSize = iCurImage->Pal.PalSize;
-	MipMap->Pal.PalType = iCurImage->Pal.PalType;
-	if (iCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
-		MipMap->Pal.Palette = (ILubyte*)malloc(iCurImage->Pal.PalSize);  // check?
-		memcpy(MipMap->Pal.Palette, iCurImage->Pal.Palette, MipMap->Pal.PalSize);
+	MipMap->Origin = iluCurImage->Origin;  // 8-11-2001
+	MipMap->Format = iluCurImage->Format;
+	MipMap->Type = iluCurImage->Type;
+	MipMap->Pal.PalSize = iluCurImage->Pal.PalSize;
+	MipMap->Pal.PalType = iluCurImage->Pal.PalType;
+	if (iluCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
+		MipMap->Pal.Palette = (ILubyte*)malloc(iluCurImage->Pal.PalSize);  // check?
+		memcpy(MipMap->Pal.Palette, iluCurImage->Pal.Palette, MipMap->Pal.PalSize);
 	}
 
 	if (CurMipMap == NULL) {  // First mipmap
-		iCurImage->Mipmaps = MipMap;
-		Src = iCurImage;
+		iluCurImage->Mipmaps = MipMap;
+		Src = iluCurImage;
 	}
 	else {
 		CurMipMap->Next = MipMap;
@@ -354,7 +354,7 @@ ILboolean iBuild3DMipmaps_(ILuint Width, ILuint Height, ILuint Depth)
 			return iBuild3DMipmapsVertical_(Height, Depth);
 		}
 	}
-	else if (iCurImage->Width <= 1 && iCurImage->Height <= 1 && iCurImage->Height <= 1) {
+	else if (iluCurImage->Width <= 1 && iluCurImage->Height <= 1 && iluCurImage->Height <= 1) {
 		ilSetError(ILU_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
@@ -373,7 +373,7 @@ ILboolean iBuild3DMipmaps_(ILuint Width, ILuint Height, ILuint Depth)
 		return iBuild3DMipmapsVertical_(Height, Depth);
 	}
 
-	MipMap = ilNewImage(Width, Height, Depth, iCurImage->Bpp, iCurImage->Bpc);
+	MipMap = ilNewImage(Width, Height, Depth, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (MipMap == NULL) {
 		ilSetError(IL_OUT_OF_MEMORY);
 		if (CurMipMap != NULL)
@@ -382,19 +382,19 @@ ILboolean iBuild3DMipmaps_(ILuint Width, ILuint Height, ILuint Depth)
 	}
 
 	// Copies attributes
-	MipMap->Origin = iCurImage->Origin;  // 8-11-2001
-	MipMap->Format = iCurImage->Format;
-	MipMap->Type = iCurImage->Type;
-	MipMap->Pal.PalSize = iCurImage->Pal.PalSize;
-	MipMap->Pal.PalType = iCurImage->Pal.PalType;
-	if (iCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
-		MipMap->Pal.Palette = (ILubyte*)malloc(iCurImage->Pal.PalSize);  // check?
-		memcpy(MipMap->Pal.Palette, iCurImage->Pal.Palette, MipMap->Pal.PalSize);
+	MipMap->Origin = iluCurImage->Origin;  // 8-11-2001
+	MipMap->Format = iluCurImage->Format;
+	MipMap->Type = iluCurImage->Type;
+	MipMap->Pal.PalSize = iluCurImage->Pal.PalSize;
+	MipMap->Pal.PalType = iluCurImage->Pal.PalType;
+	if (iluCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
+		MipMap->Pal.Palette = (ILubyte*)malloc(iluCurImage->Pal.PalSize);  // check?
+		memcpy(MipMap->Pal.Palette, iluCurImage->Pal.Palette, MipMap->Pal.PalSize);
 	}
 
 	if (CurMipMap == NULL) {  // First mipmap
-		iCurImage->Mipmaps = MipMap;
-		Src = iCurImage;
+		iluCurImage->Mipmaps = MipMap;
+		Src = iluCurImage;
 	}
 	else {
 		CurMipMap->Next = MipMap;
@@ -449,7 +449,7 @@ ILboolean iBuild3DMipmapsVertical_(ILuint Height, ILuint Depth)
 			return iBuild1DMipmapsVertical_(Height);
 		}
 	}
-	else if (iCurImage->Height <= 1 && iCurImage->Height <= 1) {
+	else if (iluCurImage->Height <= 1 && iluCurImage->Height <= 1) {
 		ilSetError(ILU_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
@@ -462,7 +462,7 @@ ILboolean iBuild3DMipmapsVertical_(ILuint Height, ILuint Depth)
 		return iBuild1DMipmapsVertical_(Height);
 	}
 
-	MipMap = ilNewImage(1, Height, Depth, iCurImage->Bpp, iCurImage->Bpc);
+	MipMap = ilNewImage(1, Height, Depth, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (MipMap == NULL) {
 		ilSetError(IL_OUT_OF_MEMORY);
 		if (CurMipMap != NULL)
@@ -471,18 +471,18 @@ ILboolean iBuild3DMipmapsVertical_(ILuint Height, ILuint Depth)
 	}
 
 	// Copies attributes
-	MipMap->Format = iCurImage->Format;
-	MipMap->Type = iCurImage->Type;
-	MipMap->Pal.PalSize = iCurImage->Pal.PalSize;
-	MipMap->Pal.PalType = iCurImage->Pal.PalType;
-	if (iCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
-		MipMap->Pal.Palette = (ILubyte*)malloc(iCurImage->Pal.PalSize);  // check?
-		memcpy(MipMap->Pal.Palette, iCurImage->Pal.Palette, MipMap->Pal.PalSize);
+	MipMap->Format = iluCurImage->Format;
+	MipMap->Type = iluCurImage->Type;
+	MipMap->Pal.PalSize = iluCurImage->Pal.PalSize;
+	MipMap->Pal.PalType = iluCurImage->Pal.PalType;
+	if (iluCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
+		MipMap->Pal.Palette = (ILubyte*)malloc(iluCurImage->Pal.PalSize);  // check?
+		memcpy(MipMap->Pal.Palette, iluCurImage->Pal.Palette, MipMap->Pal.PalSize);
 	}
 
 	if (CurMipMap == NULL) {  // First mipmap
-		iCurImage->Mipmaps = MipMap;
-		Src = iCurImage;
+		iluCurImage->Mipmaps = MipMap;
+		Src = iluCurImage;
 	}
 	else {
 		CurMipMap->Next = MipMap;
@@ -490,9 +490,9 @@ ILboolean iBuild3DMipmapsVertical_(ILuint Height, ILuint Depth)
 	}
 
 	for (z1 = 0; z1 < Depth; z1++, z2 += 2) {
-		z3 = z1 * iCurImage->SizeOfPlane;
-		z4 = z2 * iCurImage->SizeOfPlane;
-		z5 = (z2 + 1) * iCurImage->SizeOfPlane;
+		z3 = z1 * iluCurImage->SizeOfPlane;
+		z4 = z2 * iluCurImage->SizeOfPlane;
+		z5 = (z2 + 1) * iluCurImage->SizeOfPlane;
 
 		for (y1 = 0; y1 < Height; y1++, y2 += 2) {
 			for (c = 0; c < MipMap->Bpp; c++) {
@@ -529,7 +529,7 @@ ILboolean iBuild3DMipmapsHorizontal_(ILuint Width, ILuint Depth)
 			return iBuild1DMipmaps_(Width);
 		}
 	}
-	else if (iCurImage->Width <= 1 && iCurImage->Height <= 1) {
+	else if (iluCurImage->Width <= 1 && iluCurImage->Height <= 1) {
 		ilSetError(ILU_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
@@ -542,7 +542,7 @@ ILboolean iBuild3DMipmapsHorizontal_(ILuint Width, ILuint Depth)
 		return iBuild1DMipmaps_(Width);
 	}
 
-	MipMap = ilNewImage(Width, 1, Depth, iCurImage->Bpp, iCurImage->Bpc);
+	MipMap = ilNewImage(Width, 1, Depth, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (MipMap == NULL) {
 		ilSetError(IL_OUT_OF_MEMORY);
 		if (CurMipMap != NULL)
@@ -551,18 +551,18 @@ ILboolean iBuild3DMipmapsHorizontal_(ILuint Width, ILuint Depth)
 	}
 
 	// Copies attributes
-	MipMap->Format = iCurImage->Format;
-	MipMap->Type = iCurImage->Type;
-	MipMap->Pal.PalSize = iCurImage->Pal.PalSize;
-	MipMap->Pal.PalType = iCurImage->Pal.PalType;
-	if (iCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
-		MipMap->Pal.Palette = (ILubyte*)malloc(iCurImage->Pal.PalSize);  // check?
-		memcpy(MipMap->Pal.Palette, iCurImage->Pal.Palette, MipMap->Pal.PalSize);
+	MipMap->Format = iluCurImage->Format;
+	MipMap->Type = iluCurImage->Type;
+	MipMap->Pal.PalSize = iluCurImage->Pal.PalSize;
+	MipMap->Pal.PalType = iluCurImage->Pal.PalType;
+	if (iluCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
+		MipMap->Pal.Palette = (ILubyte*)malloc(iluCurImage->Pal.PalSize);  // check?
+		memcpy(MipMap->Pal.Palette, iluCurImage->Pal.Palette, MipMap->Pal.PalSize);
 	}
 
 	if (CurMipMap == NULL) {  // First mipmap
-		iCurImage->Mipmaps = MipMap;
-		Src = iCurImage;
+		iluCurImage->Mipmaps = MipMap;
+		Src = iluCurImage;
 	}
 	else {
 		CurMipMap->Next = MipMap;
@@ -570,9 +570,9 @@ ILboolean iBuild3DMipmapsHorizontal_(ILuint Width, ILuint Depth)
 	}
 
 	for (z1 = 0; z1 < Depth; z1++, z2 += 2) {
-		z3 = z1 * iCurImage->SizeOfPlane;
-		z4 = z2 * iCurImage->SizeOfPlane;
-		z5 = (z2 + 1) * iCurImage->SizeOfPlane;
+		z3 = z1 * iluCurImage->SizeOfPlane;
+		z4 = z2 * iluCurImage->SizeOfPlane;
+		z5 = (z2 + 1) * iluCurImage->SizeOfPlane;
 
 		x1 = 0;  x2 = 0;
 		for (; x1 < Width; x1++, x2 += 2) {

@@ -102,20 +102,20 @@ ILboolean ILAPIENTRY ilutGLTexImage(GLuint Level)
 {
 	ILimage	*Image;
 
-	iCurImage = ilGetCurImage();
-	if (iCurImage == NULL) {
+	ilutCurImage = ilGetCurImage();
+	if (ilutCurImage == NULL) {
 		ilSetError(ILUT_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
-	Image = MakeGLCompliant(iCurImage);
+	Image = MakeGLCompliant(ilutCurImage);
 	if (Image == NULL)
 		return IL_FALSE;
 
 	glTexImage2D(GL_TEXTURE_2D, 0, ilutGLFormat(Image->Format, Image->Bpp), Image->Width,
 				Image->Height, 0, Image->Format, Image->Type, Image->Data);
 
-	if (Image != iCurImage)
+	if (Image != ilutCurImage)
 		ilCloseImage(Image);
 
 	return IL_TRUE;
@@ -151,20 +151,20 @@ ILboolean ILAPIENTRY ilutGLBuildMipmaps()
 {
 	ILimage	*Image;
 
-	iCurImage = ilGetCurImage();
-	if (iCurImage == NULL) {
+	ilutCurImage = ilGetCurImage();
+	if (ilutCurImage == NULL) {
 		ilSetError(ILUT_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
-	Image = MakeGLCompliant(iCurImage);
+	Image = MakeGLCompliant(ilutCurImage);
 	if (Image == NULL)
 		return IL_FALSE;
 
 	gluBuild2DMipmaps(GL_TEXTURE_2D, ilutGLFormat(Image->Format, Image->Bpp), Image->Width,
 						Image->Height, Image->Format, Image->Type, Image->Data);
 
-	if (Image != iCurImage)
+	if (Image != ilutCurImage)
 		ilCloseImage(Image);
 	
 	return IL_TRUE;
@@ -182,7 +182,7 @@ ILimage* MakeGLCompliant(ILimage *Src)
 		//ilSetCurImage(Src);
 		Dest = iConvertImage(ilGetPalBaseType(Src->Pal.PalType), IL_UNSIGNED_BYTE);
 		//Dest = iConvertImage(IL_BGR);
-		//ilSetCurImage(iCurImage);
+		//ilSetCurImage(ilutCurImage);
 		if (Dest == NULL)
 			return NULL;
 
@@ -285,8 +285,8 @@ ILboolean ILAPIENTRY ilutGLScreen()
 {
 	ILuint	ViewPort[4];
 
-	iCurImage = ilGetCurImage();
-	if (iCurImage == NULL) {
+	ilutCurImage = ilGetCurImage();
+	if (ilutCurImage == NULL) {
 		ilSetError(ILUT_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
@@ -294,9 +294,9 @@ ILboolean ILAPIENTRY ilutGLScreen()
 	glGetIntegerv(GL_VIEWPORT, ViewPort);
 
 	ilTexImage(ViewPort[2], ViewPort[3], 1, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL);
-	iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
+	ilutCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
 
-	glReadPixels(0, 0, ViewPort[2], ViewPort[3], GL_RGB, GL_UNSIGNED_BYTE, iCurImage->Data);
+	glReadPixels(0, 0, ViewPort[2], ViewPort[3], GL_RGB, GL_UNSIGNED_BYTE, ilutCurImage->Data);
 
 	return IL_TRUE;
 }
@@ -363,7 +363,7 @@ ILboolean ILAPIENTRY ilutGLSetTex(GLuint TexID)
 		free(Data);
 		return IL_FALSE;
 	}
-	iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
+	ilutCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
 
 	free(Data);
 	return IL_TRUE;

@@ -34,28 +34,28 @@ ILuint ILAPIENTRY iluGenImage()
 //! Retrieves information about the current bound image.
 ILvoid ILAPIENTRY iluGetImageInfo(ILinfo *Info)
 {
-	iCurImage = ilGetCurImage();
-	if (iCurImage == NULL || Info == NULL) {
+	iluCurImage = ilGetCurImage();
+	if (iluCurImage == NULL || Info == NULL) {
 		ilSetError(ILU_ILLEGAL_OPERATION);
 		return;
 	}
 
 	Info->Id			= ilGetCurName();
 	Info->Data			= ilGetData();
-	Info->Width			= iCurImage->Width;
-	Info->Height		= iCurImage->Height;
-	Info->Depth			= iCurImage->Depth;
-	Info->Bpp			= iCurImage->Bpp;
-	Info->SizeOfData	= iCurImage->SizeOfData;
-	Info->Format		= iCurImage->Format;
-	Info->Type			= iCurImage->Type;
-	Info->Origin		= iCurImage->Origin;
-	Info->Palette		= iCurImage->Pal.Palette;
-	Info->PalType		= iCurImage->Pal.PalType;
-	Info->PalSize		= iCurImage->Pal.PalSize;
-	Info->NumNext		= iCurImage->NumNext;
-	Info->NumMips		= iCurImage->NumMips;
-	Info->NumLayers		= iCurImage->NumLayers;
+	Info->Width			= iluCurImage->Width;
+	Info->Height		= iluCurImage->Height;
+	Info->Depth			= iluCurImage->Depth;
+	Info->Bpp			= iluCurImage->Bpp;
+	Info->SizeOfData	= iluCurImage->SizeOfData;
+	Info->Format		= iluCurImage->Format;
+	Info->Type			= iluCurImage->Type;
+	Info->Origin		= iluCurImage->Origin;
+	Info->Palette		= iluCurImage->Pal.Palette;
+	Info->PalType		= iluCurImage->Pal.PalType;
+	Info->PalSize		= iluCurImage->Pal.PalSize;
+	Info->NumNext		= iluCurImage->NumNext;
+	Info->NumMips		= iluCurImage->NumMips;
+	Info->NumLayers		= iluCurImage->NumLayers;
 
 	return;
 }

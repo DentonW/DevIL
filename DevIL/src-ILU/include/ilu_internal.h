@@ -97,7 +97,7 @@ typedef struct ILimage
 } ILimage;
 
 
-extern ILimage *iCurImage;
+extern ILimage *iluCurImage;
 
 
 // Internal library functions in DevIL

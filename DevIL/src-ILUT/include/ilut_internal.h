@@ -76,7 +76,7 @@ typedef struct ILimage
 } ILimage;
 
 
-extern ILimage *iCurImage;
+extern ILimage *ilutCurImage;
 
 
 ILimage	*MakeGLCompliant(ILimage *Image);

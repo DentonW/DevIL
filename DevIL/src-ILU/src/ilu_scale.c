@@ -23,9 +23,9 @@ ILboolean ILAPIENTRY iluEnlargeImage(ILfloat XDim, ILfloat YDim, ILfloat ZDim)
 		return IL_FALSE;
 	}
 
-	iCurImage = ilGetCurImage();
-	return iluScale((ILuint)(iCurImage->Width * XDim), (ILuint)(iCurImage->Height * YDim),
-					(ILuint)(iCurImage->Depth * ZDim));
+	iluCurImage = ilGetCurImage();
+	return iluScale((ILuint)(iluCurImage->Width * XDim), (ILuint)(iluCurImage->Height * YDim),
+					(ILuint)(iluCurImage->Depth * ZDim));
 }
 
 
@@ -41,13 +41,13 @@ ILboolean ILAPIENTRY iluScale(ILuint Width, ILuint Height, ILuint Depth)
 	static ILenum		PalType;
 	static ILenum		Origin;
 
-	iCurImage = ilGetCurImage();
-	if (iCurImage == NULL) {
+	iluCurImage = ilGetCurImage();
+	if (iluCurImage == NULL) {
 		ilSetError(ILU_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
-	if (iCurImage->Width == Width && iCurImage->Height == Height && iCurImage->Depth == Depth)
+	if (iluCurImage->Width == Width && iluCurImage->Height == Height && iluCurImage->Depth == Depth)
 		return IL_TRUE;
 
 	switch (iluFilter)
@@ -62,13 +62,13 @@ ILboolean ILAPIENTRY iluScale(ILuint Width, ILuint Height, ILuint Depth)
 	}
 
 
-	Origin = iCurImage->Origin;
-	UsePal = (iCurImage->Format == IL_COLOUR_INDEX);
-	PalType = iCurImage->Pal.PalType;
-	Temp = iluScale_(iCurImage, Width, Height, Depth);
+	Origin = iluCurImage->Origin;
+	UsePal = (iluCurImage->Format == IL_COLOUR_INDEX);
+	PalType = iluCurImage->Pal.PalType;
+	Temp = iluScale_(iluCurImage, Width, Height, Depth);
 	if (Temp != NULL) {
 		ilTexImage(Temp->Width, Temp->Height, Temp->Depth, Temp->Bpp, Temp->Format, Temp->Type, Temp->Data);
-		iCurImage->Origin = Origin;
+		iluCurImage->Origin = Origin;
 		ilCloseImage(Temp);
 		if (UsePal) {
 			if (!ilConvertImage(IL_COLOUR_INDEX, IL_UNSIGNED_BYTE))
@@ -92,7 +92,7 @@ ILAPI ILimage* ILAPIENTRY iluScale_(ILimage *Image, ILuint Width, ILuint Height,
 	if (Format == IL_COLOUR_INDEX) {
 		ilSetCurImage(Image);
 		PalType = Image->Pal.PalType;
-		ToScale = iConvertImage(ilGetPalBaseType(Image->Pal.PalType), iCurImage->Type);
+		ToScale = iConvertImage(ilGetPalBaseType(Image->Pal.PalType), iluCurImage->Type);
 	}
 	else {
 		ToScale = Image;

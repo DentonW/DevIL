@@ -18,7 +18,7 @@
 ILdouble IL_PI      = 3.14159265359f;
 ILdouble IL_DEGCONV = 0.01745329251f;
 #if !defined(__APPLE__)
-	ILimage *iCurImage = NULL;
+	ILimage *iluCurImage = NULL;
 #endif
 
 

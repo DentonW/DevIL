@@ -609,16 +609,16 @@ ILuint iluScaleAdvanced(ILuint Width, ILuint Height, ILenum Filter)
 	double s = filter_support;
 	ILimage *Dest;
 
-	iCurImage = ilGetCurImage();
-	if (iCurImage == NULL) {
+	iluCurImage = ilGetCurImage();
+	if (iluCurImage == NULL) {
 		ilSetError(ILU_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
 	// Not supported yet.
-	if (iCurImage->Type != IL_UNSIGNED_BYTE ||
-		iCurImage->Format == IL_COLOUR_INDEX ||
-		iCurImage->Depth > 1) {
+	if (iluCurImage->Type != IL_UNSIGNED_BYTE ||
+		iluCurImage->Format == IL_COLOUR_INDEX ||
+		iluCurImage->Depth > 1) {
 			ilSetError(ILU_ILLEGAL_OPERATION);
 			return IL_FALSE;
 	}
@@ -634,16 +634,16 @@ ILuint iluScaleAdvanced(ILuint Width, ILuint Height, ILenum Filter)
 		//case 'h': f=filter; s=filter_support; break;
 	}
 
-	Dest = ilNewImage(Width, Height, 1, iCurImage->Bpp, 1);
-	Dest->Origin = iCurImage->Origin;
-	for (c = 0; c < (ILuint)iCurImage->Bpp; c++) {
-		if (zoom(Dest, iCurImage, f, s) != 0) {
+	Dest = ilNewImage(Width, Height, 1, iluCurImage->Bpp, 1);
+	Dest->Origin = iluCurImage->Origin;
+	for (c = 0; c < (ILuint)iluCurImage->Bpp; c++) {
+		if (zoom(Dest, iluCurImage, f, s) != 0) {
 			return IL_FALSE;
 		}
 	}
 
-	ilTexImage(Width, Height, 1, iCurImage->Bpp, iCurImage->Format, iCurImage->Type, Dest->Data);
-	iCurImage->Origin = Dest->Origin;
+	ilTexImage(Width, Height, 1, iluCurImage->Bpp, iluCurImage->Format, iluCurImage->Type, Dest->Data);
+	iluCurImage->Origin = Dest->Origin;
 	ilCloseImage(Dest);
 
 	return IL_TRUE;

@@ -20,16 +20,16 @@ ILboolean ILAPIENTRY iluRotate(ILfloat Angle)
 {
 	ILimage	*Temp;
 
-	iCurImage = ilGetCurImage();
-	if (iCurImage == NULL) {
+	iluCurImage = ilGetCurImage();
+	if (iluCurImage == NULL) {
 		ilSetError(ILU_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
-	Temp = iluRotate_(iCurImage, Angle);
+	Temp = iluRotate_(iluCurImage, Angle);
 	if (Temp != NULL) {
 		ilTexImage(Temp->Width, Temp->Height, Temp->Depth, Temp->Bpp, Temp->Format, Temp->Type, Temp->Data);
-		iCurImage->Origin = Temp->Origin;
+		iluCurImage->Origin = Temp->Origin;
 		ilSetPal(&Temp->Pal);
 		ilCloseImage(Temp);
 		return IL_TRUE;
@@ -41,11 +41,11 @@ ILboolean ILAPIENTRY iluRotate(ILfloat Angle)
 ILboolean ILAPIENTRY iluRotate3D(ILfloat x, ILfloat y, ILfloat z, ILfloat Angle)
 {
 	ILimage *Temp;
-	iCurImage = ilGetCurImage();
-	Temp = iluRotate3D_(iCurImage, x, y, z, Angle);
+	iluCurImage = ilGetCurImage();
+	Temp = iluRotate3D_(iluCurImage, x, y, z, Angle);
 	if (Temp != NULL) {
 		ilTexImage(Temp->Width, Temp->Height, Temp->Depth, Temp->Bpp, Temp->Format, Temp->Type, Temp->Data);
-		iCurImage->Origin = Temp->Origin;
+		iluCurImage->Origin = Temp->Origin;
 		ilSetPal(&Temp->Pal);
 		ilCloseImage(Temp);
 		return IL_TRUE;
@@ -106,11 +106,11 @@ ILAPI ILimage* ILAPIENTRY iluRotate_(ILimage *Image, ILfloat Angle)
 
 	ilClearImage_(Rotated);
 
-	ShortPtr = (ILushort*)iCurImage->Data;
-	IntPtr = (ILuint*)iCurImage->Data;
+	ShortPtr = (ILushort*)iluCurImage->Data;
+	IntPtr = (ILuint*)iluCurImage->Data;
 
 	//if (iluFilter == ILU_NEAREST) {
-	switch (iCurImage->Bpc)
+	switch (iluCurImage->Bpc)
 	{
 		case 1:
 			for (y = 0; y < Rotated->Height; y++) {
