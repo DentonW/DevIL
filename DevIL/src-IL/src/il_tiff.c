@@ -167,14 +167,14 @@ ILboolean ilLoadTiffL(ILvoid *Lump, ILuint Size)
 
 void warningHandler(const char* mod, const char* fmt, va_list ap)
 {
-	char buff[1024];
-	_vsnprintf(buff, 1024, fmt, ap);
+	//char buff[1024];
+	//_vsnprintf(buff, 1024, fmt, ap);
 }
 
 void errorHandler(const char* mod, const char* fmt, va_list ap)
 {
-	char buff[1024];
-	_vsnprintf(buff, 1024, fmt, ap);
+	//char buff[1024];
+	//_vsnprintf(buff, 1024, fmt, ap);
 }
 
 // Internal function used to load the Tiff.
