@@ -23,15 +23,15 @@
 typedef struct DDSHEAD
 {
 	ILbyte	Signature[4];
-    
+
 	ILuint	Size1;				// size of the structure (minus MagicNum)
-    ILuint	Flags1;				// determines what fields are valid
-    ILuint	Height;				// height of surface to be created
-    ILuint	Width;				// width of input surface
-    ILuint	LinearSize;			// Formless late-allocated optimized surface size
-    ILuint	Depth;				// Depth if a volume texture
-    ILuint	MipMapCount;		// number of mip-map levels requested
-    ILuint	AlphaBitDepth;		// depth of alpha buffer requested
+	ILuint	Flags1; 			// determines what fields are valid
+	ILuint	Height; 			// height of surface to be created
+	ILuint	Width;				// width of input surface
+	ILuint	LinearSize; 		// Formless late-allocated optimized surface size
+	ILuint	Depth;				// Depth if a volume texture
+	ILuint	MipMapCount;		// number of mip-map levels requested
+	ILuint	AlphaBitDepth;		// depth of alpha buffer requested
 
 	ILuint	NotUsed[10];
 
@@ -104,6 +104,14 @@ typedef struct DXTAlphaBlock3BitLinear
 
 
 // Defines
+
+//Those 4 were added on 20040516 to make
+//the written dds files more standard compliant
+#define DDS_CAPS				0x00000001l
+#define DDS_HEIGHT				0x00000002l
+#define DDS_WIDTH				0x00000004l
+#define DDS_PIXELFORMAT			0x00001000l
+
 #define DDS_ALPHAPIXELS			0x00000001l
 #define DDS_ALPHA				0x00000002l
 #define DDS_FOURCC				0x00000004l
