@@ -300,6 +300,9 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 	screen_gamma = 2.2;
 	if (png_get_gAMA(png_ptr, info_ptr, &image_gamma))
 		png_set_gamma(png_ptr, screen_gamma, image_gamma);
+#else
+	screen_gamma = screen_gamma;
+	image_gamma = image_gamma;
 #endif
 
     if (color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
