@@ -179,14 +179,17 @@ ILboolean	WriteHeader(ILimage *Image, ILenum DXTCFormat);
 ILushort	*CompressTo565(ILimage *Image);
 ILboolean	Compress(ILimage *Image, ILenum DXTCFormat);
 ILboolean	GetBlock(ILushort *Block, ILushort *Data, ILimage *Image, ILuint XPos, ILuint YPos);
+ILboolean	GetAlphaBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XPos, ILuint YPos);
 ILvoid		ShortToColor565(ILushort Pixel, Color565 *Colour);
 ILvoid		ShortToColor888(ILushort Pixel, Color888 *Colour);
 ILushort	Color565ToShort(Color565 *Colour);
 ILushort	Color888ToShort(Color888 *Colour);
-ILuint		GenBitMask(ILushort ex0, ILushort ex1, ILuint NumCols, ILushort *In, Color888 *OutCol);
+ILuint		GenBitMask(ILushort ex0, ILushort ex1, ILuint NumCols, ILushort *In, ILubyte *Alpha, Color888 *OutCol);
 ILuint		Distance(Color888 *c1, Color888 *c2);
 ILvoid		ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1);
-ILvoid		RMS(Color888 *Block, ILuint *Values);
+ILvoid		CorrectEndDXT1(ILushort *ex0, ILushort *ex1, ILboolean HasAlpha);
+ILvoid		PreMult(ILushort *Data, ILubyte *Alpha);
+
 
 
 #endif//DDS_H

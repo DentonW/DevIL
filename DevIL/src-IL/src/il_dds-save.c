@@ -98,6 +98,12 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat)
 	Flags1 |= DDS_LINEARSIZE;
 	Flags2 |= DDS_FOURCC;
 
+	// @TODO:  Fix the pre-multiplied alpha problem.
+	if (DXTCFormat == IL_DXT2)
+		DXTCFormat = IL_DXT3;
+	else if (DXTCFormat == IL_DXT4)
+		DXTCFormat = IL_DXT5;
+
 	switch (DXTCFormat)
 	{
 		case IL_DXT1:
@@ -224,22 +230,97 @@ ILushort *CompressTo565(ILimage *Image)
 ILboolean Compress(ILimage *Image, ILenum DXTCFormat)
 {
 	ILushort	*Data, Block[16], ex0, ex1;
-	ILuint		x, y, BitMask;
+	ILuint		x, y, i, BitMask;
+	ILubyte		*Alpha, AlphaBlock[16];
+	ILboolean	HasAlpha;
 
 	Data = CompressTo565(Image);
 	if (Data == NULL)
 		return IL_FALSE;
 
+	Alpha = ilGetAlpha(IL_UNSIGNED_BYTE);
+	if (Alpha == NULL) {
+		ifree(Data);
+		return IL_FALSE;
+	}
 
-	for (y = 0; y < Image->Height; y += 4) {
-		for (x = 0; x < Image->Width; x += 4) {
-			GetBlock(Block, Data, Image, x, y);
-			ChooseEndpoints(Block, &ex0, &ex1);
-			SaveLittleUShort(ex0);
-			SaveLittleUShort(ex1);
-			BitMask = GenBitMask(ex0, ex1, 4, Block, NULL);
-			SaveLittleUInt(BitMask);
-		}		
+	switch (DXTCFormat)
+	{
+		case IL_DXT1:
+			for (y = 0; y < Image->Height; y += 4) {
+				for (x = 0; x < Image->Width; x += 4) {
+					GetAlphaBlock(AlphaBlock, Alpha, Image, x, y);
+					HasAlpha = IL_FALSE;
+					for (i = 0 ; i < 16; i++) {
+						if (AlphaBlock[i] < 128) {
+							HasAlpha = IL_TRUE;
+							break;
+						}
+					}
+
+					GetBlock(Block, Data, Image, x, y);
+					ChooseEndpoints(Block, &ex0, &ex1);
+					CorrectEndDXT1(&ex0, &ex1, HasAlpha);
+					SaveLittleUShort(ex0);
+					SaveLittleUShort(ex1);
+					if (HasAlpha)
+						BitMask = GenBitMask(ex0, ex1, 3, Block, AlphaBlock, NULL);
+					else
+						BitMask = GenBitMask(ex0, ex1, 4, Block, NULL, NULL);
+					SaveLittleUInt(BitMask);
+				}		
+			}
+			break;
+
+		case IL_DXT2:
+			for (y = 0; y < Image->Height; y += 4) {
+				for (x = 0; x < Image->Width; x += 4) {
+					GetAlphaBlock(AlphaBlock, Alpha, Image, x, y);
+					for (i = 0; i < 16; i += 2) {
+						iputc((ILubyte)(((AlphaBlock[i] >> 4) << 4) | (AlphaBlock[i+1] >> 4)));
+					}
+
+					GetBlock(Block, Data, Image, x, y);
+					PreMult(Block, AlphaBlock);
+					ChooseEndpoints(Block, &ex0, &ex1);
+					SaveLittleUShort(ex0);
+					SaveLittleUShort(ex1);
+					BitMask = GenBitMask(ex0, ex1, 4, Block, NULL, NULL);
+					SaveLittleUInt(BitMask);
+				}		
+			}
+			break;
+
+		case IL_DXT3:
+			for (y = 0; y < Image->Height; y += 4) {
+				for (x = 0; x < Image->Width; x += 4) {
+					GetAlphaBlock(AlphaBlock, Alpha, Image, x, y);
+					for (i = 0; i < 16; i += 2) {
+						iputc((ILubyte)(((AlphaBlock[i] >> 4) << 4) | (AlphaBlock[i+1] >> 4)));
+					}
+
+					GetBlock(Block, Data, Image, x, y);
+					ChooseEndpoints(Block, &ex0, &ex1);
+					SaveLittleUShort(ex0);
+					SaveLittleUShort(ex1);
+					BitMask = GenBitMask(ex0, ex1, 4, Block, NULL, NULL);
+					SaveLittleUInt(BitMask);
+				}		
+			}
+			break;
+
+		/*case IL_DXT5:
+			for (y = 0; y < Image->Height; y += 4) {
+				for (x = 0; x < Image->Width; x += 4) {
+					GetBlock(Block, Data, Image, x, y);
+					ChooseEndpoints(Block, &ex0, &ex1);
+					SaveLittleUShort(ex0);
+					SaveLittleUShort(ex1);
+					BitMask = GenBitMask(ex0, ex1, 4, Block, NULL);
+					SaveLittleUInt(BitMask);
+				}		
+			}
+			break;*/
 	}
 
 
@@ -251,6 +332,21 @@ ILboolean Compress(ILimage *Image, ILenum DXTCFormat)
 
 // Assumed to be 16-bit (5:6:5).
 ILboolean GetBlock(ILushort *Block, ILushort *Data, ILimage *Image, ILuint XPos, ILuint YPos)
+{
+	ILuint x, y, i = 0, Offset;
+
+	for (y = 0; y < 4; y++) {
+		for (x = 0; x < 4; x++) {
+			Offset = (YPos + y) * Image->Width + (XPos + x);
+			Block[i++] = Data[Offset];
+		}
+	}
+
+	return IL_TRUE;
+}
+
+
+ILboolean GetAlphaBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XPos, ILuint YPos)
 {
 	ILuint x, y, i = 0, Offset;
 
@@ -295,7 +391,7 @@ ILushort Color888ToShort(Color888 *Colour)
 }
 
 
-ILuint GenBitMask(ILushort ex0, ILushort ex1, ILuint NumCols, ILushort *In, Color888 *OutCol)
+ILuint GenBitMask(ILushort ex0, ILushort ex1, ILuint NumCols, ILushort *In, ILubyte *Alpha, Color888 *OutCol)
 {
 	ILuint		i, j, Closest, Dist, BitMask = 0;
 	ILubyte		Mask[16];
@@ -318,6 +414,19 @@ ILuint GenBitMask(ILushort ex0, ILushort ex1, ILuint NumCols, ILushort *In, Colo
 	}
 
 	for (i = 0; i < 16; i++) {
+		if (Alpha) {  // Test to see if we have 1-bit transparency
+			if (Alpha[i] < 128) {
+				Mask[i] = 3;  // Transparent
+				if (OutCol) {
+					OutCol[i].r = Colours[j].r;
+					OutCol[i].g = Colours[j].g;
+					OutCol[i].b = Colours[j].b;
+				}
+				continue;
+			}
+		}
+
+		// If no transparency, try to find which colour is the closest.
 		Closest = UINT_MAX;
 		ShortToColor888(In[i], &c);
 		for (j = 0; j < NumCols; j++) {
@@ -369,6 +478,52 @@ ILvoid ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1)
 				*ex1 = Block[j];
 			}
 		}
+	}
+
+	return;
+}
+
+
+ILvoid CorrectEndDXT1(ILushort *ex0, ILushort *ex1, ILboolean HasAlpha)
+{
+	ILushort Temp;
+
+	if (HasAlpha) {
+		if (*ex0 > *ex1) {
+			Temp = *ex0;
+			*ex0 = *ex1;
+			*ex1 = Temp;
+		}
+	}
+	else {
+		if (*ex0 < *ex1) {
+			Temp = *ex0;
+			*ex0 = *ex1;
+			*ex1 = Temp;
+		}
+	}
+
+	return;
+}
+
+
+ILvoid PreMult(ILushort *Data, ILubyte *Alpha)
+{
+	Color888	Colour;
+	ILuint		i;
+
+	for (i = 0; i < 16; i++) {
+		ShortToColor888(Data[i], &Colour);
+		Colour.r = (ILubyte)(((ILuint)Colour.r * Alpha[i]) >> 8);
+		Colour.g = (ILubyte)(((ILuint)Colour.g * Alpha[i]) >> 8);
+		Colour.b = (ILubyte)(((ILuint)Colour.b * Alpha[i]) >> 8);
+
+		/*Colour.r = (ILubyte)(Colour.r * (Alpha[i] / 255.0));
+		Colour.g = (ILubyte)(Colour.g * (Alpha[i] / 255.0));
+		Colour.b = (ILubyte)(Colour.b * (Alpha[i] / 255.0));*/
+
+		Data[i] = Color888ToShort(&Colour);
+		ShortToColor888(Data[i], &Colour);
 	}
 
 	return;

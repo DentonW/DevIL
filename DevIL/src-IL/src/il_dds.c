@@ -16,7 +16,8 @@
 // Note:  Almost all this code is from nVidia's DDS-loading example at
 //	http://www.nvidia.com/view.asp?IO=dxtc_decompression_code
 //	and from the specs at
-//	http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dx8_c/hh/dx8_c/graphics_using_0j03.asp and
+//	http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dx8_c/hh/dx8_c/graphics_using_0j03.asp
+//	and
 //	http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dx8_c/directx_cpp/Graphics/ProgrammersGuide/Appendix/DDSFileFormat/ovwDDSFileFormat.asp
 //
 //
@@ -858,9 +859,11 @@ ILvoid CorrectPreMult()
 	static ILuint i;
 
 	for (i = 0; i < Image->SizeOfData; i += 4) {
-		Image->Data[i]   = (ILubyte)(((ILuint)Image->Data[i]   << 8) / Image->Data[i+3]);
-		Image->Data[i+1] = (ILubyte)(((ILuint)Image->Data[i+1] << 8) / Image->Data[i+3]);
-		Image->Data[i+2] = (ILubyte)(((ILuint)Image->Data[i+2] << 8) / Image->Data[i+3]);
+		if (Image->Data[i+3] != 0) {  // Cannot divide by 0.
+			Image->Data[i]   = (ILubyte)(((ILuint)Image->Data[i]   << 8) / Image->Data[i+3]);
+			Image->Data[i+1] = (ILubyte)(((ILuint)Image->Data[i+1] << 8) / Image->Data[i+3]);
+			Image->Data[i+2] = (ILubyte)(((ILuint)Image->Data[i+2] << 8) / Image->Data[i+3]);
+		}
 	}
 
 	return;

@@ -652,3 +652,86 @@ ILboolean ILAPIENTRY ilDefaultImage()
 
 	return IL_TRUE;
 }
+
+
+ILubyte* ILAPIENTRY ilGetAlpha(ILenum Type)
+{
+	ILimage		*TempImage;
+	ILubyte		*Alpha;
+	ILushort	*AlphaShort;
+	ILuint		*AlphaInt;
+	ILdouble	*AlphaDbl;
+	ILuint		i, j, Bpc, Size;
+
+	Bpc = ilGetBppType(Type);
+	if (Bpc == 0) {
+		ilSetError(IL_INVALID_PARAM);
+		return NULL;
+	}
+
+	if (iCurImage->Type == Type) {
+		TempImage = iCurImage;
+	}
+	else {
+		TempImage = iConvertImage(iCurImage->Format, Type);
+		if (TempImage == NULL)
+			return NULL;
+	}
+
+	Size = iCurImage->Width * iCurImage->Height * iCurImage->Depth * TempImage->Bpp;
+	Alpha = (ILubyte*)ialloc(Size / TempImage->Bpp * Bpc);
+	if (Alpha == NULL) {
+		if (TempImage != iCurImage)
+			ilCloseImage(TempImage);
+		ilSetError(IL_OUT_OF_MEMORY);
+		return NULL;
+	}
+
+	switch (TempImage->Format)
+	{
+		case IL_RGB:
+		case IL_BGR:
+		case IL_LUMINANCE:
+		case IL_COLOUR_INDEX:  // @TODO: Make IL_COLOUR_INDEX separate.
+			memset(Alpha, 0xFF, Size / TempImage->Bpp * Bpc);
+			if (TempImage != iCurImage)
+				ilCloseImage(TempImage);
+			return Alpha;
+	}
+
+	switch (TempImage->Type)
+	{
+		case IL_BYTE:
+		case IL_UNSIGNED_BYTE:
+			for (i = 3, j = 0; i < Size; i += 4, j++)
+				Alpha[j] = TempImage->Data[i];
+			break;
+
+		case IL_SHORT:
+		case IL_UNSIGNED_SHORT:
+			AlphaShort = (ILushort*)Alpha;
+			for (i = 3, j = 0; i < Size; i += 4, j++)
+				AlphaShort[j] = ((ILushort*)TempImage->Data)[i];
+			break;
+
+		case IL_INT:
+		case IL_UNSIGNED_INT:
+		case IL_FLOAT:  // Can throw float in here, because it's the same size.
+			AlphaInt = (ILuint*)Alpha;
+			for (i = 3, j = 0; i < Size; i += 4, j++)
+				AlphaInt[j] = ((ILuint*)TempImage->Data)[i];
+			break;
+
+		case IL_DOUBLE:
+			AlphaDbl = (ILdouble*)Alpha;
+			for (i = 3, j = 0; i < Size; i += 4, j++)
+				AlphaDbl[j] = ((ILdouble*)TempImage->Data)[i];
+			break;
+	}
+
+	if (TempImage != iCurImage)
+		ilCloseImage(TempImage);
+
+	return Alpha;
+}
+

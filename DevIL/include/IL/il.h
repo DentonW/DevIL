@@ -467,6 +467,7 @@ ILAPI ILboolean		ILAPIENTRY ilDisable(ILenum Mode);
 ILAPI ILboolean		ILAPIENTRY ilEnable(ILenum Mode);
 ILAPI ILboolean		ILAPIENTRY ilFormatFunc(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilGenImages(ILsizei Num, ILuint *Images);
+ILAPI ILubyte*		ILAPIENTRY ilGetAlpha(ILenum Type);
 ILAPI ILboolean		ILAPIENTRY ilGetBoolean(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilGetBooleanv(ILenum Mode, ILboolean *Param);
 ILAPI ILubyte*		ILAPIENTRY ilGetData(ILvoid);
