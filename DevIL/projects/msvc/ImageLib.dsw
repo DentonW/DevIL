@@ -50,18 +50,6 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name libjpeg
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name Libtiff
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name libpng
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name lcms108
-    End Project Dependency
 }}}
 
 ###############################################################################
@@ -99,18 +87,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "Libtiff"=.\extlibs\Libtiff.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "StressTest"=..\..\test\Stress\StressTest.dsp - Package Owner=<4>
 
 Package=<5>
@@ -143,69 +119,6 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name ILU
     End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "lcms108"=.\extlibs\lcms108.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "lcmsdll"=.\extlibs\lcmsdll.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "libjpeg"=.\extlibs\LibJpeg.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "libpng"=.\extlibs\libpng.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name zlib
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "zlib"=.\extlibs\zlib.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
 }}}
 
 ###############################################################################

@@ -102,14 +102,14 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 #elif _WIN32_WCE
 	#define ILUT_USE_WIN32
 #elif _WIN32
-	#ifdef __GNUC__ //__CYGWIN32__ (Cygwin seems to not define this with DevIL builds)
+	//#ifdef __GNUC__ //__CYGWIN32__ (Cygwin seems to not define this with DevIL builds)
 		#include "config.h"
-	#else
+	/*#else
 	  	#define ILUT_USE_WIN32
 		#define ILUT_USE_OPENGL
-		//#define ILUT_USE_SDL
-		//#define ILUT_USE_DIRECTX8
-	#endif
+		#define ILUT_USE_SDL
+		#define ILUT_USE_DIRECTX8
+	#endif*/
 #elif BEOS  // Don't know the #define
 	#define ILUT_USE_BEOS
 	#define ILUT_USE_OPENGL
@@ -174,7 +174,7 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 #endif//ILUT_USE_BEOS
 
 
-// ImageLib Utility Toolkit's Win32 (DirectX/GDI) Functions
+// ImageLib Utility Toolkit's Win32 GDI Functions
 #ifdef ILUT_USE_WIN32
 	#ifdef _WIN32
 		#define WIN32_LEAN_AND_MEAN
@@ -193,25 +193,30 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 		ILAPI ILboolean ILAPIENTRY ilutWinPrint(ILuint XPos, ILuint YPos, ILuint Width, ILuint Height, HDC hDC);
 		ILAPI ILboolean	ILAPIENTRY ilutWinSaveImage(const ILstring FileName, HBITMAP Bitmap);
 
-		#ifdef ILUT_USE_DIRECTX8
-			#include <d3d8.h>
-			ILAPI ILvoid	ILAPIENTRY ilutD3D8MipFunc(ILuint NumLevels);
-			ILAPI IDirect3DTexture8* ILAPIENTRY ilutD3D8Texture(IDirect3DDevice8 *Device);
-			ILAPI IDirect3DVolumeTexture8* ILAPIENTRY ilutD3D8VolumeTexture(IDirect3DDevice8 *Device);
-			ILAPI ILboolean	ILAPIENTRY ilutD3D8TexFromFile(IDirect3DDevice8 *Device, char *FileName, IDirect3DTexture8 **Texture);
-			ILAPI ILboolean	ILAPIENTRY ilutD3D8VolTexFromFile(IDirect3DDevice8 *Device, char *FileName, IDirect3DVolumeTexture8 **Texture);
-			ILAPI ILboolean	ILAPIENTRY ilutD3D8TexFromFileInMemory(IDirect3DDevice8 *Device, ILvoid *Lump, ILuint Size, IDirect3DTexture8 **Texture);
-			ILAPI ILboolean	ILAPIENTRY ilutD3D8VolTexFromFileInMemory(IDirect3DDevice8 *Device, ILvoid *Lump, ILuint Size, IDirect3DVolumeTexture8 **Texture);
-			ILAPI ILboolean	ILAPIENTRY ilutD3D8TexFromFileHandle(IDirect3DDevice8 *Device, ILHANDLE File, IDirect3DTexture8 **Texture);
-			ILAPI ILboolean	ILAPIENTRY ilutD3D8VolTexFromFileHandle(IDirect3DDevice8 *Device, ILHANDLE File, IDirect3DVolumeTexture8 **Texture);
-			// These two are not tested yet.
-			ILAPI ILboolean ILAPIENTRY ilutD3D8TexFromResource(IDirect3DDevice8 *Device, HMODULE SrcModule, char *SrcResource, IDirect3DTexture8 **Texture);
-			ILAPI ILboolean ILAPIENTRY ilutD3D8VolTexFromResource(IDirect3DDevice8 *Device, HMODULE SrcModule, char *SrcResource, IDirect3DVolumeTexture8 **Texture);
-
-			ILAPI ILboolean ILAPIENTRY ilutD3D8LoadSurface(IDirect3DDevice8 *Device, IDirect3DSurface8 *Surface);
-		#endif//ILUT_USE_DIRECTX8
 	#endif//_WIN32
 #endif//ILUT_USE_WIN32
+
+
+// ImageLib Utility Toolkit's DirectX 8 Functions
+#ifdef ILUT_USE_DIRECTX8
+	#ifdef _WIN32
+		#include <d3d8.h>
+		ILAPI ILvoid	ILAPIENTRY ilutD3D8MipFunc(ILuint NumLevels);
+		ILAPI IDirect3DTexture8* ILAPIENTRY ilutD3D8Texture(IDirect3DDevice8 *Device);
+		ILAPI IDirect3DVolumeTexture8* ILAPIENTRY ilutD3D8VolumeTexture(IDirect3DDevice8 *Device);
+		ILAPI ILboolean	ILAPIENTRY ilutD3D8TexFromFile(IDirect3DDevice8 *Device, char *FileName, IDirect3DTexture8 **Texture);
+		ILAPI ILboolean	ILAPIENTRY ilutD3D8VolTexFromFile(IDirect3DDevice8 *Device, char *FileName, IDirect3DVolumeTexture8 **Texture);
+		ILAPI ILboolean	ILAPIENTRY ilutD3D8TexFromFileInMemory(IDirect3DDevice8 *Device, ILvoid *Lump, ILuint Size, IDirect3DTexture8 **Texture);
+		ILAPI ILboolean	ILAPIENTRY ilutD3D8VolTexFromFileInMemory(IDirect3DDevice8 *Device, ILvoid *Lump, ILuint Size, IDirect3DVolumeTexture8 **Texture);
+		ILAPI ILboolean	ILAPIENTRY ilutD3D8TexFromFileHandle(IDirect3DDevice8 *Device, ILHANDLE File, IDirect3DTexture8 **Texture);
+		ILAPI ILboolean	ILAPIENTRY ilutD3D8VolTexFromFileHandle(IDirect3DDevice8 *Device, ILHANDLE File, IDirect3DVolumeTexture8 **Texture);
+		// These two are not tested yet.
+		ILAPI ILboolean ILAPIENTRY ilutD3D8TexFromResource(IDirect3DDevice8 *Device, HMODULE SrcModule, char *SrcResource, IDirect3DTexture8 **Texture);
+		ILAPI ILboolean ILAPIENTRY ilutD3D8VolTexFromResource(IDirect3DDevice8 *Device, HMODULE SrcModule, char *SrcResource, IDirect3DVolumeTexture8 **Texture);
+
+		ILAPI ILboolean ILAPIENTRY ilutD3D8LoadSurface(IDirect3DDevice8 *Device, IDirect3DSurface8 *Surface);
+	#endif//_WIN32
+#endif//ILUT_USE_DIRECTX8
 
 
 #ifdef __cplusplus

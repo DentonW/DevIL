@@ -33,7 +33,7 @@ extern "C" {
 //#define IL_NO_LIF
 //#define IL_NO_LBM
 //#define IL_NO_MDL
-#define IL_NO_MNG
+//#define IL_NO_MNG
 //#define IL_NO_PCD
 //#define IL_NO_PCX
 //#define IL_NO_PIC

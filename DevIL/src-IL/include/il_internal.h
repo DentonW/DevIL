@@ -23,8 +23,12 @@
 #include <string.h>
 
 // Local headers
+#ifdef _WIN32
+	#define HAVE_CONFIG_H
+#endif
+
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+	#include <IL/config.h>
 #endif
 
 #include <IL/il.h>

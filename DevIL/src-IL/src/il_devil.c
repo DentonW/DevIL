@@ -197,7 +197,9 @@ ILubyte* ILAPIENTRY ilGetPalette()
 
 // Changed to the colour of the Universe
 //	(http://www.newscientist.com/news/news.jsp?id=ns99991775)
-ILfloat ClearRed = 0.269f, ClearGreen = 0.388f, ClearBlue = 0.342f, ClearAlpha = 0.0f;
+//	*(http://www.space.com/scienceastronomy/universe_color_020308.html)*
+//ILfloat ClearRed = 0.269f, ClearGreen = 0.388f, ClearBlue = 0.342f, ClearAlpha = 0.0f;
+ILfloat ClearRed = 1.0f, ClearGreen = 0.972549f, ClearBlue = 0.90588f, ClearAlpha = 0.0f;
 
 ILvoid ILAPIENTRY ilClearColour(ILclampf Red, ILclampf Green, ILclampf Blue, ILclampf Alpha)
 {
