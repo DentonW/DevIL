@@ -20,6 +20,8 @@
 #include "il_gif.h"
 
 
+ILenum	GifType;
+
 //! Checks if the file specified in FileName is a valid Gif file.
 ILboolean ilIsValidGif(const ILstring FileName)
 {
@@ -138,10 +140,18 @@ ILboolean iLoadGifInternal()
 		return IL_FALSE;
 	}
 
-	if (!iIsValidGif())
-		return IL_FALSE;
-
 	iread(&Header, sizeof(Header), 1);
+
+	if (!strnicmp(Header.Sig, "GIF87A", 6)) {
+		GifType = GIF87A;
+	}
+	else if (!strnicmp(Header.Sig, "GIF89A", 6)) {
+		GifType = GIF89A;
+	}
+	else {
+		ilSetError(IL_INVALID_FILE_HEADER);
+		return IL_FALSE;
+	}
 
 	ilTexImage(Header.Width, Header.Height, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL);
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
@@ -156,6 +166,8 @@ ILboolean iLoadGifInternal()
 		iread(iCurImage->Pal.Palette, 1, iCurImage->Pal.PalSize);
 	}
 
+	if (GifType == GIF89A)
+		iseek(8, IL_SEEK_CUR);
 	iread(&ImageDesc, sizeof(ImageDesc), 1);
 
 	Data = iCurImage->Data;
