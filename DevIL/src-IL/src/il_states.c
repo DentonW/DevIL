@@ -16,8 +16,17 @@
 //#include <malloc.h>
 #include <stdlib.h>
 
-const ILstring _ilVendor	= IL_TEXT("Abysmal Software");
-const ILstring _ilVersion	= IL_TEXT("Developer's Image Library (DevIL) 1.5.6");
+const ILstring _ilVendor		= IL_TEXT("Abysmal Software");
+const ILstring _ilVersion		= IL_TEXT("Developer's Image Library (DevIL) 1.5.6");
+const ILstring _ilLoadExt		= "" IL_BMP_EXT IL_CUT_EXT IL_DCX_EXT IL_DDS_EXT
+									IL_GIF_EXT IL_ICO_EXT IL_JPG_EXT IL_LIF_EXT
+									IL_MDL_EXT IL_MNG_EXT IL_PCX_EXT IL_PIC_EXT
+									IL_PIX_EXT IL_PNG_EXT IL_PNM_EXT IL_PSD_EXT
+									IL_PSP_EXT IL_PXR_EXT IL_SGI_EXT IL_TGA_EXT
+									IL_TIF_EXT IL_WAL_EXT IL_XPM_EXT;
+const ILstring _ilSaveExt		= "" IL_BMP_EXT IL_CHEAD_EXT IL_DDS_EXT IL_JPG_EXT
+									IL_PCX_EXT IL_PNG_EXT IL_PNM_EXT IL_PSD_EXT
+									IL_SGI_EXT IL_TGA_EXT IL_TIF_EXT;
 
 
 //! Set all states to their defaults.
@@ -72,28 +81,32 @@ ILvoid ilDefaultStates()
 
 
 //! Returns a constant string detailing aspects about this library.
-const char* ILAPIENTRY ilGetString(ILenum StringName)
+const ILstring ILAPIENTRY ilGetString(ILenum StringName)
 {
 	switch (StringName)
 	{
 		case IL_VENDOR:
-			return (const char*)_ilVendor;
+			return (const ILstring)_ilVendor;
 		case IL_VERSION:
-			return (const char*)_ilVersion;
+			return (const ILstring)_ilVersion;
+		case IL_LOAD_EXT:
+			return (const ILstring)_ilLoadExt;
+		case IL_SAVE_EXT:
+			return (const ILstring)_ilSaveExt;
 		case IL_TGA_ID_STRING:
-			return (const char*)ilStates[ilCurrentPos].ilTgaId;
+			return (const ILstring)ilStates[ilCurrentPos].ilTgaId;
 		case IL_TGA_AUTHNAME_STRING:
-			return (const char*)ilStates[ilCurrentPos].ilTgaAuthName;
+			return (const ILstring)ilStates[ilCurrentPos].ilTgaAuthName;
 		case IL_TGA_AUTHCOMMENT_STRING:
-			return (const char*)ilStates[ilCurrentPos].ilTgaAuthComment;
+			return (const ILstring)ilStates[ilCurrentPos].ilTgaAuthComment;
 		case IL_PNG_AUTHNAME_STRING:
-			return (const char*)ilStates[ilCurrentPos].ilPngAuthName;
+			return (const ILstring)ilStates[ilCurrentPos].ilPngAuthName;
 		case IL_PNG_TITLE_STRING:
-			return (const char*)ilStates[ilCurrentPos].ilPngTitle;
+			return (const ILstring)ilStates[ilCurrentPos].ilPngTitle;
 		case IL_PNG_DESCRIPTION_STRING:
-			return (const char*)ilStates[ilCurrentPos].ilPngDescription;
+			return (const ILstring)ilStates[ilCurrentPos].ilPngDescription;
 		case IL_CHEAD_HEADER_STRING:
-			return (const char*)ilStates[ilCurrentPos].ilCHeader;
+			return (const ILstring)ilStates[ilCurrentPos].ilCHeader;
 		default:
 			ilSetError(IL_INVALID_ENUM);
 			break;

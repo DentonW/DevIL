@@ -546,7 +546,7 @@ ILboolean ReadMipmaps()
 {
 	ILuint	i, CompFactor=0;
 	ILubyte	Bpp;
-	ILimage	*startImage;
+	ILimage	*StartImage, *TempImage;
 	ILuint	LastLinear;
 	ILuint	minW, minH;
 
@@ -559,7 +559,7 @@ ILboolean ReadMipmaps()
 		CompFactor = (Width * Height * Depth * Bpp) / Head.LinearSize;
 	}
 
-	startImage = Image;
+	StartImage = Image;
 
 	if (!(Head.Flags1 & DDS_MIPMAPCOUNT)) {
 		Head.MipMapCount = 1;
@@ -580,7 +580,7 @@ ILboolean ReadMipmaps()
 
 		Image->Next = ilNewImage(Width, Height, Depth, Bpp, 1);
 		if (Image->Next == NULL)
-			return IL_FALSE;
+			goto mip_fail;
 		Image = Image->Next;
 		Image->Origin = IL_ORIGIN_UPPER_LEFT;
 
@@ -592,21 +592,34 @@ ILboolean ReadMipmaps()
 				minH = IL_MAX(4, Height);
 			}
 			Head.LinearSize = (minW * minH * Depth * Bpp) / CompFactor;
-		} else {
+		}
+		else {
 			Head.LinearSize >>= 1;
 		}
 
-		ReadData();
-		Decompress();
+		if (!ReadData())
+			goto mip_fail;
+		if (!Decompress())
+			goto mip_fail;
 	}
 
 	Head.LinearSize = LastLinear;
-	startImage->Mipmaps = startImage->Next;
-	startImage->Next = NULL;
-	startImage->NumMips = Head.MipMapCount - 1;
-	Image = startImage;
+	StartImage->Mipmaps = StartImage->Next;
+	StartImage->Next = NULL;
+	StartImage->NumMips = Head.MipMapCount - 1;
+	Image = StartImage;
 
 	return IL_TRUE;
+
+mip_fail:
+	Image = StartImage;
+	StartImage = StartImage->Next;
+	while (StartImage) {
+		TempImage = StartImage;
+		StartImage = StartImage->Next;
+		ifree(TempImage);
+	}
+	return IL_FALSE;
 }
 
 
@@ -699,10 +712,11 @@ ILboolean DecompressDXT2()
 {
 	// Can do color & alpha same as dxt3, but color is pre-multiplied 
 	//   so the result will be wrong unless corrected. 
-	DecompressDXT3();
+	if (!DecompressDXT3())
+		return IL_FALSE;
 	CorrectPreMult();
 
-	return IL_FALSE;
+	return IL_TRUE;
 }
 
 
@@ -792,7 +806,8 @@ ILboolean DecompressDXT4()
 {
 	// Can do color & alpha same as dxt5, but color is pre-multiplied 
 	//   so the result will be wrong unless corrected. 
-	DecompressDXT5();
+	if (!DecompressDXT5())
+		return IL_FALSE;
 	CorrectPreMult();
 
 	return IL_FALSE;

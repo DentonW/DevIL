@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 02/21/2002 <--Y2K Compliant! =]
+// Last modified: 06/20/2002 <--Y2K Compliant! =]
 //
 // Filename: src-IL/src/il_dds-save.c
 //
@@ -65,6 +65,7 @@ ILboolean ilSaveDdsL(ILvoid *Lump, ILuint Size)
 ILboolean iSaveDdsInternal()
 {
 	ILenum DXTCFormat, Origin;
+	ILuint counter, numMipMaps;
 
 	if (ilNextPower2(iCurImage->Width) != iCurImage->Width ||
 		ilNextPower2(iCurImage->Height) != iCurImage->Height ||
@@ -79,13 +80,28 @@ ILboolean iSaveDdsInternal()
 
 	DXTCFormat = iGetInt(IL_DXTC_FORMAT);
 	WriteHeader(iCurImage, DXTCFormat);
-	if (!Compress(iCurImage, DXTCFormat))
-		return IL_FALSE;
+	
+	numMipMaps = ilGetInteger(IL_NUM_MIPMAPS);
+	for (counter = 0; counter < numMipMaps; counter++) {
+		ilActiveMipmap(counter);
+		
+		Origin = iCurImage->Origin;
+		if (Origin != IL_ORIGIN_UPPER_LEFT)
+			ilFlipImage();
+		
+		if (!Compress(iCurImage, DXTCFormat))
+			return IL_FALSE;
+
+		if (Origin != IL_ORIGIN_UPPER_LEFT)
+			ilFlipImage();
+		
+		ilActiveMipmap(0);
+	}
 
 	if (Origin != IL_ORIGIN_UPPER_LEFT)
 		ilFlipImage();
 
-	return IL_FALSE;
+	return IL_TRUE;
 }
 
 
@@ -139,7 +155,7 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat)
 	}
 	SaveLittleUInt(LinearSize);	// LinearSize
 	SaveLittleUInt(0);			// Depth
-	SaveLittleUInt(0);			// MipMapCount
+	SaveLittleUInt(ilGetInteger(IL_NUM_MIPMAPS));			// MipMapCount
 	SaveLittleUInt(0);			// AlphaBitDepth
 
 	for (i = 0; i < 10; i++)
@@ -392,6 +408,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 			}
 			break;
 	}
+
 
 	ifree(Data);
 

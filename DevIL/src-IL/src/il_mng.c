@@ -84,7 +84,7 @@ mng_bool MNG_DECL mymngwritedata(mng_handle mng, mng_ptr buffer, mng_size_t size
 	*byteswritten = iwrite(buffer, 1, size);
 
 	if (*byteswritten < size) {
-		ilSetError(IL_UNKNOWN_ERROR);
+		ilSetError(IL_FILE_WRITE_ERRROR);
 		return MNG_FALSE;
 	}
 

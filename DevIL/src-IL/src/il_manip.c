@@ -179,16 +179,16 @@ ILboolean ilMirrorImage()
 
 // Should we add type to the parameter list?
 // Copies a 1d block of pixels to the buffer pointed to by Data.
-ILvoid ilCopyPixels1D(ILuint XOff, ILuint Width, ILvoid *Data)
+ILboolean ilCopyPixels1D(ILuint XOff, ILuint Width, ILvoid *Data)
 {
-	ILuint		x, c, NewBps, NewOff, PixBpp;
-	ILubyte		*Temp = (ILubyte*)Data;
-	ILboolean	Flipped = IL_FALSE;
+	ILuint	x, c, NewBps, NewOff, PixBpp;
+	ILubyte	*Temp = (ILubyte*)Data, *TempData = iCurImage->Data;
 
 	if (ilIsEnabled(IL_ORIGIN_SET)) {
 		if ((ILenum)ilGetInteger(IL_ORIGIN_MODE) != iCurImage->Origin) {
-			ilFlipImage();
-			Flipped = IL_TRUE;
+			TempData = iGetFlipped(iCurImage);
+			if (TempData == NULL)
+				return IL_FALSE;
 		}
 	}
 
@@ -204,28 +204,28 @@ ILvoid ilCopyPixels1D(ILuint XOff, ILuint Width, ILvoid *Data)
 
 	for (x = 0; x < NewBps; x += PixBpp) {
 		for (c = 0; c < PixBpp; c++) {
-			Temp[x + c] = iCurImage->Data[(x + NewOff) + c];
+			Temp[x + c] = TempData[(x + NewOff) + c];
 		}
 	}
 
-	if (Flipped)
-		ilFlipImage();
+	if (TempData != iCurImage->Data)
+		ifree(TempData);
 
-	return;
+	return IL_TRUE;
 }
 
 
 // Copies a 2d block of pixels to the buffer pointed to by Data.
-ILvoid ilCopyPixels2D(ILuint XOff, ILuint YOff, ILuint Width, ILuint Height, ILvoid *Data)
+ILboolean ilCopyPixels2D(ILuint XOff, ILuint YOff, ILuint Width, ILuint Height, ILvoid *Data)
 {
-	ILuint		x, y, c, NewBps, DataBps, NewXOff, NewHeight, PixBpp;
-	ILubyte		*Temp = (ILubyte*)Data;
-	ILboolean	Flipped = IL_FALSE;
+	ILuint	x, y, c, NewBps, DataBps, NewXOff, NewHeight, PixBpp;
+	ILubyte	*Temp = (ILubyte*)Data, *TempData = iCurImage->Data;
 
 	if (ilIsEnabled(IL_ORIGIN_SET)) {
 		if ((ILenum)ilGetInteger(IL_ORIGIN_MODE) != iCurImage->Origin) {
-			ilFlipImage();
-			Flipped = IL_TRUE;
+			TempData = iGetFlipped(iCurImage);
+			if (TempData == NULL)
+				return IL_FALSE;
 		}
 	}
 
@@ -248,29 +248,29 @@ ILvoid ilCopyPixels2D(ILuint XOff, ILuint YOff, ILuint Width, ILuint Height, ILv
 		for (x = 0; x < NewBps; x += PixBpp) {
 			for (c = 0; c < PixBpp; c++) {
 				Temp[y * DataBps + x + c] = 
-					iCurImage->Data[(y + YOff) * iCurImage->Bps + x + NewXOff + c];
+					TempData[(y + YOff) * iCurImage->Bps + x + NewXOff + c];
 			}
 		}
 	}
 
-	if (Flipped)
-		ilFlipImage();
+	if (TempData != iCurImage->Data)
+		ifree(TempData);
 
-	return;
+	return IL_TRUE;
 }
 
 
 // Copies a 3d block of pixels to the buffer pointed to by Data.
-ILvoid ilCopyPixels3D(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Width, ILuint Height, ILuint Depth, ILvoid *Data)
+ILboolean ilCopyPixels3D(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Width, ILuint Height, ILuint Depth, ILvoid *Data)
 {
-	ILuint		x, y, z, c, NewBps, DataBps, NewSizePlane, NewH, NewD, NewXOff, PixBpp;
-	ILubyte		*Temp = (ILubyte*)Data;
-	ILboolean	Flipped = IL_FALSE;
+	ILuint	x, y, z, c, NewBps, DataBps, NewSizePlane, NewH, NewD, NewXOff, PixBpp;
+	ILubyte	*Temp = (ILubyte*)Data, *TempData = iCurImage->Data;
 
 	if (ilIsEnabled(IL_ORIGIN_SET)) {
 		if ((ILenum)ilGetInteger(IL_ORIGIN_MODE) != iCurImage->Origin) {
-			ilFlipImage();
-			Flipped = IL_TRUE;
+			TempData = iGetFlipped(iCurImage);
+			if (TempData == NULL)
+				return IL_FALSE;
 		}
 	}
 
@@ -301,24 +301,24 @@ ILvoid ilCopyPixels3D(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Width, ILuin
 			for (x = 0; x < NewBps; x += PixBpp) {
 				for (c = 0; c < PixBpp; c++) {
 					Temp[z * NewSizePlane + y * DataBps + x + c] = 
-						iCurImage->Data[(z + ZOff) * iCurImage->SizeOfPlane + (y + YOff) * iCurImage->Bps + x + NewXOff + c];
-						//iCurImage->Data[(z + ZOff) * iCurImage->SizeOfPlane + (y + YOff) * iCurImage->Bps + (x + XOff) * iCurImage->Bpp + c];
+						TempData[(z + ZOff) * iCurImage->SizeOfPlane + (y + YOff) * iCurImage->Bps + x + NewXOff + c];
+						//TempData[(z + ZOff) * iCurImage->SizeOfPlane + (y + YOff) * iCurImage->Bps + (x + XOff) * iCurImage->Bpp + c];
 				}
 			}
 		}
 	}
 
-	if (Flipped)
-		ilFlipImage();
+	if (TempData != iCurImage->Data)
+		ifree(TempData);
 
-	return;
+	return IL_TRUE;
 }
 
 
 ILuint ILAPIENTRY ilCopyPixels(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Width, ILuint Height, ILuint Depth, ILenum Format, ILenum Type, ILvoid *Data)
 {
-	ILvoid	*Converted;
-	ILubyte	*TempBuff;
+	ILvoid	*Converted = NULL;
+	ILubyte	*TempBuff = NULL;
 	ILuint	SrcSize, DestSize;
 
 	if (iCurImage == NULL) {
@@ -346,13 +346,19 @@ ILuint ILAPIENTRY ilCopyPixels(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Wid
 	}
 
 	if (YOff + Height <= 1) {
-		ilCopyPixels1D(XOff, Width, TempBuff);
+		if (!ilCopyPixels1D(XOff, Width, TempBuff)) {
+			goto failed;
+		}
 	}
 	else if (ZOff + Depth <= 1) {
-		ilCopyPixels2D(XOff, YOff, Width, Height, TempBuff);
+		if (!ilCopyPixels2D(XOff, YOff, Width, Height, TempBuff)) {
+			goto failed;
+		}
 	}
 	else {
-		ilCopyPixels3D(XOff, YOff, ZOff, Width, Height, Depth, TempBuff);
+		if (!ilCopyPixels3D(XOff, YOff, ZOff, Width, Height, Depth, TempBuff)) {
+			goto failed;
+		}
 	}
 
 	if (Format == iCurImage->Format && Type == iCurImage->Type) {
@@ -360,31 +366,36 @@ ILuint ILAPIENTRY ilCopyPixels(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Wid
 	}
 
 	Converted = ilConvertBuffer(SrcSize, iCurImage->Format, Format, iCurImage->Type, Type, TempBuff);
-	if (Converted == NULL) {
-		ifree(TempBuff);
-		return 0;
-	}
+	if (Converted == NULL)
+		goto failed;
 
 	memcpy(Data, Converted, DestSize);
 
 	ifree(Converted);
-	ifree(TempBuff);
+	if (TempBuff != Data)
+		ifree(TempBuff);
 
 	return DestSize;
+
+failed:
+	if (TempBuff != Data)
+		ifree(TempBuff);
+	ifree(Converted);
+	return 0;
 }
 
 
-ILvoid ilSetPixels1D(ILint XOff, ILuint Width, ILvoid *Data)
+ILboolean ilSetPixels1D(ILint XOff, ILuint Width, ILvoid *Data)
 {
-	ILuint		c, SkipX = 0, PixBpp;
-	ILint		x, NewWidth;
-	ILubyte		*Temp = (ILubyte*)Data;
-	ILboolean	Flipped = IL_FALSE;
+	ILuint	c, SkipX = 0, PixBpp;
+	ILint	x, NewWidth;
+	ILubyte	*Temp = (ILubyte*)Data, *TempData = iCurImage->Data;
 
 	if (ilIsEnabled(IL_ORIGIN_SET)) {
 		if ((ILenum)ilGetInteger(IL_ORIGIN_MODE) != iCurImage->Origin) {
-			ilFlipImage();
-			Flipped = IL_TRUE;
+			TempData = iGetFlipped(iCurImage);
+			if (TempData == NULL)
+				return IL_FALSE;
 		}
 	}
 
@@ -406,28 +417,30 @@ ILvoid ilSetPixels1D(ILint XOff, ILuint Width, ILvoid *Data)
 
 	for (x = 0; x < NewWidth; x++) {
 		for (c = 0; c < PixBpp; c++) {
-			iCurImage->Data[(x + XOff) * PixBpp + c] = Temp[(x + SkipX) * PixBpp + c];
+			TempData[(x + XOff) * PixBpp + c] = Temp[(x + SkipX) * PixBpp + c];
 		}
 	}
 
-	if (Flipped)
-		ilFlipImage();
+	if (TempData != iCurImage->Data) {
+		ifree(iCurImage->Data);
+		iCurImage->Data = TempData;
+	}
 
-	return;
+	return IL_TRUE;
 }
 
 
-ILvoid ilSetPixels2D(ILint XOff, ILint YOff, ILuint Width, ILuint Height, ILvoid *Data)
+ILboolean ilSetPixels2D(ILint XOff, ILint YOff, ILuint Width, ILuint Height, ILvoid *Data)
 {
-	ILuint		c, SkipX = 0, SkipY = 0, NewBps, PixBpp;
-	ILint		x, y, NewWidth, NewHeight;
-	ILubyte		*Temp = (ILubyte*)Data;
-	ILboolean	Flipped = IL_FALSE;
+	ILuint	c, SkipX = 0, SkipY = 0, NewBps, PixBpp;
+	ILint	x, y, NewWidth, NewHeight;
+	ILubyte	*Temp = (ILubyte*)Data, *TempData = iCurImage->Data;
 
 	if (ilIsEnabled(IL_ORIGIN_SET)) {
 		if ((ILenum)ilGetInteger(IL_ORIGIN_MODE) != iCurImage->Origin) {
-			ilFlipImage();
-			Flipped = IL_TRUE;
+			TempData = iGetFlipped(iCurImage);
+			if (TempData == NULL)
+				return IL_FALSE;
 		}
 	}
 
@@ -459,30 +472,32 @@ ILvoid ilSetPixels2D(ILint XOff, ILint YOff, ILuint Width, ILuint Height, ILvoid
 	for (y = 0; y < NewHeight; y++) {
 		for (x = 0; x < NewWidth; x++) {
 			for (c = 0; c < PixBpp; c++) {
-				iCurImage->Data[(y + YOff) * iCurImage->Bps + (x + XOff) * PixBpp + c] =
+				TempData[(y + YOff) * iCurImage->Bps + (x + XOff) * PixBpp + c] =
 					Temp[(y + SkipY) * NewBps + (x + SkipX) * PixBpp + c];					
 			}
 		}
 	}
 
-	if (Flipped)
-		ilFlipImage();
+	if (TempData != iCurImage->Data) {
+		ifree(iCurImage->Data);
+		iCurImage->Data = TempData;
+	}
 
-	return;
+	return IL_TRUE;
 }
 
 
-ILvoid ilSetPixels3D(ILint XOff, ILint YOff, ILint ZOff, ILuint Width, ILuint Height, ILuint Depth, ILvoid *Data)
+ILboolean ilSetPixels3D(ILint XOff, ILint YOff, ILint ZOff, ILuint Width, ILuint Height, ILuint Depth, ILvoid *Data)
 {
-	ILuint		SkipX = 0, SkipY = 0, SkipZ = 0, c, NewBps, NewSizePlane, PixBpp;
-	ILint		x, y, z, NewW, NewH, NewD;
-	ILubyte		*Temp = (ILubyte*)Data;
-	ILboolean	Flipped = IL_FALSE;
+	ILuint	SkipX = 0, SkipY = 0, SkipZ = 0, c, NewBps, NewSizePlane, PixBpp;
+	ILint	x, y, z, NewW, NewH, NewD;
+	ILubyte	*Temp = (ILubyte*)Data, *TempData = iCurImage->Data;
 
 	if (ilIsEnabled(IL_ORIGIN_SET)) {
 		if ((ILenum)ilGetInteger(IL_ORIGIN_MODE) != iCurImage->Origin) {
-			ilFlipImage();
-			Flipped = IL_TRUE;
+			TempData = iGetFlipped(iCurImage);
+			if (TempData == NULL)
+				return IL_FALSE;
 		}
 	}
 
@@ -526,17 +541,19 @@ ILvoid ilSetPixels3D(ILint XOff, ILint YOff, ILint ZOff, ILuint Width, ILuint He
 		for (y = 0; y < NewH; y++) {
 			for (x = 0; x < NewW; x++) {
 				for (c = 0; c < PixBpp; c++) {
-					iCurImage->Data[(z + ZOff) * iCurImage->SizeOfPlane + (y + YOff) * iCurImage->Bps + (x + XOff) * PixBpp + c] =
+					TempData[(z + ZOff) * iCurImage->SizeOfPlane + (y + YOff) * iCurImage->Bps + (x + XOff) * PixBpp + c] =
 						Temp[(z + SkipZ) * NewSizePlane + (y + SkipY) * NewBps + (x + SkipX) * PixBpp + c];
 				}
 			}
 		}
 	}
 
-	if (Flipped)
-		ilFlipImage();
+	if (TempData != iCurImage->Data) {
+		ifree(iCurImage->Data);
+		iCurImage->Data = TempData;
+	}
 
-	return;
+	return IL_TRUE;
 }
 
 
@@ -576,7 +593,8 @@ ILvoid ILAPIENTRY ilSetPixels(ILint XOff, ILint YOff, ILint ZOff, ILuint Width, 
 		return;
 	}
 
-	ifree(Converted);
+	if (Converted != Data)
+		ifree(Converted);
 
 	return;
 }

@@ -190,8 +190,15 @@ ILboolean iLoadPicInternal()
 		}
 		else {
 			Channels->Next = (CHANNEL*)ialloc(sizeof(CHANNEL));
-			if (Channels->Next == NULL)
+			if (Channels->Next == NULL) {
+				// Clean up the list before erroring out.
+				while (Channel) {
+					Prev = Channel;
+					Channel = Channel->Next;
+					ifree(Prev);
+				}
 				return IL_FALSE;
+			}
 			Channels = Channels->Next;
 		}
 		Channels->Next = NULL;

@@ -217,3 +217,5 @@ Marc Gregoire for sending images that DevIL would not load.
 
 Alberto Barbati for noticing that the IL_NEU_QUANT_SAMPLE mode wasn't being used properly.
 
+Ryan Butterfoss for his contributions to the DDS saving code.
+

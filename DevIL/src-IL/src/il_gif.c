@@ -207,16 +207,16 @@ ILboolean GetImages(ILpal *GlobalPal)
 	IMAGEDESC	ImageDesc;
 	GFXCONTROL	Gfx;
 	ILboolean	BaseImage = IL_TRUE;
-	ILimage		*Image = iCurImage;
+	ILimage		*Image = iCurImage, *TempImage = NULL;
 	ILuint		NumImages = 0, i;
-	ILubyte		*TempData;
+	ILubyte		*TempData = NULL;
 
 	Gfx.Used = IL_TRUE;
 
 	while (!ieof()) {
 		i = itell();
 		if (!SkipExtensions(&Gfx))
-			return IL_FALSE;
+			goto error_clean;
 		i = itell();
 
 		// Either of these means that we've reached the end of the data stream.
@@ -234,17 +234,17 @@ ILboolean GetImages(ILpal *GlobalPal)
 		if (!BaseImage) {
 			NumImages++;
 			Image->Next = ilNewImage(iCurImage->Width, iCurImage->Height, 1, 1, 1);
-			if (!Image->Next)
-				return IL_FALSE;
+			if (Image->Next == NULL)
+				goto error_clean;
 
+			// Each image is based on the previous image, so copy the previous data.
 			//if ((Gfx.Packed & 0x1C) >> 2 == 1)
 			memcpy(Image->Next->Data, Image->Data, Image->SizeOfData);
 
 			if (ImageDesc.Width != iCurImage->Width || ImageDesc.Height != iCurImage->Height) {
 				TempData = (ILubyte*)ialloc(ImageDesc.Width * ImageDesc.Height);
 				if (TempData == NULL) {
-					// @TODO:  Clean up more thoroughly here?
-					return IL_FALSE;
+					goto error_clean;
 				}
 			}
 			else {
@@ -267,19 +267,19 @@ ILboolean GetImages(ILpal *GlobalPal)
 		// Check to see if the image has its own palette.
 		if (ImageDesc.ImageInfo & (1 << 7)) {
 			if (!GetPalette(ImageDesc.ImageInfo, &Image->Pal)) {
-				return IL_FALSE;
+				goto error_clean;
 			}
 		}
 		else {
 			if (!CopyPalette(&Image->Pal, GlobalPal)) {
-				return IL_FALSE;
+				goto error_clean;
 			}
 		}
 
 
 		if (!GifGetData(TempData)) {
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
-			return IL_FALSE;
+			goto error_clean;
 		}
 
 		if (TempData != Image->Data) {
@@ -289,11 +289,12 @@ ILboolean GetImages(ILpal *GlobalPal)
 			}
 
 			ifree(TempData);
+			TempData = NULL;
 		}
 
 		if (ImageDesc.ImageInfo & (1 << 6)) {  // Image is interlaced.
 			if (!RemoveInterlace())
-				return IL_FALSE;
+				goto error_clean;
 		}
 
 		// See if there was a valid graphics control extension.
@@ -304,7 +305,7 @@ ILboolean GetImages(ILpal *GlobalPal)
 			// See if a transparent colour is defined.
 			if (Gfx.Packed & 1) {
 				if (!ConvertTransparent(Image, Gfx.Transparent)) {
-					return IL_FALSE;
+					goto error_clean;
 				}
 			}
 		}
@@ -319,6 +320,17 @@ ILboolean GetImages(ILpal *GlobalPal)
 		return IL_FALSE;
 
 	return IL_TRUE;
+
+error_clean:
+	ifree(TempData);
+	Image = iCurImage->Next;
+	while (Image) {
+		TempImage = Image;
+		Image = Image->Next;
+		ilCloseImage(TempImage);
+	}
+	
+	return IL_FALSE;
 }
 
 

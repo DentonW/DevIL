@@ -104,4 +104,150 @@ typedef struct IL_HINTS
 IL_HINTS ilHints;
 
 
+#ifndef IL_NO_BMP
+	#define IL_BMP_EXT "bmp dib "
+#else
+	#define IL_BMP_EXT ""
+#endif
+
+#ifndef IL_NO_CHEAD
+	#define IL_CHEAD_EXT "h "
+#else
+	#define IL_CHEAD_EXT ""
+#endif
+
+#ifndef IL_NO_CUT
+	#define IL_CUT_EXT "cut "
+#else
+	#define IL_CUT_EXT ""
+#endif
+
+#ifndef IL_NO_DCX
+	#define IL_DCX_EXT "dcx "
+#else
+	#define IL_DCX_EXT ""
+#endif
+
+#ifndef IL_NO_DDS
+	#define IL_DDS_EXT "dds "
+#else
+	#define IL_DDS_EXT ""
+#endif
+
+#ifndef IL_NO_GIF
+	#define IL_GIF_EXT "gif "
+#else
+	#define IL_GIF_EXT ""
+#endif
+
+#ifndef IL_NO_ICO
+	#define IL_ICO_EXT "ico cur "
+#else
+	#define IL_ICO_EXT ""
+#endif
+
+#ifndef IL_NO_JPG
+	#define IL_JPG_EXT "jpg jpe jpeg "
+#else
+	#define IL_JPG_EXT ""
+#endif
+
+#ifndef IL_NO_LIF
+	#define IL_LIF_EXT "lif "
+#else
+	#define IL_LIF_EXT ""
+#endif
+
+#ifndef IL_NO_MDL
+	#define IL_MDL_EXT "mdl "
+#else
+	#define IL_MDL_EXT ""
+#endif
+
+#ifndef IL_NO_MNG
+	#define IL_MNG_EXT "mng jng "
+#else
+	#define IL_MNG_EXT ""
+#endif
+
+#ifndef IL_NO_PCX
+	#define IL_PCX_EXT "pcx "
+#else
+	#define IL_PCX_EXT ""
+#endif
+
+#ifndef IL_NO_PIC
+	#define IL_PIC_EXT "pic "
+#else
+	#define IL_PIC_EXT ""
+#endif
+
+#ifndef IL_NO_PIX
+	#define IL_PIX_EXT "pix "
+#else
+	#define IL_PIX_EXT ""
+#endif
+
+#ifndef IL_NO_PNG
+	#define IL_PNG_EXT "png "
+#else
+	#define IL_PNG_EXT ""
+#endif
+
+#ifndef IL_NO_PNM
+	#define IL_PNM_EXT "pbm pgm pnm ppm "
+#else
+	#define IL_PNM_EXT ""
+#endif
+
+#ifndef IL_NO_PSD
+	#define IL_PSD_EXT "psd pdd "
+#else
+	#define IL_PSD_EXT ""
+#endif
+
+#ifndef IL_NO_PSP
+	#define IL_PSP_EXT "psp "
+#else
+	#define IL_PSP_EXT ""
+#endif
+
+#ifndef IL_NO_PXR
+	#define IL_PXR_EXT "pxr "
+#else
+	#define IL_PXR_EXT ""
+#endif
+
+#ifndef IL_NO_SGI
+	#define IL_SGI_EXT "sgi bw rgb rgba "
+#else
+	#define IL_SGI_EXT ""
+#endif
+
+#ifndef IL_NO_TGA
+	#define IL_TGA_EXT "tga vda icb vst "
+#else
+	#define IL_TGA_EXT ""
+#endif
+
+#ifndef IL_NO_TIF
+	#define IL_TIF_EXT "tif tiff "
+#else
+	#define IL_TIF_EXT ""
+#endif
+
+#ifndef IL_NO_WAL
+	#define IL_WAL_EXT "wal "
+#else
+	#define IL_WAL_EXT ""
+#endif
+
+#ifndef IL_NO_XPM
+	#define IL_XPM_EXT "xpm "
+#else
+	#define IL_XPM_EXT ""
+#endif
+
+
+
 #endif//STATES_H

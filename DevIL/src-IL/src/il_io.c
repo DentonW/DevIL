@@ -38,7 +38,7 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 		return IL_DDS;
 	if (!iStrCmp(Ext, IL_TEXT("png")))
 		return IL_PNG;
-	if (!iStrCmp(Ext, IL_TEXT("bmp")))
+	if (!iStrCmp(Ext, IL_TEXT("bmp")) || !iStrCmp(Ext, IL_TEXT("dib")))
 		return IL_BMP;
 	if (!iStrCmp(Ext, IL_TEXT("gif")))
 		return IL_GIF;
@@ -52,7 +52,7 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 		return IL_LIF;
 	if (!iStrCmp(Ext, IL_TEXT("mdl")))
 		return IL_MDL;
-	if (!iStrCmp(Ext, IL_TEXT("mng")))
+	if (!iStrCmp(Ext, IL_TEXT("mng")) || !iStrCmp(Ext, IL_TEXT("jng")))
 		return IL_MNG;
 	if (!iStrCmp(Ext, IL_TEXT("pcd")))
 		return IL_PCD;
@@ -1011,7 +1011,7 @@ ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 		#endif
 
 		#ifndef IL_NO_BMP
-		if (!iStrCmp(Ext, IL_TEXT("bmp"))) {
+		if (!iStrCmp(Ext, IL_TEXT("bmp")) || !iStrCmp(Ext, IL_TEXT("dib"))) {
 			return ilLoadBmp(FileName);
 		}
 		#endif

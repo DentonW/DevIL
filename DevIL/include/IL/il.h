@@ -154,6 +154,8 @@ typedef void			ILvoid;
 
 
 #define IL_VENDOR							0x1F00
+#define IL_LOAD_EXT							0x1F01
+#define IL_SAVE_EXT							0x1F02
 
 
 //
@@ -244,6 +246,7 @@ typedef void			ILvoid;
 #define IL_INVALID_CONVERSION				0x0510
 #define IL_BAD_DIMENSIONS					0x0511
 #define IL_FILE_READ_ERROR					0x0512  // 05/12/2002: Addition by Sam.
+#define IL_FILE_WRITE_ERRROR				0x0512
 
 #define IL_LIB_GIF_ERROR					0x05E1
 #define IL_LIB_JPEG_ERROR					0x05E2
@@ -497,7 +500,7 @@ ILAPI ILint			ILAPIENTRY ilGetInteger(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param);
 ILAPI ILuint		ILAPIENTRY ilGetLumpPos(ILvoid);
 ILAPI ILubyte*		ILAPIENTRY ilGetPalette(ILvoid);
-ILAPI const char*	ILAPIENTRY ilGetString(ILenum StringName);
+ILAPI const ILstring ILAPIENTRY ilGetString(ILenum StringName);
 ILAPI ILvoid		ILAPIENTRY ilHint(ILenum Target, ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilInit(ILvoid);
 ILAPI ILboolean		ILAPIENTRY ilIsDisabled(ILenum Mode);

@@ -997,31 +997,6 @@ ILuint ILAPIENTRY ilCloneCurImage()
 }
 
 
-// Sets the current palette.
-ILAPI ILvoid ILAPIENTRY ilSetPal(ILpal *Pal)
-{
-	if (iCurImage->Pal.Palette && iCurImage->Pal.PalSize && iCurImage->Pal.PalType != IL_PAL_NONE) {
-		ifree(iCurImage->Pal.Palette);
-	}
-
-	if (Pal->Palette && Pal->PalSize && Pal->PalType != IL_PAL_NONE) {
-		iCurImage->Pal.Palette = (ILubyte*)ialloc(Pal->PalSize);
-		if (iCurImage->Pal.Palette == NULL)
-			return IL_FALSE;
-		memcpy(iCurImage->Pal.Palette, Pal->Palette, Pal->PalSize);
-		iCurImage->Pal.PalSize = Pal->PalSize;
-		iCurImage->Pal.PalType = Pal->PalType;
-	}
-	else {
-		iCurImage->Pal.Palette = NULL;
-		iCurImage->Pal.PalSize = 0;
-		iCurImage->Pal.PalType = IL_PAL_NONE;
-	}
-
-	return;
-}
-
-
 // Like ilTexImage but doesn't destroy the palette.
 ILAPI ILboolean ILAPIENTRY ilResizeImage(ILimage *Image, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILubyte Bpc)
 {

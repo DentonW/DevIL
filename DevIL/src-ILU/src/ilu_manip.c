@@ -649,7 +649,7 @@ ILuint ILAPIENTRY iluColoursUsed()
 	// Create our miniature memory heap.
 	// I have determined that the average number of colours versus
 	//	the number of pixels is about a 1:8 ratio, so divide by 8.
-	HeapSize = iluCurImage->SizeOfData / iluCurImage->Bpp / 8;
+	HeapSize = IL_MAX(1, iluCurImage->SizeOfData / iluCurImage->Bpp / 8);
 	Heap[0] = (BUCKET*)ialloc(HeapSize * sizeof(BUCKET));
 	if (Heap[0] == NULL)
 		return IL_FALSE;

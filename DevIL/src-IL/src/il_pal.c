@@ -616,6 +616,9 @@ ILAPI ILpal* ILAPIENTRY iConvertPal(ILpal *Pal, ILenum DestFormat)
 							NewPal->Palette[i+2] = Pal->Palette[i];
 						}
 					}
+					else {
+						memcpy(NewPal->Palette, Pal->Palette, Pal->PalSize);
+					}
 					NewPal->PalType = DestFormat;
 					break;
 
@@ -630,6 +633,9 @@ ILAPI ILpal* ILAPIENTRY iConvertPal(ILpal *Pal, ILenum DestFormat)
 							NewPal->Palette[i+1] = Pal->Palette[i+1];
 							NewPal->Palette[i+2] = Pal->Palette[i];
 						}
+					}
+					else {
+						memcpy(NewPal->Palette, Pal->Palette, Pal->PalSize);
 					}
 					NewPal->PalType = DestFormat;
 					break;
@@ -849,6 +855,31 @@ ILboolean ILAPIENTRY ilConvertPal(ILenum DestFormat)
 	ifree(Pal);
 	
 	return IL_TRUE;
+}
+
+
+// Sets the current palette.
+ILAPI ILvoid ILAPIENTRY ilSetPal(ILpal *Pal)
+{
+	if (iCurImage->Pal.Palette && iCurImage->Pal.PalSize && iCurImage->Pal.PalType != IL_PAL_NONE) {
+		ifree(iCurImage->Pal.Palette);
+	}
+
+	if (Pal->Palette && Pal->PalSize && Pal->PalType != IL_PAL_NONE) {
+		iCurImage->Pal.Palette = (ILubyte*)ialloc(Pal->PalSize);
+		if (iCurImage->Pal.Palette == NULL)
+			return;
+		memcpy(iCurImage->Pal.Palette, Pal->Palette, Pal->PalSize);
+		iCurImage->Pal.PalSize = Pal->PalSize;
+		iCurImage->Pal.PalType = Pal->PalType;
+	}
+	else {
+		iCurImage->Pal.Palette = NULL;
+		iCurImage->Pal.PalSize = 0;
+		iCurImage->Pal.PalType = IL_PAL_NONE;
+	}
+
+	return;
 }
 
 

@@ -14,6 +14,6 @@
 #define MANIP_H
 
 ILboolean ilFlipImage(ILvoid);
-ILboolean ilMirrorImage(ILvoid);	//@JASON New routine created 28/03/2001
+ILboolean ilMirrorImage(ILvoid);	//@JASON New routine created 03/28/2001
 
 #endif//MANIP_H
