@@ -89,7 +89,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "-faltivec -O3 -DHAVE_CONFIG_H";
-				OTHER_LDFLAGS = "-lz -lpng -ljpeg -lmng -ltiff -llcms";
+				OTHER_LDFLAGS = "-lz";
 				PREFIX_HEADER = ../../include/IL/config.h;
 				PRODUCT_NAME = IL;
 				SECTORDER_FLAGS = "";
@@ -134,7 +134,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3800ACE03C37D1700A80001,
-				A3800AD203C37D2600A80001,
 				A3800AD403C37D2A00A80001,
 				A3800AD903C37D2E00A80001,
 				A3800ADA03C37D2E00A80001,
@@ -415,9 +414,9 @@
 			isa = PBXFileReference;
 			lastKnownFileType = text;
 			name = configure.in;
-			path = /Users/dario/Developer/Projects/DevIL/cvsroot/DevIL/configure.in;
-			refType = 0;
-			sourceTree = "<absolute>";
+			path = ../../configure.in;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		A328B2A8068C5CF00098952D = {
 			fileRef = A328B2A7068C5CF00098952D;
@@ -454,7 +453,6 @@
 		A3800ACC03C37D0100A80001 = {
 			children = (
 				A3800ACD03C37D1700A80001,
-				A3800AD103C37D2600A80001,
 				A3800AD503C37D2E00A80001,
 				A3800AD603C37D2E00A80001,
 				A3800AD703C37D2E00A80001,
@@ -492,24 +490,6 @@
 			path = "../../cpp wrapper/il_wrap.cpp";
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
-		};
-		A3800AD103C37D2600A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = config.h;
-			path = ../../include/IL/config.h;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		A3800AD203C37D2600A80001 = {
-			fileRef = A3800AD103C37D2600A80001;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Public,
-				);
-			};
 		};
 		A3800AD303C37D2A00A80001 = {
 			fileEncoding = 30;

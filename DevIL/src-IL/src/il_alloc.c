@@ -27,7 +27,7 @@ mFree  ifree_ptr = NULL;
 __inline__ ILvoid *vec_malloc( ILuint );
 __inline__ ILvoid *vec_malloc( ILuint size ) {
     union {
-        vector unsigned char vec;
+        vector char vec;
         void *ptr;
     } mem_ptr;
     mem_ptr.ptr = (void*)malloc(size);

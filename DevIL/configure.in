@@ -37,7 +37,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.37 $)
+AC_REVISION($Revision: 1.38 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -55,6 +55,19 @@ AM_CONFIG_HEADER(include/IL/config.h)
 AM_DISABLE_STATIC
 AM_PROG_LIBTOOL
 AM_MAINTAINER_MODE
+
+dnl
+dnl Altives Check
+dnl
+AC_MSG_CHECKING(Altivec)
+CFLAGS_TMP=$CFLAGS
+CFLAGS="-faltivec"
+AC_COMPILE_IFELSE([
+int main() {
+	vector unsigned int vec;
+	vec = vec_splat_u32(0);
+	return 0;
+}], [ AC_MSG_RESULT(yes) AC_DEFINE([ALTIVEC]) CFLAGS="$CFLAGS_TMP -faltivec"], CFLAGS=$CFLAGS_TMP; [AC_MSG_RESULT(no)] );
 
 CFLAGS="-Wall -funroll-loops -ffast-math -fomit-frame-pointer -fexpensive-optimizations $CFLAGS"
 LIBIL_CFLAGS="$CFLAGS"
@@ -511,10 +524,9 @@ else
   LIBJPG=""
 fi
 AC_SUBST(LIBJPG)
-
 case "$target" in
 *-apple-darwin*)
-	AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED)
+    AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED)
 esac
 
 if test "$no_tiff" = "no" ; then
@@ -577,6 +589,8 @@ case "$target" in
 	;;
 *-apple-darwin*)
 	LIBGL="-framework OpenGL"
+	LDFLAGS_ILUT="-framework OpenGL"
+	AC_SUBST(LDFLAGS_ILUT)
 	;;
 *-*-*)
 	AC_CHECK_LIB(GL,glLoadIdentity,[LIBGL="-lGL"])
@@ -832,6 +846,10 @@ fi
 if test "$use_opengl" = "yes" ; then
   AC_DEFINE(ILUT_USE_OPENGL)
   SUPPORTED_API=$SUPPORTED_API"OpenGL "
+  case "$target" in
+    *-apple-darwin*)
+	LIBILUT_CFLAGS=$LIBILUT_CFLAGS" -framework OpenGL"
+  esac
 fi
 
 if test "$use_sdl" = "yes" ; then
