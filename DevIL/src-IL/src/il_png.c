@@ -87,7 +87,7 @@ ILboolean ilIsValidPngL(ILvoid *Lump, ILuint Size)
 
 ILboolean iIsValidPng()
 {
-	ILubyte		Signature[8];
+	ILubyte 	Signature[8];
 	ILint		Read;
 
 	Read = iread(Signature, 1, 8);
@@ -162,8 +162,8 @@ ILboolean iLoadPngInternal()
 
 	// @TODO:  Reimplement!
 	/*if (png_ptr->num_palette > 0) {
-		iCurImage->Pal.PalSize = png_ptr->num_palette * 3;  // just a guess...
-		iCurImage->Pal.PalType = IL_PAL_RGB24;  // just another guess...
+		iCurImage->Pal.PalSize = png_ptr->num_palette * 3;	// just a guess...
+		iCurImage->Pal.PalType = IL_PAL_RGB24;	// just another guess...
 		iCurImage->Pal.Palette = (ILubyte*)ialloc(png_ptr->num_palette * 3);
 		if (iCurImage->Pal.Palette == NULL) {
 			return IL_FALSE;
@@ -173,7 +173,7 @@ ILboolean iLoadPngInternal()
 
 	switch (iCurImage->Bpp)
 	{
-		case 1:  // @TODO:  FIX THIS!
+		case 1:  // @TODO:	FIX THIS!
 			iCurImage->Format = IL_COLOUR_INDEX;
 			break;
 		case 3:
@@ -221,46 +221,46 @@ static void png_warn_func(png_structp png_ptr, png_const_charp message)
 
 ILint readpng_init()
 {
-    png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_func, png_warn_func);
-    if (!png_ptr)
-        return 4;   /* out of memory */
+	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_func, png_warn_func);
+	if (!png_ptr)
+		return 4;	/* out of memory */
 
-    info_ptr = png_create_info_struct(png_ptr);
-    if (!info_ptr) {
-        png_destroy_read_struct(&png_ptr, NULL, NULL);
-        return 4;   /* out of memory */
-    }
-
-
-    /* we could create a second info struct here (end_info), but it's only
-     * useful if we want to keep pre- and post-IDAT chunk info separated
-     * (mainly for PNG-aware image editors and converters) */
+	info_ptr = png_create_info_struct(png_ptr);
+	if (!info_ptr) {
+		png_destroy_read_struct(&png_ptr, NULL, NULL);
+		return 4;	/* out of memory */
+	}
 
 
-    /* setjmp() must be called in every function that calls a PNG-reading
-     * libpng function */
+	/* we could create a second info struct here (end_info), but it's only
+	 * useful if we want to keep pre- and post-IDAT chunk info separated
+	 * (mainly for PNG-aware image editors and converters) */
 
-    if (setjmp(png_ptr->jmpbuf)) {
-        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-        return 2;
-    }
+
+	/* setjmp() must be called in every function that calls a PNG-reading
+	 * libpng function */
+
+	if (setjmp(png_ptr->jmpbuf)) {
+		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+		return 2;
+	}
 
 
 	png_set_read_fn(png_ptr, NULL, png_read);
 	png_set_error_fn(png_ptr, NULL, png_error_func, png_warn_func);
 
-//	png_set_sig_bytes(png_ptr, 8);  /* we already read the 8 signature bytes */
+//	png_set_sig_bytes(png_ptr, 8);	/* we already read the 8 signature bytes */
 
-    png_read_info(png_ptr, info_ptr);  /* read all PNG info up to image data */
+	png_read_info(png_ptr, info_ptr);  /* read all PNG info up to image data */
 
 
-    /* alternatively, could make separate calls to png_get_image_width(),
-     * etc., but want bit_depth and color_type for later [don't care about
-     * compression_type and filter_type => NULLs] */
+	/* alternatively, could make separate calls to png_get_image_width(),
+	 * etc., but want bit_depth and color_type for later [don't care about
+	 * compression_type and filter_type => NULLs] */
 
-    /* OK, that's all we need for now; return happy */
+	/* OK, that's all we need for now; return happy */
 
-    return 0;
+	return 0;
 }
 
 
@@ -269,21 +269,21 @@ ILint readpng_init()
 ILboolean readpng_get_image(ILdouble display_exponent)
 {
 	ILuint		i;
-    png_bytepp	row_pointers = NULL;
+	png_bytepp	row_pointers = NULL;
 	ILuint		width, height, channels;
 	ILdouble	screen_gamma = 1.0, image_gamma;
 	ILuint		bit_depth;
 
 
-    /* setjmp() must be called in every function that calls a PNG-reading
-     * libpng function */
+	/* setjmp() must be called in every function that calls a PNG-reading
+	 * libpng function */
 
-    if (setjmp(png_ptr->jmpbuf)) {
-        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-        return IL_FALSE;
-    }
+	if (setjmp(png_ptr->jmpbuf)) {
+		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+		return IL_FALSE;
+	}
 
-    png_get_IHDR(png_ptr, info_ptr, (png_uint_32*)&width, (png_uint_32*)&height,
+	png_get_IHDR(png_ptr, info_ptr, (png_uint_32*)&width, (png_uint_32*)&height,
 		&bit_depth, &color_type, NULL, NULL, NULL);
 
 	// Expand palette images to RGB, low-bit-depth grayscale images to 8 bits,
@@ -297,10 +297,10 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 		png_set_expand(png_ptr);
 	// Expand paletted or RGB images with transparency to full alpha channels
 	//	so the data will be available as RGBA quartets.
-    if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
-        png_set_expand(png_ptr);
+	if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
+		png_set_expand(png_ptr);
 
-	if (bit_depth < 8)  // Expanded earlier.
+	if (bit_depth < 8)	// Expanded earlier.
 		bit_depth = 8;
 
 	// Perform gamma correction.
@@ -314,7 +314,7 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 	image_gamma = image_gamma;
 #endif
 
-    if (color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
+	if (color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
 		png_set_gray_to_rgb(png_ptr);
 	}
 
@@ -339,26 +339,26 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 		row_pointers[i] = iCurImage->Data + i * iCurImage->Bps;
 
 
-    // Now we can go ahead and just read the whole image
-    png_read_image(png_ptr, row_pointers);
+	// Now we can go ahead and just read the whole image
+	png_read_image(png_ptr, row_pointers);
 
 
-    /* and we're done!  (png_read_end() can be omitted if no processing of
-     * post-IDAT text/time/etc. is desired) */
+	/* and we're done!	(png_read_end() can be omitted if no processing of
+	 * post-IDAT text/time/etc. is desired) */
 	//png_read_end(png_ptr, NULL);
 	ifree(row_pointers);
 
-    return IL_TRUE;
+	return IL_TRUE;
 }
 
 
 ILvoid readpng_cleanup()
 {
-    if (png_ptr && info_ptr) {
-        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-        png_ptr = NULL;
-        info_ptr = NULL;
-    }
+	if (png_ptr && info_ptr) {
+		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+		png_ptr = NULL;
+		info_ptr = NULL;
+	}
 }
 
 
@@ -448,13 +448,13 @@ ILvoid flush_data(png_structp png_ptr)
 // Internal function used to save the Png.
 ILboolean iSavePngInternal()
 {
-	png_structp	png_ptr;
+	png_structp png_ptr;
 	png_infop	info_ptr;
 	png_text	text[3];
 	ILenum		PngType;
 	ILuint		BitDepth, i, j;
-	ILubyte		**RowPtr = NULL;
-	ILimage		*Temp = NULL;
+	ILubyte 	**RowPtr = NULL;
+	ILimage 	*Temp = NULL;
 	ILpal		*TempPal = NULL;
 
 	if (iCurImage == NULL) {
@@ -474,7 +474,7 @@ ILboolean iSavePngInternal()
 		return IL_FALSE;
 	}
 
-	// Allocate/initialize the image information data.  REQUIRED
+	// Allocate/initialize the image information data.	REQUIRED
 	info_ptr = png_create_info_struct(png_ptr);
 	if (info_ptr == NULL) {
 		ilSetError(IL_LIB_PNG_ERROR);
@@ -540,7 +540,7 @@ ILboolean iSavePngInternal()
 			goto error_label;
 	}
 
-	// Set the image information here.  Width and height are up to 2^31,
+	// Set the image information here.	Width and height are up to 2^31,
 	//	bit_depth is one of 1, 2, 4, 8, or 16, but valid values also depend on
 	//	the color_type selected. color_type is one of PNG_COLOR_TYPE_GRAY,
 	//	PNG_COLOR_TYPE_GRAY_ALPHA, PNG_COLOR_TYPE_PALETTE, PNG_COLOR_TYPE_RGB,
@@ -619,7 +619,7 @@ ILboolean iSavePngInternal()
 		png_set_bgr(png_ptr);
 
 	// swap bytes of 16-bit files to most significant byte first
-	#ifdef  __LITTLE_ENDIAN__
+	#ifdef	__LITTLE_ENDIAN__
 	png_set_swap(png_ptr);
 	#endif//__LITTLE_ENDIAN__
 
