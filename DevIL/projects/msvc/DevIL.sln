@@ -1,0 +1,35 @@
+Microsoft Visual Studio Solution File, Format Version 7.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IL", "..\..\src-IL\msvc\IL.vcproj", "{0ED493BD-A61D-49C5-B130-CC0AE0F2C1FA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ILU", "..\..\src-ILU\msvc\ILU.vcproj", "{870E670A-FF39-4561-8423-B8AE8435ED02}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ILUT", "..\..\src-ILUT\msvc\ILUT.vcproj", "{7703E5F1-DE8D-4F65-A09D-0F991246431E}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+		{870E670A-FF39-4561-8423-B8AE8435ED02}.0 = {0ED493BD-A61D-49C5-B130-CC0AE0F2C1FA}
+		{7703E5F1-DE8D-4F65-A09D-0F991246431E}.0 = {870E670A-FF39-4561-8423-B8AE8435ED02}
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{0ED493BD-A61D-49C5-B130-CC0AE0F2C1FA}.Debug.ActiveCfg = Debug|Win32
+		{0ED493BD-A61D-49C5-B130-CC0AE0F2C1FA}.Debug.Build.0 = Debug|Win32
+		{0ED493BD-A61D-49C5-B130-CC0AE0F2C1FA}.Release.ActiveCfg = Release|Win32
+		{0ED493BD-A61D-49C5-B130-CC0AE0F2C1FA}.Release.Build.0 = Release|Win32
+		{870E670A-FF39-4561-8423-B8AE8435ED02}.Debug.ActiveCfg = Debug|Win32
+		{870E670A-FF39-4561-8423-B8AE8435ED02}.Debug.Build.0 = Debug|Win32
+		{870E670A-FF39-4561-8423-B8AE8435ED02}.Release.ActiveCfg = Release|Win32
+		{870E670A-FF39-4561-8423-B8AE8435ED02}.Release.Build.0 = Release|Win32
+		{7703E5F1-DE8D-4F65-A09D-0F991246431E}.Debug.ActiveCfg = Debug|Win32
+		{7703E5F1-DE8D-4F65-A09D-0F991246431E}.Debug.Build.0 = Debug|Win32
+		{7703E5F1-DE8D-4F65-A09D-0F991246431E}.Release.ActiveCfg = Release|Win32
+		{7703E5F1-DE8D-4F65-A09D-0F991246431E}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
