@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by OpenILUT.rc
+// Microsoft Visual C++ generated include file.
+// Used by ILUT.rc
 //
 #define IDC_OPENILUT                    109
 #define IDI_ICON1                       155

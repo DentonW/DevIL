@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Sources
-// Copyright (C) 200005/25/2001 by Denton Woods
+// Copyright (C) 2000-2002 by Denton Woods
 // Last modified: 05/25/2001 <--Y2K Compliant! =]
 //
 // Filename: openilu/manip.c
@@ -484,7 +484,7 @@ ILboolean ILAPIENTRY iluSwapColours()
 	PalBpp = ilGetBppPal(iluCurImage->Pal.PalType);
 
 	if ((iluCurImage->Bpp != 1 && iluCurImage->Bpp != 3 && iluCurImage->Bpp != 4)
-		|| (PalBpp == 2)) {
+		|| (PalBpp >= 2)) {
 		ilSetError(ILU_INVALID_VALUE);
 		return IL_FALSE;
 	}

@@ -93,8 +93,8 @@ ILboolean iFastConvert(ILenum DestFormat)
 							mov ebx, IntPtr
 							mov ecx, SizeOfData
 							L3:
-								mov ax,[ebx+0]
-								xchg ax,[ebx+8]
+								mov eax,[ebx+0]
+								xchg eax,[ebx+8]
 								mov [ebx+0],ax
 								add ebx,12
 								loop L3
@@ -197,8 +197,8 @@ ILboolean iFastConvert(ILenum DestFormat)
 							mov ebx, IntPtr
 							mov ecx, SizeOfData
 							L6:
-								mov ax,[ebx+0]
-								xchg ax,[ebx+8]
+								mov eax,[ebx+0]
+								xchg eax,[ebx+8]
 								mov [ebx+0],ax
 								add ebx,16
 								loop L6

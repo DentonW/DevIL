@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 01/23/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 02/05/2002 <--Y2K Compliant! =]
 //
 // Filename: il/il.h
 //
@@ -323,9 +323,6 @@ typedef void ILvoid;
 #define IL_TIF_HOSTCOMPUTER_STRING			0x071E
 #define IL_TIF_DOCUMENTNAME_STRING			0x071F
 #define IL_TIF_AUTHNAME_STRING				0x0720
-
-
-
 
 
 // Values

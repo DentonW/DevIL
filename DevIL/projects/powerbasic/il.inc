@@ -1,8 +1,8 @@
 '-----------------------------------------------------------------------------
 '
 ' ImageLib Sources
-' Copyright (C) 2000-2001 by Denton Woods
-' Last modified: 10/27/2001 <--Y2K Compliant! =]
+' Copyright (C) 2000-2002 by Denton Woods
+' Last modified: 02/05/2002 <--Y2K Compliant! =]
 '
 ' Filename: il/il.h
 '
@@ -15,8 +15,8 @@
 ' Web: http://www.scheutz.dk
 ' e-mail: sourcecode@scheutz.dk
 '
-' Last modified: 10/27/2001
-' Based on DevIL Ver. 1.1.8 headers
+' Last modified: 02/05/2001
+' Based on DevIL Ver. 1.3.0 headers
 '
 ' Filename: il.inc
 '
@@ -64,6 +64,7 @@
 '%IL_NO_WAL
 '%IL_NO_DDS
 '%IL_NO_DCX
+'%IL_NO_PSD
 
 '%IL_USE_IJL ' Whether we use the Intel Jpeg Library (else use libjpeg).
 
@@ -132,8 +133,8 @@
 ' IL-specific #define's
 '
 
-%IL_VERSION_1_1_8 = 1
-%IL_VERSION = 118
+%IL_VERSION_1_3_0 = 1
+%IL_VERSION = 130
 
 
 ' Attribute Bits
@@ -142,9 +143,9 @@
 %IL_PAL_BIT         = &H00000004&
 %IL_FORMAT_BIT      = &H00000008&
 %IL_TYPE_BIT        = &H00000010&
-%IL_COMPRESS_BIT        = &H00000020&
-%IL_LOADFAIL_BIT        = &H00000040&
-%IL_ALL_ATTRIB_BITS         = &H000FFFFF&
+%IL_COMPRESS_BIT    = &H00000020&
+%IL_LOADFAIL_BIT    = &H00000040&
+%IL_ALL_ATTRIB_BITS = &H000FFFFF&
 
 
 ' Palette types
@@ -158,7 +159,7 @@
 
 
 ' Image types
-%IL_TYPE_UNKNOWN        = &H0000&
+%IL_TYPE_UNKNOWN	= &H0000&
 %IL_BMP         = &H0420&
 %IL_CUT         = &H0421&
 %IL_DOOM        = &H0422&
@@ -184,67 +185,79 @@
 %IL_JNG         = &H0435&
 %IL_GIF         = &H0436&
 %IL_DDS         = &H0437&
-%IL_DCX		= &H0438&
+%IL_DCX			= &H0438&
 
-%IL_JASC_PAL        = &H0475&
+%IL_JASC_PAL	= &H0475&
 
 
 ' Error Types
-%IL_NO_ERROR        = &H0000&
-%IL_INVALID_ENUM        = &H0501&
-%IL_OUT_OF_MEMORY       = &H0502&
-%IL_FORMAT_NOT_SUPPORTED        = &H0503&
-%IL_INTERNAL_ERROR      = &H0504&
-%IL_INVALID_VALUE       = &H0505&
-%IL_ILLEGAL_OPERATION       = &H0506&
-%IL_ILLEGAL_FILE_VALUE      = &H0507&
-%IL_INVALID_FILE_HEADER         = &H0508&
-%IL_INVALID_PARAM       = &H0509&
-%IL_COULD_NOT_OPEN_FILE         = &H050A&
-%IL_INVALID_EXTENSION       = &H050B&
-%IL_FILE_ALREADY_EXISTS         = &H050C&
-%IL_OUT_FORMAT_SAME         = &H050D&
-%IL_STACK_OVERFLOW      = &H050E&
-%IL_STACK_UNDERFLOW         = &H050F&
-%IL_INVALID_CONVERSION      = &H0510&
-%IL_LIB_GIF_ERROR       = &H05E1&
-%IL_LIB_JPEG_ERROR      = &H05E2&
-%IL_LIB_PNG_ERROR       = &H05E3&
-%IL_LIB_TIFF_ERROR      = &H05E4&
-%IL_LIB_MNG_ERROR       = &H05E5&
-%IL_UNKNOWN_ERROR       = &H05FF&
+%IL_NO_ERROR				= &H0000&
+%IL_INVALID_ENUM			= &H0501&
+%IL_OUT_OF_MEMORY			= &H0502&
+%IL_FORMAT_NOT_SUPPORTED	= &H0503&
+%IL_INTERNAL_ERROR			= &H0504&
+%IL_INVALID_VALUE			= &H0505&
+%IL_ILLEGAL_OPERATION		= &H0506&
+%IL_ILLEGAL_FILE_VALUE		= &H0507&
+%IL_INVALID_FILE_HEADER		= &H0508&
+%IL_INVALID_PARAM			= &H0509&
+%IL_COULD_NOT_OPEN_FILE		= &H050A&
+%IL_INVALID_EXTENSION		= &H050B&
+%IL_FILE_ALREADY_EXISTS		= &H050C&
+%IL_OUT_FORMAT_SAME			= &H050D&
+%IL_STACK_OVERFLOW			= &H050E&
+%IL_STACK_UNDERFLOW			= &H050F&
+%IL_INVALID_CONVERSION		= &H0510&
+%IL_LIB_GIF_ERROR			= &H05E1&
+%IL_LIB_JPEG_ERROR			= &H05E2&
+%IL_LIB_PNG_ERROR			= &H05E3&
+%IL_LIB_TIFF_ERROR			= &H05E4&
+%IL_LIB_MNG_ERROR			= &H05E5&
+%IL_UNKNOWN_ERROR			= &H05FF&
 
 
 ' Origin Definitions
-%IL_ORIGIN_SET      = &H0600&
-%IL_ORIGIN_LOWER_LEFT       = &H0601&
-%IL_ORIGIN_UPPER_LEFT       = &H0602&
-%IL_ORIGIN_MODE         = &H0603&
+%IL_ORIGIN_SET			= &H0600&
+%IL_ORIGIN_LOWER_LEFT	= &H0601&
+%IL_ORIGIN_UPPER_LEFT	= &H0602&
+%IL_ORIGIN_MODE			= &H0603&
 
 
 ' Format and Type Mode Definitions
-%IL_FORMAT_SET      = &H0610&
-%IL_FORMAT_MODE         = &H0611&
-%IL_TYPE_SET        = &H0612&
-%IL_TYPE_MODE       = &H0613&
+%IL_FORMAT_SET			= &H0610&
+%IL_FORMAT_MODE			= &H0611&
+%IL_TYPE_SET			= &H0612&
+%IL_TYPE_MODE			= &H0613&
 
 
 ' File definitions
-%IL_FILE_OVERWRITE      = &H0620&
-%IL_FILE_MODE       = &H0621&
+%IL_FILE_OVERWRITE		= &H0620&
+%IL_FILE_MODE			= &H0621&
 
 
 ' Palette definitions
-%IL_CONV_PAL        = &H0630&
+%IL_CONV_PAL			= &H0630&
 
 
 ' Load fail definitions
-%IL_DEFAULT_ON_FAIL         = &H0632&
+%IL_DEFAULT_ON_FAIL		= &H0632&
 
 
 ' Key colour definitions
 %IL_USE_KEY_COLOUR      = &H0635&
 %IL_USE_KEY_COLOR       = &H0635&
+
+
+' Interlace definitions
+%IL_SAVE_INTERLACED		= &H0639&
+%IL_INTERLACE_MODE		= &H063A&
+
+
+' Quantization definitions
+%IL_QUANTIZATION_MODE	= &H0640&
+%IL_WU_QUANT			= &H0641&
+%IL_NEU_QUANT			= &H0642&
+%IL_NEU_QUANT_SAMPLE	= &H0643&
 
 
 ' Hints
@@ -272,13 +285,28 @@
 
 
 ' File format-specific values
-%IL_TGA_CREATE_STAMP    = &H0710&
-%IL_JPG_QUALITY         = &H0711&
-%IL_PNG_INTERLACE       = &H0712&
-%IL_TGA_RLE             = &H0713&
-%IL_BMP_RLE             = &H0714&
-%IL_SGI_RLE             = &H0715&
-%IL_OIL_COMPRESS        = &H0716&
+%IL_TGA_CREATE_STAMP		= &H0710&
+%IL_JPG_QUALITY				= &H0711&
+%IL_PNG_INTERLACE			= &H0712&
+%IL_TGA_RLE					= &H0713&
+%IL_BMP_RLE					= &H0714&
+%IL_SGI_RLE					= &H0715&
+%IL_TGA_CREATE_STAMP		= &H0710&
+%IL_JPG_QUALITY				= &H0711&
+%IL_PNG_INTERLACE			= &H0712&
+%IL_TGA_RLE					= &H0713&
+%IL_BMP_RLE					= &H0714&
+%IL_SGI_RLE					= &H0715&
+%IL_TGA_ID_STRING			= &H0717&
+%IL_TGA_AUTHNAME_STRING		= &H0718&
+%IL_TGA_AUTHCOMMENT_STRING	= &H0719&
+%IL_PNG_AUTHNAME_STRING		= &H071A&
+%IL_PNG_TITLE_STRING		= &H071B&
+%IL_PNG_DESCRIPTION_STRING	= &H071C&
+%IL_TIF_DESCRIPTION_STRING	= &H071D&
+%IL_TIF_HOSTCOMPUTER_STRING	= &H071E&
+%IL_TIF_DOCUMENTNAME_STRING	= &H071F&
+%IL_TIF_AUTHNAME_STRING		= &H0720&
 
 
 ' Values
@@ -305,8 +333,6 @@
 %IL_ACTIVE_LAYER        = &H0DF6&
 %IL_CUR_IMAGE           = &H0DF7&
 %IL_IMAGE_DURATION      = &H0DF8&
-
-
 
 
 '

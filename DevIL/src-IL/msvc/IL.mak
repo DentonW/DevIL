@@ -32,10 +32,10 @@ RSC=rc.exe
 
 !IF  "$(CFG)" == "IL - Win32 Debug"
 
-OUTDIR=.\../../lib/debug
+OUTDIR=.\../../lib
 INTDIR=.\../src/obj/debug
 # Begin Custom Macros
-OutDir=.\../../lib/debug
+OutDir=.\../../lib
 # End Custom Macros
 
 ALL : "$(OUTDIR)\DevIL-d.dll"
@@ -112,6 +112,8 @@ BSC32_SBRS= \
 	
 LINK32=link.exe
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:"$(OUTDIR)\DevIL-d.pdb" /debug /machine:I386 /def:".\il.def" /out:"$(OUTDIR)\DevIL-d.dll" /implib:"$(OUTDIR)\DevIL-d.lib" /pdbtype:sept 
+DEF_FILE= \
+	".\il.def"
 LINK32_OBJS= \
 	"$(INTDIR)\il_alloc.obj" \
 	"$(INTDIR)\il_bits.obj" \
@@ -138,6 +140,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_manip.obj" \
 	"$(INTDIR)\il_mdl.obj" \
 	"$(INTDIR)\il_mng.obj" \
+	"$(INTDIR)\il_neuquant.obj" \
 	"$(INTDIR)\il_pal.obj" \
 	"$(INTDIR)\il_pcd.obj" \
 	"$(INTDIR)\il_pcx.obj" \
@@ -158,26 +161,25 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_tiff.obj" \
 	"$(INTDIR)\il_utility.obj" \
 	"$(INTDIR)\il_wal.obj" \
-	"$(INTDIR)\IL.res" \
-	"$(INTDIR)\il_neuquant.obj"
+	"$(INTDIR)\IL.res"
 
 "$(OUTDIR)\DevIL-d.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
 
-TargetPath=\DevIL\lib\debug\DevIL-d.dll
+TargetPath=\DevIL\lib\DevIL-d.dll
 SOURCE="$(InputPath)"
 DS_POSTBUILD_DEP=$(INTDIR)\postbld.dep
 
 ALL : $(DS_POSTBUILD_DEP)
 
 # Begin Custom Macros
-OutDir=.\../../lib/debug
+OutDir=.\../../lib
 # End Custom Macros
 
 $(DS_POSTBUILD_DEP) : "$(OUTDIR)\DevIL-d.dll"
-   ..\..\projects\msvc\insdll.bat \DevIL\lib\debug\DevIL-d.dll
+   ..\..\projects\msvc\insdll.bat \DevIL\lib\DevIL-d.dll
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
 !ELSEIF  "$(CFG)" == "IL - Win32 Dynamic"
@@ -259,6 +261,8 @@ BSC32_SBRS= \
 	
 LINK32=link.exe
 LINK32_FLAGS=delayimp.lib user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /incremental:no /pdb:"$(OUTDIR)\DevIL-l.pdb" /machine:I386 /def:".\il.def" /out:"$(OUTDIR)\DevIL-l.dll" /implib:"$(OUTDIR)\DevIL-l.lib" /OPT:NOWIN98 /delayload:libpng3.dll /delayload:lcms.dll 
+DEF_FILE= \
+	".\il.def"
 LINK32_OBJS= \
 	"$(INTDIR)\il_alloc.obj" \
 	"$(INTDIR)\il_bits.obj" \
@@ -285,6 +289,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_manip.obj" \
 	"$(INTDIR)\il_mdl.obj" \
 	"$(INTDIR)\il_mng.obj" \
+	"$(INTDIR)\il_neuquant.obj" \
 	"$(INTDIR)\il_pal.obj" \
 	"$(INTDIR)\il_pcd.obj" \
 	"$(INTDIR)\il_pcx.obj" \
@@ -305,8 +310,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_tiff.obj" \
 	"$(INTDIR)\il_utility.obj" \
 	"$(INTDIR)\il_wal.obj" \
-	"$(INTDIR)\IL.res" \
-	"$(INTDIR)\il_neuquant.obj"
+	"$(INTDIR)\IL.res"
 
 "$(OUTDIR)\DevIL-l.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -406,6 +410,8 @@ BSC32_SBRS= \
 	
 LINK32=link.exe
 LINK32_FLAGS=user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /incremental:no /pdb:"$(OUTDIR)\DevIL.pdb" /machine:I386 /def:".\il.def" /out:"$(OUTDIR)\DevIL.dll" /implib:"$(OUTDIR)\DevIL.lib" /OPT:NOWIN98 
+DEF_FILE= \
+	".\il.def"
 LINK32_OBJS= \
 	"$(INTDIR)\il_alloc.obj" \
 	"$(INTDIR)\il_bits.obj" \
@@ -432,6 +438,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_manip.obj" \
 	"$(INTDIR)\il_mdl.obj" \
 	"$(INTDIR)\il_mng.obj" \
+	"$(INTDIR)\il_neuquant.obj" \
 	"$(INTDIR)\il_pal.obj" \
 	"$(INTDIR)\il_pcd.obj" \
 	"$(INTDIR)\il_pcx.obj" \
@@ -452,8 +459,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\il_tiff.obj" \
 	"$(INTDIR)\il_utility.obj" \
 	"$(INTDIR)\il_wal.obj" \
-	"$(INTDIR)\IL.res" \
-	"$(INTDIR)\il_neuquant.obj"
+	"$(INTDIR)\IL.res"
 
 "$(OUTDIR)\DevIL.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<

@@ -1,10 +1,11 @@
+Attribute VB_Name = "Module3"
 '-----------------------------------------------------------------------------
 '
-' ImageLib Utility Sources
-' Copyright (C) 2000-2001 by Denton Woods
+' ImageLib Utility Toolkit Sources
+' Copyright (C) 2000-2002 by Denton Woods
 ' Converted from ilut.h by Rune Kock (rune@vupti.com)
 ' based on the earlier conversion by Timo Heister (Timo-Heister@gmx.de)
-' Last modified:  04 December 2001, based on ilut.h dated 12/04/2001
+' Last modified:  05 January 2002, based on ilut.h dated 02/05/2002
 '
 ' Filename: il/ilut.bas
 '
@@ -36,8 +37,8 @@
 
 Option Explicit
 
-Public Const ILUT_VERSION_1_2_2 = 1
-Public Const ILUT_VERSION = 122
+Public Const ILUT_VERSION_1_3_0 = 1
+Public Const ILUT_VERSION = 130
 
 
 ' Attribute Bits

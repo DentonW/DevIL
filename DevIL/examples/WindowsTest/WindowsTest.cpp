@@ -18,9 +18,9 @@
 #endif//_DEBUG
 
 #include <windows.h>
-#include <il/il.h>
-#include <il/ilu.h>
-#include <il/ilut.h>
+#include <IL/il.h>
+#include <IL/ilu.h>
+#include <IL/ilut.h>
 //#include <sdl.h>
 #include "resource.h"
 

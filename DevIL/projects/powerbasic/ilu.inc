@@ -1,8 +1,8 @@
 '-----------------------------------------------------------------------------
 '
 ' ImageLib Utility Sources
-' Copyright (C) 2000 by Denton Woods
-' Last modified: 12/04/2001 <--Y2K Compliant! =]
+' Copyright (C) 2000-2002 by Denton Woods
+' Last modified: 02/05/2002 <--Y2K Compliant! =]
 '
 ' Filename: il/ilu.h
 '
@@ -15,8 +15,8 @@
 ' Web: http://www.scheutz.dk
 ' e-mail: sourcecode@scheutz.dk
 '
-' Last modified: 12/04/2001
-' Based on DevIL Ver. 1.2.2 headers
+' Last modified: 02/05/2001
+' Based on DevIL Ver. 1.3.0 headers
 '
 ' Filename: ilu.inc
 '
@@ -57,8 +57,8 @@
 ' #endif'_WIN32
 
 
-%ILU_VERSION_1_2_2 = 1
-%ILU_VERSION = 122
+%ILU_VERSION_1_3_0 = 1
+%ILU_VERSION = 130
 
 
 %ILU_FILTER         = &H2600&
@@ -132,9 +132,6 @@ End Type
 ' ImageLib Utility Functions
 Declare Function iluAlienify Lib "ilu.dll" Alias "iluAlienify" () As Byte
 Declare Function iluApplyProfile Lib "ilu.dll" Alias "iluApplyProfile" (ByRef pb_InProfile As Asciiz, ByRef pb_OutProfile As Asciiz) As Byte
-Declare Function iluBitFilter1 Lib "ilu.dll" Alias "iluBitFilter1" () As Byte
-Declare Function iluBitFilter2 Lib "ilu.dll" Alias "iluBitFilter2" () As Byte
-Declare Function iluBitFilter3 Lib "ilu.dll" Alias "iluBitFilter3" () As Byte
 Declare Function iluBlurAvg Lib "ilu.dll" Alias "iluBlurAvg" (ByVal pb_Iter As Dword) As Byte
 Declare Function iluBlurGaussian Lib "ilu.dll" Alias "iluBlurGaussian" (ByVal pb_Iter As Dword) As Byte
 Declare Function iluBuildMipmaps Lib "ilu.dll" Alias "iluBuildMipmaps" () As Byte

@@ -3,8 +3,8 @@ unit OpenIL;
 //------------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified:  12/04/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 02/05/2002 <--Y2K Compliant! =]
 //
 // Filename: il/il.h
 //
@@ -14,8 +14,8 @@ unit OpenIL;
 
 {******************************************************************************}
 { Converted to Delphi by Alexander Blach (alexander@abee.de)                   }
-{   Version:       DevIL v1.2.2                                                }
-{   Last modified: 12/04/2001                                                  }
+{   Version:       DevIL v1.3.0                                                }
+{   Last modified: 02/05/2002                                                  }
 {******************************************************************************}
 
 interface
@@ -40,6 +40,7 @@ uses
 //{$DEFINE IL_NO_PIC}
 //{$DEFINE IL_NO_PNG}
 //{$DEFINE IL_NO_PNM}
+//{$DEFINE IL_NO_PSD}
 //{$DEFINE IL_NO_RAW}
 //{$DEFINE IL_NO_SGI}
 //{$DEFINE IL_NO_TGA}
@@ -110,8 +111,8 @@ const
 // IL-specific #define's
 //
 
-  IL_VERSION_1_2_2 = 1;
-  IL_VERSION = 122;
+  IL_VERSION_1_3_0 = 1;
+  IL_VERSION = 130;
 
 
 // Attribute Bits
@@ -164,6 +165,7 @@ const
   IL_GIF = $0436;
   IL_DDS = $0437;
   IL_DCX = $0438;
+  IL_PSD = $0439;
 
   IL_JASC_PAL = $0475;
 
@@ -231,6 +233,13 @@ const
   IL_INTERLACE_MODE = $063A;
 
 
+// Quantization definitions
+  IL_QUANTIZATION_MODE = $0640;
+  IL_WU_QUANT = $0641;
+  IL_NEU_QUANT = $0642;
+  IL_NEU_QUANT_SAMPLE = $0643;
+
+
 // Hints
   IL_FASTEST = $0660;
   IL_LESS_MEM = $0661;
@@ -262,7 +271,16 @@ const
   IL_TGA_RLE = $0713;
   IL_BMP_RLE = $0714;
   IL_SGI_RLE = $0715;
-  IL_OIL_COMRPESS = $0716;
+  IL_TGA_ID_STRING = $0717;
+  IL_TGA_AUTHNAME_STRING = $0718;
+  IL_TGA_AUTHCOMMENT_STRING = $0719;
+  IL_PNG_AUTHNAME_STRING = $071A;
+  IL_PNG_TITLE_STRING = $071B;
+  IL_PNG_DESCRIPTION_STRING = $071C;
+  IL_TIF_DESCRIPTION_STRING = $071D;
+  IL_TIF_HOSTCOMPUTER_STRING = $071E;
+  IL_TIF_DOCUMENTNAME_STRING = $071F;
+  IL_TIF_AUTHNAME_STRING = $0720;
 
 
 // Values
@@ -291,6 +309,10 @@ const
   IL_IMAGE_DURATION = $0DF8;
   IL_IMAGE_PLANESIZE = $0DF9;
   IL_IMAGE_BPC = $0DFA;
+  IL_IMAGE_OFFX = $0DFB;
+  IL_IMAGE_OFFY = $0DFC;
+  IL_IMAGE_CUBEFLAGS = $0DFD;
+
 
 const
 {$IFDEF OPENIL_DEBUG}

@@ -2,10 +2,10 @@ Attribute VB_Name = "Module1"
 '-----------------------------------------------------------------------------
 '
 ' ImageLib Sources
-' Copyright (C) 2000-2001 by Denton Woods
+' Copyright (C) 2000-2002 by Denton Woods
 ' Converted from il.h by Rune Kock (rune@vupti.com)
 ' based on the earlier conversion by Timo Heister (Timo-Heister@gmx.de)
-' Last modified:  04 December 2001, based on il.h dated 12/04/2001
+' Last modified:  05 January 2002, based on il.h dated 02/05/2002
 '
 ' Filename: il.bas
 '
@@ -65,8 +65,8 @@ Public Const IL_VENDOR = &H1F00
 ' IL-specific public const's
 '
 
-Public Const IL_VERSION_1_2_2 = 1
-Public Const IL_VERSION = 122
+Public Const IL_VERSION_1_3_0 = 1
+Public Const IL_VERSION = 130
 
 ' Attribute Bits
 Public Const IL_ORIGIN_BIT = &H1
@@ -116,6 +116,7 @@ Public Const IL_JNG = &H435
 Public Const IL_GIF = &H436
 Public Const IL_DDS = &H437
 Public Const IL_DCX = &H438
+Public Const IL_PSD = &H439
 
 Public Const IL_JASC_PAL = &H475
 
@@ -174,6 +175,12 @@ Public Const IL_USE_KEY_COLOR = &H635
 Public Const IL_SAVE_INTERLACED = &H639
 Public Const IL_INTERLACE_MODE = &H63A
 
+' Quantization definitions
+Public Const IL_QUANTIZATION_MODE = &H640
+Public Const IL_WU_QUANT = &H641
+Public Const IL_NEU_QUANT = &H642
+Public Const IL_NEU_QUANT_SAMPLE = &H643
+
 ' Hints
 Public Const IL_FASTEST = &H660
 Public Const IL_LESS_MEM = &H661
@@ -198,6 +205,21 @@ Public Const IL_COMPRESS_ZLIB = &H704
 ' File format-specific values
 Public Const IL_TGA_CREATE_STAMP = &H710
 Public Const IL_JPG_QUALITY = &H711
+Public Const IL_PNG_INTERLACE = &H712
+Public Const IL_TGA_RLE = &H713
+Public Const IL_BMP_RLE = &H714
+Public Const IL_SGI_RLE = &H715
+Public Const IL_TGA_ID_STRING = &H717
+Public Const IL_TGA_AUTHNAME_STRING = &H718
+Public Const IL_TGA_AUTHCOMMENT_STRING = &H719
+Public Const IL_PNG_AUTHNAME_STRING = &H71A
+Public Const IL_PNG_TITLE_STRING = &H71B
+Public Const IL_PNG_DESCRIPTION_STRING = &H71C
+Public Const IL_TIF_DESCRIPTION_STRING = &H71D
+Public Const IL_TIF_HOSTCOMPUTER_STRING = &H71E
+Public Const IL_TIF_DOCUMENTNAME_STRING = &H71F
+Public Const IL_TIF_AUTHNAME_STRING = &H720
+
 
 ' Values
 Public Const IL_VERSION_NUM = &HDE2
@@ -225,6 +247,9 @@ Public Const IL_CUR_IMAGE = &HDF7
 Public Const IL_IMAGE_DURATION = &HDF8
 Public Const IL_IMAGE_PLANESIZE = &HDF9
 Public Const IL_IMAGE_BPC = &HDFA
+Public Const IL_IMAGE_OFFX = &HDFB
+Public Const IL_IMAGE_OFFY = &HDFC
+Public Const IL_IMAGE_CUBEFLAGS = &HDFD
 
 Public Const IL_SEEK_SET = 0
 Public Const IL_SEEK_CUR = 1
@@ -238,7 +263,7 @@ Public Declare Function ilActiveMipmap Lib "devil" (ByVal Number As Long) As Byt
 Public Declare Function ilApplyPal Lib "devil" (ByVal FileName As String) As Byte
 Public Declare Function ilApplyProfile Lib "devil" (ByVal InProfile As String, ByVal OutProfile As String) As Byte
 Public Declare Sub ilBindImage Lib "devil" (ByVal Image As Long)
-Public Declare Function ilBlit Lib "devil" (ByVal Src As Long, ByVal DestX As Long, ByVal DestY As Long, ByVal DestZ As Long, ByVal SrcX As Long, ByVal SrcY As Long, ByVal SrcZ As Long, ByVal Width As Long, ByVal Height As Long, ByVal Depth As Long) As Byte
+Public Declare Function ilBlit Lib "devil" (ByVal Src As Long, ByVal DestX As Long, ByVal DestY As Long, ByVal DestZ As Long, ByVal SrcX As Long, ByVal SrcY As Long, ByVal SrcZ As Long, ByVal width As Long, ByVal height As Long, ByVal Depth As Long) As Byte
 Public Declare Sub ilClearColour Lib "devil" (ByVal Red As Single, ByVal Green As Single, ByVal Blue As Single, ByVal Alpha As Single)
 Public Declare Function ilClearImage Lib "devil" () As Byte
 Public Declare Function ilCloneCurImage Lib "devil" () As Long
@@ -246,7 +271,7 @@ Public Declare Function ilCompressFunc Lib "devil" (ByVal Mode As Long) As Byte
 Public Declare Function ilConvertImage Lib "devil" (ByVal DestFormat As Long, ByVal DestType As Long) As Byte
 Public Declare Function ilConvertPal Lib "devil" (ByVal DestFormat As Long) As Byte
 Public Declare Function ilCopyImage Lib "devil" (ByVal Src As Long) As Byte
-Public Declare Sub ilCopyPixels Lib "devil" (ByVal XOff As Long, ByVal YOff As Long, ByVal ZOff As Long, ByVal Width As Long, ByVal Height As Long, ByVal Depth As Long, ByVal OutFormat As Long, ByVal OutType As Long, ByRef OutData As Byte)
+Public Declare Sub ilCopyPixels Lib "devil" (ByVal XOff As Long, ByVal YOff As Long, ByVal ZOff As Long, ByVal width As Long, ByVal height As Long, ByVal Depth As Long, ByVal OutFormat As Long, ByVal OutType As Long, ByRef OutData As Byte)
 Public Declare Function ilCreateSubImage Lib "devil" (ByVal IType As Long, ByVal Num As Long) As Long
 Public Declare Function ilDefaultImage Lib "devil" () As Boolean
 Public Declare Sub ilDeleteImages Lib "devil" (ByVal Num As Long, ByRef Images As Long)
@@ -301,18 +326,18 @@ Public Declare Function ilSavePal Lib "devil" (ByVal FileName As String) As Byte
 Public Declare Function ilSetData Lib "devil" (ByRef Data As Byte) As Byte
 Public Declare Function ilSetDuration Lib "devil" (ByVal Duration As Long) As Byte
 Public Declare Sub ilSetInteger Lib "devil" (ByVal Mode As Long, ByVal Param As Long)
-Public Declare Sub ilSetPixels Lib "devil" (ByVal XOff As Long, ByVal YOff As Long, ByVal ZOff As Long, ByVal Width As Long, ByVal Height As Long, ByVal Depth As Long, ByVal Format As Long, ByVal IType As Long, ByRef Data As Byte)
+Public Declare Sub ilSetPixels Lib "devil" (ByVal XOff As Long, ByVal YOff As Long, ByVal ZOff As Long, ByVal width As Long, ByVal height As Long, ByVal Depth As Long, ByVal Format As Long, ByVal IType As Long, ByRef Data As Byte)
 Public Declare Sub ilSetRead Lib "devil" (ByVal fOpenRProc As Long, ByVal fCloseRProc As Long, ByVal fEofProc As Long, ByVal fGetcProc As Long, ByVal fReadProc As Long, ByVal fSeekRProc As Long, ByVal fTellRProc As Long)
 Public Declare Sub ilSetString Lib "devil" (ByVal Mode As Long, ByVal FileName As String)
 Public Declare Sub ilSetWrite Lib "devil" (ByVal fOpenWProc As Long, ByVal fCloseWProc As Long, ByVal fPutcProc As Long, ByVal fSeekWProc As Long, ByVal fTellWProc As Long, ByVal fWriteProc As Long)
-Public Declare Function ilTexImage Lib "devil" (ByVal Width As Long, ByVal Height As Long, ByVal Depth As Long, ByVal Bpp As Byte, ByVal Format As Long, ByVal IType As Long, ByRef Data As Byte) As Byte
-Public Declare Function ilTexImage0 Lib "devil" Alias "ilTexImage" (ByVal Width As Long, ByVal Height As Long, ByVal Depth As Long, ByVal Bpp As Byte, ByVal Format As Long, ByVal IType As Long, ByVal DataPointer As Long) As Byte
+Public Declare Function ilTexImage Lib "devil" (ByVal width As Long, ByVal height As Long, ByVal Depth As Long, ByVal Bpp As Byte, ByVal Format As Long, ByVal IType As Long, ByRef Data As Byte) As Byte
+Public Declare Function ilTexImage0 Lib "devil" Alias "ilTexImage" (ByVal width As Long, ByVal height As Long, ByVal Depth As Long, ByVal Bpp As Byte, ByVal Format As Long, ByVal IType As Long, ByVal DataPointer As Long) As Byte
 ' used if you want to pass a NULL-pointer (zero).
 Public Declare Function ilTypeFunc Lib "devil" (ByVal Mode As Long) As Byte
 
-Public Declare Function ilLoadData Lib "devil" (ByVal FileName As String, ByVal Width As Long, ByVal Height As Long, ByVal Depth As Long, ByVal Bpp As Byte) As Byte
-Public Declare Function ilLoadDataF Lib "devil" (ByVal File As Long, ByVal Width As Long, ByVal Height As Long, ByVal Depth As Long, ByVal Bpp As Byte) As Byte
-Public Declare Function ilLoadDataL Lib "devil" (ByRef Lump As Long, ByVal Size As Long, ByVal Width As Long, ByVal Height As Long, ByVal Depth As Long, ByVal Bpp As Byte) As Byte
+Public Declare Function ilLoadData Lib "devil" (ByVal FileName As String, ByVal width As Long, ByVal height As Long, ByVal Depth As Long, ByVal Bpp As Byte) As Byte
+Public Declare Function ilLoadDataF Lib "devil" (ByVal File As Long, ByVal width As Long, ByVal height As Long, ByVal Depth As Long, ByVal Bpp As Byte) As Byte
+Public Declare Function ilLoadDataL Lib "devil" (ByRef Lump As Long, ByVal Size As Long, ByVal width As Long, ByVal height As Long, ByVal Depth As Long, ByVal Bpp As Byte) As Byte
 Public Declare Function ilSaveData Lib "devil" (ByVal FileName As String) As Byte
 
 ' For all those weirdos that spell "colour" without the 'u'.

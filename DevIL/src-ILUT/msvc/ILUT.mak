@@ -32,10 +32,10 @@ RSC=rc.exe
 
 !IF  "$(CFG)" == "ILUT - Win32 Debug"
 
-OUTDIR=.\../../lib/debug
+OUTDIR=.\../../lib
 INTDIR=.\../src/obj/debug
 # Begin Custom Macros
-OutDir=.\../../lib/debug
+OutDir=.\../../lib
 # End Custom Macros
 
 !IF "$(RECURSE)" == "0" 
@@ -101,18 +101,18 @@ LINK32_OBJS= \
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
 
-TargetPath=\DevIL-1.2.5\lib\debug\ilut-d.dll
+TargetPath=\DevIL\lib\ilut-d.dll
 SOURCE="$(InputPath)"
 DS_POSTBUILD_DEP=$(INTDIR)\postbld.dep
 
 ALL : $(DS_POSTBUILD_DEP)
 
 # Begin Custom Macros
-OutDir=.\../../lib/debug
+OutDir=.\../../lib
 # End Custom Macros
 
 $(DS_POSTBUILD_DEP) : "ILU - Win32 Debug" "IL - Win32 Debug" "$(OUTDIR)\ilut-d.dll"
-   ..\..\projects\msvc\insdll.bat \DevIL-1.2.5\lib\debug\ilut-d.dll
+   ..\..\projects\msvc\insdll.bat \DevIL\lib\ilut-d.dll
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
 !ELSEIF  "$(CFG)" == "ILUT - Win32 Dynamic"
@@ -183,7 +183,7 @@ LINK32_OBJS= \
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
 
-TargetPath=\DevIL-1.2.5\lib\ilut-l.dll
+TargetPath=\DevIL\lib\ilut-l.dll
 SOURCE="$(InputPath)"
 DS_POSTBUILD_DEP=$(INTDIR)\postbld.dep
 
@@ -194,7 +194,7 @@ OutDir=.\../../lib
 # End Custom Macros
 
 $(DS_POSTBUILD_DEP) : "ILU - Win32 Dynamic" "IL - Win32 Dynamic" "$(OUTDIR)\ilut-l.dll"
-   ..\..\projects\msvc\insdll.bat \DevIL-1.2.5\lib\ilut-l.dll
+   ..\..\projects\msvc\insdll.bat \DevIL\lib\ilut-l.dll
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
 !ELSEIF  "$(CFG)" == "ILUT - Win32 Release"
@@ -265,7 +265,7 @@ LINK32_OBJS= \
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
 
-TargetPath=\DevIL-1.2.5\lib\ILUT.dll
+TargetPath=\DevIL\lib\ILUT.dll
 SOURCE="$(InputPath)"
 DS_POSTBUILD_DEP=$(INTDIR)\postbld.dep
 
@@ -276,7 +276,7 @@ OutDir=.\../../lib
 # End Custom Macros
 
 $(DS_POSTBUILD_DEP) : "ILU - Win32 Release" "IL - Win32 Release" "$(OUTDIR)\ILUT.dll"
-   ..\..\projects\msvc\insdll.bat \DevIL-1.2.5\lib\ILUT.dll
+   ..\..\projects\msvc\insdll.bat \DevIL\lib\ILUT.dll
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
 !ENDIF 
@@ -373,36 +373,36 @@ SOURCE=.\ILUT.rc
 !IF  "$(CFG)" == "ILUT - Win32 Debug"
 
 "IL - Win32 Debug" : 
-   cd "\DevIL-1.2.5\src-IL\msvc"
+   cd "\DevIL\src-IL\msvc"
    $(MAKE) /$(MAKEFLAGS) /F ".\IL.mak" CFG="IL - Win32 Debug" 
    cd "..\..\src-ILUT\msvc"
 
 "IL - Win32 DebugCLEAN" : 
-   cd "\DevIL-1.2.5\src-IL\msvc"
+   cd "\DevIL\src-IL\msvc"
    $(MAKE) /$(MAKEFLAGS) /F ".\IL.mak" CFG="IL - Win32 Debug" RECURSE=1 CLEAN 
    cd "..\..\src-ILUT\msvc"
 
 !ELSEIF  "$(CFG)" == "ILUT - Win32 Dynamic"
 
 "IL - Win32 Dynamic" : 
-   cd "\DevIL-1.2.5\src-IL\msvc"
+   cd "\DevIL\src-IL\msvc"
    $(MAKE) /$(MAKEFLAGS) /F ".\IL.mak" CFG="IL - Win32 Dynamic" 
    cd "..\..\src-ILUT\msvc"
 
 "IL - Win32 DynamicCLEAN" : 
-   cd "\DevIL-1.2.5\src-IL\msvc"
+   cd "\DevIL\src-IL\msvc"
    $(MAKE) /$(MAKEFLAGS) /F ".\IL.mak" CFG="IL - Win32 Dynamic" RECURSE=1 CLEAN 
    cd "..\..\src-ILUT\msvc"
 
 !ELSEIF  "$(CFG)" == "ILUT - Win32 Release"
 
 "IL - Win32 Release" : 
-   cd "\DevIL-1.2.5\src-IL\msvc"
+   cd "\DevIL\src-IL\msvc"
    $(MAKE) /$(MAKEFLAGS) /F ".\IL.mak" CFG="IL - Win32 Release" 
    cd "..\..\src-ILUT\msvc"
 
 "IL - Win32 ReleaseCLEAN" : 
-   cd "\DevIL-1.2.5\src-IL\msvc"
+   cd "\DevIL\src-IL\msvc"
    $(MAKE) /$(MAKEFLAGS) /F ".\IL.mak" CFG="IL - Win32 Release" RECURSE=1 CLEAN 
    cd "..\..\src-ILUT\msvc"
 
@@ -411,36 +411,36 @@ SOURCE=.\ILUT.rc
 !IF  "$(CFG)" == "ILUT - Win32 Debug"
 
 "ILU - Win32 Debug" : 
-   cd "\DevIL-1.2.5\src-ILU\msvc"
+   cd "\DevIL\src-ILU\msvc"
    $(MAKE) /$(MAKEFLAGS) /F ".\ILU.mak" CFG="ILU - Win32 Debug" 
    cd "..\..\src-ILUT\msvc"
 
 "ILU - Win32 DebugCLEAN" : 
-   cd "\DevIL-1.2.5\src-ILU\msvc"
+   cd "\DevIL\src-ILU\msvc"
    $(MAKE) /$(MAKEFLAGS) /F ".\ILU.mak" CFG="ILU - Win32 Debug" RECURSE=1 CLEAN 
    cd "..\..\src-ILUT\msvc"
 
 !ELSEIF  "$(CFG)" == "ILUT - Win32 Dynamic"
 
 "ILU - Win32 Dynamic" : 
-   cd "\DevIL-1.2.5\src-ILU\msvc"
+   cd "\DevIL\src-ILU\msvc"
    $(MAKE) /$(MAKEFLAGS) /F ".\ILU.mak" CFG="ILU - Win32 Dynamic" 
    cd "..\..\src-ILUT\msvc"
 
 "ILU - Win32 DynamicCLEAN" : 
-   cd "\DevIL-1.2.5\src-ILU\msvc"
+   cd "\DevIL\src-ILU\msvc"
    $(MAKE) /$(MAKEFLAGS) /F ".\ILU.mak" CFG="ILU - Win32 Dynamic" RECURSE=1 CLEAN 
    cd "..\..\src-ILUT\msvc"
 
 !ELSEIF  "$(CFG)" == "ILUT - Win32 Release"
 
 "ILU - Win32 Release" : 
-   cd "\DevIL-1.2.5\src-ILU\msvc"
+   cd "\DevIL\src-ILU\msvc"
    $(MAKE) /$(MAKEFLAGS) /F ".\ILU.mak" CFG="ILU - Win32 Release" 
    cd "..\..\src-ILUT\msvc"
 
 "ILU - Win32 ReleaseCLEAN" : 
-   cd "\DevIL-1.2.5\src-ILU\msvc"
+   cd "\DevIL\src-ILU\msvc"
    $(MAKE) /$(MAKEFLAGS) /F ".\ILU.mak" CFG="ILU - Win32 Release" RECURSE=1 CLEAN 
    cd "..\..\src-ILUT\msvc"
 

@@ -3,8 +3,8 @@ unit OpenILU;
 //------------------------------------------------------------------------------
 //
 // ImageLib Utility Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 12/04/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 02/05/2002 <--Y2K Compliant! =]
 //
 // Filename: il/ilu.h
 //
@@ -14,8 +14,8 @@ unit OpenILU;
 
 {******************************************************************************}
 { Converted to Delphi by Alexander Blach (alexander@abee.de)                   }
-{   Version:       ILU v1.2.2                                                  }	
-{   Last modified: 12/04/2001                                                  }
+{   Version:       ILU v1.3.0                                                  }
+{   Last modified: 02/05/2002                                                  }
 {******************************************************************************}
 
 
@@ -25,8 +25,8 @@ uses
   Windows;
 
 const
-  ILU_VERSION_1_2_2 = 1;
-  ILU_VERSION = 122;
+  ILU_VERSION_1_3_0 = 1;
+  ILU_VERSION = 130;
 
   ILU_FILTER = $2600;
   ILU_NEAREST = $2601;
@@ -91,6 +91,7 @@ type
     Palette: PILubyte;		// the image's palette
     PalType: TILenum;		// palette type
     PalSize: TILuint;           // palette size
+    CubeFlags: TILenum;         // flags for what cube map sides are present
     NumNext: TILuint;		// number of images following
     NumMips: TILuint;           // number of mipmaps
     NumLayers: TILuint;		// number of layers

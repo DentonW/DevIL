@@ -1,8 +1,8 @@
 '-----------------------------------------------------------------------------
 '
 ' ImageLib Utility Toolkit Sources
-' Copyright (C) 2000-2001 by Denton Woods
-' Last modified: 12/04/2001 <--Y2K Compliant! =]
+' Copyright (C) 2000-2002 by Denton Woods
+' Last modified: 02/05/2002 <--Y2K Compliant! =]
 '
 ' Filename: il/ilut.h
 '
@@ -15,8 +15,8 @@
 ' Web: http://www.scheutz.dk
 ' e-mail: sourcecode@scheutz.dk
 '
-' Last modified: 12/04/2001
-' Based on DevIL Ver. 1.2.2 headers
+' Last modified: 02/05/2001
+' Based on DevIL Ver. 1.3.0 headers
 '
 ' Filename: ilut.inc
 '
@@ -66,8 +66,8 @@
 ' #endif'_WIN32
 
 
-%ILUT_VERSION_1_2_2 = 1
-%ILUT_VERSION = 122
+%ILUT_VERSION_1_3_0 = 1
+%ILUT_VERSION = 130
 
 
 ' Attribute Bits

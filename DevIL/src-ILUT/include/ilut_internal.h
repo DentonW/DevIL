@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Toolkit Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 12/04/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2002 by Denton Woods
+// Last modified: 02/07/2002 <--Y2K Compliant! =]
 //
 // Filename: openilut/internal.h
 //
@@ -86,7 +86,7 @@ ILvoid	ilutDefaultStates(ILvoid);
 
 
 // Internal library functions in DevIL
-ILAPI ILvoid		ILAPIENTRY	iBindImageTemp(ILvoid);
+ILAPI ILvoid		ILAPIENTRY iBindImageTemp(ILvoid);
 ILAPI ILvoid		ILAPIENTRY ilCloseImage(ILimage *Image);
 ILAPI ILimage*		ILAPIENTRY iConvertImage(ILenum DestFormat, ILenum DestType);
 ILAPI ILimage*		ILAPIENTRY ilCopyImage_(ILimage *Src);
@@ -114,13 +114,13 @@ ILAPI ILimage* ILAPIENTRY iluScale_(ILimage *Image, ILuint Width, ILuint Height,
 
 // ImageLib Utility Toolkit's OpenGL Functions
 #ifdef ILUT_USE_OPENGL
-ILboolean ilutGLInit();
+	ILboolean ilutGLInit();
 #endif
 
 
 // ImageLib Utility Toolkit's Win32 Functions
 #ifdef ILUT_USE_WIN32
-ILboolean ilutWin32Init();
+	ILboolean ilutWin32Init();
 #endif
 
 

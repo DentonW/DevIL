@@ -2,10 +2,10 @@ Attribute VB_Name = "DevIL_manipulate"
 '-----------------------------------------------------------------------------
 '
 ' ImageLib Utility Sources
-' Copyright (C) 2000-2001 by Denton Woods
+' Copyright (C) 2000-2002 by Denton Woods
 ' Converted from ilu.h by Rune Kock (rune@vupti.com)
 ' based on the earlier conversion by Timo Heister (Timo-Heister@gmx.de)
-' Last modified:  04 December 2001, based on ilu.h dated 12/04/2001
+' Last modified:  05 January 2002, based on ilu.h dated 02/05/2002
 '
 ' Filename: ilu.bas
 '
@@ -37,8 +37,8 @@ Attribute VB_Name = "DevIL_manipulate"
 
 Option Explicit
 
-Public Const ILU_VERSION_1_2_2 = 1
-Public Const ILU_VERSION = 122
+Public Const ILU_VERSION_1_3_0 = 1
+Public Const ILU_VERSION = 130
 
 
 Public Const ILU_FILTER = &H2600
@@ -89,7 +89,7 @@ Public Const ILU_FILTER_SHARPEN3 = &H810
 
 
 Public Type ILinfo
-  id As Long          ' the image's id
+  ID As Long          ' the image's id
   DataPointer As Long ' pointer to the image's data (useless in VB)
   width As Long       ' the image's width
   height As Long      ' the image's height
@@ -120,7 +120,7 @@ Public Declare Function iluColoursUsed Lib "ilu" () As Long
 Public Declare Function iluCompareImage Lib "ilu" (ByVal Comp As Long) As Byte
 Public Declare Function iluContrast Lib "ilu" (ByVal Contrast As Single) As Byte
 Public Declare Function iluCrop Lib "ilu" (ByVal XOff As Long, ByVal YOff As Long, ByVal ZOff As Long, ByVal width As Long, ByVal height As Long, ByVal Depth As Long) As Byte
-Public Declare Sub iluDeleteImage Lib "ilu" (ByVal id As Long)
+Public Declare Sub iluDeleteImage Lib "ilu" (ByVal ID As Long)
 Public Declare Function iluEdgeDetectE Lib "ilu" () As Byte
 Public Declare Function iluEdgeDetectP Lib "ilu" () As Byte
 Public Declare Function iluEdgeDetectS Lib "ilu" () As Byte
@@ -138,7 +138,7 @@ Public Declare Sub iluGetIntegerv Lib "ilu" (ByVal Mode As Long, ByRef Param As 
 Public Declare Function iluGetString Lib "ilu" (ByVal StringName As Long) As Long
 Public Declare Sub iluImageParameter Lib "ilu" (ByVal PName As Long, ByVal Param As Long)
 Public Declare Sub iluInit Lib "ilu" ()
-Public Declare Function iluLoadImage Lib "ilu" (ByVal fileName As String) As Long
+Public Declare Function iluLoadImage Lib "ilu" (ByVal FileName As String) As Long
 Public Declare Function iluMirror Lib "ilu" () As Byte
 Public Declare Function iluNegative Lib "ilu" () As Byte
 Public Declare Function iluNoisify Lib "ilu" (ByVal Tolerance As Single) As Byte

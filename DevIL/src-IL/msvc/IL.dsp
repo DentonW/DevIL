@@ -39,7 +39,7 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "../../lib/debug"
+# PROP Output_Dir "../../lib"
 # PROP Intermediate_Dir "../src/obj/debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
@@ -54,10 +54,10 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo /o"../src/obj/debug/DevIL.bsc"
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /def:".\il.def" /out:"../../lib/debug/DevIL-d.dll" /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /out:"../../lib/DevIL-d.dll" /pdbtype:sept
 # SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
-TargetPath=\DevIL\lib\debug\DevIL-d.dll
+TargetPath=\DevIL\lib\DevIL-d.dll
 SOURCE="$(InputPath)"
 PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
 # End Special Build Tool
@@ -86,9 +86,9 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo /o"../src/obj/dynamic/DevIL.bsc"
 # ADD BSC32 /nologo /o"../src/obj/dynamic/DevIL.bsc"
 LINK32=link.exe
-# ADD BASE LINK32 delayimp.lib user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /machine:I386 /def:".\il.def" /out:"../../lib/DevIL-l.dll" /OPT:NOWIN98 /delayload:libpng3.dll /delayload:lcms.dll
+# ADD BASE LINK32 delayimp.lib user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /machine:I386 /out:"../../lib/DevIL-l.dll" /OPT:NOWIN98 /delayload:libpng3.dll /delayload:lcms.dll
 # SUBTRACT BASE LINK32 /pdb:none
-# ADD LINK32 delayimp.lib user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /machine:I386 /def:".\il.def" /out:"../../lib/DevIL-l.dll" /OPT:NOWIN98 /delayload:libpng3.dll /delayload:lcms.dll
+# ADD LINK32 delayimp.lib user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /machine:I386 /out:"../../lib/DevIL-l.dll" /OPT:NOWIN98 /delayload:libpng3.dll /delayload:lcms.dll
 # SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
 TargetPath=\DevIL\lib\DevIL-l.dll
@@ -120,9 +120,9 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo /o"../src/obj/DevIL.bsc"
 # ADD BSC32 /nologo /o"../src/obj/DevIL.bsc"
 LINK32=link.exe
-# ADD BASE LINK32 user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /machine:I386 /def:".\il.def" /out:"../../lib/DevIL.dll" /OPT:NOWIN98
+# ADD BASE LINK32 user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /machine:I386 /out:"../../lib/DevIL.dll" /OPT:NOWIN98
 # SUBTRACT BASE LINK32 /pdb:none
-# ADD LINK32 user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /machine:I386 /def:".\il.def" /out:"../../lib/DevIL.dll" /OPT:NOWIN98
+# ADD LINK32 user32.lib gdi32.lib comdlg32.lib shell32.lib /nologo /dll /machine:I386 /out:"../../lib/DevIL.dll" /OPT:NOWIN98
 # SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
 TargetPath=\DevIL\lib\DevIL.dll
@@ -143,23 +143,6 @@ PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
 # Begin Source File
 
 SOURCE=.\il.def
-
-!IF  "$(CFG)" == "IL - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "IL - Win32 Dynamic"
-
-# PROP BASE Exclude_From_Build 1
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "IL - Win32 Release"
-
-# PROP BASE Exclude_From_Build 1
-# PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 

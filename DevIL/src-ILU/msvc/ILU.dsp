@@ -39,7 +39,7 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "../../lib/debug"
+# PROP Output_Dir "../../lib"
 # PROP Intermediate_Dir "../src/obj/debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
@@ -54,9 +54,9 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /out:"../../lib/debug/ilu-d.dll" /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /out:"../../lib/ilu-d.dll" /pdbtype:sept
 # Begin Special Build Tool
-TargetPath=\DevIL-1.2.5\lib\debug\ilu-d.dll
+TargetPath=\DevIL\lib\ilu-d.dll
 SOURCE="$(InputPath)"
 PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
 # End Special Build Tool
@@ -88,7 +88,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
 # Begin Special Build Tool
-TargetPath=\DevIL-1.2.5\lib\ILU.dll
+TargetPath=\DevIL\lib\ILU.dll
 SOURCE="$(InputPath)"
 PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
 # End Special Build Tool
@@ -120,7 +120,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386 /out:"../../lib/ilu-l.dll"
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386 /out:"../../lib/ilu-l.dll"
 # Begin Special Build Tool
-TargetPath=\DevIL-1.2.5\lib\ilu-l.dll
+TargetPath=\DevIL\lib\ilu-l.dll
 SOURCE="$(InputPath)"
 PostBuild_Cmds=..\..\projects\msvc\insdll.bat $(TargetPath)
 # End Special Build Tool
