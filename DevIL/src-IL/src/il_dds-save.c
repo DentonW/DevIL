@@ -241,7 +241,7 @@ ILushort *CompressTo565(ILimage *Image)
 ILboolean Compress(ILimage *Image, ILenum DXTCFormat)
 {
 	ILushort	*Data, Block[16], ex0, ex1;
-	ILuint		x, y, i, BitMask, Rms1, Rms2;
+	ILuint		x, y, i, BitMask;//, Rms1, Rms2;
 	ILubyte		*Alpha, AlphaBlock[16], AlphaBitMask[6], AlphaOut[16], a0, a1;
 	ILboolean	HasAlpha;
 
@@ -326,15 +326,15 @@ ILboolean Compress(ILimage *Image, ILenum DXTCFormat)
 					GetAlphaBlock(AlphaBlock, Alpha, Image, x, y);
 					ChooseAlphaEndpoints(AlphaBlock, &a0, &a1);
 					GenAlphaBitMask(a0, a1, 6, AlphaBlock, AlphaBitMask, AlphaOut);
-					Rms2 = RMSAlpha(AlphaBlock, AlphaOut);
+					/*Rms2 = RMSAlpha(AlphaBlock, AlphaOut);
 					GenAlphaBitMask(a0, a1, 8, AlphaBlock, AlphaBitMask, AlphaOut);
 					Rms1 = RMSAlpha(AlphaBlock, AlphaOut);
 					if (Rms2 <= Rms1) {  // Yeah, we have to regenerate...
 						GenAlphaBitMask(a0, a1, 6, AlphaBlock, AlphaBitMask, AlphaOut);
-						Rms2 = a1;
+						Rms2 = a1;  // Just reuse Rms2 as a temporary variable...
 						a1 = a0;
 						a0 = Rms2;
-					}
+					}*/
 					iputc(a0);
 					iputc(a1);
 					iwrite(AlphaBitMask, 1, 6);
@@ -544,13 +544,15 @@ ILvoid GenAlphaBitMask(ILubyte a0, ILubyte a1, ILuint Num, ILubyte *In, ILubyte 
 
 ILuint RMSAlpha(ILubyte *Orig, ILubyte *Test)
 {
-	ILuint RMS = 0, i;
+	ILuint	RMS = 0, i;
+	ILint	d;
 
 	for (i = 0; i < 16; i++) {
-		RMS += abs(Orig[i] - Test[i]);
+		d = Orig[i] - Test[i];
+		RMS += d*d;
 	}
 
-	RMS /= 16;
+	//RMS /= 16;
 
 	return RMS;
 }
