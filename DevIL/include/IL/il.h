@@ -578,7 +578,7 @@ ILAPI ILboolean		ILAPIENTRY ilSaveFromJpegStruct(ILvoid* JpegCompressorPtr);
 
 // For all those weirdos that spell "colour" without the 'u'.
 #define ilClearColor	ilClearColour
-#define ilKeyColor		ilKeyColour
+#define ilKeyColor      ilKeyColour
 
 
 #ifdef __cplusplus
@@ -588,12 +588,4 @@ ILAPI ILboolean		ILAPIENTRY ilSaveFromJpegStruct(ILvoid* JpegCompressorPtr);
 #endif // __IL_H__
 #endif // __il_h__
 
-#ifdef ALTIVEC
-	#define imemclear(x,y) vec_memclear(x,y);
-#else
-	#define imemclear(x,y) memset(x,0,y);
-#endif
-
-#ifdef ALTIVEC
-	void vec_memclear( ILvoid *, ILuint );
-#endif
+#define imemclear(x,y) memset(x,0,y);
