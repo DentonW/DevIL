@@ -76,7 +76,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(Width, Height);
 
@@ -232,6 +232,7 @@ void KeySpecialFunc(int Key, int x, int y)
 			//glRotatef(-10.0f, 0.0f, 1.0f, 0.0f);
 			break;
 	}
+	glutPostRedisplay();
 
 	return;
 }
