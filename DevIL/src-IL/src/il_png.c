@@ -460,7 +460,7 @@ ILboolean iSavePngInternal()
 	* the library version is compatible with the one used at compile time,
 	* in case we are using dynamically linked libraries.  REQUIRED.
 	*/
-	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_warn, png_error_warn);
 	if (png_ptr == NULL) {
 		ilSetError(IL_LIB_PNG_ERROR);
 		return IL_FALSE;
@@ -474,14 +474,14 @@ ILboolean iSavePngInternal()
 		return IL_FALSE;
 	}
 
-	// Set error handling.  REQUIRED if you aren't supplying your own
+	/*// Set error handling.  REQUIRED if you aren't supplying your own
 	//	error handling functions in the png_create_write_struct() call.
 	if (setjmp(png_ptr->jmpbuf)) {
 		// If we get here, we had a problem reading the file
 		png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
 		ilSetError(IL_LIB_PNG_ERROR);
 		return IL_FALSE;
-	}
+	}*/
 
 //	png_init_io(png_ptr, PngFile);
 	png_set_write_fn(png_ptr, NULL, png_write, flush_data);
