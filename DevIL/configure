@@ -21244,6 +21244,7 @@ else
 fi;
 
 if test "$debug_symbols" = "yes" ; then
+	CFLAGS="-Wall -g"
   LIBIL_CFLAGS="-Wall -g"
   LIBILU_CFLAGS="-Wall -g"
   LIBILUT_CFLAGS="-Wall -g"

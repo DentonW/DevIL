@@ -37,7 +37,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.32 $)
+AC_REVISION($Revision: 1.33 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -451,6 +451,7 @@ esac],
 debug_symbols="no")
 
 if test "$debug_symbols" = "yes" ; then
+	CFLAGS="-Wall -g"
   LIBIL_CFLAGS="-Wall -g"
   LIBILU_CFLAGS="-Wall -g"
   LIBILUT_CFLAGS="-Wall -g"
