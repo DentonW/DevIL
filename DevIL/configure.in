@@ -37,7 +37,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.35 $)
+AC_REVISION($Revision: 1.36 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -572,6 +572,7 @@ case "$target" in
 *-*-*)
 	AC_CHECK_LIB(GL,glLoadIdentity,[LIBGL="-lGL"])
 	AC_CHECK_LIB(GLU,gluPerspective,[LIBGL="-lGLU"],,$LIBGL)
+	AC_CHECK_FILE( /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib, LIBGL="-framework OpenGL" )
 	;;
 esac
    if test "x$have_gl_hdr" != "xyes" ; then
