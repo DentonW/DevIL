@@ -1,8 +1,19 @@
 1.2.5
 -----
 
-- Reworked sources tree
-- Updated *nix support, now uses autoconf/automake
+- Reworked sources tree.
+- Updated *nix support, now uses autoconf/automake.
+- Optimized ilCopyPixels and ilSetPixels if the destination and source formats/types are the same (suggestion by Kenneth Hurley).
+- Fixed an ilSetPixels memory leak.
+- Fixed the Big Endian versions of GetLittleFloat and GetLittleDouble.
+- Changed iprintf to ilprintf to fix an error compiling with Cygwin.
+- Changed iCurImage to iluCurImage and ilutCurImage in ILU and ILUT, respectively, to help with static libs.
+- Removed ilShutDown call from ilInit (gave an erroneous error).
+- Changed return type of ilSaveF and ilSaveL to return how many bytes were written.
+- Added colour-indexed support to .tif saving.
+- Fixed colour-indexed support with .bmp saving.
+- Added MSVC++ 7 solutions and projects.
+
 
 
 
@@ -13,7 +24,6 @@
 - Changed iFreeMem to ilShutDown, and made it external.
 - Rewrote much of the DDS support.
 - Made a "Dynamic" project in the MSVC++ workspace, where it delayloads some external libraries for a smaller memory footprint.
-
 
 
 1.2.2
