@@ -1,3 +1,9 @@
+1.3.1
+-----
+
+- Fixed a huge ilLoadPal() bug.
+
+
 1.3.0
 -----
 
