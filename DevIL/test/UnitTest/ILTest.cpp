@@ -60,6 +60,21 @@ void ILTest::TestilActiveImage()
   //It does not have that many images so error is reported
   ilActiveImage(2045);
   CPPUNIT_ASSERT(ilGetError() == IL_ILLEGAL_OPERATION);
+
+  //Make a picture of each image.
+  char lBuffer[4];
+  std::string lFilename = ".\\results\\Cardinal";
+  std::string lFinalFilename;
+  for (unsigned int i = 0; i < lNumImages; ++i)
+  {
+	ilBindImage(MainImage);
+	ilActiveImage(i);
+	itoa (i,lBuffer,10);
+	lFinalFilename = lFilename + lBuffer + ".bmp";
+	FILE * lBuffer = fopen(lFinalFilename.c_str() , "wb");
+	ilSaveF(IL_BMP,lBuffer);
+	fclose(lBuffer);
+  }
 }
 
 void ILTest::TestilSaveF()
