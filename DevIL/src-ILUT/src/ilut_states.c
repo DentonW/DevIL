@@ -48,7 +48,8 @@ const char* ILAPIENTRY ilutGetString(ILenum StringName)
 	{
 		case IL_VENDOR:
 			return (const char*)_ilutVendor;
-		case IL_VERSION:
+		//changed 2003-09-04
+		case IL_VERSION_NUM:
 			return (const char*)_ilutVersion;
 		default:
 			ilSetError(ILUT_INVALID_PARAM);
