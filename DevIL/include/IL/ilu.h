@@ -22,7 +22,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+/*
 #ifdef _WIN32
 	#if defined(_MSC_VER) || defined(__BORLANDC__)
 		#ifndef IL_STATIC_LIB
@@ -41,11 +41,11 @@ extern "C" {
 		#endif
 	#endif
 #endif
+*/
 
 
-
-#define ILU_VERSION_1_6_6					1
-#define ILU_VERSION							166
+#define ILU_VERSION_1_6_7					1
+#define ILU_VERSION							167
 
 
 #define ILU_FILTER							0x2600

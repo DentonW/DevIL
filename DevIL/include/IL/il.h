@@ -54,11 +54,13 @@ extern "C" {
 //#define IL_DEBUG
 //#define IL_STATIC_LIB
 //#define IL_NO_LCMS
-#ifdef _WIN32
-	#ifndef IL_USE_JPEGLIB_UNMODIFIED
-		#define IL_USE_JPEGLIB_UNMODIFIED
-	#endif
-#endif
+
+//This is now in config.h
+//#ifdef _WIN32
+//	#ifndef IL_USE_JPEGLIB_UNMODIFIED
+//		#define IL_USE_JPEGLIB_UNMODIFIED
+//	#endif
+//#endif
 
 #ifdef _WIN32_WCE
 	#define IL_NO_GIF
@@ -87,7 +89,7 @@ extern "C" {
 	#define IL_NO_LCMS
 #endif//__APPLE__*/
 
-
+/*
 #ifdef _WIN32
 	#if defined(_MSC_VER) || defined(__BORLANDC__)
 		#ifndef IL_STATIC_LIB
@@ -105,7 +107,7 @@ extern "C" {
 		#endif
 	#endif
 #endif
-
+*/
 #include <stdio.h>
 
 typedef unsigned int	ILenum;
@@ -168,8 +170,8 @@ typedef void			ILvoid;
 // IL-specific #define's
 //
 
-#define IL_VERSION_1_6_1					1
-#define IL_VERSION							161
+#define IL_VERSION_1_6_7					1
+#define IL_VERSION							167
 
 
 // Attribute Bits
