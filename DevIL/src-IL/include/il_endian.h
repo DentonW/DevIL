@@ -22,22 +22,22 @@
 	#define UInt(i) _SwapUInt(i)
 	#define Float(f) _SwapFloat(f)
 	#define Double(d) _SwapDouble(d)
-
-	#define BigShort(s) (s)
-	#define BigUShort(s) (s)
-	#define BigInt(i) (i)
-	#define BigUInt(i) (i)
-	#define BigFloat(f) (f)
-	#define BigDouble(d) (d)
+ 
+	#define BigShort(s)  
+	#define BigUShort(s)  
+	#define BigInt(i)  
+	#define BigUInt(i)  
+	#define BigFloat(f)  
+	#define BigDouble(d)  
 #else
 	#undef __LITTLE_ENDIAN__  // Not sure if it's defined by any compiler...
 	#define __LITTLE_ENDIAN__
-	#define Short(s) (s)
-	#define UShort(s) (s)
-	#define Int(i) (i)
-	#define UInt(i) (i)
-	#define Float(f) (f)
-	#define Double(d) (d)
+	#define Short(s)  
+	#define UShort(s)  
+	#define Int(i)  
+	#define UInt(i)  
+	#define Float(f)  
+	#define Double(d)  
 
 	#define BigUShort(s) _SwapUShort(s)
 	#define BigUInt(i) _SwapUInt(i)

@@ -428,7 +428,7 @@ ILboolean ILAPIENTRY iluEdgeDetectP()
 	ILubyte		*HPass, *VPass;
 	ILuint		i;
 	ILboolean	Palette = IL_FALSE, Converted = IL_FALSE;
-	ILenum		Type;
+	ILenum		Type = 0;
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
@@ -487,7 +487,7 @@ ILboolean ILAPIENTRY iluEdgeDetectS()
 	ILubyte		*HPass, *VPass;
 	ILuint		i;
 	ILboolean	Palette = IL_FALSE, Converted = IL_FALSE;
-	ILenum		Type;
+	ILenum		Type = 0;
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
@@ -545,7 +545,7 @@ ILboolean ILAPIENTRY iluBlurAvg(ILuint Iter)
 	ILubyte		*Data;
 	ILuint		i;
 	ILboolean	Palette = IL_FALSE, Converted = IL_FALSE;
-	ILenum		Type;
+	ILenum		Type = 0;
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
@@ -585,7 +585,7 @@ ILboolean ILAPIENTRY iluBlurGaussian(ILuint Iter)
 	ILubyte		*Data;
 	ILuint		i;
 	ILboolean	Palette = IL_FALSE, Converted = IL_FALSE;
-	ILenum		Type;
+	ILenum		Type = 0;
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
@@ -624,7 +624,7 @@ ILboolean ILAPIENTRY iluEmboss()
 {
 	ILubyte		*Data;
 	ILboolean	Palette = IL_FALSE, Converted = IL_FALSE;
-	ILenum		Type;
+	ILenum		Type = 0;
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
@@ -692,7 +692,7 @@ ILboolean ILAPIENTRY iluEdgeDetectE()
 {
 	ILubyte		*Data;
 	ILboolean	Palette = IL_FALSE, Converted = IL_FALSE;
-	ILenum		Type;
+	ILenum		Type = 0;
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {

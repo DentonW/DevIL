@@ -78,7 +78,7 @@ char	_Copyright[] = "Public Domain 1991 by Dale Schumacher. Mods by Ray Gardener
 
 #define CLAMP(v,l,h)    ((v)<(l) ? (l) : (v) > (h) ? (h) : v)
 
-ILuint c;  // Current colour plane offset
+static ILuint c;  // Current colour plane offset
 
 
 /*

@@ -66,7 +66,7 @@ ILboolean iSaveDdsInternal()
 {
 	ILenum	DXTCFormat;
 	ILuint	counter, numMipMaps;
-	ILubyte	*CurData;
+	ILubyte	*CurData = NULL;
 
 	if (ilNextPower2(iCurImage->Width) != iCurImage->Width ||
 		ilNextPower2(iCurImage->Height) != iCurImage->Height ||

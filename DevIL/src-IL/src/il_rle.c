@@ -34,7 +34,7 @@ ILuint GetPix(ILubyte *p, ILuint bpp)
 ILint CountDiffPixels(ILubyte *p, ILuint bpp, ILuint pixCnt)
 {
 	ILuint	pixel;
-	ILuint	nextPixel;
+	ILuint	nextPixel = 0;
 	ILint	n;
 
 	n = 0;

@@ -937,7 +937,7 @@ ILboolean iGetOS2Bmp(OS2_HEAD *Header)
 
 	iseek(Header->DataOff, IL_SEEK_SET);
 
-	PadSize = PadSize = (4 - (iCurImage->Bps % 4)) % 4;
+	PadSize = (4 - (iCurImage->Bps % 4)) % 4;
 	if (PadSize == 0) {
 		if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) != iCurImage->SizeOfData)
 			return IL_FALSE;
@@ -1078,7 +1078,7 @@ ILboolean iSaveBitmapInternal()
 
 	iwrite(TempPal->Palette, 1, TempPal->PalSize);
 
-	PadSize = PadSize = (4 - (TempImage->Bps % 4)) % 4;
+	PadSize = (4 - (TempImage->Bps % 4)) % 4;
 	// No padding, so write data directly.
 	if (PadSize == 0) {
 		iwrite(TempData, 1, TempImage->SizeOfPlane);
