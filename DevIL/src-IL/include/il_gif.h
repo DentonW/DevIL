@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/13/2002 <--Y2K Compliant! =]
+// Last modified: 05/18/2002 <--Y2K Compliant! =]
 //
 // Filename: il/il_gif.h
 //
@@ -49,7 +49,11 @@ typedef struct IMAGEDESC
 ILboolean iLoadGifInternal(ILvoid);
 ILboolean ilLoadGifF(ILHANDLE File);
 ILboolean iIsValidGif(ILvoid);
+ILboolean GetPalette(ILubyte Info, ILpal *Pal);
+ILboolean GetImages(ILpal *GlobalPal);
 ILboolean SkipExtensions(ILvoid);
 ILboolean GifGetData(ILvoid);
+ILboolean RemoveInterlace(ILvoid);
+ILboolean CopyPalette(ILpal *Dest, ILpal *Src);
 
 #endif//GIF_H

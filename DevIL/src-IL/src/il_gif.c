@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/14/2002 <--Y2K Compliant! =]
+// Last modified: 05/18/2002 <--Y2K Compliant! =]
 //
 // Filename: il/il_gif.c
 //
@@ -139,7 +139,7 @@ ILboolean ilLoadGifL(ILvoid *Lump, ILuint Size)
 ILboolean iLoadGifInternal()
 {
 	GIFHEAD		Header;
-	IMAGEDESC	ImageDesc;
+	ILpal		GlobalPal;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -164,18 +164,53 @@ ILboolean iLoadGifInternal()
 
 	// Check for a global colour map.
 	if (Header.ColourInfo & (1 << 7)) {
-		iCurImage->Pal.PalSize = (1 << ((Header.ColourInfo & 0x7) + 1)) * 3;
-		iCurImage->Pal.PalType = IL_PAL_RGB24;
-		iCurImage->Pal.Palette = (ILubyte*)ialloc(iCurImage->Pal.PalSize);
-		if (iCurImage->Pal.Palette == NULL)
+		if (!GetPalette(Header.ColourInfo, &GlobalPal))
 			return IL_FALSE;
-		iread(iCurImage->Pal.Palette, 1, iCurImage->Pal.PalSize);
 	}
+
+	if (!GetImages(&GlobalPal))
+		return IL_FALSE;
+
+	ilFixImage();
+
+	return IL_TRUE;
+}
+
+
+ILboolean GetPalette(ILubyte Info, ILpal *Pal)
+{
+	Pal->PalSize = (1 << ((Info & 0x7) + 1)) * 3;
+	Pal->PalType = IL_PAL_RGB24;
+	Pal->Palette = (ILubyte*)ialloc(Pal->PalSize);
+	if (Pal->Palette == NULL)
+		return IL_FALSE;
+	iread(Pal->Palette, 1, Pal->PalSize);
+
+	return IL_TRUE;
+}
+
+
+ILboolean GetImages(ILpal *GlobalPal)
+{
+	IMAGEDESC	ImageDesc;
+
 
 	if (!SkipExtensions())
 		return IL_FALSE;
 
 	iread(&ImageDesc, sizeof(ImageDesc), 1);
+
+	if (ImageDesc.ImageInfo & (1 << 7)) {
+		if (!GetPalette(ImageDesc.ImageInfo, &iCurImage->Pal)) {
+			return IL_FALSE;
+		}
+	}
+	else {
+		if (!CopyPalette(&iCurImage->Pal, GlobalPal)) {
+			return IL_FALSE;
+		}
+	}
+
 
 	if (!SkipExtensions())
 		return IL_FALSE;
@@ -185,7 +220,12 @@ ILboolean iLoadGifInternal()
 		return IL_FALSE;
 	}
 
-	ilFixImage();
+	if (ImageDesc.ImageInfo & (1 << 6)) {  // Image is interlaced.
+		if (!RemoveInterlace())
+			return IL_FALSE;
+	}
+
+
 
 	return IL_TRUE;
 }
@@ -208,7 +248,7 @@ ILboolean SkipExtensions()
 		}
 
 		Label = igetc();
-		/*if (Label != 0xF9 && Label != 0xFE) {
+		/*if (Label != 0xF9 && Label != 0xFE && Label != 0x01) {
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
 			return IL_FALSE;
 		}*/
@@ -368,5 +408,69 @@ ILboolean GifGetData()
 
 	return IL_TRUE;
 }
+
+
+/*From the GIF spec:
+
+  The rows of an Interlaced images are arranged in the following order:
+
+      Group 1 : Every 8th. row, starting with row 0.              (Pass 1)
+      Group 2 : Every 8th. row, starting with row 4.              (Pass 2)
+      Group 3 : Every 4th. row, starting with row 2.              (Pass 3)
+      Group 4 : Every 2nd. row, starting with row 1.              (Pass 4)
+*/
+
+ILboolean RemoveInterlace()
+{
+	ILubyte *NewData;
+	ILuint	i, j;
+
+	NewData = (ILubyte*)ialloc(iCurImage->SizeOfData);
+	if (NewData == NULL)
+		return IL_FALSE;
+
+	j = 0;
+
+	for (i = 0; i < iCurImage->Height; i += 8, j++) {
+		memcpy(&NewData[i * iCurImage->Bps], &iCurImage->Data[j * iCurImage->Bps], iCurImage->Bps);
+	}
+
+	for (i = 4; i < iCurImage->Height; i += 8, j++) {
+		memcpy(&NewData[i * iCurImage->Bps], &iCurImage->Data[j * iCurImage->Bps], iCurImage->Bps);
+	}
+
+	for (i = 2; i < iCurImage->Height; i += 4, j++) {
+		memcpy(&NewData[i * iCurImage->Bps], &iCurImage->Data[j * iCurImage->Bps], iCurImage->Bps);
+	}
+
+	for (i = 1; i < iCurImage->Height; i += 2, j++) {
+		memcpy(&NewData[i * iCurImage->Bps], &iCurImage->Data[j * iCurImage->Bps], iCurImage->Bps);
+	}
+
+	ifree(iCurImage->Data);
+	iCurImage->Data = NewData;
+
+	return IL_TRUE;
+}
+
+
+// Assumes that Dest has nothing in it.
+ILboolean CopyPalette(ILpal *Dest, ILpal *Src)
+{
+	if (Src->Palette == NULL || Src->PalSize == 0)
+		return IL_FALSE;
+
+	Dest->Palette = (ILubyte*)ialloc(Src->PalSize);
+	if (Dest->Palette == NULL)
+		return IL_FALSE;
+
+	memcpy(Dest->Palette, Src->Palette, Src->PalSize);
+
+	Dest->PalSize = Src->PalSize;
+	Dest->PalType = Src->PalType;
+
+	return IL_TRUE;
+}
+
 
 #endif //IL_NO_GIF
