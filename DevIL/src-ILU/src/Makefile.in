@@ -68,9 +68,11 @@ EXEEXT = @EXEEXT@
 HALLEGRO = @HALLEGRO@
 HSDL = @HSDL@
 LIBALLEGRO = @LIBALLEGRO@
+LIBGDI32 = @LIBGDI32@
 LIBGIF = @LIBGIF@
 LIBGL = @LIBGL@
 LIBILUT_CFLAGS = @LIBILUT_CFLAGS@
+LIBILUT_WIN32LIBPATH = @LIBILUT_WIN32LIBPATH@
 LIBILU_CFLAGS = @LIBILU_CFLAGS@
 LIBIL_CFLAGS = @LIBIL_CFLAGS@
 LIBJPG = @LIBJPG@
@@ -89,6 +91,7 @@ PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 STRIP = @STRIP@
 VERSION = @VERSION@
+VERSIONINFO = @VERSIONINFO@
 X_CFLAGS = @X_CFLAGS@
 allegro_config = @allegro_config@
 sdl_config = @sdl_config@
@@ -100,7 +103,7 @@ libILU_la_SOURCES = ilu_alloc.c       ilu_internal.c  ilu_noise.c               
 
 CFLAGS = @LIBILU_CFLAGS@
 
-libILU_la_LDFLAGS = -no-undefined -version-info @DEVIL_LTVERSION@                     -L$(top_srcdir)/src-IL/src/
+libILU_la_LDFLAGS = -no-undefined @VERSIONINFO@                     -L$(top_srcdir)/src-IL/src/
 
 libILU_la_LIBADD = -lIL
 

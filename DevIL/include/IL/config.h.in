@@ -26,6 +26,7 @@
 #undef IL_NO_TGA
 #undef IL_NO_TIF
 #undef IL_NO_WAL
+#undef IL_USE_JPEGLIB_UNMODIFIED
 
 /* Supported api (ilut) */
 
@@ -48,4 +49,7 @@
 /* Define if your processor stores words with the most significant byte first
    (like Motorola and SPARC, unlike Intel and VAX). */
 #undef WORDS_BIGENDIAN
+
+/* Define if the X Window System is missing or not being used. */
+#undef X_DISPLAY_MISSING
 #endif /* __CONFIG_H__ */

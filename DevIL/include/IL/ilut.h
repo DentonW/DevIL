@@ -44,18 +44,18 @@ extern "C" {
 // Attribute Bits
 #define ILUT_OPENGL_BIT						0x00000001
 #define ILUT_D3D_BIT						0x00000002
-#define ILUT_ALL_ATTRIB_BITS				0x000FFFFF
+#define ILUT_ALL_ATTRIB_BITS					0x000FFFFF
 
 
 // Error Types
 #define ILUT_INVALID_ENUM					0x0501
 #define ILUT_OUT_OF_MEMORY					0x0502
 #define ILUT_INVALID_VALUE					0x0505
-#define ILUT_ILLEGAL_OPERATION				0x0506
+#define ILUT_ILLEGAL_OPERATION					0x0506
 #define ILUT_INVALID_PARAM					0x0509
-#define ILUT_COULD_NOT_OPEN_FILE			0x050A
+#define ILUT_COULD_NOT_OPEN_FILE				0x050A
 #define ILUT_STACK_OVERFLOW					0x050E
-#define ILUT_STACK_UNDERFLOW				0x050F
+#define ILUT_STACK_UNDERFLOW					0x050F
 #define ILUT_NOT_SUPPORTED					0x0550
 
 
@@ -77,7 +77,7 @@ ILAPI ILboolean		ILAPIENTRY ilutDisable(ILenum Mode);
 ILAPI ILboolean		ILAPIENTRY ilutEnable(ILenum Mode);
 ILAPI ILboolean		ILAPIENTRY ilutGetBoolean(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilutGetBooleanv(ILenum Mode, ILboolean *Param);
-ILAPI ILint			ILAPIENTRY ilutGetInteger(ILenum Mode);
+ILAPI ILint		ILAPIENTRY ilutGetInteger(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilutGetIntegerv(ILenum Mode, ILint *Param);
 ILAPI const char*	ILAPIENTRY ilutGetString(ILenum StringName);
 ILAPI ILvoid		ILAPIENTRY ilutInit(ILvoid);
@@ -90,7 +90,7 @@ ILAPI ILvoid		ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param);
 
 // The different rendering api's...more to be added later?
 #define ILUT_OPENGL		0
-#define ILUT_ALLEGRO	1
+#define ILUT_ALLEGRO		1
 #define ILUT_WIN32		2
 
 

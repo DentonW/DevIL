@@ -9,7 +9,7 @@ libILU_la_SOURCES = ilu_alloc.c       ilu_internal.c  ilu_noise.c \
 
 CFLAGS = @LIBILU_CFLAGS@
 
-libILU_la_LDFLAGS = -no-undefined -version-info @DEVIL_LTVERSION@ \
+libILU_la_LDFLAGS = -no-undefined @VERSIONINFO@ \
                     -L$(top_srcdir)/src-IL/src/
 libILU_la_LIBADD = -lIL
 

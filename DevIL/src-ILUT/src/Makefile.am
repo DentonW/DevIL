@@ -7,12 +7,12 @@ libILUT_la_SOURCES = ilut_allegro.c     ilut_main.c \
 
 CFLAGS = @LIBILUT_CFLAGS@
 
-libILUT_la_LDFLAGS = -no-undefined -version-info @DEVIL_LTVERSION@ \
+libILUT_la_LDFLAGS = -no-undefined @VERSIONINFO@ \
                      -L$(top_srcdir)/src-IL/src \
                      -L$(top_srcdir)/src-ILU/src \
-                     @LIBSDL@ @LIBALLEGRO@
+                     @LIBSDL@ @LIBALLEGRO@ @LIBILUT_WIN32LIBPATH@
 
-libILUT_la_LIBADD = -lIL -lILU @LIBGL@
+libILUT_la_LIBADD = -lIL -lILU @LIBGL@ @LIBGDI32@
 
 INCLUDES = -I$(top_srcdir)/include -I$(top_srcdir)/src-ILUT/include \
            @HSDL@ @HALLEGRO@ @X_CFLAGS@

@@ -30,7 +30,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.9 $)
+AC_REVISION($Revision: 1.10 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -197,12 +197,16 @@ case "$host" in
 		LIBIL_CFLAGS=$LIBIL_CFLAGS" -mno-cygwin"
 		LIBILU_CFLAGS=$LIBILU_CFLAGS" -mno-cygwin"
 		LIBILUT_CFLAGS=$LIBILUT_CFLAGS" -mno-cygwin"
+		LIBILUT_WIN32LIBPATH="-L/usr/lib/w32api"
+		VERSIONINFO=""
               ;;
   *)
-              use_win32="no"
-              use_directx="no"
+		use_win32="no"
+		use_directx="no"
+		VERSIONINFO="-version-info $(DEVIL_LTVERSION)"
               ;;
 esac
+AC_SUBST(VERSIONINFO)
 
 dnl
 dnl Libraries development checking
@@ -226,7 +230,13 @@ if test "$no_jpeg" = "no" ; then
   AC_CHECK_LIB(jpeg, jpeg_start_decompress, LIBJPG="-ljpeg", LIBJPG="", )
   if test "$LIBJPG" != "-ljpeg" ; then
     no_jpeg="yes"
+  else
+    AC_CHECK_LIB(jpeg, jpeg_init_exif_field, use_exif="yes", use_exif="no", )
+    if test "$use_exif" = "no" ; then
+      AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED)
+    fi
   fi
+
 else
   LIBJPG=""
 fi
@@ -323,6 +333,13 @@ if test "$use_allegro" = "yes" ; then
 fi
 AC_SUBST(LIBALLEGRO)
 AC_SUBST(HALLEGRO)
+
+if test "$use_win32" = "no" ; then
+  LIBGDI32=""
+else
+  LIBGDI32="-lgdi32"
+fi
+AC_SUBST(LIBGDI32)
 
 dnl
 dnl Prepares substitutions in config.h
@@ -524,6 +541,7 @@ dnl
 AC_SUBST(LIBIL_CFLAGS)
 AC_SUBST(LIBILU_CFLAGS)
 AC_SUBST(LIBILUT_CFLAGS)
+AC_SUBST(LIBILUT_WIN32LIBPATH)
 
 dnl
 dnl Ouput files to generate

@@ -25,6 +25,7 @@
 #undef IL_NO_TGA
 #undef IL_NO_TIF
 #undef IL_NO_WAL
+#undef IL_USE_JPEGLIB_UNMODIFIED
 
 /* Supported api (ilut) */
 
