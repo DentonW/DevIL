@@ -98,7 +98,7 @@ sdl_config = @sdl_config@
 
 lib_LTLIBRARIES = libILUT.la
 
-libILUT_la_SOURCES = ilut_allegro.c     ilut_main.c                      ilut_sdlsurface.c  ilut_states.c                      ilut_internal.c    ilut_opengl.c                      ilut_win32.c       ilut_directx.c
+libILUT_la_SOURCES = ilut_allegro.c     ilut_main.c                      ilut_sdlsurface.c  ilut_states.c                      ilut_internal.c    ilut_opengl.c                      ilut_win32.c       ilut_directx.c   ilut_directx9.c
 
 
 CFLAGS = @LIBILUT_CFLAGS@
@@ -126,7 +126,7 @@ X_PRE_LIBS = @X_PRE_LIBS@
 libILUT_la_DEPENDENCIES = 
 libILUT_la_OBJECTS =  ilut_allegro.lo ilut_main.lo ilut_sdlsurface.lo \
 ilut_states.lo ilut_internal.lo ilut_opengl.lo ilut_win32.lo \
-ilut_directx.lo
+ilut_directx.lo ilut_directx9.lo
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)

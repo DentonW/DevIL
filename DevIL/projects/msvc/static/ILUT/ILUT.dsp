@@ -93,6 +93,10 @@ SOURCE="..\..\..\..\src-ILUT\src\ilut_directx.c"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\..\src-ILUT\src\ilut_directx9.c"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\..\src-ILUT\src\ilut_internal.c"
 # End Source File
 # Begin Source File

@@ -14,7 +14,8 @@
 #include "ilut_internal.h"
 
 #ifdef _WIN32
-	#define WIN32_LEAN_AND_MEAN
+#ifndef	_ILUT_NO_DLLMAIN
+	//#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
 
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
@@ -29,7 +30,7 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserve
 
 	return TRUE;
 }
-
+#endif
 
 #else  // Should check if gcc?
 
@@ -56,6 +57,9 @@ ILvoid ILAPIENTRY ilutInit()
 	ilutD3D8Init();
 #endif
 
+#ifdef ILUT_USE_DIRECTX9
+	ilutD3D9Init();
+#endif
 
 	return;
 }

@@ -18,6 +18,8 @@
 #define _ILU_BUILD_LIBRARY
 #define _ILUT_BUILD_LIBRARY
 
+//#define	WIN32_LEAN_AND_MEAN
+
 #include <string.h>
 
 #ifdef _MSC_VER
@@ -59,6 +61,9 @@ ILvoid	ilutDefaultStates(ILvoid);
 	ILboolean ilutD3D8Init();
 #endif
 
+#ifdef ILUT_USE_DIRECTX9
+	ILboolean ilutD3D9Init();
+#endif
 
 
 #endif//INTERNAL_H

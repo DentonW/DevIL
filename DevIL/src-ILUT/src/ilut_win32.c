@@ -19,9 +19,9 @@
 // For ilutWinLoadUrl().
 #pragma comment(lib, "wininet.lib")
 
-/*#if !_WIN32_WCE && (_WIN32 && __GNUC__)
+#if !_WIN32_WCE && (_WIN32 && __GNUC__)
 	PRINTDLG	Pd;
-#endif//_WIN32_WCE*/
+#endif//_WIN32_WCE
 
 ILboolean ilutWin32Init()
 {

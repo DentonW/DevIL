@@ -79,14 +79,14 @@ BEGIN
             VALUE "Comments", "DevIL: A portable image library in development\0"
             VALUE "CompanyName", "Abysmal Software\0"
             VALUE "FileDescription", "DevIL: A portable image library in development\0"
-            VALUE "FileVersion", "1.6.5\0"
+            VALUE "FileVersion", "1.6.6\0"
             VALUE "InternalName", "Developer's Image Library (DevIL)\0"
             VALUE "LegalCopyright", "Copyright © 2000-2002\0"
             VALUE "LegalTrademarks", "Under LGPL License\0"
             VALUE "OriginalFilename", "DevIL.dll\0"
             VALUE "PrivateBuild", "Open Source\0"
             VALUE "ProductName", "Developer's Image Library (DevIL)\0"
-            VALUE "ProductVersion", "1.6.5\0"
+            VALUE "ProductVersion", "1.6.6\0"
             VALUE "SpecialBuild", "eh?\0"
         END
     END
@@ -115,7 +115,7 @@ IDI_ICON1               ICON    DISCARDABLE     "resources\\IL Logo.ico"
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDC_OPENIL              "Developer's Image Library, Version 1.6.5"
+    IDC_OPENIL              "Developer's Image Library, Version 1.6.6"
 END
 
 #endif    // English (U.S.) resources

@@ -2,7 +2,8 @@
 -----
 
 - Added .gif support back in.
-
+- Fixed some DDS problems.
+- Added DirectX 9 support.
 
 
 1.6.5
