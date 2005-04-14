@@ -11,10 +11,25 @@
 //-----------------------------------------------------------------------------
 
 
+#include "ilut_opengl.h"
+
+static ILint MaxTexW = 256, MaxTexH = 256;  // maximum texture widths and heights
+
+ILvoid iGLSetMaxW(ILuint Width)
+{
+	MaxTexW = Width;
+	return;
+}
+
+ILvoid iGLSetMaxH(ILuint Height)
+{
+	MaxTexH = Height;
+	return;
+}
+
 #include "ilut_internal.h"
 #ifdef ILUT_USE_OPENGL
 
-#include "ilut_opengl.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -37,7 +52,7 @@
 #define ILGL_CLAMP_TO_EDGE					0x812F
 #define ILGL_TEXTURE_WRAP_R					0x8072
 
-ILint MaxTexW = 256, MaxTexH = 256;  // maximum texture widths and heights
+
 ILboolean HasCubemapHardware = IL_FALSE;
 #ifdef _MSC_VER
 	ILGLCOMPRESSEDTEXIMAGE2DARBPROC ilGLCompressed2D = NULL;
@@ -80,19 +95,6 @@ ILboolean ilutGLInit()
 		HasCubemapHardware = IL_TRUE;
 
 	return IL_TRUE;
-}
-
-
-ILvoid iGLSetMaxW(ILuint Width)
-{
-	MaxTexW = Width;
-	return;
-}
-
-ILvoid iGLSetMaxH(ILuint Height)
-{
-	MaxTexH = Height;
-	return;
 }
 
 
