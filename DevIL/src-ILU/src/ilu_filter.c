@@ -1232,7 +1232,7 @@ ILboolean ILAPIENTRY iluSharpen(ILfloat Factor, ILuint Iter)
 	return IL_TRUE;
 }
 
-/*
+
 ILAPI ILboolean ILAPIENTRY iluConvolution(ILint *matrix, ILint scale, ILint bias) {
 	ILubyte		*Data;
 	ILboolean	Palette = IL_FALSE, Converted = IL_FALSE;
@@ -1266,4 +1266,4 @@ ILAPI ILboolean ILAPIENTRY iluConvolution(ILint *matrix, ILint scale, ILint bias
 	
 	return IL_TRUE;
 }
-*/
+
