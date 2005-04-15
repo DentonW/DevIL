@@ -2,7 +2,7 @@
 //
 // ImageLib Utility Sources
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Last modified: 04/15/2005
 //
 // Filename: src-ILU/src/ilu_filter.c
 //
@@ -1230,5 +1230,16 @@ ILboolean ILAPIENTRY iluSharpen(ILfloat Factor, ILuint Iter)
 	ilSetCurImage(CurImage);
 
 	return IL_TRUE;
+}
+
+ILAPI ILboolean ILAPIENTRY iluConvolution(ILint *matrix, ILint scale, ILint bias) {
+	ILimage *iCurImage = ilGetCurImage();
+	ILubyte *data = Filter( iCurImage, matrix, scale, bias );
+	if( data != NULL ) {
+		ifree(iCurImage->Data);
+		iCurImage->Data = data;
+		return IL_TRUE;
+	}
+	return IL_FALSE;
 }
 
