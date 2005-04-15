@@ -139,7 +139,7 @@ ILAPI ILboolean      ILAPIENTRY iluEnlargeCanvas(ILuint Width, ILuint Height, IL
 ILAPI ILboolean      ILAPIENTRY iluEnlargeImage(ILfloat XDim, ILfloat YDim, ILfloat ZDim);
 ILAPI ILboolean      ILAPIENTRY iluEqualize(ILvoid);
 ILAPI const ILstring ILAPIENTRY iluErrorString(ILenum Error);
-ILAPI ILboolean      ILAPIENTRY iluConvolution(ILint *matrix, ILint scale, ILint bias);
+//ILAPI ILboolean      ILAPIENTRY iluConvolution(ILint *matrix, ILint scale, ILint bias);
 ILAPI ILboolean      ILAPIENTRY iluFlipImage(ILvoid);
 ILAPI ILboolean      ILAPIENTRY iluGammaCorrect(ILfloat Gamma);
 ILAPI ILuint         ILAPIENTRY iluGenImage(ILvoid);
