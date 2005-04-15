@@ -469,9 +469,9 @@
 			);
 			isa = PBXGroup;
 			name = src;
-			path = "/Users/dario/Desktop/DevIL/src-ILU/src";
-			refType = 0;
-			sourceTree = "<absolute>";
+			path = "../../src-ILU/src";
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		A32D48B008102349008510AC = {
 			fileEncoding = 30;
@@ -739,7 +739,7 @@
 			);
 			isa = PBXGroup;
 			name = include;
-			path = "/Users/dario/Desktop/DevIL/src-ILU/include";
+			path = "/Users/dario/Desktop/Developer/Projects/DevIL/cvsroot/DevIL/src-ILU/include";
 			refType = 0;
 			sourceTree = "<absolute>";
 		};
