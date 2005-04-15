@@ -194,16 +194,14 @@ ILboolean ILAPIENTRY iluPixelize(ILuint PixSize)
 // Everything here was taken from a tutorial on "Elementary Digital Filtering"
 //	by Ender Wiggen, found at http://www.gamedev.net/reference/programming/features/edf/
 
-
-
 // Needs some SERIOUS optimization.
-ILubyte *Filter(ILimage *Image, ILushort Filt)
+ILubyte *Filter(ILimage *Image, const ILint *matrix, ILint scale, ILint bias)
 {
     ILint		x, y, c, LastX, LastY, Offsets[9];
 	ILuint		i, Temp, z;
 	ILubyte		*Data, *ImgData, *NewData, *RegionMask;
 	ILdouble	Num;
-
+	
 	if (Image == NULL) {
 		ilSetError(ILU_ILLEGAL_OPERATION);
 		return NULL;
@@ -216,7 +214,6 @@ ILubyte *Filter(ILimage *Image, ILushort Filt)
 
 	RegionMask = iScanFill();
 
-	Filt *= 11;
 	// Preserve original data.
 	ImgData = Image->Data;
 	NewData = Data;
@@ -246,34 +243,34 @@ ILubyte *Filter(ILimage *Image, ILushort Filt)
 				Offsets[8] = ((y+1) * Image->Width + (x-1)) * Image->Bpp;
 
 				// Always has at least one, so get rid of all those +c's
-				Num =   Image->Data[Offsets[0]] * Filters[Filt] +
-						Image->Data[Offsets[1]] * Filters[Filt+1]+
-						Image->Data[Offsets[2]] * Filters[Filt+2]+
-						Image->Data[Offsets[3]] * Filters[Filt+3]+
-						Image->Data[Offsets[4]] * Filters[Filt+4]+
-						Image->Data[Offsets[5]] * Filters[Filt+5]+
-						Image->Data[Offsets[6]] * Filters[Filt+6]+
-						Image->Data[Offsets[7]] * Filters[Filt+7]+
-						Image->Data[Offsets[8]] * Filters[Filt+8];
+				Num =   Image->Data[Offsets[0]] * matrix[0] +
+						Image->Data[Offsets[1]] * matrix[1]+
+						Image->Data[Offsets[2]] * matrix[2]+
+						Image->Data[Offsets[3]] * matrix[3]+
+						Image->Data[Offsets[4]] * matrix[4]+
+						Image->Data[Offsets[5]] * matrix[5]+
+						Image->Data[Offsets[6]] * matrix[6]+
+						Image->Data[Offsets[7]] * matrix[7]+
+						Image->Data[Offsets[8]] * matrix[8];
 
-				Temp = (ILuint)fabs((Num / (ILdouble)Filters[Filt+9]) + Filters[Filt+10]);
+				Temp = (ILuint)fabs((Num / (ILdouble)scale) + bias);
 				if (Temp > 255)
 					Data[Offsets[4]] = 255;
 				else
 					Data[Offsets[4]] = Temp;
 
 				for (c = 1; c < Image->Bpp; c++) {
-					Num =   Image->Data[Offsets[0]+c] * Filters[Filt] +
-							Image->Data[Offsets[1]+c] * Filters[Filt+1]+
-							Image->Data[Offsets[2]+c] * Filters[Filt+2]+
-							Image->Data[Offsets[3]+c] * Filters[Filt+3]+
-							Image->Data[Offsets[4]+c] * Filters[Filt+4]+
-							Image->Data[Offsets[5]+c] * Filters[Filt+5]+
-							Image->Data[Offsets[6]+c] * Filters[Filt+6]+
-							Image->Data[Offsets[7]+c] * Filters[Filt+7]+
-							Image->Data[Offsets[8]+c] * Filters[Filt+8];
+					Num =   Image->Data[Offsets[0]+c] * matrix[0]+
+							Image->Data[Offsets[1]+c] * matrix[1]+
+							Image->Data[Offsets[2]+c] * matrix[2]+
+							Image->Data[Offsets[3]+c] * matrix[3]+
+							Image->Data[Offsets[4]+c] * matrix[4]+
+							Image->Data[Offsets[5]+c] * matrix[5]+
+							Image->Data[Offsets[6]+c] * matrix[6]+
+							Image->Data[Offsets[7]+c] * matrix[7]+
+							Image->Data[Offsets[8]+c] * matrix[8];
 
-					Temp = (ILuint)fabs((Num / (ILdouble)Filters[Filt+9]) + Filters[Filt+10]);
+					Temp = (ILuint)fabs((Num / (ILdouble)scale) + bias);
 					if (Temp > 255)
 						Data[Offsets[4]+c] = 255;
 					else
@@ -306,17 +303,17 @@ ILubyte *Filter(ILimage *Image, ILushort Filt)
 				}
 			}
 			for (c = 0; c < Image->Bpp; c++) {
-				Num =   Image->Data[(x-1) * Image->Bpp + c] * Filters[Filt] +
-						Image->Data[x * Image->Bpp + c] * Filters[Filt+1]+
-						Image->Data[(x+1) * Image->Bpp + c] * Filters[Filt+2]+
-						Image->Data[(x-1) * Image->Bpp + c] * Filters[Filt+3]+
-						Image->Data[x * Image->Bpp + c] * Filters[Filt+4]+
-						Image->Data[(x+1) * Image->Bpp + c] * Filters[Filt+5]+
-						Image->Data[(Image->Width + (x-1)) * Image->Bpp + c] * Filters[Filt+6]+
-						Image->Data[(Image->Width + (x  )) * Image->Bpp + c] * Filters[Filt+7]+
-						Image->Data[(Image->Width + (x-1)) * Image->Bpp + c] * Filters[Filt+8];
+				Num =   Image->Data[(x-1) * Image->Bpp + c] * matrix[0] +
+						Image->Data[x * Image->Bpp + c] * matrix[1]+
+						Image->Data[(x+1) * Image->Bpp + c] * matrix[2]+
+						Image->Data[(x-1) * Image->Bpp + c] * matrix[3]+
+						Image->Data[x * Image->Bpp + c] * matrix[4]+
+						Image->Data[(x+1) * Image->Bpp + c] * matrix[5]+
+						Image->Data[(Image->Width + (x-1)) * Image->Bpp + c] * matrix[6]+
+						Image->Data[(Image->Width + (x  )) * Image->Bpp + c] * matrix[7]+
+						Image->Data[(Image->Width + (x-1)) * Image->Bpp + c] * matrix[8];
 
-					Temp = (ILuint)fabs((Num / (ILdouble)Filters[Filt+9]) + Filters[Filt+10]);
+					Temp = (ILuint)fabs((Num / (ILdouble)scale) + bias);
 					if (Temp > 255)
 						Data[x * Image->Bpp + c] = 255;
 					else
@@ -334,17 +331,17 @@ ILubyte *Filter(ILimage *Image, ILushort Filt)
 				}
 			}
 			for (c = 0; c < Image->Bpp; c++) {
-				Num =   Image->Data[y - Image->Bps + (x-1) * Image->Bpp + c] * Filters[Filt] +
-						Image->Data[y - Image->Bps + x * Image->Bpp + c] * Filters[Filt+1]+
-						Image->Data[y - Image->Bps + (x+1) * Image->Bpp + c] * Filters[Filt+2]+
-						Image->Data[y + (x-1) * Image->Bpp + c] * Filters[Filt+3]+
-						Image->Data[y + x * Image->Bpp + c] * Filters[Filt+4]+
-						Image->Data[y + (x+1) * Image->Bpp + c] * Filters[Filt+5]+
-						Image->Data[y + (x-1) * Image->Bpp + c] * Filters[Filt+6]+
-						Image->Data[y + x * Image->Bpp + c] * Filters[Filt+7]+
-						Image->Data[y + (x-1) * Image->Bpp + c] * Filters[Filt+8];
+				Num =   Image->Data[y - Image->Bps + (x-1) * Image->Bpp + c] * matrix[0] +
+						Image->Data[y - Image->Bps + x * Image->Bpp + c] * matrix[1]+
+						Image->Data[y - Image->Bps + (x+1) * Image->Bpp + c] * matrix[2]+
+						Image->Data[y + (x-1) * Image->Bpp + c] * matrix[3]+
+						Image->Data[y + x * Image->Bpp + c] * matrix[4]+
+						Image->Data[y + (x+1) * Image->Bpp + c] * matrix[5]+
+						Image->Data[y + (x-1) * Image->Bpp + c] * matrix[6]+
+						Image->Data[y + x * Image->Bpp + c] * matrix[7]+
+						Image->Data[y + (x-1) * Image->Bpp + c] * matrix[8];
 
-					Temp = (ILuint)fabs((Num / (ILdouble)Filters[Filt+9]) + Filters[Filt+10]);
+					Temp = (ILuint)fabs((Num / (ILdouble)scale) + bias);
 					if (Temp > 255)
 						Data[y + x * Image->Bpp + c] = 255;
 					else
@@ -361,17 +358,17 @@ ILubyte *Filter(ILimage *Image, ILushort Filt)
 				}
 			}
 			for (c = 0; c < Image->Bpp; c++) {
-				Num =   Image->Data[y - Image->Bps + c] * Filters[Filt] +
-						Image->Data[y - Image->Bps + Image->Bpp + c] * Filters[Filt+1]+
-						Image->Data[y - Image->Bps + 2 * Image->Bpp + c] * Filters[Filt+2]+
-						Image->Data[y + c] * Filters[Filt+3]+
-						Image->Data[y + Image->Bpp + c] * Filters[Filt+4]+
-						Image->Data[y + 2 * Image->Bpp + c] * Filters[Filt+5]+
-						Image->Data[y + Image->Bps + c] * Filters[Filt+6]+
-						Image->Data[y + Image->Bps + Image->Bpp + c] * Filters[Filt+7]+
-						Image->Data[y + Image->Bps + 2 * Image->Bpp + c] * Filters[Filt+8];
+				Num =   Image->Data[y - Image->Bps + c] * matrix[0] +
+						Image->Data[y - Image->Bps + Image->Bpp + c] * matrix[1]+
+						Image->Data[y - Image->Bps + 2 * Image->Bpp + c] * matrix[2]+
+						Image->Data[y + c] * matrix[3]+
+						Image->Data[y + Image->Bpp + c] * matrix[4]+
+						Image->Data[y + 2 * Image->Bpp + c] * matrix[5]+
+						Image->Data[y + Image->Bps + c] * matrix[6]+
+						Image->Data[y + Image->Bps + Image->Bpp + c] * matrix[7]+
+						Image->Data[y + Image->Bps + 2 * Image->Bpp + c] * matrix[8];
 
-					Temp = (ILuint)fabs((Num / (ILdouble)Filters[Filt+9]) + Filters[Filt+10]);
+					Temp = (ILuint)fabs((Num / (ILdouble)scale) + bias);
 					if (Temp > 255)
 						Data[y + c] = 255;
 					else
@@ -390,17 +387,17 @@ ILubyte *Filter(ILimage *Image, ILushort Filt)
 				}
 			}
 			for (c = 0; c < Image->Bpp; c++) {
-				Num =   Image->Data[y - Image->Bps + c] * Filters[Filt] +
-						Image->Data[y - Image->Bps + Image->Bpp + c] * Filters[Filt+1]+
-						Image->Data[y - Image->Bps + 2 * Image->Bpp + c] * Filters[Filt+2]+
-						Image->Data[y + c] * Filters[Filt+3]+
-						Image->Data[y + Image->Bpp + c] * Filters[Filt+4]+
-						Image->Data[y + 2 * Image->Bpp + c] * Filters[Filt+5]+
-						Image->Data[y + Image->Bps + c] * Filters[Filt+6]+
-						Image->Data[y + Image->Bps + Image->Bpp + c] * Filters[Filt+7]+
-						Image->Data[y + Image->Bps + 2 * Image->Bpp + c] * Filters[Filt+8];
+				Num =   Image->Data[y - Image->Bps + c] * matrix[0] +
+						Image->Data[y - Image->Bps + Image->Bpp + c] * matrix[1]+
+						Image->Data[y - Image->Bps + 2 * Image->Bpp + c] * matrix[2]+
+						Image->Data[y + c] * matrix[3]+
+						Image->Data[y + Image->Bpp + c] * matrix[4]+
+						Image->Data[y + 2 * Image->Bpp + c] * matrix[5]+
+						Image->Data[y + Image->Bps + c] * matrix[6]+
+						Image->Data[y + Image->Bps + Image->Bpp + c] * matrix[7]+
+						Image->Data[y + Image->Bps + 2 * Image->Bpp + c] * matrix[8];
 
-					Temp = (ILuint)fabs((Num / (ILdouble)Filters[Filt+9]) + Filters[Filt+10]);
+					Temp = (ILuint)fabs((Num / (ILdouble)scale) + bias);
 					if (Temp > 255)
 						Data[y + c] = 255;
 					else
@@ -447,8 +444,8 @@ ILboolean ILAPIENTRY iluEdgeDetectP()
 	}
 
 
-	HPass = Filter(iluCurImage, 4);
-	VPass = Filter(iluCurImage, 5);
+	HPass = Filter(iluCurImage, filter_h_prewitt, filter_h_prewitt_scale, filter_h_prewitt_bias);
+	VPass = Filter(iluCurImage, filter_v_prewitt, filter_v_prewitt_scale, filter_v_prewitt_bias);
 	if (!HPass || !VPass) {
 		ifree(HPass);
 		ifree(VPass);
@@ -505,8 +502,8 @@ ILboolean ILAPIENTRY iluEdgeDetectS()
 		ilConvertImage(iluCurImage->Format, IL_UNSIGNED_BYTE);
 	}
 
-	HPass = Filter(iluCurImage, 2);
-	VPass = Filter(iluCurImage, 3);
+	HPass = Filter(iluCurImage, filter_h_sobel, filter_h_sobel_scale, filter_h_sobel_bias);
+	VPass = Filter(iluCurImage, filter_v_sobel, filter_v_sobel_scale, filter_v_sobel_bias);
 	if (!HPass || !VPass) {
 		ifree(HPass);
 		ifree(VPass);
@@ -564,7 +561,7 @@ ILboolean ILAPIENTRY iluBlurAvg(ILuint Iter)
 	}
 
 	for (i = 0; i < Iter; i++) {
-		Data = Filter(iluCurImage, 0);
+		Data = Filter(iluCurImage, filter_average, filter_average_scale, filter_average_bias);
 		if (!Data)
 			return IL_FALSE;
 		ifree(iluCurImage->Data);
@@ -604,7 +601,7 @@ ILboolean ILAPIENTRY iluBlurGaussian(ILuint Iter)
 	}
 
 	for (i = 0; i < Iter; i++) {
-		Data = Filter(iluCurImage, 1);
+		Data = Filter(iluCurImage, filter_gaussian, filter_gaussian_scale, filter_gaussian_bias );
 		if (!Data)
 			return IL_FALSE;
 		ifree(iluCurImage->Data);
@@ -642,7 +639,7 @@ ILboolean ILAPIENTRY iluEmboss()
 		ilConvertImage(iluCurImage->Format, IL_UNSIGNED_BYTE);
 	}
 
-	Data = Filter(iluCurImage, 6);
+	Data = Filter(iluCurImage, filter_emboss, filter_emboss_scale, filter_emboss_bias);
 	if (!Data)
 		return IL_FALSE;
 	ifree(iluCurImage->Data);
@@ -710,7 +707,7 @@ ILboolean ILAPIENTRY iluEdgeDetectE()
 		ilConvertImage(iluCurImage->Format, IL_UNSIGNED_BYTE);
 	}
 
-	Data = Filter(iluCurImage, 7);
+	Data = Filter(iluCurImage, filter_embossedge, filter_embossedge_scale, filter_embossedge_bias);
 	if (!Data)
 		return IL_FALSE;
 	ifree(iluCurImage->Data);
