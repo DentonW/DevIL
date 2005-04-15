@@ -20,7 +20,12 @@
 
 #ifndef _WIN32
 	#define NON_WINDOWS 1
-	#include <lcms/lcms.h>
+	#ifndef MACOSX
+		#include <lcms.h>
+	#else
+		#include <lcms/lcms.h>
+	#endif
+	
 #else
 //	#ifndef IL_DEBUG
 //		pragma comment(lib, "lcms108.lib")
