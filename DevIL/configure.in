@@ -37,7 +37,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.42 $)
+AC_REVISION($Revision: 1.43 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -66,7 +66,7 @@ CFLAGS="-force_cpusubtype_ALL"
 AC_COMPILE_IFELSE([
 int main() {
 	asm("vspltisw v0,0");
-}], [AC_DEFINE([ALTIVEC])] [CFLAGS="$CFLAGS_TMP -force_cpusubtype_ALL";] [AC_MSG_RESULT(yes)], [CFLAGS="$CFLAGS_TMP";] [AC_MSG_RESULT(no)] );
+}], [AC_DEFINE([ALTIVEC],,[Altivec coprocessor found])] [CFLAGS="$CFLAGS_TMP -force_cpusubtype_ALL";] [AC_MSG_RESULT(yes)], [CFLAGS="$CFLAGS_TMP";] [AC_MSG_RESULT(no)] );
 
 
 AC_MSG_CHECKING(Altivec gcc extension)
@@ -77,15 +77,15 @@ int main() {
 	vector unsigned int vec;
 	vec = vec_splat_u32(0);
 	return 0;
-}], [AC_DEFINE([ALTIVEC_GCC])] [CFLAGS="$CFLAGS_TMP -faltivec";] [AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)] );
+}], [AC_DEFINE([ALTIVEC_GCC],,[Altivec GCC extension found])] [CFLAGS="$CFLAGS_TMP -faltivec";] [AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)] );
  
 
 dnl
 dnl Memory alignment functions
 dnl
-AC_CHECK_FUNC( valloc, [AC_DEFINE([VALLOC])] )
-AC_CHECK_FUNC( posix_memalign, [AC_DEFINE([POSIX_MEMALIGN])] )
-AC_CHECK_FUNC( memalign, [AC_DEFINE([MEMALIGN])] )
+AC_CHECK_FUNC( valloc, [AC_DEFINE([VALLOC],,[vallod memory alloctaion found])] )
+AC_CHECK_FUNC( posix_memalign, [AC_DEFINE([POSIX_MEMALIGN],,[posix_memalign memory alloctaion found])] )
+AC_CHECK_FUNC( memalign, [AC_DEFINE([MEMALIGN],,[memalign memory alloctaion found])])
 
 
 CFLAGS="-Wall -funroll-loops -ffast-math -fomit-frame-pointer -fexpensive-optimizations $CFLAGS"
@@ -541,7 +541,7 @@ if test "$no_jpeg" = "no" ; then
   else
     AC_CHECK_LIB(jpeg, jpeg_init_exif_field, use_exif="yes", use_exif="no", )
     if test "$use_exif" = "no" ; then
-      AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED)
+      AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED,,[Use jpeglib unmoified])
     fi
     AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED)
   fi
@@ -553,7 +553,7 @@ AC_SUBST(LIBJPG)
 case "$target" in
 *-apple-darwin*)
     AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED)
-    AC_DEFINE(MAX_OS_X)
+    AC_DEFINE(MAX_OS_X,,[Building on Mac OS X])
 esac
 
 if test "$no_tiff" = "no" ; then
@@ -661,189 +661,189 @@ dnl
 SUPPORTED_FORMATS=""
 
 if test "$no_bmp"  = "yes"  ; then
-  AC_DEFINE(IL_NO_BMP)
+  AC_DEFINE(IL_NO_BMP,,[Disable BMP support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"BMP "
 fi
 AM_CONDITIONAL(IL_NO_BMP, test x$no_bmp != "xyes")
 
 if test "$no_dcx"  = "yes"  ; then
-  AC_DEFINE(IL_NO_DCX)
+  AC_DEFINE(IL_NO_DCX,,[Disable DCX support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"DCX "
 fi
 AM_CONDITIONAL(IL_NO_DCX, test x$no_dcx != "xyes")
 
 if test "$no_dds"  = "yes"  ; then
-  AC_DEFINE(IL_NO_DDS)
+  AC_DEFINE(IL_NO_DDS,,[Disable DDS support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"DDS "
 fi
 AM_CONDITIONAL(IL_NO_DDS, test x$no_dds != "xyes")
 
 if test "$no_doom" = "yes" ; then
-  AC_DEFINE(IL_NO_DOOM)
+  AC_DEFINE(IL_NO_DOOM,,[Disable DOOM support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"WAD "
 fi
 AM_CONDITIONAL(IL_NO_DOOM, test x$no_doom != "xyes")
 
 if test "$no_gif"  = "yes"  ; then
-  AC_DEFINE(IL_NO_GIF)
+  AC_DEFINE(IL_NO_GIF,,[Disable GIF support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"GIF "
 fi
 AM_CONDITIONAL(IL_NO_GIF, test x$no_gif != "xyes")
 
 if test "$no_hdr"  = "yes"  ; then
-  AC_DEFINE(IL_NO_HDR)
+  AC_DEFINE(IL_NO_HDR,,[Disable HDR support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"HDR "
 fi
 AM_CONDITIONAL(IL_NO_HDR, test x$no_hdr != "xyes")
 
 if test "$no_icon" = "yes"  ; then
-  AC_DEFINE(IL_NO_ICO)
+  AC_DEFINE(IL_NO_ICO,,[Disable ICO support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"ICO "
 fi
 AM_CONDITIONAL(IL_NO_ICO, test x$no_icon != "xyes")
 
 if test "$no_jpeg" = "yes"  ; then
-  AC_DEFINE(IL_NO_JPG)
+  AC_DEFINE(IL_NO_JPG,,[Disable JPEG support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"JPG "
 fi
 AM_CONDITIONAL(IL_NO_JPG, test x$no_jpeg != "xyes")
 
 if test "$no_lif"  = "yes"  ; then
-  AC_DEFINE(IL_NO_LIF)
+  AC_DEFINE(IL_NO_LIF,,[Disable LIF support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"LIF "
 fi
 AM_CONDITIONAL(IL_NO_LIF, test x$no_lif != "xyes")
 
 if test "$no_lcms"  = "yes"  ; then
-  AC_DEFINE(IL_NO_LCMS)
+  AC_DEFINE(IL_NO_LCMS,,[Disable LCMS support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"LCMS "
 fi
 AM_CONDITIONAL(IL_NO_LCMS, test x$no_lcms != "xyes")
 
 if test "$no_mdl"  = "yes"  ; then
-  AC_DEFINE(IL_NO_MDL)
+  AC_DEFINE(IL_NO_MDL,,[Disable MDL support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"MDL "
 fi
 AM_CONDITIONAL(IL_NO_MDL, test x$no_mdl != "xyes")
 
 if test "$no_mng"  = "yes"  ; then
-  AC_DEFINE(IL_NO_MNG)
+  AC_DEFINE(IL_NO_MNG,,[Disable MNG support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"MNG "
 fi
 AM_CONDITIONAL(IL_NO_MNG, test x$no_mng != "xyes")
 
 if test "$no_pcd"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PCD)
+  AC_DEFINE(IL_NO_PCD,,[Disable PCD support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PCD "
 fi
 AM_CONDITIONAL(IL_NO_PCD, test x$no_pcd != "xyes")
 
 if test "$no_pcx"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PCX)
+  AC_DEFINE(IL_NO_PCX,,[Disable PCX support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PCX "
 fi
 AM_CONDITIONAL(IL_NO_PCX, test x$no_pcx != "xyes")
 
 if test "$no_pic"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PIC)
+  AC_DEFINE(IL_NO_PIC,,[Disable PIC support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PIC "
 fi
 AM_CONDITIONAL(IL_NO_PIC, test x$no_pic != "xyes")
 
 if test "$no_pix"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PIX)
+  AC_DEFINE(IL_NO_PIX,,[Disable PIX support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PIX "
 fi
 AM_CONDITIONAL(IL_NO_PIX, test x$no_pix != "xyes")
 
 if test "$no_png"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PNG)
+  AC_DEFINE(IL_NO_PNG,,[Disable PNG support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PNG "
 fi
 AM_CONDITIONAL(IL_NO_PNG, test x$no_png != "xyes")
 
 if test "$no_pnm"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PNM)
+  AC_DEFINE(IL_NO_PNM,,[Disable PNM support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PNM "
 fi
 AM_CONDITIONAL(IL_NO_PNM, test x$no_pnm != "xyes")
 
 if test "$no_psd"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PSD)
+  AC_DEFINE(IL_NO_PSD,,[Disable PSD support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PSD "
 fi
 AM_CONDITIONAL(IL_NO_PSD, test x$no_psd != "xyes")
 
 if test "$no_psp"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PSP)
+  AC_DEFINE(IL_NO_PSP,,[Disable PSP support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PSP "
 fi
 AM_CONDITIONAL(IL_NO_PSP, test x$no_psp != "xyes")
 
 if test "$no_pxr"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PXR)
+  AC_DEFINE(IL_NO_PXR,,[Disable PXR support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PXR "
 fi
 AM_CONDITIONAL(IL_NO_PXR, test x$no_pxr != "xyes")
 
 if test "$no_raw"  = "yes"  ; then
-  AC_DEFINE(IL_NO_RAW)
+  AC_DEFINE(IL_NO_RAW,,[Disable RAW support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"RAW "
 fi
 AM_CONDITIONAL(IL_NO_RAW, test x$no_raw != "xyes")
 
 if test "$no_sgi"  = "yes"  ; then
-  AC_DEFINE(IL_NO_SGI)
+  AC_DEFINE(IL_NO_SGI,,[Disable SGI support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"SGI "
 fi
 AM_CONDITIONAL(IL_NO_SGI, test x$no_sgi != "xyes")
 
 if test "$no_tga"  = "yes"  ; then
-  AC_DEFINE(IL_NO_TGA)
+  AC_DEFINE(IL_NO_TGA,,[Disable TGA support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"TGA "
 fi
 AM_CONDITIONAL(IL_NO_TGA, test x$no_tga != "xyes")
 
 if test "$no_tiff" = "yes"  ; then
-  AC_DEFINE(IL_NO_TIF)
+  AC_DEFINE(IL_NO_TIF,,[Disable TIFF support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"TIF "
 fi
 AM_CONDITIONAL(IL_NO_TIF, test x$no_tiff != "xyes")
 
 if test "$no_wal"  = "yes"  ; then
-  AC_DEFINE(IL_NO_WAL)
+  AC_DEFINE(IL_NO_WAL,,[Disable WAL support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"WAL "
 fi
 AM_CONDITIONAL(IL_NO_WAL, test x$no_wal != "xyes")
 
 if test "$no_xpm"  = "yes"  ; then
-  AC_DEFINE(IL_NO_XPM)
+  AC_DEFINE(IL_NO_XPM,,[Disable XPM support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"XPM "
 fi
@@ -860,17 +860,17 @@ AC_MSG_RESULT([$SUPPORTED_FORMATS])
 SUPPORTED_API=""
 
 if test "$use_allegro" = "yes" ; then
-  AC_DEFINE(ILUT_USE_ALLEGRO)
+  AC_DEFINE(ILUT_USE_ALLEGRO,,[Support Allegro API])
   SUPPORTED_API=$SUPPORTED_API"Allegro "
 fi
 
 if test "$use_directx" = "yes" ; then
-  AC_DEFINE(ILUT_USE_DIRECTX8)
+  AC_DEFINE(ILUT_USE_DIRECTX8,,[Support DirectX8 API])
   SUPPORTED_APPI=$SUPPORTED_API"Directx8 "
 fi
 
 if test "$use_opengl" = "yes" ; then
-  AC_DEFINE(ILUT_USE_OPENGL)
+  AC_DEFINE(ILUT_USE_OPENGL,,[Support OpenGL API])
   SUPPORTED_API=$SUPPORTED_API"OpenGL "
   case "$target" in
     *-apple-darwin*)
@@ -879,18 +879,8 @@ if test "$use_opengl" = "yes" ; then
 fi
 
 if test "$use_sdl" = "yes" ; then
-  AC_DEFINE(ILUT_USE_SDL)
+  AC_DEFINE(ILUT_USE_SDL,,[Support SDL API])
   SUPPORTED_API=$SUPPORTED_API"SDL "
-fi
-
-if test "$use_win32" = "yes" ; then
-  AC_DEFINE(ILUT_USE_WIN32)
-  SUPPORTED_API=$SUPPORTED_API"Win32 "
-fi
-
-if test "$use_directx" = "yes" ; then
-  AC_DEFINE(ILUT_USE_DIRECTX8)
-  SUPPORTED_API=$SUPPORTED_API"DirectX8 "
 fi
 
 AC_MSG_RESULT([ ])
