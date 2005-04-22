@@ -61,7 +61,7 @@
 		};
 		08FB7794FE84155DC02AAC07 = {
 			children = (
-				A309277A081299BC007128EC,
+				A38C3BE30818FAB2008EE126,
 				A36D1100080E91B20012BB8B,
 				A32D489B0810233E008510AC,
 				A32D490A08102417008510AC,
@@ -115,7 +115,6 @@
 				A32D48E40810234E008510AC,
 				A32D48E50810234E008510AC,
 				A32D48E60810234E008510AC,
-				A3092783081299F1007128EC,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -197,7 +196,6 @@
 				A32D49640810244F008510AC,
 				A32D49650810244F008510AC,
 				A32D49660810244F008510AC,
-				A309277F081299F1007128EC,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -306,7 +304,7 @@
 				A36D1175080E95D60012BB8B,
 				A36D1176080E95D60012BB8B,
 				A36D1177080E95D60012BB8B,
-				A3092781081299F1007128EC,
+				A38C3BE70818FAB2008EE126,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -366,7 +364,7 @@
 				A36D10D7080E84D80012BB8B,
 				A36D10D8080E84D80012BB8B,
 				A36D10D9080E84D80012BB8B,
-				A3092782081299F1007128EC,
+				A38C3BE60818FAB2008EE126,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -447,56 +445,6 @@
 			name = Docs;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		A309277A081299BC007128EC = {
-			children = (
-				A309277D081299F1007128EC,
-				A309277E081299F1007128EC,
-			);
-			isa = PBXGroup;
-			name = Altivec;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		A309277D081299F1007128EC = {
-			fileEncoding = 4;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = altivec_common.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		A309277E081299F1007128EC = {
-			fileEncoding = 4;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.c;
-			path = altivec_common.c;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		A309277F081299F1007128EC = {
-			fileRef = A309277D081299F1007128EC;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		A3092781081299F1007128EC = {
-			fileRef = A309277D081299F1007128EC;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		A3092782081299F1007128EC = {
-			fileRef = A309277E081299F1007128EC;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		A3092783081299F1007128EC = {
-			fileRef = A309277D081299F1007128EC;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		A30B34820818DB240067D04E = {
 			fileEncoding = 30;
@@ -659,6 +607,7 @@
 		};
 		A32D489B0810233E008510AC = {
 			children = (
+				A38C3C170818FC42008EE126,
 				A32D48D60810234E008510AC,
 				A32D489C08102349008510AC,
 			);
@@ -1067,6 +1016,7 @@
 		};
 		A32D490A08102417008510AC = {
 			children = (
+				A38C3C1F0818FC55008EE126,
 				A32D49420810244F008510AC,
 				A32D494B0810244F008510AC,
 			);
@@ -2403,6 +2353,7 @@
 		};
 		A36D1100080E91B20012BB8B = {
 			children = (
+				A38C3C0A0818FC10008EE126,
 				A36D1101080E92150012BB8B,
 				A36D10DB080E85070012BB8B,
 			);
@@ -2975,6 +2926,72 @@
 					Public,
 				);
 			};
+		};
+		A38C3BE30818FAB2008EE126 = {
+			children = (
+				A38C3BE40818FAB2008EE126,
+				A38C3BE50818FAB2008EE126,
+			);
+			isa = PBXGroup;
+			name = altivec;
+			path = ../../altivec;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		A38C3BE40818FAB2008EE126 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = altivec_common.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		A38C3BE50818FAB2008EE126 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = altivec_common.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		A38C3BE60818FAB2008EE126 = {
+			fileRef = A38C3BE40818FAB2008EE126;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		A38C3BE70818FAB2008EE126 = {
+			fileRef = A38C3BE50818FAB2008EE126;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		A38C3C0A0818FC10008EE126 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = Makefile.am;
+			path = "../../src-IL/src/Makefile.am";
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		A38C3C170818FC42008EE126 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = Makefile.am;
+			path = "../../src-ILU/src/Makefile.am";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		A38C3C1F0818FC55008EE126 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = Makefile.am;
+			path = "../../src-ILUT/src/Makefile.am";
+			refType = 4;
+			sourceTree = "<group>";
 		};
 	};
 	rootObject = 08FB7793FE84155DC02AAC07;

@@ -13,7 +13,6 @@
 
 #include "il_internal.h"
 
-
 ILboolean iFastConvert(ILenum DestFormat)
 {
 	ILuint		SizeOfData, i=0;
@@ -36,6 +35,9 @@ ILboolean iFastConvert(ILenum DestFormat)
 			{
 				case IL_BYTE:
 				case IL_UNSIGNED_BYTE:
+					#ifdef ALTIVEC_GCC
+						abc2cba_byte(BytePtr,iCurImage->SizeOfData/3,BytePtr);
+					#else
 					SizeOfData = iCurImage->SizeOfData / 3;
 					#ifdef USE_WIN32_ASM
 						__asm
@@ -57,6 +59,7 @@ ILboolean iFastConvert(ILenum DestFormat)
 							BytePtr += 3;
 						}
 					#endif//USE_WIN32_ASM
+					#endif
 					return IL_TRUE;
 
 				case IL_SHORT:
