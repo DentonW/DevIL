@@ -12,6 +12,8 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				OTHER_CFLAGS = "-DHAVE_CONFIG_H";
+				OTHER_CPLUSPLUSFLAGS = "-DHAVE_CONFIG_H";
 				ZERO_LINK = YES;
 			};
 			isa = PBXBuildStyle;
@@ -59,6 +61,7 @@
 		};
 		08FB7794FE84155DC02AAC07 = {
 			children = (
+				A309277A081299BC007128EC,
 				A36D1100080E91B20012BB8B,
 				A32D489B0810233E008510AC,
 				A32D490A08102417008510AC,
@@ -112,6 +115,7 @@
 				A32D48E40810234E008510AC,
 				A32D48E50810234E008510AC,
 				A32D48E60810234E008510AC,
+				A3092783081299F1007128EC,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -159,6 +163,7 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				GCC_ALTIVEC_EXTENSIONS = YES;
 				INSTALL_PATH = /usr/local/lib;
 				LIBRARY_STYLE = DYNAMIC;
 				OTHER_CFLAGS = "";
@@ -192,6 +197,7 @@
 				A32D49640810244F008510AC,
 				A32D49650810244F008510AC,
 				A32D49660810244F008510AC,
+				A309277F081299F1007128EC,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -233,6 +239,7 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				GCC_ALTIVEC_EXTENSIONS = YES;
 				INSTALL_PATH = /usr/local/lib;
 				LIBRARY_STYLE = DYNAMIC;
 				OTHER_CFLAGS = "";
@@ -299,6 +306,7 @@
 				A36D1175080E95D60012BB8B,
 				A36D1176080E95D60012BB8B,
 				A36D1177080E95D60012BB8B,
+				A3092781081299F1007128EC,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -358,6 +366,7 @@
 				A36D10D7080E84D80012BB8B,
 				A36D10D8080E84D80012BB8B,
 				A36D10D9080E84D80012BB8B,
+				A3092782081299F1007128EC,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -387,11 +396,12 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				GCC_MODEL_PPC64 = YES;
+				GCC_ALTIVEC_EXTENSIONS = YES;
+				GCC_MODEL_PPC64 = NO;
 				INSTALL_PATH = /usr/local/lib;
 				LIBRARY_SEARCH_PATHS = "\"/Users/dario/Desktop/DevIL o /src-IL/src/.libs\" /sw/lib";
 				LIBRARY_STYLE = DYNAMIC;
-				OTHER_CFLAGS = "";
+				OTHER_CFLAGS = "-I../../include -I../Include";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = libIL;
@@ -416,11 +426,221 @@
 		};
 		A3009534080E8006003DEA28 = {
 			children = (
+				A30B34870818DB400067D04E,
+				A30B34880818DB400067D04E,
+				A30B34890818DB400067D04E,
+				A30B348A0818DB400067D04E,
+				A30B348B0818DB400067D04E,
+				A30B348C0818DB400067D04E,
+				A30B348D0818DB400067D04E,
+				A30B349E0818DB5C0067D04E,
+				A30B348E0818DB400067D04E,
+				A30B348F0818DB400067D04E,
+				A30B34900818DB400067D04E,
+				A30B34910818DB400067D04E,
+				A30B34920818DB400067D04E,
+				A30B34930818DB400067D04E,
+				A30B34940818DB400067D04E,
+				A30B34820818DB240067D04E,
 			);
 			isa = PBXGroup;
 			name = Docs;
 			refType = 4;
 			sourceTree = "<group>";
+		};
+		A309277A081299BC007128EC = {
+			children = (
+				A309277D081299F1007128EC,
+				A309277E081299F1007128EC,
+			);
+			isa = PBXGroup;
+			name = Altivec;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		A309277D081299F1007128EC = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = altivec_common.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		A309277E081299F1007128EC = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = altivec_common.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		A309277F081299F1007128EC = {
+			fileRef = A309277D081299F1007128EC;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		A3092781081299F1007128EC = {
+			fileRef = A309277D081299F1007128EC;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		A3092782081299F1007128EC = {
+			fileRef = A309277E081299F1007128EC;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		A3092783081299F1007128EC = {
+			fileRef = A309277D081299F1007128EC;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		A30B34820818DB240067D04E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = AUTHORS;
+			path = /Users/dario/Desktop/Developer/Projects/DevIL/cvsroot/DevIL/AUTHORS;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		A30B34870818DB400067D04E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = TODO;
+			path = ../../TODO;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		A30B34880818DB400067D04E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.script.sh;
+			name = autogen.sh;
+			path = ../../autogen.sh;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		A30B34890818DB400067D04E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = COPYING;
+			path = ../../COPYING;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		A30B348A0818DB400067D04E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = README.win;
+			path = ../../README.win;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		A30B348B0818DB400067D04E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = README.unix;
+			path = ../../README.unix;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		A30B348C0818DB400067D04E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = README.macosx;
+			path = ../../README.macosx;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		A30B348D0818DB400067D04E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = README;
+			path = ../../README;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		A30B348E0818DB400067D04E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = NEWS;
+			path = ../../NEWS;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		A30B348F0818DB400067D04E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = Makefile.am;
+			path = ../../Makefile.am;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		A30B34900818DB400067D04E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = ChangeLog;
+			path = ../../ChangeLog;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		A30B34910818DB400067D04E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = BUGS;
+			path = ../../BUGS;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		A30B34920818DB400067D04E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = Libraries.txt;
+			path = ../../Libraries.txt;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		A30B34930818DB400067D04E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = INSTALL;
+			path = ../../INSTALL;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		A30B34940818DB400067D04E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = CREDITS;
+			path = ../../CREDITS;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		A30B349E0818DB5C0067D04E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = configure.in;
+			path = ../../configure.in;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		A30E01C208101A1700B16732 = {
 			children = (
@@ -2122,7 +2342,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\ncd build\nsudo cp libIL.dylib libILU.dylib libILUT.dylib /usr/local/lib\nsudo cp usr/local/include/* /usr/local/include/\nexit 0";
+			shellScript = "\ncd build\nsudo cp libIL.dylib libILU.dylib libILUT.dylib /usr/local/lib\nif [ $? -ne 0 ] ; then\n\techo \"Failure installing the libraries\"\n\texit 1\nfi\nsudo cp usr/local/include/* /usr/local/include/\nif [ $? -ne 0 ] ; then\n\techo \"Failure installing the includes\"\n\texit 1\nfi\nexit 0";
 		};
 		A36D10F5080E8FD80012BB8B = {
 			buildPhases = (
