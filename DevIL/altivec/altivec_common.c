@@ -8,7 +8,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "il_internal.h"
+#include "config.h"
 
 #ifdef ALTIVEC_GCC
 #include "altivec_common.h"
