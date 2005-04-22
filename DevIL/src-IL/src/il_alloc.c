@@ -24,26 +24,24 @@ mFree  ifree_ptr = NULL;
 
 
 #ifdef ALTIVEC_GCC
-
-typedef union {
-    float scalars[ vec_step( vector float ) ];
-    vector float v;
-} buffer;
-
-__inline__ ILvoid *vec_malloc( ILuint );
-__inline__ ILvoid *vec_malloc( ILuint size ) {
-    buffer *b = (buffer*)malloc( size );
-    return (void*)b;
-}
-
-__inline__ ILvoid *vec_calloc( ILuint, ILuint );
-__inline__ ILvoid *vec_calloc( ILuint count, ILuint size ) {
-    buffer *b = (buffer*)calloc(count,size);
-    return (void*)b;
+ILvoid *vec_malloc( ILuint size ) {
+	size =  size % 16 > 0 ? size + 16 - (size % 16) : size; // align size value
+	
+	#ifdef POSIX_MEMALIGN
+		return posix_memalign(&buffer, 16, size);
+	#else
+	#ifdef VALLOC
+		return valloc( size );
+	#else
+	#ifdef MEMALIGN
+		return memalign( 16, size );
+	#else
+		#error NO ALIGNED MEMORY ALLOCATION FUNCTIONS...
+	#endif
 }
 
 ILvoid *ivec_align_buffer( ILvoid *buffer, ILuint size ) {
-    if( (size_t)buffer % 16 != 0 ) {
+	if( (size_t)buffer % 16 != 0 ) {
         void *aligned_buffer = vec_malloc( size );
         memcpy( aligned_buffer, buffer, size );
         ifree( buffer );
