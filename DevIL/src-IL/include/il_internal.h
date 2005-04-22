@@ -31,6 +31,10 @@
 	#include <IL/config.h>
 #endif
 
+#ifdef ALTIVEC_GCC
+	#include "altivec_common.h"
+#endif
+
 #include <IL/il.h>
 #include <IL/devil_internal_exports.h>
 
