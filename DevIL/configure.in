@@ -37,7 +37,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.43 $)
+AC_REVISION($Revision: 1.44 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -66,7 +66,7 @@ CFLAGS="-force_cpusubtype_ALL"
 AC_COMPILE_IFELSE([
 int main() {
 	asm("vspltisw v0,0");
-}], [AC_DEFINE([ALTIVEC],,[Altivec coprocessor found])] [CFLAGS="$CFLAGS_TMP -force_cpusubtype_ALL";] [AC_MSG_RESULT(yes)], [CFLAGS="$CFLAGS_TMP";] [AC_MSG_RESULT(no)] );
+}], [AC_DEFINE([ALTIVEC],,[Altivec coprocessor found])] [CFLAGS="$CFLAGS_TMP -force_cpusubtype_ALL -I../../altivec";] [AC_MSG_RESULT(yes)], [CFLAGS="$CFLAGS_TMP";] [AC_MSG_RESULT(no)] );
 
 
 AC_MSG_CHECKING(Altivec gcc extension)
@@ -517,6 +517,7 @@ AC_CHECK_HEADER(jpeglib.h, ,no_jpeg="yes")
 AC_CHECK_HEADER(tiffio.h, ,no_tiff="yes")
 AC_CHECK_HEADER(png.h, ,no_png="yes")
 AC_CHECK_HEADER(lcms/lcms.h, ,no_lcms="yes")
+AC_CHECK_HEADER(lcms.h, ,no_lcms="yes";lcms_nodirinclude="yes")
 AC_CHECK_HEADER(libmng.h, ,no_mng="yes")
 AC_CHECK_HEADER(d3d8.h, , use_directx="no")
 case "$target" in
@@ -661,189 +662,192 @@ dnl
 SUPPORTED_FORMATS=""
 
 if test "$no_bmp"  = "yes"  ; then
-  AC_DEFINE(IL_NO_BMP,,[Disable BMP support])
+  AC_DEFINE(IL_NO_BMP,,[BMP support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"BMP "
 fi
 AM_CONDITIONAL(IL_NO_BMP, test x$no_bmp != "xyes")
 
 if test "$no_dcx"  = "yes"  ; then
-  AC_DEFINE(IL_NO_DCX,,[Disable DCX support])
+  AC_DEFINE(IL_NO_DCX,,[DCX support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"DCX "
 fi
 AM_CONDITIONAL(IL_NO_DCX, test x$no_dcx != "xyes")
 
 if test "$no_dds"  = "yes"  ; then
-  AC_DEFINE(IL_NO_DDS,,[Disable DDS support])
+  AC_DEFINE(IL_NO_DDS,,[DDS support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"DDS "
 fi
 AM_CONDITIONAL(IL_NO_DDS, test x$no_dds != "xyes")
 
 if test "$no_doom" = "yes" ; then
-  AC_DEFINE(IL_NO_DOOM,,[Disable DOOM support])
+  AC_DEFINE(IL_NO_DOOM,,[DOOM support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"WAD "
 fi
 AM_CONDITIONAL(IL_NO_DOOM, test x$no_doom != "xyes")
 
 if test "$no_gif"  = "yes"  ; then
-  AC_DEFINE(IL_NO_GIF,,[Disable GIF support])
+  AC_DEFINE(IL_NO_GIF,,[GIF support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"GIF "
 fi
 AM_CONDITIONAL(IL_NO_GIF, test x$no_gif != "xyes")
 
 if test "$no_hdr"  = "yes"  ; then
-  AC_DEFINE(IL_NO_HDR,,[Disable HDR support])
+  AC_DEFINE(IL_NO_HDR,,[HDR support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"HDR "
 fi
 AM_CONDITIONAL(IL_NO_HDR, test x$no_hdr != "xyes")
 
 if test "$no_icon" = "yes"  ; then
-  AC_DEFINE(IL_NO_ICO,,[Disable ICO support])
+  AC_DEFINE(IL_NO_ICO,,[ICO support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"ICO "
 fi
 AM_CONDITIONAL(IL_NO_ICO, test x$no_icon != "xyes")
 
 if test "$no_jpeg" = "yes"  ; then
-  AC_DEFINE(IL_NO_JPG,,[Disable JPEG support])
+  AC_DEFINE(IL_NO_JPG,,[JPEG support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"JPG "
 fi
 AM_CONDITIONAL(IL_NO_JPG, test x$no_jpeg != "xyes")
 
 if test "$no_lif"  = "yes"  ; then
-  AC_DEFINE(IL_NO_LIF,,[Disable LIF support])
+  AC_DEFINE(IL_NO_LIF,,[LIF support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"LIF "
 fi
 AM_CONDITIONAL(IL_NO_LIF, test x$no_lif != "xyes")
 
 if test "$no_lcms"  = "yes"  ; then
-  AC_DEFINE(IL_NO_LCMS,,[Disable LCMS support])
+  if test "$lcms_nodirinclude" = "yes" ; then
+    AC_DEFINE(LCMS_NODIRINCLUDE,,[LCMS include without lcms/ support])
+  fi
+   AC_DEFINE(IL_NO_LCMS,,[LCMS support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"LCMS "
 fi
 AM_CONDITIONAL(IL_NO_LCMS, test x$no_lcms != "xyes")
 
 if test "$no_mdl"  = "yes"  ; then
-  AC_DEFINE(IL_NO_MDL,,[Disable MDL support])
+  AC_DEFINE(IL_NO_MDL,,[MDL support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"MDL "
 fi
 AM_CONDITIONAL(IL_NO_MDL, test x$no_mdl != "xyes")
 
 if test "$no_mng"  = "yes"  ; then
-  AC_DEFINE(IL_NO_MNG,,[Disable MNG support])
+  AC_DEFINE(IL_NO_MNG,,[MNG support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"MNG "
 fi
 AM_CONDITIONAL(IL_NO_MNG, test x$no_mng != "xyes")
 
 if test "$no_pcd"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PCD,,[Disable PCD support])
+  AC_DEFINE(IL_NO_PCD,,[PCD support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PCD "
 fi
 AM_CONDITIONAL(IL_NO_PCD, test x$no_pcd != "xyes")
 
 if test "$no_pcx"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PCX,,[Disable PCX support])
+  AC_DEFINE(IL_NO_PCX,,[PCX support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PCX "
 fi
 AM_CONDITIONAL(IL_NO_PCX, test x$no_pcx != "xyes")
 
 if test "$no_pic"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PIC,,[Disable PIC support])
+  AC_DEFINE(IL_NO_PIC,,[PIC support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PIC "
 fi
 AM_CONDITIONAL(IL_NO_PIC, test x$no_pic != "xyes")
 
 if test "$no_pix"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PIX,,[Disable PIX support])
+  AC_DEFINE(IL_NO_PIX,,[PIX support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PIX "
 fi
 AM_CONDITIONAL(IL_NO_PIX, test x$no_pix != "xyes")
 
 if test "$no_png"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PNG,,[Disable PNG support])
+  AC_DEFINE(IL_NO_PNG,,[PNG support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PNG "
 fi
 AM_CONDITIONAL(IL_NO_PNG, test x$no_png != "xyes")
 
 if test "$no_pnm"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PNM,,[Disable PNM support])
+  AC_DEFINE(IL_NO_PNM,,[PNM support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PNM "
 fi
 AM_CONDITIONAL(IL_NO_PNM, test x$no_pnm != "xyes")
 
 if test "$no_psd"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PSD,,[Disable PSD support])
+  AC_DEFINE(IL_NO_PSD,,[PSD support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PSD "
 fi
 AM_CONDITIONAL(IL_NO_PSD, test x$no_psd != "xyes")
 
 if test "$no_psp"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PSP,,[Disable PSP support])
+  AC_DEFINE(IL_NO_PSP,,[PSP support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PSP "
 fi
 AM_CONDITIONAL(IL_NO_PSP, test x$no_psp != "xyes")
 
 if test "$no_pxr"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PXR,,[Disable PXR support])
+  AC_DEFINE(IL_NO_PXR,,[PXR support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PXR "
 fi
 AM_CONDITIONAL(IL_NO_PXR, test x$no_pxr != "xyes")
 
 if test "$no_raw"  = "yes"  ; then
-  AC_DEFINE(IL_NO_RAW,,[Disable RAW support])
+  AC_DEFINE(IL_NO_RAW,,[RAW support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"RAW "
 fi
 AM_CONDITIONAL(IL_NO_RAW, test x$no_raw != "xyes")
 
 if test "$no_sgi"  = "yes"  ; then
-  AC_DEFINE(IL_NO_SGI,,[Disable SGI support])
+  AC_DEFINE(IL_NO_SGI,,[SGI support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"SGI "
 fi
 AM_CONDITIONAL(IL_NO_SGI, test x$no_sgi != "xyes")
 
 if test "$no_tga"  = "yes"  ; then
-  AC_DEFINE(IL_NO_TGA,,[Disable TGA support])
+  AC_DEFINE(IL_NO_TGA,,[TGA support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"TGA "
 fi
 AM_CONDITIONAL(IL_NO_TGA, test x$no_tga != "xyes")
 
 if test "$no_tiff" = "yes"  ; then
-  AC_DEFINE(IL_NO_TIF,,[Disable TIFF support])
+  AC_DEFINE(IL_NO_TIF,,[TIFF support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"TIF "
 fi
 AM_CONDITIONAL(IL_NO_TIF, test x$no_tiff != "xyes")
 
 if test "$no_wal"  = "yes"  ; then
-  AC_DEFINE(IL_NO_WAL,,[Disable WAL support])
+  AC_DEFINE(IL_NO_WAL,,[WAL support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"WAL "
 fi
 AM_CONDITIONAL(IL_NO_WAL, test x$no_wal != "xyes")
 
 if test "$no_xpm"  = "yes"  ; then
-  AC_DEFINE(IL_NO_XPM,,[Disable XPM support])
+  AC_DEFINE(IL_NO_XPM,,[XPM support])
 else
   SUPPORTED_FORMATS=$SUPPORTED_FORMATS"XPM "
 fi
