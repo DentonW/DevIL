@@ -16,12 +16,8 @@
 #include <stdlib.h>
 #include <math.h>
 
-//mAlloc ialloc;
-//mFree  ifree;
-
 mAlloc ialloc_ptr = NULL;
 mFree  ifree_ptr = NULL;
-
 
 #ifdef ALTIVEC_GCC
 ILvoid *vec_malloc( ILuint size ) {
@@ -37,6 +33,8 @@ ILvoid *vec_malloc( ILuint size ) {
 		return memalign( 16, size );
 	#else
 		#error NO ALIGNED MEMORY ALLOCATION FUNCTIONS...
+	#endif
+	#endif
 	#endif
 }
 
