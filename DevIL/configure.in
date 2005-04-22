@@ -37,7 +37,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.41 $)
+AC_REVISION($Revision: 1.42 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -79,6 +79,13 @@ int main() {
 	return 0;
 }], [AC_DEFINE([ALTIVEC_GCC])] [CFLAGS="$CFLAGS_TMP -faltivec";] [AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)] );
  
+
+dnl
+dnl Memory alignment functions
+dnl
+AC_CHECK_FUNC( valloc, [AC_DEFINE([VALLOC])] )
+AC_CHECK_FUNC( posix_memalign, [AC_DEFINE([POSIX_MEMALIGN])] )
+AC_CHECK_FUNC( memalign, [AC_DEFINE([MEMALIGN])] )
 
 
 CFLAGS="-Wall -funroll-loops -ffast-math -fomit-frame-pointer -fexpensive-optimizations $CFLAGS"
