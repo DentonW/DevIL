@@ -22,7 +22,7 @@ typedef union {
 } vector_t;
 
 // Loads 16 byte from the specified address, aligned or not
-vector unsigned char load_unaligned( unsigned char *buffer );
+//vector unsigned char load_unaligned( unsigned char *buffer );
 
 // Fills a vector with the specified value
 vector float fill_vector_f( float value );

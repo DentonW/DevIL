@@ -14,14 +14,14 @@
 #include "altivec_common.h"
 
 // from http://developer.apple.com/hardware/ve/alignment.html
-vector unsigned char load_unaligned( unsigned char *buffer ) {
+/*vector unsigned char load_unaligned( unsigned char *buffer ) {
 	vector unsigned char MSQ, LSQ;
 	vector unsigned char mask;
 	MSQ = vec_ld(0, buffer); // most significant quadword
 	LSQ = vec_ld(15, buffer); // least significant quadword
 	mask = vec_lvsl(0, buffer); // create the permute mask
 	return vec_perm(MSQ, LSQ, mask);// align the data
-}
+}*/
 
 vector float fill_vector_f( float value ) {
 	vector_t vec;
@@ -91,16 +91,13 @@ void abc2cba_byte( unsigned char *data, unsigned int length, unsigned char *newd
 
 void abc2cba_short( unsigned short *data, unsigned int length, unsigned short *newdata ) {
 	register vector unsigned short d0,d1,d2,t0,t1,t2;
-	register const vector unsigned char p0 = (vector unsigned char) // there is an error in here...
+	register const vector unsigned char p0 = (vector unsigned char)
 		(0x04,0x05,0x02,0x03,0x00,0x01,0x0A,0x0B,0x08,0x09,0x06,0x07,0x10,0x11,0x0E,0x0F);
 	register const vector unsigned char p1 = (vector unsigned char)
 		(0x1C,0x1D,0x06,0x07,0x04,0x05,0x02,0x03,0x0C,0x0D,0x0A,0x0B,0x08,0x09,0x0E,0x0F);
 	register const vector unsigned char p2 = (vector unsigned char)
 		(0x00,0x01,0x1E,0x1F,0x08,0x09,0x06,0x07,0x04,0x05,0x0E,0x0F,0x0C,0x0D,0x0A,0x0B);
-	
-	
 	register const vector unsigned char p3 = (vector unsigned char)
-	//	(0x00,0x01,0x10,0x11,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F);
 		(0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x12,0x13);
 	
 	// Approximate at the greatest group fo pixel
