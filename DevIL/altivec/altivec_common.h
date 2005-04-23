@@ -28,7 +28,8 @@ vector unsigned char load_unaligned( unsigned char *buffer );
 vector float fill_vector_f( float value );
 
 // Format conversion function
-void abc2cba_byte( unsigned char *data, unsigned int numpixel, unsigned char *newdata );
+void abc2cba_byte( unsigned char *data, unsigned int length, unsigned char *newdata );
+void abc2cba_short( unsigned short *data, unsigned int length, unsigned short *newdata );
 
 #endif
 #endif

@@ -36,7 +36,7 @@ ILboolean iFastConvert(ILenum DestFormat)
 				case IL_BYTE:
 				case IL_UNSIGNED_BYTE:
 					#ifdef ALTIVEC_GCC
-						abc2cba_byte(BytePtr,iCurImage->SizeOfData/3,BytePtr);
+					abc2cba_byte(BytePtr,iCurImage->SizeOfData,BytePtr);
 					#else
 					SizeOfData = iCurImage->SizeOfData / 3;
 					#ifdef USE_WIN32_ASM
@@ -64,6 +64,9 @@ ILboolean iFastConvert(ILenum DestFormat)
 
 				case IL_SHORT:
 				case IL_UNSIGNED_SHORT:
+					#ifdef ALTIVEC_GCC
+					abc2cba_short(ShortPtr,iCurImage->SizeOfData,ShortPtr);
+					#else
 					SizeOfData = iCurImage->SizeOfData / 6;  // 3*2
 					#ifdef USE_WIN32_ASM
 						__asm
@@ -85,6 +88,7 @@ ILboolean iFastConvert(ILenum DestFormat)
 							ShortPtr += 3;
 						}
 					#endif//USE_WIN32_ASM
+					#endif
 					return IL_TRUE;
 
 				case IL_INT:

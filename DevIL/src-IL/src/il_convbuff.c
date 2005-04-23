@@ -74,23 +74,27 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 					{
 						case IL_UNSIGNED_BYTE:
 						case IL_BYTE:
-						  #ifdef ALTIVEC_GCC
-							abc2cba_byte(((ILubyte*)Data),NumPix,NewData);
-						  #else
+						#ifdef ALTIVEC_GCC
+							abc2cba_byte((ILubyte*)Data,iCurImage->SizeOfData,NewData);
+						#else
 							for (i = 0; i < NumPix; i += 3) {
 								NewData[i] = ((ILubyte*)(Data))[i+2];
 								NewData[i+1] = ((ILubyte*)(Data))[i+1];
 								NewData[i+2] = ((ILubyte*)(Data))[i];
-								}
-						  #endif
-						break;
+							}
+						#endif
+							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						#ifdef ALTIVEC_GCC
+							abc2cba_short((ILushort*)Data,iCurImage->SizeOfData,(ILushort*)NewData);
+						#else
 							for (i = 0; i < NumPix; i += 3) {
 								((ILushort*)(NewData))[i] = ((ILushort*)(Data))[i+2];
 								((ILushort*)(NewData))[i+1] = ((ILushort*)(Data))[i+1];
 								((ILushort*)(NewData))[i+2] = ((ILushort*)(Data))[i];
 							}
+						#endif
 							break;
 						case IL_UNSIGNED_INT:
 						case IL_INT:
