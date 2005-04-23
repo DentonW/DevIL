@@ -75,7 +75,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 						case IL_UNSIGNED_BYTE:
 						case IL_BYTE:
 						#ifdef ALTIVEC_GCC
-							abc2cba_byte((ILubyte*)Data,iCurImage->SizeOfData,NewData);
+							abc2cba_byte((ILubyte*)Data,NumPix * BpcDest,NewData);
 						#else
 							for (i = 0; i < NumPix; i += 3) {
 								NewData[i] = ((ILubyte*)(Data))[i+2];
@@ -87,7 +87,8 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
 						#ifdef ALTIVEC_GCC
-							abc2cba_short((ILushort*)Data,iCurImage->SizeOfData,(ILushort*)NewData);
+							abc2cba_short((ILushort*)Data,NumPix * BpcDest,(ILushort*)NewData);
+							// the *2 is a workaround
 						#else
 							for (i = 0; i < NumPix; i += 3) {
 								((ILushort*)(NewData))[i] = ((ILushort*)(Data))[i+2];
