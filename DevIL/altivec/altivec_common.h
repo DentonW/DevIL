@@ -8,6 +8,8 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <IL/il.h>
+
 #ifdef ALTIVEC_GCC
 #ifndef ALTIVEC_COMMON
 #define ALTIVEC_COMMON
@@ -28,8 +30,8 @@ typedef union {
 vector float fill_vector_f( float value );
 
 // Format conversion function
-void abc2cba_byte( unsigned char *data, unsigned int length, unsigned char *newdata );
-void abc2cba_short( unsigned short *data, unsigned int length, unsigned short *newdata );
+void abc2cba_byte( ILubyte *data, ILuint length, ILubyte *newdata );
+void abc2cba_short( ILushort *data, ILuint length, ILushort *newdata );
 
 #endif
 #endif
