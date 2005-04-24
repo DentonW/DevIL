@@ -132,7 +132,7 @@ ILboolean iFastConvert(ILenum DestFormat)
 
 				case IL_DOUBLE:
 				#ifdef ALTIVEC_GCC
-					abc2cba_double(IntPtr,iCurImage->SizeOfData,IntPtr);
+					abc2cba_double(DblPtr,iCurImage->SizeOfData,DblPtr);
 				#else
 					SizeOfData = iCurImage->SizeOfData / 24;  // 3*8
 					for (i = 0; i < SizeOfData; i++) {
