@@ -131,6 +131,9 @@ ILboolean iFastConvert(ILenum DestFormat)
 					return IL_TRUE;
 
 				case IL_DOUBLE:
+				#ifdef ALTIVEC_GCC
+					abc2cba_double(IntPtr,iCurImage->SizeOfData,IntPtr);
+				#else
 					SizeOfData = iCurImage->SizeOfData / 24;  // 3*8
 					for (i = 0; i < SizeOfData; i++) {
 						TempDbl = DblPtr[0];
@@ -138,6 +141,7 @@ ILboolean iFastConvert(ILenum DestFormat)
 						DblPtr[2] = TempDbl;
 						DblPtr += 3;
 					}
+				#endif
 					return IL_TRUE;
 			}
 			break;
