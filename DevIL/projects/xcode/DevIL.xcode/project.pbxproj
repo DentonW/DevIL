@@ -304,6 +304,7 @@
 				A36D1175080E95D60012BB8B,
 				A36D1176080E95D60012BB8B,
 				A36D1177080E95D60012BB8B,
+				A39B3C50081C1E6000115B25,
 				A38C3BE70818FAB2008EE126,
 			);
 			isa = PBXHeadersBuildPhase;
@@ -364,6 +365,7 @@
 				A36D10D7080E84D80012BB8B,
 				A36D10D8080E84D80012BB8B,
 				A36D10D9080E84D80012BB8B,
+				A39B3C4F081C1E5100115B25,
 				A38C3BE60818FAB2008EE126,
 			);
 			isa = PBXSourcesBuildPhase;
@@ -2929,6 +2931,9 @@
 		};
 		A38C3BE30818FAB2008EE126 = {
 			children = (
+				A39B3BAE081C18DF00115B25,
+				A39B3BAC081C189200115B25,
+				A39B3BAD081C189200115B25,
 				A38C3BE40818FAB2008EE126,
 				A38C3BE50818FAB2008EE126,
 			);
@@ -2992,6 +2997,42 @@
 			path = "../../src-ILUT/src/Makefile.am";
 			refType = 4;
 			sourceTree = "<group>";
+		};
+		A39B3BAC081C189200115B25 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = altivec_typeconversion.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		A39B3BAD081C189200115B25 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = altivec_typeconversion.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		A39B3BAE081C18DF00115B25 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = altivec.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		A39B3C4F081C1E5100115B25 = {
+			fileRef = A39B3BAD081C189200115B25;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		A39B3C50081C1E6000115B25 = {
+			fileRef = A39B3BAC081C189200115B25;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 	};
 	rootObject = 08FB7793FE84155DC02AAC07;
