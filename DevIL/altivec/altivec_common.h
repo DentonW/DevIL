@@ -32,6 +32,7 @@ vector float fill_vector_f( float value );
 // Format conversion function
 void abc2cba_byte( ILubyte *data, ILuint length, ILubyte *newdata );
 void abc2cba_short( ILushort *data, ILuint length, ILushort *newdata );
+void abc2cba_int( ILuint *data, ILuint length, ILuint *newdata );
 
 #endif
 #endif
