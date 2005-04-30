@@ -37,7 +37,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.44 $)
+AC_REVISION($Revision: 1.45 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -77,7 +77,7 @@ int main() {
 	vector unsigned int vec;
 	vec = vec_splat_u32(0);
 	return 0;
-}], [AC_DEFINE([ALTIVEC_GCC],,[Altivec GCC extension found])] [CFLAGS="$CFLAGS_TMP -faltivec";] [AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)] );
+}], [AC_DEFINE([ALTIVEC_GCC],,[Altivec GCC extension found])] [CFLAGS="$CFLAGS_TMP -faltivec -maltivec";] [AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)] );
  
 
 dnl
