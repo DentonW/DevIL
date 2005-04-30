@@ -13,17 +13,15 @@
 #ifndef ILUT_OPENGL_H
 #define ILUT_OPENGL_H
 
-
 #include "ilut_internal.h"
 
+ILvoid iGLSetMaxW(ILuint Width);
+ILvoid iGLSetMaxH(ILuint Height);
 
 #ifndef min
 #define min(a, b)	(((a) < (b)) ? (a) : (b))
 #endif
 
-
-ILvoid iGLSetMaxW(ILuint Width);
-ILvoid iGLSetMaxH(ILuint Height);
 
 #ifdef ILUT_USE_OPENGL
 ILenum    ilutGLFormat(ILenum, ILubyte);
