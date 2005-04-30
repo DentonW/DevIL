@@ -16,4 +16,8 @@ void abc2cba_short( ILushort *data, ILuint length, ILushort *newdata );
 void abc2cba_int( ILuint *data, ILuint length, ILuint *newdata );
 void abc2cba_double( ILdouble *data, ILuint length, ILdouble *newdata );
 
+// Used to convert RGBA <-> BGRA in various data types
+void abcd2cbad_byte( ILubyte *data, ILuint length, ILubyte *newdata );
+void abcd2cbad_short( ILushort *data, ILuint length, ILushort *newdata );
+
 #endif

@@ -3,17 +3,41 @@
 #ifdef ALTIVEC_GCC
 #include "altivec_typeconversion.h"
 
-static inline void abc2cba_internal( register const vector unsigned char p[4], unsigned char *data, unsigned int length, unsigned char *newdata ) {
+static inline void abc2cba_internal( register const vector unsigned char p[4], unsigned char *data, register unsigned int length, unsigned char *newdata ) {
 	register vector unsigned char d0,d1,d2,t0,t1,t2;
-	
+
 	float pixgrp = length / 16;
 	length = ((int)(pixgrp*10)%10) > 0 ? pixgrp : pixgrp+1;
 	
-	while( length >= 3 ) {
+	if( length >= 3 ) {
+		length -= 3;
+		
 		d2 = vec_ld(32,data);
 		d1 = vec_ld(16,data);
 		d0 = vec_ld(0,data);
 		
+		while( length >= 3 ) {
+			t0 = d0; // used to avoid stall in the permutation
+			t1 = d1; // not the whole register is overwritten
+			t2 = d2;
+			
+			d0 = vec_perm(d0,t1,p[0]);
+			d1 = vec_perm(d1,t0,p[1]);
+			d2 = vec_perm(d2,t1,p[2]);
+			d1 = vec_perm(d1,t2,p[3]);
+			
+			vec_st(d0,0,newdata);
+			vec_st(d1,16,newdata);
+			vec_st(d2,32,newdata);
+			
+			length -= 3;
+			data += 16*3;
+			newdata += 16*3;
+			
+			d2 = vec_ld(32,data);
+			d1 = vec_ld(16,data);
+			d0 = vec_ld(0,data);
+		}
 		t0 = d0; // used to avoid stall in the permutation
 		t1 = d1; // not the whole register is overwritten
 		t2 = d2;
@@ -24,12 +48,8 @@ static inline void abc2cba_internal( register const vector unsigned char p[4], u
 		d1 = vec_perm(d1,t2,p[3]);
 		
 		vec_st(d0,0,newdata);
+		vec_st(d1,16,newdata);
 		vec_st(d2,32,newdata);
-		vec_st(d1,16,newdata); // forced out of order execution to avoid stall
-		
-		length -= 3;
-		data += 16*3;
-		newdata += 16*3;
 	}
 	
 	if( length == 2 ) {
@@ -47,6 +67,62 @@ static inline void abc2cba_internal( register const vector unsigned char p[4], u
 	} else if( length == 1 ) {
 		d0 = vec_ld(0,data);
 		d0 = vec_perm(d0,d0,p[0]);
+		vec_st(d0,0,newdata);
+	}
+}
+
+static inline void abcd2cbad_internal( register const vector unsigned char p, unsigned char *data, unsigned int length, unsigned char *newdata ) {
+	register vector unsigned char d0,d1,d2,z;
+	z = vec_splat_u8(0);
+	
+	float pixgrp = length / 16;
+	length = ((int)(pixgrp*10)%10) > 0 ? pixgrp : pixgrp+1;
+	
+	if( length >= 3 ) {
+		length -= 3;
+		
+		d2 = vec_ld(32,data);
+		d1 = vec_ld(16,data);
+		d0 = vec_ld(0,data);
+		
+		while( length >= 3 ) {
+			d0 = vec_perm(d0,z,p);
+			d1 = vec_perm(d1,z,p);
+			d2 = vec_perm(d2,z,p);
+			
+			vec_st(d0,0,newdata);
+			vec_st(d1,16,newdata);
+			vec_st(d2,32,newdata);
+			
+			length -= 3;
+			data += 16*3;
+			newdata += 16*3;
+			
+			d2 = vec_ld(32,data);
+			d1 = vec_ld(16,data);
+			d0 = vec_ld(0,data);
+		}
+		d0 = vec_perm(d0,z,p);
+		d1 = vec_perm(d1,z,p);
+		d2 = vec_perm(d2,z,p);
+		
+		vec_st(d0,0,newdata);
+		vec_st(d1,16,newdata);
+		vec_st(d2,32,newdata);
+	}
+	
+	if( length == 2 ) {
+		d0 = vec_ld(0,data);
+		d1 = vec_ld(16,data);
+		
+		d0 = vec_perm(d0,z,p);
+		d1 = vec_perm(d1,z,p);
+		
+		vec_st(d0,0,newdata);
+		vec_st(d1,16,newdata);
+	} else if( length == 1 ) {
+		d0 = vec_ld(0,data);
+		d0 = vec_perm(d0,d0,z);
 		vec_st(d0,0,newdata);
 	}
 }
@@ -86,6 +162,16 @@ void abc2cba_double( ILdouble *data, ILuint length, ILdouble *newdata ) {
 	(vector unsigned char)(0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x18,0x19,0x1A,0x1B,0x1C,0x1D,0x1E,0x1F),
 	(vector unsigned char)(0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x18,0x19,0x1A,0x1B,0x1C,0x1D,0x1E,0x1F)};
 	abc2cba_internal(p,(ILubyte*)data,length,(ILubyte*)newdata);
+}
+
+void abcd2cbad_byte( ILubyte *data, ILuint length, ILubyte *newdata ) {
+	const vector unsigned char p = (vector unsigned char)(0x02,0x01,0x00,0x03,0x06,0x05,0x04,0x07,0x0A,0x09,0x08,0x0B, 0x0E,0x0D,0x0C,0x0F);
+	abcd2cbad_internal(p,data,length,newdata);
+}
+
+void abcd2cbad_short( ILushort *data, ILuint length, ILushort *newdata ) {
+	const vector unsigned char p = (vector unsigned char)(0x04,0x05,0x02,0x03,0x00,0x01,0x06,0x07,0x0C,0x0D,0x0A,0x0B,0x08,0x09,0x0E,0x0F);
+	abcd2cbad_internal(p,(ILubyte*)data,length,(ILubyte*)newdata);
 }
 
 #endif

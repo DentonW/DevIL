@@ -383,12 +383,16 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						#ifdef ALTIVEC_GCC
+							abcd2cbad_short((ILushort*)Data,iCurImage->SizeOfData,(ILushort*)NewData);
+						#else
 							for (i = 0; i < NumPix; i += 4) {
 								((ILushort*)(NewData))[i] = ((ILushort*)(Data))[i+2];
 								((ILushort*)(NewData))[i+1] = ((ILushort*)(Data))[i+1];
 								((ILushort*)(NewData))[i+2] = ((ILushort*)(Data))[i];
 								((ILushort*)(NewData))[i+3] = ((ILushort*)(Data))[i+3];
 							}
+						#endif
 							break;
 						case IL_UNSIGNED_INT:
 						case IL_INT:
@@ -954,12 +958,16 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						#ifdef ALTIVEC_GCC
+							abcd2cbad_short((ILushort*)Data,iCurImage->SizeOfData,(ILushort*)NewData);
+						#else
 							for (i = 0; i < NumPix; i += 4) {
 								((ILushort*)(NewData))[i] = ((ILushort*)(Data))[i+2];
 								((ILushort*)(NewData))[i+1] = ((ILushort*)(Data))[i+1];
 								((ILushort*)(NewData))[i+2] = ((ILushort*)(Data))[i];
 								((ILushort*)(NewData))[i+3] = ((ILushort*)(Data))[i+3];
 							}
+						#endif
 							break;
 						case IL_UNSIGNED_INT:
 						case IL_INT:

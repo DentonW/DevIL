@@ -16,12 +16,21 @@
 ILboolean iFastConvert(ILenum DestFormat)
 {
 	ILuint		SizeOfData, i=0;
-	ILubyte		*BytePtr = iCurImage->Data, TempByte=0;
-	ILushort	*ShortPtr = (ILushort*)iCurImage->Data, TempShort=0;
-	ILuint		*IntPtr = (ILuint*)iCurImage->Data, TempInt=0;
-	ILfloat		*FloatPtr = (ILfloat*)iCurImage->Data, TempFloat=0;
-	ILdouble	*DblPtr = (ILdouble*)iCurImage->Data, TempDbl = 0;
+	ILubyte		*BytePtr = iCurImage->Data;
+	ILushort	*ShortPtr = (ILushort*)iCurImage->Data;
+	ILuint		*IntPtr = (ILuint*)iCurImage->Data;
+	ILfloat		*FloatPtr = (ILfloat*)iCurImage->Data;
+	ILdouble	*DblPtr = (ILdouble*)iCurImage->Data;
 
+#ifndef ALTIVEC_GCC
+	ILubyte TempByte = 0;
+	ILushort TempShort = 0;
+#endif
+	ILuint TempInt = 0;
+	ILfloat TempFloat = 0;
+	ILdouble TempDbl = 0;
+
+	
 	// We assume iCurImage is valid, since this is called from ilConvertImage.
 
 	switch (DestFormat)
@@ -194,6 +203,9 @@ ILboolean iFastConvert(ILenum DestFormat)
 
 				case IL_SHORT:
 				case IL_UNSIGNED_SHORT:
+				#ifdef ALTIVEC_GCC
+					abcd2cbad_short(ShortPtr,iCurImage->SizeOfData,ShortPtr);
+				#else
 					SizeOfData = iCurImage->SizeOfData / 8;  // 4*2
 					#ifdef USE_WIN32_ASM
 						__asm
@@ -215,6 +227,7 @@ ILboolean iFastConvert(ILenum DestFormat)
 							ShortPtr += 4;
 						}
 					#endif//USE_WIN32_ASM
+				#endif
 					return IL_TRUE;
 
 				case IL_INT:
