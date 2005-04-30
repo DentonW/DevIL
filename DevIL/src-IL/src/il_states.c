@@ -94,7 +94,7 @@ ILvoid ilDefaultStates()
 
 
 //! Returns a constant string detailing aspects about this library.
-const ILstring ILAPIENTRY ilGetString(ILenum StringName)
+ILstring ILAPIENTRY ilGetString(ILenum StringName)
 {
 	switch (StringName)
 	{

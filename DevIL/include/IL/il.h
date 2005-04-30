@@ -514,7 +514,7 @@ ILAPI ILint     ILAPIENTRY ilGetInteger(ILenum Mode);
 ILAPI ILvoid    ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param);
 ILAPI ILuint    ILAPIENTRY ilGetLumpPos(ILvoid);
 ILAPI ILubyte*  ILAPIENTRY ilGetPalette(ILvoid);
-ILAPI const ILstring ILAPIENTRY ilGetString(ILenum StringName);
+ILAPI ILstring  ILAPIENTRY ilGetString(ILenum StringName);
 ILAPI ILvoid    ILAPIENTRY ilHint(ILenum Target, ILenum Mode);
 ILAPI ILvoid    ILAPIENTRY ilInit(ILvoid);
 ILAPI ILboolean ILAPIENTRY ilIsDisabled(ILenum Mode);

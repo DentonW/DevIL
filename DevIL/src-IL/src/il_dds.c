@@ -100,27 +100,27 @@ ILboolean iGetDdsHead(DDSHEAD *Header)
 	if (iread(Header, sizeof(DDSHEAD), 1) != 1)
 		return IL_FALSE;
 
-	Int(&Header->Size1);
-	Int(&Header->Flags1);
-	Int(&Header->Height);
-	Int(&Header->Width);
-	Int(&Header->LinearSize);
-	Int(&Header->Depth);
-	Int(&Header->MipMapCount);
-	Int(&Header->AlphaBitDepth);
-	Int(&Header->Size2);
-	Int(&Header->Flags2);
-	Int(&Header->FourCC);
-	Int(&Header->RGBBitCount);
-	Int(&Header->RBitMask);
-	Int(&Header->GBitMask);
-	Int(&Header->BBitMask);
-	Int(&Header->RGBAlphaBitMask);
-	Int(&Header->ddsCaps1);
-	Int(&Header->ddsCaps2);
-	Int(&Header->ddsCaps3);
-	Int(&Header->ddsCaps4);
-	Int(&Header->TextureStage);
+	UInt(&Header->Size1);
+	UInt(&Header->Flags1);
+	UInt(&Header->Height);
+	UInt(&Header->Width);
+	UInt(&Header->LinearSize);
+	UInt(&Header->Depth);
+	UInt(&Header->MipMapCount);
+	UInt(&Header->AlphaBitDepth);
+	UInt(&Header->Size2);
+	UInt(&Header->Flags2);
+	UInt(&Header->FourCC);
+	UInt(&Header->RGBBitCount);
+	UInt(&Header->RBitMask);
+	UInt(&Header->GBitMask);
+	UInt(&Header->BBitMask);
+	UInt(&Header->RGBAlphaBitMask);
+	UInt(&Header->ddsCaps1);
+	UInt(&Header->ddsCaps2);
+	UInt(&Header->ddsCaps3);
+	UInt(&Header->ddsCaps4);
+	UInt(&Header->TextureStage);
 
 	if (Head.Depth == 0)
 		Head.Depth = 1;

@@ -197,7 +197,7 @@ ILAPI ILboolean		ILAPIENTRY ilutGetBoolean(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilutGetBooleanv(ILenum Mode, ILboolean *Param);
 ILAPI ILint			ILAPIENTRY ilutGetInteger(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilutGetIntegerv(ILenum Mode, ILint *Param);
-ILAPI const ILstring		ILAPIENTRY ilutGetString(ILenum StringName);
+ILAPI ILstring		ILAPIENTRY ilutGetString(ILenum StringName);
 ILAPI ILvoid		ILAPIENTRY ilutInit(ILvoid);
 ILAPI ILboolean		ILAPIENTRY ilutIsDisabled(ILenum Mode);
 ILAPI ILboolean		ILAPIENTRY ilutIsEnabled(ILenum Mode);

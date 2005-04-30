@@ -306,7 +306,7 @@ ILdouble GetBigDouble()
 ILubyte SaveLittleUShort(ILushort s)
 {
 #ifdef __BIG_ENDIAN__
-	_SwapShort(&s);
+	_SwapUShort(&s);
 #endif
 	return iwrite(&s, sizeof(ILushort), 1);
 }

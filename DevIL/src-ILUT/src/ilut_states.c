@@ -45,7 +45,7 @@ ILvoid ILAPIENTRY ilutD3D8MipFunc(ILuint NumLevels)
 }
 
 
-const ILstring ILAPIENTRY ilutGetString(ILenum StringName)
+ILstring ILAPIENTRY ilutGetString(ILenum StringName)
 {
 	switch (StringName)
 	{
