@@ -30,8 +30,4 @@ vector float fill_vector_f( float value ) {
 	return vec_splat(temp,0);
 }
 
-
-/*********  Format Conversion Functions   *********/
-
-
 #endif // ALTIVEC_GCC
