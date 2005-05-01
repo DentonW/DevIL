@@ -130,6 +130,9 @@ ILboolean iFastConvert(ILenum DestFormat)
 					return IL_TRUE;
 					
 				case IL_FLOAT:
+				#ifdef ALTIVEC_GCC
+					abc2cba_float(FloatPtr,iCurImage->SizeOfData,FloatPtr);
+				#else
 					SizeOfData = iCurImage->SizeOfData / 12;  // 3*4
 					for (i = 0; i < SizeOfData; i++) {
 						TempFloat = FloatPtr[0];
@@ -137,6 +140,7 @@ ILboolean iFastConvert(ILenum DestFormat)
 						FloatPtr[2] = TempFloat;
 						FloatPtr += 3;
 					}
+				#endif
 					return IL_TRUE;
 
 				case IL_DOUBLE:
