@@ -99,16 +99,16 @@ ILboolean ilLoadJascPal(const ILstring FileName)
 	}
 
 	iFgetw(Buff, BUFFLEN, PalFile);
-	if (stricmp(Buff, "JASC-PAL")) {
+	if (stricmp((ILbyte*)Buff, "JASC-PAL")) {
 		Error = IL_TRUE;
 	}
 	iFgetw(Buff, BUFFLEN, PalFile);
-	if (stricmp(Buff, "0100")) {
+	if (stricmp((ILbyte*)Buff, "0100")) {
 		Error = IL_TRUE;
 	}
 
 	iFgetw(Buff, BUFFLEN, PalFile);
-	NumColours = atoi(Buff);
+	NumColours = atoi((ILbyte*)Buff);
 	if (NumColours == 0 || Error) {
 		ilSetError(IL_INVALID_FILE_HEADER);
 		fclose(PalFile);
@@ -126,7 +126,7 @@ ILboolean ilLoadJascPal(const ILstring FileName)
 	for (i = 0; i < NumColours; i++) {
 		for (c = 0; c < PALBPP; c++) {
 			iFgetw(Buff, BUFFLEN, PalFile);
-			Pal->Palette[i * PALBPP + c] = atoi(Buff);
+			Pal->Palette[i * PALBPP + c] = atoi((ILbyte*)Buff);
 		}
 	}
 
@@ -138,7 +138,7 @@ ILboolean ilLoadJascPal(const ILstring FileName)
 
 // File Get Word
 //	MaxLen must be greater than 1, because the trailing NULL is always stored.
-char *iFgetw(char *Buff, ILint MaxLen, FILE *File)
+char *iFgetw(ILubyte *Buff, ILint MaxLen, FILE *File)
 {
 	ILbyte Temp;
 	ILint i;
@@ -174,7 +174,7 @@ char *iFgetw(char *Buff, ILint MaxLen, FILE *File)
 	}
 
 	Buff[i] = '\0';
-	return Buff;
+	return (ILbyte*)Buff;
 }
 
 
