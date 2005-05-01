@@ -12,8 +12,8 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				OTHER_CFLAGS = "-DHAVE_CONFIG_H";
-				OTHER_CPLUSPLUSFLAGS = "-DHAVE_CONFIG_H";
+				OTHER_CFLAGS = "-DHAVE_CONFIG_H -maltivec";
+				OTHER_CPLUSPLUSFLAGS = "-DHAVE_CONFIG_H -maltivec";
 				ZERO_LINK = YES;
 			};
 			isa = PBXBuildStyle;
@@ -434,6 +434,7 @@
 				A30B348C0818DB400067D04E,
 				A30B348D0818DB400067D04E,
 				A30B349E0818DB5C0067D04E,
+				A35E96760823F02E0061C1C7,
 				A30B348E0818DB400067D04E,
 				A30B348F0818DB400067D04E,
 				A30B34900818DB400067D04E,
@@ -1362,6 +1363,15 @@
 			settings = {
 			};
 		};
+		A35E96760823F02E0061C1C7 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.script.sh;
+			name = configure;
+			path = ../../configure;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
 		A36D0EDF080E81800012BB8B = {
 			containerPortal = 08FB7793FE84155DC02AAC07;
 			isa = PBXContainerItemProxy;
@@ -2263,7 +2273,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "# get to the root of the installation\ncd ../../\n\n# check if configure script is available or generate it\nif [ ! -x configure ] ; then\n\t./autogen.sh\nfi\n\n# call configuration script\n./configure\n\n# successfull exit\nexit $?\n";
+			shellScript = "# get to the root of the installation\ncd ../../\n\n# check if configure script is available or generate it\nif [ ! -x configure ] ; then\n\t./autogen.sh\nfi\n\n# call configuration script\nif [ |\n./configure\n\n# successfull exit\nexit $?\n";
 		};
 		A36D10E8080E8E5D0012BB8B = {
 			buildPhases = (
