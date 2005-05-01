@@ -26,8 +26,8 @@ ILboolean iFastConvert(ILenum DestFormat)
 	ILubyte TempByte = 0;
 	ILushort TempShort = 0;
 	ILuint TempInt = 0;
-#endif
 	ILfloat TempFloat = 0;
+#endif
 	ILdouble TempDbl = 0;
 
 	
