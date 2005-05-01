@@ -174,4 +174,9 @@ void abcd2cbad_short( ILushort *data, ILuint length, ILushort *newdata ) {
 	abcd2cbad_internal(p,(ILubyte*)data,length,(ILubyte*)newdata);
 }
 
+void abcd2cbad_int( ILuint *data, ILuint length, ILuint *newdata ) {
+	const vector unsigned char p = (vector unsigned char)(0x08,0x09,0x0A,0x0B,0x04,0x05,0x06,0x07,0x00,0x01,0x02,0x03,0x0C,0x0D,0x0E,0x0F);
+	abcd2cbad_internal(p,(ILubyte*)data,length,(ILubyte*)newdata);
+}
+
 #endif

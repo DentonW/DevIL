@@ -25,8 +25,8 @@ ILboolean iFastConvert(ILenum DestFormat)
 #ifndef ALTIVEC_GCC
 	ILubyte TempByte = 0;
 	ILushort TempShort = 0;
-#endif
 	ILuint TempInt = 0;
+#endif
 	ILfloat TempFloat = 0;
 	ILdouble TempDbl = 0;
 
@@ -232,6 +232,9 @@ ILboolean iFastConvert(ILenum DestFormat)
 
 				case IL_INT:
 				case IL_UNSIGNED_INT:
+				#ifdef ALTIVEC_GCC
+					abcd2cbad_int(IntPtr,iCurImage->SizeOfData,IntPtr);
+				#else
 					SizeOfData = iCurImage->SizeOfData / 16;  // 4*4
 					#ifdef USE_WIN32_ASM
 						__asm
@@ -253,6 +256,7 @@ ILboolean iFastConvert(ILenum DestFormat)
 							IntPtr += 4;
 						}
 					#endif//USE_WIN32_ASM
+				#endif
 					return IL_TRUE;
 
 				case IL_FLOAT:
