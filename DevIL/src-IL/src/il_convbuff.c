@@ -109,13 +109,15 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 						#endif
 							break;
 						case IL_FLOAT:
+						#ifdef ALTIVEC_GCC
+							abc2cba_float(Data,NumPix * BpcDest,NewData);
+						#else
 							for (i = 0; i < NumPix; i += 3) {
 								((ILfloat*)(NewData))[i] = ((ILfloat*)(Data))[i+2];
 								((ILfloat*)(NewData))[i+1] = ((ILfloat*)(Data))[i+1];
 								((ILfloat*)(NewData))[i+2] = ((ILfloat*)(Data))[i];
 							}
-							break;
-
+						#endif
 							break;
 						case IL_DOUBLE:
 						#ifdef ALTIVEC_GCC
@@ -408,12 +410,16 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 						#endif
 							break;
 						case IL_FLOAT:
+						#ifdef ALTIVEC_GCC
+							abcd2cbad_float(Data,iCurImage->SizeOfData,NewData);
+						#else
 							for (i = 0; i < NumPix; i += 4) {
 								((ILfloat*)(NewData))[i] = ((ILfloat*)(Data))[i+2];
 								((ILfloat*)(NewData))[i+1] = ((ILfloat*)(Data))[i+1];
 								((ILfloat*)(NewData))[i+2] = ((ILfloat*)(Data))[i];
 								((ILfloat*)(NewData))[i+3] = ((ILfloat*)(Data))[i+3];
 							}
+						#endif
 							break;
 						case IL_DOUBLE:
 							for (i = 0; i < NumPix; i += 4) {
@@ -690,11 +696,15 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 						#endif
 							break;
 						case IL_FLOAT:
+						#ifdef ALTIVEC_GCC
+							abc2cba_float(Data,NumPix * BpcDest,NewData);
+						#else
 							for (i = 0; i < NumPix; i += 3) {
 								((ILfloat*)(NewData))[i] = ((ILfloat*)(Data))[i+2];
 								((ILfloat*)(NewData))[i+1] = ((ILfloat*)(Data))[i+1];
 								((ILfloat*)(NewData))[i+2] = ((ILfloat*)(Data))[i];
 							}
+						#endif
 							break;
 						case IL_DOUBLE:
 						#ifdef ALTIVEC_GCC
@@ -987,12 +997,16 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 						#endif
 							break;
 						case IL_FLOAT:
+						#ifdef ALTIVEC_GCC
+							abcd2cbad_float(NewData,iCurImage->SizeOfData,NewData);
+						#else
 							for (i = 0; i < NumPix; i += 4) {
 								((ILfloat*)(NewData))[i] = ((ILfloat*)(Data))[i+2];
 								((ILfloat*)(NewData))[i+1] = ((ILfloat*)(Data))[i+1];
 								((ILfloat*)(NewData))[i+2] = ((ILfloat*)(Data))[i];
 								((ILfloat*)(NewData))[i+3] = ((ILfloat*)(Data))[i+3];
 							}
+						#endif
 							break;
 						case IL_DOUBLE:
 							for (i = 0; i < NumPix; i += 4) {
