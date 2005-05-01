@@ -19,7 +19,7 @@ const ILstring _iluVendor	= IL_TEXT("Abysmal Software");
 const ILstring _iluVersion	= IL_TEXT("Developer's Image Library Utilities (ILU) 1.6.7 " __DATE__);
 
 
-const ILstring ILAPIENTRY iluGetString(ILenum StringName)
+ILstring ILAPIENTRY iluGetString(ILenum StringName)
 {
 	switch (StringName)
 	{

@@ -43,7 +43,7 @@ const ILstring iluLibErrorStrings[IL_LIB_MNG_ERROR - IL_LIB_GIF_ERROR + 1] = {
 };
 
 
-const ILstring ILAPIENTRY iluErrorString(ILenum Error)
+ILstring ILAPIENTRY iluErrorString(ILenum Error)
 {
 	if (Error == IL_NO_ERROR) {
 		return (const ILstring)"no error";
