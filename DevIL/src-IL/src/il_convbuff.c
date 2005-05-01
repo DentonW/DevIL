@@ -422,12 +422,16 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 						#endif
 							break;
 						case IL_DOUBLE:
+						#ifdef ALTIVEC_GCC
+							abcd2cbad_double((ILdouble*)Data,iCurImage->SizeOfData,(ILdouble*)NewData);
+						#else
 							for (i = 0; i < NumPix; i += 4) {
 								((ILdouble*)(NewData))[i] = ((ILdouble*)(Data))[i+2];
 								((ILdouble*)(NewData))[i+1] = ((ILdouble*)(Data))[i+1];
 								((ILdouble*)(NewData))[i+2] = ((ILdouble*)(Data))[i];
 								((ILdouble*)(NewData))[i+3] = ((ILdouble*)(Data))[i+3];
 							}
+						#endif
 							break;
 					}
 					break;
@@ -1009,12 +1013,16 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 						#endif
 							break;
 						case IL_DOUBLE:
+						#ifdef ALTIVEC_GCC
+							abcd2cbad_double((ILdouble*)Data,iCurImage->SizeOfData,(ILdouble*)NewData);
+						#else
 							for (i = 0; i < NumPix; i += 4) {
 								((ILdouble*)(NewData))[i] = ((ILdouble*)(Data))[i+2];
 								((ILdouble*)(NewData))[i+1] = ((ILdouble*)(Data))[i+1];
 								((ILdouble*)(NewData))[i+2] = ((ILdouble*)(Data))[i];
 								((ILdouble*)(NewData))[i+3] = ((ILdouble*)(Data))[i+3];
 							}
+						#endif
 							break;
 					}
 					break;

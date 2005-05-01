@@ -168,4 +168,64 @@ void abcd2cbad_int( ILuint *data, ILuint length, ILuint *newdata ) {
 	abcd2cbad_internal(p,(ILubyte*)data,length,(ILubyte*)newdata);
 }
 
+void abcd2cbad_double( ILdouble *tdata, ILuint length, ILdouble *tnewdata ) {
+	register ILubyte *data = (ILubyte*)tdata;
+	register ILubyte *newdata = (ILubyte*)tnewdata;
+	const vector unsigned char p = (vector unsigned char)(0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F);
+	register vector unsigned char d0,d1,d2,d3,t0,t1,t2,t3;
+	
+	float pixgrp = length / 16;
+	length = ((int)(pixgrp*10)%10) > 0 ? pixgrp : pixgrp+1;
+	
+	if( length >= 4 ) {
+		length -= 4;
+		
+		d3 = vec_ld(48,data);
+		d2 = vec_ld(32,data);
+		d1 = vec_ld(16,data);
+		d0 = vec_ld(0,data);
+		
+		while( length >= 4 ) {
+			t0 = vec_perm(d0,d1,p);
+			t1 = vec_perm(d1,d0,p);
+			t2 = vec_perm(d2,d3,p);
+			t3 = vec_perm(d3,d2,p);
+			
+			vec_st(t3,48,newdata);
+			vec_st(t2,32,newdata);
+			vec_st(t1,16,newdata);
+			vec_st(t0,0,newdata);
+			
+			length -= 4;
+			data += 16*4;
+			newdata += 16*4;
+			
+			d3 = vec_ld(48,data);
+			d2 = vec_ld(32,data);
+			d1 = vec_ld(16,data);
+			d0 = vec_ld(0,data);
+		}
+		t0 = vec_perm(d0,d1,p);
+		t1 = vec_perm(d1,d0,p);
+		t2 = vec_perm(d2,d3,p);
+		t3 = vec_perm(d3,d2,p);
+		
+		vec_st(d0,0,newdata);
+		vec_st(d1,16,newdata);
+		vec_st(d2,32,newdata);
+		vec_st(d3,48,newdata);
+	}
+	
+	if( length == 2 ) {
+		d0 = vec_ld(0,data);
+		d1 = vec_ld(16,data);
+		
+		t0 = vec_perm(d0,d1,p);
+		t1 = vec_perm(d1,d0,p);
+		
+		vec_st(t0,0,newdata);
+		vec_st(t1,16,newdata);
+	}
+}
+
 #endif

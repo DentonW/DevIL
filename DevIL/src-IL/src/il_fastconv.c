@@ -15,7 +15,7 @@
 
 ILboolean iFastConvert(ILenum DestFormat)
 {
-	ILuint		SizeOfData, i=0;
+	
 	ILubyte		*BytePtr = iCurImage->Data;
 	ILushort	*ShortPtr = (ILushort*)iCurImage->Data;
 	ILuint		*IntPtr = (ILuint*)iCurImage->Data;
@@ -23,12 +23,14 @@ ILboolean iFastConvert(ILenum DestFormat)
 	ILdouble	*DblPtr = (ILdouble*)iCurImage->Data;
 
 #ifndef ALTIVEC_GCC
+	ILuint		SizeOfData, i=0;
 	ILubyte TempByte = 0;
 	ILushort TempShort = 0;
 	ILuint TempInt = 0;
 	ILfloat TempFloat = 0;
-#endif
 	ILdouble TempDbl = 0;
+#endif
+	
 
 	
 	// We assume iCurImage is valid, since this is called from ilConvertImage.
@@ -278,6 +280,9 @@ ILboolean iFastConvert(ILenum DestFormat)
 					return IL_TRUE;
 
 				case IL_DOUBLE:
+				#ifdef ALTIVEC_GCC
+					abcd2cbad_double(DblPtr,iCurImage->SizeOfData,DblPtr);
+				#else
 					SizeOfData = iCurImage->SizeOfData / 32;  // 4*8
 					for (i = 0; i < SizeOfData; i++) {
 						TempDbl = DblPtr[0];
@@ -285,6 +290,7 @@ ILboolean iFastConvert(ILenum DestFormat)
 						DblPtr[2] = TempDbl;
 						DblPtr += 4;
 					}
+				#endif
 					return IL_TRUE;
 			}
 	}

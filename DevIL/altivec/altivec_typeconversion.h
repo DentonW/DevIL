@@ -22,5 +22,6 @@ void abcd2cbad_byte( ILubyte *data, ILuint length, ILubyte *newdata );
 void abcd2cbad_short( ILushort *data, ILuint length, ILushort *newdata );
 void abcd2cbad_int( ILuint *data, ILuint length, ILuint *newdata );
 #define abcd2cbad_float(x,y,z) abcd2cbad_int(((ILuint*)(x)),y,((ILuint*)(z)))
+void abcd2cbad_double( ILdouble *data, ILuint length, ILdouble *newdata );
 
 #endif
