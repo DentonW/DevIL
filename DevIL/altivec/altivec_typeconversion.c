@@ -17,18 +17,14 @@ static inline void abc2cba_internal( register const vector unsigned char p[4], u
 		d0 = vec_ld(0,data);
 		
 		while( length >= 3 ) {
-			t0 = d0; // used to avoid stall in the permutation
-			t1 = d1; // not the whole register is overwritten
-			t2 = d2;
+			t0 = vec_perm(d0,d1,p[0]);
+			t1 = vec_perm(d1,d0,p[1]);
+			t2 = vec_perm(d2,d1,p[2]);
+			t1 = vec_perm(t1,d2,p[3]);
 			
-			d0 = vec_perm(d0,t1,p[0]);
-			d1 = vec_perm(d1,t0,p[1]);
-			d2 = vec_perm(d2,t1,p[2]);
-			d1 = vec_perm(d1,t2,p[3]);
-			
-			vec_st(d0,0,newdata);
-			vec_st(d1,16,newdata);
-			vec_st(d2,32,newdata);
+			vec_st(t0,0,newdata);
+			vec_st(t1,16,newdata);
+			vec_st(t2,32,newdata);
 			
 			length -= 3;
 			data += 16*3;
@@ -38,36 +34,29 @@ static inline void abc2cba_internal( register const vector unsigned char p[4], u
 			d1 = vec_ld(16,data);
 			d0 = vec_ld(0,data);
 		}
-		t0 = d0; // used to avoid stall in the permutation
-		t1 = d1; // not the whole register is overwritten
-		t2 = d2;
+		t0 = vec_perm(d0,d1,p[0]);
+		t1 = vec_perm(d1,d0,p[1]);
+		t2 = vec_perm(d2,d1,p[2]);
+		t1 = vec_perm(t1,d2,p[3]);
 		
-		d0 = vec_perm(d0,t1,p[0]);
-		d1 = vec_perm(d1,t0,p[1]);
-		d2 = vec_perm(d2,t1,p[2]);
-		d1 = vec_perm(d1,t2,p[3]);
-		
-		vec_st(d0,0,newdata);
-		vec_st(d1,16,newdata);
-		vec_st(d2,32,newdata);
+		vec_st(t0,0,newdata);
+		vec_st(t1,16,newdata);
+		vec_st(t2,32,newdata);
 	}
 	
 	if( length == 2 ) {
 		d0 = vec_ld(0,data);
 		d1 = vec_ld(16,data);
 		
-		t0 = d0;
-		t1 = d1;
+		t0 = vec_perm(d0,d1,p[0]);
+		t1 = vec_perm(d1,d0,p[1]);
 		
-		d0 = vec_perm(d0,t1,p[0]);
-		d1 = vec_perm(d1,t0,p[1]);
-		
-		vec_st(d0,0,newdata);
-		vec_st(d1,16,newdata);
+		vec_st(t0,0,newdata);
+		vec_st(t1,16,newdata);
 	} else if( length == 1 ) {
 		d0 = vec_ld(0,data);
-		d0 = vec_perm(d0,d0,p[0]);
-		vec_st(d0,0,newdata);
+		t0 = vec_perm(d0,d0,p[0]);
+		vec_st(t0,0,newdata);
 	}
 }
 
