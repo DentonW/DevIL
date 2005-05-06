@@ -49,12 +49,12 @@
 #endif
 
 
-ILvoid	_SwapUShort(ILushort *s);
-ILvoid	_SwapShort(ILshort *s);
-ILvoid	_SwapUInt(ILuint *i);
-ILvoid	_SwapInt(ILint *i);
-ILvoid	_SwapFloat(ILfloat *f);
-ILvoid	_SwapDouble(ILdouble *d);
+inline ILvoid	_SwapUShort(ILushort *s);
+inline ILvoid	_SwapShort(ILshort *s);
+inline ILvoid	_SwapUInt(ILuint *i);
+inline ILvoid	_SwapInt(ILint *i);
+inline ILvoid	_SwapFloat(ILfloat *f);
+inline ILvoid	_SwapDouble(ILdouble *d);
 
 
 // Only seem to work on unsigned values properly...
