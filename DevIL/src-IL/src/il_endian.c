@@ -14,8 +14,6 @@
 #include "il_internal.h"
 #include "il_endian.h"
 
-#define MACOSX
-
 ILvoid _SwapUShort(ILushort *s)
 {
 	#ifdef USE_WIN32_ASM
@@ -429,13 +427,15 @@ ILvoid EndianSwapData(void *_Image)
 			switch (Image->Bpp)
 			{
 				case 3:
+					/*
 					temp = ialloc(Image->SizeOfData);
 					if (temp == NULL)
 						return;
 					s = Image->Data;
 					d = temp;
+					*/
 
-					for (i = Image->Width * Image->Height; i > 0; i--) {
+					for( i = Image->Width * Image->Height; i > 0; i-- ) {
 						*d++ = *(s+2);
 						*d++ = *(s+1);
 						*d++ = *s;
