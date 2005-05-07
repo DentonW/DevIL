@@ -205,18 +205,21 @@ ILboolean ilLoadDdsL(ILvoid *Lump, ILuint Size)
 
 ILubyte iCompFormatToBpp(ILenum Format)
 {
-	if (Format == PF_RGB || Format == PF_3DC || Format == PF_RXGB)
+	//non-compressed (= non-FOURCC) codes
+	if (Format == PF_LUMINANCE || Format == PF_LUMINANCE_ALPHA || Format == PF_ARGB)
+		return Head.RGBBitCount/8;
+
+	//fourcc formats
+	else if (Format == PF_RGB || Format == PF_3DC || Format == PF_RXGB)
 		return 3;
-	else if (Format == PF_LUMINANCE)
-		return 1;
-	else if (Format == PF_LUMINANCE_ALPHA || Format == PF_R16F)
+	else if (Format == PF_R16F)
 		return 2;
 	else if (Format == PF_A16B16G16R16 || Format == PF_A16B16G16R16F
 		|| Format == PF_G32R32F)
 		return 8;
 	else if (Format == PF_A32B32G32R32F)
 		return 16;
-	else //if (Format == PF_ARGB || Format == PF_G16R16F || Format == PF_R32F || dxt)
+	else //if (Format == PF_G16R16F || Format == PF_R32F || dxt)
 		return 4;
 }
 
@@ -256,6 +259,9 @@ ILboolean iLoadDdsCubemapInternal()
 	Bpp = iCompFormatToBpp(CompFormat);
 	Channels = iCompFormatToChannelCount(CompFormat);
 	Bpc = iCompFormatToBpc(CompFormat);
+	if(CompFormat == PF_LUMINANCE && Head.RGBBitCount == 16 && Head.RBitMask == 0xFFFF) { //HACK
+		Bpc = 2; Bpp = 2;
+	}
 
 	startImage = Image;
 	// run through cube map possibilities
@@ -646,8 +652,13 @@ ILboolean AllocImage()
 				return IL_FALSE;
 			break;
 		case PF_LUMINANCE:
-			if (!ilTexImage(Width, Height, Depth, 1, IL_LUMINANCE, IL_UNSIGNED_BYTE, NULL))
-				return IL_FALSE;
+			if(Head.RGBBitCount == 16 && Head.RBitMask == 0xFFFF) { //HACK
+				if (!ilTexImage(Width, Height, Depth, 1, IL_LUMINANCE, IL_UNSIGNED_SHORT, NULL))
+					return IL_FALSE;
+			}
+			else
+				if (!ilTexImage(Width, Height, Depth, 1, IL_LUMINANCE, IL_UNSIGNED_BYTE, NULL))
+					return IL_FALSE;
 			break;
 		case PF_LUMINANCE_ALPHA:
 			if (!ilTexImage(Width, Height, Depth, 2, IL_LUMINANCE_ALPHA, IL_UNSIGNED_BYTE, NULL))
@@ -766,6 +777,9 @@ ILboolean ReadMipmaps()
 	Bpp = iCompFormatToBpp(CompFormat);
 	Channels = iCompFormatToChannelCount(CompFormat);
 	Bpc = iCompFormatToBpc(CompFormat);
+	if(CompFormat == PF_LUMINANCE && Head.RGBBitCount == 16 && Head.RBitMask == 0xFFFF) { //HACK
+		Bpc = 2; Bpp = 2;
+	}
 
 	//This doesn't work for images which first mipmap (= the image
 	//itself) has width or height < 4
@@ -837,6 +851,8 @@ ILboolean ReadMipmaps()
 				Image->Type = IL_FLOAT;
 				Image->Bpp = Channels;
 			}
+			else if (CompFormat == PF_A16B16G16R16)
+				Head.LinearSize = Width * Height * Depth * Bpp;
 			else if (CompFormat != PF_RGB && CompFormat != PF_ARGB
 				&& CompFormat != PF_LUMINANCE
 				&& CompFormat != PF_LUMINANCE_ALPHA) {
@@ -1502,9 +1518,6 @@ ILboolean iConvFloat16ToFloat32(ILuint* dest, ILushort* src, ILuint size)
 
 ILboolean DecompressFloat()
 {
-	if(Head.FourCC == IL_MAKEFOURCC('$', '\0', '\0', '\0'))
-		Image->Format = IL_BGRA;
-
 	switch(CompFormat)
 	{
 		case PF_R32F:
@@ -1545,6 +1558,11 @@ ILboolean DecompressARGB()
 
 	if (!CompData)
 		return IL_FALSE;
+
+	if(CompFormat == PF_LUMINANCE && Head.RGBBitCount == 16 && Head.RBitMask == 0xFFFF) { //HACK
+		memcpy(Image->Data, CompData, Image->SizeOfData);
+		return IL_TRUE;
+	}
 
 	GetBitsFromMask(Head.RBitMask, &RedL, &RedR);
 	GetBitsFromMask(Head.GBitMask, &GreenL, &GreenR);
