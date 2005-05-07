@@ -30,6 +30,7 @@ ILvoid iGLSetMaxH(ILuint Height)
 #include "ilut_internal.h"
 #ifdef ILUT_USE_OPENGL
 
+
 #include <stdio.h>
 #include <string.h>
 
@@ -39,6 +40,9 @@ ILvoid iGLSetMaxH(ILuint Height)
 //	#pragma comment(lib, "freeglut.lib")
 #endif
 
+#ifdef linux
+	#include <GL/glx.h>
+#endif
 
 //used for automatic texture target detection
 #define ILGL_TEXTURE_CUBE_MAP				0x8513
@@ -54,7 +58,7 @@ ILvoid iGLSetMaxH(ILuint Height)
 
 
 ILboolean HasCubemapHardware = IL_FALSE;
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(linux)
 	ILGLCOMPRESSEDTEXIMAGE2DARBPROC ilGLCompressed2D = NULL;
 #endif
 
@@ -89,7 +93,14 @@ ILboolean ilutGLInit()
 			ilGLCompressed2D = (ILGLCOMPRESSEDTEXIMAGE2DARBPROC)
 				wglGetProcAddress("glCompressedTexImage2DARB");
 	}
+#elif linux
+	if (IsExtensionSupported("GL_ARB_texture_compression") &&
+		IsExtensionSupported("GL_EXT_texture_compression_s3tc")) {
+			ilGLCompressed2D = (ILGLCOMPRESSEDTEXIMAGE2DARBPROC)
+				glXGetProcAddressARB("glCompressedTexImage2DARB");
+	}
 #endif
+
 
 	if (IsExtensionSupported("GL_ARB_texture_cube_map"))
 		HasCubemapHardware = IL_TRUE;
@@ -169,7 +180,7 @@ ILuint GLGetDXTCNum(ILenum DXTCFormat)
 ILboolean ILAPIENTRY ilutGLTexImage_(GLuint Level, GLuint Target, ILimage *Image)
 {
 	ILimage	*ImageCopy, *OldImage;
-#ifdef _MSC_VER
+#if defined (_MSC_VER) || defined (linux)
 	ILenum	DXTCFormat;
 	ILuint	Size;
 	ILubyte	*Buffer;
@@ -182,7 +193,7 @@ ILboolean ILAPIENTRY ilutGLTexImage_(GLuint Level, GLuint Target, ILimage *Image
 
 	OldImage = ilGetCurImage();
 
-#ifdef _MSC_VER
+#if defined (_MSC_VER) || defined (linux)
 	if (ilutGetBoolean(ILUT_GL_USE_S3TC) && ilGLCompressed2D != NULL) {
 		if (Image->DxtcData != NULL && Image->DxtcSize != 0) {
 			DXTCFormat = GLGetDXTCNum(Image->DxtcFormat);
