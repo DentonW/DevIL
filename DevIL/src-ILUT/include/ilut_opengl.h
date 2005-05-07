@@ -32,7 +32,11 @@ ILboolean IsExtensionSupported(const char *extension);
 #ifdef _WIN32
 	#include <windows.h>
 	typedef void (ILAPIENTRY * ILGLCOMPRESSEDTEXIMAGE2DARBPROC) (GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *data);
+#elif __linux__
+	#include <GL/gl.h>
+	typedef void (ILAPIENTRY * ILGLCOMPRESSEDTEXIMAGE2DARBPROC) (GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *data);
 #endif
+
 
 #endif ILUT_USE_OPENGL
 #endif//ILUT_OPENGL_H
