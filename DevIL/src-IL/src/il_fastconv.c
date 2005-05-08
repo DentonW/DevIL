@@ -30,10 +30,6 @@ ILboolean iFastConvert(ILenum DestFormat)
 	ILfloat TempFloat = 0;
 	ILdouble TempDbl = 0;
 #endif
-	
-
-	
-	// We assume iCurImage is valid, since this is called from ilConvertImage.
 
 	switch (DestFormat)
 	{
@@ -177,15 +173,6 @@ ILboolean iFastConvert(ILenum DestFormat)
 					#ifdef USE_WIN32_ASM
 						__asm
 						{
-							/*mov ebx, BytePtr
-							mov ecx, SizeOfData
-							L4:
-								mov al,[ebx+0]
-								xchg al,[ebx+2]
-								mov [ebx+0],al
-								add ebx,4
-								loop L4*/
-
 							mov ebx, BytePtr
 							mov ecx, SizeOfData
 							L4:
