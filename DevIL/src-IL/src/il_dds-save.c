@@ -111,7 +111,7 @@ ILboolean iSaveDdsInternal()
 // @TODO:  Finish this, as it is incomplete.
 ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat)
 {
-	ILuint i, FourCC, Flags1 = 0, Flags2 = 0, ddsCaps1 = 0, LinearSize;
+	ILuint i, FourCC, Flags1 = 0, Flags2 = 0, ddsCaps1 = 0, LinearSize, BlockSize;
 
 	Flags1 |= DDS_LINEARSIZE | DDS_MIPMAPCOUNT 
 			| DDS_WIDTH | DDS_HEIGHT | DDS_CAPS | DDS_PIXELFORMAT;
@@ -159,11 +159,13 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat)
 	SaveLittleUInt(Image->Width);
 
 	if (DXTCFormat == IL_DXT1) {
-		LinearSize = Image->Width * Image->Height / 16 * 8;
+		BlockSize = 8;
 	}
 	else {
-		LinearSize = Image->Width * Image->Height / 16 * 16;
+		BlockSize = 16;
 	}
+	LinearSize = (((Image->Width + 3)/4) * ((Image->Height + 3)/4)) * BlockSize;
+
 	SaveLittleUInt(LinearSize);	// LinearSize
 	SaveLittleUInt(0);			// Depth
 	SaveLittleUInt(ilGetInteger(IL_NUM_MIPMAPS) + 1);  // MipMapCount
@@ -202,6 +204,7 @@ ILuint ILAPIENTRY ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize, ILenum DXTCFo
 {
 	ILubyte	*CurData = NULL;
 	ILuint	retVal;
+	ILint BlockNum;
 
 	if (Buffer == NULL) {  // Return the number that will be written with a subsequent call.
 		if (ilNextPower2(iCurImage->Width) != iCurImage->Width ||
@@ -210,15 +213,17 @@ ILuint ILAPIENTRY ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize, ILenum DXTCFo
 				return 0;
 		}
 
+		BlockNum = ((iCurImage->Width + 3)/4) * ((iCurImage->Height + 3)/4);
+
 		switch (DXTCFormat)
 		{
 			case IL_DXT1:
-				return iCurImage->Width * iCurImage->Height / 16 * 8;
+				return BlockNum * 8;
 			case IL_DXT3:
 			case IL_DXT5:
 			case IL_3DC:
 			case IL_RXGB:
-				return iCurImage->Width * iCurImage->Height / 16 * 16;
+				return BlockNum * 16;
 			default:
 				ilSetError(IL_FORMAT_NOT_SUPPORTED);
 				return 0;
@@ -654,7 +659,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 		}
 
 		ifree(Data);
-                ifree(Alpha);
+		ifree(Alpha);
 	} //else no 3dc
 
 	return Count;
