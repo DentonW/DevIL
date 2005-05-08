@@ -773,6 +773,7 @@ ILboolean ReadMipmaps()
 	ILimage	*StartImage, *TempImage;
 	ILuint	LastLinear;
 	ILuint	minW, minH;
+	ILboolean isCompressed = IL_FALSE;
 
 	Bpp = iCompFormatToBpp(CompFormat);
 	Channels = iCompFormatToChannelCount(CompFormat);
@@ -856,9 +857,11 @@ ILboolean ReadMipmaps()
 			else if (CompFormat != PF_RGB && CompFormat != PF_ARGB
 				&& CompFormat != PF_LUMINANCE
 				&& CompFormat != PF_LUMINANCE_ALPHA) {
+				//compressed format
 				minW = IL_MAX(4, Width);
 				minH = IL_MAX(4, Height);
 				Head.LinearSize = (minW * minH * Depth * Bpp) / CompFactor;
+				isCompressed = IL_TRUE;
 			}
 			else {
 				//don't use Bpp to support argb images with less than 32 bits
@@ -871,6 +874,16 @@ ILboolean ReadMipmaps()
 
 		if (!ReadData())
 			goto mip_fail;
+
+		if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE && isCompressed == IL_TRUE && CompData) {
+			Image->DxtcData = (ILubyte*)ialloc(Head.LinearSize);
+			if (Image->DxtcData == NULL)
+				return IL_FALSE;
+			Image->DxtcFormat = CompFormat - PF_DXT1 + IL_DXT1;
+			Image->DxtcSize = Head.LinearSize;
+			memcpy(Image->DxtcData, CompData, Image->DxtcSize);
+		}
+
 		if (!Decompress())
 			goto mip_fail;
 	}
