@@ -30,4 +30,9 @@ vector float fill_vector_f( float value ) {
 	return vec_splat(temp,0);
 }
 
+inline unsigned int round16( unsigned int v ) {
+	return ((int)((v/16)*10)%10) > 0 ? (v/16) : (v/16)+1;
+}
+
+
 #endif // ALTIVEC_GCC

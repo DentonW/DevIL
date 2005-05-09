@@ -1,13 +1,12 @@
-//-----------------------------------------------------------------------------
-//
-// ImageLib Sources
-// Last modified: 17/04/2005
-// by Meloni Dario
-// 
-// Description: Common altivec function.
-//
-//-----------------------------------------------------------------------------
+/*
+ *  altivec_typeconversion.h
+ *  DevIL
+ *
+ *  Created by Meloni Dario on 17/04/05.
+ *
+ */
 
+#include "config.h"
 #include <IL/il.h>
 
 #ifdef ALTIVEC_GCC
@@ -28,6 +27,9 @@ typedef union {
 
 // Fills a vector with the specified value
 vector float fill_vector_f( float value );
+
+#define eround(v,x) (((int)((v/x)*10)%10) > 0 ? (v/x) : (v/x)+1)
+#define eround16(v) eround(v,16)
 
 #endif
 #endif

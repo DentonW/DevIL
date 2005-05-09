@@ -2,13 +2,14 @@
  *  altivec_typeconversion.h
  *  DevIL
  *
- *  Created by Dario on 24/04/05.
- *  Copyright 2005 __MyCompanyName__. All rights reserved.
+ *  Created by Meloni Dario on 24/04/05.
  *
  */
 
 #include "altivec_common.h"
 #ifdef ALTIVEC_GCC
+
+// data and newdata may be the same buffer
 
 // Used to convert RGB <-> BGR in various data types
 void abc2cba_byte( ILubyte *data, ILuint length, ILubyte *newdata );

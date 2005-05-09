@@ -6,9 +6,8 @@
 static inline void abc2cba_internal( register const vector unsigned char p[4], unsigned char *data, register unsigned int length, unsigned char *newdata ) {
 	register vector unsigned char d0,d1,d2,t0,t1,t2;
 
-	float pixgrp = length / 16;
-	length = ((int)(pixgrp*10)%10) > 0 ? pixgrp : pixgrp+1;
-	
+	length = eround16(length);
+		
 	if( length >= 3 ) {
 		length -= 3;
 		
@@ -64,8 +63,7 @@ static inline void abcd2cbad_internal( register const vector unsigned char p, un
 	register vector unsigned char d0,d1,d2,z;
 	z = vec_splat_u8(0);
 	
-	float pixgrp = length / 16;
-	length = ((int)(pixgrp*10)%10) > 0 ? pixgrp : pixgrp+1;
+	length = eround16(length);
 	
 	if( length >= 3 ) {
 		length -= 3;
@@ -174,8 +172,7 @@ void abcd2cbad_double( ILdouble *tdata, ILuint length, ILdouble *tnewdata ) {
 	const vector unsigned char p = (vector unsigned char)(0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F);
 	register vector unsigned char d0,d1,d2,d3,t0,t1,t2,t3;
 	
-	float pixgrp = length / 16;
-	length = ((int)(pixgrp*10)%10) > 0 ? pixgrp : pixgrp+1;
+	length = eround16(length);
 	
 	if( length >= 4 ) {
 		length -= 4;
