@@ -37,7 +37,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.45 $)
+AC_REVISION($Revision: 1.46 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -79,6 +79,31 @@ int main() {
 	return 0;
 }], [AC_DEFINE([ALTIVEC_GCC],,[Altivec GCC extension found])] [CFLAGS="$CFLAGS_TMP -faltivec -maltivec";] [AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)] );
  
+dnl
+dnl x86 XCHG assembly command
+dnl
+AC_MSG_CHECKING(x86 XCHG)
+AC_COMPILE_IFELSE([
+int main() {
+    asm("push   %ax");
+    asm("xchg	%ah, %al");
+	asm("pop    %ax");
+	return 0;
+}], [AC_DEFINE([GCC_x86_XCHG],,[Use x86 XCHG for byteswap of word])]
+[AC_MSG_RESULT(yes)], [AC_MSG_RESULT(no)])
+
+dnl
+dnl x86 XCHG assembly command
+dnl
+AC_MSG_CHECKING(x86 BSWAP)
+AC_COMPILE_IFELSE([
+int main() {
+    asm("push   %eax");
+    asm("bswap	%eax");
+	asm("pop    %eax");
+	return 0;
+}], [AC_DEFINE([GCC_x86_BSWAP],,[Use x86 BSWAP for byteswap of word])]
+[AC_MSG_RESULT(yes)], [AC_MSG_RESULT(no)])
 
 dnl
 dnl Memory alignment functions
@@ -90,7 +115,7 @@ AC_CHECK_FUNC( memalign, [AC_DEFINE([MEMALIGN],,[memalign memory alloctaion foun
 
 CFLAGS="-Wall -funroll-loops -ffast-math -fomit-frame-pointer -fexpensive-optimizations $CFLAGS"
 LIBIL_CFLAGS="$CFLAGS"
-LIBILU_CFLAGS="$CFLAGS"
+Libilu_CFLAGS="$CFLAGS"
 LIBILUT_CFLAGS="$CFLAGS"
 
 dnl
