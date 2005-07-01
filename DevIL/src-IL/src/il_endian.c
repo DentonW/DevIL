@@ -99,8 +99,9 @@ inline ILvoid _SwapInt(ILint *i)
 }
 
 inline ILvoid _SwapFloat(ILfloat *f) {
-	ILuint *b = (ILuint*)&f;
-	*b = (*b>>24) | ((*b>>8) & 0xff00) | ((*b<<8) & 0xff0000) | (*b<<24);
+	_SwapUInt((ILuint*)&f);
+	//ILuint *b = (ILuint*)&f;
+	//*b = (*b>>24) | ((*b>>8) & 0xff00) | ((*b<<8) & 0xff0000) | (*b<<24);
 }
 
 inline ILvoid _SwapDouble(ILdouble *d) {
