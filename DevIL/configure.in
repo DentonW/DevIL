@@ -37,7 +37,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.46 $)
+AC_REVISION($Revision: 1.47 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -78,22 +78,9 @@ int main() {
 	vec = vec_splat_u32(0);
 	return 0;
 }], [AC_DEFINE([ALTIVEC_GCC],,[Altivec GCC extension found])] [CFLAGS="$CFLAGS_TMP -faltivec -maltivec";] [AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)] );
- 
-dnl
-dnl x86 XCHG assembly command
-dnl
-AC_MSG_CHECKING(x86 XCHG)
-AC_COMPILE_IFELSE([
-int main() {
-    asm("push   %ax");
-    asm("xchg	%ah, %al");
-	asm("pop    %ax");
-	return 0;
-}], [AC_DEFINE([GCC_x86_XCHG],,[Use x86 XCHG for byteswap of word])]
-[AC_MSG_RESULT(yes)], [AC_MSG_RESULT(no)])
 
 dnl
-dnl x86 XCHG assembly command
+dnl x86 BSWAP assembly command
 dnl
 AC_MSG_CHECKING(x86 BSWAP)
 AC_COMPILE_IFELSE([
