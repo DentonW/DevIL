@@ -26,8 +26,9 @@ inline ILvoid _SwapUShort(ILushort *s)
     #else
 	#ifdef GCC_x86_XCHG
 		asm("movl   8(%ebp), %eax 		\n" // eax = s
-			"movw   (%eax),%cx		\n" // ecx = *s
-			"xchg	%ch, %cl			\n" // swap ecx
+			"movw   (%eax),%cx			\n" // ecx = *s
+			"bswap	%ecx				\n" // swap ecx
+			"ror	$16, %ecx			\n" // adjust bytes	
 			"movw	%cx, (%eap)");
 	#else
 		*s = ((*s)>>8) | ((*s)<<8);
@@ -48,7 +49,8 @@ inline ILvoid _SwapShort(ILshort *s)
 	#ifdef GCC_x86_XCHG
 		asm("movl   8(%ebp), %eax 		\n" // eax = s
 			"movw  (%eax),%cx			\n" // ecx = *s
-			"xchg	%ch, %cl			\n" // swap ecx
+			"bswap	%ecx				\n" // swap ecx
+			"ror	$16, %ecx			\n" // adjust bytes		
 			"movw	%cx, (%eax)");
 	#else
 		*s = ((*s)>>8) | ((*s)<<8);
