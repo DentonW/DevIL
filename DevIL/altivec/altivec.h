@@ -10,6 +10,5 @@
 
 #include "altivec_common.h"
 #include "altivec_typeconversion.h"
-#include "altivec_formatconversion.h"
 
 #endif
