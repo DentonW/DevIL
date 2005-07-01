@@ -24,8 +24,15 @@ inline ILvoid _SwapUShort(ILushort *s)
 			mov [ebx], ax
 		}
     #else
+	#ifdef GCC_x86_XCHG
+		asm("movl   8(%ebp), %eax 		\n" // eax = s
+			"movw   (%eax),%cx		\n" // ecx = *s
+			"xchg	%ch, %cl			\n" // swap ecx
+			"movw	%cx, (%eap)");
+	#else
 		*s = ((*s)>>8) | ((*s)<<8);
-	#endif//USE_WIN32_ASM
+	#endif
+	#endif
 }
 
 inline ILvoid _SwapShort(ILshort *s)
@@ -38,8 +45,15 @@ inline ILvoid _SwapShort(ILshort *s)
 			mov [ebx], ax
 		}
 	#else
+	#ifdef GCC_x86_XCHG
+		asm("movl   8(%ebp), %eax 		\n" // eax = s
+			"movw  (%eax),%cx			\n" // ecx = *s
+			"xchg	%ch, %cl			\n" // swap ecx
+			"movw	%cx, (%eax)");
+	#else
 		*s = ((*s)>>8) | ((*s)<<8);
-	#endif//USE_WIN32_ASM
+	#endif
+	#endif
 }
 
 inline ILvoid _SwapUInt(ILuint *i)
@@ -52,7 +66,14 @@ inline ILvoid _SwapUInt(ILuint *i)
 			mov [ebx], eax
 		}
 	#else
+	#ifdef GCC_x86_BSWAP
+		asm("movl    8(%ebp), %eax 		\n" // eax = s
+			"movl    (%eax),%ecx		\n" // ecx = *s
+			"bswap	 %ecx				\n" // swap ecx
+			"mov	 %ecx, (%eax)");
+	#else
     	*i = ((*i)>>24) | (((*i)>>8) & 0xff00) | (((*i)<<8) & 0xff0000) | ((*i)<<24);
+	#endif
 	#endif//USE_WIN32_ASM
 }
 
@@ -66,7 +87,14 @@ inline ILvoid _SwapInt(ILint *i)
 			mov [ebx], eax
 		}
 	#else
-		*i = ((*i)>>24) | (((*i)>>8) & 0xff00) | (((*i)<<8) & 0xff0000) | ((*i)<<24);
+	#ifdef GCC_x86_BSWAP
+		asm("movl    8(%ebp), %eax 		\n" // eax = s
+			"movl    (%eax),%ecx		\n" // ecx = *s
+			"bswap	 %ecx				\n" // swap ecx
+			"mov	 %ecx, (%eax)");
+	#else
+    	*i = ((*i)>>24) | (((*i)>>8) & 0xff00) | (((*i)<<8) & 0xff0000) | ((*i)<<24);
+	#endif
 	#endif//USE_WIN32_ASM
 }
 
