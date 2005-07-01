@@ -2,8 +2,7 @@
  *  altivec.h
  *  DevIL
  *
- *  Created by Dario on 24/04/05.
- *  Copyright 2005 __MyCompanyName__. All rights reserved.
+ *  Created by Meloni Dario on 24/04/05.
  *
  */
 
@@ -11,5 +10,6 @@
 
 #include "altivec_common.h"
 #include "altivec_typeconversion.h"
+#include "altivec_formatconversion.h"
 
 #endif
