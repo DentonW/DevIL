@@ -111,11 +111,15 @@ ILboolean iSaveDdsInternal()
 // @TODO:  Finish this, as it is incomplete.
 ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat)
 {
-	ILuint i, FourCC, Flags1 = 0, Flags2 = 0, ddsCaps1 = 0, LinearSize, BlockSize;
+	ILuint i, FourCC, Flags1 = 0, Flags2 = 0, ddsCaps1 = 0,
+		LinearSize, BlockSize, ddsCaps2 = 0;
 
 	Flags1 |= DDS_LINEARSIZE | DDS_MIPMAPCOUNT 
 			| DDS_WIDTH | DDS_HEIGHT | DDS_CAPS | DDS_PIXELFORMAT;
 	Flags2 |= DDS_FOURCC;
+
+	if (Image->Depth > 1)
+		Flags1 |= DDS_DEPTH;
 
 	// @TODO:  Fix the pre-multiplied alpha problem.
 	if (DXTCFormat == IL_DXT2)
@@ -164,10 +168,15 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat)
 	else {
 		BlockSize = 16;
 	}
-	LinearSize = (((Image->Width + 3)/4) * ((Image->Height + 3)/4)) * BlockSize;
+	LinearSize = (((Image->Width + 3)/4) * ((Image->Height + 3)/4)) * BlockSize * Image->Depth;
 
 	SaveLittleUInt(LinearSize);	// LinearSize
-	SaveLittleUInt(0);			// Depth
+	if (Image->Depth > 1) {
+		SaveLittleUInt(Image->Depth);			// Depth
+		ddsCaps2 = DDS_VOLUME;
+	}
+	else
+		SaveLittleUInt(0);						// Depth
 	SaveLittleUInt(ilGetInteger(IL_NUM_MIPMAPS) + 1);  // MipMapCount
 	SaveLittleUInt(0);			// AlphaBitDepth
 
@@ -189,7 +198,7 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat)
 	if (ilGetInteger(IL_NUM_MIPMAPS) > 0)
 		ddsCaps1 |= DDS_MIPMAP | DDS_COMPLEX;
 	SaveLittleUInt(ddsCaps1);	// ddsCaps1
-	SaveLittleUInt(0);			// ddsCaps2
+	SaveLittleUInt(ddsCaps2);	// ddsCaps2
 	SaveLittleUInt(0);			// ddsCaps3
 	SaveLittleUInt(0);			// ddsCaps4
 	SaveLittleUInt(0);			// TextureStage
@@ -213,7 +222,8 @@ ILuint ILAPIENTRY ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize, ILenum DXTCFo
 				return 0;
 		}
 
-		BlockNum = ((iCurImage->Width + 3)/4) * ((iCurImage->Height + 3)/4);
+		BlockNum = ((iCurImage->Width + 3)/4) * ((iCurImage->Height + 3)/4)
+					* iCurImage->Depth;
 
 		switch (DXTCFormat)
 		{
@@ -272,7 +282,7 @@ ILushort *CompressTo565(ILimage *Image)
 		TempImage = Image;
 	}
 
-	Data = (ILushort*)ialloc(iCurImage->Width * iCurImage->Height * 2);
+	Data = (ILushort*)ialloc(iCurImage->Width * iCurImage->Height * 2 * iCurImage->Depth);
 	if (Data == NULL) {
 		if (TempImage != Image)
 			ilCloseImage(TempImage);
@@ -283,7 +293,7 @@ ILushort *CompressTo565(ILimage *Image)
 	switch (TempImage->Format)
 	{
 		case IL_RGB:
-			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 3, j++) {
+			for (i = 0, j = 0; i < TempImage->SizeOfData; i += 3, j++) {
 				Data[j]  = (TempImage->Data[i  ] >> 3) << 11;
 				Data[j] |= (TempImage->Data[i+1] >> 2) << 5;
 				Data[j] |=  TempImage->Data[i+2] >> 3;
@@ -291,7 +301,7 @@ ILushort *CompressTo565(ILimage *Image)
 			break;
 
 		case IL_RGBA:
-			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 4, j++) {
+			for (i = 0, j = 0; i < TempImage->SizeOfData; i += 4, j++) {
 				Data[j]  = (TempImage->Data[i  ] >> 3) << 11;
 				Data[j] |= (TempImage->Data[i+1] >> 2) << 5;
 				Data[j] |=  TempImage->Data[i+2] >> 3;
@@ -299,7 +309,7 @@ ILushort *CompressTo565(ILimage *Image)
 			break;
 
 		case IL_BGR:
-			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 3, j++) {
+			for (i = 0, j = 0; i < TempImage->SizeOfData; i += 3, j++) {
 				Data[j]  = (TempImage->Data[i+2] >> 3) << 11;
 				Data[j] |= (TempImage->Data[i+1] >> 2) << 5;
 				Data[j] |=  TempImage->Data[i  ] >> 3;
@@ -307,7 +317,7 @@ ILushort *CompressTo565(ILimage *Image)
 			break;
 
 		case IL_BGRA:
-			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 4, j++) {
+			for (i = 0, j = 0; i < TempImage->SizeOfData; i += 4, j++) {
 				Data[j]  = (TempImage->Data[i+2] >> 3) << 11;
 				Data[j] |= (TempImage->Data[i+1] >> 2) << 5;
 				Data[j] |=  TempImage->Data[i  ] >> 3;
@@ -315,7 +325,7 @@ ILushort *CompressTo565(ILimage *Image)
 			break;
 
 		case IL_LUMINANCE:
-			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i++, j++) {
+			for (i = 0, j = 0; i < TempImage->SizeOfData; i++, j++) {
 				Data[j]  = (TempImage->Data[i] >> 3) << 11;
 				Data[j] |= (TempImage->Data[i] >> 2) << 5;
 				Data[j] |=  TempImage->Data[i] >> 3;
@@ -323,7 +333,7 @@ ILushort *CompressTo565(ILimage *Image)
 			break;
 
 		case IL_LUMINANCE_ALPHA:
-			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 2, j++) {
+			for (i = 0, j = 0; i < TempImage->SizeOfData; i += 2, j++) {
 				Data[j]  = (TempImage->Data[i] >> 3) << 11;
 				Data[j] |= (TempImage->Data[i] >> 2) << 5;
 				Data[j] |=  TempImage->Data[i] >> 3;
@@ -353,7 +363,7 @@ ILubyte *CompressTo88(ILimage *Image)
 		TempImage = Image;
 	}
 
-	Data = (ILubyte*)ialloc(iCurImage->Width * iCurImage->Height * 2);
+	Data = (ILubyte*)ialloc(iCurImage->Width * iCurImage->Height * 2 * iCurImage->Depth);
 	if (Data == NULL) {
 		if (TempImage != Image)
 			ilCloseImage(TempImage);
@@ -364,28 +374,28 @@ ILubyte *CompressTo88(ILimage *Image)
 	switch (TempImage->Format)
 	{
 		case IL_RGB:
-			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 3, j += 2) {
+			for (i = 0, j = 0; i < TempImage->SizeOfData; i += 3, j += 2) {
 				Data[j  ] = TempImage->Data[i+1];
 				Data[j+1] = TempImage->Data[i  ];
 			}
 			break;
 
 		case IL_RGBA:
-			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 4, j += 2) {
+			for (i = 0, j = 0; i < TempImage->SizeOfData; i += 4, j += 2) {
 				Data[j  ] = TempImage->Data[i+1];
 				Data[j+1] = TempImage->Data[i  ];
 			}
 			break;
 
 		case IL_BGR:
-			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 3, j += 2) {
+			for (i = 0, j = 0; i < TempImage->SizeOfData; i += 3, j += 2) {
 				Data[j  ] = TempImage->Data[i+1];
 				Data[j+1] = TempImage->Data[i+2];
 			}
 			break;
 
 		case IL_BGRA:
-			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 4, j += 2) {
+			for (i = 0, j = 0; i < TempImage->SizeOfData; i += 4, j += 2) {
 				Data[j  ] = TempImage->Data[i+1];
 				Data[j+1] = TempImage->Data[i+2];
 			}
@@ -393,7 +403,7 @@ ILubyte *CompressTo88(ILimage *Image)
 
 		case IL_LUMINANCE:
 		case IL_LUMINANCE_ALPHA:
-			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i++, j += 2) {
+			for (i = 0, j = 0; i < TempImage->SizeOfData; i++, j += 2) {
 				Data[j  ] = Data[j+1] = 0; //??? Luminance is no normal map format...
 			}
 			break;
@@ -424,8 +434,8 @@ void CompressToRXGB(ILimage *Image, ILushort** xgb, ILubyte** r)
 		TempImage = Image;
 	}
 
-	*xgb = (ILushort*)ialloc(iCurImage->Width * iCurImage->Height * 2);
-	*r = ialloc(iCurImage->Width * iCurImage->Height);
+	*xgb = (ILushort*)ialloc(iCurImage->Width * iCurImage->Height * 2 * iCurImage->Depth);
+	*r = ialloc(iCurImage->Width * iCurImage->Height * iCurImage->Depth);
 	if (*xgb == NULL || *r == NULL) {
 		if (TempImage != Image)
 			ilCloseImage(TempImage);
@@ -439,7 +449,7 @@ void CompressToRXGB(ILimage *Image, ILushort** xgb, ILubyte** r)
 	switch (TempImage->Format)
 	{
 		case IL_RGB:
-			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 3, j++) {
+			for (i = 0, j = 0; i < TempImage->SizeOfData; i += 3, j++) {
 				Alpha[j] = TempImage->Data[i];
 				Data[j] = (TempImage->Data[i+1] >> 2) << 5;
 				Data[j] |=  TempImage->Data[i+2] >> 3;
@@ -447,7 +457,7 @@ void CompressToRXGB(ILimage *Image, ILushort** xgb, ILubyte** r)
 			break;
 
 		case IL_RGBA:
-			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 4, j++) {
+			for (i = 0, j = 0; i < TempImage->SizeOfData; i += 4, j++) {
 				Alpha[j]  = TempImage->Data[i];
 				Data[j] = (TempImage->Data[i+1] >> 2) << 5;
 				Data[j] |=  TempImage->Data[i+2] >> 3;
@@ -455,7 +465,7 @@ void CompressToRXGB(ILimage *Image, ILushort** xgb, ILubyte** r)
 			break;
 
 		case IL_BGR:
-			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 3, j++) {
+			for (i = 0, j = 0; i < TempImage->SizeOfData; i += 3, j++) {
 				Alpha[j]  = TempImage->Data[i+2];
 				Data[j] = (TempImage->Data[i+1] >> 2) << 5;
 				Data[j] |=  TempImage->Data[i  ] >> 3;
@@ -463,7 +473,7 @@ void CompressToRXGB(ILimage *Image, ILushort** xgb, ILubyte** r)
 			break;
 
 		case IL_BGRA:
-			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 4, j++) {
+			for (i = 0, j = 0; i < TempImage->SizeOfData; i += 4, j++) {
 				Alpha[j]  = TempImage->Data[i+2];
 				Data[j] = (TempImage->Data[i+1] >> 2) << 5;
 				Data[j] |=  TempImage->Data[i  ] >> 3;
@@ -471,7 +481,7 @@ void CompressToRXGB(ILimage *Image, ILushort** xgb, ILubyte** r)
 			break;
 
 		case IL_LUMINANCE:
-			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i++, j++) {
+			for (i = 0, j = 0; i < TempImage->SizeOfData; i++, j++) {
 				Alpha[j]  = TempImage->Data[i];
 				Data[j] = (TempImage->Data[i] >> 2) << 5;
 				Data[j] |=  TempImage->Data[i] >> 3;
@@ -479,7 +489,7 @@ void CompressToRXGB(ILimage *Image, ILushort** xgb, ILubyte** r)
 			break;
 
 		case IL_LUMINANCE_ALPHA:
-			for (i = 0, j = 0; i < TempImage->SizeOfPlane; i += 2, j++) {
+			for (i = 0, j = 0; i < TempImage->SizeOfData; i += 2, j++) {
 				Alpha[j]  = TempImage->Data[i];
 				Data[j] = (TempImage->Data[i] >> 2) << 5;
 				Data[j] |=  TempImage->Data[i] >> 3;
@@ -494,12 +504,12 @@ void CompressToRXGB(ILimage *Image, ILushort** xgb, ILubyte** r)
 
 ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 {
-	ILushort	*Data, Block[16], ex0, ex1;
-	ILuint		x, y, i, BitMask;//, Rms1, Rms2;
+	ILushort	*Data, Block[16], ex0, ex1, *Runner16;
+	ILuint		x, y, z, i, BitMask;//, Rms1, Rms2;
 	ILubyte		*Alpha, AlphaBlock[16], AlphaBitMask[6], /*AlphaOut[16],*/ a0, a1;
 	ILboolean	HasAlpha;
 	ILuint		Count = 0;
-	ILubyte		*Data3Dc;
+	ILubyte		*Data3Dc, *Runner8;
 
 	if (ilNextPower2(iCurImage->Width) != iCurImage->Width ||
 		ilNextPower2(iCurImage->Height) != iCurImage->Height ||
@@ -513,24 +523,29 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 		if (Data3Dc == NULL)
 			return 0;
 
-		for (y = 0; y < Image->Height; y += 4) {
-			for (x = 0; x < Image->Width; x += 4) {
-				Get3DcBlock(AlphaBlock, Data3Dc, Image, x, y, 0);
-				ChooseAlphaEndpoints(AlphaBlock, &a0, &a1);
-				GenAlphaBitMask(a0, a1, AlphaBlock, AlphaBitMask, NULL);
-				iputc(a0);
-				iputc(a1);
-				iwrite(AlphaBitMask, 1, 6);
+		Runner8 = Data3Dc;
 
-				Get3DcBlock(AlphaBlock, Data3Dc, Image, x, y, 1);
-				ChooseAlphaEndpoints(AlphaBlock, &a0, &a1);
-				GenAlphaBitMask(a0, a1, AlphaBlock, AlphaBitMask, NULL);
-				iputc(a0);
-				iputc(a1);
-				iwrite(AlphaBitMask, 1, 6);
+		for (z = 0; z < Image->Depth; z++) {
+			for (y = 0; y < Image->Height; y += 4) {
+				for (x = 0; x < Image->Width; x += 4) {
+					Get3DcBlock(AlphaBlock, Runner8, Image, x, y, 0);
+					ChooseAlphaEndpoints(AlphaBlock, &a0, &a1);
+					GenAlphaBitMask(a0, a1, AlphaBlock, AlphaBitMask, NULL);
+					iputc(a0);
+					iputc(a1);
+					iwrite(AlphaBitMask, 1, 6);
 
-				Count += 16;
+					Get3DcBlock(AlphaBlock, Runner8, Image, x, y, 1);
+					ChooseAlphaEndpoints(AlphaBlock, &a0, &a1);
+					GenAlphaBitMask(a0, a1, AlphaBlock, AlphaBitMask, NULL);
+					iputc(a0);
+					iputc(a1);
+					iwrite(AlphaBitMask, 1, 6);
+
+					Count += 16;
+				}
 			}
+			Runner8 += Image->Width * Image->Height * 2;
 		}
 
 		ifree(Data3Dc);
@@ -559,32 +574,40 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 			}
 		}
 
+		Runner8 = Alpha;
+		Runner16 = Data;
+
 		switch (DXTCFormat)
 		{
 			case IL_DXT1:
-				for (y = 0; y < Image->Height; y += 4) {
-					for (x = 0; x < Image->Width; x += 4) {
-						GetAlphaBlock(AlphaBlock, Alpha, Image, x, y);
-						HasAlpha = IL_FALSE;
-						for (i = 0 ; i < 16; i++) {
-							if (AlphaBlock[i] < 128) {
-								HasAlpha = IL_TRUE;
-								break;
+				for (z = 0; z < Image->Depth; z++) {
+					for (y = 0; y < Image->Height; y += 4) {
+						for (x = 0; x < Image->Width; x += 4) {
+							GetAlphaBlock(AlphaBlock, Runner8, Image, x, y);
+							HasAlpha = IL_FALSE;
+							for (i = 0 ; i < 16; i++) {
+								if (AlphaBlock[i] < 128) {
+									HasAlpha = IL_TRUE;
+									break;
+								}
 							}
-						}
 
-						GetBlock(Block, Data, Image, x, y);
-						ChooseEndpoints(Block, &ex0, &ex1);
-						CorrectEndDXT1(&ex0, &ex1, HasAlpha);
-						SaveLittleUShort(ex0);
-						SaveLittleUShort(ex1);
-						if (HasAlpha)
-							BitMask = GenBitMask(ex0, ex1, 3, Block, AlphaBlock, NULL);
-						else
-							BitMask = GenBitMask(ex0, ex1, 4, Block, NULL, NULL);
-						SaveLittleUInt(BitMask);
-						Count += 8;
+							GetBlock(Block, Runner16, Image, x, y);
+							ChooseEndpoints(Block, &ex0, &ex1);
+							CorrectEndDXT1(&ex0, &ex1, HasAlpha);
+							SaveLittleUShort(ex0);
+							SaveLittleUShort(ex1);
+							if (HasAlpha)
+								BitMask = GenBitMask(ex0, ex1, 3, Block, AlphaBlock, NULL);
+							else
+								BitMask = GenBitMask(ex0, ex1, 4, Block, NULL, NULL);
+							SaveLittleUInt(BitMask);
+							Count += 8;
+						}
 					}
+
+					Runner16 += Image->Width * Image->Height;
+					Runner8 += Image->Width * Image->Height;
 				}
 				break;
 
@@ -608,52 +631,62 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 				break;*/
 
 			case IL_DXT3:
-				for (y = 0; y < Image->Height; y += 4) {
-					for (x = 0; x < Image->Width; x += 4) {
-						GetAlphaBlock(AlphaBlock, Alpha, Image, x, y);
-						for (i = 0; i < 16; i += 2) {
-							iputc((ILubyte)(((AlphaBlock[i+1] >> 4) << 4) | (AlphaBlock[i] >> 4)));
-						}
+				for (z = 0; z < Image->Depth; z++) {
+					for (y = 0; y < Image->Height; y += 4) {
+						for (x = 0; x < Image->Width; x += 4) {
+							GetAlphaBlock(AlphaBlock, Runner8, Image, x, y);
+							for (i = 0; i < 16; i += 2) {
+								iputc((ILubyte)(((AlphaBlock[i+1] >> 4) << 4) | (AlphaBlock[i] >> 4)));
+							}
 
-						GetBlock(Block, Data, Image, x, y);
-						ChooseEndpoints(Block, &ex0, &ex1);
-						SaveLittleUShort(ex0);
-						SaveLittleUShort(ex1);
-						BitMask = GenBitMask(ex0, ex1, 4, Block, NULL, NULL);
-						SaveLittleUInt(BitMask);
-						Count += 16;
-					}		
+							GetBlock(Block, Runner16, Image, x, y);
+							ChooseEndpoints(Block, &ex0, &ex1);
+							SaveLittleUShort(ex0);
+							SaveLittleUShort(ex1);
+							BitMask = GenBitMask(ex0, ex1, 4, Block, NULL, NULL);
+							SaveLittleUInt(BitMask);
+							Count += 16;
+						}
+					}
+
+					Runner16 += Image->Width * Image->Height;
+					Runner8 += Image->Width * Image->Height;
 				}
 				break;
 
 			case IL_RXGB:
 			case IL_DXT5:
-				for (y = 0; y < Image->Height; y += 4) {
-					for (x = 0; x < Image->Width; x += 4) {
-						GetAlphaBlock(AlphaBlock, Alpha, Image, x, y);
-						ChooseAlphaEndpoints(AlphaBlock, &a0, &a1);
-						GenAlphaBitMask(a0, a1, AlphaBlock, AlphaBitMask, NULL/*AlphaOut*/);
-						/*Rms2 = RMSAlpha(AlphaBlock, AlphaOut);
-						GenAlphaBitMask(a0, a1, 8, AlphaBlock, AlphaBitMask, AlphaOut);
-						Rms1 = RMSAlpha(AlphaBlock, AlphaOut);
-						if (Rms2 <= Rms1) {  // Yeah, we have to regenerate...
-							GenAlphaBitMask(a0, a1, 6, AlphaBlock, AlphaBitMask, AlphaOut);
-							Rms2 = a1;  // Just reuse Rms2 as a temporary variable...
-							a1 = a0;
-							a0 = Rms2;
-						}*/
-						iputc(a0);
-						iputc(a1);
-						iwrite(AlphaBitMask, 1, 6);
+				for (z = 0; z < Image->Depth; z++) {
+					for (y = 0; y < Image->Height; y += 4) {
+						for (x = 0; x < Image->Width; x += 4) {
+							GetAlphaBlock(AlphaBlock, Runner8, Image, x, y);
+							ChooseAlphaEndpoints(AlphaBlock, &a0, &a1);
+							GenAlphaBitMask(a0, a1, AlphaBlock, AlphaBitMask, NULL/*AlphaOut*/);
+							/*Rms2 = RMSAlpha(AlphaBlock, AlphaOut);
+							GenAlphaBitMask(a0, a1, 8, AlphaBlock, AlphaBitMask, AlphaOut);
+							Rms1 = RMSAlpha(AlphaBlock, AlphaOut);
+							if (Rms2 <= Rms1) {  // Yeah, we have to regenerate...
+								GenAlphaBitMask(a0, a1, 6, AlphaBlock, AlphaBitMask, AlphaOut);
+								Rms2 = a1;  // Just reuse Rms2 as a temporary variable...
+								a1 = a0;
+								a0 = Rms2;
+							}*/
+							iputc(a0);
+							iputc(a1);
+							iwrite(AlphaBitMask, 1, 6);
 
-						GetBlock(Block, Data, Image, x, y);
-						ChooseEndpoints(Block, &ex0, &ex1);
-						SaveLittleUShort(ex0);
-						SaveLittleUShort(ex1);
-						BitMask = GenBitMask(ex0, ex1, 4, Block, NULL, NULL);
-						SaveLittleUInt(BitMask);
-						Count += 16;
+							GetBlock(Block, Runner16, Image, x, y);
+							ChooseEndpoints(Block, &ex0, &ex1);
+							SaveLittleUShort(ex0);
+							SaveLittleUShort(ex1);
+							BitMask = GenBitMask(ex0, ex1, 4, Block, NULL, NULL);
+							SaveLittleUInt(BitMask);
+							Count += 16;
+						}
 					}
+
+					Runner16 += Image->Width * Image->Height;
+					Runner8 += Image->Width * Image->Height;
 				}
 				break;
 		}
