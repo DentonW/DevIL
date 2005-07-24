@@ -14,28 +14,7 @@
 #include "il_internal.h"
 #include "il_endian.h"
 
-inline ILvoid _SwapUShort(ILushort *s) 
-{
-	#ifdef USE_WIN32_ASM
-		__asm {
-			mov ebx, s
-			mov al, [ebx+1]
-			mov ah, [ebx  ]
-			mov [ebx], ax
-		}
-    #else
-	#ifdef GCC_x86_XCHG
-		asm("movl   8(%ebp), %eax 		\n" // eax = s
-			"mov    1(%eax), %bl		\n" // ecx = *s
-			"mov    0(%eax), %bh		\n" // swap ecx
-			"movw   %bx, (%eax)		    \n"); // adjust bytes	
-	#else
-		*s = ((*s)>>8) | ((*s)<<8);
-	#endif
-	#endif
-}
-
-inline ILvoid _SwapShort(ILshort *s)
+ILvoid _SwapUShort(ILushort *s) 
 {
 	#ifdef USE_WIN32_ASM
 		__asm {
@@ -56,7 +35,28 @@ inline ILvoid _SwapShort(ILshort *s)
 	#endif
 }
 
-inline ILvoid _SwapUInt(ILuint *i)
+ILvoid _SwapShort(ILshort *s)
+{
+	#ifdef USE_WIN32_ASM
+		__asm {
+			mov ebx, s
+			mov al, [ebx+1]
+			mov ah, [ebx  ]
+			mov [ebx], ax
+		}
+	#else
+	#ifdef GCC_x86_XCHG
+		asm("movl   8(%ebp), %eax 		\n" // eax = s
+			"mov    1(%eax), %bl		\n" // ecx = *s
+			"mov    0(%eax), %bh		\n" // swap ecx
+			"movw   %bx, (%eax)		    \n"); // adjust bytes	
+	#else
+		*s = ((*s)>>8) | ((*s)<<8);
+	#endif
+	#endif
+}
+
+ILvoid _SwapUInt(ILuint *i)
 {
 	#ifdef USE_WIN32_ASM
 		__asm {
@@ -72,12 +72,12 @@ inline ILvoid _SwapUInt(ILuint *i)
 			"bswap	 %ecx				\n" // swap ecx
 			"mov	 %ecx, (%eax)");
 	#else
-    	*i = ((*i)>>24) | (((*i)>>8) & 0xff00) | (((*i)<<8) & 0xff0000) | ((*i)<<24);
+		*i = ((*i)>>24) | (((*i)>>8) & 0xff00) | (((*i)<<8) & 0xff0000) | ((*i)<<24);
 	#endif
 	#endif//USE_WIN32_ASM
 }
 
-inline ILvoid _SwapInt(ILint *i)
+ILvoid _SwapInt(ILint *i)
 {
 	#ifdef USE_WIN32_ASM
 		__asm {
@@ -93,27 +93,20 @@ inline ILvoid _SwapInt(ILint *i)
 			"bswap	 %ecx				\n" // swap ecx
 			"mov	 %ecx, (%eax)");
 	#else
-    	*i = ((*i)>>24) | (((*i)>>8) & 0xff00) | (((*i)<<8) & 0xff0000) | ((*i)<<24);
+		*i = ((*i)>>24) | (((*i)>>8) & 0xff00) | (((*i)<<8) & 0xff0000) | ((*i)<<24);
 	#endif
 	#endif//USE_WIN32_ASM
 }
 
-inline ILvoid _SwapFloat(ILfloat *f) {
+ILvoid _SwapFloat(ILfloat *f) {
 	_SwapUInt((ILuint*)&f);
 	//ILuint *b = (ILuint*)&f;
 	//*b = (*b>>24) | ((*b>>8) & 0xff00) | ((*b<<8) & 0xff0000) | (*b<<24);
 }
 
-inline ILvoid _SwapDouble(ILdouble *d) {
-	_SwapInt((ILuint*)&d);
-	_SwapInt((ILuint*)((ILubyte*)&d + 4));
-	
-	ILuint *b0 = (ILuint*)&d;
-	ILuint *b1 = (ILuint*)((ILubyte*)&d + 4);
-	
-	ILuint t = *b0;
-	*b0 = *b1;
-	*b1 = t;
+ILvoid _SwapDouble(ILdouble *d) {
+	_SwapUInt((ILuint*)&d);
+	_SwapUInt((ILuint*)((ILubyte*)&d + 4));
 }
 
 
@@ -367,7 +360,7 @@ ILvoid EndianSwapData(void *_Image)
 	ILdouble	*DblS, *DblD;
 
 	ILimage *Image = (ILimage*)_Image;
-        
+
 	switch (Image->Type)
 	{
 		case IL_BYTE:
@@ -375,13 +368,11 @@ ILvoid EndianSwapData(void *_Image)
 			switch (Image->Bpp)
 			{
 				case 3:
-					/*
 					temp = ialloc(Image->SizeOfData);
 					if (temp == NULL)
 						return;
 					s = Image->Data;
 					d = temp;
-					*/
 
 					for( i = Image->Width * Image->Height; i > 0; i-- ) {
 						*d++ = *(s+2);
