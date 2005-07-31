@@ -110,6 +110,7 @@ typedef struct DXTAlphaBlock3BitLinear
 #define DDS_CAPS				0x00000001L
 #define DDS_HEIGHT				0x00000002L
 #define DDS_WIDTH				0x00000004L
+#define DDS_RGB					0x00000040L
 #define DDS_PIXELFORMAT			0x00001000L
 #define DDS_LUMINANCE			0x00020000L
 
@@ -185,7 +186,7 @@ ILboolean	DecompressFloat(ILvoid);
 ILvoid		CorrectPreMult(ILvoid);
 ILvoid		GetBitsFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight);
 ILboolean	iSaveDdsInternal(ILvoid);
-ILboolean	WriteHeader(ILimage *Image, ILenum DXTCFormat);
+ILboolean	WriteHeader(ILimage *Image, ILenum DXTCFormat, ILuint CubeFlags);
 ILushort	*CompressTo565(ILimage *Image);
 ILubyte		*CompressTo88(ILimage *Image);
 ILuint		Compress(ILimage *Image, ILenum DXTCFormat);
@@ -205,6 +206,7 @@ ILvoid		ChooseAlphaEndpoints(ILubyte *Block, ILubyte *a0, ILubyte *a1);
 ILvoid		CorrectEndDXT1(ILushort *ex0, ILushort *ex1, ILboolean HasAlpha);
 ILvoid		PreMult(ILushort *Data, ILubyte *Alpha);
 
+extern ILuint CubemapDirections[CUBEMAP_SIDES];
 
 
 #endif//DDS_H

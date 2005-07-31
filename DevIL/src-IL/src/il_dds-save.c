@@ -61,12 +61,74 @@ ILboolean ilSaveDdsL(ILvoid *Lump, ILuint Size)
 }
 
 
+//! Checks if an image is a cubemap
+ILuint GetCubemapInfo(ILimage* image, ILint* faces)
+{
+	ILint	indices[] = { -1, -1, -1,  -1, -1, -1 }, i;
+	ILimage*	img;
+	ILuint	ret = 0, mipmapCount;
+
+	if (image == NULL)
+		return 0;
+
+	if (image->NumNext != 5) //write only complete cubemaps (TODO?)
+		return 0;
+
+	img = image;
+	mipmapCount = img->NumMips;
+	for (i = 0; i < 6; ++i) {
+		switch(img->CubeFlags)
+		{
+			case DDS_CUBEMAP_POSITIVEX:
+				indices[i] = 0;
+				break;
+			case DDS_CUBEMAP_NEGATIVEX:
+				indices[i] = 1;
+				break;
+			case DDS_CUBEMAP_POSITIVEY:
+				indices[i] = 2;
+				break;
+			case DDS_CUBEMAP_NEGATIVEY:
+				indices[i] = 3;
+				break;
+			case DDS_CUBEMAP_POSITIVEZ:
+				indices[i] = 4;
+				break;
+			case DDS_CUBEMAP_NEGATIVEZ:
+				indices[i] = 5;
+				break;
+		}
+
+		if (img->NumMips != mipmapCount)
+			return 0; //equal # of mipmaps required
+
+		ret |= img->CubeFlags;
+		img = img->Next;
+	}
+
+	for (i = 0; i < 6; ++i)
+		if (indices[i] == -1)
+			return 0; //one face not found
+
+	if (ret != 0) //should always be true
+		ret |= DDS_CUBEMAP;
+
+
+	for (i =0; i < 6; ++i)
+		faces[indices[i]] = i;
+
+	return ret;
+}
+
+
 // Internal function used to save the Dds.
 ILboolean iSaveDdsInternal()
 {
 	ILenum	DXTCFormat;
-	ILuint	counter, numMipMaps, image;
+	ILuint	counter, numMipMaps, image, numFaces, i;
 	ILubyte	*CurData = NULL;
+	ILint	CubeTable[6] = { 0 };
+	ILuint	CubeFlags;
 
 	if (ilNextPower2(iCurImage->Width) != iCurImage->Width ||
 		ilNextPower2(iCurImage->Height) != iCurImage->Height ||
@@ -75,33 +137,42 @@ ILboolean iSaveDdsInternal()
 			return IL_FALSE;
 	}
 
+	CubeFlags = GetCubemapInfo(iCurImage, CubeTable);
+
 	image = ilGetInteger(IL_CUR_IMAGE);
 	DXTCFormat = iGetInt(IL_DXTC_FORMAT);
-	WriteHeader(iCurImage, DXTCFormat);
+	WriteHeader(iCurImage, DXTCFormat, CubeFlags);
 	
-	numMipMaps = ilGetInteger(IL_NUM_MIPMAPS);
-	for (counter = 0; counter <= numMipMaps; counter++) {
-		ilActiveMipmap(counter);
+	if (CubeFlags != 0)
+		numFaces = ilGetInteger(IL_NUM_IMAGES); //should always be 5 for now
+	else
+		numFaces = 0;
 
-		if (iCurImage->Origin != IL_ORIGIN_UPPER_LEFT) {
-			CurData = iCurImage->Data;
-			iCurImage->Data = iGetFlipped(iCurImage);
-			if (iCurImage->Data == NULL) {
-				iCurImage->Data = CurData;
+	numMipMaps = ilGetInteger(IL_NUM_MIPMAPS); //this assumes all faces have some # of mipmaps
+
+	for (i = 0; i <= numFaces; ++i) {
+		for (counter = 0; counter <= numMipMaps; counter++) {
+			ilBindImage(image);
+			ilActiveImage(CubeTable[i]);
+			ilActiveMipmap(counter);
+
+			if (iCurImage->Origin != IL_ORIGIN_UPPER_LEFT) {
+				CurData = iCurImage->Data;
+				iCurImage->Data = iGetFlipped(iCurImage);
+				if (iCurImage->Data == NULL) {
+					iCurImage->Data = CurData;
+					return IL_FALSE;
+				}
+			}
+
+			if (!Compress(iCurImage, DXTCFormat))
 				return IL_FALSE;
+
+			if (iCurImage->Origin != IL_ORIGIN_UPPER_LEFT) {
+				ifree(iCurImage->Data);
+				iCurImage->Data = CurData;
 			}
 		}
-
-		if (!Compress(iCurImage, DXTCFormat))
-			return IL_FALSE;
-
-		if (iCurImage->Origin != IL_ORIGIN_UPPER_LEFT) {
-			ifree(iCurImage->Data);
-			iCurImage->Data = CurData;
-		}
-		
-		//ilActiveMipmap(0);
-		ilBindImage(image);
 	}
 
 	return IL_TRUE;
@@ -109,7 +180,7 @@ ILboolean iSaveDdsInternal()
 
 
 // @TODO:  Finish this, as it is incomplete.
-ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat)
+ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat, ILuint CubeFlags)
 {
 	ILuint i, FourCC, Flags1 = 0, Flags2 = 0, ddsCaps1 = 0,
 		LinearSize, BlockSize, ddsCaps2 = 0;
@@ -170,10 +241,23 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat)
 	}
 	LinearSize = (((Image->Width + 3)/4) * ((Image->Height + 3)/4)) * BlockSize * Image->Depth;
 
-	SaveLittleUInt(LinearSize);	// LinearSize
+	/*
+	// doing this is actually wrong, linear size is only size of one cube face
+	if (CubeFlags != 0) {
+		ILint numFaces = 0;
+		for (i = 0; i < 6; ++i)
+			if (CubeFlags & CubemapDirections[i])
+				++numFaces;
+
+		LinearSize *= numFaces;
+	}
+	*/
+
+
+	SaveLittleUInt(LinearSize);	// LinearSize (TODO: change this when uncompressed formats are supported)
 	if (Image->Depth > 1) {
 		SaveLittleUInt(Image->Depth);			// Depth
-		ddsCaps2 = DDS_VOLUME;
+		ddsCaps2 |= DDS_VOLUME;
 	}
 	else
 		SaveLittleUInt(0);						// Depth
@@ -193,10 +277,14 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat)
 	SaveLittleUInt(0);			// RGBAlphaBitMask
 	ddsCaps1 |= DDS_TEXTURE;
 	//changed 20040516: set mipmap flag on mipmap images
-	//(cubemaps and non-compressed .dds files still not supported,
+	//(non-compressed .dds files still not supported,
 	//though)
 	if (ilGetInteger(IL_NUM_MIPMAPS) > 0)
 		ddsCaps1 |= DDS_MIPMAP | DDS_COMPLEX;
+	if (CubeFlags != 0) {
+		ddsCaps1 |= DDS_COMPLEX;
+		ddsCaps2 |= CubeFlags;
+	}
 	SaveLittleUInt(ddsCaps1);	// ddsCaps1
 	SaveLittleUInt(ddsCaps2);	// ddsCaps2
 	SaveLittleUInt(0);			// ddsCaps3
