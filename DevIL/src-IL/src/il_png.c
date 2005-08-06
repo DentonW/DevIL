@@ -47,7 +47,7 @@ ILvoid		readpng_cleanup(ILvoid);
 
 png_structp png_ptr = NULL;
 png_infop info_ptr = NULL;
-ILuint color_type;
+ILint color_type;
 
 #define GAMMA_CORRECTION 1.0  // Doesn't seem to be doing anything...
 
@@ -296,8 +296,8 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 	png_bytepp	row_pointers = NULL;
 	png_uint_32 width, height; // Changed the type to fix AMD64 bit problems, thanks to Eric Werness
 	ILdouble	screen_gamma = 1.0, image_gamma;
-	ILuint		i, channels, bit_depth;
-
+	ILuint		i, channels;//, bit_depth;
+    ILint       bit_depth;
 
 	/* setjmp() must be called in every function that calls a PNG-reading
 	 * libpng function */
@@ -308,7 +308,7 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 	}
 
 	png_get_IHDR(png_ptr, info_ptr, (png_uint_32*)&width, (png_uint_32*)&height,
-		&bit_depth, &color_type, NULL, NULL, NULL);
+	   		     &bit_depth, &color_type, NULL, NULL, NULL);
 
 	// Expand palette images to RGB, low-bit-depth grayscale images to 8 bits,
 	//	transparency chunks to full alpha channel; strip 16-bit-per-sample
@@ -326,7 +326,7 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 
 	//refresh information (added 20040224)
 	png_get_IHDR(png_ptr, info_ptr, (png_uint_32*)&width, (png_uint_32*)&height,
-		&bit_depth, &color_type, NULL, NULL, NULL);
+		         &bit_depth, &color_type, NULL, NULL, NULL);
 
 	if (bit_depth < 8)	// Expanded earlier.
 		bit_depth = 8;
