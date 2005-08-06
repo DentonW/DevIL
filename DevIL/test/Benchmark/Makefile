@@ -2,7 +2,7 @@
 
 CC       = gcc
 CFLAGS   = -Wall
-LIBS     = -lX11 -lm -lGL -lGLU -lSDL -lIL -lILU -lILUT -lXext -lXi -lXmu
+LIBS     = -lIL -lILU
 
 SRC     = benchmark.c
 OBJECTS = $(SRC:%.c=.objects/%.o)

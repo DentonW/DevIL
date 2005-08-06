@@ -15,13 +15,11 @@
 
 #include <IL/il.h>
 #include <IL/ilu.h>
-#include <SDL.h>
 #include <stdlib.h>
+#include <time.h>
 
 
 #ifdef _WIN32
-	#pragma comment(lib, "sdl.lib")
-	#pragma comment(lib, "sdlmain.lib")
 	#ifdef  _DEBUG
 		#pragma comment(linker, "/NODEFAULTLIB:msvcrt.lib")
 	#endif//_DEBUG
@@ -51,14 +49,7 @@ int main(int argc, char **argv)
 	ilGenImages(1, &id);
 	ilBindImage(id);
 
-	if (SDL_Init(SDL_INIT_TIMER) < 0) {
-		fprintf(stderr, "Couldn't load SDL: %s\n", SDL_GetError());
-		return 3;
-	}
-	atexit(SDL_Quit);
-
-
-	last_elapsed = cur_elapsed = SDL_GetTicks();
+	last_elapsed = cur_elapsed = time(NULL);
 
 	
 	ilHint(IL_MEM_SPEED_HINT, IL_FASTEST);
@@ -67,7 +58,7 @@ int main(int argc, char **argv)
 
 	for (i = 0; i < 10; i++) {
 		ilLoadImage(argv[1]);
-		cur_elapsed = SDL_GetTicks();
+		cur_elapsed = time(NULL);
 		curtime = cur_elapsed - last_elapsed;
 		last_elapsed = cur_elapsed;
 		avgtime += curtime;
@@ -82,11 +73,11 @@ int main(int argc, char **argv)
 	avgtime = 0.0;
 
 
-	last_elapsed = cur_elapsed = SDL_GetTicks();
+	last_elapsed = cur_elapsed = time(NULL);
 
 	for (i = 0; i < 10; i++) {
 		ilLoadImage(argv[1]);
-		cur_elapsed = SDL_GetTicks();
+		cur_elapsed = time(NULL);
 		curtime = cur_elapsed - last_elapsed;
 		last_elapsed = cur_elapsed;
 		avgtime += curtime;
