@@ -14,7 +14,8 @@ libIL_la_SOURCES = il_alloc.c     il_doom.c      il_stack.c    il_pcx.c        i
 
 AM_CFLAGS = @LIBIL_CFLAGS@
 libIL_la_LDFLAGS = -no-undefined @VERSIONINFO@
-libIL_la_LIBADD = @LIBPNG@ @LIBJPG@ @LIBTIFF@ @LIBGIF@ @LIBMNG@ @LIBLCMS@ @LIBZ@
+#libIL_la_LIBADD = @LIBPNG@ @LIBJPG@ @LIBTIFF@ @LIBGIF@ @LIBMNG@ @LIBLCMS@ @LIBZ@
+libIL_la_LIBADD = @LIBPNG@ @LIBJPG@ @LIBTIFF@ @LIBMNG@ @LIBLCMS@ @LIBZ@
 
 INCLUDES = -I$(top_srcdir)/include -I$(top_srcdir)/src-IL/include
 
