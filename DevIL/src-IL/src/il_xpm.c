@@ -154,7 +154,7 @@ void XpmGetEntry(XPMHASHENTRY **Table, const ILubyte* Name, int Len, XpmPixel Co
 
 	Index = XpmHash(Name, Len);
 	Entry = Table[Index];
-	while (Entry != NULL && strncmp(Entry->ColourName, Name, Len) != 0)
+	while (Entry != NULL && strncmp((char*)(Entry->ColourName), (char*)Name, Len) != 0)
 		Entry = Entry->Next;
 
 	if (Entry != NULL)
@@ -164,7 +164,7 @@ void XpmGetEntry(XPMHASHENTRY **Table, const ILubyte* Name, int Len, XpmPixel Co
 #endif //XPM_DONT_USE_HASHTABLE
 
 
-ILint XpmGetsInternal(char *Buffer, ILint MaxLen)
+ILint XpmGetsInternal(ILubyte *Buffer, ILint MaxLen)
 {
 	ILint	i = 0, Current;
 
@@ -197,7 +197,7 @@ ILint XpmGetsInternal(char *Buffer, ILint MaxLen)
 }
 
 
-ILint XpmGets(char *Buffer, ILint MaxLen)
+ILint XpmGets(ILubyte *Buffer, ILint MaxLen)
 {
 	ILint		Size, i, j;
 	ILboolean	NotComment = IL_FALSE, InsideComment = IL_FALSE;
@@ -245,7 +245,7 @@ ILint XpmGets(char *Buffer, ILint MaxLen)
 }
 
 
-ILint XpmGetInt(char *Buffer, ILint Size, ILint *Position)
+ILint XpmGetInt(ILubyte *Buffer, ILint Size, ILint *Position)
 {
 	char		Buff[1024];
 	ILint		i, j;
@@ -368,9 +368,9 @@ ILboolean XpmPredefCol(char *Buff, XpmPixel *Colour)
 
 
 #ifndef XPM_DONT_USE_HASHTABLE
-ILboolean XpmGetColour(char *Buffer, ILint Size, int Len, XPMHASHENTRY **Table)
+ILboolean XpmGetColour(ILubyte *Buffer, ILint Size, int Len, XPMHASHENTRY **Table)
 #else
-ILboolean XpmGetColour(char *Buffer, ILint Size, int Len, XpmPixel* Colours)
+ILboolean XpmGetColour(ILubyte *Buffer, ILint Size, int Len, XpmPixel* Colours)
 #endif
 {
 	ILint		i = 0, j, strLen = 0;
@@ -446,7 +446,7 @@ ILboolean XpmGetColour(char *Buffer, ILint Size, int Len, XpmPixel* Colours)
 			}
 
 			ColBuff[2] = 0; // add terminating '\0' char
-			Colour[j] = (ILubyte)strtol(ColBuff, NULL, 16);
+			Colour[j] = (ILubyte)strtol((char*)ColBuff, NULL, 16);
 		}
 		Colour[3] = 255;  // Full alpha.
 	}
@@ -489,7 +489,7 @@ ILboolean iLoadXpmInternal()
 #endif
 
 	Size = XpmGetsInternal(Buffer, BUFFER_SIZE);
-	if (strncmp("/* XPM */", Buffer, strlen("/* XPM */"))) {
+	if (strncmp("/* XPM */", (char*)Buffer, strlen("/* XPM */"))) {
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
 	}
