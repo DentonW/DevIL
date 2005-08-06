@@ -15,13 +15,17 @@
 
 #include "il_internal.h"
 
+#ifdef WORDS_BIGENDIAN //this is defined by ./configure
+	#define __BIG_ENDIAN__
+#endif
+
 #ifdef __BIG_ENDIAN__
-	#define Short(s) _SwapShort(s)
-	#define UShort(s) _SwapUShort(s)
-	#define Int(i) _SwapInt(i)
-	#define UInt(i) _SwapUInt(i)
-	#define Float(f) _SwapFloat(f)
-	#define Double(d) _SwapDouble(d)
+	#define Short(s) iSwapShort(s)
+	#define UShort(s) iSwapUShort(s)
+	#define Int(i) iSwapInt(i)
+	#define UInt(i) iSwapUInt(i)
+	#define Float(f) iSwapFloat(f)
+	#define Double(d) iSwapDouble(d)
  
 	#define BigShort(s)  
 	#define BigUShort(s)  
@@ -39,22 +43,21 @@
 	#define Float(f)  
 	#define Double(d)  
 
-	#define BigUShort(s) _SwapUShort(s)
-	#define BigUInt(i) _SwapUInt(i)
-	#define BigInt(i) _SwapInt(i)
-	#define BigUShort(s) _SwapUShort(s)
-	#define BigUInt(i) _SwapUInt(i)
-	#define BigFloat(f) _SwapFloat(f)
-	#define BigDouble(d) _SwapDouble(d)
+	#define BigShort(s) iSwapShort(s)
+	#define BigUShort(s) iSwapUShort(s)
+	#define BigInt(i) iSwapInt(i)
+	#define BigUInt(i) iSwapUInt(i)
+	#define BigFloat(f) iSwapFloat(f)
+	#define BigDouble(d) iSwapDouble(d)
 #endif
 
 
-inline ILvoid	_SwapUShort(ILushort *s);
-inline ILvoid	_SwapShort(ILshort *s);
-inline ILvoid	_SwapUInt(ILuint *i);
-inline ILvoid	_SwapInt(ILint *i);
-inline ILvoid	_SwapFloat(ILfloat *f);
-inline ILvoid	_SwapDouble(ILdouble *d);
+ILvoid	iSwapUShort(ILushort *s);
+ILvoid	iSwapShort(ILshort *s);
+ILvoid	iSwapUInt(ILuint *i);
+ILvoid	iSwapInt(ILint *i);
+ILvoid	iSwapFloat(ILfloat *f);
+ILvoid	iSwapDouble(ILdouble *d);
 
 
 // Only seem to work on unsigned values properly...
