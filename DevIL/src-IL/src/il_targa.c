@@ -695,9 +695,9 @@ ILboolean iSaveTargaInternal()
 	}
 	
 	if (TempImage->Origin != IL_ORIGIN_LOWER_LEFT)
-		TempData = iGetFlipped(TempImage);
+		TempData = (char*)iGetFlipped(TempImage);
 	else
-		TempData = TempImage->Data;
+		TempData = (char*)TempImage->Data;
 	
 	// Write out the origin stuff.
 	Temp = 0;
@@ -731,7 +731,8 @@ ILboolean iSaveTargaInternal()
 			ifree(AuthComment);
 			return IL_FALSE;
 		}
-		RleLen = ilRleCompress(TempData, TempImage->Width, TempImage->Height, TempImage->Depth, TempImage->Bpp, Rle, IL_TGACOMP, NULL);
+		RleLen = ilRleCompress((unsigned char*)TempData, TempImage->Width, TempImage->Height,
+		                       TempImage->Depth, TempImage->Bpp, Rle, IL_TGACOMP, NULL);
 		
 		iwrite(Rle, 1, RleLen);
 		ifree(Rle);
