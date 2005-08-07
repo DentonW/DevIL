@@ -86,8 +86,17 @@ ILboolean iLoadWalInternal()
 	}
 	CurImage = iCurImage;
 
-	if (iread(&Header, sizeof(WALHEAD), 1) != 1)
-		return IL_FALSE;
+	//read header
+	iread(&Header.FileName, 1, 32);
+	Header.Width = GetLittleUInt();
+	Header.Height = GetLittleUInt();
+	for (i = 0; i < 4; i++)
+		Header.Offsets[i] = GetLittleUInt();
+	iread(Header.AnimName, 1, 32);
+	Header.Flags = GetLittleUInt();
+	Header.Contents = GetLittleUInt();
+	Header.Value = GetLittleUInt();
+
 	if (!ilTexImage(Header.Width, Header.Height, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL))
 		return IL_FALSE;
 

@@ -77,15 +77,19 @@ ILboolean ilIsValidTgaL(ILvoid *Lump, ILuint Size)
 // Internal function used to get the Targa header from the current file.
 ILboolean iGetTgaHead(TARGAHEAD *Header)
 {
-	if (iread(Header, sizeof(TARGAHEAD), 1) != 1)
-		return IL_FALSE;
-	
-	Short(&Header->FirstEntry);
-	Short(&Header->ColMapLen);
-	Short(&Header->OriginX);
-	Short(&Header->OriginY);
-	UShort(&Header->Width);
-	UShort(&Header->Height);
+	Header->IDLen = igetc();
+	Header->ColMapPresent = igetc();
+	Header->ImageType = igetc();
+	Header->FirstEntry = GetLittleShort();
+	Header->ColMapLen = GetLittleShort();
+	Header->ColMapEntSize = igetc();
+
+	Header->OriginX = GetLittleShort();
+	Header->OriginY = GetLittleShort();
+	Header->Width = GetLittleUShort();
+	Header->Height = GetLittleUShort();
+	Header->Bpp = igetc();
+	Header->ImageDesc = igetc();
 	
 	return IL_TRUE;
 }
