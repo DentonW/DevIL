@@ -76,18 +76,19 @@ ILboolean ilIsValidSgiL(ILvoid *Lump, ILuint Size)
 // Internal function used to get the .sgi header from the current file.
 ILboolean iGetSgiHead(iSgiHeader *Header)
 {
-	if (iread(Header, sizeof(iSgiHeader), 1) != 1)
-		return IL_FALSE;
-
-	BigUShort(&Header->MagicNum);
-	BigUShort(&Header->Dim);
-	BigUShort(&Header->XSize);
-	BigUShort(&Header->YSize);
-	BigUShort(&Header->ZSize);
-	BigInt(&Header->PixMin);
-	BigInt(&Header->PixMax);
-	BigInt(&Header->Dummy1);
-	BigInt(&Header->ColMap);
+	Header->MagicNum = GetBigUShort();
+	Header->Storage = igetc();
+	Header->Bpc = igetc();
+	Header->Dim = GetBigUShort();
+	Header->XSize = GetBigUShort();
+	Header->YSize = GetBigUShort();
+	Header->ZSize = GetBigUShort();
+	Header->PixMin = GetBigInt();
+	Header->PixMax = GetBigInt();
+	Header->Dummy1 = GetBigInt();
+	iread(Header->Name, 1, 80);
+	Header->ColMap = GetBigInt();
+	iread(Header->Dummy, 1, 404);
 
 	return IL_TRUE;
 }
@@ -203,12 +204,12 @@ ILboolean iLoadSgiInternal()
 /*----------------------------------------------------------------------------*/
 
 ILboolean iReadRleSgi(iSgiHeader *Head)
-{       
-        #ifdef __LITTLE_ENDIAN__
-        ILuint ixTable;
-        #endif
-        ILuint 		ChanInt = 0;
-        ILuint  	ixPlane, ixHeight,ixPixel, RleOff, RleLen;
+{
+	#ifdef __LITTLE_ENDIAN__
+	ILuint ixTable;
+	#endif
+	ILuint 		ChanInt = 0;
+	ILuint  	ixPlane, ixHeight,ixPixel, RleOff, RleLen;
 	ILuint		*OffTable=NULL, *LenTable=NULL, TableSize, Cur;
 	ILubyte		**TempData=NULL;
 
@@ -239,7 +240,7 @@ ILboolean iReadRleSgi(iSgiHeader *Head)
 	if (TempData == NULL)
 		goto cleanup_error;
 	imemclear(TempData, Head->ZSize * sizeof(ILubyte*));  // Just in case ialloc fails then cleanup_error.
-        for (ixPlane = 0; ixPlane < Head->ZSize; ixPlane++) {
+	for (ixPlane = 0; ixPlane < Head->ZSize; ixPlane++) {
 		TempData[ixPlane] = (ILubyte*)ialloc(Head->XSize * Head->YSize * Head->Bpc);
 		if (TempData[ixPlane] == NULL)
 			goto cleanup_error;
@@ -280,12 +281,12 @@ ILboolean iReadRleSgi(iSgiHeader *Head)
 				iCurImage->Data[ixPixel + ixPlane + 1] = TempData[ixPlane][ChanInt + 1];
 		}
 	}
-        
-        #ifdef __LITTLE_ENDIAN__
+
+	#ifdef __LITTLE_ENDIAN__
 	if (Head->Bpc == 2)
 		sgiSwitchData(iCurImage->Data, iCurImage->SizeOfData);
-        #endif
-        
+	#endif
+
 	ifree(OffTable);
 	ifree(LenTable);
 
@@ -370,7 +371,7 @@ ILboolean iReadNonRleSgi(iSgiHeader *Head)
 {
 	ILuint		i, c;
 	// ILint		ChanInt = 0; Unused
-        ILint 		ChanSize;
+	ILint 		ChanSize;
 	ILboolean	Cache = IL_FALSE;
 
 	if (!iNewSgi(Head)) {
@@ -405,29 +406,29 @@ ILvoid sgiSwitchData(ILubyte *Data, ILuint SizeOfData)
 {	
 	ILubyte	Temp;
 	ILuint	i;
-        #ifdef ALTIVEC
-            i = 0;
-            union {
-                vector unsigned char vec;
-                vector unsigned int load;
-            }inversion_vector;
-            
-            inversion_vector.load  = (vector unsigned int)\
-                {0x01000302,0x05040706,0x09080B0A,0x0D0C0F0E};
-            while( i <= SizeOfData-16 ) {
-                vector unsigned char data = vec_ld(i,Data);
-                vec_perm(data,data,inversion_vector.vec);
-                vec_st(data,i,Data);
-                i+=16;
-            }
-            SizeOfData -= i;
-        #endif
-        for (i = 0; i < SizeOfData; i += 2) {
-                Temp = Data[i];
-                Data[i] = Data[i+1];
-                Data[i+1] = Temp;
-        }
-        return;
+	#ifdef ALTIVEC
+		i = 0;
+		union {
+			vector unsigned char vec;
+			vector unsigned int load;
+		}inversion_vector;
+
+		inversion_vector.load  = (vector unsigned int)\
+			{0x01000302,0x05040706,0x09080B0A,0x0D0C0F0E};
+		while( i <= SizeOfData-16 ) {
+			vector unsigned char data = vec_ld(i,Data);
+			vec_perm(data,data,inversion_vector.vec);
+			vec_st(data,i,Data);
+			i+=16;
+		}
+		SizeOfData -= i;
+	#endif
+	for (i = 0; i < SizeOfData; i += 2) {
+		Temp = Data[i];
+		Data[i] = Data[i+1];
+		Data[i+1] = Temp;
+	}
+	return;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -446,9 +447,9 @@ ILboolean iNewSgi(iSgiHeader *Head)
 			iCurImage->Format = IL_LUMINANCE;
 			break;
 		case 2: 
-                         iCurImage->Format = IL_LUMINANCE_ALPHA; 
-                         break;
-                case 3:
+			iCurImage->Format = IL_LUMINANCE_ALPHA; 
+			break;
+		case 3:
 			iCurImage->Format = IL_RGB;
 			break;
 		case 4:
