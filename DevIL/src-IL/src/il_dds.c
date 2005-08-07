@@ -97,30 +97,34 @@ ILboolean ilIsValidDdsL(ILvoid *Lump, ILuint Size)
 // Internal function used to get the .dds header from the current file.
 ILboolean iGetDdsHead(DDSHEAD *Header)
 {
-	if (iread(Header, sizeof(DDSHEAD), 1) != 1)
-		return IL_FALSE;
+	ILint i;
 
-	UInt(&Header->Size1);
-	UInt(&Header->Flags1);
-	UInt(&Header->Height);
-	UInt(&Header->Width);
-	UInt(&Header->LinearSize);
-	UInt(&Header->Depth);
-	UInt(&Header->MipMapCount);
-	UInt(&Header->AlphaBitDepth);
-	UInt(&Header->Size2);
-	UInt(&Header->Flags2);
-	UInt(&Header->FourCC);
-	UInt(&Header->RGBBitCount);
-	UInt(&Header->RBitMask);
-	UInt(&Header->GBitMask);
-	UInt(&Header->BBitMask);
-	UInt(&Header->RGBAlphaBitMask);
-	UInt(&Header->ddsCaps1);
-	UInt(&Header->ddsCaps2);
-	UInt(&Header->ddsCaps3);
-	UInt(&Header->ddsCaps4);
-	UInt(&Header->TextureStage);
+	iread(&Header->Signature, 1, 4);
+	Header->Size1 = GetLittleUInt();
+	Header->Flags1 = GetLittleUInt();
+	Header->Height = GetLittleUInt();
+	Header->Width = GetLittleUInt();
+	Header->LinearSize = GetLittleUInt();
+	Header->Depth = GetLittleUInt();
+	Header->MipMapCount = GetLittleUInt();
+	Header->AlphaBitDepth = GetLittleUInt();
+
+	for (i = 0; i < 10; ++i)
+		Header->NotUsed[i] = GetLittleUInt();
+
+	Header->Size2 = GetLittleUInt();
+	Header->Flags2 = GetLittleUInt();
+	Header->FourCC = GetLittleUInt();
+	Header->RGBBitCount = GetLittleUInt();
+	Header->RBitMask = GetLittleUInt();
+	Header->GBitMask = GetLittleUInt();
+	Header->BBitMask = GetLittleUInt();
+	Header->RGBAlphaBitMask = GetLittleUInt();
+	Header->ddsCaps1 = GetLittleUInt();
+	Header->ddsCaps2 = GetLittleUInt();
+	Header->ddsCaps3 = GetLittleUInt();
+	Header->ddsCaps4 = GetLittleUInt();
+	Header->TextureStage = GetLittleUInt();
 
 	if (Head.Depth == 0)
 		Head.Depth = 1;
