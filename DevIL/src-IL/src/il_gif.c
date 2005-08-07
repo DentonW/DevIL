@@ -143,11 +143,14 @@ ILboolean iLoadGifInternal()
 
 	GlobalPal.Palette = NULL;
 	GlobalPal.PalSize = 0;
-	if (iread(&Header, sizeof(Header), 1) != 1)
-		return IL_FALSE;
 
-	UShort(&Header.Width);
-	UShort(&Header.Height);
+	//read header
+	iread(&Header.Sig, 1, 6);
+	Header.Width = GetLittleUShort();
+	Header.Height = GetLittleUShort();
+	Header.ColourInfo = igetc();
+	Header.Background = igetc();
+	Header.Aspect = igetc();
 
 	if (!strnicmp(Header.Sig, "GIF87A", 6)) {
 		GifType = GIF87A;
@@ -226,17 +229,20 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 			DisposalMethod = (Gfx.Packed & 0x1C) >> 2;
 
 
-		// Either of these means that we've reached the end of the data stream.
-		if (iread(&ImageDesc, sizeof(ImageDesc), 1) != 1) {
+		//read image descriptor
+		ImageDesc.Separator = igetc();
+		if (ImageDesc.Separator != 0x2C) //end of image
+			break;
+		ImageDesc.OffX = GetLittleUShort();
+		ImageDesc.OffY = GetLittleUShort();
+		ImageDesc.Width = GetLittleUShort();
+		ImageDesc.Height = GetLittleUShort();
+		ImageDesc.ImageInfo = igetc();
+		if (ieof()) {
 			ilGetError();  // Gets rid of the IL_FILE_READ_ERROR that inevitably results.
 			break;
 		}
-		if (ImageDesc.Separator != 0x2C)
-			break;
-		UShort(&ImageDesc.OffX);
-		UShort(&ImageDesc.OffY);
-		UShort(&ImageDesc.Width);
-		UShort(&ImageDesc.Height);
+
 
 		if (!BaseImage) {
 			NumImages++;
@@ -381,9 +387,13 @@ ILboolean SkipExtensions(GFXCONTROL *Gfx)
 		switch (Label)
 		{
 			case 0xF9:
-				if (iread(Gfx, sizeof(GFXCONTROL) - sizeof(ILboolean), 1) != 1)
+				Gfx->Size = igetc();
+				Gfx->Packed = igetc();
+				Gfx->Delay = GetLittleUShort();
+				Gfx->Transparent = igetc();
+				Gfx->Terminator = igetc();
+				if (ieof())
 					return IL_FALSE;
-				UShort(&Gfx->Delay);
 				Gfx->Used = IL_FALSE;
 
 				break;

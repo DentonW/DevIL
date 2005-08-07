@@ -99,24 +99,21 @@ ILboolean ilIsValidBmpL(ILvoid *Lump, ILuint Size)
 // Internal function used to get the .bmp header from the current file.
 ILboolean iGetBmpHead(BMPHEAD *Header)
 {
-	if (iread(Header, sizeof(BMPHEAD), 1) != 1)
-		return IL_FALSE;
-
-	UShort(&Header->bfType);
-	Int(&Header->bfSize);
-	UInt(&Header->bfReserved);
-	Int(&Header->bfDataOff);
-	Int(&Header->biSize);
-	Int(&Header->biWidth);
-	Int(&Header->biHeight);
-	Short(&Header->biPlanes);
-	Short(&Header->biBitCount);
-	Int(&Header->biCompression);
-	Int(&Header->biSizeImage);
-	Int(&Header->biXPelsPerMeter);
-	Int(&Header->biYPelsPerMeter);
-	Int(&Header->biClrUsed);
-	Int(&Header->biClrImportant);
+	Header->bfType = GetLittleUShort();
+	Header->bfSize = GetLittleInt();
+	Header->bfReserved = GetLittleUInt();
+	Header->bfDataOff = GetLittleInt();
+	Header->biSize = GetLittleInt();
+	Header->biWidth = GetLittleInt();
+	Header->biHeight = GetLittleInt();
+	Header->biPlanes = GetLittleShort();
+	Header->biBitCount = GetLittleShort();
+	Header->biCompression = GetLittleInt();
+	Header->biSizeImage = GetLittleInt();
+	Header->biXPelsPerMeter = GetLittleInt();
+	Header->biYPelsPerMeter = GetLittleInt();
+	Header->biClrUsed = GetLittleInt();
+	Header->biClrImportant = GetLittleInt();
 
 	return IL_TRUE;
 }

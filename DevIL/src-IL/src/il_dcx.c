@@ -67,19 +67,16 @@ ILboolean ilIsValidDcxL(ILvoid *Lump, ILuint Size)
 // Internal function obtain the .dcx header from the current file.
 ILboolean iGetDcxHead(DCXHEAD *Head)
 {
-	if (iread(Head, sizeof(DCXHEAD), 1) != 1)
-		return IL_FALSE;
-
-	UShort(&Head->Xmin);
-	UShort(&Head->Ymin);
-	UShort(&Head->Xmax);
-	UShort(&Head->Ymax);
-	UShort(&Head->HDpi);
-	UShort(&Head->VDpi);
-	UShort(&Head->Bps);
-	UShort(&Head->PaletteInfo);
-	UShort(&Head->HScreenSize);
-	UShort(&Head->VScreenSize);
+	Head->Xmin = GetLittleUShort();
+	Head->Ymin = GetLittleUShort();
+	Head->Xmax = GetLittleUShort();
+	Head->Ymax = GetLittleUShort();
+	Head->HDpi = GetLittleUShort();
+	Head->VDpi = GetLittleUShort();
+	Head->Bps = GetLittleUShort();
+	Head->PaletteInfo = GetLittleUShort();
+	Head->HScreenSize = GetLittleUShort();
+	Head->VScreenSize = GetLittleUShort();
 
 	return IL_TRUE;
 }

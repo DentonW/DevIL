@@ -71,15 +71,14 @@ ILboolean ilIsValidPsdL(ILvoid *Lump, ILuint Size)
 // Internal function used to get the Psd header from the current file.
 ILboolean iGetPsdHead(PSDHEAD *Header)
 {
-	if (iread(Header, sizeof(PSDHEAD), 1) != 1)
-		return IL_FALSE;
-
-	BigUShort(&Header->Version);
-	BigUShort(&Header->Channels);
-	BigUInt(&Header->Height);
-	BigUInt(&Header->Width);
-	BigUShort(&Header->Depth);
-	BigUShort(&Header->Mode);
+	iread(Header->Signature, 1, 4);
+	Header->Version = GetBigUShort();
+	iread(Header->Reserved, 1, 6);
+	Header->Channels = GetBigUShort();
+	Header->Height = GetBigUInt();
+	Header->Width = GetBigUInt();
+	Header->Depth = GetBigUShort();
+	Header->Mode = GetBigUShort();
 
 	return IL_TRUE;
 }

@@ -74,10 +74,11 @@ ILboolean iLoadIconInternal()
 		return IL_FALSE;
 	}
 
-	if (iread(&IconDir, sizeof(ICODIR), 1) != 1)
+	IconDir.Reserved = GetLittleShort();
+	IconDir.Type = GetLittleShort();
+	IconDir.Count = GetLittleShort();
+	if (ieof())
 		goto file_read_error;
-	Short(&IconDir.Count);
-	Short(&IconDir.Type);
 
 	DirEntries = (ICODIRENTRY*)ialloc(sizeof(ICODIRENTRY) * IconDir.Count);
 	IconImages = (ICOIMAGE*)ialloc(sizeof(ICOIMAGE) * IconDir.Count);
@@ -90,30 +91,37 @@ ILboolean iLoadIconInternal()
 	// Make it easier for file_read_error.
 	for (i = 0; i < IconDir.Count; i++)
 		imemclear(&IconImages[i], sizeof(ICOIMAGE));
-	if (iread(DirEntries, sizeof(ICODIRENTRY), IconDir.Count) != (ILuint)IconDir.Count)
-		goto file_read_error;
+	for (i = 0; i < IconDir.Count; ++i) {
+		DirEntries[i].Width = igetc();
+		DirEntries[i].Height = igetc();
+		DirEntries[i].NumColours = igetc();
+		DirEntries[i].Reserved = igetc();
+		DirEntries[i].Planes = GetLittleShort();
+		DirEntries[i].Bpp = GetLittleShort();
+		DirEntries[i].SizeOfData = GetLittleUInt();
+		DirEntries[i].Offset = GetLittleUInt();
+
+		if(ieof())
+			goto file_read_error;
+	}
 
 	for (i = 0; i < IconDir.Count; i++) {
-		Short(&DirEntries[i].Planes);
-		Short(&DirEntries[i].Bpp);
-		UInt(&DirEntries[i].SizeOfData);
-		UInt(&DirEntries[i].Offset);
-
 		iseek(DirEntries[i].Offset, IL_SEEK_SET);
-		if (iread(&IconImages[i].Head, sizeof(INFOHEAD), 1) != 1)
-			goto file_read_error;
 
-		Int(&IconImages[i].Head.Size);
-		Int(&IconImages[i].Head.Width);
-		Int(&IconImages[i].Head.Height);
-		Short(&IconImages[i].Head.Planes);
-		Short(&IconImages[i].Head.BitCount);
-		Int(&IconImages[i].Head.Compression);
-		Int(&IconImages[i].Head.SizeImage);
-		Int(&IconImages[i].Head.XPixPerMeter);
-		Int(&IconImages[i].Head.YPixPerMeter);
-		Int(&IconImages[i].Head.ColourUsed);
-		Int(&IconImages[i].Head.ColourImportant);
+		IconImages[i].Head.Size = GetLittleInt();
+		IconImages[i].Head.Width = GetLittleInt();
+		IconImages[i].Head.Height = GetLittleInt();
+		IconImages[i].Head.Planes = GetLittleShort();
+		IconImages[i].Head.BitCount = GetLittleShort();
+		IconImages[i].Head.Compression = GetLittleInt();
+		IconImages[i].Head.SizeImage = GetLittleInt();
+		IconImages[i].Head.XPixPerMeter = GetLittleInt();
+		IconImages[i].Head.YPixPerMeter = GetLittleInt();
+		IconImages[i].Head.ColourUsed = GetLittleInt();
+		IconImages[i].Head.ColourImportant = GetLittleInt();
+
+		if (ieof())
+			goto file_read_error;
 
 		if (IconImages[i].Head.BitCount < 8) {
 			if (IconImages[i].Head.ColourUsed == 0) {

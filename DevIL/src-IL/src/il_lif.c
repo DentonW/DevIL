@@ -66,18 +66,16 @@ ILboolean ilIsValidLifL(ILvoid *Lump, ILuint Size)
 // Internal function used to get the Lif header from the current file.
 ILboolean iGetLifHead(LIF_HEAD *Header)
 {
-	if (iread(Header, sizeof(LIF_HEAD), 1) != 1)
-		return IL_FALSE;
-
-	UInt(&Header->Version);
-	UInt(&Header->Flags);
-	UInt(&Header->Width);
-	UInt(&Header->Height);
-	UInt(&Header->PaletteCRC);
-	UInt(&Header->ImageCRC);
-	UInt(&Header->PalOffset);
-	UInt(&Header->TeamEffect0);
-	UInt(&Header->TeamEffect1);
+	iread(Header->Id, 1, 8);
+	Header->Version = GetLittleUInt();
+	Header->Flags = GetLittleUInt();
+	Header->Width = GetLittleUInt();
+	Header->Height = GetLittleUInt();
+	Header->PaletteCRC = GetLittleUInt();
+	Header->ImageCRC = GetLittleUInt();
+	Header->PalOffset = GetLittleUInt();
+	Header->TeamEffect0 = GetLittleUInt();
+	Header->TeamEffect1 = GetLittleUInt();
 
 	return IL_TRUE;
 }

@@ -69,16 +69,15 @@ ILboolean ilIsValidPicL(ILvoid *Lump, ILuint Size)
 // Internal function used to get the .pic header from the current file.
 ILboolean iGetPicHead(PIC_HEAD *Header)
 {
-	if (iread(Header, sizeof(PIC_HEAD), 1) != 1)
-		return IL_FALSE;
-
-	Int(&Header->Magic);
-	//iread(&Header->Version, sizeof(ILfloat), 1);  // wtf?  A float?!
-	Short(&Header->Width);
-	Short(&Header->Height);
-	//iread(&Header->Ratio, sizeof(ILfloat), 1);
-	Short(&Header->Fields);
-	Short(&Header->Padding);
+	Header->Magic = GetLittleInt();
+	Header->Version = GetLittleFloat();
+	iread(Header->Comment, 1, 80);
+	iread(Header->Id, 1, 4);
+	Header->Width = GetLittleShort();
+	Header->Height = GetLittleShort();
+	Header->Ratio = GetLittleFloat();
+	Header->Fields = GetLittleShort();
+	Header->Padding = GetLittleShort();
 
 	return IL_TRUE;
 }

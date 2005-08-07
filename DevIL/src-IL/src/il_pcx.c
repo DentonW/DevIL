@@ -67,19 +67,24 @@ ILboolean ilIsValidPcxL(ILvoid *Lump, ILuint Size)
 // Internal function obtain the .pcx header from the current file.
 ILboolean iGetPcxHead(PCXHEAD *Head)
 {
-	if (iread(Head, sizeof(PCXHEAD), 1) != 1)
-		return IL_FALSE;
-
-	UShort(&Head->Xmin);
-	UShort(&Head->Ymin);
-	UShort(&Head->Xmax);
-	UShort(&Head->Ymax);
-	UShort(&Head->HDpi);
-	UShort(&Head->VDpi);
-	UShort(&Head->Bps);
-	UShort(&Head->PaletteInfo);
-	UShort(&Head->HScreenSize);
-	UShort(&Head->VScreenSize);
+	Head->Manufacturer = igetc();
+	Head->Version = igetc();
+	Head->Encoding = igetc();
+	Head->Bpp = igetc();
+	Head->Xmin = GetLittleUShort();
+	Head->Ymin = GetLittleUShort();
+	Head->Xmax = GetLittleUShort();
+	Head->Ymax = GetLittleUShort();
+	Head->HDpi = GetLittleUShort();
+	Head->VDpi = GetLittleUShort();
+	iread(Head->ColMap, 1, 48);
+	Head->Reserved = igetc();
+	Head->NumPlanes = igetc();
+	Head->Bps = GetLittleUShort();
+	Head->PaletteInfo = GetLittleUShort();
+	Head->HScreenSize = GetLittleUShort();
+	Head->VScreenSize = GetLittleUShort();
+	iread(Head->Filler, 1, 54);
 
 	return IL_TRUE;
 }
