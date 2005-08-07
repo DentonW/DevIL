@@ -710,7 +710,7 @@ ILboolean ILAPIENTRY ilFormatFunc(ILenum Mode)
 		case IL_BGR:
 		case IL_BGRA:
 		case IL_LUMINANCE:
-                case IL_LUMINANCE_ALPHA:
+		case IL_LUMINANCE_ALPHA:
 			ilStates[ilCurrentPos].ilFormatMode = Mode;
 			break;
 		default:
@@ -1160,38 +1160,23 @@ ILvoid ILAPIENTRY ilSetInteger(ILenum Mode, ILint Param)
 }
 
 
+
 ILint iGetInt(ILenum Mode)
 {
-	switch (Mode)
-	{
-		case IL_TGA_CREATE_STAMP:
-			return (ILint)ilStates[ilCurrentPos].ilTgaCreateStamp;
-		case IL_JPG_QUALITY:
-			return ilStates[ilCurrentPos].ilJpgQuality;
-		case IL_PNG_INTERLACE:
-			return ilStates[ilCurrentPos].ilPngInterlace;
-		case IL_TGA_RLE:
-			return ilStates[ilCurrentPos].ilTgaRle;
-		case IL_BMP_RLE:
-			return ilStates[ilCurrentPos].ilBmpRle;
-		case IL_SGI_RLE:
-			return ilStates[ilCurrentPos].ilSgiRle;
-		case IL_JPG_SAVE_FORMAT:
-			return ilStates[ilCurrentPos].ilJpgFormat;
-		case IL_DXTC_FORMAT:
-			return ilStates[ilCurrentPos].ilDxtcFormat;
-		case IL_PCD_PICNUM:
-			return ilStates[ilCurrentPos].ilPcdPicNum;
-		case IL_QUANTIZATION_MODE:
-			return ilStates[ilCurrentPos].ilQuantMode;
-		case IL_NEU_QUANT_SAMPLE:
-			return ilStates[ilCurrentPos].ilNeuSample;
-		case IL_KEEP_DXTC_DATA:
-			return ilStates[ilCurrentPos].ilKeepDxtcData;
-		case IL_MAX_QUANT_INDEXS:
-			return ilStates[ilCurrentPos].ilQuantMaxIndexs ;
-	}
+	//like ilGetInteger(), but sets another error on failure
 
-	ilSetError(IL_INTERNAL_ERROR);
-	return 0;
+	//call ilGetIntegerv() for more robust code
+	ILenum err;
+	ILint r = -1;
+
+	ilGetIntegerv(Mode, &r);
+
+	//check if an error occured, set another error
+	err = ilGetError();
+	if (r == -1 && err == IL_INVALID_ENUM)
+		ilSetError(IL_INTERNAL_ERROR);
+	else
+		ilSetError(err); //restore error
+
+	return r;
 }
