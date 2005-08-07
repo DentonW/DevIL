@@ -75,11 +75,11 @@ ILboolean iLoadRawInternal()
 		return IL_FALSE;
 	}
 
-	iread(&iCurImage->Width, sizeof(ILuint), 1);
-	iread(&iCurImage->Height, sizeof(ILuint), 1);
-	iread(&iCurImage->Depth, sizeof(ILuint), 1);
-	iread(&iCurImage->Bpp, sizeof(ILubyte), 1);
-	if (iread(&iCurImage->Bpc, sizeof(ILubyte), 1) != 1)
+	iCurImage->Width = GetLittleUInt();
+	iCurImage->Height = GetLittleUInt();
+	iCurImage->Depth = GetLittleUInt();
+	iCurImage->Bpp = igetc();
+	if (iread(&iCurImage->Bpc, 1, 1) != 1)
 		return IL_FALSE;
 
 	if (!ilTexImage(iCurImage->Width, iCurImage->Height, iCurImage->Depth, iCurImage->Bpp, 0, ilGetTypeBpc(iCurImage->Bpc), NULL)) {
