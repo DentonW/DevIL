@@ -39,7 +39,6 @@
 ILboolean	iIsValidPng(ILvoid);
 ILboolean	iLoadPngInternal(ILvoid);
 ILboolean	iSavePngInternal(ILvoid);
-ILvoid		pngSwitchData(ILubyte *Data, ILuint SizeOfData, ILubyte Bpc);
 
 ILint		readpng_init(ILvoid);
 ILboolean	readpng_get_image(ILdouble display_exponent);
@@ -169,46 +168,7 @@ ILboolean iLoadPngInternal()
 	if (!readpng_get_image(GAMMA_CORRECTION))
 		return IL_FALSE;
 
-	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;  // correct?
-
-	// @TODO:  Reimplement!
-	/*if (png_ptr->num_palette > 0) {
-		iCurImage->Pal.PalSize = png_ptr->num_palette * 3;	// just a guess...
-		iCurImage->Pal.PalType = IL_PAL_RGB24;	// just another guess...
-		iCurImage->Pal.Palette = (ILubyte*)ialloc(png_ptr->num_palette * 3);
-		if (iCurImage->Pal.Palette == NULL) {
-			return IL_FALSE;
-		}
-		memcpy(iCurImage->Pal.Palette, png_ptr->palette, png_ptr->num_palette * 3);
-	}*/
-
-	switch (iCurImage->Bpp)
-	{
-		case 1: // @TODO:	FIX THIS! Will never happen right now, because
-				//paletted images are expanded to rgb at the moment...
-			iCurImage->Format = IL_COLOUR_INDEX;
-			break;
-		case 2: //this has to be gray + alpha, since palette images were
-				//expanded to rgb earlier (added 20040224)
-			iCurImage->Format = IL_LUMINANCE_ALPHA;
-			break;
-		case 3:
-			iCurImage->Format = IL_RGB;
-			break;
-		case 4:
-			iCurImage->Format = IL_RGBA;
-			break;
-		default:
-			ilSetError(IL_ILLEGAL_FILE_VALUE);
-			return IL_FALSE;
-	}
-
-	if (color_type == PNG_COLOR_TYPE_GRAY)
-		iCurImage->Format = IL_LUMINANCE;
-	
 	readpng_cleanup();
-
-	pngSwitchData(iCurImage->Data, iCurImage->SizeOfData, iCurImage->Bpc);
 
 	ilFixImage();
 
@@ -296,8 +256,10 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 	png_bytepp	row_pointers = NULL;
 	png_uint_32 width, height; // Changed the type to fix AMD64 bit problems, thanks to Eric Werness
 	ILdouble	screen_gamma = 1.0, image_gamma;
-	ILuint		i, channels;//, bit_depth;
-    ILint       bit_depth;
+	ILuint		i, channels;
+	ILenum format;
+	png_colorp	palette;
+	ILint num_palette, j, bit_depth;
 
 	/* setjmp() must be called in every function that calls a PNG-reading
 	 * libpng function */
@@ -308,17 +270,13 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 	}
 
 	png_get_IHDR(png_ptr, info_ptr, (png_uint_32*)&width, (png_uint_32*)&height,
-	   		     &bit_depth, &color_type, NULL, NULL, NULL);
+	             &bit_depth, &color_type, NULL, NULL, NULL);
 
-	// Expand palette images to RGB, low-bit-depth grayscale images to 8 bits,
-	//	transparency chunks to full alpha channel; strip 16-bit-per-sample
-	//	images to 8 bits per sample; and convert grayscale to RGB[A]
+	// Expand low-bit-depth grayscale images to 8 bits
 	if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8) {
 		png_set_gray_1_2_4_to_8(png_ptr);
 	}
-	// Expand paletted colors into true RGB triplets
-	if (color_type == PNG_COLOR_TYPE_PALETTE)
-		png_set_palette_to_rgb(png_ptr);
+
 	// Expand paletted or RGB images with transparency to full alpha channels
 	//	so the data will be available as RGBA quartets.
 	if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
@@ -326,10 +284,12 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 
 	//refresh information (added 20040224)
 	png_get_IHDR(png_ptr, info_ptr, (png_uint_32*)&width, (png_uint_32*)&height,
-		         &bit_depth, &color_type, NULL, NULL, NULL);
+	             &bit_depth, &color_type, NULL, NULL, NULL);
 
-	if (bit_depth < 8)	// Expanded earlier.
+	if (bit_depth < 8) {	// Expanded earlier for grayscale, now take care of palette and rgb
 		bit_depth = 8;
+		png_set_packing(png_ptr);
+	}
 
 	// Perform gamma correction.
 	// @TODO:  Determine if we should call png_set_gamma if image_gamma is 1.0.
@@ -342,9 +302,12 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 	image_gamma = image_gamma;
 #endif
 
-	if (color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
-		png_set_gray_to_rgb(png_ptr);
-	}
+	//fix endianess
+#ifdef __LITTLE_ENDIAN__
+	if (bit_depth == 16)
+		png_set_swap(png_ptr);
+#endif
+
 
 	png_read_update_info(png_ptr, info_ptr);
 	channels = (ILint)png_get_channels(png_ptr, info_ptr);
@@ -352,12 +315,56 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 	//in iLoadPngInternal (globals rule...)
 	color_type = png_get_color_type(png_ptr, info_ptr);
 
-	if (!ilTexImage(width, height, 1, (ILubyte)channels, 0, ilGetTypeBpc((ILubyte)(bit_depth >> 3)), NULL)) {
+	//determine internal format
+	switch(color_type)
+	{
+		case PNG_COLOR_TYPE_PALETTE:
+			format = IL_COLOUR_INDEX;
+			break;
+		case PNG_COLOR_TYPE_GRAY:
+			format = IL_LUMINANCE;
+			break;
+		case PNG_COLOR_TYPE_GRAY_ALPHA:
+			format = IL_LUMINANCE_ALPHA;
+			break;
+		case PNG_COLOR_TYPE_RGB:
+			format = IL_RGB;
+			break;
+		case PNG_COLOR_TYPE_RGB_ALPHA:
+			format = IL_RGBA;
+			break;
+		default:
+			ilSetError(IL_ILLEGAL_FILE_VALUE);
+			png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+			return IL_FALSE;
+	}
+
+	if (!ilTexImage(width, height, 1, (ILubyte)channels, format, ilGetTypeBpc((ILubyte)(bit_depth >> 3)), NULL)) {
 		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
 		return IL_FALSE;
 	}
-	iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
+	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 
+	//copy palette
+	if (format == IL_COLOUR_INDEX) {
+		if (!png_get_PLTE(png_ptr, info_ptr, &palette, &num_palette)) {
+			ilSetError(IL_ILLEGAL_FILE_VALUE);
+			png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+			return IL_FALSE;
+		}
+
+		iCurImage->Pal.PalType = IL_PAL_RGB24;
+		iCurImage->Pal.PalSize = num_palette * 3;
+		iCurImage->Pal.Palette = (ILubyte*)ialloc(iCurImage->Pal.PalSize);
+
+		for (j = 0; j < num_palette; ++j) {
+			iCurImage->Pal.Palette[3*j + 0] = palette[j].red;
+			iCurImage->Pal.Palette[3*j + 1] = palette[j].green;
+			iCurImage->Pal.Palette[3*j + 2] = palette[j].blue;
+		}
+	}
+
+	//allocate row pointers
 	if ((row_pointers = (png_bytepp)ialloc(height * sizeof(png_bytep))) == NULL) {
 		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
 		return IL_FALSE;
@@ -365,7 +372,6 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 
 
 	// Set the individual row_pointers to point at the correct offsets */
-
 	for (i = 0; i < height; i++)
 		row_pointers[i] = iCurImage->Data + i * iCurImage->Bps;
 
@@ -390,34 +396,6 @@ ILvoid readpng_cleanup()
 		png_ptr = NULL;
 		info_ptr = NULL;
 	}
-}
-
-
-ILvoid pngSwitchData(ILubyte *Data, ILuint SizeOfData, ILubyte Bpc)
-{
-#ifdef __LITTLE_ENDIAN__
-	ILuint	Temp;
-	ILuint	i;
-
-	switch (Bpc)
-	{
-		case 2:
-			for (i = 0; i < SizeOfData; i += 2) {
-				Temp = Data[i];
-				Data[i] = Data[i+1];
-				Data[i+1] = Temp;
-			}
-			break;
-
-		case 4:
-			for (i = 0; i < SizeOfData; i += 4) {
-				*((ILuint*)Data+i) = SwapInt(*((ILuint*)Data+i));
-			}
-			break;
-	}
-
-#endif
-	return;
 }
 
 
