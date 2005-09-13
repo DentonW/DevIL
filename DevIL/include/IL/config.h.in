@@ -177,6 +177,9 @@
 /* valloc memory alloctaion found */
 #undef VALLOC
 
+/* Memory is vector aligned */
+#undef VECTORMEM
+
 /* Version number of package */
 #undef VERSION
 

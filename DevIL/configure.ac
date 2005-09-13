@@ -33,7 +33,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.2 $)
+AC_REVISION($Revision: 1.3 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -72,7 +72,7 @@ int main() {
 	vector unsigned int vec;
 	vec = vec_splat_u32(0);
 	return 0;
-}], [AC_DEFINE([ALTIVEC_GCC],,[Altivec GCC extension found])] [CFLAGS="$CFLAGS_TMP -faltivec -maltivec";] [AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)] );
+}], [AC_DEFINE([ALTIVEC_GCC],,[Altivec GCC extension found])] [AC_DEFINE([VECTORMEM],,[Memory is vector aligned])] [CFLAGS="$CFLAGS_TMP -faltivec -maltivec";] [AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)] );
 
 dnl
 dnl SSE
@@ -86,7 +86,7 @@ int main() {
         __m128 v;
         v = _mm_sub_ss(v,v);
 }], [AC_DEFINE([SSE],,[Use SSE cpu extension])]
- [CFLAGS="$CFLAGS_TMP -msse";][AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)])
+ [CFLAGS="$CFLAGS_TMP -msse";] [AC_DEFINE([VECTORMEM],,[Memory is vector aligned])][AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)])
 
 dnl
 dnl SSE2
@@ -100,7 +100,7 @@ int main() {
         __m128i v;
         v = _mm_add_epi32(v,v);
 }], [AC_DEFINE([SSE2],,[Use SSE2 cpu extension])]
- [CFLAGS="$CFLAGS_TMP -msse2";][AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)])
+ [CFLAGS="$CFLAGS_TMP -msse2";] [AC_DEFINE([VECTORMEM],,[Memory is vector aligned])][AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)])
 
 dnl
 dnl SSE3
@@ -114,7 +114,7 @@ int main() {
         __m128d v;
         v = _mm_addsub_pd(v,v);
 }], [AC_DEFINE([SSE3],,[Use SSE3 cpu extension])]
- [CFLAGS="$CFLAGS_TMP -msse3";][AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)])
+ [CFLAGS="$CFLAGS_TMP -msse3";] [AC_DEFINE([VECTORMEM],,[Memory is vector aligned])][AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)])
 
 
 dnl
