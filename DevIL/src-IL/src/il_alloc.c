@@ -51,7 +51,7 @@ ILvoid *ivec_align_buffer( ILvoid *buffer, ILuint size ) {
 
 ILvoid* ILAPIENTRY DefaultAllocFunc(ILuint Size)
 {
-        #ifdef ALTIVEC_GCC
+        #ifdef VECTORMEM
             return (ILvoid*)vec_malloc(Size);
         #else
             return malloc(Size);
