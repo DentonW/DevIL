@@ -33,7 +33,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.1 $)
+AC_REVISION($Revision: 1.2 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -75,17 +75,47 @@ int main() {
 }], [AC_DEFINE([ALTIVEC_GCC],,[Altivec GCC extension found])] [CFLAGS="$CFLAGS_TMP -faltivec -maltivec";] [AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)] );
 
 dnl
-dnl x86 BSWAP assembly command
+dnl SSE
 dnl
-AC_MSG_CHECKING(x86 BSWAP)
+CFLAGS_TMP=$CFLAGS
+CFLAGS="-msse"
+AC_MSG_CHECKING(SSE)
 AC_COMPILE_IFELSE([
+#include <xmmintrin.h>
 int main() {
-    asm("push   %eax");
-    asm("bswap	%eax");
-	asm("pop    %eax");
-	return 0;
-}], [AC_DEFINE([GCC_x86_BSWAP],,[Use x86 BSWAP for byteswap of word])]
-[AC_MSG_RESULT(yes)], [AC_MSG_RESULT(no)])
+        __m128 v;
+        v = _mm_sub_ss(v,v);
+}], [AC_DEFINE([SSE],,[Use SSE cpu extension])]
+ [CFLAGS="$CFLAGS_TMP -msse";][AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)])
+
+dnl
+dnl SSE2
+dnl
+CFLAGS_TMP=$CFLAGS
+CFLAGS="-msse2"
+AC_MSG_CHECKING(SSE2)
+AC_COMPILE_IFELSE([
+#include <emmintrin.h>
+int main() {
+        __m128i v;
+        v = _mm_add_epi32(v,v);
+}], [AC_DEFINE([SSE2],,[Use SSE2 cpu extension])]
+ [CFLAGS="$CFLAGS_TMP -msse2";][AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)])
+
+dnl
+dnl SSE3
+dnl
+CFLAGS_TMP=$CFLAGS
+CFLAGS="-msse3"
+AC_MSG_CHECKING(SSE3)
+AC_COMPILE_IFELSE([
+#include <emmintrin.h>
+int main() {
+        __m128d v;
+        v = _mm_addsub_pd(v,v);
+}], [AC_DEFINE([SSE3],,[Use SSE3 cpu extension])]
+ [CFLAGS="$CFLAGS_TMP -msse3";][AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)])
+
 
 dnl
 dnl Memory alignment functions

@@ -1,53 +1,9 @@
-/* include/IL/config.h.in.  Generated from configure.in by autoheader.  */
-#ifndef __CONFIG_H__
-#define __CONFIG_H__
+/* include/IL/config.h.in.  Generated from configure.ac by autoheader.  */
 
-/* Supported images formats (il) */
-
-#undef IL_NO_BMP
-#undef IL_NO_CUT
-#undef IL_NO_CHEAD
-#undef IL_NO_DCX
-#undef IL_NO_DDS
-#undef IL_NO_DOOM
-#undef IL_NO_GIF
-#undef IL_NO_HDR
-#undef IL_NO_ICO
-#undef IL_NO_JPG
-#undef IL_NO_LCMS
-#undef IL_NO_LIF
-#undef IL_NO_MDL
-#undef IL_NO_MNG
-#undef IL_NO_PCD
-#undef IL_NO_PCX
-#undef IL_NO_PIC
-#undef IL_NO_PIX
-#undef IL_NO_PNG
-#undef IL_NO_PNM
-#undef IL_NO_PSD
-#undef IL_NO_PSP
-#undef IL_NO_PXR
-#undef IL_NO_RAW
-#undef IL_NO_SGI
-#undef IL_NO_TGA
-#undef IL_NO_TIF
-#undef IL_NO_WAL
-#undef IL_NO_XPM
-#undef IL_USE_JPEGLIB_UNMODIFIED
-
-/* Supported api (ilut) */
-
-#undef ILUT_USE_ALLEGRO
-#undef ILUT_USE_DIRECTX8
-#undef ILUT_USE_OPENGL
-#undef ILUT_USE_SDL
-#undef ILUT_USE_WIN32
-
-
-/* Defined to 1 if Altivec technology is available in the processor */
+/* Altivec coprocessor found */
 #undef ALTIVEC
 
-/* Defined to 1 if the gcc has the altivec extension enabled */
+/* Altivec GCC extension found */
 #undef ALTIVEC_GCC
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
@@ -80,6 +36,111 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
+/* Support Allegro API */
+#undef ILUT_USE_ALLEGRO
+
+/* Support DirectX8 API */
+#undef ILUT_USE_DIRECTX8
+
+/* Support OpenGL API */
+#undef ILUT_USE_OPENGL
+
+/* Support SDL API */
+#undef ILUT_USE_SDL
+
+/* BMP support */
+#undef IL_NO_BMP
+
+/* DCX support */
+#undef IL_NO_DCX
+
+/* DDS support */
+#undef IL_NO_DDS
+
+/* DOOM support */
+#undef IL_NO_DOOM
+
+/* GIF support */
+#undef IL_NO_GIF
+
+/* HDR support */
+#undef IL_NO_HDR
+
+/* ICO support */
+#undef IL_NO_ICO
+
+/* JPEG support */
+#undef IL_NO_JPG
+
+/* LCMS support */
+#undef IL_NO_LCMS
+
+/* LIF support */
+#undef IL_NO_LIF
+
+/* MDL support */
+#undef IL_NO_MDL
+
+/* MNG support */
+#undef IL_NO_MNG
+
+/* PCD support */
+#undef IL_NO_PCD
+
+/* PCX support */
+#undef IL_NO_PCX
+
+/* PIC support */
+#undef IL_NO_PIC
+
+/* PIX support */
+#undef IL_NO_PIX
+
+/* PNG support */
+#undef IL_NO_PNG
+
+/* PNM support */
+#undef IL_NO_PNM
+
+/* PSD support */
+#undef IL_NO_PSD
+
+/* PSP support */
+#undef IL_NO_PSP
+
+/* PXR support */
+#undef IL_NO_PXR
+
+/* RAW support */
+#undef IL_NO_RAW
+
+/* SGI support */
+#undef IL_NO_SGI
+
+/* TGA support */
+#undef IL_NO_TGA
+
+/* TIFF support */
+#undef IL_NO_TIF
+
+/* WAL support */
+#undef IL_NO_WAL
+
+/* XPM support */
+#undef IL_NO_XPM
+
+/* Use jpeglib unmoified */
+#undef IL_USE_JPEGLIB_UNMODIFIED
+
+/* LCMS include without lcms/ support */
+#undef LCMS_NODIRINCLUDE
+
+/* Building on Mac OS X */
+#undef MAX_OS_X
+
+/* memalign memory alloctaion found */
+#undef MEMALIGN
+
 /* Name of package */
 #undef PACKAGE
 
@@ -98,8 +159,23 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
+/* posix_memalign memory alloctaion found */
+#undef POSIX_MEMALIGN
+
+/* Use SSE cpu extension */
+#undef SSE
+
+/* Use SSE2 cpu extension */
+#undef SSE2
+
+/* Use SSE3 cpu extension */
+#undef SSE3
+
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
+
+/* valloc memory alloctaion found */
+#undef VALLOC
 
 /* Version number of package */
 #undef VERSION
@@ -110,4 +186,3 @@
 
 /* Define to 1 if the X Window System is missing or not being used. */
 #undef X_DISPLAY_MISSING
-#endif /* __CONFIG_H__ */
