@@ -575,7 +575,7 @@ ILboolean iSaveTargaInternal()
 	char		*AuthComment = iGetString(IL_TGA_AUTHCOMMENT_STRING);
 	ILubyte 	IDLen = 0, UsePal, Type, PalEntSize;
 	ILshort 	ColMapStart = 0, PalSize;
-	ILint		Temp;
+	ILubyte		Temp;
 	ILenum		Format;
 	ILboolean	Compress;
 	ILuint		RleLen;
