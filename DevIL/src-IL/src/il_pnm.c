@@ -263,6 +263,12 @@ ILboolean iLoadPnmInternal()
 			return IL_FALSE;
 	}
 
+	if (PmImage == NULL) {
+	    iCurImage->Format = ilGetFormatBpp(iCurImage->Bpp);
+	    ilSetError(IL_FILE_READ_ERROR);
+	    return IL_FALSE;
+	}
+
 	// Is this conversion needed?  Just 0's and 1's shows up as all black
 	if (Info.Type == IL_PBM_ASCII) {
 		PbmMaximize(PmImage);
