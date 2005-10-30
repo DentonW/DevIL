@@ -142,8 +142,10 @@ ILboolean ilRleCompressLine(ILubyte *p, ILuint n, ILubyte bpp, ILubyte *q, ILuin
 		}
 	}
 
-	if (CompressMode == IL_SGICOMP)
+	if (CompressMode == IL_SGICOMP) {
+		++RLEBufSize;
 		*q++ = 0;
+	}
 
 	*DestWidth = RLEBufSize;
 

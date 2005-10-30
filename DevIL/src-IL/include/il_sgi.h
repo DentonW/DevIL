@@ -22,6 +22,10 @@ typedef struct iSgiHeader
 	ILbyte		Storage;	// Storage format
 	ILbyte		Bpc;		// Number of bytes per pixel channel
 	ILushort	Dim;		// Number of dimensions
+							//  1: single channel, 1 row with XSize pixels
+							//  2: single channel, XSize*YSize pixels
+							//  3: ZSize channels, XSize*YSize pixels
+	
 	ILushort	XSize;		// X size in pixels
 	ILushort	YSize;		// Y size in pixels
 	ILushort	ZSize;		// Number of channels
@@ -57,6 +61,6 @@ ILvoid		sgiSwitchData(ILubyte *Data, ILuint SizeOfData);
 ILboolean	iNewSgi(iSgiHeader *Head);
 ILboolean	iReadNonRleSgi(iSgiHeader *Head);
 ILboolean	iReadRleSgi(iSgiHeader *Head);
-ILboolean	iSaveRleSgi(ILubyte *Data);
+ILboolean	iSaveRleSgi(ILubyte *Data, int w, int h, int numChannels, int bps);
 
 #endif//SGI_H

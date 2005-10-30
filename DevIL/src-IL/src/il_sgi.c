@@ -552,15 +552,19 @@ ILboolean iSaveSgiInternal()
 	ILimage		*Temp = iCurImage;
 	ILubyte		*TempData;
 
-	Compress = iGetInt(IL_SGI_RLE);
-
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
-	if (iCurImage->Format != IL_RGB && iCurImage->Format != IL_RGBA) {
-		if (iCurImage->Format == IL_BGRA)
+	if (iCurImage->Format != IL_LUMINANCE
+	    //while the sgi spec doesn't directly forbid rgb files with 2
+	    //channels, they are quite uncommon and most apps don't support
+	    //them. so convert lum_a images to rgba before writing.
+	    //&& iCurImage->Format != IL_LUMINANCE_ALPHA
+	    && iCurImage->Format != IL_RGB
+	    && iCurImage->Format != IL_RGBA) {
+		if (iCurImage->Format == IL_BGRA || iCurImage->Format == IL_LUMINANCE_ALPHA)
 			Temp = iConvertImage(iCurImage, IL_RGBA, DetermineSgiType(iCurImage->Type));
 		else
 			Temp = iConvertImage(iCurImage, IL_RGB, DetermineSgiType(iCurImage->Type));
@@ -568,6 +572,9 @@ ILboolean iSaveSgiInternal()
 	else if (iCurImage->Type > IL_UNSIGNED_SHORT) {
 		Temp = iConvertImage(iCurImage, iCurImage->Format, DetermineSgiType(iCurImage->Type));
 	}
+	
+	//compression of images with 2 bytes per channel doesn't work yet
+	Compress = iGetInt(IL_SGI_RLE) && Temp->Bpc == 1;
 
 	if (Temp == NULL)
 		return IL_FALSE;
@@ -659,7 +666,7 @@ ILboolean iSaveSgiInternal()
 		}
 	}
 	else {
-		iSaveRleSgi(TempData);
+		iSaveRleSgi(TempData, Temp->Width, Temp->Height, Temp->Bpp, Temp->Bps);
 	}
 
 
@@ -673,19 +680,20 @@ ILboolean iSaveSgiInternal()
 
 /*----------------------------------------------------------------------------*/
 
-ILboolean iSaveRleSgi(ILubyte *Data)
-{
+ILboolean iSaveRleSgi(ILubyte *Data, int w, int h, int numChannels, int bps)
+ {
+	//works only for sgi files with only 1 bpc
+
 	ILuint	c, i, y, j;
 	ILubyte	*ScanLine = NULL, *CompLine = NULL;
 	ILuint	*StartTable = NULL, *LenTable = NULL;
 	ILuint	TableOff, DataOff = 0;
 
-
-	ScanLine = (ILubyte*)ialloc(iCurImage->Width);
-	CompLine = (ILubyte*)ialloc(iCurImage->Width * 2);  // Absolute worst case.
-	StartTable = (ILuint*)ialloc(iCurImage->Height * iCurImage->Bpp * sizeof(ILuint));
-	LenTable = (ILuint*)ialloc(iCurImage->Height * iCurImage->Bpp * sizeof(ILuint));
-	if (!ScanLine || !StartTable || !LenTable) {
+	ScanLine = (ILubyte*)ialloc(w);
+	CompLine = (ILubyte*)ialloc(w * 2 + 1);  // Absolute worst case.
+	StartTable = (ILuint*)ialloc(h * numChannels * sizeof(ILuint));
+	LenTable = (ILuint*)ialloc(h * numChannels * sizeof(ILuint));
+	if (!ScanLine || !CompLine || !StartTable || !LenTable) {
 		ifree(ScanLine);
 		ifree(CompLine);
 		ifree(StartTable);
@@ -695,34 +703,36 @@ ILboolean iSaveRleSgi(ILubyte *Data)
 
 	// These just contain dummy values at this point.
 	TableOff = itellw();
-	iwrite(StartTable, sizeof(ILuint), iCurImage->Height * iCurImage->Bpp);
-	iwrite(LenTable, sizeof(ILuint), iCurImage->Height * iCurImage->Bpp);
+	iwrite(StartTable, sizeof(ILuint), h * numChannels);
+	iwrite(LenTable, sizeof(ILuint), h * numChannels);
 
 	DataOff = itellw();
-	for (c = 0; c < iCurImage->Bpp; c++) {
-		for (y = 0; y < iCurImage->Height; y++) {
-			i = y * iCurImage->Bps + c;
-			for (j = 0; j < iCurImage->Width; j++, i += iCurImage->Bpp) {
+	for (c = 0; c < numChannels; c++) {
+		for (y = 0; y < h; y++) {
+			i = y * bps + c;
+			for (j = 0; j < w; j++, i += numChannels) {
 				ScanLine[j] = Data[i];
 			}
 
-			ilRleCompressLine(ScanLine, iCurImage->Width, 1, CompLine, LenTable + iCurImage->Height * c + y, IL_SGICOMP);
-			iwrite(CompLine, 1, *(LenTable + iCurImage->Height * c + y));
+			ilRleCompressLine(ScanLine, w, 1, CompLine, LenTable + h * c + y, IL_SGICOMP);
+			iwrite(CompLine, 1, *(LenTable + h * c + y));
 		}
 	}
 
-	iseek(TableOff, IL_SEEK_SET);
+	iseekw(TableOff, IL_SEEK_SET);
 
-	j = iCurImage->Height * iCurImage->Bpp;
+	j = h * numChannels;
 	for (y = 0; y < j; y++) {
 		StartTable[y] = DataOff;
-		StartTable[y] = SwapInt(StartTable[y]);
 		DataOff += LenTable[y];
-		LenTable[y] = SwapInt(LenTable[y]);
+#ifdef __LITTLE_ENDIAN__
+		StartTable[y] = SwapInt(StartTable[y]);
+ 		LenTable[y] = SwapInt(LenTable[y]);
+#endif
 	}
 
-	iwrite(StartTable, sizeof(ILuint), iCurImage->Height * iCurImage->Bpp);
-	iwrite(LenTable, sizeof(ILuint), iCurImage->Height * iCurImage->Bpp);
+	iwrite(StartTable, sizeof(ILuint), h * numChannels);
+	iwrite(LenTable, sizeof(ILuint), h * numChannels);
 
 	ifree(ScanLine);
 	ifree(CompLine);
