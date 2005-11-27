@@ -39,7 +39,8 @@
 static ILboolean iLoadTiffInternal(ILvoid);
 static char*     iMakeString(ILvoid);
 static TIFF*     iTIFFOpen(char *Mode);
-static ILboolean iSaveTiffInternal(char *Filename);
+//static ILboolean iSaveTiffInternal();
+static ILboolean iSaveTiffInternal(const char* Filename);
 
 /*----------------------------------------------------------------------------*/
 
@@ -610,6 +611,10 @@ ILboolean iLoadTiffInternal()
 			}
 			Image->Origin = IL_ORIGIN_LOWER_LEFT;  // eiu...dunno if this is right
 
+#ifdef __BIG_ENDIAN__ //TIFFReadRGBAImage reads abgr on big endian, convert to rgba
+			EndianSwapData(Image);
+#endif
+
 			/*
 			 The following switch() should not be needed,
 			 because we take care of the special cases that needed
@@ -724,6 +729,19 @@ _tiffFileSeekProc(thandle_t fd, toff_t tOff, int whence)
 }
 
 /*----------------------------------------------------------------------------*/
+#if 0
+static toff_t
+_tiffFileSeekProcW(thandle_t fd, toff_t tOff, int whence)
+{
+	/* we use this as a special code, so avoid accepting it */
+	if (tOff == 0xFFFFFFFF)
+		return 0xFFFFFFFF;
+
+	iseekw(tOff, whence);
+	return tOff;
+}
+#endif
+/*----------------------------------------------------------------------------*/
 
 static int
 _tiffFileCloseProc(thandle_t fd)
@@ -745,6 +763,20 @@ _tiffFileSizeProc(thandle_t fd)
 	return Size;
 }
 
+/*----------------------------------------------------------------------------*/
+#if 0
+static toff_t
+_tiffFileSizeProcW(thandle_t fd)
+{
+	ILint Offset, Size;
+	Offset = itellw();
+	iseekw(0, IL_SEEK_END);
+	Size = itellw();
+	iseekw(Offset, IL_SEEK_SET);
+
+	return Size;
+}
+#endif
 /*----------------------------------------------------------------------------*/
 
 #ifdef __BORLANDC__
@@ -772,13 +804,22 @@ _tiffDummyUnmapProc(thandle_t fd, tdata_t base, toff_t size)
 TIFF *iTIFFOpen(char *Mode)
 {
 	TIFF *tif;
-
-	tif = TIFFClientOpen("TIFFMemFile", Mode,
-						 NULL,
-						 _tiffFileReadProc, _tiffFileWriteProc,
-						 _tiffFileSeekProc, _tiffFileCloseProc,
-						 _tiffFileSizeProc, _tiffDummyMapProc,
-						 _tiffDummyUnmapProc);
+#if 0
+	if (Mode[0] == 'w')
+		tif = TIFFClientOpen("TIFFMemFile", Mode,
+							NULL,
+							_tiffFileReadProc, _tiffFileWriteProc,
+							_tiffFileSeekProcW, _tiffFileCloseProc,
+							_tiffFileSizeProcW, _tiffDummyMapProc,
+							_tiffDummyUnmapProc);
+	else
+#endif
+		tif = TIFFClientOpen("TIFFMemFile", Mode,
+							NULL,
+							_tiffFileReadProc, _tiffFileWriteProc,
+							_tiffFileSeekProc, _tiffFileCloseProc,
+							_tiffFileSizeProc, _tiffDummyMapProc,
+							_tiffDummyUnmapProc);
 	
 	return tif;
 }
@@ -798,17 +839,18 @@ ILboolean ilSaveTiff(const ILstring FileName)
 			return IL_FALSE;
 		}
 	}
-
+/*
 	TiffFile = iopenw(FileName);
 	if (TiffFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
 		return bTiff;
 	}
-
+*/
 	//bTiff = ilSaveTiffF(TiffFile);
 	bTiff = iSaveTiffInternal(FileName);
+/*
 	iclosew(TiffFile);
-
+*/
 	return bTiff;
 }
 
@@ -816,27 +858,32 @@ ILboolean ilSaveTiff(const ILstring FileName)
 //! Writes a Tiff to an already-opened file
 ILboolean ilSaveTiffF(ILHANDLE File)
 {
-	//	iSetOutputFile(File);
-	//	return iSaveTiffInternal();
-	ilSetError(IL_FILE_READ_ERROR);
-	return IL_FALSE;
+/*
+	iSetOutputFile(File);
+	return iSaveTiffInternal();
+*/
+	//ilSetError(IL_FILE_READ_ERROR);
+	//return IL_FALSE;
 }
 
 
 //! Writes a Tiff to a memory "lump"
 ILboolean ilSaveTiffL(ILvoid *Lump, ILuint Size)
 {
-	//	iSetOutputLump(Lump, Size);
-	//	return iSaveTiffInternal();
-	ilSetError(IL_FILE_READ_ERROR);
-	return IL_FALSE;
+/*
+	iSetOutputLump(Lump, Size);
+	return iSaveTiffInternal();
+*/
+	//ilSetError(IL_FILE_READ_ERROR);
+	//return IL_FALSE;
 }
 
 
 // @TODO:  Accept palettes!
 
 // Internal function used to save the Tiff.
-ILboolean iSaveTiffInternal(char *Filename)
+//ILboolean iSaveTiffInternal()
+ILboolean iSaveTiffInternal(const char* Filename)
 {
 	ILenum	Format;
 	ILenum	Compression;
@@ -845,13 +892,22 @@ ILboolean iSaveTiffInternal(char *Filename)
 	char	Description[512];
 	ILimage *TempImage;
 	char	*str;
+	ILboolean SwapColors;
+	ILubyte *OldData;
 
 	if(iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
-
+#if 1
+	TIFFSetWarningHandler (NULL);
+	TIFFSetErrorHandler   (NULL);
+#else
+	//for debugging only
+	TIFFSetWarningHandler(warningHandler);
+	TIFFSetErrorHandler(errorHandler);
+#endif
 	if (iGetHint(IL_COMPRESSION_HINT) == IL_USE_COMPRESSION)
 		Compression = COMPRESSION_PACKBITS;
 	else
@@ -886,6 +942,8 @@ ILboolean iSaveTiffInternal(char *Filename)
 	TIFFSetField(File, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
 	TIFFSetField(File, TIFFTAG_BITSPERSAMPLE, TempImage->Bpc << 3);
 	TIFFSetField(File, TIFFTAG_SAMPLESPERPIXEL, TempImage->Bpp);
+	if(TempImage->Bpp == 4) //TODO: LUMINANCE, LUMINANCE_ALPHA
+		TIFFSetField(File, TIFFTAG_MATTEING, 1);
 	TIFFSetField(File, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
 	TIFFSetField(File, TIFFTAG_ROWSPERSTRIP, 1);
 	TIFFSetField(File, TIFFTAG_SOFTWARE, ilGetString(IL_VERSION_NUM));
@@ -918,18 +976,26 @@ ILboolean iSaveTiffInternal(char *Filename)
 		ifree(str);
 	}
 
-	TIFFSetField(File, TIFFTAG_DATETIME, iMakeString());
-
+	//The date time string is not formatted correctly,
+	//so leave it out for now
+	//(from http://www.awaresystems.be/imaging/tiff/tifftags/datetime.html :
+	//The format is: "YYYY:MM:DD HH:MM:SS", with hours like those on
+	//a 24-hour clock, and one space character between the date and the
+	//time. The length of the string, including the terminating NUL, is
+	//20 bytes.)
+	//TIFFSetField(File, TIFFTAG_DATETIME, iMakeString());
 
 	// 24/4/2003
 	// Orientation flag is not always supported ( Photoshop, ...), orient the image data 
 	// and set it always to normal view
 	TIFFSetField(File, TIFFTAG_ORIENTATION,ORIENTATION_TOPLEFT );
 	if( TempImage->Origin != IL_ORIGIN_UPPER_LEFT ) {
-		ILubyte *Data = iGetFlipped(TempImage);
-		ifree( (void*)TempImage->Data );
+		ILubyte* Data = iGetFlipped(TempImage);
+		OldData = TempImage->Data;
 		TempImage->Data = Data;
 	}
+	else
+	OldData = TempImage->Data;
 
 	/*
 	 TIFFSetField(File, TIFFTAG_ORIENTATION,
@@ -937,19 +1003,33 @@ ILboolean iSaveTiffInternal(char *Filename)
 	 */
 
 	Format = TempImage->Format;
-	if (Format == IL_BGR || Format == IL_BGRA)
-		ilSwapColours();
+	SwapColors = (Format == IL_BGR || Format == IL_BGRA);
+	if (SwapColors)
+ 		ilSwapColours();
 
 	for (ixLine = 0; ixLine < TempImage->Height; ++ixLine) {
 		if (TIFFWriteScanline(File, TempImage->Data + ixLine * TempImage->Bps, ixLine, 0) < 0) {
 			TIFFClose(File);
 			ilSetError(IL_LIB_TIFF_ERROR);
+			if (SwapColors)
+				ilSwapColours();
+			if (TempImage->Data != OldData) {
+				ifree( TempImage->Data );
+				TempImage->Data = OldData;
+			}
+			if (TempImage != iCurImage)
+				ilCloseImage(TempImage);
 			return IL_FALSE;
 		}
 	}
 
-	if (Format == IL_BGR || Format == IL_BGRA)
-		ilSwapColours();
+	if (SwapColors)
+ 		ilSwapColours();
+
+	if (TempImage->Data != OldData) {
+		ifree( TempImage->Data );
+		TempImage->Data = OldData;
+	}
 
 	if (TempImage != iCurImage)
 		ilCloseImage(TempImage);
