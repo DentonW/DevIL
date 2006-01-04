@@ -19,12 +19,14 @@
 mAlloc ialloc_ptr = NULL;
 mFree  ifree_ptr = NULL;
 
-#ifdef ALTIVEC_GCC
+#ifdef VECTORMEM
 ILvoid *vec_malloc( ILuint size ) {
 	size =  size % 16 > 0 ? size + 16 - (size % 16) : size; // align size value
 	
 	#ifdef POSIX_MEMALIGN
-		return posix_memalign(&buffer, 16, size);
+	        char *buffer;
+		int err = posix_memalign(&buffer, 16, size);
+		return err == 0 ? buffer : NULL;
 	#else
 	#ifdef VALLOC
 		return valloc( size );
