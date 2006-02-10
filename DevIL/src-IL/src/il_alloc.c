@@ -34,7 +34,14 @@ ILvoid *vec_malloc( ILuint size ) {
 	#ifdef MEMALIGN
 		return memalign( 16, size );
 	#else
-		#error NO ALIGNED MEMORY ALLOCATION FUNCTIONS...
+		// Memalign hack from ffmpeg for MinGW
+		void *ptr;
+		int diff;
+		ptr = malloc(size+16+1);
+		diff= ((-(int)ptr - 1)&15) + 1;
+		ptr += diff;
+		((char*)ptr)[-1]= diff;
+		return ptr;
 	#endif
 	#endif
 	#endif
@@ -94,7 +101,13 @@ ILvoid* ILAPIENTRY icalloc(ILuint Size, ILuint Num)
 ILvoid ILAPIENTRY DefaultFreeFunc(ILvoid *Ptr)
 {
         if (Ptr)
+	  {      
+#if defined(VECTORMEM) & !defined(POSIX_MEMALIGN) & !defined(VALLOC) & !defined(MEMALIGN)
+	    free(Ptr - ((char*)Ptr)[-1]);
+#else
             free(Ptr);
+#endif
+	  }
 }
 
 
