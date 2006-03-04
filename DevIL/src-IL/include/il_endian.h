@@ -16,7 +16,9 @@
 #include "il_internal.h"
 
 #ifdef WORDS_BIGENDIAN //this is defined by ./configure
+	#ifndef __BIG_ENDIAN__
 	#define __BIG_ENDIAN__
+	#endif
 #endif
 
 #ifdef __BIG_ENDIAN__
