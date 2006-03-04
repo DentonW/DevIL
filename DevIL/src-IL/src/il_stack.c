@@ -529,7 +529,7 @@ ILboolean IsInit = IL_FALSE;
 // ONLY call at startup.
 ILvoid ILAPIENTRY ilInit()
 {
-	ilSetMemory(NULL, NULL);  // Do first, since it handles allocations.
+	//ilSetMemory(NULL, NULL);  Now useless 3/4/2006 (due to modification in il_alloc.c)
 	ilSetError(IL_NO_ERROR);
 	ilDefaultStates();  // Set states to their defaults.
 	// Sets default file-reading callbacks.
