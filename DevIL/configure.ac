@@ -33,13 +33,14 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.4 $)
+AC_REVISION($Revision: 1.5 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 AC_LANG([C])
 AC_PROG_CC
+AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_C_BIGENDIAN
@@ -55,14 +56,6 @@ AM_MAINTAINER_MODE
 dnl
 dnl Altives Check
 dnl
-AC_MSG_CHECKING(Altivec) 
-CFLAGS_TMP=$CFLAGS
-CFLAGS="-force_cpusubtype_ALL"
-AC_COMPILE_IFELSE([
-int main() {
-	asm("vspltisw v0,0");
-}], [AC_DEFINE([ALTIVEC],,[Altivec coprocessor found])] [CFLAGS="$CFLAGS_TMP -force_cpusubtype_ALL -I../../altivec";] [AC_MSG_RESULT(yes)], [CFLAGS="$CFLAGS_TMP";] [AC_MSG_RESULT(no)] );
-
 
 AC_MSG_CHECKING(Altivec gcc extension)
 CFLAGS_TMP=$CFLAGS
@@ -72,7 +65,9 @@ int main() {
 	vector unsigned int vec;
 	vec = vec_splat_u32(0);
 	return 0;
-}], [AC_DEFINE([ALTIVEC_GCC],,[Altivec GCC extension found])] [AC_DEFINE([VECTORMEM],,[Memory is vector aligned])] [CFLAGS="$CFLAGS_TMP -faltivec -maltivec";] [AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)] );
+}],
+[AC_DEFINE([ALTIVEC_GCC],,[Altivec GCC extension found])] [AC_DEFINE([VECTORMEM],,[Memory is vector aligned])] [CFLAGS="$CFLAGS_TMP -faltivec -maltivec";] [AC_MSG_RESULT(yes)],
+[CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)] );
 
 dnl
 dnl SSE
@@ -115,7 +110,6 @@ int main() {
         v = _mm_addsub_pd(v,v);
 }], [AC_DEFINE([SSE3],,[Use SSE3 cpu extension])]
  [CFLAGS="$CFLAGS_TMP -msse3";] [AC_DEFINE([VECTORMEM],,[Memory is vector aligned])][AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)])
-
 
 dnl
 dnl Memory alignment functions
@@ -645,6 +639,7 @@ LIBSDL="$SDL_LIBS"
 AC_SUBST(LIBSDL)
 AC_SUBST(HSDL)
 
+AC_LANG([C++])
 
 if test "$use_opengl" = "yes" ; then
 case "$target" in
