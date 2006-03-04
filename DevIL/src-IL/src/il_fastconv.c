@@ -12,6 +12,7 @@
 
 
 #include "il_internal.h"
+#include "../../altivec/altivec_typeconversion.h"
 
 ILboolean iFastConvert(ILenum DestFormat)
 {

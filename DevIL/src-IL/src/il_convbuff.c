@@ -13,6 +13,7 @@
 
 #include "il_internal.h"
 #include "il_manip.h"
+#include "../../altivec/altivec_typeconversion.h"
 #include <limits.h>
 
 
