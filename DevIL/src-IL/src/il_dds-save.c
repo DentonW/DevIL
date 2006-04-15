@@ -130,13 +130,6 @@ ILboolean iSaveDdsInternal()
 	ILint	CubeTable[6] = { 0 };
 	ILuint	CubeFlags;
 
-	if (ilNextPower2(iCurImage->Width) != iCurImage->Width ||
-		ilNextPower2(iCurImage->Height) != iCurImage->Height ||
-		ilNextPower2(iCurImage->Depth) != iCurImage->Depth) {
-			ilSetError(IL_BAD_DIMENSIONS);
-			return IL_FALSE;
-	}
-
 	CubeFlags = GetCubemapInfo(iCurImage, CubeTable);
 
 	image = ilGetInteger(IL_CUR_IMAGE);
@@ -148,7 +141,7 @@ ILboolean iSaveDdsInternal()
 	else
 		numFaces = 0;
 
-	numMipMaps = ilGetInteger(IL_NUM_MIPMAPS); //this assumes all faces have some # of mipmaps
+	numMipMaps = ilGetInteger(IL_NUM_MIPMAPS); //this assumes all faces have same # of mipmaps
 
 	for (i = 0; i <= numFaces; ++i) {
 		for (counter = 0; counter <= numMipMaps; counter++) {
@@ -308,12 +301,7 @@ ILuint ILAPIENTRY ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize, ILenum DXTCFo
 	ILint BlockNum;
 
 	if (Buffer == NULL) {  // Return the number that will be written with a subsequent call.
-		if (ilNextPower2(iCurImage->Width) != iCurImage->Width ||
-			ilNextPower2(iCurImage->Height) != iCurImage->Height ||
-			ilNextPower2(iCurImage->Depth) != iCurImage->Depth) {
-				return 0;
-		}
-
+		
 		BlockNum = ((iCurImage->Width + 3)/4) * ((iCurImage->Height + 3)/4)
 					* iCurImage->Depth;
 
@@ -604,13 +592,6 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 	ILuint		Count = 0;
 	ILubyte		*Data3Dc, *Runner8;
 
-	if (ilNextPower2(iCurImage->Width) != iCurImage->Width ||
-		ilNextPower2(iCurImage->Height) != iCurImage->Height ||
-		ilNextPower2(iCurImage->Depth) != iCurImage->Depth) {
-			ilSetError(IL_BAD_DIMENSIONS);
-			return 0;
-	}
-
 	if (DXTCFormat == IL_3DC) {
 		Data3Dc = CompressTo88(Image);
 		if (Data3Dc == NULL)
@@ -766,8 +747,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 							}
 
 							GetBlock(Block, Runner16, Image, x, y);
-							ChooseEndpoints(Block, &ex0, &ex1);
-							t0 = ex0; t1 = ex1;
+							ChooseEndpoints(Block, &t0, &t1);
 							ex0 = IL_MAX(t0, t1);
 							ex1 = IL_MIN(t0, t1);
 							SaveLittleUShort(ex0);
@@ -805,8 +785,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 							iwrite(AlphaBitMask, 1, 6);
 
 							GetBlock(Block, Runner16, Image, x, y);
-							ChooseEndpoints(Block, &ex0, &ex1);
-							t0 = ex0; t1 = ex1;
+							ChooseEndpoints(Block, &t0, &t1);
 							ex0 = IL_MAX(t0, t1);
 							ex1 = IL_MIN(t0, t1);
 							SaveLittleUShort(ex0);
@@ -834,13 +813,16 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 // Assumed to be 16-bit (5:6:5).
 ILboolean GetBlock(ILushort *Block, ILushort *Data, ILimage *Image, ILuint XPos, ILuint YPos)
 {
-	ILuint x, y, i = 0, Offset;
+    ILuint x, y, i = 0, Offset = YPos * Image->Width + XPos;
 
 	for (y = 0; y < 4; y++) {
 		for (x = 0; x < 4; x++) {
-		Offset = (YPos + y) * Image->Width + (XPos + x);
-			Block[i++] = Data[Offset];
+		    if (x < Image->Width && y < Image->Height)
+				Block[i++] = Data[Offset + x];
+			else
+			    Block[i++] = Data[Offset];
 		}
+        Offset += Image->Width;
 	}
 
 	return IL_TRUE;
@@ -849,13 +831,16 @@ ILboolean GetBlock(ILushort *Block, ILushort *Data, ILimage *Image, ILuint XPos,
 
 ILboolean GetAlphaBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XPos, ILuint YPos)
 {
-	ILuint x, y, i = 0, Offset;
+	ILuint x, y, i = 0, Offset = YPos * Image->Width + XPos;
 
 	for (y = 0; y < 4; y++) {
 		for (x = 0; x < 4; x++) {
-			Offset = (YPos + y) * Image->Width + (XPos + x);
-			Block[i++] = Data[Offset];
+			if (x < Image->Width && y < Image->Height)
+	            Block[i++] = Data[Offset + x];
+            else
+	            Block[i++] = Data[Offset];
 		}
+        Offset += Image->Width;
 	}
 
 	return IL_TRUE;
@@ -863,13 +848,16 @@ ILboolean GetAlphaBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XP
 
 ILboolean Get3DcBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XPos, ILuint YPos, int channel)
 {
-	ILuint x, y, i = 0, Offset;
+	ILuint x, y, i = 0, Offset = 2*(YPos * Image->Width + XPos) + channel;
 
 	for (y = 0; y < 4; y++) {
 		for (x = 0; x < 4; x++) {
-			Offset = (YPos + y) * Image->Width * 2 + (XPos + x)*2;
-			Block[i++] = Data[Offset + channel];
+			if (x < Image->Width && y < Image->Height)
+                Block[i++] = Data[Offset + 2*x];
+            else
+                Block[i++] = Data[Offset];
 		}
+        Offset += 2*Image->Width;
 	}
 
 	return IL_TRUE;
