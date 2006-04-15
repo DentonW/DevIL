@@ -871,7 +871,6 @@ ILboolean ReadMipmaps()
 		if (Height == 0) 
 			Height = 1;
 
-		//TODO: mipmaps don't keep DXT data???
 		Image->Next = ilNewImage(Width, Height, Depth, Channels, Bpc);
 		if (Image->Next == NULL)
 			goto mip_fail;
