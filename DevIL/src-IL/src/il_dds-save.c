@@ -215,6 +215,10 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat, ILuint CubeFlags)
 		case IL_DXT5:
 			FourCC = IL_MAKEFOURCC('D','X','T','5');
 			break;
+		case IL_ATI1N:
+			FourCC = IL_MAKEFOURCC('A', 'T', 'I', '1');
+			break;
+
 		case IL_3DC:
 			FourCC = IL_MAKEFOURCC('A','T','I','2');
 			break;
@@ -233,7 +237,7 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat, ILuint CubeFlags)
 	SaveLittleUInt(Image->Height);
 	SaveLittleUInt(Image->Width);
 
-	if (DXTCFormat == IL_DXT1) {
+	if (DXTCFormat == IL_DXT1 || DXTCFormat == IL_ATI1N) {
 		BlockSize = 8;
 	}
 	else {
@@ -316,6 +320,7 @@ ILuint ILAPIENTRY ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize, ILenum DXTCFo
 		switch (DXTCFormat)
 		{
 			case IL_DXT1:
+			case IL_ATI1N:
 				return BlockNum * 8;
 			case IL_DXT3:
 			case IL_DXT5:
@@ -592,7 +597,7 @@ void CompressToRXGB(ILimage *Image, ILushort** xgb, ILubyte** r)
 
 ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 {
-	ILushort	*Data, Block[16], ex0, ex1, *Runner16;
+	ILushort	*Data, Block[16], ex0, ex1, *Runner16, t0, t1;
 	ILuint		x, y, z, i, BitMask;//, Rms1, Rms2;
 	ILubyte		*Alpha, AlphaBlock[16], AlphaBitMask[6], /*AlphaOut[16],*/ a0, a1;
 	ILboolean	HasAlpha;
@@ -637,6 +642,39 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 		}
 
 		ifree(Data3Dc);
+	}
+	else if(DXTCFormat == IL_ATI1N)
+	{
+		ILimage		*TempImage;
+
+		if (Image->Bpp != 1) {
+			TempImage = iConvertImage(iCurImage, IL_LUMINANCE, IL_UNSIGNED_BYTE);
+			if (TempImage == NULL)
+				return 0;
+		}
+		else {
+			TempImage = Image;
+		}
+
+		Runner8 = TempImage->Data;
+
+		for (z = 0; z < Image->Depth; z++) {
+			for (y = 0; y < Image->Height; y += 4) {
+				for (x = 0; x < Image->Width; x += 4) {
+					GetAlphaBlock(AlphaBlock, Runner8, Image, x, y);
+					ChooseAlphaEndpoints(AlphaBlock, &a0, &a1);
+					GenAlphaBitMask(a0, a1, AlphaBlock, AlphaBitMask, NULL);
+					iputc(a0);
+					iputc(a1);
+					iwrite(AlphaBitMask, 1, 6);
+					Count += 8;
+				}
+			}
+			Runner8 += Image->Width * Image->Height;
+		}
+
+		if (TempImage != Image)
+			ilCloseImage(TempImage);
 	}
 	else
 	{
@@ -729,6 +767,9 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 
 							GetBlock(Block, Runner16, Image, x, y);
 							ChooseEndpoints(Block, &ex0, &ex1);
+							t0 = ex0; t1 = ex1;
+							ex0 = IL_MAX(t0, t1);
+							ex1 = IL_MIN(t0, t1);
 							SaveLittleUShort(ex0);
 							SaveLittleUShort(ex1);
 							BitMask = GenBitMask(ex0, ex1, 4, Block, NULL, NULL);
@@ -765,6 +806,9 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 
 							GetBlock(Block, Runner16, Image, x, y);
 							ChooseEndpoints(Block, &ex0, &ex1);
+							t0 = ex0; t1 = ex1;
+							ex0 = IL_MAX(t0, t1);
+							ex1 = IL_MIN(t0, t1);
 							SaveLittleUShort(ex0);
 							SaveLittleUShort(ex1);
 							BitMask = GenBitMask(ex0, ex1, 4, Block, NULL, NULL);
