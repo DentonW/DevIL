@@ -216,6 +216,8 @@ ILubyte iCompFormatToBpp(ILenum Format)
 	//fourcc formats
 	else if (Format == PF_RGB || Format == PF_3DC || Format == PF_RXGB)
 		return 3;
+	else if (Format == PF_ATI1N)
+		return 1;
 	else if (Format == PF_R16F)
 		return 2;
 	else if (Format == PF_A16B16G16R16 || Format == PF_A16B16G16R16F
@@ -244,7 +246,7 @@ ILubyte iCompFormatToChannelCount(ILenum Format)
 {
 	if (Format == PF_RGB || Format == PF_3DC || Format == PF_RXGB)
 		return 3;
-	else if (Format == PF_LUMINANCE || Format == PF_R16F || Format == PF_R32F)
+	else if (Format == PF_LUMINANCE || Format == PF_R16F || Format == PF_R32F || Format == PF_ATI1N)
 		return 1;
 	else if (Format == PF_LUMINANCE_ALPHA || Format == PF_G16R16F || Format == PF_G32R32F)
 		return 2;
@@ -456,6 +458,11 @@ ILuint DecodePixelFormat()
 				BlockSize *= 16;
 				break;
 
+			case IL_MAKEFOURCC('A', 'T', 'I', '1'):
+				CompFormat = PF_ATI1N;
+				BlockSize *= 8;
+				break;
+
 			case IL_MAKEFOURCC('A', 'T', 'I', '2'):
 				CompFormat = PF_3DC;
 				BlockSize *= 16;
@@ -557,6 +564,7 @@ ILvoid AdjustVolumeTexture(DDSHEAD *Head)
 			break;
 	
 		case PF_DXT1:
+		case PF_ATI1N:
 			Head->LinearSize = IL_MAX(1,Head->Width/4) * IL_MAX(1,Head->Height/4) * 8;
 			break;
 
@@ -668,6 +676,14 @@ ILboolean AllocImage()
 			if (!ilTexImage(Width, Height, Depth, 2, IL_LUMINANCE_ALPHA, IL_UNSIGNED_BYTE, NULL))
 				return IL_FALSE;
 			break;
+
+		case PF_ATI1N:
+			//right now there's no OpenGL api to use the compressed 3dc data, so
+			//throw it away (I don't know how DirectX works, though)?
+			if (!ilTexImage(Width, Height, Depth, 1, IL_LUMINANCE, IL_UNSIGNED_BYTE, NULL))
+				return IL_FALSE;
+			break;
+
 		case PF_3DC:
 			//right now there's no OpenGL api to use the compressed 3dc data, so
 			//throw it away (I don't know how DirectX works, though)?
@@ -742,6 +758,9 @@ ILboolean Decompress()
 		case PF_DXT5:
 			return DecompressDXT5();
 
+		case PF_ATI1N:
+			return DecompressAti1n();
+
 		case PF_3DC:
 			return Decompress3Dc();
 
@@ -808,6 +827,9 @@ ILboolean ReadMipmaps()
 			//This is officially 4 for 3dc, but that's bullshit :) There's no
 			//alpha data in 3dc images
 			CompFactor = 3;
+			break;
+		case PF_ATI1N:
+			CompFactor = 2;
 			break;
 		default:
 			CompFactor = 1;
@@ -1315,6 +1337,64 @@ ILboolean	Decompress3Dc()
 
 				//skip bytes that were read via Temp2
 				Temp += 8;
+			}
+			Offset += Image->Bps*4;
+		}
+	}
+
+	return IL_TRUE;
+}
+
+ILboolean	DecompressAti1n()
+{
+	int			x, y, z, i, j, k, t1, t2;
+	ILubyte		*Temp;
+	ILubyte		Colours[8];
+	ILuint		bitmask, Offset, CurrOffset;
+
+	if (!CompData)
+		return IL_FALSE;
+
+	Temp = CompData;
+	Offset = 0;
+	for (z = 0; z < Depth; z++) {
+		for (y = 0; y < Height; y += 4) {
+			for (x = 0; x < Width; x += 4) {
+				//Read palette
+				t1 = Colours[0] = Temp[0];
+				t2 = Colours[1] = Temp[1];
+				Temp += 2;
+				if (t1 > t2)
+					for (i = 2; i < 8; ++i)
+						Colours[i] = t1 + ((t2 - t1)*(i - 1))/7;
+				else {
+					for (i = 2; i < 6; ++i)
+						Colours[i] = t1 + ((t2 - t1)*(i - 1))/5;
+					Colours[6] = 0;
+					Colours[7] = 255;
+				}
+
+				//decompress pixel data
+				CurrOffset = Offset;
+				for (k = 0; k < 4; k += 2) {
+					// First three bytes
+					bitmask = ((ILuint)(Temp[0]) << 0) | ((ILuint)(Temp[1]) << 8) | ((ILuint)(Temp[2]) << 16);
+					for (j = 0; j < 2; j++) {
+						// only put pixels out < height
+						if ((y + k + j) < Height) {
+							for (i = 0; i < 4; i++) {
+								// only put pixels out < width
+								if (((x + i) < Width)) {
+									t1 = CurrOffset + (x + i);
+									Image->Data[t1] = Colours[bitmask & 0x07];
+								}
+								bitmask >>= 3;
+							}
+							CurrOffset += Image->Bps;
+						}
+					}
+					Temp += 3;
+				}
 			}
 			Offset += Image->Bps*4;
 		}

@@ -149,6 +149,7 @@ enum PixFormat
 	PF_DXT4,
 	PF_DXT5,
 	PF_3DC,
+	PF_ATI1N,
 	PF_LUMINANCE,
 	PF_LUMINANCE_ALPHA,
 	PF_RXGB, //Doom3 normal maps
@@ -181,6 +182,7 @@ ILboolean	DecompressDXT3(ILvoid);
 ILboolean	DecompressDXT4(ILvoid);
 ILboolean	DecompressDXT5(ILvoid);
 ILboolean	Decompress3Dc(ILvoid);
+ILboolean	DecompressAti1n(ILvoid);
 ILboolean	DecompressRXGB(ILvoid);
 ILboolean	DecompressFloat(ILvoid);
 ILvoid		CorrectPreMult(ILvoid);
