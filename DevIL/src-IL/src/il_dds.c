@@ -1775,5 +1775,542 @@ ILvoid GetBitsFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight)
 	return;
 }
 
+#if 0
+//dxt extension code. this works, but it's to much to enable
+//it for 1.6.8, especially because all these functions
+//are not documented. perhaps we'll use it later, perhaps
+//we'll delete it again, let's see.
+ILubyte* ILAPIENTRY ilGetDxtcData()
+{
+	if (iCurImage == NULL) {
+		ilSetError(IL_INTERNAL_ERROR);
+		return NULL;
+	}
+	return iCurImage->DxtcData;
+}
+
+ILvoid ilFreeSurfaceDxtcData()
+{
+	if (iCurImage != NULL && iCurImage->DxtcData != NULL) {
+		ifree(iCurImage->DxtcData);
+		iCurImage->DxtcData = NULL;
+		iCurImage->DxtcSize = 0;
+		iCurImage->DxtcFormat = IL_DXT_NO_COMP;
+	}
+}
+
+ILvoid ilFreeImageDxtcData()
+{
+	ILint i, j;
+	ILuint ImgID = ilGetInteger(IL_CUR_IMAGE);
+	ILint ImgCount = ilGetInteger(IL_NUM_IMAGES);
+	ILint MipCount;
+
+	for(i = 0; i <= ImgCount; ++i) {
+		ilBindImage(ImgID);
+		ilActiveImage(i);
+
+		MipCount = ilGetInteger(IL_NUM_MIPMAPS);
+		for(j = 0; j <= MipCount; ++j) {
+			ilBindImage(ImgID);
+			ilActiveImage(i);
+			ilActiveMipmap(j);
+
+			ilFreeSurfaceDxtcData();
+		}
+	}
+}
+
+/*
+ * This assumes DxtcData, DxtcFormat, width, height, and depth are valid
+ */
+ILAPI ILboolean ILAPIENTRY ilDxtcDataToSurface()
+{
+	if (iCurImage == NULL || iCurImage->DxtcData == NULL) {
+		ilSetError(IL_INVALID_PARAM);
+		return IL_FALSE;
+	}
+
+	if (!(iCurImage->DxtcFormat == IL_DXT1 || iCurImage->DxtcFormat == IL_DXT3
+		|| iCurImage->DxtcFormat == IL_DXT5)) {
+		ilSetError(IL_INVALID_PARAM); //TODO
+		return IL_FALSE;
+	}
+
+
+		//TODO: is this right for all dxt formats? works for
+		//dxt1, 3, 5
+		iCurImage->Bpp = 4;
+		iCurImage->Bpc = 1;
+		iCurImage->Bps = iCurImage->Width*iCurImage->Bpp*iCurImage->Bpc;
+		iCurImage->SizeOfPlane = iCurImage->Height*iCurImage->Bps;
+		iCurImage->Format = IL_RGBA;
+		iCurImage->Type = IL_UNSIGNED_BYTE;
+
+	if (iCurImage->SizeOfData != iCurImage->SizeOfPlane*iCurImage->Depth) {
+		iCurImage->SizeOfData = iCurImage->Depth*iCurImage->SizeOfPlane;
+		if (iCurImage->Data != NULL)
+			ifree(iCurImage->Data);
+		iCurImage->Data = NULL;
+	}
+
+	if (iCurImage->Data == NULL) {
+		iCurImage->Data = ialloc(iCurImage->SizeOfData);
+	}
+
+	Image = iCurImage;
+	Width = iCurImage->Width;
+	Height = iCurImage->Height;
+	Depth = iCurImage->Depth;
+	switch(iCurImage->DxtcFormat)
+	{
+		case IL_DXT1: CompFormat = PF_DXT1; break;
+		case IL_DXT3: CompFormat = PF_DXT3; break;
+		case IL_DXT5: CompFormat = PF_DXT5; break;
+	}
+	CompData = iCurImage->DxtcData;
+	Decompress(); //globals suck...fix this
+
+        //TODO: origin should be set in Decompress()...
+        iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
+        return ilFixCur();
+}
+
+ILAPI ILboolean ILAPIENTRY ilDxtcDataToImage()
+{
+	ILint i, j;
+	ILuint ImgID = ilGetInteger(IL_CUR_IMAGE);
+	ILint ImgCount = ilGetInteger(IL_NUM_IMAGES);
+	ILint MipCount;
+	ILboolean ret = IL_TRUE;
+
+	for(i = 0; i <= ImgCount; ++i) {
+		ilBindImage(ImgID);
+		ilActiveImage(i);
+
+		MipCount = ilGetInteger(IL_NUM_MIPMAPS);
+		for(j = 0; j <= MipCount; ++j) {
+			ilBindImage(ImgID);
+			ilActiveImage(i);
+			ilActiveMipmap(j);
+
+			if (!ilDxtcDataToSurface())
+				ret = IL_FALSE;
+		}
+	}
+        ilBindImage(ImgID);
+
+	return ret;
+}
+
+ILAPI ILboolean ILAPIENTRY ilSurfaceToDxtcData(ILenum Format)
+{
+	ILuint Size;
+	ILvoid* Data;
+	ilFreeSurfaceDxtcData();
+
+	Size = ilGetDXTCData(NULL, 0, Format);
+	if (Size == 0) {
+		return IL_FALSE;
+	}
+
+	Data = ialloc(Size);
+    
+	if (Data == NULL)
+		return IL_FALSE;
+            
+	ilGetDXTCData(Data, Size, Format);
+
+	//These have to be after the call to ilGetDXTCData()
+	iCurImage->DxtcData = Data;
+	iCurImage->DxtcFormat = Format;
+	iCurImage->DxtcSize = Size;
+
+	return IL_TRUE;
+}
+
+ILAPI ILboolean ILAPIENTRY ilImageToDxtcData(ILenum Format)
+{
+	ILint i, j;
+	ILuint ImgID = ilGetInteger(IL_CUR_IMAGE);
+	ILint ImgCount = ilGetInteger(IL_NUM_IMAGES);
+	ILint MipCount;
+	ILboolean ret = IL_TRUE;
+
+	for(i = 0; i <= ImgCount; ++i) {
+		ilBindImage(ImgID);
+		ilActiveImage(i);
+
+		MipCount = ilGetInteger(IL_NUM_MIPMAPS);
+		for(j = 0; j <= MipCount; ++j) {
+			ilBindImage(ImgID);
+			ilActiveImage(i);
+			ilActiveMipmap(j);
+
+			if (!ilSurfaceToDxtcData(Format))
+				ret = IL_FALSE;
+		}
+	}
+
+	return ret;
+}
+
+//works like ilTexImage(), ie. destroys mipmaps etc (which sucks, but
+//is consistent. There should be a ilTexSurface() and ilTexSurfaceDxtc()
+//functions as well, but for now this is sufficient)
+ILAPI ILboolean ILAPIENTRY ilTexImageDxtc(ILint w, ILint h, ILint d, ILenum DxtFormat, const ILubyte* data)
+{
+	ILimage* Image = iCurImage;
+
+	ILint xBlocks, yBlocks, BlockSize, LineSize, DataSize;
+
+
+	//The next few lines are copied from ilTexImage() and ilInitImage() -
+	//should be factored in more reusable functions...
+
+        if (Image == NULL) {
+		ilSetError(IL_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	////
+
+	// Not sure if we should be getting rid of the palette...
+	if (Image->Pal.Palette && Image->Pal.PalSize && Image->Pal.PalType != IL_PAL_NONE) {
+		ifree(Image->Pal.Palette);
+	}
+
+	ilCloseImage(Image->Mipmaps);
+	ilCloseImage(Image->Next);
+	ilCloseImage(Image->Layers);
+
+	if (Image->AnimList) ifree(Image->AnimList);
+	if (Image->Profile)  ifree(Image->Profile);
+	if (Image->DxtcData) ifree(Image->DxtcData);
+	if (Image->Data)	 ifree(Image->Data);
+
+
+	////
+
+	memset (Image, 0, sizeof(ILimage));
+	Image->Width	   = w;
+	Image->Height	   = h;
+	Image->Depth	   = d;
+
+	//TODO: What about origin with dxtc data?
+	Image->Origin	   = IL_ORIGIN_LOWER_LEFT;
+	Image->Pal.PalType = IL_PAL_NONE;
+
+        //alloc dxtc data buffer
+	xBlocks = (w + 3)/4;
+	yBlocks = (h + 3)/4;
+	if (DxtFormat == IL_DXT1)
+		BlockSize = 8;
+	else
+		BlockSize = 16;
+
+	LineSize = xBlocks * BlockSize;
+
+	DataSize = yBlocks * LineSize * d;
+
+	Image->DxtcFormat  = DxtFormat;
+        Image->DxtcSize = DataSize;
+	Image->DxtcData    = ialloc(DataSize);
+
+	if (Image->DxtcData == NULL) {
+		return IL_FALSE;
+	}
+
+	if (data != NULL)
+		memcpy(Image->DxtcData, data, DataSize);
+
+	return IL_TRUE;
+}
+
+
+/* ------------------------------------------------------------------- */
+
+ILvoid iFlipColorBlock(ILubyte *data)
+{
+    ILubyte tmp;
+
+    tmp = data[4];
+    data[4] = data[7];
+    data[7] = tmp;
+
+    tmp = data[5];
+    data[5] = data[6];
+    data[6] = tmp;
+}
+
+ILvoid iFlipSimpleAlphaBlock(ILushort *data)
+{
+	ILushort tmp;
+
+	tmp = data[0];
+	data[0] = data[3];
+	data[3] = tmp;
+
+	tmp = data[1];
+	data[1] = data[2];
+	data[2] = tmp;
+}
+
+ILvoid iComplexAlphaHelper(ILubyte* Data)
+{
+	ILushort tmp[2];
+
+	//one 4 pixel line is 12 bit, copy each line into
+	//a ushort, swap them and copy back
+	tmp[0] = (Data[0] | (Data[1] << 8)) & 0xfff;
+	tmp[1] = ((Data[1] >> 4) | (Data[2] << 4)) & 0xfff;
+
+	Data[0] = tmp[1];
+	Data[1] = (tmp[1] >> 8) | (tmp[0] << 4);
+	Data[2] = tmp[0] >> 4;
+}
+
+ILvoid iFlipComplexAlphaBlock(ILubyte *Data)
+{
+	ILubyte tmp[3];
+	Data += 2; //Skip 'palette'
+
+	//swap upper two rows with lower two rows
+	memcpy(tmp, Data, 3);
+	memcpy(Data, Data + 3, 3);
+	memcpy(Data + 3, tmp, 3);
+
+	//swap 1st with 2nd row, 3rd with 4th
+	iComplexAlphaHelper(Data);
+	iComplexAlphaHelper(Data + 3);
+}
+
+ILvoid iFlipDxt1(ILubyte* data, ILuint count)
+{
+	ILint i;
+
+	for (i = 0; i < count; ++i) {
+		iFlipColorBlock(data);
+		data += 8; //advance to next block
+	}
+}
+
+ILvoid iFlipDxt3(ILubyte* data, ILuint count)
+{
+	ILint i;
+	for (i = 0; i < count; ++i) {
+		iFlipSimpleAlphaBlock((ILushort*)data);
+		iFlipColorBlock(data + 8);
+		data += 16; //advance to next block
+	}
+}
+
+ILvoid iFlipDxt5(ILubyte* data, ILuint count)
+{
+	ILint i;
+	for (i = 0; i < count; ++i) {
+		iFlipComplexAlphaBlock(data);
+		iFlipColorBlock(data + 8);
+		data += 16; //advance to next block
+	}
+}
+
+ILvoid iFlip3dc(ILubyte* data, ILuint count)
+{
+	ILint i;
+	for (i = 0; i < count; ++i) {
+		iFlipComplexAlphaBlock(data);
+		iFlipComplexAlphaBlock(data + 8);
+		data += 16; //advance to next block
+	}
+}
+
+
+ILAPI ILvoid ILAPIENTRY ilFlipSurfaceDxtcData()
+{
+	ILint x, y, z;
+	ILuint BlockSize, LineSize;
+	ILubyte *Temp, *Runner, *Top, *Bottom;
+	ILint numXBlocks, numYBlocks;
+        ILvoid (*FlipBlocks)(ILubyte* data, ILuint count);
+
+	if (iCurImage == NULL || iCurImage->DxtcData == NULL) {
+		ilSetError(IL_INVALID_PARAM);
+		return;
+	}
+
+	numXBlocks = (iCurImage->Width + 3)/4;
+	numYBlocks = (iCurImage->Height + 3)/4;
+	
+	switch (iCurImage->DxtcFormat)
+	{
+		case IL_DXT1:
+			BlockSize = 8;
+			FlipBlocks = iFlipDxt1;
+			break;
+		case IL_DXT2:
+		case IL_DXT3:
+			BlockSize = 16;
+			FlipBlocks = iFlipDxt3;
+			break;
+		case IL_DXT4:
+		case IL_DXT5:
+		case IL_RXGB:
+			BlockSize = 16;
+			FlipBlocks = iFlipDxt5;
+			break;
+		case IL_3DC:
+			BlockSize = 16;
+			FlipBlocks = iFlip3dc;
+			break;
+		default:
+			ilSetError(IL_INVALID_PARAM);
+			return;
+	}
+	
+	LineSize = numXBlocks * BlockSize;
+	Temp = ialloc(LineSize);
+
+	if (Temp == NULL)
+	    return;
+
+	Runner = iCurImage->DxtcData;
+	for (z = 0; z < iCurImage->Depth; ++z) {
+		Top = Runner;
+		Bottom = Runner + (numYBlocks - 1)*LineSize;
+	    
+		for (y = 0; y < numYBlocks/2; ++y) {
+			//swap block row
+			memcpy(Temp, Top, LineSize);
+			memcpy(Top, Bottom, LineSize);
+			memcpy(Bottom, Temp, LineSize);
+
+
+			//swap blocks
+			FlipBlocks(Top, numXBlocks);
+			FlipBlocks(Bottom, numXBlocks);
+
+			Top += LineSize;
+			Bottom -= LineSize;
+		}
+
+		//middle line
+		if (numYBlocks % 2 != 0)
+			FlipBlocks(Top, numXBlocks);
+
+		Runner += LineSize * numYBlocks;
+	}
+
+	ifree(Temp);
+}
+
+/**********************************************************************/
+
+ILvoid iInvertDxt3Alpha(ILubyte *data)
+{
+	ILint i;
+
+	for (i = 0; i < 8; ++i) {
+		/*
+		ILubyte b, t1, t2;
+		b = data[i];
+
+		t1 = b & 0xf;
+		t1 = 15 - t1;
+		t2 = b >> 4;
+		t2 = 15 - t2;
+
+		data[i] = (t2 << 4) | t1;
+		*/
+		//simpler:
+		data[i] = ~data[i];
+	}
+}
+
+ILvoid iInvertDxt5Alpha(ILubyte *data)
+{
+	ILubyte a0, a1;
+	ILint i, j;
+
+	a0 = data[0];
+	a1 = data[1];
+
+	//a0 > a1 <=> 255 - a0 < 255 - a1. Because of this,
+	//a1 and a2 have to be swapped, and the indices
+	//have to be changed as well.
+
+	//invert and swap alpha
+	data[0] = 255 - a1;
+	data[1] = 255 - a0;
+	data += 2;
+
+	//fix indices
+	const ILubyte map1[] = { 1, 0,  7, 6, 5, 4, 3, 2 };
+	const ILubyte map2[] = { 1, 0,  5, 4, 3, 2,  7, 6 };
+	for (i = 0; i < 6; i += 3) {
+		ILuint in = data[i] | (data[i+1] << 8) | (data[i+2] << 16);
+		ILuint out = 0;
+
+		for (j = 0; j < 24; j += 3) {
+			ILubyte b = (in >> j) & 0x7;
+
+			if (a0 > a1)
+				b = map1[b];
+			else
+				b = map2[b];
+
+			out |= b << j;
+		}
+
+		data[i] = out;
+		data[i+1] = out >> 8;
+		data[i+2] = out >> 16;
+	}
+}
+
+ILAPI ILvoid ILAPIENTRY ilInvertSurfaceDxtcDataAlpha()
+{
+	ILint i;
+	ILuint BlockSize;
+	ILubyte *Runner;
+	ILint numXBlocks, numYBlocks, numBlocks;
+	ILvoid (*InvertAlpha)(ILubyte* data);
+
+	if (iCurImage == NULL || iCurImage->DxtcData == NULL) {
+		ilSetError(IL_INVALID_PARAM);
+		return;
+	}
+
+	numXBlocks = (iCurImage->Width + 3)/4;
+	numYBlocks = (iCurImage->Height + 3)/4;
+	numBlocks = numXBlocks*numYBlocks*iCurImage->Depth;
+	BlockSize = 16;
+
+	switch (iCurImage->DxtcFormat)
+	{
+		case IL_DXT3:
+			InvertAlpha = iInvertDxt3Alpha;
+			break;
+		case IL_DXT5:
+			InvertAlpha = iInvertDxt5Alpha;
+			break;
+		default:
+			//DXT2/4 are not supported yet because nobody
+			//uses them anyway and I would have to change
+			//the color blocks as well...
+			//DXT1 is not supported because DXT1 alpha is
+			//seldom used and it's not easily invertable.
+			ilSetError(IL_INVALID_PARAM);
+			return;
+	}
+
+	Runner = iCurImage->DxtcData;
+	for (i = 0; i < numBlocks; ++i, Runner += BlockSize) {
+		InvertAlpha(Runner);
+	}
+}
+#endif //dxt extension
+
+
 
 #endif//IL_NO_DDS
