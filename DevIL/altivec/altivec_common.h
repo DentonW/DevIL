@@ -6,8 +6,7 @@
  *
  */
 
-#include "config.h"
-#include <IL/il.h>
+#include "il_internal.h"
 
 #ifdef ALTIVEC_GCC
 #ifndef ALTIVEC_COMMON
