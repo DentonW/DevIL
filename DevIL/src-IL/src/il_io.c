@@ -1385,6 +1385,12 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size)
 			break;
 		#endif
 
+		#ifndef IL_NO_PNG
+		case IL_PNG:
+			Ret = ilSavePngL(Lump, Size);
+			break;
+		#endif
+
 		#ifndef IL_NO_PNM
 		case IL_PNM:
 			Ret = ilSavePnmL(Lump, Size);
