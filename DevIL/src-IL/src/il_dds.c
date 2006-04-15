@@ -430,7 +430,7 @@ ILuint DecodePixelFormat()
 	ILuint BlockSize;
 
 	if (Head.Flags2 & DDS_FOURCC) {
-		BlockSize = ((Head.Width + 3)/4) * ((Head.Height + 3)/4) * ((Head.Depth + 3)/4);
+		BlockSize = ((Head.Width + 3)/4) * ((Head.Height + 3)/4) * Head.Depth;
 		switch (Head.FourCC)
 		{
 			case IL_MAKEFOURCC('D','X','T','1'):
@@ -565,7 +565,7 @@ ILvoid AdjustVolumeTexture(DDSHEAD *Head)
 	
 		case PF_DXT1:
 		case PF_ATI1N:
-			Head->LinearSize = IL_MAX(1,Head->Width/4) * IL_MAX(1,Head->Height/4) * 8;
+			Head->LinearSize = ((Head->Width+3)/4) * ((Head->Height+3)/4) * 8;
 			break;
 
 		case PF_DXT2:
@@ -574,7 +574,7 @@ ILvoid AdjustVolumeTexture(DDSHEAD *Head)
 		case PF_DXT5:
 		case PF_3DC:
 		case PF_RXGB:
-			Head->LinearSize = IL_MAX(1,Head->Width/4) * IL_MAX(1,Head->Height/4) * 16;
+			Head->LinearSize = ((Head->Width+3)/4) * ((Head->Height+3)/4) * 16;
 			break;
 
 		case PF_A16B16G16R16:
@@ -884,8 +884,8 @@ ILboolean ReadMipmaps()
 				&& CompFormat != PF_LUMINANCE
 				&& CompFormat != PF_LUMINANCE_ALPHA) {
 				//compressed format
-				minW = IL_MAX(4, Width);
-				minH = IL_MAX(4, Height);
+				minW = (((Width+3)/4))*4;
+				minH = (((Height+3)/4))*4;
 				Head.LinearSize = (minW * minH * Depth * Bpp) / CompFactor;
 				isCompressed = IL_TRUE;
 			}
@@ -930,6 +930,7 @@ mip_fail:
 		StartImage = StartImage->Next;
 		ifree(TempImage);
 	}
+	Image->Next = NULL;
 	return IL_FALSE;
 }
 
