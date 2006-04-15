@@ -143,7 +143,7 @@ ILboolean ILAPIENTRY ilApplyProfile(const ILstring InProfile, const ILstring Out
 
 	cmsDoTransform(hTransform, iCurImage->Data, Temp, iCurImage->SizeOfData / 3);
 
-	free(iCurImage->Data);
+	ifree(iCurImage->Data);
 	iCurImage->Data = Temp;
 
 	cmsDeleteTransform(hTransform);
