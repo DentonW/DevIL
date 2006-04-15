@@ -733,6 +733,20 @@ ILboolean AllocImage()
 }
 
 
+/*
+ * Assumes that the global variable CompFormat stores the format of the
+ * global pointer CompData (that's the pointer to the compressed data).
+ * Decompresses this data into Image->Data, returns if it was successful.
+ * It also uses the globals Width and Height.
+ *
+ * Assumes that iCurImage has valid Width, Height, Depth, Data, SizeOfData,
+ * Bpp, Bpc, Bps, SizeOfPlane, Format and Type fields. It is more or
+ * less assumed that the image has u8 rgba data (perhaps not for float
+ * images...)
+ *
+ *
+ * TODO: don't use globals, clean this function (and this file) up
+ */
 ILboolean Decompress()
 {
 	switch (CompFormat)
@@ -934,40 +948,70 @@ mip_fail:
 	return IL_FALSE;
 }
 
+ILvoid ReadColors(const ILubyte* Data, Color8888* Out)
+{
+	ILubyte r0, g0, b0, r1, g1, b1;
+
+	b0 = Data[0] & 0x1F;
+	g0 = ((Data[0] & 0xE0) >> 5) | ((Data[1] & 0x7) << 3);
+	r0 = (Data[1] & 0xF8) >> 3;
+
+	b1 = Data[2] & 0x1F;
+	g1 = ((Data[2] & 0xE0) >> 5) | ((Data[3] & 0x7) << 3);
+	r1 = (Data[3] & 0xF8) >> 3;
+
+	Out[0].r = r0 << 3;
+	Out[0].g = g0 << 2;
+	Out[0].b = b0 << 3;
+
+	Out[1].r = r1 << 3;
+	Out[1].g = g1 << 2;
+	Out[1].b = b1 << 3;
+}
+
+ILvoid ReadColor(ILushort Data, Color8888* Out)
+{
+	ILubyte r, g, b;
+
+	b = Data & 0x1f;
+	g = (Data & 0x7E0) >> 5;
+	r = (Data & 0xF800) >> 11;
+
+	Out->r = r << 3;
+	Out->g = g << 2;
+	Out->b = b << 3;
+}
 
 ILboolean DecompressDXT1()
 {
 	int			x, y, z, i, j, k, Select;
 	ILubyte		*Temp;
-	Color565	*color_0, *color_1;
 	Color8888	colours[4], *col;
+	ILushort	color_0, color_1;
 	ILuint		bitmask, Offset;
 
 	if (!CompData)
 		return IL_FALSE;
 
 	Temp = CompData;
+	colours[0].a = 0xFF;
+	colours[1].a = 0xFF;
+	colours[2].a = 0xFF;
+	//colours[3].a = 0xFF;
 	for (z = 0; z < Depth; z++) {
 		for (y = 0; y < Height; y += 4) {
 			for (x = 0; x < Width; x += 4) {
-
-				color_0 = ((Color565*)Temp);
-				color_1 = ((Color565*)(Temp+2));
+				color_0 = *((ILushort*)Temp);
+				UShort(&color_0);
+				color_1 = *((ILushort*)(Temp + 2));
+				UShort(&color_1);
+				ReadColor(color_0, colours);
+				ReadColor(color_1, colours + 1);
 				bitmask = ((ILuint*)Temp)[1];
+				UInt(&bitmask);
 				Temp += 8;
 
-				colours[0].r = color_0->nRed << 3;
-				colours[0].g = color_0->nGreen << 2;
-				colours[0].b = color_0->nBlue << 3;
-				colours[0].a = 0xFF;
-
-				colours[1].r = color_1->nRed << 3;
-				colours[1].g = color_1->nGreen << 2;
-				colours[1].b = color_1->nBlue << 3;
-				colours[1].a = 0xFF;
-
-
-				if (*((ILushort*)color_0) > *((ILushort*)color_1)) {
+				if (color_0 > color_1) {
 					// Four-color block: derive the other two colors.
 					// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
 					// These 2-bit codes correspond to the 2-bit fields 
@@ -975,7 +1019,7 @@ ILboolean DecompressDXT1()
 					colours[2].b = (2 * colours[0].b + colours[1].b + 1) / 3;
 					colours[2].g = (2 * colours[0].g + colours[1].g + 1) / 3;
 					colours[2].r = (2 * colours[0].r + colours[1].r + 1) / 3;
-					colours[2].a = 0xFF;
+					//colours[2].a = 0xFF;
 
 					colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
 					colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
@@ -991,7 +1035,7 @@ ILboolean DecompressDXT1()
 					colours[2].b = (colours[0].b + colours[1].b) / 2;
 					colours[2].g = (colours[0].g + colours[1].g) / 2;
 					colours[2].r = (colours[0].r + colours[1].r) / 2;
-					colours[2].a = 0xFF;
+					//colours[2].a = 0xFF;
 
 					colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
 					colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
@@ -1038,11 +1082,11 @@ ILboolean DecompressDXT3()
 {
 	int			x, y, z, i, j, k, Select;
 	ILubyte		*Temp;
-	Color565	*color_0, *color_1;
+	//Color565	*color_0, *color_1;
 	Color8888	colours[4], *col;
 	ILuint		bitmask, Offset;
 	ILushort	word;
-	DXTAlphaBlockExplicit *alpha;
+	ILubyte *alpha;
 
 	if (!CompData)
 		return IL_FALSE;
@@ -1051,22 +1095,12 @@ ILboolean DecompressDXT3()
 	for (z = 0; z < Depth; z++) {
 		for (y = 0; y < Height; y += 4) {
 			for (x = 0; x < Width; x += 4) {
-				alpha = (DXTAlphaBlockExplicit*)Temp;
+				alpha = Temp;
 				Temp += 8;
-				color_0 = ((Color565*)Temp);
-				color_1 = ((Color565*)(Temp+2));
+				ReadColors(Temp, colours);
 				bitmask = ((ILuint*)Temp)[1];
+				UInt(&bitmask);
 				Temp += 8;
-
-				colours[0].r = color_0->nRed << 3;
-				colours[0].g = color_0->nGreen << 2;
-				colours[0].b = color_0->nBlue << 3;
-				colours[0].a = 0xFF;
-
-				colours[1].r = color_1->nRed << 3;
-				colours[1].g = color_1->nGreen << 2;
-				colours[1].b = color_1->nBlue << 3;
-				colours[1].a = 0xFF;
 
 				// Four-color block: derive the other two colors.    
 				// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
@@ -1075,12 +1109,12 @@ ILboolean DecompressDXT3()
 				colours[2].b = (2 * colours[0].b + colours[1].b + 1) / 3;
 				colours[2].g = (2 * colours[0].g + colours[1].g + 1) / 3;
 				colours[2].r = (2 * colours[0].r + colours[1].r + 1) / 3;
-				colours[2].a = 0xFF;
+				//colours[2].a = 0xFF;
 
 				colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
 				colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
 				colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
-				colours[3].a = 0xFF;
+				//colours[3].a = 0xFF;
 
 				k = 0;
 				for (j = 0; j < 4; j++) {
@@ -1099,7 +1133,7 @@ ILboolean DecompressDXT3()
 				}
 
 				for (j = 0; j < 4; j++) {
-					word = alpha->row[j];
+					word = alpha[2*j] + 256*alpha[2*j+1];
 					for (i = 0; i < 4; i++) {
 						if (((x + i) < Width) && ((y + j) < Height)) {
 							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
@@ -1133,8 +1167,7 @@ ILboolean DecompressDXT4()
 ILboolean DecompressDXT5()
 {
 	int			x, y, z, i, j, k, Select;
-	ILubyte		*Temp;
-	Color565	*color_0, *color_1;
+	ILubyte		*Temp; //, r0, g0, b0, r1, g1, b1;
 	Color8888	colours[4], *col;
 	ILuint		bitmask, Offset;
 	ILubyte		alphas[8], *alphamask;
@@ -1153,20 +1186,11 @@ ILboolean DecompressDXT5()
 				alphas[1] = Temp[1];
 				alphamask = Temp + 2;
 				Temp += 8;
-				color_0 = ((Color565*)Temp);
-				color_1 = ((Color565*)(Temp+2));
+
+				ReadColors(Temp, colours);
 				bitmask = ((ILuint*)Temp)[1];
+				UInt(&bitmask);
 				Temp += 8;
-
-				colours[0].r = color_0->nRed << 3;
-				colours[0].g = color_0->nGreen << 2;
-				colours[0].b = color_0->nBlue << 3;
-				colours[0].a = 0xFF;
-
-				colours[1].r = color_1->nRed << 3;
-				colours[1].g = color_1->nGreen << 2;
-				colours[1].b = color_1->nBlue << 3;
-				colours[1].a = 0xFF;
 
 				// Four-color block: derive the other two colors.    
 				// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
@@ -1175,12 +1199,12 @@ ILboolean DecompressDXT5()
 				colours[2].b = (2 * colours[0].b + colours[1].b + 1) / 3;
 				colours[2].g = (2 * colours[0].g + colours[1].g + 1) / 3;
 				colours[2].r = (2 * colours[0].r + colours[1].r + 1) / 3;
-				colours[2].a = 0xFF;
+				//colours[2].a = 0xFF;
 
 				colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
 				colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
 				colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
-				colours[3].a = 0xFF;
+				//colours[3].a = 0xFF;
 
 				k = 0;
 				for (j = 0; j < 4; j++) {
@@ -1225,7 +1249,8 @@ ILboolean DecompressDXT5()
 				//	it operates on a 6-byte system.
 
 				// First three bytes
-				bits = *((ILint*)alphamask);
+				//bits = *((ILint*)alphamask);
+				bits = (alphamask[0]) | (alphamask[1] << 8) | (alphamask[2] << 16);
 				for (j = 0; j < 2; j++) {
 					for (i = 0; i < 4; i++) {
 						// only put pixels out < width or height
@@ -1238,7 +1263,8 @@ ILboolean DecompressDXT5()
 				}
 
 				// Last three bytes
-				bits = *((ILint*)&alphamask[3]);
+				//bits = *((ILint*)&alphamask[3]);
+				bits = (alphamask[3]) | (alphamask[4] << 8) | (alphamask[5] << 16);
 				for (j = 2; j < 4; j++) {
 					for (i = 0; i < 4; i++) {
 						// only put pixels out < width or height
@@ -1678,17 +1704,17 @@ ILboolean DecompressARGB()
 		if (Image->SizeOfData - i < 4) { //less than 4 byte to write?
 			if (TempBpp == 3) { //this branch is extra-SLOOOW
 				ReadI =
-					*((ILubyte*)Temp)
-					| (*((ILubyte*)(Temp + 1)) << 8)
-					| (*((ILubyte*)(Temp + 2)) << 16);
+					*Temp
+					| ((*(Temp + 1)) << 8)
+					| ((*(Temp + 2)) << 16);
 			}
 			else if (TempBpp == 1)
 				ReadI = *((ILubyte*)Temp);
 			else if (TempBpp == 2)
-				ReadI = *((ILushort*)Temp);
+				ReadI = Temp[0] | (Temp[1] << 8);
 		}
 		else
-			ReadI = *((ILuint*)Temp); //read 4 bytes at once, faster
+			ReadI = Temp[0] | (Temp[1] << 8) | (Temp[2] << 16) | (Temp[3] << 24);
 		Temp += TempBpp;
 
 		Image->Data[i] = ((ReadI & Head.RBitMask) >> RedR) << RedL;
