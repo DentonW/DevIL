@@ -40,8 +40,28 @@ ILvoid iGLSetMaxH(ILuint Height)
 //	#pragma comment(lib, "freeglut.lib")
 #endif
 
+
 #ifdef linux
-	#include <GL/glx.h>
+      #include <GL/glx.h>
+#endif
+
+#ifdef __APPLE_CC__
+// Taken directly from Apple Developer Documentation http://developer.apple.com/qa/qa2001/qa1188.html
+#include <mach-o/dyld.h>
+void *NSGLGetProcAddress(const char *name)
+{
+    NSSymbol symbol;
+    char *symbolName;
+    // Prepend a '_' for the Unix C symbol mangling convention
+    symbolName = malloc (strlen (name) + 2);
+    strcpy(symbolName + 1, name);
+    symbolName[0] = '_';
+    symbol = NULL;
+    if (NSIsSymbolNameDefined (symbolName))
+        symbol = NSLookupAndBindSymbol (symbolName);
+    free (symbolName);
+    return symbol ? NSAddressOfSymbol (symbol) : NULL;
+}
 #endif
 
 //used for automatic texture target detection
@@ -58,7 +78,7 @@ ILvoid iGLSetMaxH(ILuint Height)
 
 
 ILboolean HasCubemapHardware = IL_FALSE;
-#if defined(_MSC_VER) || defined(linux)
+#if defined(_MSC_VER) || defined(linux) || defined(__APPLE_CC__)
 	ILGLCOMPRESSEDTEXIMAGE2DARBPROC ilGLCompressed2D = NULL;
 #endif
 
@@ -94,11 +114,17 @@ ILboolean ilutGLInit()
 				wglGetProcAddress("glCompressedTexImage2DARB");
 	}
 #elif linux
-	if (IsExtensionSupported("GL_ARB_texture_compression") &&
-		IsExtensionSupported("GL_EXT_texture_compression_s3tc")) {
-			ilGLCompressed2D = (ILGLCOMPRESSEDTEXIMAGE2DARBPROC)
-				glXGetProcAddressARB("glCompressedTexImage2DARB");
-	}
+      if (IsExtensionSupported("GL_ARB_texture_compression") &&
+              IsExtensionSupported("GL_EXT_texture_compression_s3tc")) {
+                      ilGLCompressed2D = (ILGLCOMPRESSEDTEXIMAGE2DARBPROC)
+                              glXGetProcAddressARB("glCompressedTexImage2DARB");
+      }
+#elif __APPLE_CC__
+      if (IsExtensionSupported("GL_ARB_texture_compression") &&
+              IsExtensionSupported("GL_EXT_texture_compression_s3tc")) {
+                      ilGLCompressed2D = (ILGLCOMPRESSEDTEXIMAGE2DARBPROC)
+                              NSGLGetProcAddress("glCompressedTexImage2DARB");
+      }
 #endif
 
 
@@ -180,7 +206,7 @@ ILuint GLGetDXTCNum(ILenum DXTCFormat)
 ILboolean ILAPIENTRY ilutGLTexImage_(GLuint Level, GLuint Target, ILimage *Image)
 {
 	ILimage	*ImageCopy, *OldImage;
-#if defined (_MSC_VER) || defined (linux)
+#if defined (_MSC_VER) || defined (linux) || defined(__APPLE_CC__)
 	ILenum	DXTCFormat;
 	ILuint	Size;
 	ILubyte	*Buffer;
@@ -193,7 +219,7 @@ ILboolean ILAPIENTRY ilutGLTexImage_(GLuint Level, GLuint Target, ILimage *Image
 
 	OldImage = ilGetCurImage();
 
-#if defined (_MSC_VER) || defined (linux)
+#if defined (_MSC_VER) || defined (linux) || defined(__APPLE_CC__)
 	if (ilutGetBoolean(ILUT_GL_USE_S3TC) && ilGLCompressed2D != NULL) {
 		if (Image->DxtcData != NULL && Image->DxtcSize != 0) {
 			DXTCFormat = GLGetDXTCNum(Image->DxtcFormat);
