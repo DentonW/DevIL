@@ -33,7 +33,7 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.6 $)
+AC_REVISION($Revision: 1.7 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -633,9 +633,15 @@ dnl ILUT APIs checking
 dnl
 
 dnl Check for SDL
-AM_PATH_SDL(1.2.5,use_sdl="yes",use_sdl="no")
-HSDL="$SDL_CFLAGS"
-LIBSDL="$SDL_LIBS"
+dnl patched by Henrik Dohlmann - henrikd
+if test "$use_sdl" = "yes" ; then
+  AM_PATH_SDL(1.2.5,,)
+  HSDL="$SDL_CFLAGS"
+  LIBSDL="$SDL_LIBS"
+else
+  HSDL=""
+  LIBSDL=""
+fi
 AC_SUBST(LIBSDL)
 AC_SUBST(HSDL)
 
