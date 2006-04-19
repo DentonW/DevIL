@@ -295,6 +295,9 @@ ILvoid iSetOutputLump(ILvoid *Lump, ILuint Size)
 	WriteLump = Lump;
 	WriteLumpPos = 0;
 	WriteLumpSize = Size;
+	
+	// patch from Roman Vorobets (sesquialteral)
+	ReadLumpPos = 0;
 }
 
 
@@ -636,6 +639,9 @@ ILint ILAPIENTRY iWriteLump(const ILvoid *Buffer, ILuint Size, ILuint Number)
 	}
 
 	WriteLumpPos += SizeBytes;
+	
+	// patch from Roman Vorobets (sesquialteral)
+	if (WriteLumpPos > ReadLumpPos) ReadLumpPos = WriteLumpPos;
 	
 	return SizeBytes;
 }
