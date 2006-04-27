@@ -5,6 +5,6 @@ IL_LIB_PATH="/usr/local/lib"
 PYTHON_INCLUDE_PATH="/usr/include/python2.4"
 
 swig -I$IL_INCLUDE_PATH -python -interface DevIL DevIL.i
-gcc -shared -I$PYTHON_INCLUDE_PATH -L$IL_LIB_PATH -lIL -lILU -lILUT swig_wrapper,c -o DevIL.so
+gcc -shared -I$PYTHON_INCLUDE_PATH -L$IL_LIB_PATH -lIL -lILU -lILUT swig_wrap.c -o DevIL.so
 
 echo "DevIL.py and DevIL.so are ready"
