@@ -102,7 +102,8 @@ extern "C" {
 	#endif
 #endif
 
-#include <stdio.h>
+/* useless include     */
+/* #include <stdio.h>  */
 
 typedef unsigned int   ILenum;
 typedef unsigned char  ILboolean;
