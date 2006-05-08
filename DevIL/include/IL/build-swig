@@ -4,12 +4,13 @@ IL_INCLUDE_PATH="/usr/local/include"
 IL_LIB_PATH="/usr/local/lib"
 PYTHON_INCLUDE_PATH="/usr/include/python2.4"
 
-swig -I$IL_INCLUDE_PATH -python -interface DevIL DevIL.i
+swig "-I$IL_INCLUDE_PATH" -python -interface DevIL DevIL.i
 if [ $? -ne 0 ] ; then
 	echo Error while building the swig interface
 	exit 1
 fi
-gcc -shared -I$PYTHON_INCLUDE_PATH -L$IL_LIB_PATH -lIL -lILU -lILUT DevIL_wrap.c -o DevIL.so
+
+gcc -shared "-I$IL_INCLUDE_PATH" "-I$PYTHON_INCLUDE_PATH" "-L$IL_LIB_PATH" -lIL -lILU -lILUT DevIL_wrap.c -o DevIL.so
 if [ $? -ne 0 ] ; then
 	echo Error while compiling the python module
 fi
