@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"><html><head><title>DevIL Documentation, ilGetPalette</title></head><body topmargin="0" bgcolor="white"><font face="verdana"><img src="../images/DevIL.gif"><br></font>
+<style type="text/css">
+A.color{color: FFFFFF;text-decoration: none;}
+</style>
+
+
+
+<table width="100%" cols="2" border="0" bgcolor="navy"><tr align="left"><td align="left"><font color="white">DevIL Documentation</font></td><td align="right"><font color="white">
+<a class="color" href="ilGetIntegerv.html">Previous</a> |
+<a class="color" href="index.html">IL</a> |
+<a class="color" href="ilGetString.html">Next</a>
+</font></td></tr></table><br/><table><tr><td>&nbsp;</td><td>
+<p><h3>ilGetPalette</h3></p><table><tr><td>&nbsp;</td><td>
+<p><font size="-1">ilGetPalette returns an unsigned byte pointer to the current bound image's palette (if one exists) to allow direct access and modification to the contents of the palette.</font></p>
+<table><tr><td>&nbsp;</td><td><p><pre><code><b>ILubyte * ilGetPalette(<br/></b>&nbsp;&nbsp;<b>ILvoid</b> <b>);</b></code></pre></p></dl></p></td></tr></table>
+<br/><p><h4>Parameters</h4><table><tr><td>&nbsp;</td><td><dl><p><font face="verdana" size="-1"><i>None</i></font></p>
+</dl></p></td></tr></table><br/><h4>Errors</h4><table><tr><td>&nbsp;</td><td><dl><dt><a href="../IL/IL_ILLEGAL_OPERATION.html"><font size="-1">IL_ILLEGAL_OPERATION</font></a></dt><dd><font size="-1">The operation attempted is not allowable in the current state. The function returns with no ill side effects. Generally there is currently no image bound or it has been deleted via ilDeleteImages. You should use ilGenImages and ilBindImage before calling the function.</font></dd>
+</dl></td></tr></table></p>
+<h4>See Also</h4><table><tr><td>&nbsp;</td><td><dl><a href="../IL/ilBindImage.html"><font size="-1">ilBindImage</font></a>, 
+<a href="../IL/ilGenImages.html"><font size="-1">ilGenImages</font></a>, 
+<a href="../IL/ilGetData.html"><font size="-1">ilGetData</font></a>, 
+</td></tr></table></p>
+</td></tr></table>
+
+
+
+<br/></body></html>

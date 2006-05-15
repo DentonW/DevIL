@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"><html><head><title>DevIL Documentation, ilGenImages</title></head><body topmargin="0" bgcolor="white"><font face="verdana"><img src="../images/DevIL.gif"><br></font>
+<style type="text/css">
+A.color{color: FFFFFF;text-decoration: none;}
+</style>
+
+
+
+<table width="100%" cols="2" border="0" bgcolor="navy"><tr align="left"><td align="left"><font color="white">DevIL Documentation</font></td><td align="right"><font color="white">
+<a class="color" href="ilEnable.html">Previous</a> |
+<a class="color" href="index.html">IL</a> |
+<a class="color" href="ilGetBoolean.html">Next</a>
+</font></td></tr></table><br/><table><tr><td>&nbsp;</td><td>
+<p><h3>ilGenImages</h3></p><table><tr><td>&nbsp;</td><td>
+<p><font size="-1">ilGenImages stores Num image names in Images. The names stored are not necessarily contiguous, and names can have been deleted via ilDeleteImages beforehand. The image names stored in Images can be used with ilBindImage after calling ilGenImages. After calling ilGenImages, all image dimensions and features are undefined.</font></p>
+<table><tr><td>&nbsp;</td><td><p><pre><code><b>ILvoid ilGenImages(<br/></b>&nbsp;&nbsp;<b>ILsizei</b> <i>Num</i>, <b>ILuint *</b> <i>Images</i> <b>);</b></code></pre></p></dl></p></td></tr></table>
+<br/><p><h4>Parameters</h4><table><tr><td>&nbsp;</td><td><dl><dt><i><font size="-1">Num</font></i></font></dt><dd><font size="-1">Number of image names to generate.</font></dd> <dt><i><font size="-1">Images</font></i></font></dt><dd><font size="-1">Pointer in which the generated image names are stored.</font></dd></dl></p></td></tr></table><br/><h4>Errors</h4><table><tr><td>&nbsp;</td><td><dl><dt><a href="../IL/IL_INVALID_VALUE.html"><font size="-1">IL_INVALID_VALUE</font></a></dt><dd><font size="-1">Num was less than 1 or Images was NULL.</font></dd>
+</dl></td></tr></table></p>
+<h4>See Also</h4><table><tr><td>&nbsp;</td><td><dl><a href="../IL/ilBindImage.html"><font size="-1">ilBindImage</font></a>, 
+<a href="../IL/ilDeleteImages.html"><font size="-1">ilDeleteImages</font></a>, 
+</td></tr></table></p>
+</td></tr></table>
+
+
+
+<br/></body></html>

@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"><html><head><title>DevIL Documentation, ilutLoadResource</title></head><body topmargin="0" bgcolor="white"><font face="verdana"><img src="../images/DevIL.gif"><br></font>
+<style type="text/css">
+A.color{color: FFFFFF;text-decoration: none;}
+</style>
+
+
+
+<table width="100%" cols="2" border="0" bgcolor="navy"><tr align="left"><td align="left"><font color="white">DevIL Documentation</font></td><td align="right"><font color="white">
+<a class="color" href="ilutIsEnabled.html">Previous</a> |
+<a class="color" href="index.html">ILUT</a> |
+<a class="color" href="ilutPopAttrib.html">Next</a>
+</font></td></tr></table><br/><table><tr><td>&nbsp;</td><td>
+<p><h3>ilutLoadResource</h3></p><table><tr><td>&nbsp;</td><td>
+<p><font size="-1">ilutLoadResource is a Windows-specific function that loads a resource as the current bound image. This feature allows you to have images directly in your .exe and not worry whether a particular file is present on the user's harddrive. An alternative, more portable solution is to use ilSave with IL_CHEAD as the Type parameter.</font></p>
+<table><tr><td>&nbsp;</td><td><p><pre><code><b>ILboolean ilutLoadResource(<br/></b>&nbsp;&nbsp;<b>HINSTANCE</b> <i>hInst</i>, <b>ILINT</b> <i>ID</i>, <b>char *</b> <i>ResourceType</i>, <b>ILenum</b> <i>Type</i> <b>);</b></code></pre></p></dl></p></td></tr></table>
+<br/><p><h4>Parameters</h4><table><tr><td>&nbsp;</td><td><dl><dt><i><font size="-1">hInst</font></i></font></dt><dd><font size="-1">The application-s HINSTANCE</font></dd> <dt><i><font size="-1">ID</font></i></font></dt><dd><font size="-1">The resource identifier of the resource to be loaded</font></dd> <dt><i><font size="-1">ResourceType</font></i></font></dt><dd><font size="-1">The type of user-defined resource (name used when creating)</font></dd> <dt><i><font size="-1">Type</font></i></font></dt><dd><font size="-1">The type of image to be loaded. Use IL_TYPE_UNKNOWN to let OpenIL determine the type</font></dd></dl></p></td></tr></table><br/><h4>Errors</h4><table><tr><td>&nbsp;</td><td><dl><dt><a href="../ILUT/ILUT_ILLEGAL_OPERATION.html"><font size="-1">ILUT_ILLEGAL_OPERATION</font></a></dt><dd><font size="-1">The operation attempted is not allowable in the current state. The function returns with no ill side effects.</font></dd>
+</dl></td></tr></table></p>
+<h4>See Also</h4><table><tr><td>&nbsp;</td><td><dl><a href="../IL/ilBindImage.html"><font size="-1">ilBindImage</font></a>, 
+<a href="../IL/ilGenImages.html"><font size="-1">ilGenImages</font></a>, 
+<a href="../IL/ilSave.html"><font size="-1">ilSave</font></a>, 
+<a href="../ILUT/ilutGetWinClipboard.html"><font size="-1">ilutGetWinClipboard</font></a>, 
+</td></tr></table></p>
+</td></tr></table>
+
+
+
+<br/></body></html>

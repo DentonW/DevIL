@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"><html><head><title>DevIL Documentation, ilCopyPixels</title></head><body topmargin="0" bgcolor="white"><font face="verdana"><img src="../images/DevIL.gif"><br></font>
+<style type="text/css">
+A.color{color: FFFFFF;text-decoration: none;}
+</style>
+
+
+
+<table width="100%" cols="2" border="0" bgcolor="navy"><tr align="left"><td align="left"><font color="white">DevIL Documentation</font></td><td align="right"><font color="white">
+<a class="color" href="ilCopyImage.html">Previous</a> |
+<a class="color" href="index.html">IL</a> |
+<a class="color" href="ilDefaultImage.html">Next</a>
+</font></td></tr></table><br/><table><tr><td>&nbsp;</td><td>
+<p><h3>ilCopyPixels</h3></p><table><tr><td>&nbsp;</td><td>
+<p><font size="-1">s width, height or depth number of pixels will be copied to Data.</font></p>
+<table><tr><td>&nbsp;</td><td><p><pre><code><b>ILvoid ilCopyPixels(<br/></b>&nbsp;&nbsp;<b>ILuint</b> <i>XOff</i>, <b>ILuint</b> <i>YOff</i>, <b>ILuint</b> <i>ZOff</i>, <b>ILuint</b> <i>Width</i>, <b>ILuint</b> <i>Height</i>, <b>ILuint</b> <i>Depth</i>, <b>ILenum</b> <i>Format</i>, <b>ILenum</b> <i>Type</i>, <b>ILvoid *</b> <i>Data</i> <b>);</b></code></pre></p></dl></p></td></tr></table>
+<br/><p><h4>Parameters</h4><table><tr><td>&nbsp;</td><td><dl><dt><i><font size="-1">XOff</font></i></font></dt><dd><font size="-1">Where to begin copying pixels from in the x direction.</font></dd> <dt><i><font size="-1">YOff</font></i></font></dt><dd><font size="-1">Where to begin copying pixels from in the y direction.</font></dd> <dt><i><font size="-1">ZOff</font></i></font></dt><dd><font size="-1">Where to begin copying pixels from in the z direction.</font></dd> <dt><i><font size="-1">Width</font></i></font></dt><dd><font size="-1">How many pixels to copy in the x direction.</font></dd> <dt><i><font size="-1">Height</font></i></font></dt><dd><font size="-1">How many pixels to copy in the y direction.</font></dd> <dt><i><font size="-1">Depth</font></i></font></dt><dd><font size="-1">How many pixels to copy in the z direction.</font></dd> <dt><i><font size="-1">Format</font></i></font></dt><dd><font size="-1">The desired format the output should be.</font></dd> <dt><i><font size="-1">Type</font></i></font></dt><dd><font size="-1">The desired type the output should be.</font></dd> <dt><i><font size="-1">Data</font></i></font></dt><dd><font size="-1">User-defined buffer to copy the image data to.</font></dd></dl></p></td></tr></table><br/><h4>Errors</h4><table><tr><td>&nbsp;</td><td><dl><dt><a href="../IL/IL_ILLEGAL_OPERATION.html"><font size="-1">IL_ILLEGAL_OPERATION</font></a></dt><dd><font size="-1">The operation attempted is not allowable in the current state. The function returns with no ill side effects. Generally there is currently no image bound or it has been deleted via ilDeleteImages. You should use ilGenImages and ilBindImage before calling the function.</font></dd>
+<dt><a href="../IL/IL_INVALID_CONVERSION.html"><font size="-1">IL_INVALID_CONVERSION</font></a></dt><dd><font size="-1">Format did not match the current image's format. Use ilGetInteger to obtain the current image's format.</font></dd>
+</dl></td></tr></table></p>
+<h4>See Also</h4><table><tr><td>&nbsp;</td><td><dl><a href="../IL/ilBindImage.html"><font size="-1">ilBindImage</font></a>, 
+<a href="../IL/ilGenImages.html"><font size="-1">ilGenImages</font></a>, 
+<a href="../IL/ilGetInteger.html"><font size="-1">ilGetInteger</font></a>, 
+</td></tr></table></p>
+</td></tr></table>
+
+
+
+<br/></body></html>

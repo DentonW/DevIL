@@ -1,0 +1,24 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"><html><head><title>DevIL Documentation, ilSetRead</title></head><body topmargin="0" bgcolor="white"><font face="verdana"><img src="../images/DevIL.gif"><br></font>
+<style type="text/css">
+A.color{color: FFFFFF;text-decoration: none;}
+</style>
+
+
+
+<table width="100%" cols="2" border="0" bgcolor="navy"><tr align="left"><td align="left"><font color="white">DevIL Documentation</font></td><td align="right"><font color="white">
+<a class="color" href="ilSetPixels.html">Previous</a> |
+<a class="color" href="index.html">IL</a> |
+<a class="color" href="ilSetString.html">Next</a>
+</font></td></tr></table><br/><table><tr><td>&nbsp;</td><td>
+<p><h3>ilSetRead</h3></p><table><tr><td>&nbsp;</td><td>
+<p><font size="-1"> datatype ILHANDLE is passed to these functions when used, so any internal datatype used by the differing language (or file handle) can be used.</font></p>
+<table><tr><td>&nbsp;</td><td><p><pre><code><b>ILvoid ilSetRead(<br/></b>&nbsp;&nbsp;<b>fOpenRProc</b> <i>Open</i>, <b>fCloseRProc</b> <i>Close</i>, <b>fEofProc</b> <i>Eof</i>, <b>fGetcProc</b> <i>Getc</i>, <b>fReadProc</b> <i>Read</i>, <b>fSeekRProc</b> <i>Seek</i>, <b>fTellRProc</b> <i>Tell</i> <b>);</b></code></pre></p></dl></p></td></tr></table>
+<br/><p><h4>Parameters</h4><table><tr><td>&nbsp;</td><td><dl><dt><i><font size="-1">Open</font></i></font></dt><dd><font size="-1">Pointer to a function to open a file.</font></dd> <dt><i><font size="-1">Close</font></i></font></dt><dd><font size="-1">Pointer to a function to close a file.</font></dd> <dt><i><font size="-1">Eof</font></i></font></dt><dd><font size="-1">Pointer to a function that returns IL_TRUE if the end of file is reached.</font></dd> <dt><i><font size="-1">Getc</font></i></font></dt><dd><font size="-1">Pointer to a function to return one byte from a file.</font></dd> <dt><i><font size="-1">Read</font></i></font></dt><dd><font size="-1">Pointer to a function to read multiple bytes from a file.</font></dd> <dt><i><font size="-1">Seek</font></i></font></dt><dd><font size="-1">Pointer to a function to change position in a file.</font></dd> <dt><i><font size="-1">Tell</font></i></font></dt><dd><font size="-1">Pointer to a function to report the position in a file.</font></dd></dl></p></td></tr></table><br/><h4>See Also</h4><table><tr><td>&nbsp;</td><td><dl><a href="../IL/ilResetRead.html"><font size="-1">ilResetRead</font></a>, 
+<a href="../IL/ilResetWrite.html"><font size="-1">ilResetWrite</font></a>, 
+<a href="../IL/ilSetWrite.html"><font size="-1">ilSetWrite</font></a>, 
+</td></tr></table></p>
+</td></tr></table>
+
+
+
+<br/></body></html>

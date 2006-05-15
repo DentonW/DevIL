@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"><html><head><title>DevIL Documentation, ilGetString</title></head><body topmargin="0" bgcolor="white"><font face="verdana"><img src="../images/DevIL.gif"><br></font>
+<style type="text/css">
+A.color{color: FFFFFF;text-decoration: none;}
+</style>
+
+
+
+<table width="100%" cols="2" border="0" bgcolor="navy"><tr align="left"><td align="left"><font color="white">DevIL Documentation</font></td><td align="right"><font color="white">
+<a class="color" href="ilGetPalette.html">Previous</a> |
+<a class="color" href="index.html">IL</a> |
+<a class="color" href="ilHint.html">Next</a>
+</font></td></tr></table><br/><table><tr><td>&nbsp;</td><td>
+<p><h3>ilGetString</h3></p><table><tr><td>&nbsp;</td><td>
+<p><font size="-1">ilGetString returns a constant human-readable string describing the current OpenIL implementation.</font></p>
+<table><tr><td>&nbsp;</td><td><p><pre><code><b>const char * ilGetString(<br/></b>&nbsp;&nbsp;<b>ILenum</b> <i>StringName</i> <b>);</b></code></pre></p></dl></p></td></tr></table>
+<br/><p><h4>Parameters</h4><table><tr><td>&nbsp;</td><td><dl><dt><i><font size="-1">StringName</font></i></font></dt><dd><font size="-1">Describes the string to be retrieved.</font></dd></dl></p></td></tr></table><br/><h4>Strings</h4><table><tr><td>&nbsp;</td><td><dl><dt><font size="-1">IL_VENDOR</font></dt><dd><font size="-1">Describes the OpenIL vendor (currently Abysmal Software).</font></dd>
+<dt><font size="-1">IL_VERSION</font></dt><dd><font size="-1">String describing the current OpenIL version. Use ilGetInteger with IL_VERSION_NUM to actually check for version differences.</font></dd>
+</dl></td></tr></table></p>
+<h4>Errors</h4><table><tr><td>&nbsp;</td><td><dl><dt><font size="-1">IL_INVALID_ENUM</font></dt><dd><font size="-1">StringName was an invalid value.</font></dd>
+</dl></td></tr></table></p>
+</td></tr></table>
+
+
+
+<br/></body></html>

@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"><html><head><title>DevIL Documentation, iluSharpen</title></head><body topmargin="0" bgcolor="white"><font face="verdana"><img src="../images/DevIL.gif"><br></font>
+<style type="text/css">
+A.color{color: FFFFFF;text-decoration: none;}
+</style>
+
+
+
+<table width="100%" cols="2" border="0" bgcolor="navy"><tr align="left"><td align="left"><font color="white">DevIL Documentation</font></td><td align="right"><font color="white">
+<a class="color" href="iluScale.html">Previous</a> |
+<a class="color" href="index.html">ILU</a> |
+<a class="color" href="iluSwapColours.html">Next</a>
+</font></td></tr></table><br/><table><tr><td>&nbsp;</td><td>
+<p><h3>iluSharpen</h3></p><table><tr><td>&nbsp;</td><td>
+<p><font size="-1">iluSharpen can actually either sharpen or blur an image, depending on the value of Factor. iluBlurAvg and iluBlurGaussian are much faster for blurring, though. When Factor is 1.0, the image goes unchanged. When Factor is in the range 0.0 - 1.0, the current image is blurred. When Factor is in the range 1.0 - 2.5, the current image is sharpened. To achieve a more pronounced sharpening/blurring effect, simply increase the number of iterations by increasing the value passed in Iter.</font></p>
+<table><tr><td>&nbsp;</td><td><p><pre><code><b>ILboolean iluSharpen(<br/></b>&nbsp;&nbsp;<b>ILfloat</b> <i>Factor</i>, <b>ILuint</b> <i>Iter</i> <b>);</b></code></pre></p></dl></p></td></tr></table>
+<br/><p><h4>Parameters</h4><table><tr><td>&nbsp;</td><td><dl><dt><i><font size="-1">Factor</font></i></font></dt><dd><font size="-1">Factor to sharpen by.</font></dd> <dt><i><font size="-1">Iter</font></i></font></dt><dd><font size="-1">Number of iterations to perform on the image.</font></dd></dl></p></td></tr></table><br/><h4>Errors</h4><table><tr><td>&nbsp;</td><td><dl><dt><a href="../ILU/ILU_ILLEGAL_OPERATION.html"><font size="-1">ILU_ILLEGAL_OPERATION</font></a></dt><dd><font size="-1">The operation attempted is not allowable in the current state. The function returns with no ill side effects. Generally there is currently no image bound or it has been deleted via ilDeleteImages. You should use ilGenImages and ilBindImage before calling the function.</font></dd>
+</dl></td></tr></table></p>
+<h4>See Also</h4><table><tr><td>&nbsp;</td><td><dl><a href="../IL/ilBindImages.html"><font size="-1">ilBindImages</font></a>, 
+<a href="../IL/ilGenImages.html"><font size="-1">ilGenImages</font></a>, 
+<a href="../ILU/iluBlurAvg.html"><font size="-1">iluBlurAvg</font></a>, 
+<a href="../ILU/iluBlurGaussian.html"><font size="-1">iluBlurGaussian</font></a>, 
+</td></tr></table></p>
+</td></tr></table>
+
+
+
+<br/></body></html>

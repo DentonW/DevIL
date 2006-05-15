@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"><html><head><title>DevIL Documentation, ilSaveF</title></head><body topmargin="0" bgcolor="white"><font face="verdana"><img src="../images/DevIL.gif"><br></font>
+<style type="text/css">
+A.color{color: FFFFFF;text-decoration: none;}
+</style>
+
+
+
+<table width="100%" cols="2" border="0" bgcolor="navy"><tr align="left"><td align="left"><font color="white">DevIL Documentation</font></td><td align="right"><font color="white">
+<a class="color" href="ilSave.html">Previous</a> |
+<a class="color" href="index.html">IL</a> |
+<a class="color" href="ilSaveImage.html">Next</a>
+</font></td></tr></table><br/><table><tr><td>&nbsp;</td><td>
+<p><h3>ilSaveF</h3></p><table><tr><td>&nbsp;</td><td>
+<p><font size="-1">ilSaveF saves an image to a previously opened file</font></p>
+<table><tr><td>&nbsp;</td><td><p><pre><code><b>ILboolean ilSaveF(<br/></b>&nbsp;&nbsp;<b>ILenum</b> <i>Type</i>, <b>ILHANDLE</b> <i>File</i> <b>);</b></code></pre></p></dl></p></td></tr></table>
+<br/><p><h4>Parameters</h4><table><tr><td>&nbsp;</td><td><dl><dt><i><font size="-1">Type</font></i></font></dt><dd><font size="-1">Image format</font></dd> <dt><i><font size="-1">File</font></i></font></dt><dd><font size="-1">Pointer to a previous opened file</font></dd></dl></p></td></tr></table><br/><h4>Types</h4><table><tr><td>&nbsp;</td><td><dl><dt><font size="-1">IL_BMP</font></dt><dd><font size="-1">Save the image as a Microsoft bitmap (.bmp).</font></dd>
+<dt><font size="-1">IL_CHEAD</font></dt><dd><font size="-1">Save a C Header style image.</font></dd>
+<dt><font size="-1">IL_JPG</font></dt><dd><font size="-1">Save the image as a Jpeg (.jpg).</font></dd>
+<dt><font size="-1">IL_PNM</font></dt><dd><font size="-1">Save a Portable AnyMap (.pbm, .pgm or .ppm).</font></dd>
+<dt><font size="-1">IL_PSD</font></dt><dd><font size="-1">Save a PhotoShop (.psd) file.</font></dd>
+<dt><font size="-1">IL_SGI</font></dt><dd><font size="-1">Save an SGI (.bw, .rgb, .rgba or .sgi).</font></dd>
+<dt><font size="-1">IL_TGA</font></dt><dd><font size="-1">Save a TrueVision Targa.</font></dd>
+<dt><font size="-1">IL_TYPE_UNKNOWN</font></dt><dd><font size="-1">Tells OpenIL to try to determine the type of image present in FileName, File or Lump.</font></dd>
+</dl></td></tr></table></p>
+<h4>Errors</h4><table><tr><td>&nbsp;</td><td><dl><dt><a href="../IL/IL_COULD_NOT_OPEN_FILE.html"><font size="-1">IL_COULD_NOT_OPEN_FILE</font></a></dt><dd><font size="-1">The file pointed to by FileName could not be opened. Either the file does not exist or is in use by another process.</font></dd>
+<dt><a href="../IL/IL_ILLEGAL_OPERATION.html"><font size="-1">IL_ILLEGAL_OPERATION</font></a></dt><dd><font size="-1">There is currently no image bound. Use ilGenImages and ilBindImage before calling this function. </font></dd>
+<dt><a href="../IL/IL_INVALID_ENUM.html"><font size="-1">IL_INVALID_ENUM</font></a></dt><dd><font size="-1">Type was of an invalid value.</font></dd>
+<dt><a href="../IL/IL_INVALID_PARAM.html"><font size="-1">IL_INVALID_PARAM</font></a></dt><dd><font size="-1">FileName or Type was NULL.</font></dd>
+<dt><a href="../IL/IL_LIB_JPEG_ERROR.html"><font size="-1">IL_LIB_JPEG_ERROR</font></a></dt><dd><font size="-1">Error occurred when trying to save a jpeg.</font></dd>
+<dt><a href="../IL/IL_LIB_PNG_ERROR.html"><font size="-1">IL_LIB_PNG_ERROR</font></a></dt><dd><font size="-1">Error occurred when trying to save a png.</font></dd>
+</dl></td></tr></table></p>
+<h4>See Also</h4><table><tr><td>&nbsp;</td><td><dl><a href="../IL/ilBindImage.html"><font size="-1">ilBindImage</font></a>, 
+<a href="../IL/ilGenImages.html"><font size="-1">ilGenImages</font></a>, 
+<a href="../IL/ilLoadImage.html"><font size="-1">ilLoadImage</font></a>, 
+<a href="../IL/ilSave.html"><font size="-1">ilSave</font></a>, 
+<a href="../IL/ilSaveImage.html"><font size="-1">ilSaveImage</font></a>, 
+<a href="../IL/ilSetFileCallbacks.html"><font size="-1">ilSetFileCallbacks</font></a>, 
+</td></tr></table></p>
+</td></tr></table>
+
+
+
+<br/></body></html>

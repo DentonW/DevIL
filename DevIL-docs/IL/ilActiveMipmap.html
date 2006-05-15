@@ -1,0 +1,29 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"><html><head><title>DevIL Documentation, ilActiveMipmap</title></head><body topmargin="0" bgcolor="white"><font face="verdana"><img src="../images/DevIL.gif"><br></font>
+<style type="text/css">
+A.color{color: FFFFFF;text-decoration: none;}
+</style>
+
+
+
+<table width="100%" cols="2" border="0" bgcolor="navy"><tr align="left"><td align="left"><font color="white">DevIL Documentation</font></td><td align="right"><font color="white">
+<a class="color" href="ilActiveLayer.html">Previous</a> |
+<a class="color" href="index.html">IL</a> |
+<a class="color" href="ilApplyProfile.html">Next</a>
+</font></td></tr></table><br/><table><tr><td>&nbsp;</td><td>
+<p><h3>ilActiveMipmap</h3></p><table><tr><td>&nbsp;</td><td>
+<p><font size="-1">ilActiveMipmap sets a mipmap of the image as the current mipmap. Currently, the only way to generate mipmaps is by calling iluBuildMipmaps. If neither function has been called for the current image, no mipmaps exist for it. If Number is 0, then the current base image is set.</font></p>
+<table><tr><td>&nbsp;</td><td><p><pre><code><b>ILboolean ilActiveMipmap(<br/></b>&nbsp;&nbsp;<b>ILuint</b> <i>Number</i> <b>);</b></code></pre></p></dl></p></td></tr></table>
+<br/><p><h4>Parameters</h4><table><tr><td>&nbsp;</td><td><dl><dt><i><font size="-1">Number</font></i></font></dt><dd><font size="-1">Mipmap level to select as current.</font></dd></dl></p></td></tr></table><br/><h4>Errors</h4><table><tr><td>&nbsp;</td><td><dl><dt><a href="../IL/IL_ILLEGAL_OPERATION.html"><font size="-1">IL_ILLEGAL_OPERATION</font></a></dt><dd><font size="-1">The operation attempted is not allowable in the current state. The function returns with no ill side effects. Generally there is currently no image bound or it has been deleted via ilDeleteImages. You should use ilGenImages and ilBindImage before calling the function.</font></dd>
+<dt><a href="../IL/IL_INTERNAL_ERROR.html"><font size="-1">IL_INTERNAL_ERROR</font></a></dt><dd><font size="-1">A serious error has occurred. Please e-mail an admin with the conditions leading up to this error being reported.</font></dd>
+</dl></td></tr></table></p>
+<h4>See Also</h4><table><tr><td>&nbsp;</td><td><dl><a href="../IL/ilActiveImage.html"><font size="-1">ilActiveImage</font></a>, 
+<a href="../IL/ilActiveLayer.html"><font size="-1">ilActiveLayer</font></a>, 
+<a href="../IL/ilBindImage.html"><font size="-1">ilBindImage</font></a>, 
+<a href="../IL/ilGenImages.html"><font size="-1">ilGenImages</font></a>, 
+<a href="../ILU/iluBuildMipmaps.html"><font size="-1">iluBuildMipmaps</font></a>, 
+</td></tr></table></p>
+</td></tr></table>
+
+
+
+<br/></body></html>
