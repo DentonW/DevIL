@@ -11,7 +11,7 @@ A.color{color: FFFFFF;text-decoration: none;}
 <a class="color" href="ilutGLBindTexImage.html">Next</a>
 </font></td></tr></table><br/><table><tr><td>&nbsp;</td><td>
 <p><h3>ilutGLBindMipmaps</h3></p><table><tr><td>&nbsp;</td><td>
-<p><font size="-1">to an OpenGL texture and creates mipmaps, generates a texture via glGenTextures, binds the current OpenIL image to it, generates mipmaps via gluBuild2DMipmaps and returns the texture name. This function is a more general purpose version of ilutOglBindTexImage.</font></p>
+<p><font size="-1">The ilutGLBindMipmaps function binds an image to an OpenGL texture and creates mipmaps, generates a texture via glGenTextures, binds the current OpenIL image to it, generates mipmaps via gluBuild2DMipmaps and returns the texture name. This function is a more general purpose version of ilutOglBindTexImage.</font></p>
 <table><tr><td>&nbsp;</td><td><p><pre><code><b>GLuint ilutGLBindMipmaps(<br/></b>&nbsp;&nbsp;<b>ILvoid</b> <b>);</b></code></pre></p></dl></p></td></tr></table>
 <br/><p><h4>Parameters</h4><table><tr><td>&nbsp;</td><td><dl><p><font face="verdana" size="-1"><i>None</i></font></p>
 </dl></p></td></tr></table><br/><h4>Errors</h4><table><tr><td>&nbsp;</td><td><dl><dt><a href="../ILUT/ILUT_ILLEGAL_OPERATION.html"><font size="-1">ILUT_ILLEGAL_OPERATION</font></a></dt><dd><font size="-1">The operation attempted is not allowable in the current state. The function returns with no ill side effects.</font></dd>
