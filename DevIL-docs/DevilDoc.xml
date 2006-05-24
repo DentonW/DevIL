@@ -677,10 +677,10 @@
     <entity type="function">
       <name>ilClearColour</name>
       <return>ILvoid</return>
-      <param description="Amount of red to clear to." name="Red" type="ILubyte" />
-      <param description="Amount of green to clear to." name="Green" type="ILubyte" />
-      <param description="Amount of blue to clear to." name="Blue" type="ILubyte" />
-      <param description="Amount of alpha to clear to." name="Alpha" type="ILubyte" />
+      <param description="Amount of red to clear to." name="Red" type="ILclampf" />
+      <param description="Amount of green to clear to." name="Green" type="ILclampf" />
+      <param description="Amount of blue to clear to." name="Blue" type="ILclampf" />
+      <param description="Amount of alpha to clear to." name="Alpha" type="ILclampf" />
       <description>ilClearColour sets the current clearing colour to be used by future calls to ilClearImage.  iluRotate and iluEnlargeCanvas both use these values to clear blank space in images, too.</description>
       <link name="See Also" verbose="false">
         <a from="IL" name="ilClearImage" />
