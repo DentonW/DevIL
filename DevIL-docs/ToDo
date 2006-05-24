@@ -1,11 +1,6 @@
 * add IL_LUMINANCE_ALPHA everywhere
 * Search for all ILU*_OUT_OF_MEMORY errors to add at the various functions (IL completed)
 
-dove chiamo le ilFlip a inizio e fine funzione.. non e' forse meglio fare il flip delle coordinate?
-qual'e' l'utilita di poter impostare l'origine dell'immagine?
-iluGammaCorrectInter is not compiled.. why? use calloc insteam of the for to zzero the allocated region
-finire di convertire iluMirror
-
 iluInvertAlpha should be void 				<---
 ilModAlpha e ilSetAlpha should to go ILU 	<--
 
@@ -41,7 +36,7 @@ ILU:
 
 ILUT: need verification
 BITMAP* ilutAllegLoadImage(const ILstring FileName);
-BBitmap ilutConvertToBBitmap(ILvoid);Ê
+BBitmap ilutConvertToBBitmap(ILvoid);ï¿½
 ILboolean ilutGLSaveImage(const ILstring FileName, GLuint TexID);
 ILboolean ilutGLSetTex(GLuint TexID);
 ILboolean ilutSDLSurfaceFromBitmap(SDL_Surface *Bitmap)
