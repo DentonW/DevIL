@@ -226,6 +226,31 @@
         <a from="IL" name="ilDeleteImages" />
       </link>
     </entity>
+        <entity type="function">
+      <name>ilDeleteImage</name>
+      <return>ILvoid</return>
+      <param name="Id" type="ILuint" description="The image name to delete" />
+      <description>ilDeleteImage is a convenience function to delete a single image instead of calling ilDeleteImages</description>
+      <link name="Errors" verbose="true">
+        <a from="IL" name="IL_INVALID_VALUE" />
+      </link>
+      <link name="See Also" verbose="false">
+        <a from="IL"  name="ilGenImages" />
+        <a from="IL"  name="ilDeleteImages" />
+        <a from="IL"  name="ilGenImage" />
+      </link>
+    </entity>
+    <entity type="function">
+      <name>ilGenImage</name>
+      <return>ILvoid</return>
+      <param name="Id" type="ILuint" description="The image name to delete" />
+      <description>ilGenImage is a convenience function to delete a single image instead of calling ilGenImages</description>
+      <link name="See Also" verbose="false">
+        <a from="IL" name="ilGenImages" />
+        <a from="IL" name="ilDeleteImages" />
+        <a from="IL" name="ilDeleteImage" />
+      </link>
+    </entity>
     <entity type="function">
       <name>ilGetBoolean</name>
       <return>ILboolean</return>
@@ -2364,25 +2389,29 @@ static const ILint filter_emboss[] =
       <name>iluDeleteImage</name>
       <return>ILvoid</return>
       <param name="Id" type="ILuint" description="The image name to delete" />
-      <description>iluDeleteImage is a convenience function to delete a single image instead of calling ilDeleteImages</description>
+      <description>iluDeleteImage is a convenience function to delete a single image instead of calling ilDeleteImages. Deprecated! use ilDeleteImage instead</description>
       <link name="Errors" verbose="true">
         <a from="IL" name="IL_INVALID_VALUE" />
       </link>
       <link name="See Also" verbose="false">
-        <a from="IL" name="ilGenImages" />
-        <a from="IL" name="ilDeleteImages" />
+        <a from="IL"  name="ilGenImages" />
+        <a from="IL"  name="ilDeleteImages" />
         <a from="ILU" name="iluGenImage" />
+        <a from="IL"  name="ilGenImage" />
+        <a from="IL"  name="ilDeleteImage" />
       </link>
     </entity>
     <entity type="function">
       <name>iluGenImage</name>
       <return>ILvoid</return>
       <param name="Id" type="ILuint" description="The image name to delete" />
-      <description>iluGenImage is a convenience function to delete a single image instead of calling ilGenImages</description>
+      <description>iluGenImage is a convenience function to delete a single image instead of calling ilGenImages. Deprecated! use ilGenImage instead</description>
       <link name="See Also" verbose="false">
         <a from="IL" name="ilGenImages" />
         <a from="IL" name="ilDeleteImages" />
-        <a from="ILU" name="iluDelImage" />
+        <a from="ILU" name="iluDeleteImage" />
+        <a from="IL"  name="ilGenImage" />
+        <a from="IL"  name="ilDeleteImage" />
       </link>
     </entity>
 
