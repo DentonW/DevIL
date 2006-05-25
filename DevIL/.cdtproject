@@ -8,8 +8,8 @@
 <attribute key="ctagslocation" value=""/>
 <attribute key="ctagfiletype" value="ctags_internal"/>
 <attribute key="ctagsindexincludes" value="false"/>
-<attribute key="ctagfilelocation" value=""/>
 <attribute key="ctagslocationtype" value="ctags_path_default"/>
+<attribute key="ctagfilelocation" value=""/>
 </extension>
 <data>
 <item id="org.eclipse.cdt.core.pathentry">
