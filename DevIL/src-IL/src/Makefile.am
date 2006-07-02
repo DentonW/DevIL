@@ -17,5 +17,5 @@ AM_CFLAGS = @LIBIL_CFLAGS@
 libIL_la_LDFLAGS = -no-undefined @VERSIONINFO@
 libIL_la_LIBADD = @LIBPNG@ @LIBJPG@ @LIBTIFF@ @LIBMNG@ @LIBLCMS@ @LIBZ@
 
-INCLUDES = -I$(top_srcdir)/include -I$(top_srcdir)/src-IL/include
+INCLUDES = -I$(top_srcdir)/include -I$(top_srcdir)/src-IL/include @LIBPNG_INCLUDE@
 
