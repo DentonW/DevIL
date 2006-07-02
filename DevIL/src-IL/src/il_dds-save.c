@@ -814,13 +814,14 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 ILboolean GetBlock(ILushort *Block, ILushort *Data, ILimage *Image, ILuint XPos, ILuint YPos)
 {
     ILuint x, y, i = 0, Offset = YPos * Image->Width + XPos;
+	ILuint Start = Offset, w = Image->Width - XPos, h = Image->Height - YPos;
 
 	for (y = 0; y < 4; y++) {
 		for (x = 0; x < 4; x++) {
-		    if (x < Image->Width && y < Image->Height)
+		    if (x < w && y < h)
 				Block[i++] = Data[Offset + x];
 			else
-			    Block[i++] = Data[Offset];
+			    Block[i++] = Data[Start];
 		}
         Offset += Image->Width;
 	}
@@ -832,13 +833,14 @@ ILboolean GetBlock(ILushort *Block, ILushort *Data, ILimage *Image, ILuint XPos,
 ILboolean GetAlphaBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XPos, ILuint YPos)
 {
 	ILuint x, y, i = 0, Offset = YPos * Image->Width + XPos;
+	ILuint Start = Offset, w = Image->Width - XPos, h = Image->Height - YPos;
 
 	for (y = 0; y < 4; y++) {
 		for (x = 0; x < 4; x++) {
-			if (x < Image->Width && y < Image->Height)
+			if (x < w && y < h)
 	            Block[i++] = Data[Offset + x];
             else
-	            Block[i++] = Data[Offset];
+	            Block[i++] = Data[Start];
 		}
         Offset += Image->Width;
 	}
@@ -849,13 +851,14 @@ ILboolean GetAlphaBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XP
 ILboolean Get3DcBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XPos, ILuint YPos, int channel)
 {
 	ILuint x, y, i = 0, Offset = 2*(YPos * Image->Width + XPos) + channel;
+	ILuint Start = Offset, w = Image->Width - XPos, h = Image->Height - YPos;
 
 	for (y = 0; y < 4; y++) {
 		for (x = 0; x < 4; x++) {
-			if (x < Image->Width && y < Image->Height)
+			if (x < w && y < h)
                 Block[i++] = Data[Offset + 2*x];
             else
-                Block[i++] = Data[Offset];
+                Block[i++] = Data[Start];
 		}
         Offset += 2*Image->Width;
 	}
