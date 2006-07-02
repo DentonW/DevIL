@@ -17,7 +17,7 @@
 
 
 //! Checks if the file specified in FileName is a valid Lif file.
-ILboolean ilIsValidLif(const ILstring FileName)
+ILboolean ilIsValidLif(ILstring FileName)
 {
 	ILHANDLE	LifFile;
 	ILboolean	bLif = IL_FALSE;
@@ -56,7 +56,7 @@ ILboolean ilIsValidLifF(ILHANDLE File)
 
 
 //! Checks if Lump is a valid Lif lump.
-ILboolean ilIsValidLifL(ILvoid *Lump, ILuint Size)
+ILboolean ilIsValidLifL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidLif();
@@ -106,7 +106,7 @@ ILboolean iCheckLif(LIF_HEAD *Header)
 
 
 //! Reads a .Lif file
-ILboolean ilLoadLif(const ILstring FileName)
+ILboolean ilLoadLif(ILstring FileName)
 {
 	ILHANDLE	LifFile;
 	ILboolean	bLif = IL_FALSE;
@@ -140,7 +140,7 @@ ILboolean ilLoadLifF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a .Lif
-ILboolean ilLoadLifL(ILvoid *Lump, ILuint Size)
+ILboolean ilLoadLifL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadLifInternal();

@@ -5,3 +5,4 @@ Makefile
 *.lo
 libIL.la
 obj
+Makefile.in

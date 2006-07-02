@@ -462,7 +462,7 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 
 	size = Width * Height * Depth;
         
-        #ifdef ALTIVEC
+        #ifdef ALTIVEC_GCC
             register ILuint v_size = size>>4;
             register ILuint pos = 0;
             v_size = v_size /3;
@@ -518,7 +518,7 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 		Ib[k] = TempImage->Data[k * 3 + 2];
 	}
         
-        #ifdef ALTIVEC
+        #ifdef ALTIVEC_GCC
            size = Width * Height * Depth;
         #endif
         

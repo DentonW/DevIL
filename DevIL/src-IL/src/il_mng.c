@@ -222,7 +222,7 @@ ILboolean ilLoadMngF(ILHANDLE File)
 
 
 // Reads from a memory "lump"
-ILboolean ilLoadMngL(ILvoid *Lump, ILuint Size)
+ILboolean ilLoadMngL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadMngInternal();

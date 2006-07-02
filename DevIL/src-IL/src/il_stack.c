@@ -17,7 +17,6 @@
 #include "il_internal.h"
 #include "il_stack.h"
 
-
 //! Creates Num images and puts their index in Images - similar to glGenTextures().
 ILvoid ILAPIENTRY ilGenImages(ILsizei Num, ILuint *Images)
 {
@@ -55,6 +54,11 @@ ILvoid ILAPIENTRY ilGenImages(ILsizei Num, ILuint *Images)
 	return;
 }
 
+ILint ILAPIENTRY ilGenImage() {
+    ILuint i;
+    ilGenImages(1,&i);
+    return i;
+}
 
 //! Makes Image the current active image - similar to glBindTexture().
 ILvoid ILAPIENTRY ilBindImage(ILuint Image)
@@ -138,10 +142,12 @@ ILvoid ILAPIENTRY ilDeleteImages(ILsizei Num, const ILuint *Images)
 			ilSetError(IL_ILLEGAL_OPERATION);
 		}*/
 	} while (++Index < (ILuint)Num);
-
-	return;
 }
 
+
+ILvoid ILAPIENTRY ilDeleteImage(const ILuint Num) {
+    ilDeleteImages(1,&Num);
+}
 
 //! Checks if Image is a valid ilGenImages-generated image (like glIsTexture()).
 ILboolean ILAPIENTRY ilIsImage(ILuint Image)
@@ -264,8 +270,7 @@ ILimage *iGetBaseImage()
 ILboolean ILAPIENTRY ilActiveMipmap(ILuint Number)
 {
 	ILuint Current;
-
-	//ParentImage = IL_TRUE;
+    ILimage *iTempImage;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -273,24 +278,16 @@ ILboolean ILAPIENTRY ilActiveMipmap(ILuint Number)
 	}
 
 	if (Number == 0) {
-	//removed 20040621 - this also resets the currently selected layer etc.
-	//	iCurImage = ImageStack[ilGetCurName()];
 		return IL_TRUE;
 	}
 
-	if (Number > iCurImage->NumMips) {
-		ilSetError(IL_ILLEGAL_OPERATION);
-		//iCurImage = ImageStack[ilGetCurName()];
-		return IL_FALSE;
-	}
-
+    iTempImage = iCurImage;
 	iCurImage = iCurImage->Mipmaps;
-	//Number--;  // Skip 0 (parent image)
 	for (Current = 1; Current < Number; Current++) {
 		iCurImage = iCurImage->Next;
 		if (iCurImage == NULL) {
 			ilSetError(IL_INTERNAL_ERROR);
-			iCurImage = ImageStack[ilGetCurName()];
+			iCurImage = iTempImage;
 			return IL_FALSE;
 		}
 	}
@@ -305,33 +302,25 @@ ILboolean ILAPIENTRY ilActiveMipmap(ILuint Number)
 ILboolean ILAPIENTRY ilActiveImage(ILuint Number)
 {
 	ILuint Current;
-
-	//ParentImage = IL_TRUE;
-
+    ILimage *iTempImage;
+    
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
 	if (Number == 0) {
-	//removed 20040621 - this also resets the currently selected layer etc.
-	//	iCurImage = ImageStack[ilGetCurName()];
 		return IL_TRUE;
 	}
 
-	if (Number > iCurImage->NumNext) {
-		ilSetError(IL_ILLEGAL_OPERATION);
-		//iCurImage = ImageStack[ilGetCurName()];
-		return IL_FALSE;
-	}
-
+    iTempImage = iCurImage;
 	iCurImage = iCurImage->Next;
 	Number--;  // Skip 0 (parent image)
 	for (Current = 0; Current < Number; Current++) {
 		iCurImage = iCurImage->Next;
 		if (iCurImage == NULL) {
 			ilSetError(IL_INTERNAL_ERROR);
-			iCurImage = ImageStack[ilGetCurName()];
+			iCurImage = iTempImage;
 			return IL_FALSE;
 		}
 	}
@@ -346,8 +335,7 @@ ILboolean ILAPIENTRY ilActiveImage(ILuint Number)
 ILboolean ILAPIENTRY ilActiveLayer(ILuint Number)
 {
 	ILuint Current;
-
-	//ParentImage = IL_TRUE;
+    ILimage *iTempImage;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -355,24 +343,17 @@ ILboolean ILAPIENTRY ilActiveLayer(ILuint Number)
 	}
 
 	if (Number == 0) {
-	//removed 20040621 - this also resets the currently selected layer etc.
-	//	iCurImage = ImageStack[ilGetCurName()];
 		return IL_TRUE;
 	}
 
-	if (Number > iCurImage->NumLayers) {
-		ilSetError(IL_ILLEGAL_OPERATION);
-		//iCurImage = ImageStack[ilGetCurName()];
-		return IL_FALSE;
-	}
-
+    iTempImage = iCurImage;
 	iCurImage = iCurImage->Layers;
 	//Number--;  // Skip 0 (parent image)
 	for (Current = 1; Current < Number; Current++) {
 		iCurImage = iCurImage->Layers;
 		if (iCurImage == NULL) {
 			ilSetError(IL_INTERNAL_ERROR);
-			iCurImage = ImageStack[ilGetCurName()];
+			iCurImage = iTempImage;
 			return IL_FALSE;
 		}
 	}
@@ -386,14 +367,13 @@ ILboolean ILAPIENTRY ilActiveLayer(ILuint Number)
 ILuint ILAPIENTRY ilCreateSubImage(ILenum Type, ILuint Num)
 {
 	ILimage	*SubImage;
-	ILuint	Count = 1;  // Create one before we go in the loop.
+	ILuint	Count ;  // Create one before we go in the loop.
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return 0;
 	}
-	if (Num == 0) {
-		//ilSetError(IL_INVALID_PARAM);
+	if (Num == 0)  {
 		return 0;
 	}
 
@@ -403,7 +383,6 @@ ILuint ILAPIENTRY ilCreateSubImage(ILenum Type, ILuint Num)
 			if (iCurImage->Next)
 				ilCloseImage(iCurImage->Next);
 			iCurImage->Next = ilNewImage(1, 1, 1, 1, 1);
-			iCurImage->NumNext = Num;
 			SubImage = iCurImage->Next;
 			break;
 
@@ -411,7 +390,6 @@ ILuint ILAPIENTRY ilCreateSubImage(ILenum Type, ILuint Num)
 			if (iCurImage->Mipmaps)
 				ilCloseImage(iCurImage->Mipmaps);
 			iCurImage->Mipmaps = ilNewImage(1, 1, 1, 1, 1);
-			iCurImage->NumMips = Num;
 			SubImage = iCurImage->Mipmaps;
 			break;
 
@@ -419,7 +397,6 @@ ILuint ILAPIENTRY ilCreateSubImage(ILenum Type, ILuint Num)
 			if (iCurImage->Layers)
 				ilCloseImage(iCurImage->Layers);
 			iCurImage->Layers = ilNewImage(1, 1, 1, 1, 1);
-			iCurImage->NumLayers = Num;
 			SubImage = iCurImage->Layers;
 			break;
 
@@ -432,7 +409,7 @@ ILuint ILAPIENTRY ilCreateSubImage(ILenum Type, ILuint Num)
 		return 0;
 	}
 
-	for (; Count < Num; Count++) {
+	for (Count = 1; Count < Num; Count++) {
 		SubImage->Next = ilNewImage(1, 1, 1, 1, 1);
 		SubImage = SubImage->Next;
 		if (SubImage == NULL)

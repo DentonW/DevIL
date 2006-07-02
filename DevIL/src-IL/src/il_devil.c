@@ -866,7 +866,6 @@ ILboolean iCopySubImages(ILimage *Dest, ILimage *Src)
 		if (!iCopySubImage(Dest->Layers, Src->Layers))
 			return IL_FALSE;
 	}
-	Dest->NumLayers = Src->NumLayers;
 	
 	if (Src->Mipmaps) {
 		Dest->Mipmaps = (ILimage*)icalloc(1, sizeof(ILimage));
@@ -876,7 +875,6 @@ ILboolean iCopySubImages(ILimage *Dest, ILimage *Src)
 		if (!iCopySubImage(Dest->Mipmaps, Src->Mipmaps))
 			return IL_FALSE;
 	}
-	Dest->NumMips = Src->NumMips;
 	
 	if (Src->Next) {
 		Dest->Next = (ILimage*)icalloc(1, sizeof(ILimage));
@@ -886,7 +884,6 @@ ILboolean iCopySubImages(ILimage *Dest, ILimage *Src)
 		if (!iCopySubImage(Dest->Next, Src->Next))
 			return IL_FALSE;
 	}
-	Dest->NumNext = Src->NumNext;
 	
 	return IL_TRUE;
 }

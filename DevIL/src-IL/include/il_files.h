@@ -46,7 +46,7 @@ __FILES_EXTERN ILint		ILAPIENTRY iDefaultPutc(ILubyte Char, ILHANDLE Handle);
 __FILES_EXTERN ILint		ILAPIENTRY iDefaultWrite(const ILvoid *Buffer, ILuint Size, ILuint Number, ILHANDLE Handle);
 
 __FILES_EXTERN ILvoid		iSetInputFile(ILHANDLE File);
-__FILES_EXTERN ILvoid		iSetInputLump(ILvoid *Lump, ILuint Size);
+__FILES_EXTERN ILvoid		iSetInputLump(const ILvoid *Lump, ILuint Size);
 __FILES_EXTERN ILboolean	(ILAPIENTRY *ieof)(ILvoid);
 __FILES_EXTERN ILHANDLE		(ILAPIENTRY *iopenr)(const ILstring);
 __FILES_EXTERN ILvoid		(ILAPIENTRY *icloser)(ILHANDLE);
@@ -65,7 +65,7 @@ __FILES_EXTERN ILuint		(ILAPIENTRY *itellw)(ILvoid);
 __FILES_EXTERN ILint		(ILAPIENTRY *iwrite)(const ILvoid *Buffer, ILuint Size, ILuint Number);
  
 __FILES_EXTERN ILHANDLE		ILAPIENTRY iGetFile(ILvoid);
-__FILES_EXTERN ILubyte*		ILAPIENTRY iGetLump(ILvoid);
+__FILES_EXTERN const ILubyte*		ILAPIENTRY iGetLump(ILvoid);
 
 __FILES_EXTERN ILuint		ILAPIENTRY ilprintf(const char *, ...);
 __FILES_EXTERN ILvoid		ipad(ILuint NumZeros);

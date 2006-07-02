@@ -1,15 +1,5 @@
-//-----------------------------------------------------------------------------
-//
-// ImageLib Utility Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 04/15/2005
-//
-// Filename: src-ILU/src/ilu_filter.c
-//
-// Description: Applies filters to an image.
-//
-//-----------------------------------------------------------------------------
 
+// Description: Applies filters to an image.
 
 #include "ilu_internal.h"
 #include "ilu_filter.h"
@@ -728,8 +718,7 @@ ILboolean ILAPIENTRY iluEdgeDetectE()
 
 // @TODO:  fast float to byte
 //! Scales image colours
-ILboolean ILAPIENTRY iluScaleColours(ILfloat r, ILfloat g, ILfloat b)
-{
+ILboolean ILAPIENTRY iluScaleColours(ILfloat r, ILfloat g, ILfloat b) {
 	ILuint		i;
 	ILint		red, grn, blu, grey;
 	ILushort	*ShortPtr;
@@ -738,6 +727,11 @@ ILboolean ILAPIENTRY iluScaleColours(ILfloat r, ILfloat g, ILfloat b)
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
+		ilSetError(ILU_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	if( iluCurImage->Type != IL_BYTE ) {
 		ilSetError(ILU_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
@@ -781,11 +775,11 @@ ILboolean ILAPIENTRY iluScaleColours(ILfloat r, ILfloat g, ILfloat b)
 			break;
 
 		case IL_LUMINANCE:
-			NumPix = iluCurImage->SizeOfData / iluCurImage->Bpc;
-			switch (iluCurImage->Bpc)
-			{
+		case IL_LUMINANCE_ALPHA:
+			NumPix = iluCurImage->SizeOfData / (iluCurImage->Bpc*iluCurImage->Bpp);
+			switch (iluCurImage->Bpc) {
 				case 1:
-					for (i = 0; i < NumPix; i++) {
+					for (i = 0; i < NumPix; i+=iluCurImage->Bpp) {
 						grey = (ILint)(iluCurImage->Data[i] * r);
 						if (grey > UCHAR_MAX) grey = UCHAR_MAX;
 						if (grey < 0) grey = 0;
@@ -795,7 +789,7 @@ ILboolean ILAPIENTRY iluScaleColours(ILfloat r, ILfloat g, ILfloat b)
 
 				case 2:
 					ShortPtr = (ILushort*)iluCurImage->Data;
-					for (i = 0; i < NumPix; i++) {
+					for (i = 0; i < NumPix; i+=iluCurImage->Bpp) {
 						grey = (ILint)(ShortPtr[i] * r);
 						if (grey > USHRT_MAX) grey = USHRT_MAX;
 						if (grey < 0) grey = 0;
@@ -805,7 +799,7 @@ ILboolean ILAPIENTRY iluScaleColours(ILfloat r, ILfloat g, ILfloat b)
 
 				case 4:
 					IntPtr = (ILuint*)iluCurImage->Data;
-					for (i = 0; i < NumPix; i++) {
+					for (i = 0; i < NumPix; i+=iluCurImage->Bpp) {
 						grey = (ILint)(IntPtr[i] * r);
 						if (grey < 0) grey = 0;
 						IntPtr[i] = (ILuint)grey;
@@ -814,7 +808,7 @@ ILboolean ILAPIENTRY iluScaleColours(ILfloat r, ILfloat g, ILfloat b)
 
 				case 8:
 					DblPtr = (ILdouble*)iluCurImage->Data;
-					for (i = 0; i < NumPix; i++) {
+					for (i = 0; i < NumPix; i+=iluCurImage->Bpp) {
 						DblPtr[i] = DblPtr[i] * r;
 					}
 					break;

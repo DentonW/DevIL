@@ -12,11 +12,12 @@
 
 
 #include "il_internal.h"
-#include "../../altivec/altivec_typeconversion.h"
+#ifdef ALTIVEC_GCC
+#include "altivec_typeconversion.h"
+#endif
 
 ILboolean iFastConvert(ILenum DestFormat)
 {
-	
 	ILubyte		*BytePtr = iCurImage->Data;
 	ILushort	*ShortPtr = (ILushort*)iCurImage->Data;
 	ILuint		*IntPtr = (ILuint*)iCurImage->Data;

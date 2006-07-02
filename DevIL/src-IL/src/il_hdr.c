@@ -56,7 +56,7 @@ ILboolean ilIsValidHdrF(ILHANDLE File)
 
 
 //! Checks if Lump is a valid .hdr lump.
-ILboolean ilIsValidHdrL(ILvoid *Lump, ILuint Size)
+ILboolean ilIsValidHdrL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidHdr();
@@ -180,7 +180,7 @@ ILboolean ilLoadHdrF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a .hdr
-ILboolean ilLoadHdrL(ILvoid *Lump, ILuint Size)
+ILboolean ilLoadHdrL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadHdrInternal();
@@ -227,7 +227,8 @@ ILboolean iLoadHdrInternal()
 
 		//convert hdrs internal format to floats
 		for (j = 0; j < 4*Header.Width; j += 4) {
-			ILfloat t;
+			ILuint *ee;
+			ILfloat t, *ff;
 			e = scanline[j + 3];
 			r = scanline[j + 0];
 			g = scanline[j + 1];
@@ -236,7 +237,13 @@ ILboolean iLoadHdrInternal()
 			//t = (float)pow(2.f, ((ILint)e) - 128);
 			if (e != 0)
 				e = (e - 1) << 23;
-			t = *(ILfloat*)&e;
+			
+			// All this just to avoid stric-aliasing warnings...
+			// was: t = *(ILfloat*)&e
+			ee = &e;
+			ff = (ILfloat*)ee;
+			t = *ff;
+			
 			data[0] = (r/255.0f)*t;
 			data[1] = (g/255.0f)*t;
 			data[2] = (b/255.0f)*t;

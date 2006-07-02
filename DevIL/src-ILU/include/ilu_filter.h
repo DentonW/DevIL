@@ -78,5 +78,4 @@ static const ILint filter_embossedge[] =
 	-1,  0, 1,
     -1,  0, 1 };
 
-
 #endif//FILTER_H

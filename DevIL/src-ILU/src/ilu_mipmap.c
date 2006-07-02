@@ -46,7 +46,6 @@ ILboolean iluBuild2DMipmaps()
 		ilCloseImage(Original->Mipmaps);
 		Original->Mipmaps = NULL;
 	}
-	Original->NumMips = 0;
 
 	Width = ilNextPower2(iluCurImage->Width);
 	Height = ilNextPower2(iluCurImage->Height);
@@ -92,7 +91,6 @@ ILboolean iluBuild3DMipmaps()
 		ilCloseImage(Original->Mipmaps);
 		Original->Mipmaps = NULL;
 	}
-	Original->NumMips = 0;
 
 	Width = ilNextPower2(iluCurImage->Width);
 	Height = ilNextPower2(iluCurImage->Height);
@@ -191,7 +189,6 @@ ILboolean iBuild1DMipmaps_(ILuint Width)
 	// 8-11-2001
 	CurMipMap = MipMap;
 	iBuild1DMipmaps_(MipMap->Width >> 1);
-	Original->NumMips++;
 
 	return IL_TRUE;
 }
@@ -252,7 +249,6 @@ ILboolean iBuild1DMipmapsVertical_(ILuint Height)
 	// 8-11-2001
 	CurMipMap = MipMap;
 	iBuild1DMipmapsVertical_(MipMap->Height >> 1);
-	Original->NumMips++;
 
 	return IL_TRUE;
 }
@@ -360,7 +356,6 @@ ILboolean iBuild2DMipmaps_(ILuint Width, ILuint Height)
 
 	CurMipMap = MipMap;
 	iBuild2DMipmaps_(MipMap->Width >> 1, MipMap->Height >> 1);
-	Original->NumMips++;
 
 	return IL_TRUE;
 }
@@ -465,7 +460,6 @@ ILboolean iBuild3DMipmaps_(ILuint Width, ILuint Height, ILuint Depth)
 
 	CurMipMap = MipMap;
 	iBuild3DMipmaps_(MipMap->Width >> 1, MipMap->Height >> 1, MipMap->Depth >> 1);
-	Original->NumMips++;
 
 	return IL_TRUE;
 }
@@ -548,7 +542,6 @@ ILboolean iBuild3DMipmapsVertical_(ILuint Height, ILuint Depth)
 
 	CurMipMap = MipMap;
 	iBuild3DMipmapsVertical_(MipMap->Height >> 1, MipMap->Depth >> 1);
-	Original->NumMips++;
 
 	return IL_TRUE;
 }
@@ -632,7 +625,6 @@ ILboolean iBuild3DMipmapsHorizontal_(ILuint Width, ILuint Depth)
 
 	CurMipMap = MipMap;
 	iBuild3DMipmapsHorizontal_(MipMap->Width >> 1, MipMap->Depth >> 1);
-	Original->NumMips++;
 
 	return IL_TRUE;
 }

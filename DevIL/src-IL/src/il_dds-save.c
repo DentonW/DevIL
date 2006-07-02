@@ -20,8 +20,7 @@
 #ifndef IL_NO_DDS
 
 //! Writes a Dds file
-ILboolean ilSaveDds(const ILstring FileName)
-{
+ILboolean ilSaveDds(const ILstring FileName) {
 	ILHANDLE	DdsFile;
 	ILboolean	bDds = IL_FALSE;
 
@@ -66,16 +65,18 @@ ILuint GetCubemapInfo(ILimage* image, ILint* faces)
 {
 	ILint	indices[] = { -1, -1, -1,  -1, -1, -1 }, i;
 	ILimage*	img;
-	ILuint	ret = 0, mipmapCount;
+	ILuint	ret = 0, srcMipmapCount, srcImagesCount, mipmapCount;
 
 	if (image == NULL)
 		return 0;
 
-	if (image->NumNext != 5) //write only complete cubemaps (TODO?)
+    iGetIntegervImage(image, IL_NUM_IMAGES, (ILint*) &srcImagesCount );
+	if (srcImagesCount != 5) //write only complete cubemaps (TODO?)
 		return 0;
 
 	img = image;
-	mipmapCount = img->NumMips;
+	iGetIntegervImage(image, IL_NUM_MIPMAPS, (ILint*) &srcMipmapCount );
+	mipmapCount = srcMipmapCount;
 	for (i = 0; i < 6; ++i) {
 		switch(img->CubeFlags)
 		{
@@ -98,8 +99,8 @@ ILuint GetCubemapInfo(ILimage* image, ILint* faces)
 				indices[i] = 5;
 				break;
 		}
-
-		if (img->NumMips != mipmapCount)
+        iGetIntegervImage(img, IL_NUM_MIPMAPS, (ILint*) &srcMipmapCount );
+		if (srcMipmapCount != mipmapCount)
 			return 0; //equal # of mipmaps required
 
 		ret |= img->CubeFlags;
@@ -750,6 +751,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 							ChooseEndpoints(Block, &t0, &t1);
 							ex0 = IL_MAX(t0, t1);
 							ex1 = IL_MIN(t0, t1);
+							CorrectEndDXT1(&ex0, &ex1, 0);
 							SaveLittleUShort(ex0);
 							SaveLittleUShort(ex1);
 							BitMask = GenBitMask(ex0, ex1, 4, Block, NULL, NULL);
@@ -788,6 +790,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 							ChooseEndpoints(Block, &t0, &t1);
 							ex0 = IL_MAX(t0, t1);
 							ex1 = IL_MIN(t0, t1);
+							CorrectEndDXT1(&ex0, &ex1, 0);
 							SaveLittleUShort(ex0);
 							SaveLittleUShort(ex1);
 							BitMask = GenBitMask(ex0, ex1, 4, Block, NULL, NULL);
@@ -814,14 +817,13 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 ILboolean GetBlock(ILushort *Block, ILushort *Data, ILimage *Image, ILuint XPos, ILuint YPos)
 {
     ILuint x, y, i = 0, Offset = YPos * Image->Width + XPos;
-	ILuint Start = Offset, w = Image->Width - XPos, h = Image->Height - YPos;
 
 	for (y = 0; y < 4; y++) {
 		for (x = 0; x < 4; x++) {
-		    if (x < w && y < h)
+		    if (x < Image->Width && y < Image->Height)
 				Block[i++] = Data[Offset + x];
 			else
-			    Block[i++] = Data[Start];
+			    Block[i++] = Data[Offset];
 		}
         Offset += Image->Width;
 	}
@@ -833,14 +835,13 @@ ILboolean GetBlock(ILushort *Block, ILushort *Data, ILimage *Image, ILuint XPos,
 ILboolean GetAlphaBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XPos, ILuint YPos)
 {
 	ILuint x, y, i = 0, Offset = YPos * Image->Width + XPos;
-	ILuint Start = Offset, w = Image->Width - XPos, h = Image->Height - YPos;
 
 	for (y = 0; y < 4; y++) {
 		for (x = 0; x < 4; x++) {
-			if (x < w && y < h)
+			if (x < Image->Width && y < Image->Height)
 	            Block[i++] = Data[Offset + x];
             else
-	            Block[i++] = Data[Start];
+	            Block[i++] = Data[Offset];
 		}
         Offset += Image->Width;
 	}
@@ -851,14 +852,13 @@ ILboolean GetAlphaBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XP
 ILboolean Get3DcBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XPos, ILuint YPos, int channel)
 {
 	ILuint x, y, i = 0, Offset = 2*(YPos * Image->Width + XPos) + channel;
-	ILuint Start = Offset, w = Image->Width - XPos, h = Image->Height - YPos;
 
 	for (y = 0; y < 4; y++) {
 		for (x = 0; x < 4; x++) {
-			if (x < w && y < h)
+			if (x < Image->Width && y < Image->Height)
                 Block[i++] = Data[Offset + 2*x];
             else
-                Block[i++] = Data[Start];
+                Block[i++] = Data[Offset];
 		}
         Offset += 2*Image->Width;
 	}
@@ -1039,72 +1039,46 @@ ILuint RMSAlpha(ILubyte *Orig, ILubyte *Test)
 }
 
 
-ILuint Distance(Color888 *c1, Color888 *c2)
-{
+ILuint Distance(Color888 *c1, Color888 *c2) {
 	return  (c1->r - c2->r) * (c1->r - c2->r) +
 			(c1->g - c2->g) * (c1->g - c2->g) +
 			(c1->b - c2->b) * (c1->b - c2->b);
 }
 
+#define Sum(c) ((c)->r + (c)->g + (c)->b)
 
-ILvoid ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1)
-{
-	ILuint		i, j;
+ILvoid ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1) {
+	ILuint		i;
 	Color888	Colours[16];
-	ILint		Farthest = -1, d;
+	ILint		Lowest=0, Highest=0;
 
 	for (i = 0; i < 16; i++) {
 		ShortToColor888(Block[i], &Colours[i]);
+	
+		if (Sum(&Colours[i]) < Sum(&Colours[Lowest]))
+			Lowest = i;
+		if (Sum(&Colours[i]) > Sum(&Colours[Highest]))
+ 			Highest = i;
 	}
-
-	for (i = 0; i < 16; i++) {
-		for (j = i+1; j < 16; j++) {
-			d = Distance(&Colours[i], &Colours[j]);
-			if (d > Farthest) {
-				Farthest = d;
-				*ex0 = Block[i];
-				*ex1 = Block[j];
-			}
-		}
-	}
-
-	return;
+	*ex0 = Block[Highest];
+	*ex1 = Block[Lowest];
 }
 
+#undef Sum
 
-ILvoid ChooseAlphaEndpoints(ILubyte *Block, ILubyte *a0, ILubyte *a1)
-{
-	ILuint	i;
-	ILuint	Lowest = 0xFF, Highest = 0;
-	ILboolean flip = IL_FALSE;
 
-	*a1 = Lowest;
-	*a0 = Highest;
+ILvoid ChooseAlphaEndpoints(ILubyte *Block, ILubyte *a0, ILubyte *a1) {
+	ILuint	i, Lowest = 0xFF, Highest = 0;
 
 	for (i = 0; i < 16; i++) {
-		if (Block[i] == 0) // use 0, 255 as endpoints
-			flip = IL_TRUE;
-		else if (Block[i] < Lowest) {
-			*a1 = Block[i];  // a1 is the lower of the two.
+		if( Block[i] < Lowest)
 			Lowest = Block[i];
-		}
-
-		if (Block[i] == 255) //use 0, 255 as endpoints
-			flip = IL_TRUE;
-		else if (Block[i] > Highest) {
-			*a0 = Block[i];  // a0 is the higher of the two.
+		if (Block[i] > Highest)
 			Highest = Block[i];
-		}
 	}
 
-	if (flip) {
-		i = *a0;
-		*a0 = *a1;
-		*a1 = i;
-	}
-
-
-	return;
+	*a0 = Lowest;
+	*a1 = Highest;
 }
 
 

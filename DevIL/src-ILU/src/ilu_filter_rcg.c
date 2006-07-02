@@ -61,119 +61,13 @@
 #include <string.h>
 //#include <malloc.h>
 #include <math.h>
+
 #include "ilu_internal.h"
+#include "ilu_filter.h"
 #include "ilu_states.h"
 
-/*char	_Program[] = "fzoom";
-char	_Version[] = "0.30";
-char	_Copyright[] = "Public Domain 1991 by Dale Schumacher. Mods by Ray Gardener";*/
-
-
-/* Note: if you define ILubyte to something bigger than char, 
-		you may need to add more support in bitmap file I/O functions.
-*/
-
-#define	WHITE_PIXEL	(255)
-#define	BLACK_PIXEL	(0)
-
-#define CLAMP(v,l,h)    ((v)<(l) ? (l) : (v) > (h) ? (h) : v)
-
-static ILuint c;  // Current colour plane offset
-
-
-/*
- *	generic image access and i/o support routines
- */
-
-
-/*ILubyte
-get_pixel(image, x, y)
-Image *image;
-int x, y;
-{
-	Image *im = NULL;
-	int yy = -1;
-	ILubyte *p = NULL;
-
-	if((x < 0) || (x >= image->xsize) || (y < 0) || (y >= image->ysize)) {
-		return(0);
-	}
-	if((im != image) || (yy != y)) {
-		im = image;
-		yy = y;
-		p = image->data + (y * image->Bps);
-	}
-	return(p[x]);
-
-	return y * image->Bps + x;
-}*/
-
-INLINE void
-get_row(row, Image, y)
-ILubyte *row;
-ILimage *Image;
-int y;
-{
-	// Denton:  Should never occur, so let's get rid of it.
-	/*if((y < 0) || (y >= image->ysize)) {
-		return;
-	}*/
-	ILuint i = 0;
-	for (; i < Image->Width; i++)
-		row[i] = Image->Data[y * Image->Bps + i * Image->Bpp + c];
-}
-
-INLINE void
-get_column(column, Image, x)
-ILubyte *column;
-ILimage *Image;
-int x;
-{
-	int i, d;
-	ILubyte *p;
-
-	// Denton:  Should never occur, so let's get rid of it.
-	/*if((x < 0) || (x >= image->xsize)) {
-		return;
-	}*/
-	d = Image->Bps;
-	for (i = Image->Height, p = Image->Data + x * Image->Bpp + c; i-- > 0; p += d) {
-		*column++ = *p;
-	}
-}
-
-/*ILubyte
-put_pixel(Image, x, y, data)
-ILimage *Image;
-int x, y;
-ILubyte data;
-{
-	ILimage *im = NULL;
-	int yy = -1;
-	ILubyte *p = NULL;
-
-	if((x < 0) || (x >= image->xsize) || (y < 0) || (y >= image->ysize)) {
-		return(0);
-	}
-	if((im != image) || (yy != y)) {
-		im = image;
-		yy = y;
-		p = image->data + (y * image->Bps);
-	}
-	return(p[x] = data);
-}*/
-
-
-/*
- *	filter function definitions
- */
-
 #define	filter_support		(1.0)
-
-INLINE double
-filter(t)
-double t;
-{
+double filter( double t) {
 	/* f(t) = 2|t|^3 - 3|t|^2 + 1, -1 <= t <= 1 */
 	if(t < 0.0) t = -t;
 	if(t < 1.0) return((2.0 * t - 3.0) * t * t + 1.0);
@@ -182,20 +76,13 @@ double t;
 
 #define	box_support		(0.5)
 
-INLINE double
-box_filter(t)
-double t;
-{
+double box_filter( double t) {
 	if((t > -0.5) && (t <= 0.5)) return(1.0);
 	return(0.0);
 }
 
 #define	triangle_support	(1.0)
-
-INLINE double
-triangle_filter(t)
-double t;
-{
+double triangle_filter( double t ) {
 	if(t < 0.0) t = -t;
 	if(t < 1.0) return(1.0 - t);
 	return(0.0);
@@ -203,10 +90,7 @@ double t;
 
 #define	bell_support		(1.5)
 
-INLINE double
-bell_filter(t)		/* box (*) box (*) box */
-double t;
-{
+double bell_filter( double t ) {
 	if(t < 0) t = -t;
 	if(t < .5) return(.75 - (t * t));
 	if(t < 1.5) {
@@ -221,10 +105,7 @@ double t;
 #define FRAC_2_3 0.6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666667
 #define FRAC_1_6 0.1666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666667
 
-INLINE double
-B_spline_filter(t)	/* box (*) box (*) box (*) box */
-double t;
-{
+double B_spline_filter( double t ) { /* box (*) box (*) box (*) box */
 	double tt;
 
 	if(t < 0) t = -t;
@@ -238,21 +119,14 @@ double t;
 	return(0.0);
 }
 
-FINLINE double
-sinc(x)
-double x;
-{
+double sinc( double x) {
 	x *= IL_PI;
 	if(x != 0) return(sin(x) / x);
 	return(1.0);
 }
 
 #define	Lanczos3_support	(3.0)
-
-INLINE double
-Lanczos3_filter(t)
-double t;
-{
+double Lanczos3_filter( double t ) {
 	if(t < 0) t = -t;
 	if(t < 3.0) return(sinc(t) * sinc(t/3.0));
 	return(0.0);
@@ -263,10 +137,7 @@ double t;
 #define	B	(1.0 / 3.0)
 #define	C	(1.0 / 3.0)
 
-INLINE double
-Mitchell_filter(t)
-double t;
-{
+double Mitchell_filter( double t ) {
 	double tt;
 
 	tt = t * t;
@@ -286,9 +157,47 @@ double t;
 	return(0.0);
 }
 
-/*
- *	image rescaling routine
- */
+
+int roundcloser(double d) {
+	int n = (int) d;
+	double diff = d - (double)n;
+	if(diff < 0)
+		diff = -diff;
+	if(diff >= 0.5)
+	{
+		if(d < 0)
+			n--;
+		else
+			n++;
+	}
+	return n;
+}
+
+int wrap_filter_sample(int i, int size) {
+	int j;
+	j = i % (size * 2);
+	if (j < 0)
+		j += (size * 2);
+	if (j < size)
+		return j;
+	return 2 * size - j - 1;
+}
+
+/*char	_Program[] = "fzoom";
+char	_Version[] = "0.30";
+char	_Copyright[] = "Public Domain 1991 by Dale Schumacher. Mods by Ray Gardener";*/
+
+
+/* Note: if you define ILubyte to something bigger than char, 
+		you may need to add more support in bitmap file I/O functions.
+*/
+
+#define	WHITE_PIXEL	(255)
+#define	BLACK_PIXEL	(0)
+
+#define CLAMP(v,l,h)    ((v)<(l) ? (l) : (v) > (h) ? (h) : v)
+
+static ILuint c;  // Current colour plane offset
 
 typedef struct {
 	int	pixel;
@@ -302,41 +211,9 @@ typedef struct {
 
 CLIST	*contrib;		/* array of contribution lists */
 
-
 /*
-	roundcloser()
-
-	Round an FP value to its closest int representation.
-	General routine; ideally belongs in general math lib file.
-*/	
-INLINE int roundcloser(double d)
-{
-	/* Untested potential one-liner, but smacks of call overhead */
-	/* return fabs(ceil(d)-d) <= 0.5 ? ceil(d) : floor(d); */
-
-	/* Untested potential optimized ceil() usage */
-/*	double cd = ceil(d);
-	int ncd = (int)cd;
-	if(fabs(cd - d) > 0.5)
-		ncd--;
-	return ncd;
-*/
-
-	/* Version that uses no function calls at all. */
-	int n = (int) d;
-	double diff = d - (double)n;
-	if(diff < 0)
-		diff = -diff;
-	if(diff >= 0.5)
-	{
-		if(d < 0)
-			n--;
-		else
-			n++;
-	}
-	return n;
-} /* roundcloser */
-
+ *	generic image access and i/o support routines
+ */
 
 /* 
 	calc_x_contrib()
@@ -346,15 +223,7 @@ INLINE int roundcloser(double d)
 
 	Returns -1 if error, 0 otherwise.
 */
-int calc_x_contrib(contribX, xscale, fwidth, dstwidth, srcwidth, filterf, i)
-CLIST* contribX;			/* Receiver of contrib info */
-double xscale;				/* Horizontal zooming scale */
-double fwidth;				/* Filter sampling width */
-int dstwidth;				/* Target bitmap width */
-int srcwidth;				/* Source bitmap width */
-double (*filterf)(double);	/* Filter proc */
-int i;						/* ILubyte column in source bitmap being processed */
-{
+int calc_x_contrib( CLIST *contribX, double xscale, double fwidth, int dstwidth, int srcwidth, double (*filterf)(double), int i) {
 	double width;
 	double fscale;
 	double center, left, right;
@@ -381,12 +250,7 @@ int i;						/* ILubyte column in source bitmap being processed */
 		{
 			weight = center - (double) j;
 			weight = (*filterf)(weight / fscale) / fscale;
-			if(j < 0)
-				n = -j;
-			else if(j >= srcwidth)
-				n = (srcwidth - j) + srcwidth - 1;
-			else
-				n = j;
+			n = wrap_filter_sample(j, srcwidth);
 			
 			k = contribX->n++;
 			contribX->p[k].pixel = n;
@@ -411,13 +275,7 @@ int i;						/* ILubyte column in source bitmap being processed */
 		{
 			weight = center - (double) j;
 			weight = (*filterf)(weight);
-			if(j < 0) {
-				n = -j;
-			} else if(j >= srcwidth) {
-				n = (srcwidth - j) + srcwidth - 1;
-			} else {
-				n = j;
-			}
+			n = wrap_filter_sample(j, srcwidth);
 			k = contribX->n++;
 			contribX->p[k].pixel = n;
 			contribX->p[k].weight = weight;
@@ -433,11 +291,7 @@ int i;						/* ILubyte column in source bitmap being processed */
 	Resizes bitmaps while resampling them.
 	Returns -1 if error, 0 if success.
 */
-int zoom(dst, src, filterf, fwidth)
-ILimage *dst, *src;
-double (*filterf)(double);
-double fwidth;
-{
+int zoom( ILimage *dst, ILimage *src, double (*filterf)(double), double fwidth) {
 	ILubyte* tmp;
 	double xscale, yscale;		/* zoom scale factors */
 	int xx;
@@ -489,13 +343,7 @@ double fwidth;
 			for(j = (int)left; j <= right; ++j) {
 				weight = center - (double) j;
 				weight = (*filterf)(weight / fscale) / fscale;
-				if(j < 0) {
-					n = -j;
-				} else if(j >= (ILint)src->Height) {
-					n = (src->Height - j) + src->Height - 1;
-				} else {
-					n = j;
-				}
+				n = wrap_filter_sample(j, src->Height);
 				k = contribY[i].n++;
 				contribY[i].p[k].pixel = n;
 				contribY[i].p[k].weight = weight;
@@ -517,13 +365,7 @@ double fwidth;
 			for(j = (int)left; j <= right; ++j) {
 				weight = center - (double) j;
 				weight = (*filterf)(weight);
-				if(j < 0) {
-					n = -j;
-				} else if(j >= (ILint)src->Height) {
-					n = (src->Height - j) + src->Height - 1;
-				} else {
-					n = j;
-				}
+				n = wrap_filter_sample(j, src->Height);
 				k = contribY[i].n++;
 				contribY[i].p[k].pixel = n;
 				contribY[i].p[k].weight = weight;
@@ -599,7 +441,6 @@ __zoom_cleanup:
 } /* zoom */
 
 
-
 ILuint iluScaleAdvanced(ILuint Width, ILuint Height, ILenum Filter)
 {
 	double (*f)() = filter;
@@ -633,6 +474,7 @@ ILuint iluScaleAdvanced(ILuint Width, ILuint Height, ILenum Filter)
 
 	Dest = ilNewImage(Width, Height, 1, iluCurImage->Bpp, 1);
 	Dest->Origin = iluCurImage->Origin;
+	Dest->Duration = iluCurImage->Duration;
 	for (c = 0; c < (ILuint)iluCurImage->Bpp; c++) {
 		if (zoom(Dest, iluCurImage, f, s) != 0) {
 			return IL_FALSE;
@@ -641,6 +483,7 @@ ILuint iluScaleAdvanced(ILuint Width, ILuint Height, ILenum Filter)
 
 	ilTexImage(Width, Height, 1, iluCurImage->Bpp, iluCurImage->Format, iluCurImage->Type, Dest->Data);
 	iluCurImage->Origin = Dest->Origin;
+	iluCurImage->Duration = Dest->Duration;
 	ilCloseImage(Dest);
 
 	return IL_TRUE;

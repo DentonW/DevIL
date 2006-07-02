@@ -18,12 +18,12 @@
 #define MAX_LINE_WIDTH 14
 
 //! Generates a C-style header file for the current image.
-ILboolean ilSaveCHeader(const ILstring FileName, const char *InternalName)
+ILboolean ilSaveCHeader(ILstring FileName, const char *InternalName)
 {
 	FILE	*HeadFile;
 	ILuint	i = 0, j;
 	ILimage	*TempImage;
-	char	*Name;
+	const char *Name;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -32,7 +32,7 @@ ILboolean ilSaveCHeader(const ILstring FileName, const char *InternalName)
 
 	Name = iGetString(IL_CHEAD_HEADER_STRING);
 	if (Name == NULL)
-		Name = (char*)InternalName;
+		Name = InternalName;
 
 	if (FileName == NULL || Name == NULL ||
 #ifndef _UNICODE
@@ -41,30 +41,25 @@ ILboolean ilSaveCHeader(const ILstring FileName, const char *InternalName)
 		wcslen(FileName) < 1 || wcslen(FileName) < 1) {
 #endif//_UNICODE
 		ilSetError(IL_INVALID_VALUE);
-                ifree(Name);
 		return IL_FALSE;
 	}
 
 	if (!iCheckExtension(FileName, IL_TEXT("h"))) {
 		ilSetError(IL_INVALID_EXTENSION);
-                ifree(Name);
 		return IL_FALSE;
 	}
 
 	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
 		if (iFileExists(FileName)) {
 			ilSetError(IL_FILE_ALREADY_EXISTS);
-			ifree(Name);
-                        return IL_FALSE;
+            return IL_FALSE;
 		}
 	}
 
 	if (iCurImage->Bpc > 1) {
 		TempImage = iConvertImage(iCurImage, iCurImage->Format, IL_UNSIGNED_BYTE);
-		if (TempImage == NULL) {
-                    ifree(Name);
-                    return IL_FALSE;
-                }
+		if (TempImage == NULL)
+           return IL_FALSE;
 	} else {
 		TempImage = iCurImage;
 	}
@@ -78,20 +73,19 @@ ILboolean ilSaveCHeader(const ILstring FileName, const char *InternalName)
 	
 	if (HeadFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
-		ifree(Name);
-                return IL_FALSE;
+        return IL_FALSE;
 	}
 
 	fprintf(HeadFile, "//#include <il/il.h>\n");
 	fprintf(HeadFile, "// C Image Header:\n\n\n");
 	fprintf(HeadFile, "// IMAGE_BPP is in bytes per pixel, *not* bits\n");
-        fprintf(HeadFile, "#define IMAGE_BPP %d\n",iCurImage->Bpp);
+    fprintf(HeadFile, "#define IMAGE_BPP %d\n",iCurImage->Bpp);
 	fprintf(HeadFile, "#define IMAGE_WIDTH   %d\n", iCurImage->Width);
 	fprintf(HeadFile, "#define IMAGE_HEIGHT  %d\n", iCurImage->Height);	
 	fprintf(HeadFile, "#define IMAGE_DEPTH   %d\n\n\n", iCurImage->Depth);
 	fprintf(HeadFile, "#define IMAGE_TYPE    0x%X\n", iCurImage->Type);
 	fprintf(HeadFile, "#define IMAGE_FORMAT  0x%X\n\n\n", iCurImage->Format);
-        fprintf(HeadFile, "ILubyte %s[] = {\n", Name);
+    fprintf(HeadFile, "ILubyte %s[] = {\n", Name);
         
 
 	for (; i < TempImage->SizeOfData; i += MAX_LINE_WIDTH) {
@@ -116,7 +110,7 @@ ILboolean ilSaveCHeader(const ILstring FileName, const char *InternalName)
 		fprintf(HeadFile, "\n\n");
 		fprintf(HeadFile, "#define IMAGE_PALSIZE %u\n\n", iCurImage->Pal.PalSize);
 		fprintf(HeadFile, "#define IMAGE_PALTYPE 0x%X\n\n", iCurImage->Pal.PalType);
-                fprintf(HeadFile, "ILubyte %sPal[] = {\n", Name);
+        fprintf(HeadFile, "ILubyte %sPal[] = {\n", Name);
 		for (i = 0; i < iCurImage->Pal.PalSize; i += MAX_LINE_WIDTH) {
 			fprintf(HeadFile, "\t");
 			for (j = 0; j < MAX_LINE_WIDTH; j++) {
@@ -132,7 +126,6 @@ ILboolean ilSaveCHeader(const ILstring FileName, const char *InternalName)
 
 		fprintf(HeadFile, "};\n");
 	}
-        ifree(Name);
 	fclose(HeadFile);
 	return IL_TRUE;
 }

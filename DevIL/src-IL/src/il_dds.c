@@ -48,7 +48,7 @@ ILuint CubemapDirections[CUBEMAP_SIDES] = {
 
 
 //! Checks if the file specified in FileName is a valid .dds file.
-ILboolean ilIsValidDds(const ILstring FileName)
+ILboolean ilIsValidDds(ILstring FileName)
 {
 	ILHANDLE	DdsFile;
 	ILboolean	bDds = IL_FALSE;
@@ -87,7 +87,7 @@ ILboolean ilIsValidDdsF(ILHANDLE File)
 
 
 //! Checks if Lump is a valid .dds lump.
-ILboolean ilIsValidDdsL(ILvoid *Lump, ILuint Size)
+ILboolean ilIsValidDdsL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidDds();
@@ -167,7 +167,7 @@ ILboolean iCheckDds(DDSHEAD *Head)
 
 
 //! Reads a .dds file
-ILboolean ilLoadDds(const ILstring FileName)
+ILboolean ilLoadDds(ILstring FileName)
 {
 	ILHANDLE	DdsFile;
 	ILboolean	bDds = IL_FALSE;
@@ -201,7 +201,7 @@ ILboolean ilLoadDdsF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a .dds
-ILboolean ilLoadDdsL(ILvoid *Lump, ILuint Size)
+ILboolean ilLoadDdsL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadDdsInternal();
@@ -296,7 +296,6 @@ ILboolean iLoadDdsCubemapInternal()
 					Image->Bpp = Channels;
 				}
 
-				startImage->NumNext++;
 				ilBindImage(ilGetCurName()); // Set to parent image first.
 				ilActiveImage(i); //now Image == iCurImage...globals SUCK, fix this!!!
 			}
@@ -930,7 +929,6 @@ ILboolean ReadMipmaps()
 	Head.LinearSize = LastLinear;
 	StartImage->Mipmaps = StartImage->Next;
 	StartImage->Next = NULL;
-	StartImage->NumMips = Head.MipMapCount - 1;
 	Image = StartImage;
 
 	return IL_TRUE;
@@ -1674,9 +1672,12 @@ ILvoid CorrectPreMult()
 }
 
 
-ILboolean DecompressARGB()
-{
-	ILuint	i, ReadI, RedL, RedR, GreenL, GreenR, BlueL, BlueR, AlphaL, AlphaR, TempBpp;
+ILboolean DecompressARGB() {
+	ILuint ReadI = 0, TempBpp, i;
+	ILuint RedL, RedR;
+	ILuint GreenL, GreenR;
+	ILuint BlueL, BlueR;
+	ILuint AlphaL, AlphaR;
 	ILubyte	*Temp;
 
 	if (!CompData)

@@ -17,7 +17,7 @@
 
 
 //! Reads an icon file.
-ILboolean ilLoadIcon(const ILstring FileName)
+ILboolean ilLoadIcon(ILstring FileName)
 {
 	ILHANDLE	IconFile;
 	ILboolean	bIcon = IL_FALSE;
@@ -51,7 +51,7 @@ ILboolean ilLoadIconF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains an icon.
-ILboolean ilLoadIconL(ILvoid *Lump, ILuint Size)
+ILboolean ilLoadIconL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadIconInternal();
@@ -184,13 +184,11 @@ ILboolean iLoadIconInternal()
 			iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
 			Image = iCurImage;
 			BaseCreated = IL_TRUE;
-			iCurImage->NumNext = 0;
 		}
 		else {
 			Image->Next = ilNewImage(IconImages[i].Head.Width, IconImages[i].Head.Height / 2, 1, 4, 1);
 			Image = Image->Next;
 			Image->Format = IL_BGRA;
-			iCurImage->NumNext++;
 		}
 		Image->Type = IL_UNSIGNED_BYTE;
 

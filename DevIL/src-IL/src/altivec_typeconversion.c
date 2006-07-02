@@ -188,10 +188,10 @@ void abcd2cbad_double( ILdouble *tdata, ILuint length, ILdouble *tnewdata ) {
 			t2 = vec_perm(d2,d3,p);
 			t3 = vec_perm(d3,d2,p);
 			
-			vec_st(t3,48,newdata);
-			vec_st(t2,32,newdata);
-			vec_st(t1,16,newdata);
 			vec_st(t0,0,newdata);
+			vec_st(t1,16,newdata);
+			vec_st(t2,32,newdata);
+			vec_st(t3,48,newdata);
 			
 			length -= 4;
 			data += 16*4;

@@ -38,7 +38,7 @@ ILboolean iLoadPxrInternal(ILvoid);
 
 
 //! Reads a Pxr file
-ILboolean ilLoadPxr(const ILstring FileName)
+ILboolean ilLoadPxr(ILstring FileName)
 {
 	ILHANDLE	PxrFile;
 	ILboolean	bPxr = IL_FALSE;
@@ -72,7 +72,7 @@ ILboolean ilLoadPxrF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a Pxr
-ILboolean ilLoadPxrL(ILvoid *Lump, ILuint Size)
+ILboolean ilLoadPxrL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadPxrInternal();

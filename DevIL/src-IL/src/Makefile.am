@@ -10,11 +10,11 @@ libIL_la_SOURCES = il_alloc.c     il_doom.c      il_stack.c    il_pcx.c        i
                    il_dds.c       il_internal.c  il_pal.c      il_rawdata.c    il_devil.c \
                    il_io.c        il_pcd.c       il_register.c il_psd.c        il_fastconv.c \
                    il_neuquant.c  il_dds-save.c  il_psp.c      il_pix.c        il_pxr.c \
-				   il_xpm.c       il_hdr.c       ../../altivec/altivec_common.c ../../altivec/altivec_typeconversion.c
+                   il_inline.c	  il_xpm.c       il_hdr.c      \
+                   altivec_common.c altivec_typeconversion.c
 
 AM_CFLAGS = @LIBIL_CFLAGS@
 libIL_la_LDFLAGS = -no-undefined @VERSIONINFO@
-#libIL_la_LIBADD = @LIBPNG@ @LIBJPG@ @LIBTIFF@ @LIBGIF@ @LIBMNG@ @LIBLCMS@ @LIBZ@
 libIL_la_LIBADD = @LIBPNG@ @LIBJPG@ @LIBTIFF@ @LIBMNG@ @LIBLCMS@ @LIBZ@
 
 INCLUDES = -I$(top_srcdir)/include -I$(top_srcdir)/src-IL/include

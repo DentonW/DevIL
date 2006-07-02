@@ -18,8 +18,7 @@
 
 
 //! Checks if the file specified in FileName is a valid .pcx file.
-ILboolean ilIsValidPcx(const ILstring FileName)
-{
+ILboolean ilIsValidPcx(ILstring FileName) {
 	ILHANDLE	PcxFile;
 	ILboolean	bPcx = IL_FALSE;
 
@@ -42,8 +41,7 @@ ILboolean ilIsValidPcx(const ILstring FileName)
 
 
 //! Checks if the ILHANDLE contains a valid .pcx file at the current position.
-ILboolean ilIsValidPcxF(ILHANDLE File)
-{
+ILboolean ilIsValidPcxF(ILHANDLE File) {
 	ILuint		FirstPos;
 	ILboolean	bRet;
 
@@ -57,16 +55,14 @@ ILboolean ilIsValidPcxF(ILHANDLE File)
 
 
 //! Checks if Lump is a valid .pcx lump.
-ILboolean ilIsValidPcxL(ILvoid *Lump, ILuint Size)
-{
+ILboolean ilIsValidPcxL(const ILvoid *Lump, ILuint Size) {
 	iSetInputLump(Lump, Size);
 	return iIsValidPcx();
 }
 
 
 // Internal function obtain the .pcx header from the current file.
-ILboolean iGetPcxHead(PCXHEAD *Head)
-{
+ILboolean iGetPcxHead(PCXHEAD *Head) {
 	Head->Manufacturer = igetc();
 	Head->Version = igetc();
 	Head->Encoding = igetc();
@@ -91,8 +87,7 @@ ILboolean iGetPcxHead(PCXHEAD *Head)
 
 
 // Internal function to get the header and check it.
-ILboolean iIsValidPcx()
-{
+ILboolean iIsValidPcx() {
 	PCXHEAD Head;
 
 	if (!iGetPcxHead(&Head))
@@ -105,9 +100,8 @@ ILboolean iIsValidPcx()
 
 // Internal function used to check if the HEADER is a valid .pcx header.
 // Should we also do a check on Header->Bpp?
-ILboolean iCheckPcx(PCXHEAD *Header)
-{
-	ILuint	Test, i;
+ILboolean iCheckPcx(PCXHEAD *Header) {
+	ILuint	Test;
 
 	//	Got rid of the Reserved check, because I've seen some .pcx files with invalid values in it.
 	if (Header->Manufacturer != 10 || Header->Encoding != 1/* || Header->Reserved != 0*/)
@@ -132,18 +126,17 @@ ILboolean iCheckPcx(PCXHEAD *Header)
 		}
 	}
 
-	for (i = 0; i < 54; i++) {
+	/* for (i = 0; i < 54; i++) { useless check
 		if (Header->Filler[i] != 0)
 			return IL_FALSE;
-	}
+	} */
 
 	return IL_TRUE;
 }
 
 
 //! Reads a .pcx file
-ILboolean ilLoadPcx(const ILstring FileName)
-{
+ILboolean ilLoadPcx(ILstring FileName) {
 	ILHANDLE	PcxFile;
 	ILboolean	bPcx = IL_FALSE;
 
@@ -161,8 +154,7 @@ ILboolean ilLoadPcx(const ILstring FileName)
 
 
 //! Reads an already-opened .pcx file
-ILboolean ilLoadPcxF(ILHANDLE File)
-{
+ILboolean ilLoadPcxF(ILHANDLE File) {
 	ILuint		FirstPos;
 	ILboolean	bRet;
 
@@ -176,16 +168,14 @@ ILboolean ilLoadPcxF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a .pcx
-ILboolean ilLoadPcxL(ILvoid *Lump, ILuint Size)
-{
+ILboolean ilLoadPcxL(const ILvoid *Lump, ILuint Size) {
 	iSetInputLump(Lump, Size);
 	return iLoadPcxInternal();
 }
 
 
 // Internal function used to load the .pcx.
-ILboolean iLoadPcxInternal()
-{
+ILboolean iLoadPcxInternal() {
 	PCXHEAD	Header;
 	ILboolean bPcx = IL_FALSE;
 
@@ -210,8 +200,7 @@ ILboolean iLoadPcxInternal()
 
 
 // Internal function to uncompress the .pcx (all .pcx files are rle compressed)
-ILboolean iUncompressPcx(PCXHEAD *Header)
-{
+ILboolean iUncompressPcx(PCXHEAD *Header) {
 	//changed decompression loop 2003-09-01
 	//From the pcx spec: "There should always
 	//be a decoding break at the end of each scan line.
@@ -349,8 +338,7 @@ file_read_error:
 }
 
 
-ILboolean iUncompressSmall(PCXHEAD *Header)
-{
+ILboolean iUncompressSmall(PCXHEAD *Header) {
 	ILuint	i = 0, j, k, c, d, x, y, Bps;
 	ILubyte	HeadByte, Colour, Data = 0, *ScanLine;
 
@@ -481,8 +469,7 @@ ILboolean iUncompressSmall(PCXHEAD *Header)
 
 
 //! Writes a .pcx file
-ILboolean ilSavePcx(const ILstring FileName)
-{
+ILboolean ilSavePcx(ILstring FileName) {
 	ILHANDLE	PcxFile;
 	ILboolean	bPcx = IL_FALSE;
 
@@ -507,24 +494,21 @@ ILboolean ilSavePcx(const ILstring FileName)
 
 
 //! Writes a .pcx to an already-opened file
-ILboolean ilSavePcxF(ILHANDLE File)
-{
+ILboolean ilSavePcxF(ILHANDLE File) {
 	iSetOutputFile(File);
 	return iSavePcxInternal();
 }
 
 
 //! Writes a .pcx to a memory "lump"
-ILboolean ilSavePcxL(ILvoid *Lump, ILuint Size)
-{
+ILboolean ilSavePcxL(ILvoid *Lump, ILuint Size) {
 	iSetOutputLump(Lump, Size);
 	return iSavePcxInternal();
 }
 
 
 // Internal function used to save the .pcx.
-ILboolean iSavePcxInternal()
-{
+ILboolean iSavePcxInternal() {
 	ILuint	i, c, PalSize;
 	ILpal	*TempPal;
 	ILimage	*TempImage = iCurImage;
@@ -653,8 +637,7 @@ ILboolean iSavePcxInternal()
 
 
 // Routine used from ZSoft's pcx documentation
-ILuint encput(ILubyte byt, ILubyte cnt)
-{
+ILuint encput(ILubyte byt, ILubyte cnt) {
 	if (cnt) {
 		if ((cnt == 1) && (0xC0 != (0xC0 & byt))) {
 			if (IL_EOF == iputc(byt))

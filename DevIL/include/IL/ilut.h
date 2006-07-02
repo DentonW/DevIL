@@ -25,8 +25,8 @@
 // Defines
 //-----------------------------------------------------------------------------
 
-#define ILUT_VERSION_1_6_7 1
-#define ILUT_VERSION       167
+#define ILUT_VERSION_1_6_8 1
+#define ILUT_VERSION       168
 
 
 // Attribute Bits
@@ -213,10 +213,10 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 	ILAPI GLuint	ILAPIENTRY ilutGLBindTexImage();
 	ILAPI GLuint	ILAPIENTRY ilutGLBindMipmaps(ILvoid);
 	ILAPI ILboolean	ILAPIENTRY ilutGLBuildMipmaps(ILvoid);
-	ILAPI GLuint	ILAPIENTRY ilutGLLoadImage(const ILstring FileName);
+	ILAPI GLuint	ILAPIENTRY ilutGLLoadImage(ILstring FileName);
 	ILAPI ILboolean	ILAPIENTRY ilutGLScreen(ILvoid);
 	ILAPI ILboolean	ILAPIENTRY ilutGLScreenie(ILvoid);
-	ILAPI ILboolean	ILAPIENTRY ilutGLSaveImage(const ILstring FileName, GLuint TexID);
+	ILAPI ILboolean	ILAPIENTRY ilutGLSaveImage(ILstring FileName, GLuint TexID);
 	ILAPI ILboolean	ILAPIENTRY ilutGLSetTex(GLuint TexID);
 	ILAPI ILboolean	ILAPIENTRY ilutGLTexImage(GLuint Level);
 	ILAPI ILboolean ILAPIENTRY ilutGLSubTex(GLuint TexID, ILuint XOff, ILuint YOff);
@@ -234,7 +234,7 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 extern "C" {
 #endif
 
-	ILAPI BITMAP* ILAPIENTRY ilutAllegLoadImage(const ILstring FileName);
+	ILAPI BITMAP* ILAPIENTRY ilutAllegLoadImage(Lstring FileName);
 	ILAPI BITMAP* ILAPIENTRY ilutConvertToAlleg(PALETTE Pal);
 #endif//ILUT_USE_ALLEGRO
 
@@ -242,7 +242,7 @@ extern "C" {
 // ImageLib Utility Toolkit's SDL Functions
 #ifdef ILUT_USE_SDL
 	ILAPI struct SDL_Surface* ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags);
-	ILAPI struct SDL_Surface* ILAPIENTRY ilutSDLSurfaceLoadImage(const ILstring FileName);
+	ILAPI struct SDL_Surface* ILAPIENTRY ilutSDLSurfaceLoadImage(ILstring FileName);
 	ILAPI ILboolean    ILAPIENTRY ilutSDLSurfaceFromBitmap(struct SDL_Surface *Bitmap);
 #endif//ILUT_USE_SDL
 
@@ -262,14 +262,14 @@ extern "C" {
 	ILAPI HPALETTE	ILAPIENTRY ilutGetHPal(ILvoid);
 	ILAPI ILubyte*	ILAPIENTRY ilutGetPaddedData(ILvoid);
 	ILAPI ILboolean	ILAPIENTRY ilutGetWinClipboard(ILvoid);
-	ILAPI ILboolean	ILAPIENTRY ilutLoadResource(HINSTANCE hInst, ILint ID, const ILstring ResourceType, ILenum Type);
+	ILAPI ILboolean	ILAPIENTRY ilutLoadResource(HINSTANCE hInst, ILint ID, ILstring ResourceType, ILenum Type);
 	ILAPI ILboolean	ILAPIENTRY ilutSetHBitmap(HBITMAP Bitmap);
 	ILAPI ILboolean	ILAPIENTRY ilutSetHPal(HPALETTE Pal);
 	ILAPI ILboolean	ILAPIENTRY ilutSetWinClipboard(ILvoid);
-	ILAPI HBITMAP	ILAPIENTRY ilutWinLoadImage(const ILstring FileName, HDC hDC);
-	ILAPI ILboolean	ILAPIENTRY ilutWinLoadUrl(const ILstring Url);
+	ILAPI HBITMAP	ILAPIENTRY ilutWinLoadImage(ILstring FileName, HDC hDC);
+	ILAPI ILboolean	ILAPIENTRY ilutWinLoadUrl(ILstring Url);
 	ILAPI ILboolean ILAPIENTRY ilutWinPrint(ILuint XPos, ILuint YPos, ILuint Width, ILuint Height, HDC hDC);
-	ILAPI ILboolean	ILAPIENTRY ilutWinSaveImage(const ILstring FileName, HBITMAP Bitmap);
+	ILAPI ILboolean	ILAPIENTRY ilutWinSaveImage(ILstring FileName, HBITMAP Bitmap);
 #endif//ILUT_USE_WIN32
 
 // ImageLib Utility Toolkit's DirectX 8 Functions

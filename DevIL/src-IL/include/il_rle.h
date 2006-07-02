@@ -17,5 +17,6 @@
 
 #define TGA_MAX_RUN 128
 #define SGI_MAX_RUN 127
+#define BMP_MAX_RUN 127
 
 #endif//RLE_H

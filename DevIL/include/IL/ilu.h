@@ -33,8 +33,8 @@ extern "C" {
 #endif
 
 
-#define ILU_VERSION_1_6_7 1
-#define ILU_VERSION       167
+#define ILU_VERSION_1_6_8 1
+#define ILU_VERSION       168
 
 
 #define ILU_FILTER         0x2600
@@ -138,7 +138,7 @@ ILAPI ILboolean      ILAPIENTRY iluEmboss(ILvoid);
 ILAPI ILboolean      ILAPIENTRY iluEnlargeCanvas(ILuint Width, ILuint Height, ILuint Depth);
 ILAPI ILboolean      ILAPIENTRY iluEnlargeImage(ILfloat XDim, ILfloat YDim, ILfloat ZDim);
 ILAPI ILboolean      ILAPIENTRY iluEqualize(ILvoid);
-ILAPI ILstring ILAPIENTRY iluErrorString(ILenum Error);
+ILAPI ILstring 		 ILAPIENTRY iluErrorString(ILenum Error);
 ILAPI ILboolean      ILAPIENTRY iluConvolution(ILint *matrix, ILint scale, ILint bias);
 ILAPI ILboolean      ILAPIENTRY iluFlipImage(ILvoid);
 ILAPI ILboolean      ILAPIENTRY iluGammaCorrect(ILfloat Gamma);
@@ -146,11 +146,11 @@ ILAPI ILuint         ILAPIENTRY iluGenImage(ILvoid);
 ILAPI ILvoid         ILAPIENTRY iluGetImageInfo(ILinfo *Info);
 ILAPI ILint          ILAPIENTRY iluGetInteger(ILenum Mode);
 ILAPI ILvoid         ILAPIENTRY iluGetIntegerv(ILenum Mode, ILint *Param);
-ILAPI ILstring ILAPIENTRY iluGetString(ILenum StringName);
+ILAPI ILstring 		 ILAPIENTRY iluGetString(ILenum StringName);
 ILAPI ILvoid         ILAPIENTRY iluImageParameter(ILenum PName, ILenum Param);
 ILAPI ILvoid         ILAPIENTRY iluInit(ILvoid);
 ILAPI ILboolean      ILAPIENTRY iluInvertAlpha(ILvoid);
-ILAPI ILuint         ILAPIENTRY iluLoadImage(const ILstring FileName);
+ILAPI ILuint         ILAPIENTRY iluLoadImage(ILstring FileName);
 ILAPI ILboolean      ILAPIENTRY iluMirror(ILvoid);
 ILAPI ILboolean      ILAPIENTRY iluNegative(ILvoid);
 ILAPI ILboolean      ILAPIENTRY iluNoisify(ILclampf Tolerance);

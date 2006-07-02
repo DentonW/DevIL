@@ -19,17 +19,17 @@
 //#include <malloc.h>
 #include <stdlib.h>
 
-const ILstring _ilVendor		= IL_TEXT("Abysmal Software");
-const ILstring _ilVersion		= IL_TEXT("Developer's Image Library (DevIL) 1.6.8pre " __DATE__);
+ILstring _ilVendor		= IL_TEXT("Abysmal Software");
+ILstring _ilVersion		= IL_TEXT("Developer's Image Library (DevIL) 1.6.8pre " __DATE__);
 
 
-const ILstring _ilLoadExt		= "" IL_BMP_EXT IL_CUT_EXT IL_DCX_EXT IL_DDS_EXT
+ILstring _ilLoadExt		= "" IL_BMP_EXT IL_CUT_EXT IL_DCX_EXT IL_DDS_EXT
 									IL_GIF_EXT IL_HDR_EXT IL_ICO_EXT IL_JPG_EXT IL_LIF_EXT
 									IL_MDL_EXT IL_MNG_EXT IL_PCX_EXT IL_PIC_EXT
 									IL_PIX_EXT IL_PNG_EXT IL_PNM_EXT IL_PSD_EXT
 									IL_PSP_EXT IL_PXR_EXT IL_SGI_EXT IL_TGA_EXT
 									IL_TIF_EXT IL_WAL_EXT IL_XPM_EXT;
-const ILstring _ilSaveExt		= "" IL_BMP_EXT IL_CHEAD_EXT IL_DDS_EXT IL_JPG_EXT
+ILstring _ilSaveExt		= "" IL_BMP_EXT IL_CHEAD_EXT IL_DDS_EXT IL_JPG_EXT
 									IL_PCX_EXT IL_PNG_EXT IL_PNM_EXT IL_PSD_EXT
 									IL_SGI_EXT IL_TGA_EXT IL_TIF_EXT;
 
@@ -99,36 +99,36 @@ ILstring ILAPIENTRY ilGetString(ILenum StringName)
 	switch (StringName)
 	{
 		case IL_VENDOR:
-			return (const ILstring)_ilVendor;
+			return (ILstring)_ilVendor;
 		case IL_VERSION_NUM: //changed 2003-08-30: IL_VERSION changes									//switch define ;-)
-			return (const ILstring)_ilVersion;
+			return (ILstring)_ilVersion;
 		case IL_LOAD_EXT:
-			return (const ILstring)_ilLoadExt;
+			return (ILstring)_ilLoadExt;
 		case IL_SAVE_EXT:
-			return (const ILstring)_ilSaveExt;
+			return (ILstring)_ilSaveExt;
 		case IL_TGA_ID_STRING:
-			return (const ILstring)ilStates[ilCurrentPos].ilTgaId;
+			return (ILstring)ilStates[ilCurrentPos].ilTgaId;
 		case IL_TGA_AUTHNAME_STRING:
-			return (const ILstring)ilStates[ilCurrentPos].ilTgaAuthName;
+			return (ILstring)ilStates[ilCurrentPos].ilTgaAuthName;
 		case IL_TGA_AUTHCOMMENT_STRING:
-			return (const ILstring)ilStates[ilCurrentPos].ilTgaAuthComment;
+			return (ILstring)ilStates[ilCurrentPos].ilTgaAuthComment;
 		case IL_PNG_AUTHNAME_STRING:
-			return (const ILstring)ilStates[ilCurrentPos].ilPngAuthName;
+			return (ILstring)ilStates[ilCurrentPos].ilPngAuthName;
 		case IL_PNG_TITLE_STRING:
-			return (const ILstring)ilStates[ilCurrentPos].ilPngTitle;
+			return (ILstring)ilStates[ilCurrentPos].ilPngTitle;
 		case IL_PNG_DESCRIPTION_STRING:
-			return (const ILstring)ilStates[ilCurrentPos].ilPngDescription;
+			return (ILstring)ilStates[ilCurrentPos].ilPngDescription;
 		//2003-08-31: added tif strings
 		case IL_TIF_DESCRIPTION_STRING:
-			return (const ILstring)ilStates[ilCurrentPos].ilTifDescription;
+			return (ILstring)ilStates[ilCurrentPos].ilTifDescription;
 		case IL_TIF_HOSTCOMPUTER_STRING:
-			return (const ILstring)ilStates[ilCurrentPos].ilTifHostComputer;
+			return (ILstring)ilStates[ilCurrentPos].ilTifHostComputer;
 		case IL_TIF_DOCUMENTNAME_STRING:
-			return (const ILstring)ilStates[ilCurrentPos].ilTifDocumentName;
+			return (ILstring)ilStates[ilCurrentPos].ilTifDocumentName;
 		case IL_TIF_AUTHNAME_STRING:
-			return (const ILstring)ilStates[ilCurrentPos].ilTifAuthName;
+			return (ILstring)ilStates[ilCurrentPos].ilTifAuthName;
 		case IL_CHEAD_HEADER_STRING:
-			return (const ILstring)ilStates[ilCurrentPos].ilCHeader;
+			return (ILstring)ilStates[ilCurrentPos].ilCHeader;
 		default:
 			ilSetError(IL_INVALID_ENUM);
 			break;
@@ -353,8 +353,7 @@ ILuint iGetActiveNum(ILenum Type)
 
 
 //! Sets Param equal to the current value of the Mode
-ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
-{
+ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param) {
 	if (Param == NULL) {
 		ilSetError(IL_INVALID_PARAM);
 		return;
@@ -362,8 +361,7 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 
 	*Param = 0;
 
-	switch (Mode)
-	{
+	switch (Mode) {
 		// Integer values
 		case IL_COMPRESS_MODE:
 			*Param = ilStates[ilCurrentPos].ilCompression;
@@ -407,206 +405,7 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 		case IL_ACTIVE_IMAGE:
 		case IL_ACTIVE_MIPMAP:
 		case IL_ACTIVE_LAYER:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
 			*Param = iGetActiveNum(Mode);
-			break;
-
-		case IL_DXTC_DATA_FORMAT:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			if (iCurImage->DxtcData == NULL || iCurImage->DxtcSize == 0) {
-				*Param = IL_DXT_NO_COMP;
-				break;
-			}
-			*Param = iCurImage->DxtcFormat;
-			break;
-
-			////
-
-		case IL_IMAGE_BITS_PER_PIXEL:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			//changed 20040610 to channel count (Bpp) times Byte per channel
-			*Param = (iCurImage->Bpp << 3)*iCurImage->Bpc;
-			break;
-		case IL_IMAGE_BYTES_PER_PIXEL:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			//changed 20040610 to channel count (Bpp) times Byte per channel
-			*Param = iCurImage->Bpp*iCurImage->Bpc;
-			break;
-		case IL_IMAGE_BPC:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->Bpc;
-			break;
-		case IL_IMAGE_CHANNELS:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->Bpp / iCurImage->Bpc;
-			break;
-		case IL_IMAGE_CUBEFLAGS:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->CubeFlags;
-			break;
-		case IL_IMAGE_DEPTH:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->Depth;
-			break;
-		case IL_IMAGE_DURATION:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->Duration;
-			break;
-		case IL_IMAGE_FORMAT:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->Format;
-			break;
-		case IL_IMAGE_HEIGHT:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->Height;
-			break;
-		case IL_IMAGE_SIZE_OF_DATA:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->SizeOfData;
-			break;
-		case IL_IMAGE_OFFX:
-		case IL_IMAGE_OFFY:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			if (Mode == IL_IMAGE_OFFX)
-				*Param = iCurImage->OffX;
-			else  // IL_IMAGE_OFFY
-				*Param = iCurImage->OffY;
-			break;
-		case IL_IMAGE_ORIGIN:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->Origin;
-			break;
-		case IL_IMAGE_PLANESIZE:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->SizeOfPlane;
-			break;
-		case IL_IMAGE_TYPE:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->Type;
-			break;
-		case IL_IMAGE_WIDTH:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->Width;
-			break;
-		case IL_NUM_IMAGES:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->NumNext;
-			break;
-		case IL_NUM_LAYERS:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->NumLayers; //changed 20050304
-			break;
-		case IL_NUM_MIPMAPS:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->NumMips;
-			break;
-
-			////
-
-		case IL_PALETTE_TYPE:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = iCurImage->Pal.PalType;
-			break;
-		case IL_PALETTE_BPP:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			*Param = ilGetBppPal(iCurImage->Pal.PalType);
-			break;
-		case IL_PALETTE_NUM_COLS:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			if (!iCurImage->Pal.Palette || !iCurImage->Pal.PalSize || iCurImage->Pal.PalType == IL_PAL_NONE)
-				*Param = 0;
-			else
-				*Param = iCurImage->Pal.PalSize / ilGetBppPal(iCurImage->Pal.PalType);
-			break;
-		case IL_PALETTE_BASE_TYPE:
-			if (iCurImage == NULL) {
-				ilSetError(IL_ILLEGAL_OPERATION);
-				break;
-			}
-			switch (iCurImage->Pal.PalType)
-			{
-				case IL_PAL_RGB24:
-					*Param = IL_RGB;
-				case IL_PAL_RGB32:
-					*Param = IL_RGBA;  // Not sure
-				case IL_PAL_RGBA32:
-					*Param = IL_RGBA;
-				case IL_PAL_BGR24:
-					*Param = IL_BGR;
-				case IL_PAL_BGR32:
-					*Param = IL_BGRA;  // Not sure
-				case IL_PAL_BGRA32:
-					*Param = IL_BGRA;
-			}
 			break;
 
 		// Format-specific values
@@ -665,11 +464,134 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 			break;
 
 		default:
-			ilSetError(IL_INVALID_ENUM);
+            iGetIntegervImage(iCurImage, Mode, Param);
 	}
 
 	return;
 }
+
+
+//! Sets Param equal to the current value of the Mode
+ILvoid ILAPIENTRY iGetIntegervImage(ILimage *Image, ILenum Mode, ILint *Param) {
+    ILimage *SubImage;
+    if (Image == NULL) {
+        ilSetError(IL_ILLEGAL_OPERATION);
+        return;
+    }
+    if (Param == NULL) {
+        ilSetError(IL_INVALID_PARAM);
+        return;
+    }
+    *Param = 0;
+    switch (Mode)
+    {
+        case IL_DXTC_DATA_FORMAT:
+            if (Image->DxtcData == NULL || Image->DxtcSize == 0) {
+                 *Param = IL_DXT_NO_COMP;
+                 break;
+            }
+            *Param = Image->DxtcFormat;
+            break;
+            ////
+        case IL_IMAGE_BITS_PER_PIXEL:
+            //changed 20040610 to channel count (Bpp) times Byte per channel
+            *Param = (Image->Bpp << 3)*Image->Bpc;
+            break;
+        case IL_IMAGE_BYTES_PER_PIXEL:
+            //changed 20040610 to channel count (Bpp) times Byte per channel
+            *Param = Image->Bpp*Image->Bpc;
+            break;
+        case IL_IMAGE_BPC:
+            *Param = Image->Bpc;
+            break;
+        case IL_IMAGE_CHANNELS:
+            *Param = Image->Bpp / Image->Bpc;
+            break;
+        case IL_IMAGE_CUBEFLAGS:
+            *Param = Image->CubeFlags;
+            break;
+        case IL_IMAGE_DEPTH:
+            *Param = Image->Depth;
+            break;
+        case IL_IMAGE_DURATION:
+            *Param = Image->Duration;
+            break;
+        case IL_IMAGE_FORMAT:
+            *Param = Image->Format;
+            break;
+        case IL_IMAGE_HEIGHT:
+            *Param = Image->Height;
+            break;
+        case IL_IMAGE_SIZE_OF_DATA:
+            *Param = Image->SizeOfData;
+
+            break;
+        case IL_IMAGE_OFFX:
+            *Param = Image->OffX;
+            break;
+        case IL_IMAGE_OFFY:
+            *Param = Image->OffY;
+            break;
+        case IL_IMAGE_ORIGIN:
+            *Param = Image->Origin;
+            break;
+        case IL_IMAGE_PLANESIZE:
+            *Param = Image->SizeOfPlane;
+            break;
+        case IL_IMAGE_TYPE:
+            *Param = Image->Type;
+            break;
+        case IL_IMAGE_WIDTH:
+            *Param = Image->Width;
+            break;
+        case IL_NUM_IMAGES:
+            for(SubImage = Image->Next; SubImage; SubImage = SubImage->Next)
+                (*Param)++;
+            break;
+        case IL_NUM_LAYERS:
+            for(SubImage = Image->Layers; SubImage; SubImage = SubImage->Next)
+                (*Param)++;
+            break;
+        case IL_NUM_MIPMAPS:
+            for(SubImage = Image->Mipmaps; SubImage; SubImage = SubImage->Next)
+                (*Param)++;
+            break;
+
+        case IL_PALETTE_TYPE:
+             *Param = Image->Pal.PalType;
+             break;
+        case IL_PALETTE_BPP:
+             *Param = ilGetBppPal(Image->Pal.PalType);
+             break;
+        case IL_PALETTE_NUM_COLS:
+             if (!Image->Pal.Palette || !Image->Pal.PalSize || Image->Pal.PalType ==
+IL_PAL_NONE)
+                  *Param = 0;
+             else
+                  *Param = Image->Pal.PalSize / ilGetBppPal(Image->Pal.PalType);
+             break;
+        case IL_PALETTE_BASE_TYPE:
+             switch (Image->Pal.PalType)
+             {
+                  case IL_PAL_RGB24:
+                      *Param = IL_RGB;
+                  case IL_PAL_RGB32:
+                      *Param = IL_RGBA; // Not sure
+                  case IL_PAL_RGBA32:
+                      *Param = IL_RGBA;
+                  case IL_PAL_BGR24:
+                      *Param = IL_BGR;
+                  case IL_PAL_BGR32:
+                      *Param = IL_BGRA; // Not sure
+                  case IL_PAL_BGRA32:
+                      *Param = IL_BGRA;
+             }
+             break;
+        default:
+             ilSetError(IL_INVALID_ENUM);
+    }
+}
+
 
 
 //! Returns the current value of the Mode

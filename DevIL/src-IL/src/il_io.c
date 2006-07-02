@@ -16,7 +16,7 @@
 #include <string.h>
 
 
-ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
+ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILstring FileName)
 {
 	ILstring Ext;
 
@@ -95,7 +95,7 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 ILenum ilDetermineTypeF(ILHANDLE File);
 
 //changed 2003-09-17 to ILAPIENTRY
-ILAPI ILenum ILAPIENTRY ilDetermineType(const ILstring FileName)
+ILAPI ILenum ILAPIENTRY ilDetermineType(ILstring FileName)
 {
 	ILHANDLE	File;
 	ILenum		Type;
@@ -201,8 +201,7 @@ ILenum ilDetermineTypeF(ILHANDLE File)
 }
 
 
-ILenum ilDetermineTypeL(ILvoid *Lump, ILuint Size)
-{
+ILenum ilDetermineTypeL( const ILvoid *Lump, ILuint Size) {
 	if (Lump == NULL)
 		return IL_TYPE_UNKNOWN;
 
@@ -287,7 +286,7 @@ ILenum ilDetermineTypeL(ILvoid *Lump, ILuint Size)
 }
 
 
-ILboolean ILAPIENTRY ilIsValid(ILenum Type, const ILstring FileName)
+ILboolean ILAPIENTRY ilIsValid(ILenum Type, ILstring FileName)
 {
 	if (FileName == NULL) {
 		ilSetError(IL_INVALID_PARAM);
@@ -547,7 +546,7 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, ILvoid *Lump, ILuint Size)
 }
 
 
-ILboolean ILAPIENTRY ilLoad(ILenum Type, const ILstring FileName)
+ILboolean ILAPIENTRY ilLoad(ILenum Type, ILstring FileName)
 {
 #ifndef _UNICODE
 	if (FileName == NULL || strlen(FileName) < 1) {
@@ -863,8 +862,7 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 }
 
 
-ILboolean ILAPIENTRY ilLoadL(ILenum Type, ILvoid *Lump, ILuint Size)
-{
+ILboolean ILAPIENTRY ilLoadL(ILenum Type, const ILvoid *Lump, ILuint Size) {
 	if (Lump == NULL || Size == 0) {
 		ilSetError(IL_INVALID_PARAM);
 		return IL_FALSE;
@@ -1017,7 +1015,7 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, ILvoid *Lump, ILuint Size)
 
 
 //! Attempts to load an image with various different methods before failing - very generic.
-ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
+ILboolean ILAPIENTRY ilLoadImage(ILstring FileName)
 {
 	ILstring	Ext = iGetExtension(FileName);
 	ILenum		Type;
@@ -1212,7 +1210,7 @@ ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 }
 
 
-ILboolean ILAPIENTRY ilSave(ILenum Type, const ILstring FileName)
+ILboolean ILAPIENTRY ilSave(ILenum Type, ILstring FileName)
 {
 	switch (Type)
 	{
@@ -1441,7 +1439,7 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size)
 
 //! Determines what image type to save based on the extension and attempts to save
 //	the current image based on the extension given in FileName.
-ILboolean ILAPIENTRY ilSaveImage(const ILstring FileName)
+ILboolean ILAPIENTRY ilSaveImage(ILstring FileName)
 {
 	ILstring Ext = iGetExtension(FileName);
 

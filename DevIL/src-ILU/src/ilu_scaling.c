@@ -97,10 +97,7 @@ Pixel data;
 
 #define	filter_support		(1.0)
 
-double
-filter(t)
-double t;
-{
+double filter( double t) {
 	/* f(t) = 2|t|^3 - 3|t|^2 + 1, -1 <= t <= 1 */
 	if(t < 0.0) t = -t;
 	if(t < 1.0) return((2.0 * t - 3.0) * t * t + 1.0);
@@ -109,20 +106,14 @@ double t;
 
 #define	box_support		(0.5)
 
-double
-box_filter(t)
-double t;
-{
+double box_filter( double t) {
 	if((t > -0.5) && (t <= 0.5)) return(1.0);
 	return(0.0);
 }
 
 #define	triangle_support	(1.0)
 
-double
-triangle_filter(t)
-double t;
-{
+double triangle_filter( double t ) {
 	if(t < 0.0) t = -t;
 	if(t < 1.0) return(1.0 - t);
 	return(0.0);
@@ -130,10 +121,7 @@ double t;
 
 #define	bell_support		(1.5)
 
-double
-bell_filter(t)		/* box (*) box (*) box */
-double t;
-{
+double bell_filter( double t) {		/* box (*) box (*) box */
 	if(t < 0) t = -t;
 	if(t < .5) return(.75 - (t * t));
 	if(t < 1.5) {

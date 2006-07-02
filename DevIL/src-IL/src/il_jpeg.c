@@ -83,7 +83,7 @@ ILboolean iIsValidJpg()
 
 
 //! Checks if the file specified in FileName is a valid .jpg file.
-ILboolean ilIsValidJpg(const ILstring FileName)
+ILboolean ilIsValidJpg(ILstring FileName)
 {
 	ILHANDLE	JpegFile;
 	ILboolean	bJpeg = IL_FALSE;
@@ -123,7 +123,7 @@ ILboolean ilIsValidJpgF(ILHANDLE File)
 }
 
 
-ILboolean ilIsValidJpgL(ILvoid *Lump, ILuint Size)
+ILboolean ilIsValidJpgL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidJpg();
@@ -146,7 +146,7 @@ void OutputMsg(struct jpeg_common_struct *JpegInfo)
 
 
 //! Reads a jpeg file
-ILboolean ilLoadJpeg(const ILstring FileName)
+ILboolean ilLoadJpeg(ILstring FileName)
 {
 	ILHANDLE	JpegFile;
 	ILboolean	bJpeg = IL_FALSE;
@@ -180,7 +180,7 @@ ILboolean ilLoadJpegF(ILHANDLE File)
 
 
 // Reads from a memory "lump" containing a jpeg
-ILboolean ilLoadJpegL(ILvoid *Lump, ILuint Size)
+ILboolean ilLoadJpegL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadJpegInternal();
@@ -384,7 +384,7 @@ devil_jpeg_write_init(j_compress_ptr cinfo)
 	if (cinfo->dest == NULL) {	// first time for this JPEG object?
 		cinfo->dest = (struct jpeg_destination_mgr *)
 		  (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-					  sizeof(struct jpeg_destination_mgr));
+					  sizeof(iwrite_mgr));
 		dest = (iwrite_ptr)cinfo->dest;
 	}
 
@@ -398,7 +398,7 @@ devil_jpeg_write_init(j_compress_ptr cinfo)
 
 
 //! Writes a Jpeg file
-ILboolean ilSaveJpeg(const ILstring FileName)
+ILboolean ilSaveJpeg(ILstring FileName)
 {
 	ILHANDLE	JpegFile;
 	ILboolean	bJpeg = IL_FALSE;
@@ -553,7 +553,7 @@ ILboolean iSaveJpegInternal()
 
 
 //! Reads a jpeg file
-ILboolean ilLoadJpeg(const ILstring FileName)
+ILboolean ilLoadJpeg(ILstring FileName)
 {
 	if (!iFileExists(FileName)) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
@@ -571,7 +571,7 @@ ILboolean ilLoadJpegL(ILvoid *Lump, ILuint Size)
 
 
 // Internal function used to load the jpeg.
-ILboolean iLoadJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size)
+ILboolean iLoadJpegInternal(ILstring FileName, ILvoid *Lump, ILuint Size)
 {
     JPEG_CORE_PROPERTIES Image;
 
@@ -670,7 +670,7 @@ ILboolean iLoadJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size)
 
 
 //! Writes a Jpeg file
-ILboolean ilSaveJpeg(const ILstring FileName)
+ILboolean ilSaveJpeg(ILstring FileName)
 {
 	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
 		if (iFileExists(FileName)) {
@@ -691,7 +691,7 @@ ILboolean ilSaveJpegL(ILvoid *Lump, ILuint Size)
 
 
 // Internal function used to save the Jpeg.
-ILboolean iSaveJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size)
+ILboolean iSaveJpegInternal(ILstring FileName, ILvoid *Lump, ILuint Size)
 {
 	JPEG_CORE_PROPERTIES	Image;
 	ILuint	Quality;

@@ -1,20 +1,12 @@
-//-----------------------------------------------------------------------------
-//
-// ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 06/13/2002 <--Y2K Compliant! =]
-//
-// Filename: src-IL/src/il_alloc.c
-//
-// Description: File handling for DevIL
-//
-//-----------------------------------------------------------------------------
-
 
 #define __ALLOC_C
 #include "il_internal.h"
 #include <stdlib.h>
 #include <math.h>
+
+#ifdef MM_MALLOC
+#include <mm_malloc.h>
+#endif
 
 static ILvoid ILAPIENTRY DefaultFreeFunc(ILvoid *Ptr);
 static ILvoid* ILAPIENTRY DefaultAllocFunc(ILuint Size);
@@ -27,12 +19,15 @@ static mFree  ifree_ptr = DefaultFreeFunc;
 ILvoid *vec_malloc( ILuint size ) {
 	size =  size % 16 > 0 ? size + 16 - (size % 16) : size; // align size value
 	
-#ifdef POSIX_MEMALIGN
-	char *buffer;
-	return posix_memalign(&buffer, 16, size) == 0 ? buffer : NULL;
+#ifdef MM_MALLOC
+	return _mm_malloc(size,16);
 #else
 #ifdef VALLOC
 	return valloc( size );
+#else
+#ifdef POSIX_MEMALIGN
+	char *buffer;
+	return posix_memalign(&buffer, 16, size) == 0 ? buffer : NULL;
 #else
 #ifdef MEMALIGN
 	return memalign( 16, size );
@@ -45,6 +40,7 @@ ILvoid *vec_malloc( ILuint size ) {
 	ptr += diff;
 	((char*)ptr)[-1]= diff;
 	return ptr;
+#endif
 #endif
 #endif
 #endif
@@ -101,14 +97,16 @@ static ILvoid* ILAPIENTRY DefaultAllocFunc(ILuint Size)
 #endif
 }
 
-static ILvoid ILAPIENTRY DefaultFreeFunc(ILvoid *Ptr)
-{
-	if (Ptr)
-	{      
-#if defined(VECTORMEM) & !defined(POSIX_MEMALIGN) & !defined(VALLOC) & !defined(MEMALIGN)
-	    free(Ptr - ((char*)Ptr)[-1]);
+static ILvoid ILAPIENTRY DefaultFreeFunc(ILvoid *ptr) {
+	if( ptr ) {
+#ifdef MM_MALLOC
+	    _mm_free(ptr);
 #else
-		free(Ptr);
+#if defined(VECTORMEM) & !defined(POSIX_MEMALIGN) & !defined(VALLOC) & !defined(MEMALIGN) & !defined(MM_MALLOC)
+	    free(ptr - ((char*)ptr)[-1]);
+#else	    
+	    free(ptr);
+#endif
 #endif
 	}
 }

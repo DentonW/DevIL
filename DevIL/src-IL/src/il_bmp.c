@@ -17,14 +17,7 @@
 #include "il_manip.h"
 #include "il_endian.h"
 
-//changed define 2003-08-30
-//1 doesn't work for 4bpp rle bmps (tlas rule ;-))
-//because the padding isn't removed after decompression...
-//so don't use it (why is it here anyway?)
-#define	IL_USE_POINTER 0
-
-ILvoid GetShiftFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight)
-{
+INLINE ILvoid GetShiftFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight) {
 	ILuint Temp, i;
 
 	if (Mask == 0) {
@@ -89,7 +82,7 @@ ILboolean ilIsValidBmpF(ILHANDLE File)
 
 
 //! Checks if Lump is a valid .bmp lump.
-ILboolean ilIsValidBmpL(ILvoid *Lump, ILuint Size)
+ILboolean ilIsValidBmpL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidBmp();
@@ -238,7 +231,7 @@ ILboolean ilLoadBmpF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a .bmp
-ILboolean ilLoadBmpL(ILvoid *Lump, ILuint Size)
+ILboolean ilLoadBmpL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadBitmapInternal();
@@ -618,29 +611,25 @@ ILboolean ilReadRLE8Bmp(BMPHEAD *Header)
 	// Seek to the data from the "beginning" of the file
 	iseek(Header->bfDataOff, IL_SEEK_SET);
 
-	for (y = 0 ; y < iCurImage->Height; y++)
-	{
+	for (y = 0 ; y < iCurImage->Height; y++) {
 		x = 0;
-		while (1)
-		{
+		while (1) {
 			if (iread(Bytes, sizeof(Bytes), 1) != 1)
 				return IL_FALSE;
-			if (Bytes[0] == 0x0) {  // Escape sequence
-				if (Bytes[1] == 0x0)  // End of line
+			if (Bytes[0] == 0x00) {  // Escape sequence
+				if (Bytes[1] == 0x00)  // End of line
 					break;
-				else if (Bytes[1] == 0x1) {  // End of bitmap
+				else if (Bytes[1] == 0x01) {  // End of bitmap
 					y = iCurImage->Height;
 					break;
-				}
-				else if (Bytes[1] == 0x2) {
+				} else if (Bytes[1] == 0x2) {
 					if (iread(Bytes, sizeof(Bytes), 1) != 1)
 						return IL_FALSE;
 					x += Bytes[0];
 					y += Bytes[1];
 					if (y >= iCurImage->Height)
 						break;
-				}
-				else {  // Run of pixels
+				} else {  // Run of pixels
 					if ((ILint)iCurImage->Width - (ILint)x < (ILint)Bytes[1])
 						return IL_FALSE;
 					if (iread(iCurImage->Data + (y * iCurImage->Width + x),
@@ -651,9 +640,7 @@ ILboolean ilReadRLE8Bmp(BMPHEAD *Header)
 						if (iread( &Bytes[0], 1, 1) != 1)
 							return IL_FALSE;
 				}
-			}
-			else
-			{
+			} else {
 				memset( iCurImage->Data + y * iCurImage->Width + x, Bytes[1], Bytes[0] );
 				x += Bytes[0];
 			}
@@ -907,8 +894,7 @@ ILboolean ilSaveBmp(const ILstring FileName)
 
 
 //! Writes a .bmp to an already-opened file
-ILboolean ilSaveBmpF(ILHANDLE File)
-{
+ILboolean ilSaveBmpF(ILHANDLE File) {
 	iSetOutputFile(File);
 	return iSaveBitmapInternal();
 }
@@ -923,8 +909,9 @@ ILboolean ilSaveBmpL(ILvoid *Lump, ILuint Size)
 
 
 // Internal function used to save the .bmp.
-ILboolean iSaveBitmapInternal()
-{
+ILboolean iSaveBitmapInternal() {
+	//int compress_rle8 = ilGetInteger(IL_BMP_RLE);
+	int compress_rle8 = IL_FALSE; // disabled BMP RLE compression. broken
 	ILuint	FileSize, i, PadSize, Padding = 0;
 	ILimage	*TempImage = NULL;
 	ILpal	*TempPal;
@@ -937,17 +924,28 @@ ILboolean iSaveBitmapInternal()
 
 	iputc('B');  // Comprises the
 	iputc('M');  //  "signature"
+	
 	SaveLittleUInt(0);  // Will come back and change later in this function (filesize)
 	SaveLittleUInt(0);  // Reserved
 
+	if( compress_rle8 == IL_TRUE ) {
+		TempImage = iConvertImage(iCurImage, IL_COLOR_INDEX, IL_UNSIGNED_BYTE);
+		if( TempImage == NULL )
+			return IL_FALSE;
+		TempPal = iConvertPal(&TempImage->Pal, IL_PAL_BGR32);
+		if( TempPal == NULL ) {
+			return IL_FALSE;
+			ilCloseImage(TempImage);
+		}
+	}
+
 	// If the current image has a palette, take care of it
 	TempPal = &iCurImage->Pal;
-	if (iCurImage->Pal.PalSize && iCurImage->Pal.Palette && iCurImage->Pal.PalType != IL_PAL_NONE) {
+	if( iCurImage->Pal.PalSize && iCurImage->Pal.Palette && iCurImage->Pal.PalType != IL_PAL_NONE ) {
 		// If the palette in .bmp format, write it directly
 		if (iCurImage->Pal.PalType == IL_PAL_BGR32) {
 			TempPal = &iCurImage->Pal;
-		}
-		else {
+		} else {
 			TempPal = iConvertPal(&iCurImage->Pal, IL_PAL_BGR32);
 			if (TempPal == NULL) {
 				return IL_FALSE;
@@ -956,39 +954,40 @@ ILboolean iSaveBitmapInternal()
 	}
 
 	SaveLittleUInt(54 + TempPal->PalSize);  // Offset of the data
-
-
+	
 	//Changed 20040923: moved this block above writing of
 	//BITMAPINFOHEADER, so that the written header refers to
 	//TempImage instead of the original image
+	
+	// @TODO LUMINANCE converted to BGR insteaf of beign saved to luminance
 	if (iCurImage->Format != IL_BGR && iCurImage->Format != IL_BGRA && iCurImage->Format != IL_COLOUR_INDEX) {
-		if (iCurImage->Format == IL_RGBA)
+		if (iCurImage->Format == IL_RGBA) {
 			TempImage = iConvertImage(iCurImage, IL_BGRA, IL_UNSIGNED_BYTE);
-		else
+		} else {
 			TempImage = iConvertImage(iCurImage, IL_BGR, IL_UNSIGNED_BYTE);
-
+		}
 		if (TempImage == NULL)
 			return IL_FALSE;
-	}
-	else if (iCurImage->Bpc > 1) {
+	} else if (iCurImage->Bpc > 1) {
 		TempImage = iConvertImage(iCurImage, iCurImage->Format, IL_UNSIGNED_BYTE);
 		if (TempImage == NULL)
 			return IL_FALSE;
-	}
-	else {
+	} else {
 		TempImage = iCurImage;
 	}
 
-	if (TempImage->Origin != IL_ORIGIN_LOWER_LEFT)
+	if (TempImage->Origin != IL_ORIGIN_LOWER_LEFT) {
 		TempData = iGetFlipped(TempImage);
-	else
+	} else {
 		TempData = TempImage->Data;
-
+	}
 
 	SaveLittleUInt(0x28);  // Header size
 	SaveLittleUInt(iCurImage->Width);
 
 	// Removed because some image viewers don't like the negative height.
+	// even if it is standard. @TODO should be enabled or disabled
+	// usually enabled.
 	/*if (iCurImage->Origin == IL_ORIGIN_UPPER_LEFT)
 		SaveLittleInt(-(ILint)iCurImage->Height);
 	else*/
@@ -996,37 +995,48 @@ ILboolean iSaveBitmapInternal()
 
 	SaveLittleUShort(1);  // Number of planes
 	SaveLittleUShort((ILushort)((ILushort)TempImage->Bpp << 3));  // Bpp
-	SaveLittleInt(0);  // Compression
+	if( compress_rle8 == IL_TRUE ) {
+		SaveLittleInt(1); // rle8 compression
+	} else {
+		SaveLittleInt(0);
+	}
 	SaveLittleInt(0);  // Size of image (Obsolete)
 	SaveLittleInt(0);  // (Obsolete)
 	SaveLittleInt(0);  // (Obsolete)
 
-	if (TempImage->Pal.PalType != IL_PAL_NONE)
+	if (TempImage->Pal.PalType != IL_PAL_NONE) {
 		SaveLittleInt(ilGetInteger(IL_PALETTE_NUM_COLS));  // Num colours used
-	else
+	} else {
 		SaveLittleInt(0);
+	}
 	SaveLittleInt(0);  // Important colour (none)
 
 	iwrite(TempPal->Palette, 1, TempPal->PalSize);
 
-	PadSize = (4 - (TempImage->Bps % 4)) % 4;
-	// No padding, so write data directly.
-	if (PadSize == 0) {
-		iwrite(TempData, 1, TempImage->SizeOfPlane);
-	}
-	else {  // Odd width, so we must pad each line.
-		for (i = 0; i < TempImage->SizeOfPlane; i += TempImage->Bps) {
-			iwrite(TempData + i, 1, TempImage->Bps);
-			// Write pad byte(s)
-			iwrite(&Padding, 1, PadSize);
+	
+	if( compress_rle8 == IL_TRUE ) {
+		//@TODO compress and save
+		ILubyte *Dest = ialloc((long)((double)TempImage->SizeOfPlane*130/127));
+		FileSize = ilRleCompress(TempImage->Data,TempImage->Width,TempImage->Height,
+						TempImage->Depth,TempImage->Bpp,Dest,IL_BMPCOMP,NULL);
+		iwrite(Dest,1,FileSize);
+	} else {
+		PadSize = (4 - (TempImage->Bps % 4)) % 4;
+		// No padding, so write data directly.
+		if (PadSize == 0) {
+			iwrite(TempData, 1, TempImage->SizeOfPlane);
+		} else {  // Odd width, so we must pad each line.
+			for (i = 0; i < TempImage->SizeOfPlane; i += TempImage->Bps) {
+				iwrite(TempData + i, 1, TempImage->Bps); // Write data
+				iwrite(&Padding, 1, PadSize); // Write pad byte(s)
+			}
 		}
 	}
-
+	
 	// Write the filesize
 	FileSize = itellw();
 	iseekw(2, IL_SEEK_SET);
 	SaveLittleUInt(FileSize);
-
 
 	if (TempPal != &iCurImage->Pal) {
 		ifree(TempPal->Palette);

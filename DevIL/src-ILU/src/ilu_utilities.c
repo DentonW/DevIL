@@ -52,9 +52,9 @@ ILvoid ILAPIENTRY iluGetImageInfo(ILinfo *Info)
 	Info->Palette		= iluCurImage->Pal.Palette;
 	Info->PalType		= iluCurImage->Pal.PalType;
 	Info->PalSize		= iluCurImage->Pal.PalSize;
-	Info->NumNext		= iluCurImage->NumNext;
-	Info->NumMips		= iluCurImage->NumMips;
-	Info->NumLayers		= iluCurImage->NumLayers;
-
+	iGetIntegervImage(iluCurImage, IL_NUM_IMAGES, (ILint*)&Info->NumNext);
+	iGetIntegervImage(iluCurImage, IL_NUM_MIPMAPS, (ILint*)Info->NumMips);
+	iGetIntegervImage(iluCurImage, IL_NUM_LAYERS, (ILint*)Info->NumLayers);
+	
 	return;
 }

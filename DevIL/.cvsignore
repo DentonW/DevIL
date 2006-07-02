@@ -7,3 +7,7 @@ libtool
 autom4te.cache
 .cdtproject
 .project
+configure
+aclocal.m4
+Makefile.in
+config.cache

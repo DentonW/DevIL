@@ -30,7 +30,7 @@ public:
 	ILboolean	ActiveLayer(ILuint);
 	ILboolean	ActiveMipmap(ILuint);
 	ILboolean	Clear(ILvoid);
-	ILvoid		ClearColour(ILubyte, ILubyte, ILubyte, ILubyte);
+	ILvoid		ClearColour(ILclampf, ILclampf, ILclampf, ILclampf);
 	ILboolean	Convert(ILenum);
 	ILboolean	Copy(ILuint);
 	ILboolean	Default(ILvoid);
@@ -46,7 +46,7 @@ public:
 	ILvoid		Close(ILvoid) { this->Delete(); }
 	ILvoid		Delete(ILvoid);
 	ILvoid		iGenBind();
-
+	ILenum		PaletteAlphaIndex();
 
 	// Image characteristics
 	ILuint		Width(ILvoid);

@@ -80,7 +80,7 @@ BITMAP* ILAPIENTRY ilutConvertToAlleg(PALETTE Pal)
 
 
 #ifndef _WIN32_WCE
-BITMAP* ILAPIENTRY ilutAllegLoadImage(const ILstring FileName)
+BITMAP* ILAPIENTRY ilutAllegLoadImage(ILstring FileName)
 {
 	ILuint	ImgId;
 	PALETTE	Pal;

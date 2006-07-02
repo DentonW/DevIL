@@ -1,15 +1,3 @@
-//-----------------------------------------------------------------------------
-//
-// ImageLib Utility Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 12/04/2001 <--Y2K Compliant! =]
-//
-// Filename: src-ILU/include/ilu_internal.h
-//
-// Description: Internal stuff for ILU
-//
-//-----------------------------------------------------------------------------
-
 
 #ifndef INTERNAL_H
 #define INTERNAL_H
@@ -59,16 +47,6 @@
 	#define TEXT(s) (s)
 #endif
 
-
-#ifdef _MSC_VER
-	#define INLINE __inline
-	#define FINLINE __forceinline
-#else
-	#define INLINE
-	#define FINLINE
-#endif
-
-
 extern ILimage *iluCurImage;
 
 
@@ -78,9 +56,20 @@ extern ILdouble	IL_DEGCONV;
 
 
 // Internal functions
-ILfloat	ilCos(ILfloat Angle);
-ILfloat	ilSin(ILfloat Angle);
-ILint	ilRound(ILfloat Num);
+INLINE ILfloat ilCos(ILfloat Angle) {
+	return (ILfloat)(cos(Angle * IL_DEGCONV));
+}
+
+
+INLINE ILfloat ilSin(ILfloat Angle) {
+	return (ILfloat)(sin(Angle * IL_DEGCONV));
+}
+
+
+INLINE ILint ilRound(ILfloat Num) {
+	return (ILint)(Num + 0.5); // this is truncating in away-from-0, not rounding
+}
+
 ILuint	iluScaleAdvanced(ILuint Width, ILuint Height, ILenum Filter);
 ILubyte	*iScanFill(ILvoid);
 

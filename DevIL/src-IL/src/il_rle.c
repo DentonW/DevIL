@@ -17,13 +17,27 @@
 #include "il_internal.h"
 #include "il_rle.h"
 
-
-ILuint GetPix(ILubyte *p, ILuint bpp)
-{
+INLINE ILuint GetPix(ILubyte *p, ILuint bpp) {
 	ILuint Pixel;
-
 	Pixel = (ILuint)*p++;
-	while (bpp-- > 1) {
+	
+	/*
+	switch(bpp) {
+		case 1:
+			// direct byte access
+		case 2:
+			// direct short access
+		case 3:
+			// short + byte
+		case 4:
+			// direct int access
+	}
+	Can be optimized, there are just 4 different values.
+	1,2,3,4
+	
+	*/
+	
+	while( bpp-- > 1 ) {
 		Pixel <<= 8;
 		Pixel |= (ILuint)*p++;
 	}
@@ -31,8 +45,7 @@ ILuint GetPix(ILubyte *p, ILuint bpp)
 }
 
 
-ILint CountDiffPixels(ILubyte *p, ILuint bpp, ILuint pixCnt)
-{
+INLINE ILint CountDiffPixels(ILubyte *p, ILuint bpp, ILuint pixCnt) {
 	ILuint	pixel;
 	ILuint	nextPixel = 0;
 	ILint	n;
@@ -58,8 +71,7 @@ ILint CountDiffPixels(ILubyte *p, ILuint bpp, ILuint pixCnt)
 }
 
 
-ILint CountSamePixels(ILubyte *p, ILuint bpp, ILuint pixCnt)
-{
+INLINE ILint CountSamePixels(ILubyte *p, ILuint bpp, ILuint pixCnt) {
 	ILuint	pixel;
 	ILuint	nextPixel;
 	ILint	n;
@@ -81,209 +93,158 @@ ILint CountSamePixels(ILubyte *p, ILuint bpp, ILuint pixCnt)
 }
 
 
-ILboolean ilRleCompressLine(ILubyte *p, ILuint n, ILubyte bpp, ILubyte *q, ILuint *DestWidth, ILenum CompressMode)
-{
-	ILint	DiffCount;		// pixel count until two identical
-	ILint	SameCount;		// number of identical adjacent pixels
-	ILint	RLEBufSize;		// count of number of bytes encoded
-	ILint	MaxRun = SGI_MAX_RUN;
+ILboolean ilRleCompressLine(ILubyte *p, ILuint n, ILubyte bpp,
+			ILubyte *q, ILuint *DestWidth, ILenum CompressMode) {
+	
+	ILint		DiffCount;		// pixel count until two identical
+	ILint		SameCount;		// number of identical adjacent pixels
+	ILint		RLEBufSize;		// count of number of bytes encoded
+	ILint		MaxRun;
+	const ILint bmp_pad_to_even = 1 - ((long)q - *DestWidth) % 2;
 
-	switch (CompressMode)
-	{
+	switch( CompressMode ) {
 		case IL_TGACOMP:
 			MaxRun = TGA_MAX_RUN;
 			break;
 		case IL_SGICOMP:
 			MaxRun = SGI_MAX_RUN;
 			break;
+		case IL_BMPCOMP:
+			MaxRun = BMP_MAX_RUN;
+			break;
+		default:
+			ilSetError(IL_INVALID_PARAM);
+			return IL_FALSE;
 	}
 
 	RLEBufSize = 0;
 
 	while (n > 0) {
+		
+		// Analyze pixels
 		DiffCount = CountDiffPixels(p, bpp, n);
 		SameCount = CountSamePixels(p, bpp, n);
-		if (DiffCount > MaxRun)
-			DiffCount = MaxRun;
-		if (SameCount > MaxRun)
-			SameCount = MaxRun;
+		if( DiffCount > MaxRun ) DiffCount = MaxRun;
+		if( SameCount > MaxRun ) SameCount = MaxRun;
 
-		if (DiffCount > 0) {
-			// create a raw packet
-			if (CompressMode == IL_TGACOMP)
-				*q++ = (ILbyte)(DiffCount - 1);
-			else
-				*q++ = (ILbyte)(DiffCount | 0x80);
-			n -= DiffCount;
-			RLEBufSize += (DiffCount * bpp) + 1;
-
-			while (DiffCount > 0) {
-				*q++ = *p++;
-				if (bpp > 1) *q++ = *p++;
-				if (bpp > 2) *q++ = *p++;
-				if (bpp > 3) *q++ = *p++;
-				DiffCount--;
+		if( CompressMode == IL_BMPCOMP ) {
+			ILint remaining_data = n-(DiffCount > SameCount ? DiffCount : SameCount);
+			if( remaining_data < 3 ) { // check is the end of line
+				if( DiffCount > 0 ) {
+					if( n < MaxRun ) {
+						// end line merging last bytes in another absolute run
+						DiffCount = n;
+					} else {
+						// must limit the line
+						DiffCount = n-3;
+					}
+				} else { // Compressed ending
+					// no compression if it has not enough data
+					if( SameCount < 2 ) {
+						// make a run with the compressed run and EOF
+						SameCount = 0;
+						DiffCount = n;
+					} else {
+						// limit compressed range
+						SameCount -= 3-remaining_data;
+					}
+				}
 			}
 		}
 
-		if (SameCount > 1) {
-			// create a RLE packet
-			if (CompressMode == IL_TGACOMP)
-				*q++ = (ILbyte)((SameCount - 1) | 0x80);
-			else
-				*q++ = (ILbyte)(SameCount);
+		if( DiffCount > 0 ) { // create a raw packet (bmp absolute run)
+			switch(CompressMode) {
+				case IL_TGACOMP:
+					*q++ = (ILbyte)(DiffCount - 1);
+					break;
+				case IL_BMPCOMP:
+					*q++ = 0x00; RLEBufSize++;
+					*q++ = (ILbyte)DiffCount;
+					break;
+				case IL_SGICOMP:
+					*q++ = (ILbyte)(DiffCount | 0x80);
+					break;
+			}
+			n -= DiffCount;
+			RLEBufSize += (DiffCount * bpp) + 1;
+
+			while( DiffCount > 0 ) {
+				switch(bpp) {
+					case 4:	*q++ = *p++;
+					case 3: *q++ = *p++;
+					case 2: *q++ = *p++;
+					case 1: *q++ = *p++;
+				}
+				DiffCount--;
+			}
+		
+			if( CompressMode == IL_BMPCOMP ) {
+				if( (long)q % 2 == bmp_pad_to_even ) {
+					*q++ = 0x00; // insert padding
+				}
+			}
+		}
+
+		if( SameCount > 1 ) { // create a RLE packet
+			switch(CompressMode) {
+				case IL_TGACOMP:
+					*q++ = (ILbyte)((SameCount - 1) | 0x80);
+					break;
+				case IL_SGICOMP:
+				case IL_BMPCOMP:
+					*q++ = (ILbyte)(SameCount);
+					break;
+			}
 			n -= SameCount;
 			RLEBufSize += bpp + 1;
 			p += (SameCount - 1) * bpp;
 			*q++ = *p++;
-			if (bpp > 1) *q++ = *p++;
-			if (bpp > 2) *q++ = *p++;
-			if (bpp > 3) *q++ = *p++;
+			switch(bpp) {
+				case 4:	*q++ = *p++;
+				case 3: *q++ = *p++;
+				case 2: *q++ = *p++;
+				case 1: *q++ = *p++;
+			}
 		}
 	}
 
-	if (CompressMode == IL_SGICOMP) {
-		++RLEBufSize;
-		*q++ = 0;
+	// write line termination code
+	switch(CompressMode) {
+		case IL_SGICOMP:
+			++RLEBufSize;
+			*q++ = 0;
+			break;
+		case IL_BMPCOMP: 
+			*q++ = 0x00; RLEBufSize++;
+			*q++ = 0x00; RLEBufSize++;
+			break;
 	}
-
+	
 	*DestWidth = RLEBufSize;
-
+	
 	return IL_TRUE;
 }
 
 
 // Compresses an entire image using run-length encoding
-ILuint ilRleCompress(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILubyte *Dest, ILenum CompressMode, ILuint *ScanTable)
-{
+ILuint ilRleCompress(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp,
+		ILubyte *Dest, ILenum CompressMode, ILuint *ScanTable) {
 	ILuint DestW = 0, i, j, LineLen, Bps = Width * Bpp, SizeOfPlane = Width * Height * Bpp;
 
-	for (j = 0; j < Depth; j++) {
-		for (i = 0; i < Height; i++) {
-			if (ScanTable)
+	memset(ScanTable,0,Height*sizeof(ILuint));
+	for( j = 0; j < Depth; j++ ) {
+		for( i = 0; i < Height; i++ ) {
+			if( ScanTable )
 				*ScanTable++ = DestW;
-
 			ilRleCompressLine(Data + j * SizeOfPlane + i * Bps, Width, Bpp, Dest + DestW, &LineLen, CompressMode);
-			//ilRleCompressLine(Data + i * Bps, Width, Bpp, Dest + DestW, &LineLen, CompressMode);
-			
 			DestW += LineLen;
 		}
+	}
+	
+	if( CompressMode == IL_BMPCOMP ) { // add end of image
+		*(Data+DestW) = 0x00; DestW++;
+		*(Data+DestW) = 0x01; DestW++;
 	}
 
 	return DestW;
 }
-
-
-// Compresses a scanline using run-length encoding
-/*ILboolean ilRleCompressLine(ILubyte *ScanLine, ILuint Width, ILubyte Bpp, ILubyte *Dest, ILuint *DestWidth, ILenum CompressMode)
-{
-	ILuint		MaxRun;  // Temporary
-	ILuint		Count = 0, RunLen, DestPos = 0, i, c;
-	ILboolean	BreakOut;
-
-	switch (CompressMode)
-	{
-		case IL_TGACOMP:
-			MaxRun = TGA_MAX_RUN;
-			break;
-		case IL_SGICOMP:
-			MaxRun = SGI_MAX_RUN;
-			break;
-		default:
-			ilSetError(IL_INVALID_PARAM);
-			break;
-	}
-
-	// Should we check if Bpp is too high?
-	if (ScanLine == NULL || Width == 0 || Bpp == 0 || Dest == NULL || DestWidth == NULL) {
-		ilSetError(IL_INVALID_PARAM);
-		return IL_FALSE;
-	}
-
-	while (Count < Width) {
-		RunLen = 0;
-
-		if (Count == Width - 1) {
-			Dest[DestPos++] = 0;
-			for (c = 0; c < Bpp; c++) {
-				Dest[DestPos++] = ScanLine[(Width - 1) * Bpp + c];
-			}
-			break;
-		}
-
-		while (Count + RunLen < Width && RunLen < MaxRun) {
-			if (Count + RunLen == Width - 1) {
-				RunLen++;
-				break;
-			}
-
-			BreakOut = IL_FALSE;
-			for (c = 0; c < Bpp; c++) {
-				if (ScanLine[(Count+RunLen) * Bpp + c]
-					!= ScanLine[(Count+RunLen+1) * Bpp + c]) {
-					if (!BreakOut)
-						RunLen++;
-					BreakOut = IL_TRUE;
-				}
-			}
-			if (BreakOut)
-				break;
-
-			RunLen++;
-		}
-
-		if (RunLen > 1) {
-			if (CompressMode == IL_TGACOMP)
-				Dest[DestPos++] = 128 + RunLen - 1;
-			else if (CompressMode == IL_SGICOMP)
-				Dest[DestPos++] = 128 + RunLen;
-
-			for (c = 0; c < Bpp; c++) {
-				Dest[DestPos++] = ScanLine[Count * Bpp + c];
-			}
-			Count += RunLen;
-		}
-
-		else {
-			RunLen = 1;
-			while (Count + RunLen < Width && RunLen < MaxRun) {
-				if (Count + RunLen == Width - 1) {
-					RunLen++;
-					break;
-				}
-
-				BreakOut = IL_FALSE;
-				for (c = 0; c < Bpp; c++) {
-					if (ScanLine[(Count+RunLen) * Bpp + c]
-						== ScanLine[(Count+RunLen+1) * Bpp + c]) {
-							BreakOut = IL_TRUE;
-					}
-				}
-				if (BreakOut)
-					break;
-
-				RunLen++;
-			}
-
-			if (CompressMode == IL_TGACOMP)
-				Dest[DestPos++] = RunLen - 1;
-			else if (CompressMode == IL_SGICOMP)
-				Dest[DestPos++] = RunLen;
-
-			for (i = 0; i < RunLen; i++) {
-				for (c = 0; c < Bpp; c++) {
-					Dest[DestPos++] = ScanLine[(Count + i) * Bpp + c];
-				}
-			}
-			Count += RunLen;
-		}
-	}
-
-	// Sgi scanlines end with a 0.
-	if (CompressMode == IL_SGICOMP)
-		Dest[DestPos++] = 0;
-
-	*DestWidth = DestPos;
-
-	return IL_TRUE;
-}*/

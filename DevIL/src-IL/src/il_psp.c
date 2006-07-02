@@ -37,7 +37,7 @@ ILpal			Pal;
 
 
 //! Checks if the file specified in FileName is a valid Psp file.
-ILboolean ilIsValidPsp(const ILstring FileName)
+ILboolean ilIsValidPsp(ILstring FileName)
 {
 	ILHANDLE	PspFile;
 	ILboolean	bPsp = IL_FALSE;
@@ -76,7 +76,7 @@ ILboolean ilIsValidPspF(ILHANDLE File)
 
 
 //! Checks if Lump is a valid Psp lump.
-ILboolean ilIsValidPspL(ILvoid *Lump, ILuint Size)
+ILboolean ilIsValidPspL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidPsp();
@@ -122,7 +122,7 @@ ILboolean iCheckPsp()
 
 
 //! Reads a PSP file
-ILboolean ilLoadPsp(const ILstring FileName)
+ILboolean ilLoadPsp(ILstring FileName)
 {
 	ILHANDLE	PSPFile;
 	ILboolean	bPsp = IL_FALSE;
@@ -156,7 +156,7 @@ ILboolean ilLoadPspF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a PSP
-ILboolean ilLoadPspL(ILvoid *Lump, ILuint Size)
+ILboolean ilLoadPspL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadPspInternal();

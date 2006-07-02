@@ -33,7 +33,7 @@ ILboolean iLoadWalInternal(ILvoid);
 
 
 //! Reads a .wal file
-ILboolean ilLoadWal(const ILstring FileName)
+ILboolean ilLoadWal(ILstring FileName)
 {
 	ILHANDLE	WalFile;
 	ILboolean	bWal = IL_FALSE;
@@ -67,7 +67,7 @@ ILboolean ilLoadWalF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a .wal file
-ILboolean ilLoadWalL(ILvoid *Lump, ILuint Size)
+ILboolean ilLoadWalL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadWalInternal();
@@ -151,8 +151,6 @@ ILboolean iLoadWalInternal()
 		if (iread(Mipmaps[i]->Data, Mipmaps[i]->Width * Mipmaps[i]->Height, 1) != 1)
 			goto cleanup_error;
 	}
-
-	iCurImage->NumMips = 3;
 
 	// Fixes all images, even mipmaps.
 	ilFixImage();

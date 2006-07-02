@@ -2,20 +2,26 @@ DevIL TODO:
 
 -----------
 
+For 1.7.0
+- fixed OpenGL Loading (breaks old code which inverted the images)
+- iluReplaceColour should have a color to describe which color to set
+- ilBindIMage must return a result. it may fail!
+- ilInit() call iSetImage0 and ilBindTemp. this shouldn't happend and image names must start from 0
+
+To fix
+- Add a real Layer facility.
+- iluScaleColours is BUGGED, doesn't handle the image with the correct type! more Bpc (except luminance and paletted one)
 - IL_LUMINANCE_ALPHA support must be tested in ilApplyPal();
+- ilApplyPal should work on any type of image, not only IL_BYTE or IL_UNSIGNED_BYTE
 - IL_COLOUR_INDEX:  must be implemented in iluReplaceColour(ILubyte Red, ILubyte Green, ILubyte Blue, ILfloat Tolerance);
 - Check saving of Luminance (8 bpp/1 Bpp) BMP
 - ilKeyColor ilAddKey...
 - iluRotate3D
 - iluEqualize must be implemented for various Bpc
 - Add more filters.  Some sites to look at are http://www.jasonwaltman.com/thesis/introduction.html http://www.dai.ed.ac.uk/CVonline/transf.htm http://www.fortunecity.com/lavendar/kane/39/ffpg.htm and http://www.opengl.org/developers/documentation/Version1.2/1.2specs/convolution_border_modes.txt .  The last link describes ways to handle borders for the convolution filters.  It might be worthwhile to allow these kinds of options.
-- Finalize the Unicode support.  For instance, ILUT doesn't use Unicode at all.
 - Add support for callbacks so that users can create progress meters for loading and saving in their applications.  We could extend this idea further and allow cancellation of loading/saving images.
-- Get rid of dependence on the external libraries to create a smaller library.  This is a bit of a monumental task, though.
 - Add an IL_BITMAP format.  This would be great for WBMP files.  The problem is that bit manipulation can be extremely tedious, even with macros.
 - Make better versions of the DevIL ports of the NeHe tutorials.  Several of the tutorials don't call ilInit, for instance.
-- Fix problems with the MFC and static library versions of DevIL.
-- Add support for the external libraries to WinCE.
 - Add support for volume texture compression (VTC).
 - Find a way to make the filters (especially the convolution filters) work in three dimensions.
 - Finish support for regions in ILU.
@@ -29,16 +35,12 @@ DevIL TODO:
 - Add padding options, so that each line could be DWORD-padded, for instance.
 - Work on better .tif loading and saving.  DevIL needs to use lower-level libtiff functions to accomplish this.
 - Find a better algorithm for generating DXTC textures.
-- Add volume texture saving (.dds).
 - Fix problems loading .dds files on Big Endian machines.
 - Work on the signed/unsigned conversions a bit more (IL_BYTE versus IL_UNSIGNED_BYTE, etc.).  A good link for defining signed formats is http://www.sgi.com/software/opengl/advanced98/notes/node31.html .
 - Possibly add support for other colour spaces besides RGB (CMYK, YUV, etc.)
 - Look at adding FreeType support to ILU.
 - Implement a scripting "language" with LUA for ILU.  This way, people can generate scripts to run a certain set of filters on all images.
-- Add support for blending modes with layers (such as in the .psd) format.
 - Add clipboard and printing support in Linux.
-- Add GIF support
-- Make the format in wich the images are loaded selectable and not fixed to BGR
 - Add TWAIN support.
 - Look at other rescaling algorithms:
 http://java.sun.com/products/java-media/jai/forDevelopers/jai1_0guide/Geom-image-manip.doc.html

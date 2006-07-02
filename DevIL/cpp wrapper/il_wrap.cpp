@@ -329,7 +329,7 @@ ILenum ilImage::PaletteType()
 	return 0;
 }
 
-Lenum ilImage::PaletteAlphaIndex()
+ILenum ilImage::PaletteAlphaIndex()
 {
 	if (this->Id) {
 		this->Bind();

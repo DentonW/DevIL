@@ -25,7 +25,7 @@
 
 
 //! Checks if the file specified in FileName is a valid Targa file.
-ILboolean ilIsValidTga(const ILstring FileName)
+ILboolean ilIsValidTga(ILstring FileName)
 {
 	ILHANDLE	TargaFile;
 	ILboolean	bTarga = IL_FALSE;
@@ -67,7 +67,7 @@ ILboolean ilIsValidTgaF(ILHANDLE File)
 
 
 //! Checks if Lump is a valid Targa lump.
-ILboolean ilIsValidTgaL(ILvoid *Lump, ILuint Size)
+ILboolean ilIsValidTgaL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidTarga();
@@ -138,7 +138,7 @@ ILboolean iCheckTarga(TARGAHEAD *Header)
 
 
 //! Reads a Targa file
-ILboolean ilLoadTarga(const ILstring FileName)
+ILboolean ilLoadTarga(ILstring FileName)
 {
 	ILHANDLE	TargaFile;
 	ILboolean	bTarga = IL_FALSE;
@@ -157,8 +157,7 @@ ILboolean ilLoadTarga(const ILstring FileName)
 
 
 //! Reads an already-opened Targa file
-ILboolean ilLoadTargaF(ILHANDLE File)
-{
+ILboolean ilLoadTargaF(ILHANDLE File) {
 	ILuint		FirstPos;
 	ILboolean	bRet;
 	
@@ -172,7 +171,7 @@ ILboolean ilLoadTargaF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a Targa
-ILboolean ilLoadTargaL(ILvoid *Lump, ILuint Size)
+ILboolean ilLoadTargaL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadTargaInternal();
@@ -232,7 +231,7 @@ ILboolean iLoadTargaInternal()
 			
 		case IMAGEDESC_TOPRIGHT:
 			iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
-			ilMirrorImage();
+			iMirror();
 			break;
 			
 		case IMAGEDESC_BOTLEFT:
@@ -241,7 +240,7 @@ ILboolean iLoadTargaInternal()
 			
 		case IMAGEDESC_BOTRIGHT:
 			iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
-			ilMirrorImage();
+			iMirror();
 			break;
 	}
 	
@@ -526,7 +525,7 @@ ILboolean i16BitTarga(ILimage *Image)
 
 
 //! Writes a Targa file
-ILboolean ilSaveTarga(const ILstring FileName)
+ILboolean ilSaveTarga(ILstring FileName)
 {
 	ILHANDLE	TargaFile;
 	ILboolean	bTarga = IL_FALSE;

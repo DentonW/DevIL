@@ -1,14 +1,3 @@
-//-----------------------------------------------------------------------------
-//
-// ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 01/29/2002 <--Y2K Compliant! =]
-//
-// Filename: src-IL/src/il_psd.c
-//
-// Description: Reads from a PhotoShop (.psd) file.
-//
-//-----------------------------------------------------------------------------
 
 // Information about the .psd format was taken from Adobe's PhotoShop SDK at
 //  http://partners.adobe.com/asn/developer/gapsdk/PhotoshopSDK.html
@@ -21,7 +10,7 @@
 
 
 //! Checks if the file specified in FileName is a valid Psd file.
-ILboolean ilIsValidPsd(const ILstring FileName)
+ILboolean ilIsValidPsd(ILstring FileName)
 {
 	ILHANDLE	PsdFile;
 	ILboolean	bPsd = IL_FALSE;
@@ -61,7 +50,7 @@ ILboolean ilIsValidPsdF(ILHANDLE File)
 
 
 //! Checks if Lump is a valid Psd lump.
-ILboolean ilIsValidPsdL(ILvoid *Lump, ILuint Size)
+ILboolean ilIsValidPsdL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidPsd();
@@ -101,7 +90,7 @@ ILboolean iCheckPsd(PSDHEAD *Header)
 {
 	ILuint i;
 
-	if (strncmp(Header->Signature, "8BPS", 4))
+	if (strncmp((char*)Header->Signature, "8BPS", 4))
 		return IL_FALSE;
 	if (Header->Version != 1)
 		return IL_FALSE;
@@ -121,7 +110,7 @@ ILboolean iCheckPsd(PSDHEAD *Header)
 
 
 //! Reads a Psd file
-ILboolean ilLoadPsd(const ILstring FileName)
+ILboolean ilLoadPsd(ILstring FileName)
 {
 	ILHANDLE	PsdFile;
 	ILboolean	bPsd = IL_FALSE;
@@ -155,7 +144,7 @@ ILboolean ilLoadPsdF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a Psd
-ILboolean ilLoadPsdL(ILvoid *Lump, ILuint Size)
+ILboolean ilLoadPsdL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadPsdInternal();
@@ -522,7 +511,7 @@ ILuint *GetCompChanLen(PSDHEAD *Head)
 	}
 #ifdef __LITTLE_ENDIAN__
 	for (i = 0; i < Head->Height * ChannelNum; i++) {
-		RleTable[i] = SwapShort(RleTable[i]);
+		iSwapUShort(&RleTable[i]);
 	}
 #endif
 
@@ -768,7 +757,7 @@ ILboolean GetSingleChannel(PSDHEAD *Head, ILubyte *Buffer, ILboolean Compressed)
 
 
 //! Writes a Psd file
-ILboolean ilSavePsd(const ILstring FileName)
+ILboolean ilSavePsd(ILstring FileName)
 {
 	ILHANDLE	PsdFile;
 	ILboolean	bPsd = IL_FALSE;
@@ -812,7 +801,7 @@ ILboolean ilSavePsdL(ILvoid *Lump, ILuint Size)
 // Internal function used to save the Psd.
 ILboolean iSavePsdInternal()
 {
-	ILubyte		*Signature = "8BPS";
+	ILubyte		*Signature = (ILubyte*)"8BPS";
 	ILimage		*TempImage;
 	ILpal		*TempPal;
 	ILuint		c, i;

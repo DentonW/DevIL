@@ -1,8 +1,7 @@
 dnl 
 dnl Autoconf script for DevIL Library
-dnl Written by Edouard Gomez <ed.gomez@wanadoo.fr>
+dnl Written by Meloni Dario
 dnl 
-
 
 dnl
 dnl configure.in initialization
@@ -18,7 +17,7 @@ AC_PREREQ(2.52)
 DEVIL_MAJOR=1
 DEVIL_MINOR=6
 DEVIL_REVISION=8
-DEVIL_VERSION="$DEVIL_MAJOR$DEVIL_MINOR$DEVIL_REVISION RC1"
+DEVIL_VERSION=$DEVIL_MAJOR$DEVIL_MINOR$DEVIL_REVISION
 
 dnl
 dnl Note that the libtool version has nothing to do
@@ -33,11 +32,15 @@ dnl
 dnl Basic conf
 dnl
 
-AC_REVISION($Revision: 1.7 $)
+SUPPORTED_FORMATS=""
+SUPPORTED_API=""
+SUPPORTED_EXTENSION=""
+AC_REVISION($Revision: 1.8 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
+AC_LANG([C++])
 AC_LANG([C])
 AC_PROG_CC
 AC_PROG_CXX
@@ -47,479 +50,268 @@ AC_C_BIGENDIAN
 AC_LIBTOOL_WIN32_DLL
 AC_PATH_XTRA
 
-AM_INIT_AUTOMAKE("DevIL", $DEVIL_MAJOR.$DEVIL_MINOR.$DEVIL_REVISION-RC1)
+AC_DEFUN([ADD_CFLAGS],[
+LIBIL_CFLAGS="$LIBIL_CFLAGS $1"
+LIBILU_CFLAGS="$LIBILU_CFLAGS $1"
+LIBILUT_CFLAGS="$LIBILUT_CFLAGS $1"
+])
+
+ADD_CFLAGS([$CFLAGS])
+
+dnl must add AC_CACHE_CHECK support where possible
+
+AM_INIT_AUTOMAKE("DevIL", $DEVIL_MAJOR.$DEVIL_MINOR.$DEVIL_REVISION)
 AM_CONFIG_HEADER(include/IL/config.h)
 AM_DISABLE_STATIC
 AM_PROG_LIBTOOL
 AM_MAINTAINER_MODE
 
 dnl
-dnl Altives Check
+dnl Check Machine Extensions
 dnl
-
-AC_MSG_CHECKING(Altivec gcc extension)
+AC_DEFUN([TEST_EXT],[
+AC_ARG_ENABLE($6,AC_HELP_STRING([--disable-$6],[Doesn't compile $1 support]),
+[use_$1=$enable_$1],[use_$1=yes])
+AC_MSG_CHECKING([$1])
 CFLAGS_TMP=$CFLAGS
-CFLAGS="-faltivec"
+CFLAGS=$CFLAGS" $2"
 AC_COMPILE_IFELSE([
+$5
 int main() {
-	vector unsigned int vec;
-	vec = vec_splat_u32(0);
-	return 0;
-}],
-[AC_DEFINE([ALTIVEC_GCC],,[Altivec GCC extension found])] [AC_DEFINE([VECTORMEM],,[Memory is vector aligned])] [CFLAGS="$CFLAGS_TMP -faltivec -maltivec";] [AC_MSG_RESULT(yes)],
-[CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)] );
+$3
+return 0;}]
+,[
+if test "$use_$1" = "yes" ; then
+  AC_DEFINE([$4],,[$1 extension found])
+  AC_DEFINE([VECTORMEM],,[Memory must be vector aligned])
+  ADD_CFLAGS([$2])
+  AC_MSG_RESULT(yes)
+  SUPPORTED_EXTENSION=$SUPPORTED_EXTENSION"$1 "
+else
+  AC_MSG_RESULT(disabled)
+fi]
+,[AC_MSG_RESULT(no)])
+ [CFLAGS=$CFLAGS_TMP]
+]) 
 
-dnl
-dnl SSE
-dnl
-CFLAGS_TMP=$CFLAGS
-CFLAGS="-msse"
-AC_MSG_CHECKING(SSE)
-AC_COMPILE_IFELSE([
-#include <xmmintrin.h>
-int main() {
-        __m128 v;
-        v = _mm_sub_ss(v,v);
-}], [AC_DEFINE([SSE],,[Use SSE cpu extension])]
- [CFLAGS="$CFLAGS_TMP -msse";] [AC_DEFINE([VECTORMEM],,[Memory is vector aligned])][AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)])
-
-dnl
-dnl SSE2
-dnl
-CFLAGS_TMP=$CFLAGS
-CFLAGS="-msse2"
-AC_MSG_CHECKING(SSE2)
-AC_COMPILE_IFELSE([
-#include <emmintrin.h>
-int main() {
-        __m128i v;
-        v = _mm_add_epi32(v,v);
-}], [AC_DEFINE([SSE2],,[Use SSE2 cpu extension])]
- [CFLAGS="$CFLAGS_TMP -msse2";] [AC_DEFINE([VECTORMEM],,[Memory is vector aligned])][AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)])
+TEST_EXT([Altivec],[-faltivec -maltivec],[vector int vec;vec=vec_splat_u32(0);],[ALTIVEC_GCC],[],[altivec])
+TEST_EXT([SSE],[-msse],[__m128 v;v=_mm_sub_ss(v,v);],[SSE],[#include <xmmintrin.h>],[sse])
+TEST_EXT([SSE2],[-msse2],[__m128i v;v=_mm_add_epi32(v,v);],[SSE2],[#include <emmintrin.h>],[sse2])
+TEST_EXT([SSE3],[-msse3],[__m128d v;v=_mm_addsub_pd(v,v);],[SSE3],[#include <emmintrin.h>],[sse3])
+TEST_EXT([X86_ASM],[],[int v=0;asm("bswap %0\n ror   $8,%0\n xchg  %0,%0\n"
+									 :"=r" (v):"r" (v));],[GCC_X86_ASM],[],[x86_asm])
+TEST_EXT([PPC_ASM],[],[asm("lwz r0,r0,r0\n");],[GCC_PCC_ASM],[],[ppc_asm])
 
 dnl
-dnl SSE3
+dnl Test release build options
 dnl
-CFLAGS_TMP=$CFLAGS
-CFLAGS="-msse3"
-AC_MSG_CHECKING(SSE3)
-AC_COMPILE_IFELSE([
-#include <emmintrin.h>
-int main() {
-        __m128d v;
-        v = _mm_addsub_pd(v,v);
-}], [AC_DEFINE([SSE3],,[Use SSE3 cpu extension])]
- [CFLAGS="$CFLAGS_TMP -msse3";] [AC_DEFINE([VECTORMEM],,[Memory is vector aligned])][AC_MSG_RESULT(yes)], [CFLAGS=$CFLAGS_TMP;] [AC_MSG_RESULT(no)])
+AC_ARG_ENABLE(release,
+AC_HELP_STRING([--disable-release],[Compile a debug version of the library]),
+[build_release="$enable_release"],[build_release="no"])
+
+if test "$build_release" = "no" ; then
+	ADD_CFLAGS([-Wall -g -O0])
+else
+	ADD_CFLAGS([-O3])
+fi
+
+dnl
+dnl Test warning build options
+dnl
+AC_ARG_ENABLE(warning,
+AC_HELP_STRING([--enable-warning],[Compile breaks on warnings]),
+[build_warning="$enable_warning"],[build_warning="no"])
+
+if test "$build_warning" = "yes" ; then
+	ADD_CFLAGS([-Wall -g -Werror])
+fi
 
 dnl
 dnl Memory alignment functions
 dnl
-AC_CHECK_FUNC( valloc, [AC_DEFINE([VALLOC],,[valloc memory alloctaion found])] )
-AC_CHECK_FUNC( posix_memalign, [AC_DEFINE([POSIX_MEMALIGN],,[posix_memalign memory alloctaion found])] )
-AC_CHECK_FUNC( memalign, [AC_DEFINE([MEMALIGN],,[memalign memory alloctaion found])])
-
-
-CFLAGS="-Wall $CFLAGS"
-LIBIL_CFLAGS="$CFLAGS"
-LIBILU_CFLAGS="$CFLAGS"
-LIBILUT_CFLAGS="$CFLAGS"
+AC_CHECK_FUNC(  valloc, [AC_DEFINE([VALLOC],,[valloc memory allocation])] )
+AC_CHECK_FUNC(  posix_memalign, [AC_DEFINE([POSIX_MEMALIGN],,[posix_memalign memory allocation])] )
+AC_CHECK_FUNC(  memalign, [AC_DEFINE([MEMALIGN],,[memalign memory allocation])])
+AC_CHECK_HEADER(mm_malloc.h,[AC_DEFINE([MM_MALLOC],,[mm_malloc memory allocation])])
 
 dnl
-dnl Default supported formats : all except lcms
+dnl Libraries development checking
 dnl
-dnl no_bmp="no"
-dnl no_dcx="no"
-dnl no_dds="no"
-dnl no_doom="no"
-dnl no_gif="no"
-dnl no_hdr="no"
-dnl no_icon="no"
-dnl no_jpeg="no"
-dnl no_lif="no"
-dnl no_mdl="no"
-dnl no_mng="no"
-dnl no_pcd="no"
-dnl no_pcx="no"
-dnl no_pic="no"
-dnl no_pix="no"
-dnl no_png="no"
-dnl no_pnm="no"
-dnl no_psd="no"
-dnl no_psp="no"
-dnl no_pxr="no"
-dnl no_lcms="no"
-dnl no_raw="no"
-dnl no_sgi="no"
-dnl no_tga="no"
-dnl no_tiff="no"
-dnl no_wal="no"
-dnl no_xpm="no"
+AC_CHECK_HEADER(jpeglib.h,,no_jpeg=yes)
+AC_CHECK_HEADER(tiffio.h,,no_tiff=yes)
+dnl AC_CHECK_HEADER(png.h,,no_png=yes)
+no_png=no
+AC_CHECK_HEADER(lcms/lcms.h,,no_lcms=yes)
+AC_CHECK_HEADER(lcms.h,lcms_nodirinclude=yes)
+AC_CHECK_HEADER(libmng.h,,no_mng="yes")
+AC_CHECK_HEADER(zlib.h, use_z=yes, use_z=no)
 
-dnl
-dnl Arguments
-dnl
-AC_ARG_ENABLE(bmp,
-[  --disable-bmp           Doesn't compile bmp support],
-[case "$enable_bmp" in
-  no)
-    no_bmp="yes"
-    ;;
-  *)
-    no_bmp="no"
-    ;;
-esac],
-no_bmp="no")
-
-AC_ARG_ENABLE(dcx,
-[  --disable-dcx           Doesn't compile dcx support],
-[case "$enable_dcx" in
-  no)
-    no_dcx="yes"
-    ;;
-  *)
-    no_dcx="no"
-    ;;
-esac],
-no_dcx="no")
-
-AC_ARG_ENABLE(doom,
-[  --disable-doom          Doesn't compile wad support],
-[case "$enable_doom" in
-  no)
-    no_doom="yes"
-    ;;
-  *)
-    no_doom="no"
-    ;;
-esac],
-no_doom="no")
-
-AC_ARG_ENABLE(gif,
-[  --disable-gif           Doesn't compile gif support],
-[case "$enable_gif" in
-  no)
-    no_gif="yes"
-    ;;
-  *)
-    no_gif="no"
-    ;;
-esac],
-no_gif="no")
-
-AC_ARG_ENABLE(hdr,
-[  --disable-hdr           Doesn't compile hdr support],
-[case "$enable_hdr" in
-  no)
-    no_hdr="yes"
-    ;;
-  *)
-    no_hdr="no"
-    ;;
-esac],
-no_hdr="no")
-
-AC_ARG_ENABLE(icon,
-[  --disable-icon          Doesn't compile icon support],
-[case "$enable_icon" in
-  no)
-    no_icon="yes"
-    ;;
-  *)
-    no_icon="no"
-    ;;
-esac],
-no_icon="no")
-
-AC_ARG_ENABLE(jpeg,
-[  --disable-jpeg          Doesn't compile jpeg support],
-[case "$enable_jpeg" in
-  no)
-    no_jpeg="yes"
-    ;;
-  *)
-    no_jpeg="no"
-    ;;
-esac],
-no_jpeg="no")
-
-AC_ARG_ENABLE(lif,
-[  --disable-lif           Doesn't compile lif support],
-[case "$enable_lif" in
-  no)
-    no_lif="yes"
-    ;;
-  *)
-    no_lif="no"
-    ;;
-esac],
-no_lif="no")
-
-AC_ARG_ENABLE(lcms,
-[  --disable-lcms          Doesn't compile lcms support],
-[case "$enable_lcms" in
-  no)
-    no_lcms="yes"
-    ;;
-  *)
-    no_lcms="no"
-    ;;
-esac],
-no_lcms="no")
-
-AC_ARG_ENABLE(mdl,
-[  --disable-mdl           Doesn't compile mdl support],
-[case "$enable_mdl" in
-  no)
-    no_mdl="yes"
-    ;;
-  *)
-    no_mdl="no"
-    ;;
-esac],
-no_mdl="no")
-
-AC_ARG_ENABLE(mng,
-[  --disable-mng           Doesn't compile mng support],
-[case "$enable_mng" in
-  no)
-    no_mng="yes"
-    ;;
-  *)
-    no_mng="no"
-    ;;
-esac],
-no_mng="no")
-
-AC_ARG_ENABLE(pcd,
-[  --disable-pcd           Doesn't compile pcd support],
-[case "$enable_pcd" in
-  no)
-    no_pcd="yes"
-    ;;
-  *)
-    no_pcd="no"
-    ;;
-esac],
-no_pcd="no")
-
-AC_ARG_ENABLE(pcx,
-[  --disable-pcx           Doesn't compile pcx support],
-[case "$enable_pcx" in
-  no)
-    no_pcx="yes"
-    ;;
-  *)
-    no_pcx="no"
-    ;;
-esac],
-no_pcx="no")
-
-AC_ARG_ENABLE(pic,
-[  --disable-pic           Doesn't compile pic support],
-[case "$enable_pic" in
-  no)
-    no_pic="yes"
-    ;;
-  *)
-    no_pic="no"
-    ;;
-esac],
-no_pic="no")
-
-AC_ARG_ENABLE(pix,
-[  --disable-pix           Doesn't compile pix support],
-[case "$enable_pix" in
-  no)
-    no_pix="yes"
-    ;;
-  *)
-    no_pix="no"
-    ;;
-esac],
-no_pix="no")
-
-AC_ARG_ENABLE(png,
-[  --disable-png           Doesn't compile png support],
-[case "$enable_png" in
-  no)
-    no_png="yes"
-    ;;
-  *)
-    no_png="no"
-    ;;
-esac],
-no_png="no")
-
-AC_ARG_ENABLE(pnm,
-[  --disable-pnm           Doesn't compile pnm support],
-[case "$enable_pnm" in
-  no)
-    no_pnm="yes"
-    ;;
-  *)
-    no_pnm="no"
-    ;;
-esac],
-no_pnm="no")
-
-AC_ARG_ENABLE(psd,
-[  --disable-psd           Doesn't compile psd support],
-[case "$enable_psd" in
-  no)
-    no_psd="yes"
-    ;;
-  *)
-    no_psd="no"
-    ;;
-esac],
-no_psd="no")
-
-AC_ARG_ENABLE(psp,
-[  --disable-psp           Doesn't compile psp support],
-[case "$enable_psp" in
-  no)
-    no_psp="yes"
-    ;;
-  *)
-    no_psp="no"
-    ;;
-esac],
-no_psp="no")
-
-AC_ARG_ENABLE(pxr,
-[  --disable-pxr           Doesn't compile pxr support],
-[case "$enable_pxr" in
-  no)
-    no_pxr="yes"
-    ;;
-  *)
-    no_pxr="no"
-    ;;
-esac],
-no_pxr="no")
-
-AC_ARG_ENABLE(lcms,
-[  --disable-lcms          Doesn't compile lcms support],
-[case "$enable_lcms" in
-  no)
-    no_lcms="yes"
-    ;;
-  *)
-    no_lcms="no"
-    ;;
-esac],
-no_lcms="no")
-
-AC_ARG_ENABLE(raw,
-[  --disable-raw           Doesn't compile raw support],
-[case "$enable_raw" in
-  no)
-    no_raw="yes"
-    ;;
-  *)
-    no_raw="no"
-    ;;
-esac],
-no_raw="no")
-
-AC_ARG_ENABLE(sgi,
-[  --disable-sgi           Doesn't compile sgi support],
-[case "$enable_sgi" in
-  no)
-    no_sgi="yes"
-    ;;
-  *)
-    no_sgi="no"
-    ;;
-esac],
-no_sgi="no")
-
-AC_ARG_ENABLE(tga,
-[  --disable-tga           Doesn't compile tga support],
-[case "$enable_tga" in
-  no)
-    no_tga="yes"
-    ;;
-  *)
-    no_tga="no"
-    ;;
-esac], no_tga="no")
-
-AC_ARG_ENABLE(tiff,
-[  --disable-tiff          Doesn't compile tiff support],
-[case "$enable_tiff" in
-  no)
-    no_tiff="yes"
-    ;;
-  *)
-    no_tiff="no"
-    ;;
-esac],
-no_tiff="no")
-
-AC_ARG_ENABLE(wal,
-[  --disable-wal           Doesn't compile wal support],
-[case "$enable_wal" in
-  no)
-    no_wal="yes"
-    ;;
-  *)
-    no_wal="no"
-    ;;
-esac],
-no_wal="no")
-
-AC_ARG_ENABLE(xpm,
-[  --disable-xpm           Doesn't compile xpm support],
-[case "$enable_xpm" in
-  no)
-    no_xpm="yes"
-    ;;
-  *)
-    no_xpm="no"
-    ;;
-esac],
-no_xpm="no")
-
-AC_ARG_ENABLE(allegro,
-[  --disable-allegro       Doesn't compile allegro support],
-use_allegro=$enable_allegro, use_allegro="yes")
-
-AC_ARG_ENABLE(directx,
-[  --disable-directx       Doesn't compile directx support],
-use_directx=$enable_directx, use_directx="yes")
-
-AC_ARG_ENABLE(opengl,
-[  --disable-opengl        Doesn't compile opengl support],
-use_opengl=$enable_opengl, use_opengl="yes")
-
-AC_ARG_ENABLE(sdl,
-[  --disable-sdl           Doesn't compile sdl support],
-use_sdl=$enable_sdl, use_sdl="yes")
-
-AC_ARG_ENABLE(win32,
-[  --disable-win32         Doesn't compile win32 support],
-use_win32=$enable_win32, use_win32="yes")
-
-AC_ARG_ENABLE(release,
-[  --disable-release         Compile a debug version of the library],
-[case "$enable_release" in
-  yes)
-    debug_symbols="no"
-    ;;
-  no)
-    debug_symbols="yes"
-    ;;
-esac],
-debug_symbols="no")
-
-if test "$debug_symbols" = "yes" ; then
-	CFLAGS="-Wall -g"
-  LIBIL_CFLAGS="-Wall -g"
-  LIBILU_CFLAGS="-Wall -g"
-  LIBILUT_CFLAGS="-Wall -g"
+dnl Special code for LCMS
+if test "$lcms_nodirinclude" = "yes" ; then
+	no_lcms=no
+else
+	AC_DEFINE(LCMS_NODIRINCLUDE,,[LCMS include without lcms/ support])	
 fi
 
+dnl
+dnl Formats
+dnl
+AC_DEFUN([TEST_FORMAT],[
+AC_ARG_ENABLE([$1],AC_HELP_STRING([--disable-$1],[Doesn't compile $1 support]),[use_$1="$enable_$1"],[use_$1="yes"])
+if test "$no_$1" = "yes" ; then	
+	AC_DEFINE([IL_NO_$2],,[$2 support])
+else
+if test "$use_$1" = "yes" ; then
+	SUPPORTED_FORMATS=$SUPPORTED_FORMATS"$2 "
+else
+	AC_DEFINE([IL_NO_$2],,[$2 support])
+fi
+fi
+])
+
+TEST_FORMAT(bmp,BMP)
+TEST_FORMAT(dcx,DCX)
+TEST_FORMAT(doom,WAD)
+TEST_FORMAT(gif,GIF)
+TEST_FORMAT(hdr,HDR)
+TEST_FORMAT(icon,ICON)
+TEST_FORMAT(jpeg,JPG)
+TEST_FORMAT(lcms,LCMS)
+TEST_FORMAT(lif,LIF)
+TEST_FORMAT(mdl,MDL)
+TEST_FORMAT(mng,MNG)
+TEST_FORMAT(pcx,PCX)
+TEST_FORMAT(pcd,PCD)
+TEST_FORMAT(pic,PIC)
+TEST_FORMAT(pix,PIX)
+TEST_FORMAT(png,PNG)
+TEST_FORMAT(pnm,PNM)
+TEST_FORMAT(psd,PSD)
+TEST_FORMAT(psp,PSP)
+TEST_FORMAT(pxr,PXR)
+TEST_FORMAT(raw,RAW)
+TEST_FORMAT(sgi,SGI)
+TEST_FORMAT(tga,TGA)
+TEST_FORMAT(tiff,TIF)
+TEST_FORMAT(xpm,XPM)
+TEST_FORMAT(wal,WAL)
+
+dnl Special code for libjpeg
+AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED,,[Use libjpeg without modification. always enabled.])
+
+dnl
+dnl Setup Libraries
+dnl
+AC_DEFUN([SET_LIB],[
+LIB$2=""
+AC_ARG_ENABLE($1dir,AC_HELP_STRING([--with-$1dir=path],[Specify the lib$1 installation path]),
+	ADD_CFLAGS([-I$enable_$1dir/include])
+	LIB$2="-L$enable_$1dir/lib"
+	no_$1=no
+	use_$1=yes )
+if test ! "$no_$1" = "yes" ; then
+	if test "$use_$1" = "yes" ; then
+		if test -z "$3" ; then
+			LIB$2="$LIB$2 -l$1"
+		else
+			LIB$2="$3"
+		fi
+	fi
+fi
+AC_SUBST(LIB$2) ])
+
+SET_LIB(jpeg,JPG)
+SET_LIB(tiff,TIFF)
+SET_LIB(png,PNG,`libpng-config --libs`)
+SET_LIB(lcms,LCMS)
+SET_LIB(mng,MNG)
+SET_LIB(z,Z)
+
+
+dnl
+dnl ILUT APIs checking
+dnl
+AC_DEFUN([TEST_API],[
+AC_ARG_ENABLE($1,AC_HELP_STRING([--disable-$1],[Doesn't compile $1 support]),
+[use_$1=$enable_$1],[use_$1=yes])])
+
+TEST_API(allegro)
+TEST_API(directx8)
+TEST_API(directx9)
+TEST_API(opengl)
+TEST_API(sdl)
+TEST_API(win32)
+
+dnl
+dnl ILUT APIs library checking
+dnl
+
+dnl if AM_PATH_SDL is missing, replace it with a dummy test
+m4_ifndef([AM_PATH_SDL],[AC_DEFUN([AM_PATH_SDL],[
+	AC_MSG_CHECKING([SDL $1])
+  	AC_MSG_RESULT(missing macros)
+  	$3])])
+
+dnl SDL
+HSDL=""
+LIBSDL=""
+if test "$use_sdl" = "yes" ; then
+	AM_PATH_SDL(1.2.5,use_sdl="yes",use_sdl="no")
+	if test "$use_sdl" = "yes" ; then
+		HSDL="$SDL_CFLAGS"
+		LIBSDL="$SDL_LIBS"
+		AC_DEFINE(ILUT_USE_SDL,,[Support SDL API])
+  		SUPPORTED_API=$SUPPORTED_API"SDL "
+  	fi
+fi
+AC_SUBST(LIBSDL)
+AC_SUBST(HSDL)
+
+dnl OpenGL
+case "$target" in
+ 	*apple-darwin*)
+		AC_CHECK_HEADER(OpenGL/gl.h,,use_opengl=no) ;;
+	*)
+		AC_CHECK_HEADER(GL/gl.h,,use_opengl=no) ;;
+esac
+if test "$use_opengl" = "yes" ; then
+case "$target" in
+*-*-cygwin* | *-*-mingw32*)
+	LIBGL="-lopengl32 -lglu32"
+	;;
+*-apple-darwin*)
+	dnl must test if the LIBILUT CFLAGS done here is really usefull. should not...
+	LIBILUT_CFLAGS=$LIBILUT_CFLAGS" -framework OpenGL"
+	LIBGL="-Wl,-framework -Wl,OpenGL"
+	;;
+*-*-*)
+	AC_CHECK_LIB(GL,glLoadIdentity,[LIBGL="-lGL"])
+	AC_CHECK_LIB(GLU,gluPerspective,[LIBGL="-lGLU"])
+	;;
+esac
+   AC_DEFINE(ILUT_USE_OPENGL,,[Support OpenGL API])
+   SUPPORTED_API=$SUPPORTED_API"OpenGL "
+else
+  LIBGL=""
+fi
+AC_SUBST(LIBGL)
+
+dnl Allegro
+LIBALLEGRO=""
+HALLEGRO=""
+if test $use_allegro = yes ; then
+  AC_CHECK_PROG(allegro_config, allegro-config, yes, no, )
+  if test $allegro_config = yes ; then
+  	AC_DEFINE(ILUT_USE_ALLEGRO,,[Support Allegro API])
+    SUPPORTED_API=$SUPPORTED_API"Allegro "
+    LIBALLEGRO=`allegro-config --libs`
+    HALLEGRO=`allegro-config --cflags`
+  fi
+fi
+AC_SUBST(LIBALLEGRO)
+AC_SUBST(HALLEGRO)
+
+dnl Win32
 case "$host" in
   *mingw32*)
 		LIBIL_CFLAGS=$LIBIL_CFLAGS" -mno-cygwin"
@@ -532,158 +324,11 @@ case "$host" in
 		VERSIONINFO=""
               ;;
   *)
-		use_win32="no"
-		use_directx="no"
+		use_win32=no
 		VERSIONINFO="-version-info $DEVIL_LTVERSION"
               ;;
 esac
 AC_SUBST(VERSIONINFO)
-
-dnl
-dnl Libraries development checking
-dnl
-CPPFLAGS=$X_CFLAGS
-AC_SUBST(X_CFLAGS)
-AC_CHECK_HEADER(jpeglib.h, ,no_jpeg="yes")
-AC_CHECK_HEADER(tiffio.h, ,no_tiff="yes")
-AC_CHECK_HEADER(png.h, ,no_png="yes")
-AC_CHECK_HEADER(lcms/lcms.h, ,no_lcms="yes")
-AC_CHECK_HEADER(lcms.h, ,no_lcms="yes";lcms_nodirinclude="yes")
-AC_CHECK_HEADER(libmng.h, ,no_mng="yes")
-AC_CHECK_HEADER(d3d8.h, , use_directx="no")
-case "$target" in
- 	*apple-darwin*)
-		AC_CHECK_HEADER(OpenGL/gl.h, [have_gl_hdr=yes], use_opengl="no")
-							;;
-	*)
-		AC_CHECK_HEADER(GL/gl.h, [have_gl_hdr=yes], use_opengl="no")
-							;;
-esac
-dnl AC_CHECK_HEADER(SDL.h, , use_sdl="no")
-AC_CHECK_HEADER(zlib.h, LIBZ="-lz", LIBZ="")
-AC_SUBST(LIBZ)
-
-dnl
-dnl Now we can check for bin libraries
-dnl
-if test "$no_jpeg" = "no" ; then
-  AC_CHECK_LIB(jpeg, jpeg_start_decompress, LIBJPG="-ljpeg", LIBJPG="", )
-  if test "$LIBJPG" != "-ljpeg" ; then
-    no_jpeg="yes"
-  else
-    AC_CHECK_LIB(jpeg, jpeg_init_exif_field, use_exif="yes", use_exif="no", )
-    if test "$use_exif" = "no" ; then
-      AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED,,[Use jpeglib unmoified])
-    fi
-    AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED)
-  fi
-else
-  LIBJPG=""
-fi
-AC_SUBST(LIBJPG)
-
-case "$target" in
-*-apple-darwin*)
-    AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED)
-    AC_DEFINE(MAX_OS_X,,[Building on Mac OS X])
-esac
-
-if test "$no_tiff" = "no" ; then
-   AC_CHECK_LIB(tiff, TIFFReadRGBAImage, LIBTIFF="-ltiff", LIBTIFF="", -lm)
-   if test "$LIBTIFF" != "-ltiff" ; then
-     no_tiff="yes"
-   fi
-else
-  LIBTIFF=""
-fi
-AC_SUBST(LIBTIFF)
-
-if test "$no_png" = "no" ; then
-   AC_CHECK_LIB(png, png_start_read_image, LIBPNG="-lpng", LIBPNG="", `libpng-config --libs`)
-   if test "$LIBPNG" != "-lpng" ; then
-     no_png="yes"
-   fi
-else
-  LIBPNG=""
-fi
-AC_SUBST(LIBPNG)
-
-if test "$no_lcms" = "no" ; then
-   AC_CHECK_LIB(lcms,  cmsOpenProfileFromFile, LIBLCMS="-llcms", LIBLCMS="", -lm)
-   if test "$LIBLCMS" != "-llcms" ; then
-     no_lcms="yes"
-   fi
-else
-  LIBLCMS=""
-fi
-AC_SUBST(LIBLCMS)
-
-if test "$no_mng" = "no" ; then
-   AC_CHECK_LIB(mng, mng_setcb_openstream, LIBMNG="-lmng", LIBMNG="", )
-   if test "$LIBMNG" != "-lmng" ; then
-     no_mng="yes"
-   fi
-else
-  LIBMNG=""
-fi
-AC_SUBST(LIBMNG)
-
-dnl
-dnl ILUT APIs checking
-dnl
-
-dnl Check for SDL
-dnl patched by Henrik Dohlmann - henrikd
-if test "$use_sdl" = "yes" ; then
-  AM_PATH_SDL(1.2.5,,)
-  HSDL="$SDL_CFLAGS"
-  LIBSDL="$SDL_LIBS"
-else
-  HSDL=""
-  LIBSDL=""
-fi
-AC_SUBST(LIBSDL)
-AC_SUBST(HSDL)
-
-AC_LANG([C++])
-
-if test "$use_opengl" = "yes" ; then
-case "$target" in
-*-*-cygwin* | *-*-mingw32*)
-	LIBGL="-lopengl32 -lglu32"
-	;;
-*-apple-darwin*)
-	LIBGL="-Wl,-framework -Wl,OpenGL"
-	;;
-*-*-*)
-	AC_CHECK_LIB(GL,glLoadIdentity,[LIBGL="-lGL"])
-	AC_CHECK_LIB(GLU,gluPerspective,[LIBGL="-lGLU"])
-	;;
-esac
-   if test "x$have_gl_hdr" != "xyes" ; then
-     use_opengl="no"
-     LIBGL=""
-   fi
-else
-  LIBGL=""
-fi
-
-AC_SUBST(LIBGL)
-
-if test "$use_allegro" = "yes" ; then
-  AC_CHECK_PROG(allegro_config, allegro-config, yes, no, )
-  if test $allegro_config = no ; then
-    use_allegro="no"
-    LIBALLEGRO=""
-    HALLEGRO=""
-  else
-    LIBALLEGRO=`allegro-config --libs`
-    HALLEGRO=`allegro-config --cflags`
-  fi
-fi
-AC_SUBST(LIBALLEGRO)
-AC_SUBST(HALLEGRO)
-
 if test "$use_win32" = "no" ; then
   LIBGDI32=""
 else
@@ -691,249 +336,29 @@ else
 fi
 AC_SUBST(LIBGDI32)
 
-dnl
-dnl Prepares substitutions in config.h
-dnl
-
-SUPPORTED_FORMATS=""
-
-if test "$no_bmp"  = "yes"  ; then
-  AC_DEFINE(IL_NO_BMP,,[BMP support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"BMP "
-fi
-AM_CONDITIONAL(IL_NO_BMP, test x$no_bmp != "xyes")
-
-if test "$no_dcx"  = "yes"  ; then
-  AC_DEFINE(IL_NO_DCX,,[DCX support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"DCX "
-fi
-AM_CONDITIONAL(IL_NO_DCX, test x$no_dcx != "xyes")
-
-if test "$no_dds"  = "yes"  ; then
-  AC_DEFINE(IL_NO_DDS,,[DDS support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"DDS "
-fi
-AM_CONDITIONAL(IL_NO_DDS, test x$no_dds != "xyes")
-
-if test "$no_doom" = "yes" ; then
-  AC_DEFINE(IL_NO_DOOM,,[DOOM support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"WAD "
-fi
-AM_CONDITIONAL(IL_NO_DOOM, test x$no_doom != "xyes")
-
-if test "$no_gif"  = "yes"  ; then
-  AC_DEFINE(IL_NO_GIF,,[GIF support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"GIF "
-fi
-AM_CONDITIONAL(IL_NO_GIF, test x$no_gif != "xyes")
-
-if test "$no_hdr"  = "yes"  ; then
-  AC_DEFINE(IL_NO_HDR,,[HDR support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"HDR "
-fi
-AM_CONDITIONAL(IL_NO_HDR, test x$no_hdr != "xyes")
-
-if test "$no_icon" = "yes"  ; then
-  AC_DEFINE(IL_NO_ICO,,[ICO support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"ICO "
-fi
-AM_CONDITIONAL(IL_NO_ICO, test x$no_icon != "xyes")
-
-if test "$no_jpeg" = "yes"  ; then
-  AC_DEFINE(IL_NO_JPG,,[JPEG support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"JPG "
-fi
-AM_CONDITIONAL(IL_NO_JPG, test x$no_jpeg != "xyes")
-
-if test "$no_lif"  = "yes"  ; then
-  AC_DEFINE(IL_NO_LIF,,[LIF support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"LIF "
-fi
-AM_CONDITIONAL(IL_NO_LIF, test x$no_lif != "xyes")
-
-if test "$no_lcms"  = "yes"  ; then
-  if test "$lcms_nodirinclude" = "yes" ; then
-    AC_DEFINE(LCMS_NODIRINCLUDE,,[LCMS include without lcms/ support])
-  fi
-   AC_DEFINE(IL_NO_LCMS,,[LCMS support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"LCMS "
-fi
-AM_CONDITIONAL(IL_NO_LCMS, test x$no_lcms != "xyes")
-
-if test "$no_mdl"  = "yes"  ; then
-  AC_DEFINE(IL_NO_MDL,,[MDL support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"MDL "
-fi
-AM_CONDITIONAL(IL_NO_MDL, test x$no_mdl != "xyes")
-
-if test "$no_mng"  = "yes"  ; then
-  AC_DEFINE(IL_NO_MNG,,[MNG support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"MNG "
-fi
-AM_CONDITIONAL(IL_NO_MNG, test x$no_mng != "xyes")
-
-if test "$no_pcd"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PCD,,[PCD support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PCD "
-fi
-AM_CONDITIONAL(IL_NO_PCD, test x$no_pcd != "xyes")
-
-if test "$no_pcx"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PCX,,[PCX support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PCX "
-fi
-AM_CONDITIONAL(IL_NO_PCX, test x$no_pcx != "xyes")
-
-if test "$no_pic"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PIC,,[PIC support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PIC "
-fi
-AM_CONDITIONAL(IL_NO_PIC, test x$no_pic != "xyes")
-
-if test "$no_pix"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PIX,,[PIX support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PIX "
-fi
-AM_CONDITIONAL(IL_NO_PIX, test x$no_pix != "xyes")
-
-if test "$no_png"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PNG,,[PNG support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PNG "
-fi
-AM_CONDITIONAL(IL_NO_PNG, test x$no_png != "xyes")
-
-if test "$no_pnm"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PNM,,[PNM support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PNM "
-fi
-AM_CONDITIONAL(IL_NO_PNM, test x$no_pnm != "xyes")
-
-if test "$no_psd"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PSD,,[PSD support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PSD "
-fi
-AM_CONDITIONAL(IL_NO_PSD, test x$no_psd != "xyes")
-
-if test "$no_psp"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PSP,,[PSP support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PSP "
-fi
-AM_CONDITIONAL(IL_NO_PSP, test x$no_psp != "xyes")
-
-if test "$no_pxr"  = "yes"  ; then
-  AC_DEFINE(IL_NO_PXR,,[PXR support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"PXR "
-fi
-AM_CONDITIONAL(IL_NO_PXR, test x$no_pxr != "xyes")
-
-if test "$no_raw"  = "yes"  ; then
-  AC_DEFINE(IL_NO_RAW,,[RAW support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"RAW "
-fi
-AM_CONDITIONAL(IL_NO_RAW, test x$no_raw != "xyes")
-
-if test "$no_sgi"  = "yes"  ; then
-  AC_DEFINE(IL_NO_SGI,,[SGI support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"SGI "
-fi
-AM_CONDITIONAL(IL_NO_SGI, test x$no_sgi != "xyes")
-
-if test "$no_tga"  = "yes"  ; then
-  AC_DEFINE(IL_NO_TGA,,[TGA support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"TGA "
-fi
-AM_CONDITIONAL(IL_NO_TGA, test x$no_tga != "xyes")
-
-if test "$no_tiff" = "yes"  ; then
-  AC_DEFINE(IL_NO_TIF,,[TIFF support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"TIF "
-fi
-AM_CONDITIONAL(IL_NO_TIF, test x$no_tiff != "xyes")
-
-if test "$no_wal"  = "yes"  ; then
-  AC_DEFINE(IL_NO_WAL,,[WAL support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"WAL "
-fi
-AM_CONDITIONAL(IL_NO_WAL, test x$no_wal != "xyes")
-
-if test "$no_xpm"  = "yes"  ; then
-  AC_DEFINE(IL_NO_XPM,,[XPM support])
-else
-  SUPPORTED_FORMATS=$SUPPORTED_FORMATS"XPM "
-fi
-AM_CONDITIONAL(IL_NO_XPM, test x$no_xpm != "xyes")
-
-
-AC_MSG_RESULT([ ])
-AC_MSG_RESULT([+----------------------------------------+])
-AC_MSG_RESULT([|     IL library  Supported formats      |])
-AC_MSG_RESULT([+----------------------------------------+-------+])
-AC_MSG_RESULT([$SUPPORTED_FORMATS])
-
-
-SUPPORTED_API=""
-
-if test "$use_allegro" = "yes" ; then
-  AC_DEFINE(ILUT_USE_ALLEGRO,,[Support Allegro API])
-  SUPPORTED_API=$SUPPORTED_API"Allegro "
+dnl DirectX 8
+if test $use_directx8 = yes ; then
+	AC_CHECK_HEADER(d3d8.h,,use_directx8=no)
+	if test $use_directx8 = yes ; then
+		AC_DEFINE(ILUT_USE_DIRECTX8,,[Support DirectX8 API])
+	    SUPPORTED_API=$SUPPORTED_API"DirectX8 "
+	fi
 fi
 
-if test "$use_directx" = "yes" ; then
-  AC_DEFINE(ILUT_USE_DIRECTX8,,[Support DirectX8 API])
-  SUPPORTED_APPI=$SUPPORTED_API"Directx8 "
+dnl DirectX 9
+if test $use_directx9 = yes ; then
+	AC_CHECK_HEADER(d3d9.h,,use_directx9=no)
+	if test $use_directx9 = yes ; then
+		AC_DEFINE(ILUT_USE_DIRECTX9,,[Support DirectX9 API])
+ 		SUPPORTED_API=$SUPPORTED_API"DirectX9 "
+	fi
 fi
 
-if test "$use_opengl" = "yes" ; then
-  AC_DEFINE(ILUT_USE_OPENGL,,[Support OpenGL API])
-  SUPPORTED_API=$SUPPORTED_API"OpenGL "
-  case "$target" in
-    *-apple-darwin*)
-	LIBILUT_CFLAGS=$LIBILUT_CFLAGS" -framework OpenGL"
-  esac
-fi
-
-if test "$use_sdl" = "yes" ; then
-  AC_DEFINE(ILUT_USE_SDL,,[Support SDL API])
-  SUPPORTED_API=$SUPPORTED_API"SDL "
-fi
-
-AC_MSG_RESULT([ ])
-AC_MSG_RESULT([+----------------------------------------+])
-AC_MSG_RESULT([|      ILUT library  Supported APIs      |])
-AC_MSG_RESULT([+----------------------------------------+-------+])
-AC_MSG_RESULT([$SUPPORTED_API])
-
-AC_MSG_RESULT([ ])
-
-dnl
-dnl Final vars
-dnl
+dnl Mac OS X Specific test
+case "$target" in
+    *-apple-darwin*) AC_DEFINE(MAX_OS_X,,[Building on Mac OS X])
+esac
+dnl Final substitution
 AC_SUBST(LIBIL_CFLAGS)
 AC_SUBST(LIBILU_CFLAGS)
 AC_SUBST(LIBILUT_CFLAGS)
@@ -945,3 +370,23 @@ dnl note: keep the list on one line separated by single spaces
 dnl (otherwise MSYS compilation breaks)
 AC_CONFIG_FILES([Makefile src-IL/Makefile src-IL/src/Makefile src-IL/include/Makefile src-ILU/Makefile src-ILU/src/Makefile src-ILU/include/Makefile src-ILUT/Makefile src-ILUT/src/Makefile src-ILUT/include/Makefile include/Makefile include/IL/Makefile ])
 AC_OUTPUT
+
+echo
+echo +----------------------------------------+
+echo \|     IL library  Supported formats      \|
+echo +----------------------------------------+-------+
+echo $SUPPORTED_FORMATS
+echo
+echo +----------------------------------------+
+echo \|      ILUT library  Supported APIs      \|
+echo +----------------------------------------+-------+
+echo $SUPPORTED_API
+echo
+echo +----------------------------------------+
+echo \|      Detected Machine Extensions       \|
+echo +----------------------------------------+-------+
+echo $SUPPORTED_EXTENSION
+echo
+echo
+
+

@@ -19,7 +19,7 @@
 
 
 //! Loads a palette from FileName into the current image's palette.
-ILboolean ILAPIENTRY ilLoadPal(const ILstring FileName)
+ILboolean ILAPIENTRY ilLoadPal(ILstring FileName)
 {
 	FILE		*f;
 	ILboolean	IsPsp;
@@ -65,7 +65,7 @@ ILboolean ILAPIENTRY ilLoadPal(const ILstring FileName)
 
 
 //! Loads a Paint Shop Pro formatted palette (.pal) file.
-ILboolean ilLoadJascPal(const ILstring FileName)
+ILboolean ilLoadJascPal(ILstring FileName)
 {
 	FILE *PalFile;
 	ILuint NumColours, i, c;
@@ -178,7 +178,7 @@ char *iFgetw(ILubyte *Buff, ILint MaxLen, FILE *File)
 }
 
 
-ILboolean ILAPIENTRY ilSavePal(const ILstring FileName)
+ILboolean ILAPIENTRY ilSavePal(ILstring FileName)
 {
 	ILstring Ext = iGetExtension(FileName);
 
@@ -211,7 +211,7 @@ ILboolean ILAPIENTRY ilSavePal(const ILstring FileName)
 
 
 //! Saves a Paint Shop Pro formatted palette (.pal) file.
-ILboolean ilSaveJascPal(const ILstring FileName)
+ILboolean ilSaveJascPal(ILstring FileName)
 {
 	FILE	*PalFile;
 	ILuint	i, PalBpp, NumCols = ilGetInteger(IL_PALETTE_NUM_COLS);
@@ -292,7 +292,7 @@ ILboolean ilSaveJascPal(const ILstring FileName)
 
 
 //! Loads a Halo formatted palette (.pal) file.
-ILboolean ilLoadHaloPal(const ILstring FileName)
+ILboolean ilLoadHaloPal(ILstring FileName)
 {
 	ILHANDLE	HaloFile;
 	HALOHEAD	HaloHead;
@@ -365,7 +365,7 @@ ILboolean ilLoadHaloPal(const ILstring FileName)
 //	@TODO: Test the thing!
 
 //! Loads a .col palette file
-ILboolean ilLoadColPal(const ILstring FileName)
+ILboolean ilLoadColPal(ILstring FileName)
 {
 	ILuint		RealFileSize, FileSize;
 	ILushort	Version;
@@ -446,7 +446,7 @@ ILboolean ilLoadColPal(const ILstring FileName)
 
 
 //! Loads an .act palette file.
-ILboolean ilLoadActPal(const ILstring FileName)
+ILboolean ilLoadActPal(ILstring FileName)
 {
 	ILHANDLE	ActFile;
 
@@ -491,7 +491,7 @@ ILboolean ilLoadActPal(const ILstring FileName)
 
 
 //! Loads an .plt palette file.
-ILboolean ilLoadPltPal(const ILstring FileName)
+ILboolean ilLoadPltPal(ILstring FileName)
 {
 	ILHANDLE	PltFile;
 
@@ -897,7 +897,7 @@ int sort_func(void *e1, void *e2)
 }
 
 
-ILboolean ILAPIENTRY ilApplyPal(const ILstring FileName)
+ILboolean ILAPIENTRY ilApplyPal(ILstring FileName)
 {
 	ILimage		Image, *CurImage = iCurImage;
 	ILubyte		*NewData;
@@ -907,10 +907,10 @@ ILboolean ILAPIENTRY ilApplyPal(const ILstring FileName)
 	ILenum		Origin;
 //	COL_CUBE	*Cubes;
 
-        if( iCurImage == NULL ) {
-            ilSetError(IL_ILLEGAL_OPERATION);
-            return IL_FALSE;
-        }
+    if( iCurImage == NULL || (iCurImage->Format != IL_BYTE || iCurImage->Format != IL_UNSIGNED_BYTE) ) {
+    	ilSetError(IL_ILLEGAL_OPERATION);
+        return IL_FALSE;
+    }
 
 	NewData = (ILubyte*)ialloc(iCurImage->Width * iCurImage->Height * iCurImage->Depth);
 	if (NewData == NULL) {

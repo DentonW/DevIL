@@ -23,8 +23,7 @@ iFormatL *LoadProcs = NULL;
 iFormatS *SaveProcs = NULL;
 
 
-ILboolean ILAPIENTRY ilRegisterLoad(const ILstring Ext, IL_LOADPROC Load)
-{
+ILboolean ILAPIENTRY ilRegisterLoad(ILstring Ext, IL_LOADPROC Load) {
 	iFormatL *TempNode, *NewNode;
 
 	TempNode = LoadProcs;
@@ -65,7 +64,7 @@ ILboolean ILAPIENTRY ilRegisterLoad(const ILstring Ext, IL_LOADPROC Load)
 }
 
 
-ILboolean ILAPIENTRY ilRegisterSave(const ILstring Ext, IL_SAVEPROC Save)
+ILboolean ILAPIENTRY ilRegisterSave(ILstring Ext, IL_SAVEPROC Save)
 {
 	iFormatS *TempNode, *NewNode;
 
@@ -108,7 +107,7 @@ ILboolean ILAPIENTRY ilRegisterSave(const ILstring Ext, IL_SAVEPROC Save)
 
 
 //! Unregisters a load extension - doesn't have to be called.
-ILboolean ILAPIENTRY ilRemoveLoad(const ILstring Ext)
+ILboolean ILAPIENTRY ilRemoveLoad(ILstring Ext)
 {
 	iFormatL *TempNode = LoadProcs, *PrevNode = NULL;
 
@@ -120,12 +119,12 @@ ILboolean ILAPIENTRY ilRemoveLoad(const ILstring Ext)
 #endif//_UNICODE
 			if (PrevNode == NULL) {  // first node in the list
 				LoadProcs = TempNode->Next;
-				ifree(TempNode->Ext);
+				ifree((void*)TempNode->Ext);
 				ifree(TempNode);
 			}
 			else {
 				PrevNode->Next = TempNode->Next;
-				ifree(TempNode->Ext);
+				ifree((void*)TempNode->Ext);
 				ifree(TempNode);
 			}
 
@@ -141,7 +140,7 @@ ILboolean ILAPIENTRY ilRemoveLoad(const ILstring Ext)
 
 
 //! Unregisters a save extension - doesn't have to be called.
-ILboolean ILAPIENTRY ilRemoveSave(const ILstring Ext)
+ILboolean ILAPIENTRY ilRemoveSave(ILstring Ext)
 {
 	iFormatS *TempNode = SaveProcs, *PrevNode = NULL;
 
@@ -153,12 +152,12 @@ ILboolean ILAPIENTRY ilRemoveSave(const ILstring Ext)
 #endif//_UNICODE
 			if (PrevNode == NULL) {  // first node in the list
 				SaveProcs = TempNode->Next;
-				ifree(TempNode->Ext);
+				ifree((void*)TempNode->Ext);
 				ifree(TempNode);
 			}
 			else {
 				PrevNode->Next = TempNode->Next;
-				ifree(TempNode->Ext);
+				ifree((void*)TempNode->Ext);
 				ifree(TempNode);
 			}
 
@@ -181,14 +180,14 @@ ILvoid ilRemoveRegistered()
 
 	while (LoadProcs != NULL) {
 		TempNodeL = LoadProcs->Next;
-		ifree(LoadProcs->Ext);
+		ifree((void*)LoadProcs->Ext);
 		ifree(LoadProcs);
 		LoadProcs = TempNodeL;
 	}
 
 	while (SaveProcs != NULL) {
 		TempNodeS = SaveProcs->Next;
-		ifree(SaveProcs->Ext);
+		ifree((void*)SaveProcs->Ext);
 		ifree(SaveProcs);
 		SaveProcs = TempNodeS;
 	}
@@ -197,7 +196,7 @@ ILvoid ilRemoveRegistered()
 }
 
 
-ILboolean iRegisterLoad(const ILstring FileName)
+ILboolean iRegisterLoad(ILstring FileName)
 {
 	iFormatL	*TempNode = LoadProcs;
 	ILstring	Ext = iGetExtension(FileName);
@@ -228,7 +227,7 @@ ILboolean iRegisterLoad(const ILstring FileName)
 }
 
 
-ILboolean iRegisterSave(const ILstring FileName)
+ILboolean iRegisterSave(ILstring FileName)
 {
 	iFormatS	*TempNode = SaveProcs;
 	ILstring	Ext = iGetExtension(FileName);

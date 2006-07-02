@@ -46,12 +46,12 @@
 
 #endif//IL_NO_LCMS
 
-ILboolean ILAPIENTRY ilApplyProfile(const ILstring InProfile, const ILstring OutProfile)
+ILboolean ILAPIENTRY ilApplyProfile(ILstring InProfile, ILstring OutProfile)
 {
 #ifndef IL_NO_LCMS
 	cmsHPROFILE		hInProfile, hOutProfile;
 	cmsHTRANSFORM	hTransform;
-	ILbyte			*Temp;
+	ILubyte			*Temp;
 	ILint			Format=0;
 
 	if (iCurImage == NULL) {
@@ -136,7 +136,7 @@ ILboolean ILAPIENTRY ilApplyProfile(const ILstring InProfile, const ILstring Out
 
 	hTransform = cmsCreateTransform(hInProfile, Format, hOutProfile, Format, INTENT_PERCEPTUAL, 0);
 
-	Temp = (ILbyte*)ialloc(iCurImage->SizeOfData);
+	Temp = (ILubyte*)ialloc(iCurImage->SizeOfData);
 	if (Temp == NULL) {
 		return IL_FALSE;
 	}

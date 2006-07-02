@@ -45,15 +45,14 @@ ILvoid ILAPIENTRY ilutD3D8MipFunc(ILuint NumLevels)
 }
 
 
-ILstring ILAPIENTRY ilutGetString(ILenum StringName)
-{
+ILstring ILAPIENTRY ilutGetString(ILenum StringName) {
 	switch (StringName)
 	{
 		case ILUT_VENDOR:
-			return (const ILstring)_ilutVendor;
+			return (ILstring)_ilutVendor;
 		//changed 2003-09-04
 		case ILUT_VERSION_NUM:
-			return (const ILstring)_ilutVersion;
+			return (ILstring)_ilutVersion;
 		default:
 			ilSetError(ILUT_INVALID_PARAM);
 			break;
@@ -370,7 +369,11 @@ ILboolean ILAPIENTRY ilutRenderer(ILenum Renderer)
 			return ilutD3D8Init();
 		#endif
 
-
+		#ifdef ILUT_USE_DIRECTX9
+        case ILUT_DIRECT3D9:
+        	return ilutD3D9Init();
+        #endif
+		
 		default:
 			ilSetError(ILUT_NOT_SUPPORTED);
 	}

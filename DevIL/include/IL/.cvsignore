@@ -1,3 +1,9 @@
 Makefile
 stamp-h1
 config.h
+DevIL_wrap.c
+DevIL.py
+DevIL.so
+config.h.in
+Makefile.in
+stamp-h

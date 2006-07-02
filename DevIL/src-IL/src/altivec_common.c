@@ -35,4 +35,4 @@ inline unsigned int round16( unsigned int v ) {
 }
 
 
-#endif // ALTIVEC_GCC
+#endif

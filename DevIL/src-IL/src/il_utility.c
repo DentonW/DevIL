@@ -153,3 +153,23 @@ ILAPI ILuint ILAPIENTRY ilNextPower2(ILuint Num)
 	for (; Power2 < Num; Power2 <<= 1);
 	return Power2;
 }
+
+ILAPI ILvoid ILAPIENTRY iMemSwap( ILubyte *s1, ILubyte *s2, const ILuint size ) {
+	const ILuint block_size = 4096;
+	const ILuint blocks = size/block_size;
+	ILubyte block[block_size];
+	ILuint i;
+	for( i = 0; i < blocks; i++ ) {
+		memcpy(block,s1,block_size);
+		memcpy(s1,s2,block_size);
+		memcpy(s2,block,block_size);
+		s1 += block_size;
+		s1 += block_size;
+	}
+	i = size - i*block_size;
+	if( i > 0 ) {
+		memcpy(block,s1,i);
+		memcpy(s1,s2,i);
+		memcpy(s2,block,i);
+	}
+}

@@ -1,326 +1,7 @@
-//-----------------------------------------------------------------------------
-//
-// ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 06/12/2002 <--Y2K Compliant! =]
-//
-// Filename: src-IL/src/il_endian.c
-//
-// Description: Handles Endian-ness
-//
-//-----------------------------------------------------------------------------
-
-
 #include "il_internal.h"
 #include "il_endian.h"
 
-ILvoid iSwapUShort(ILushort *s) 
-{
-	#ifdef USE_WIN32_ASM
-		__asm {
-			mov ebx, s
-			mov al, [ebx+1]
-			mov ah, [ebx  ]
-			mov [ebx], ax
-		}
-	#else
-	#ifdef GCC_x86_XCHG
-		asm("movl   8(%ebp), %eax 		\n" // eax = s
-			"mov    1(%eax), %bl		\n" // ecx = *s
-			"mov    0(%eax), %bh		\n" // swap ecx
-			"movw   %bx, (%eax)		    \n"); // adjust bytes	
-	#else
-		*s = ((*s)>>8) | ((*s)<<8);
-	#endif
-	#endif
-}
-
-ILvoid iSwapShort(ILshort *s)
-{
-	iSwapUShort((ILushort*)s);
-}
-
-ILvoid iSwapUInt(ILuint *i)
-{
-	#ifdef USE_WIN32_ASM
-		__asm {
-			mov ebx, i
-			mov eax, [ebx]
-			bswap eax
-			mov [ebx], eax
-		}
-	#else
-	#ifdef GCC_x86_BSWAP
-		asm("movl    8(%ebp), %eax 		\n" // eax = s
-			"movl    (%eax),%ecx		\n" // ecx = *s
-			"bswap	 %ecx				\n" // swap ecx
-			"mov	 %ecx, (%eax)");
-	#else
-		*i = ((*i)>>24) | (((*i)>>8) & 0xff00) | (((*i)<<8) & 0xff0000) | ((*i)<<24);
-	#endif
-	#endif//USE_WIN32_ASM
-}
-
-ILvoid iSwapInt(ILint *i)
-{
-	iSwapUInt((ILuint*)i);
-}
-
-ILvoid iSwapFloat(ILfloat *f)
-{
-	iSwapUInt((ILuint*)&f);
-}
-
-ILvoid iSwapDouble(ILdouble *d)
-{
-	//TODO: This is broken this way
-	iSwapUInt((ILuint*)&d);
-	iSwapUInt((ILuint*)((ILubyte*)&d + 4));
-}
-
-
-ILushort GetLittleUShort()
-{
-	ILushort s;
-	iread(&s, sizeof(ILushort), 1);
-#ifdef __BIG_ENDIAN__
-	iSwapUShort(&s);
-#endif
-	return s;
-}
-
-
-ILshort GetLittleShort()
-{
-	ILshort s;
-	iread(&s, sizeof(ILshort), 1);
-#ifdef __BIG_ENDIAN__
-	iSwapShort(&s);
-#endif
-	return s;
-}
-
-
-ILuint GetLittleUInt()
-{
-	ILuint i;
-	iread(&i, sizeof(ILuint), 1);
-#ifdef __BIG_ENDIAN__
-	iSwapUInt(&i);
-#endif
-	return i;
-}
-
-
-ILint GetLittleInt()
-{
-	ILint i;
-	iread(&i, sizeof(ILint), 1);
-#ifdef __BIG_ENDIAN__
-	iSwapInt(&i);
-#endif
-	return i;
-}
-
-
-ILfloat GetLittleFloat()
-{
-	ILfloat f;
-	iread(&f, sizeof(ILfloat), 1);
-#ifdef __BIG_ENDIAN__
-	iSwapFloat(&f);
-#endif
-	return f;
-}
-
-
-ILdouble GetLittleDouble()
-{
-	ILdouble d;
-	iread(&d, sizeof(ILdouble), 1);
-#ifdef __BIG_ENDIAN__
-	iSwapDouble(&d);
-#endif
-	return d;
-}
-
-
-ILushort GetBigUShort()
-{
-	ILushort s;
-	iread(&s, sizeof(ILushort), 1);
-#ifdef __LITTLE_ENDIAN__
-	iSwapUShort(&s);
-#endif
-	return s;
-}
-
-
-ILshort GetBigShort()
-{
-	ILshort s;
-	iread(&s, sizeof(ILshort), 1);
-#ifdef __LITTLE_ENDIAN__
-	iSwapShort(&s);
-#endif
-	return s;
-}
-
-
-ILuint GetBigUInt()
-{
-	ILuint i;
-	iread(&i, sizeof(ILuint), 1);
-#ifdef __LITTLE_ENDIAN__
-	iSwapUInt(&i);
-#endif
-	return i;
-}
-
-
-ILint GetBigInt()
-{
-	ILint i;
-	iread(&i, sizeof(ILint), 1);
-#ifdef __LITTLE_ENDIAN__
-	iSwapInt(&i);
-#endif
-	return i;
-}
-
-
-ILfloat GetBigFloat()
-{
-	ILfloat f;
-	iread(&f, sizeof(ILfloat), 1);
-#ifdef __LITTLE_ENDIAN__
-	iSwapFloat(&f);
-#endif
-	return f;
-}
-
-
-ILdouble GetBigDouble()
-{
-	ILdouble d;
-	iread(&d, sizeof(ILdouble), 1);
-#ifdef __LITTLE_ENDIAN__
-	iSwapDouble(&d);
-#endif
-	return d;
-}
-
-
-ILubyte SaveLittleUShort(ILushort s)
-{
-#ifdef __BIG_ENDIAN__
-	iSwapUShort(&s);
-#endif
-	return iwrite(&s, sizeof(ILushort), 1);
-}
-
-
-ILubyte SaveLittleShort(ILshort s)
-{
-#ifdef __BIG_ENDIAN__
-	iSwapShort(&s);
-#endif
-	return iwrite(&s, sizeof(ILshort), 1);
-}
-
-
-ILubyte SaveLittleUInt(ILuint i)
-{
-#ifdef __BIG_ENDIAN__
-	iSwapUInt(&i);
-#endif
-	return iwrite(&i, sizeof(ILuint), 1);
-}
-
-
-ILubyte SaveLittleInt(ILint i)
-{
-#ifdef __BIG_ENDIAN__
-	iSwapInt(&i);
-#endif
-	return iwrite(&i, sizeof(ILint), 1);
-}
-
-
-ILubyte SaveLittleFloat(ILfloat f)
-{
-#ifdef __BIG_ENDIAN__
-	iSwapFloat(&f);
-#endif
-	return iwrite(&f, sizeof(ILfloat), 1);
-}
-
-
-ILubyte SaveLittleDouble(ILdouble d)
-{
-#ifdef __BIG_ENDIAN__
-	iSwapDouble(&d);
-#endif
-	return iwrite(&d, sizeof(ILdouble), 1);
-}
-
-
-ILubyte SaveBigUShort(ILushort s)
-{
-#ifdef __LITTLE_ENDIAN__
-	iSwapUShort(&s);
-#endif
-	return iwrite(&s, sizeof(ILushort), 1);
-}
-
-
-ILubyte SaveBigShort(ILshort s)
-{
-#ifdef __LITTLE_ENDIAN__
-	iSwapShort(&s);
-#endif
-	return iwrite(&s, sizeof(ILshort), 1);
-}
-
-
-ILubyte SaveBigUInt(ILuint i)
-{
-#ifdef __LITTLE_ENDIAN__
-	iSwapUInt(&i);
-#endif
-	return iwrite(&i, sizeof(ILuint), 1);
-}
-
-
-ILubyte SaveBigInt(ILint i)
-{
-#ifdef __LITTLE_ENDIAN__
-	iSwapInt(&i);
-#endif
-	return iwrite(&i, sizeof(ILint), 1);
-}
-
-
-ILubyte SaveBigFloat(ILfloat f)
-{
-#ifdef __LITTLE_ENDIAN__
-	iSwapFloat(&f);
-#endif
-	return iwrite(&f, sizeof(ILfloat), 1);
-}
-
-
-ILubyte SaveBigDouble(ILdouble d)
-{
-#ifdef __LITTLE_ENDIAN__
-	iSwapDouble(&d);
-#endif
-	return iwrite(&d, sizeof(ILdouble), 1);
-}
-
-
-ILvoid EndianSwapData(void *_Image)
-{
+ILvoid EndianSwapData(void *_Image) {
 	ILuint		i;
 	ILubyte		*temp, *s, *d;
 	ILushort	*ShortS, *ShortD;
@@ -330,8 +11,7 @@ ILvoid EndianSwapData(void *_Image)
 
 	ILimage *Image = (ILimage*)_Image;
 
-	switch (Image->Type)
-	{
+	switch (Image->Type) {
 		case IL_BYTE:
 		case IL_UNSIGNED_BYTE:
 			switch (Image->Bpp)
@@ -387,9 +67,10 @@ ILvoid EndianSwapData(void *_Image)
 					ShortD = (ILushort*)temp;
 
 					for (i = Image->Width * Image->Height; i > 0; i--) {
-						*ShortD++ = SwapShort(*(ShortS+2));
-						*ShortD++ = SwapShort(*(ShortS+1));
-						*ShortD++ = SwapShort(*ShortS);
+						*(ShortD+2) = *(ShortS+2);iSwapUShort(ShortD+2);
+						*(ShortD+1) = *(ShortS+1);iSwapUShort(ShortD+1);
+						*ShortD     = *(ShortS);  iSwapUShort(ShortD);
+						ShortD += 3;
 						ShortS += 3;
 					}
 
@@ -405,10 +86,11 @@ ILvoid EndianSwapData(void *_Image)
 					ShortD = (ILushort*)temp;
 
 					for (i = Image->Width * Image->Height; i > 0; i--) {
-						*ShortD++ = SwapShort(*(ShortS+3));
-						*ShortD++ = SwapShort(*(ShortS+2));
-						*ShortD++ = SwapShort(*(ShortS+1));
-						*ShortD++ = SwapShort(*ShortS);
+						*(ShortD+3) = *(ShortS+3);iSwapUShort(ShortD+3);
+						*(ShortD+2) = *(ShortS+2);iSwapUShort(ShortD+2);
+						*(ShortD+1) = *(ShortS+1);iSwapUShort(ShortD+1);
+						*ShortD     = *(ShortS);  iSwapUShort(ShortD);
+						ShortD += 4;
 						ShortS += 4;
 					}
 
@@ -430,9 +112,10 @@ ILvoid EndianSwapData(void *_Image)
 					IntD = (ILuint*)temp;
 
 					for (i = Image->Width * Image->Height; i > 0; i--) {
-						*IntD++ = SwapInt(*(IntS+2));
-						*IntD++ = SwapInt(*(IntS+1));
-						*IntD++ = SwapInt(*IntS);
+						*(IntD+2) = *(IntS+2);iSwapUInt(IntD+2);
+						*(IntD+1) = *(IntS+1);iSwapUInt(IntD+1);
+						*IntD     = *IntS;    iSwapUInt(IntD);
+						IntD += 3;
 						IntS += 3;
 					}
 
@@ -448,10 +131,11 @@ ILvoid EndianSwapData(void *_Image)
 					IntD = (ILuint*)temp;
 
 					for (i = Image->Width * Image->Height; i > 0; i--) {
-						*IntD++ = SwapInt(*(IntS+3));
-						*IntD++ = SwapInt(*(IntS+2));
-						*IntD++ = SwapInt(*(IntS+1));
-						*IntD++ = SwapInt(*IntS);
+						*(IntD+3) = *(IntS+3);iSwapUInt(IntD+3);
+						*(IntD+2) = *(IntS+2);iSwapUInt(IntD+2);
+						*(IntD+1) = *(IntS+1);iSwapUInt(IntD+1);
+						*IntD     = *IntS;    iSwapUInt(IntD);
+						IntD += 4;
 						IntS += 4;
 					}
 
@@ -605,6 +289,5 @@ ILvoid EndianSwapData(void *_Image)
 				break;
 		}
 	}
-
 	return;
 }

@@ -484,7 +484,7 @@ ILboolean iD3D9CreateMipmaps(IDirect3DTexture9 *Texture, ILimage *Image)
 {
 	D3DLOCKED_RECT	Rect;
 	D3DSURFACE_DESC	Desc;
-	ILuint			NumMips, Width, Height, i;
+	ILuint			NumMips,  srcMips, Width, Height, i;
 	ILimage			*CurImage, *MipImage, *Temp;
 	ILenum			DXTCFormat;
 	ILuint			Size;
@@ -500,7 +500,8 @@ ILboolean iD3D9CreateMipmaps(IDirect3DTexture9 *Texture, ILimage *Image)
 		
 	CurImage = ilGetCurImage();
 	MipImage = Image;
-	if (MipImage->NumMips != NumMips-1) {
+	iGetIntegervImage(MipImage, IL_NUM_MIPMAPS, (ILint*) &srcMips);
+	if ( srcMips != NumMips-1) {
 		MipImage = ilCopyImage_(Image);
 		ilSetCurImage(MipImage);
 		if (!iluBuildMipmaps()) {

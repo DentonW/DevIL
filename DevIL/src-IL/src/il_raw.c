@@ -20,7 +20,7 @@ ILboolean iSaveRawInternal(ILvoid);
 
 
 //! Reads a raw file
-ILboolean ilLoadRaw(const ILstring FileName)
+ILboolean ilLoadRaw(ILstring FileName)
 {
 	ILHANDLE	RawFile;
 	ILboolean	bRaw = IL_FALSE;
@@ -60,7 +60,7 @@ ILboolean ilLoadRawF(ILHANDLE File)
 
 
 //! Reads from a raw memory "lump"
-ILboolean ilLoadRawL(ILvoid *Lump, ILuint Size)
+ILboolean ilLoadRawL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadRawInternal();
@@ -112,7 +112,7 @@ ILboolean iLoadRawInternal()
 
 
 //! Writes a Raw file
-ILboolean ilSaveRaw(const ILstring FileName)
+ILboolean ilSaveRaw(ILstring FileName)
 {
 	ILHANDLE	RawFile;
 	ILboolean	bRaw = IL_FALSE;

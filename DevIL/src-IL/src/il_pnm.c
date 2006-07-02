@@ -25,7 +25,7 @@ ILboolean IsLump = IL_FALSE;
 
 
 //! Checks if the file specified in FileName is a valid .pnm file.
-ILboolean ilIsValidPnm(const ILstring FileName)
+ILboolean ilIsValidPnm(ILstring FileName)
 {
 	ILHANDLE	PnmFile;
 	ILboolean	bPnm = IL_FALSE;
@@ -67,7 +67,7 @@ ILboolean ilIsValidPnmF(ILHANDLE File)
 
 
 //! Checks if Lump is a valid .pnm lump.
-ILboolean ilIsValidPnmL(ILvoid *Lump, ILuint Size)
+ILboolean ilIsValidPnmL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidPnm();
@@ -110,7 +110,7 @@ ILboolean iCheckPnm(char Header[2])
 
 
 // Reads a file
-ILboolean ilLoadPnm(const ILstring FileName)
+ILboolean ilLoadPnm(ILstring FileName)
 {
 	ILHANDLE	PnmFile;
 	ILboolean	bPnm = IL_FALSE;
@@ -144,7 +144,7 @@ ILboolean ilLoadPnmF(ILHANDLE File)
 
 
 // Reads from a memory "lump"
-ILboolean ilLoadPnmL(ILvoid *Lump, ILuint Size)
+ILboolean ilLoadPnmL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadPnmInternal();
@@ -462,7 +462,7 @@ ILboolean iGetWord(ILvoid)
 ILstring FName;
 
 //! Writes a Pnm file
-ILboolean ilSavePnm(const ILstring FileName)
+ILboolean ilSavePnm(ILstring FileName)
 {
 	ILHANDLE	PnmFile;
 	ILboolean	bPnm = IL_FALSE;

@@ -24,7 +24,7 @@
 ILenum	GifType;
 
 //! Checks if the file specified in FileName is a valid Gif file.
-ILboolean ilIsValidGif(const ILstring FileName)
+ILboolean ilIsValidGif(ILstring FileName)
 {
 	ILHANDLE	GifFile;
 	ILboolean	bGif = IL_FALSE;
@@ -63,7 +63,7 @@ ILboolean ilIsValidGifF(ILHANDLE File)
 
 
 //! Checks if Lump is a valid Gif lump.
-ILboolean ilIsValidGifL(ILvoid *Lump, ILuint Size)
+ILboolean ilIsValidGifL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidGif();
@@ -89,7 +89,7 @@ ILboolean iIsValidGif()
 
 
 //! Reads a Gif file
-ILboolean ilLoadGif(const ILstring FileName)
+ILboolean ilLoadGif(ILstring FileName)
 {
 	ILHANDLE	GifFile;
 	ILboolean	bGif = IL_FALSE;
@@ -123,7 +123,7 @@ ILboolean ilLoadGifF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a Gif
-ILboolean ilLoadGifL(ILvoid *Lump, ILuint Size)
+ILboolean ilLoadGifL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadGifInternal();
@@ -216,6 +216,8 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 	ILuint		NumImages = 0, i;
 	ILint		input;
 
+	OldImageDesc.ImageInfo = 0; // to initialize the data with an harmless value 
+
 	Gfx.Used = IL_TRUE;
 
 	while (!ieof()) {
@@ -278,8 +280,7 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 			Image = Image->Next;
 			Image->Format = IL_COLOUR_INDEX;
 			Image->Origin = IL_ORIGIN_UPPER_LEFT;
-		}
-		else {
+		} else {
 			BaseImage = IL_FALSE;
 			if (!Gfx.Used && Gfx.Packed & 0x1)
 				memset(Image->Data, Gfx.Transparent, Image->SizeOfData);
@@ -343,8 +344,6 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 			goto error_clean;
 	}
 
-
-	iCurImage->NumNext = NumImages;
 	if (BaseImage)  // Was not able to load any images in...
 		return IL_FALSE;
 

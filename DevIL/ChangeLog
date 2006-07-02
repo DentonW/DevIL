@@ -1,4 +1,36 @@
-1.6.8
+
+1.6.8 (not released yet)
+-----
+
+- altivec code is now merged inside IL sources, not on a separate directory
+- more dds fixes
+- now the returned number of layer, mipmaps or subimage is correct (computed at every call)
+- added ilGenImage() and ilDeleteImage()
+- fixed iluMirror, ilMirror duplicate code
+- added _mm_malloc _mm_free for vectorized code memory managment
+- fixed precedence for memory mangment variants
+- Altivec,SSE,SSE2,SSE3 checks completed
+- applied submitted patch #1483941
+- applied submitted patch #1476315
+- applied submitted patch #1085415 DXT3 and DXT5 save is broken
+- applied submitted patch #1504388.(by Hans de Goede)
+- fixed bug #1411053 now Lump loads parameters are const pointer
+- fixed bug #1211071 pcx with the padding header not 0 filled will be loaded
+- fixed bug #1092521 png save memory leak fixed
+- fixed bug #1183924 iluScale checks for return values of ilTexImage
+- fixed bug #1173264 iluInvertAlpha inverting the wrong channels
+- fixed bug #1119508 il_tiff high order bit garbage when using uint32 as shorts.
+- ilTypeFromExt is now exported
+- ILstring now is (const char*). The typecastings are now not necessary to pass ILstrings
+- iluFlipImage now is 3x faster and doesn't use any memory allocation
+- IL_LUMINANCE and IL_LUMINANCE_ALPHA are now correctly handled; corrected function:
+	iluInvertAlpha,	[iluScaleColours needs testing]
+- iluScaleColours will return error when passing not BYTE or UNSIGNED_BYTE images, needs enhanchments to enable all the types.
+- Finalized the Unicode support for windows.
+- Fixed inlining for small function (i.e.g. endianess, rouding..)
+- Added to configure script the ability to configure the path for the libraries
+
+1.6.8 RC1
 -----
 
 - Fixed a lot of minor bugs in various image format ( expecialy TIFF )
@@ -265,7 +297,7 @@
 -----
 
 - Removed .oil support -- it wasn't used anyway.
-- Better Linux makefiles, thanks to Ismo Kärkkäinen.
+- Better Linux makefiles, thanks to Ismo Kï¿½rkkï¿½inen.
 - Fixed a problem compiling in Linux.
 - Renamed all DevIL files with il_*, to make it easier to compile as a static library (no name conflicts).
 - Added IL_STATIC_LIB if you want to compile as a static library (no pragma options in MSVC++).
