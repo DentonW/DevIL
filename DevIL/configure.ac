@@ -35,7 +35,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION($Revision: 1.9 $)
+AC_REVISION($Revision: 1.10 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -284,7 +284,6 @@ case "$target" in
 	;;
 *-apple-darwin*)
 	dnl must test if the LIBILUT CFLAGS done here is really usefull. should not...
-	LIBILUT_CFLAGS=$LIBILUT_CFLAGS" -framework OpenGL"
 	LIBGL="-Wl,-framework -Wl,OpenGL"
 	;;
 *-*-*)
