@@ -313,7 +313,7 @@ ILint iGetScanLine(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length)
 			return -1;
 		
 #ifndef __LITTLE_ENDIAN__
-		Pixel = SwapShort(Pixel);
+		iSwapUShort(&Pixel);
 #endif
 
 		if (!(Count = (Pixel & 0x7f)))  // If 0, line ends
@@ -329,7 +329,7 @@ ILint iGetScanLine(ILubyte *ScanLine, iSgiHeader *Head, ILuint Length)
 			if (iread(&Pixel, Head->Bpc, 1) != 1)
 				return -1;
 #ifndef __LITTLE_ENDIAN__
-			Pixel = SwapShort(Pixel);
+			iSwapUShort(&Pixel);
 #endif
 			if (Head->Bpc == 1) {
 				while (Count--) {
