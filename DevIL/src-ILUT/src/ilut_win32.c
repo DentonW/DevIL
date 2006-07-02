@@ -110,8 +110,11 @@ ILAPI HBITMAP	ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 			Data = ialloc((TempImage->Width + pad)*TempImage->Height*3);
 		}
 		//strip alpha channel from grayscale image
-		else if(TempImage->Format == IL_LUMINANCE_ALPHA)
+		else if(TempImage->Format == IL_LUMINANCE_ALPHA) {
+			//recalculate pad because it changes when bpp change
+			pad = (4 - TempImage->Width%4)%4;
 			Data = ialloc((TempImage->Width + pad)*TempImage->Height);
+		}
 		else
 			Data = ialloc((TempImage->Width + pad)*TempImage->Height*TempImage->Bpp);
 
@@ -139,6 +142,8 @@ ILAPI HBITMAP	ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 		}
 		else if(TempImage->Format == IL_LUMINANCE_ALPHA) {
 			//strip alpha channel
+			//recalculate pad because it included alpha channel info
+			pad = (4 - TempImage->Width%4)%4;
 			k = l = 0;
 			for (j = 0; j < TempImage->Height; j++) {
 				for (i = 0, n = 0; i < TempImage->Width; ++i, n += 2) {
