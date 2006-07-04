@@ -33,7 +33,7 @@ ILvoid iGLSetMaxH( ILuint Height ) {
 #include <string.h>
 
 #ifdef __APPLE__
-void* aglGetProcAddress( const GLubyte *name ) {
+static void *aglGetProcAddress( const GLubyte *name ) {
 	NSSymbol symbol;
  	char* symbolName;
  	/* prepend a '_' for the Unix C symbol mangling convention */
@@ -118,7 +118,7 @@ ILboolean ilutGLInit()
 #elif defined(__APPLE__)
 	if( IsExtensionSupported("GL_ARB_texture_compression") &&
         	IsExtensionSupported("GL_EXT_texture_compression_s3tc")) {
-		ilGLCompressed2D = (ILGLCOMPRESSEDTEXIMAGE2DARBPROC)aglGetProcAddressARB("glCompressedTexImage2DARB");
+		ilGLCompressed2D = (ILGLCOMPRESSEDTEXIMAGE2DARBPROC)aglGetProcAddress("glCompressedTexImage2DARB");
 	}
 #endif
 
