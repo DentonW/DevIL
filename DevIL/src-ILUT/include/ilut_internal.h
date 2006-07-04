@@ -41,9 +41,7 @@
 
 #include <stdlib.h>
 
-
 extern ILimage *ilutCurImage;
-
 
 ILvoid	ilutDefaultStates(ILvoid);
 
@@ -65,6 +63,11 @@ ILvoid	ilutDefaultStates(ILvoid);
 
 #ifdef ILUT_USE_DIRECTX9
 	ILboolean ilutD3D9Init();
+#endif
+
+#define CUBEMAP_SIDES 6
+#ifndef SAFE_RELEASE
+#define SAFE_RELEASE(p) {if((p)!=NULL){(p)->lpVtbl->Release(p);(p)=NULL;}}
 #endif
 
 

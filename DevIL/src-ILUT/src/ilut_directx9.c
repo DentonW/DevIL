@@ -81,10 +81,132 @@ ILboolean ILAPIENTRY ilutD3D9TexFromFile(IDirect3DDevice9 *Device, char *FileNam
 }
 #endif//_WIN32_WCE
 
+#ifndef _WIN32_WCE
+ILboolean ILAPIENTRY ilutD3D9CubeTexFromFile(IDirect3DDevice9 *Device,
+			char *FileName, IDirect3DCubeTexture9 **Texture) {
+	iBindImageTemp();
+	if( !ilLoadImage(FileName) )
+    	return IL_FALSE;
+
+    *Texture = ilutD3D9CubeTexture(Device);
+
+    return IL_TRUE;
+}
+
+#endif//_WIN32_WCE
+ILboolean ILAPIENTRY ilutD3D9CubeTexFromFileInMemory(IDirect3DDevice9 *Device,
+				ILvoid *Lump, ILuint Size, IDirect3DCubeTexture9 **Texture) {
+	iBindImageTemp();
+    if( !ilLoadL(IL_TYPE_UNKNOWN, Lump, Size) )
+    	return IL_FALSE;
+
+    *Texture = ilutD3D9CubeTexture(Device);
+
+    return IL_TRUE;
+ }
+ 
+ILboolean ILAPIENTRY ilutD3D9CubeTexFromResource(IDirect3DDevice9 *Device,
+		HMODULE SrcModule, char *SrcResource, IDirect3DCubeTexture9 **Texture) {
+	HRSRC   Resource;
+    ILubyte *Data;
+
+    iBindImageTemp();
+
+    Resource = (HRSRC)LoadResource(SrcModule, FindResource(SrcModule, SrcResource, RT_BITMAP));
+    Data = (ILubyte*)LockResource(Resource);
+    if (!ilLoadL(IL_TYPE_UNKNOWN, Data, SizeofResource(SrcModule, FindResource(SrcModule, SrcResource, RT_BITMAP))))
+    	return IL_FALSE;
+
+    *Texture = ilutD3D9CubeTexture(Device);
+
+    return IL_TRUE;
+ }
+
+ILboolean ILAPIENTRY ilutD3D9CubeTexFromFileHandle(IDirect3DDevice9 *Device,
+			ILHANDLE File, IDirect3DCubeTexture9 **Texture) {
+	iBindImageTemp();
+    if( !ilLoadF(IL_TYPE_UNKNOWN, File) )
+    	return IL_FALSE;
+
+    *Texture = ilutD3D9CubeTexture(Device);
+
+    return IL_TRUE;
+}
+
+D3DCUBEMAP_FACES iToD3D9Cube(ILuint cube) {
+	switch (cube) {
+    	case IL_CUBEMAP_POSITIVEX:
+        	return D3DCUBEMAP_FACE_POSITIVE_X;
+        case IL_CUBEMAP_NEGATIVEX:
+            return D3DCUBEMAP_FACE_NEGATIVE_X;
+        case IL_CUBEMAP_POSITIVEY:
+            return D3DCUBEMAP_FACE_POSITIVE_Y;
+        case IL_CUBEMAP_NEGATIVEY:
+            return D3DCUBEMAP_FACE_NEGATIVE_Y;
+        case IL_CUBEMAP_POSITIVEZ:
+            return D3DCUBEMAP_FACE_POSITIVE_Z;
+        case IL_CUBEMAP_NEGATIVEZ:
+            return D3DCUBEMAP_FACE_NEGATIVE_Z;
+        default:
+            return D3DCUBEMAP_FACE_POSITIVE_X; //???
+	}
+ }
+ 
+ IDirect3DCubeTexture9* ILAPIENTRY ilutD3D9CubeTexture(IDirect3DDevice9 *Device) {
+	IDirect3DCubeTexture9   *Texture;
+	D3DLOCKED_RECT  Box;
+    D3DFORMAT               Format;
+    ILimage                 *StartImage;
+    ILimage                 *Image;
+    int i;
+    Texture=NULL;
+    Image=NULL;
+    ilutCurImage = ilGetCurImage();
+    if( ilutCurImage == NULL ) {
+    	ilSetError(ILUT_ILLEGAL_OPERATION);
+        return NULL;
+    }
+
+    if( !FormatsDX9Checked )
+    	CheckFormatsDX9(Device);
+
+    StartImage=ilutCurImage;
+    if( FAILED(IDirect3DDevice9_CreateCubeTexture(Device, StartImage->Width,
+                       ilutGetInteger(ILUT_D3D_MIPLEVELS),0,Format, ilutGetInteger(ILUT_D3D_POOL), &Texture, NULL)))
+               return NULL;
+		for( i = 0; i < CUBEMAP_SIDES; i++ ) {
+       		if( ilutCurImage==NULL || ilutCurImage->CubeFlags != 0) {
+            	SAFE_RELEASE(Texture)
+                return NULL;
+            }
+            Image = MakeD3D9Compliant(Device, &Format);
+            if( Image == NULL ) {
+            	SAFE_RELEASE(Texture)
+                return NULL;
+            }
+            if( FAILED(IDirect3DCubeTexture9_LockRect(Texture,iToD3D9Cube(Image->CubeFlags), 0, &Box, NULL, D3DLOCK_DISCARD))) {
+                SAFE_RELEASE(Texture)
+                return NULL;
+            }
+
+            memcpy(Box.pBits, Image->Data, Image->SizeOfData);
+            if (!IDirect3DCubeTexture9_UnlockRect(Texture,iToD3D9Cube(Image->CubeFlags), 0)) {
+          		SAFE_RELEASE(Texture)
+            	return IL_FALSE;
+        	}
+       		ilutCurImage=ilutCurImage->Next;
+       	}
+       	ilutCurImage=StartImage;
+
+       	// We don't want to have mipmaps for such a large image.
+		if (Image != ilutCurImage)
+	       	ilCloseImage(Image);
+
+       	return Texture;
+}
 
 #ifndef _WIN32_WCE
-ILboolean ILAPIENTRY ilutD3D9VolTexFromFile(IDirect3DDevice9 *Device, char *FileName, IDirect3DVolumeTexture9 **Texture)
-{
+ILboolean ILAPIENTRY ilutD3D9VolTexFromFile(IDirect3DDevice9 *Device, char *FileName, IDirect3DVolumeTexture9 **Texture) {
 	iBindImageTemp();
 	if (!ilLoadImage(FileName))
 		return IL_FALSE;
