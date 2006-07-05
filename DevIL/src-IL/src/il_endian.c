@@ -1,4 +1,7 @@
 #include "il_internal.h"
+
+#define IL_ENDIAN_C
+
 #include "il_endian.h"
 
 ILvoid EndianSwapData(void *_Image) {
