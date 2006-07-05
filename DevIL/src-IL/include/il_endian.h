@@ -106,7 +106,7 @@ INLINE ILvoid iSwapUShort(ILushort *s)  {
 	#ifdef GCC_X86_ASM
 		asm("ror $8,%0"
 			: 
-			: "g"  (*s) );
+			: "r"  (*s) );
 	#else
 		*s = ((*s)>>8) | ((*s)<<8);
 	#endif //GCC_X86_ASM
