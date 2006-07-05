@@ -103,7 +103,7 @@ INLINE ILvoid iSwapUShort(ILushort *s)  {
 			mov [ebx], ax
 		}
 	#else
-	#ifdef GCC_x86_ASM
+	#ifdef GCC_X86_ASM
 		asm("ror $8,%0"
 			: 
 			: "g"  (*s) );
@@ -126,7 +126,7 @@ INLINE ILvoid iSwapUInt(ILuint *i) {
 			mov [ebx], eax
 		}
 	#else
-	#ifdef GCC_x86_ASM
+	#ifdef GCC_X86_ASM
 			asm("bswap  %0;"
 	    		: "=r" (*i) );
 	#else
@@ -144,7 +144,7 @@ INLINE ILvoid iSwapFloat(ILfloat *f) {
 }
 
 INLINE ILvoid iSwapDouble(ILdouble *d) {
-	#ifdef GCC_x86_ASM
+	#ifdef GCC_X86_ASM
 	int *t = (int*)d;
     asm("bswap %2    \n"
         "bswap %3    \n"
