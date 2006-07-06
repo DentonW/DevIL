@@ -51,15 +51,27 @@ extern ILimage *iluCurImage;
 
 
 // Useful global variables
-extern ILdouble	IL_PI;
-extern ILdouble	IL_DEGCONV;
+extern const ILdouble	IL_PI;
+extern const ILdouble	IL_DEGCONV;
 
+
+#ifdef ILU_INTERNAL_C
+#undef NOINLINE
+#undef INLINE
+#undef FINLINE
+#define INLINE
+#define FINLINE
+#endif
 
 // Internal functions
+ILfloat ilCos(ILfloat Angle);
+ILfloat ilSin(ILfloat Angle);
+ILint ilRound(ILfloat Num);
+
+#ifndef NOINLINE
 INLINE ILfloat ilCos(ILfloat Angle) {
 	return (ILfloat)(cos(Angle * IL_DEGCONV));
 }
-
 
 INLINE ILfloat ilSin(ILfloat Angle) {
 	return (ILfloat)(sin(Angle * IL_DEGCONV));
@@ -69,6 +81,9 @@ INLINE ILfloat ilSin(ILfloat Angle) {
 INLINE ILint ilRound(ILfloat Num) {
 	return (ILint)(Num + 0.5); // this is truncating in away-from-0, not rounding
 }
+#endif
+
+
 
 ILuint	iluScaleAdvanced(ILuint Width, ILuint Height, ILenum Filter);
 ILubyte	*iScanFill(ILvoid);
