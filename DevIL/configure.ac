@@ -35,7 +35,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION($Revision: 1.10 $)
+AC_REVISION($Revision: 1.11 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -50,10 +50,12 @@ AC_C_BIGENDIAN
 AC_LIBTOOL_WIN32_DLL
 AC_PATH_XTRA
 
+
 AC_DEFUN([ADD_CFLAGS],[
 LIBIL_CFLAGS="$LIBIL_CFLAGS $1"
 LIBILU_CFLAGS="$LIBILU_CFLAGS $1"
 LIBILUT_CFLAGS="$LIBILUT_CFLAGS $1"
+CFLAGS="$CFLAGS $1"
 ])
 
 ADD_CFLAGS([$CFLAGS])
@@ -123,7 +125,7 @@ AC_HELP_STRING([--enable-warning],[Compile breaks on warnings]),
 [build_warning="$enable_warning"],[build_warning="no"])
 
 if test "$build_warning" = "yes" ; then
-	ADD_CFLAGS([-Wall -g -Werror])
+	ADD_CFLAGS([-Wall -g -Werror -DNOINLINE])
 fi
 
 dnl
