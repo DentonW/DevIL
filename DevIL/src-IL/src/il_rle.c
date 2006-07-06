@@ -13,85 +13,10 @@
 // RLE code from TrueVision's TGA sample code available as Tgautils.zip at
 //	ftp://ftp.truevision.com/pub/TGA.File.Format.Spec/PC.Version
 
+#define IL_RLE_C
 
 #include "il_internal.h"
 #include "il_rle.h"
-
-INLINE ILuint GetPix(ILubyte *p, ILuint bpp) {
-	ILuint Pixel;
-	Pixel = (ILuint)*p++;
-	
-	/*
-	switch(bpp) {
-		case 1:
-			// direct byte access
-		case 2:
-			// direct short access
-		case 3:
-			// short + byte
-		case 4:
-			// direct int access
-	}
-	Can be optimized, there are just 4 different values.
-	1,2,3,4
-	
-	*/
-	
-	while( bpp-- > 1 ) {
-		Pixel <<= 8;
-		Pixel |= (ILuint)*p++;
-	}
-	return Pixel;
-}
-
-
-INLINE ILint CountDiffPixels(ILubyte *p, ILuint bpp, ILuint pixCnt) {
-	ILuint	pixel;
-	ILuint	nextPixel = 0;
-	ILint	n;
-
-	n = 0;
-	if (pixCnt == 1)
-		return pixCnt;
-	pixel = GetPix(p, bpp);
-
-	while (pixCnt > 1) {
-		p += bpp;
-		nextPixel = GetPix(p, bpp);
-		if (nextPixel == pixel)
-			break;
-		pixel = nextPixel;
-		++n;
-		--pixCnt;
-	}
-
-	if (nextPixel == pixel)
-		return n;
-	return n + 1;
-}
-
-
-INLINE ILint CountSamePixels(ILubyte *p, ILuint bpp, ILuint pixCnt) {
-	ILuint	pixel;
-	ILuint	nextPixel;
-	ILint	n;
-
-	n = 1;
-	pixel = GetPix(p, bpp);
-	pixCnt--;
-
-	while (pixCnt > 0) {
-		p += bpp;
-		nextPixel = GetPix(p, bpp);
-		if (nextPixel != pixel)
-			break;
-		++n;
-		--pixCnt;
-	}
-
-	return n;
-}
-
 
 ILboolean ilRleCompressLine(ILubyte *p, ILuint n, ILubyte bpp,
 			ILubyte *q, ILuint *DestWidth, ILenum CompressMode) {
