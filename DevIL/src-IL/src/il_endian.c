@@ -1,4 +1,3 @@
-#include "il_internal.h"
 
 #define IL_ENDIAN_C
 
@@ -17,8 +16,7 @@ ILvoid EndianSwapData(void *_Image) {
 	switch (Image->Type) {
 		case IL_BYTE:
 		case IL_UNSIGNED_BYTE:
-			switch (Image->Bpp)
-			{
+			switch (Image->Bpp) {
 				case 3:
 					temp = ialloc(Image->SizeOfData);
 					if (temp == NULL)
@@ -60,8 +58,7 @@ ILvoid EndianSwapData(void *_Image) {
 
 		case IL_SHORT:
 		case IL_UNSIGNED_SHORT:
-			switch (Image->Bpp)
-			{
+			switch (Image->Bpp) {
 				case 3:
 					temp = ialloc(Image->SizeOfData);
 					if (temp == NULL)
@@ -70,11 +67,9 @@ ILvoid EndianSwapData(void *_Image) {
 					ShortD = (ILushort*)temp;
 
 					for (i = Image->Width * Image->Height; i > 0; i--) {
-						*(ShortD+2) = *(ShortS+2);iSwapUShort(ShortD+2);
-						*(ShortD+1) = *(ShortS+1);iSwapUShort(ShortD+1);
-						*ShortD     = *(ShortS);  iSwapUShort(ShortD);
-						ShortD += 3;
-						ShortS += 3;
+						*ShortD = *ShortS++; iSwapUShort(ShortD++);
+						*ShortD = *ShortS++; iSwapUShort(ShortD++);
+						*ShortD = *ShortS++; iSwapUShort(ShortD++);
 					}
 
 					ifree(Image->Data);
@@ -89,12 +84,10 @@ ILvoid EndianSwapData(void *_Image) {
 					ShortD = (ILushort*)temp;
 
 					for (i = Image->Width * Image->Height; i > 0; i--) {
-						*(ShortD+3) = *(ShortS+3);iSwapUShort(ShortD+3);
-						*(ShortD+2) = *(ShortS+2);iSwapUShort(ShortD+2);
-						*(ShortD+1) = *(ShortS+1);iSwapUShort(ShortD+1);
-						*ShortD     = *(ShortS);  iSwapUShort(ShortD);
-						ShortD += 4;
-						ShortS += 4;
+						*ShortD = *ShortS++; iSwapUShort(ShortD++);
+						*ShortD = *ShortS++; iSwapUShort(ShortD++);
+						*ShortD = *ShortS++; iSwapUShort(ShortD++);
+						*ShortD = *ShortS++; iSwapUShort(ShortD++);
 					}
 
 					ifree(Image->Data);
@@ -115,11 +108,9 @@ ILvoid EndianSwapData(void *_Image) {
 					IntD = (ILuint*)temp;
 
 					for (i = Image->Width * Image->Height; i > 0; i--) {
-						*(IntD+2) = *(IntS+2);iSwapUInt(IntD+2);
-						*(IntD+1) = *(IntS+1);iSwapUInt(IntD+1);
-						*IntD     = *IntS;    iSwapUInt(IntD);
-						IntD += 3;
-						IntS += 3;
+						*IntD = *IntS++; iSwapUInt(IntD++);
+						*IntD = *IntS++; iSwapUInt(IntD++);
+						*IntD = *IntS++; iSwapUInt(IntD++);
 					}
 
 					ifree(Image->Data);
@@ -134,12 +125,10 @@ ILvoid EndianSwapData(void *_Image) {
 					IntD = (ILuint*)temp;
 
 					for (i = Image->Width * Image->Height; i > 0; i--) {
-						*(IntD+3) = *(IntS+3);iSwapUInt(IntD+3);
-						*(IntD+2) = *(IntS+2);iSwapUInt(IntD+2);
-						*(IntD+1) = *(IntS+1);iSwapUInt(IntD+1);
-						*IntD     = *IntS;    iSwapUInt(IntD);
-						IntD += 4;
-						IntS += 4;
+						*IntD = *IntS++; iSwapUInt(IntD++);
+						*IntD = *IntS++; iSwapUInt(IntD++);
+						*IntD = *IntS++; iSwapUInt(IntD++);
+						*IntD = *IntS++; iSwapUInt(IntD++);
 					}
 
 					ifree(Image->Data);
@@ -159,13 +148,9 @@ ILvoid EndianSwapData(void *_Image) {
 					FltD = (ILfloat*)temp;
 
 					for (i = Image->Width * Image->Height; i > 0; i--) {
-						iSwapFloat(FltS);
-						iSwapFloat(FltS+1);
-						iSwapFloat(FltS+2);
-						*FltD++ = *(FltS+2);
-						*FltD++ = *(FltS+1);
-						*FltD++ = *FltS;
-						FltS += 3;
+						*FltD = *FltS++; iSwapFloat(FltD++);
+						*FltD = *FltS++; iSwapFloat(FltD++);
+						*FltD = *FltS++; iSwapFloat(FltD++);
 					}
 
 					ifree(Image->Data);
@@ -180,15 +165,10 @@ ILvoid EndianSwapData(void *_Image) {
 					FltD = (ILfloat*)temp;
 
 					for (i = Image->Width * Image->Height; i > 0; i--) {
-						iSwapFloat(FltS);
-						iSwapFloat(FltS+1);
-						iSwapFloat(FltS+2);
-						iSwapFloat(FltS+3);
-						*FltD++ = *(FltS+3);
-						*FltD++ = *(FltS+2);
-						*FltD++ = *(FltS+1);
-						*FltD++ = *FltS;
-						FltS += 4;
+						*FltD = *FltS++; iSwapFloat(FltD++);
+						*FltD = *FltS++; iSwapFloat(FltD++);
+						*FltD = *FltS++; iSwapFloat(FltD++);
+						*FltD = *FltS++; iSwapFloat(FltD++);
 					}
 
 					ifree(Image->Data);
@@ -208,13 +188,9 @@ ILvoid EndianSwapData(void *_Image) {
 					DblD = (ILdouble*)temp;
 
 					for (i = Image->Width * Image->Height; i > 0; i--) {
-						iSwapDouble(DblS);
-						iSwapDouble(DblS+1);
-						iSwapDouble(DblS+2);
-						*DblD++ = *(DblS+2);
-						*DblD++ = *(DblS+1);
-						*DblD++ = *DblS;
-						DblS += 3;
+						*DblD = *DblS++; iSwapFloat(DblD++);
+						*DblD = *DblS++; iSwapFloat(DblD++);
+						*DblD = *DblS++; iSwapFloat(DblD++);
 					}
 
 					ifree(Image->Data);
@@ -229,15 +205,10 @@ ILvoid EndianSwapData(void *_Image) {
 					DblD = (ILdouble*)temp;
 
 					for (i = Image->Width * Image->Height; i > 0; i--) {
-						iSwapDouble(DblS);
-						iSwapDouble(DblS+1);
-						iSwapDouble(DblS+2);
-						iSwapDouble(DblS+3);
-						*DblD++ = *(DblS+3);
-						*DblD++ = *(DblS+2);
-						*DblD++ = *(DblS+1);
-						*DblD++ = *DblS;
-						DblS += 4;
+						*DblD = *DblS++; iSwapFloat(DblD++);
+						*DblD = *DblS++; iSwapFloat(DblD++);
+						*DblD = *DblS++; iSwapFloat(DblD++);
+						*DblD = *DblS++; iSwapFloat(DblD++);
 					}
 
 					ifree(Image->Data);
@@ -247,9 +218,8 @@ ILvoid EndianSwapData(void *_Image) {
 			break;
 	}
 
-	if (iCurImage->Format == IL_COLOUR_INDEX) {
-		switch (iCurImage->Pal.PalType)
-		{
+	if( iCurImage->Format == IL_COLOUR_INDEX ) {
+		switch (iCurImage->Pal.PalType) {
 			case IL_PAL_RGB24:
 			case IL_PAL_BGR24:
 				temp = ialloc(Image->Pal.PalSize);
