@@ -53,23 +53,23 @@
 	#define BigDouble(d) iSwapDouble(d)
 #endif
 
-ILvoid iSwapUShort(ILushort *s);
-ILvoid iSwapShort(ILshort *s);
-ILvoid iSwapUInt(ILuint *i);
-ILvoid iSwapInt(ILint *i);
-ILvoid iSwapFloat(ILfloat *f);
-ILvoid iSwapDouble(ILdouble *d);
+ILvoid   iSwapUShort(ILushort *s);
+ILvoid   iSwapShort(ILshort *s);
+ILvoid   iSwapUInt(ILuint *i);
+ILvoid   iSwapInt(ILint *i);
+ILvoid   iSwapFloat(ILfloat *f);
+ILvoid   iSwapDouble(ILdouble *d);
 ILushort GetLittleUShort();
-ILshort GetLittleShort();
-ILuint GetLittleUInt();
-ILint GetLittleInt();
-ILfloat GetLittleFloat();
+ILshort  GetLittleShort();
+ILuint   GetLittleUInt();
+ILint    GetLittleInt();
+ILfloat  GetLittleFloat();
 ILdouble GetLittleDouble();
 ILushort GetBigUShort();
-ILshort GetBigShort();
-ILuint GetBigUInt();
-ILint GetBigInt();
-ILfloat GetBigFloat();
+ILshort  GetBigShort();
+ILuint   GetBigUInt();
+ILint    GetBigInt();
+ILfloat  GetBigFloat();
 ILdouble GetBigDouble();
 ILubyte SaveLittleUShort(ILushort s);
 ILubyte SaveLittleShort(ILshort s);
@@ -87,13 +87,10 @@ ILubyte SaveBigDouble(ILdouble d);
 #ifdef IL_ENDIAN_C
 #undef NOINLINE
 #undef INLINE
-#undef FINLINE
 #define INLINE
-#define FINLINE
 #endif
 
 #ifndef NOINLINE
-
 INLINE ILvoid iSwapUShort(ILushort *s)  {
 	#ifdef USE_WIN32_ASM
 		__asm {
