@@ -58,9 +58,7 @@ extern const ILdouble	IL_DEGCONV;
 #ifdef ILU_INTERNAL_C
 #undef NOINLINE
 #undef INLINE
-#undef FINLINE
 #define INLINE
-#define FINLINE
 #endif
 
 // Internal functions

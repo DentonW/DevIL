@@ -19,18 +19,14 @@
 #ifndef INLINE
 #if defined(__GNUC__)
 	#define INLINE extern inline
-	#define FINLINE extern inline
 #elif defined(_MSC_VER)
 	#define INLINE  __inline
-	#define FINLINE __forceinline
 #else
 	#define INLINE inline
-	#define FINLINE inline
 #endif
 #endif
 #else
 #define INLINE
-#define FINLINE
 #endif //NOINLINE
 
 #ifdef __cplusplus
