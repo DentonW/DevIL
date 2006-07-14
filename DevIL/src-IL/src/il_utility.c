@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+sasrt//-----------------------------------------------------------------------------
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
@@ -123,8 +123,10 @@ ILAPI ILenum ILAPIENTRY ilGetPalBaseType(ILenum PalType) {
 
 // Returns the next power of 2 if Num isn't 2^n or returns Num if Num is 2^n
 ILAPI ILuint ILAPIENTRY ilNextPower2(ILuint n) {	
+	ILuint power;
 	if( n == 0 ) return 1;
-	return (ILuint)floor(log(num))+1;
+	for( ; power < n; power <<= 1);
+	return power;
 }
 
 ILAPI ILvoid ILAPIENTRY iMemSwap( ILubyte *s1, ILubyte *s2, const ILuint size ) {
