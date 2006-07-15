@@ -132,7 +132,7 @@ ILAPI ILimage*  ILAPIENTRY iConvertImage   (ILimage *Image, ILenum DestFormat, I
 ILAPI ILpal*    ILAPIENTRY iConvertPal     (ILpal *Pal, ILenum DestFormat);
 ILAPI ILubyte*  ILAPIENTRY iGetFlipped     (ILimage *Image);
 ILAPI ILboolean	ILAPIENTRY iMirror();
-ILvoid iFlipBuffer( ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num );
+ILAPI ILvoid    ILAPIENTRY iFlipBuffer( ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num );
 ILubyte *iFlipNewBuffer( ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num );
 ILAPI ILvoid ILAPIENTRY iGetIntegervImage(ILimage *Image, ILenum Mode, ILint *Param);
 

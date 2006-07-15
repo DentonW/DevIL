@@ -6,7 +6,7 @@
 #include "il_manip.h"
 
 
-ILvoid iFlipBuffer( ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num ) {
+ILAPI ILvoid ILAPIENTRY iFlipBuffer( ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num ) {
 	ILubyte *StartPtr, *EndPtr;
 	ILuint y, d;
 	const ILuint size = line_num * line_size;
