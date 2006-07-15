@@ -15,10 +15,6 @@
 
 #include "il_internal.h"
 
-#ifdef _MSC_VER
-#define NOINLINE
-#endif
-
 #ifdef WORDS_BIGENDIAN //this is defined by ./configure
 	#ifndef __BIG_ENDIAN__
 	#define __BIG_ENDIAN__

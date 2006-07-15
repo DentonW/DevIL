@@ -20,7 +20,9 @@
 #if defined(__GNUC__)
 	#define INLINE extern inline
 #elif defined(_MSC_VER)
-	#define INLINE  __inline
+	#define NOINLINE
+	#define INLINE
+	//#define INLINE  __inline
 #else
 	#define INLINE inline
 #endif
