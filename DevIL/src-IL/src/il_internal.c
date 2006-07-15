@@ -42,12 +42,12 @@ ILimage *iCurImage = NULL;
 #endif /* _WIN32 */
 
 #if _UNICODE //_WIN32_WCE
-	int iStrCmp(ILstring src1, ILstring src2)
+	int iStrCmp(const ILstring src1, const ILstring src2)
 	{
 		return wcsicmp(src1, src2);
 	}
 #else
-	int iStrCmp(ILstring src1, ILstring src2)
+	int iStrCmp(const ILstring src1, const ILstring src2)
 	{
 		return stricmp(src1, src2);
 	}
@@ -82,7 +82,7 @@ ILuint ilStrLen(const char *Str)
 
 
 // Simple function to test if a filename has a given extension, disregarding case
-ILboolean iCheckExtension(ILstring Arg, ILstring Ext)
+ILboolean iCheckExtension(const ILstring Arg, const ILstring Ext)
 {
 	ILboolean PeriodFound = IL_FALSE;
 	ILint i;
@@ -138,7 +138,7 @@ ILboolean iCheckExtension(ILstring Arg, ILstring Ext)
 }
 
 
-ILstring iGetExtension(ILstring FileName) {
+ILstring iGetExtension(const ILstring FileName) {
 	ILboolean PeriodFound = IL_FALSE;
 #ifndef _UNICODE
 	char *Ext = (char*)FileName;
@@ -169,7 +169,7 @@ ILstring iGetExtension(ILstring FileName) {
 
 
 // Checks if the file exists
-ILboolean iFileExists(ILstring FileName)
+ILboolean iFileExists(const ILstring FileName)
 {
 #ifndef _UNICODE
 	FILE *CheckFile = fopen(FileName, "rb");

@@ -20,7 +20,7 @@ ILboolean iSaveRawInternal(ILvoid);
 
 
 //! Reads a raw file
-ILboolean ilLoadRaw(ILstring FileName)
+ILboolean ilLoadRaw(const ILstring FileName)
 {
 	ILHANDLE	RawFile;
 	ILboolean	bRaw = IL_FALSE;
@@ -112,7 +112,7 @@ ILboolean iLoadRawInternal()
 
 
 //! Writes a Raw file
-ILboolean ilSaveRaw(ILstring FileName)
+ILboolean ilSaveRaw(const ILstring FileName)
 {
 	ILHANDLE	RawFile;
 	ILboolean	bRaw = IL_FALSE;

@@ -24,7 +24,7 @@ ILboolean iLoadXpmInternal(ILvoid);
 
 
 // Reads an .xpm file
-ILboolean ilLoadXpm(ILstring FileName)
+ILboolean ilLoadXpm(const ILstring FileName)
 {
 	ILHANDLE	XpmFile;
 	ILboolean	bXpm = IL_FALSE;

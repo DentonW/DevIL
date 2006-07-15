@@ -33,7 +33,7 @@ ILboolean iLoadWalInternal(ILvoid);
 
 
 //! Reads a .wal file
-ILboolean ilLoadWal(ILstring FileName)
+ILboolean ilLoadWal(const ILstring FileName)
 {
 	ILHANDLE	WalFile;
 	ILboolean	bWal = IL_FALSE;

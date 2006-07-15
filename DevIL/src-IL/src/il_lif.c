@@ -17,7 +17,7 @@
 
 
 //! Checks if the file specified in FileName is a valid Lif file.
-ILboolean ilIsValidLif(ILstring FileName)
+ILboolean ilIsValidLif(const ILstring FileName)
 {
 	ILHANDLE	LifFile;
 	ILboolean	bLif = IL_FALSE;
@@ -106,7 +106,7 @@ ILboolean iCheckLif(LIF_HEAD *Header)
 
 
 //! Reads a .Lif file
-ILboolean ilLoadLif(ILstring FileName)
+ILboolean ilLoadLif(const ILstring FileName)
 {
 	ILHANDLE	LifFile;
 	ILboolean	bLif = IL_FALSE;

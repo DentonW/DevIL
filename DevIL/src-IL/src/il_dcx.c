@@ -18,7 +18,7 @@
 
 
 //! Checks if the file specified in FileName is a valid .dcx file.
-ILboolean ilIsValidDcx(ILstring FileName) {
+ILboolean ilIsValidDcx(const ILstring FileName) {
 	ILHANDLE	DcxFile;
 	ILboolean	bDcx = IL_FALSE;
 
@@ -125,7 +125,7 @@ ILboolean iCheckDcx(DCXHEAD *Header)
 
 
 //! Reads a .dcx file
-ILboolean ilLoadDcx(ILstring FileName)
+ILboolean ilLoadDcx(const ILstring FileName)
 {
 	ILHANDLE	DcxFile;
 	ILboolean	bDcx = IL_FALSE;

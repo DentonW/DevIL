@@ -25,7 +25,7 @@
 
 
 //! Checks if the file specified in FileName is a valid Targa file.
-ILboolean ilIsValidTga(ILstring FileName)
+ILboolean ilIsValidTga(const ILstring FileName)
 {
 	ILHANDLE	TargaFile;
 	ILboolean	bTarga = IL_FALSE;
@@ -138,7 +138,7 @@ ILboolean iCheckTarga(TARGAHEAD *Header)
 
 
 //! Reads a Targa file
-ILboolean ilLoadTarga(ILstring FileName)
+ILboolean ilLoadTarga(const ILstring FileName)
 {
 	ILHANDLE	TargaFile;
 	ILboolean	bTarga = IL_FALSE;
@@ -525,7 +525,7 @@ ILboolean i16BitTarga(ILimage *Image)
 
 
 //! Writes a Targa file
-ILboolean ilSaveTarga(ILstring FileName)
+ILboolean ilSaveTarga(const ILstring FileName)
 {
 	ILHANDLE	TargaFile;
 	ILboolean	bTarga = IL_FALSE;

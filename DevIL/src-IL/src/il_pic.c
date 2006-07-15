@@ -20,7 +20,7 @@
 
 
 //! Checks if the file specified in FileName is a valid .pic file.
-ILboolean ilIsValidPic(ILstring FileName)
+ILboolean ilIsValidPic(const ILstring FileName)
 {
 	ILHANDLE	PicFile;
 	ILboolean	bPic = IL_FALSE;
@@ -113,7 +113,7 @@ ILboolean iCheckPic(PIC_HEAD *Header)
 
 
 //! Reads a .pic file
-ILboolean ilLoadPic(ILstring FileName)
+ILboolean ilLoadPic(const ILstring FileName)
 {
 	ILHANDLE	PicFile;
 	ILboolean	bPic = IL_FALSE;

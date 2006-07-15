@@ -37,7 +37,7 @@ ILpal			Pal;
 
 
 //! Checks if the file specified in FileName is a valid Psp file.
-ILboolean ilIsValidPsp(ILstring FileName)
+ILboolean ilIsValidPsp(const ILstring FileName)
 {
 	ILHANDLE	PspFile;
 	ILboolean	bPsp = IL_FALSE;
@@ -122,7 +122,7 @@ ILboolean iCheckPsp()
 
 
 //! Reads a PSP file
-ILboolean ilLoadPsp(ILstring FileName)
+ILboolean ilLoadPsp(const ILstring FileName)
 {
 	ILHANDLE	PSPFile;
 	ILboolean	bPsp = IL_FALSE;

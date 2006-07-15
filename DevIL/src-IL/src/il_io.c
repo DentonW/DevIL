@@ -16,7 +16,7 @@
 #include <string.h>
 
 
-ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILstring FileName)
+ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 {
 	ILstring Ext;
 
@@ -95,7 +95,7 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILstring FileName)
 ILenum ilDetermineTypeF(ILHANDLE File);
 
 //changed 2003-09-17 to ILAPIENTRY
-ILAPI ILenum ILAPIENTRY ilDetermineType(ILstring FileName)
+ILAPI ILenum ILAPIENTRY ilDetermineType(const ILstring FileName)
 {
 	ILHANDLE	File;
 	ILenum		Type;
@@ -1015,7 +1015,7 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const ILvoid *Lump, ILuint Size) {
 
 
 //! Attempts to load an image with various different methods before failing - very generic.
-ILboolean ILAPIENTRY ilLoadImage(ILstring FileName)
+ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
 {
 	ILstring	Ext = iGetExtension(FileName);
 	ILenum		Type;
@@ -1439,7 +1439,7 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size)
 
 //! Determines what image type to save based on the extension and attempts to save
 //	the current image based on the extension given in FileName.
-ILboolean ILAPIENTRY ilSaveImage(ILstring FileName)
+ILboolean ILAPIENTRY ilSaveImage(const ILstring FileName)
 {
 	ILstring Ext = iGetExtension(FileName);
 

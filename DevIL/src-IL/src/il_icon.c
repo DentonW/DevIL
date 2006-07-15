@@ -17,7 +17,7 @@
 
 
 //! Reads an icon file.
-ILboolean ilLoadIcon(ILstring FileName)
+ILboolean ilLoadIcon(const ILstring FileName)
 {
 	ILHANDLE	IconFile;
 	ILboolean	bIcon = IL_FALSE;

@@ -24,7 +24,7 @@
 ILenum	GifType;
 
 //! Checks if the file specified in FileName is a valid Gif file.
-ILboolean ilIsValidGif(ILstring FileName)
+ILboolean ilIsValidGif(const ILstring FileName)
 {
 	ILHANDLE	GifFile;
 	ILboolean	bGif = IL_FALSE;
@@ -89,7 +89,7 @@ ILboolean iIsValidGif()
 
 
 //! Reads a Gif file
-ILboolean ilLoadGif(ILstring FileName)
+ILboolean ilLoadGif(const ILstring FileName)
 {
 	ILHANDLE	GifFile;
 	ILboolean	bGif = IL_FALSE;

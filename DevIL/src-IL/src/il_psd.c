@@ -10,7 +10,7 @@
 
 
 //! Checks if the file specified in FileName is a valid Psd file.
-ILboolean ilIsValidPsd(ILstring FileName)
+ILboolean ilIsValidPsd(const ILstring FileName)
 {
 	ILHANDLE	PsdFile;
 	ILboolean	bPsd = IL_FALSE;
@@ -110,7 +110,7 @@ ILboolean iCheckPsd(PSDHEAD *Header)
 
 
 //! Reads a Psd file
-ILboolean ilLoadPsd(ILstring FileName)
+ILboolean ilLoadPsd(const ILstring FileName)
 {
 	ILHANDLE	PsdFile;
 	ILboolean	bPsd = IL_FALSE;
@@ -757,7 +757,7 @@ ILboolean GetSingleChannel(PSDHEAD *Head, ILubyte *Buffer, ILboolean Compressed)
 
 
 //! Writes a Psd file
-ILboolean ilSavePsd(ILstring FileName)
+ILboolean ilSavePsd(const ILstring FileName)
 {
 	ILHANDLE	PsdFile;
 	ILboolean	bPsd = IL_FALSE;

@@ -104,7 +104,7 @@ ILAPI ILenum  ILAPIENTRY ilGetTypeBpc(ILubyte Bpc);
 ILAPI ILubyte ILAPIENTRY ilGetBppPal(ILenum PalType);
 ILAPI ILenum  ILAPIENTRY ilGetPalBaseType(ILenum PalType);
 ILAPI ILuint  ILAPIENTRY ilNextPower2(ILuint Num);
-ILAPI ILenum  ILAPIENTRY ilTypeFromExt(ILstring FileName);
+ILAPI ILenum  ILAPIENTRY ilTypeFromExt(const ILstring FileName);
 ILAPI ILvoid  ILAPIENTRY ilReplaceCurImage(ILimage *Image);
 ILAPI ILvoid  ILAPIENTRY iMemSwap( ILubyte *, ILubyte *, const ILuint );
 

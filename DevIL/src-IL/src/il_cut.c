@@ -35,7 +35,7 @@ typedef struct CUT_HEAD
 ILboolean iLoadCutInternal();
 
 //! Reads a .cut file
-ILboolean ilLoadCut(ILstring FileName)
+ILboolean ilLoadCut(const ILstring FileName)
 {
 	ILHANDLE	CutFile;
 	ILboolean	bCut = IL_FALSE;

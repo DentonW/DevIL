@@ -38,7 +38,7 @@ ILboolean iLoadPxrInternal(ILvoid);
 
 
 //! Reads a Pxr file
-ILboolean ilLoadPxr(ILstring FileName)
+ILboolean ilLoadPxr(const ILstring FileName)
 {
 	ILHANDLE	PxrFile;
 	ILboolean	bPxr = IL_FALSE;
