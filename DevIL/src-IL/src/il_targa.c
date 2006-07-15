@@ -583,7 +583,7 @@ ILboolean iSaveTargaInternal()
 	ILimage 	*TempImage = NULL;
 	ILuint		ExtOffset, i;
 	char		*Footer = "TRUEVISION-XFILE.\0";
-	char		*ILstring = "Developer's Image Library (DevIL)";
+	char		*idString = "Developer's Image Library (DevIL)";
 	ILuint		Day, Month, Year, Hour, Minute, Second;
 	char		*TempData;
 	
@@ -770,8 +770,8 @@ ILboolean iSaveTargaInternal()
 		SaveLittleUShort(0);
 	}
 	
-	iwrite(ILstring, 1, strlen(ILstring));	// Software ID
-	for (i = 0; i < 41 - strlen(ILstring); i++) {
+	iwrite(idString, 1, strlen(idString));	// Software ID
+	for (i = 0; i < 41 - strlen(idString); i++) {
 		iputc(0);
 	}
 	SaveLittleUShort(IL_VERSION);  // Software version
