@@ -188,9 +188,9 @@ ILvoid EndianSwapData(void *_Image) {
 					DblD = (ILdouble*)temp;
 
 					for (i = Image->Width * Image->Height; i > 0; i--) {
-						*DblD = *DblS++; iSwapFloat(DblD++);
-						*DblD = *DblS++; iSwapFloat(DblD++);
-						*DblD = *DblS++; iSwapFloat(DblD++);
+						*DblD = *DblS++; iSwapDouble(DblD++);
+						*DblD = *DblS++; iSwapDouble(DblD++);
+						*DblD = *DblS++; iSwapDouble(DblD++);
 					}
 
 					ifree(Image->Data);
@@ -205,10 +205,10 @@ ILvoid EndianSwapData(void *_Image) {
 					DblD = (ILdouble*)temp;
 
 					for (i = Image->Width * Image->Height; i > 0; i--) {
-						*DblD = *DblS++; iSwapFloat(DblD++);
-						*DblD = *DblS++; iSwapFloat(DblD++);
-						*DblD = *DblS++; iSwapFloat(DblD++);
-						*DblD = *DblS++; iSwapFloat(DblD++);
+						*DblD = *DblS++; iSwapDouble(DblD++);
+						*DblD = *DblS++; iSwapDouble(DblD++);
+						*DblD = *DblS++; iSwapDouble(DblD++);
+						*DblD = *DblS++; iSwapDouble(DblD++);
 					}
 
 					ifree(Image->Data);

@@ -1,4 +1,4 @@
-sasrt//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 //
 // ImageLib Sources
 // Copyright (C) 2000-2002 by Denton Woods
@@ -132,8 +132,10 @@ ILAPI ILuint ILAPIENTRY ilNextPower2(ILuint n) {
 ILAPI ILvoid ILAPIENTRY iMemSwap( ILubyte *s1, ILubyte *s2, const ILuint size ) {
 	const ILuint block_size = 4096;
 	const ILuint blocks = size/block_size;
-	ILubyte block[block_size];
 	ILuint i;
+
+	ILubyte *block = ialloc(block_size);
+	if(block == NULL) return;
 	for( i = 0; i < blocks; i++ ) {
 		memcpy(block,s1,block_size);
 		memcpy(s1,s2,block_size);
@@ -147,4 +149,5 @@ ILAPI ILvoid ILAPIENTRY iMemSwap( ILubyte *s1, ILubyte *s2, const ILuint size ) 
 		memcpy(s1,s2,i);
 		memcpy(s2,block,i);
 	}
+	ifree(block);
 }
