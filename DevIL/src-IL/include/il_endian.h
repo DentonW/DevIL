@@ -15,6 +15,10 @@
 
 #include "il_internal.h"
 
+#ifdef _MSC_VER
+#define NOINLINE
+#endif
+
 #ifdef WORDS_BIGENDIAN //this is defined by ./configure
 	#ifndef __BIG_ENDIAN__
 	#define __BIG_ENDIAN__
@@ -125,7 +129,7 @@ INLINE ILvoid iSwapUInt(ILuint *i) {
 	#else
 	#ifdef GCC_X86_ASM
 			asm("bswap  %0;"
-	    		: "=r" (*i) );
+				: "=r" (*i) );
 	#else
 		*i = ((*i)>>24) | (((*i)>>8) & 0xff00) | (((*i)<<8) & 0xff0000) | ((*i)<<24);
 	#endif //GCC_X86_ASM
@@ -143,12 +147,12 @@ INLINE ILvoid iSwapFloat(ILfloat *f) {
 INLINE ILvoid iSwapDouble(ILdouble *d) {
 	#ifdef GCC_X86_ASM
 	int *t = (int*)d;
-    asm("bswap %2    \n"
-        "bswap %3    \n"
-        "movl  %2,%1 \n"
-        "movl  %3,%0 \n"
-        : "=g" (t[0]), "=g" (t[1])
-        : "r"  (t[0]), "r"  (t[1]));
+	asm("bswap %2    \n"
+		"bswap %3    \n"
+		"movl  %2,%1 \n"
+		"movl  %3,%0 \n"
+		: "=g" (t[0]), "=g" (t[1])
+		: "r"  (t[0]), "r"  (t[1]));
 	#else
 	ILubyte t,*b = (ILubyte*)d;
 	#define dswap(x,y) t=b[x];b[x]=b[y];b[y]=b[x];
