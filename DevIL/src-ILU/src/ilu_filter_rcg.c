@@ -443,7 +443,7 @@ __zoom_cleanup:
 
 ILuint iluScaleAdvanced(ILuint Width, ILuint Height, ILenum Filter)
 {
-	double (*f)() = filter;
+	double (*f)(double) = filter;
 	double s = filter_support;
 	ILimage *Dest;
 
