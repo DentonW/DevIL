@@ -669,8 +669,9 @@ ILboolean iSaveSgiInternal()
 
 /*----------------------------------------------------------------------------*/
 
-ILboolean iSaveRleSgi(ILubyte *Data, int w, int h, int numChannels, int bps)
- {
+ILboolean iSaveRleSgi(ILubyte *Data, ILuint w, ILuint h, ILuint numChannels,
+		ILuint bps)
+{
 	//works only for sgi files with only 1 bpc
 
 	ILuint	c, i, y, j;
