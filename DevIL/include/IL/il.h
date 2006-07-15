@@ -75,9 +75,13 @@ typedef void           ILvoid;
 	#ifndef _WIN32_WCE
 		#include <wchar.h>
 	#endif
-	typedef wchar_t* ILstring;
+	//if we use a define instead of a typedef,
+	//const ILstring works as intended
+	#define ILstring wchar_t*
 #else
-	typedef char* ILstring;
+	//if we use a define instead of a typedef,
+	//const ILstring works as intended
+	#define ILstring char*
 #endif //_UNICODE
 
 #define IL_FALSE							0
@@ -475,7 +479,7 @@ ILAPI ILboolean ILAPIENTRY ilIsValid(ILenum Type, ILstring FileName);
 ILAPI ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File);
 ILAPI ILboolean ILAPIENTRY ilIsValidL(ILenum Type, ILvoid *Lump, ILuint Size);
 ILAPI ILvoid    ILAPIENTRY ilKeyColour(ILclampf Red, ILclampf Green, ILclampf Blue, ILclampf Alpha);
-ILAPI ILboolean ILAPIENTRY ilLoad(ILenum Type, ILstring FileName);
+ILAPI ILboolean ILAPIENTRY ilLoad(ILenum Type, const ILstring FileName);
 ILAPI ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File);
 ILAPI ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName);
 ILAPI ILboolean ILAPIENTRY ilLoadL(ILenum Type, const ILvoid *Lump, ILuint Size);
