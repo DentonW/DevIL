@@ -759,7 +759,7 @@ ILboolean ILAPIENTRY iluReplaceColour(ILubyte Red, ILubyte Green, ILubyte Blue, 
 ILboolean ILAPIENTRY iluEqualize() {
 	ILuint	Histogram[256]; // image Histogram
 	ILuint	SumHistm[256]; // normalized Histogram and LUT
-    ILuint	i = 0; // index variable
+	ILuint	i = 0; // index variable
 	ILuint	j = 0; // index variable
 	ILuint	Sum=0;
 	ILuint	NumPixels, Bpp;
@@ -768,11 +768,11 @@ ILboolean ILAPIENTRY iluEqualize() {
 	ILint	IntensityNew;
 	ILimage	*LumImage;
 	ILuint	NewColour[4];
-	NewColour[0] = NewColour[1] = NewColour[2] = NewColour[3] = 0;
-	
 	ILubyte		*BytePtr;
 	ILushort	*ShortPtr;
 	ILuint		*IntPtr;
+
+	NewColour[0] = NewColour[1] = NewColour[2] = NewColour[3] = 0;
 
 	iluCurImage = ilGetCurImage();
 	if (iluCurImage == NULL) {
@@ -820,7 +820,7 @@ ILboolean ILAPIENTRY iluEqualize() {
 	IntPtr = (ILuint*)iluCurImage->Data;
 
 	// Transform image using new SumHistm as a LUT
-    for (i = 0; i < NumPixels; i++) {
+	for (i = 0; i < NumPixels; i++) {
 		Intensity = LumImage->Data[i];
 
 		// Look up the normalized intensity
