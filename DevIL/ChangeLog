@@ -1,7 +1,7 @@
 
-1.6.8 (not released yet)
+1.6.8 RC2
 -----
-
+- fixed OpenGL loading
 - altivec code is now merged inside IL sources, not on a separate directory
 - more dds fixes
 - now the returned number of layer, mipmaps or subimage is correct (computed at every call)
