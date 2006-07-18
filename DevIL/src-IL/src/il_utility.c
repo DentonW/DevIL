@@ -125,7 +125,7 @@ ILAPI ILenum ILAPIENTRY ilGetPalBaseType(ILenum PalType) {
 ILAPI ILuint ILAPIENTRY ilNextPower2(ILuint n) {	
 	ILuint power = 1;
 	while( power < n ) {
-		power <<= 2;
+		power <<= 1;
 	}
 	return power;
 }
