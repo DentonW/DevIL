@@ -429,7 +429,8 @@ ILimage* MakeGLCompliant(ILimage *Src)
 		Dest->Pal.PalType = IL_PAL_NONE;
 	}
 
-	if (Src->Width != ilNextPower2(Src->Width) || Src->Height != ilNextPower2(Src->Height) ||
+	if (Src->Width  != ilNextPower2(Src->Width)  ||
+		Src->Height != ilNextPower2(Src->Height) ||
 		(ILint)Src->Width > MaxTexW || (ILint)Src->Height > MaxTexH) {
 		if (!Created) {
 			Dest = ilCopyImage_(Src);
@@ -458,12 +459,11 @@ ILimage* MakeGLCompliant(ILimage *Src)
 		Dest = Temp;
 	}
 
-	//changed 2003-08-25: images passed to opengl have to be upper-left
-	if (Dest->Origin != IL_ORIGIN_UPPER_LEFT) {
+	if (Dest->Origin != IL_ORIGIN_LOWER_LEFT) {
 		Flipped = iGetFlipped(Dest);
 		ifree(Dest->Data);
 		Dest->Data = Flipped;
-		Dest->Origin = IL_ORIGIN_UPPER_LEFT;
+		Dest->Origin = IL_ORIGIN_LOWER_LEFT;
 	}
 
 	return Dest;
