@@ -123,9 +123,10 @@ ILAPI ILenum ILAPIENTRY ilGetPalBaseType(ILenum PalType) {
 
 // Returns the next power of 2 if Num isn't 2^n or returns Num if Num is 2^n
 ILAPI ILuint ILAPIENTRY ilNextPower2(ILuint n) {	
-	ILuint power;
-	if( n == 0 ) return 1;
-	for( ; power < n; power <<= 1);
+	ILuint power = 1;
+	while( power < n ) {
+		power <<= 2;
+	}
 	return power;
 }
 
