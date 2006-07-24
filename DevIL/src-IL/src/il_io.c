@@ -546,8 +546,7 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, ILvoid *Lump, ILuint Size)
 }
 
 
-ILboolean ILAPIENTRY ilLoad(ILenum Type, ILstring FileName)
-{
+ILboolean ILAPIENTRY ilLoad(ILenum Type, const ILstring FileName) {
 #ifndef _UNICODE
 	if (FileName == NULL || strlen(FileName) < 1) {
 #else
