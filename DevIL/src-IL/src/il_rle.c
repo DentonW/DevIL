@@ -1,13 +1,5 @@
 //-----------------------------------------------------------------------------
-//
-// ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 08/26/2001 <--Y2K Compliant! =]
-//
-// Filename: src-IL/src/il_rle.c
-//
 // Description: Functions for run-length encoding
-//
 //-----------------------------------------------------------------------------
 
 // RLE code from TrueVision's TGA sample code available as Tgautils.zip at
@@ -23,7 +15,7 @@ ILboolean ilRleCompressLine(ILubyte *p, ILuint n, ILubyte bpp,
 	
 	ILint		DiffCount;		// pixel count until two identical
 	ILint		SameCount;		// number of identical adjacent pixels
-	ILint		RLEBufSize;		// count of number of bytes encoded
+	ILint		RLEBufSize = 0; // count of number of bytes encoded
 	ILint		MaxRun;
 	const ILint bmp_pad_to_even = 1 - ((long)q - *DestWidth) % 2;
 
@@ -42,38 +34,24 @@ ILboolean ilRleCompressLine(ILubyte *p, ILuint n, ILubyte bpp,
 			return IL_FALSE;
 	}
 
-	RLEBufSize = 0;
-
-	while (n > 0) {
-		
+	while( n > 0 ) {	
 		// Analyze pixels
-		DiffCount = CountDiffPixels(p, bpp, n);
-		SameCount = CountSamePixels(p, bpp, n);
-		if( DiffCount > MaxRun ) DiffCount = MaxRun;
-		if( SameCount > MaxRun ) SameCount = MaxRun;
+		DiffCount = CountDiffPixels(p, bpp, n > MaxRun ? MaxRun : n);
+		SameCount = CountSamePixels(p, bpp, n > MaxRun ? MaxRun : n);
 
 		if( CompressMode == IL_BMPCOMP ) {
-			ILint remaining_data = n-(DiffCount > SameCount ? DiffCount : SameCount);
-			if( remaining_data < 3 ) { // check is the end of line
-				if( DiffCount > 0 ) {
-					if( n < MaxRun ) {
-						// end line merging last bytes in another absolute run
-						DiffCount = n;
-					} else {
-						// must limit the line
-						DiffCount = n-3;
-					}
-				} else { // Compressed ending
-					// no compression if it has not enough data
-					if( SameCount < 2 ) {
-						// make a run with the compressed run and EOF
-						SameCount = 0;
-						DiffCount = n;
-					} else {
-						// limit compressed range
-						SameCount -= 3-remaining_data;
-					}
+			ILint remaining_data = n - DiffCount - SameCount;
+			if( remaining_data < 3  ) { // check if the run has gone near the end
+				// no absolute run can be done
+				// complete the line adding 0x01 + pixel, for each pixel
+				while( remaining_data > 0 ) {
+					*q++ = 0x01;
+					*q++ = *p++;
+					remaining_data--;
 				}
+				DiffCount = 0;
+				SameCount = 0;
+				n = 0;
 			}
 		}
 
@@ -144,7 +122,6 @@ ILboolean ilRleCompressLine(ILubyte *p, ILuint n, ILubyte bpp,
 			*q++ = 0x00; RLEBufSize++;
 			break;
 	}
-	
 	*DestWidth = RLEBufSize;
 	
 	return IL_TRUE;
