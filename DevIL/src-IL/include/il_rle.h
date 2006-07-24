@@ -22,9 +22,7 @@
 #ifdef IL_RLE_C
 #undef NOINLINE
 #undef INLINE
-#undef FINLINE
 #define INLINE
-#define FINLINE
 #endif
 
 #ifndef NOINLINE
