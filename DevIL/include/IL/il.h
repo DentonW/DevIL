@@ -372,7 +372,11 @@ typedef void           ILvoid;
 #elif defined( __GNUC__ )
   // this should work for any of the above commented platforms 
   // plus any platform using GCC
-	#define ILAPIENTRY
+	#ifdef __MINGW32__
+		#define ILAPIENTRY __stdcall
+	#else
+		#define ILAPIENTRY
+	#endif
 	#define IL_PACKSTRUCT __attribute__ ((packed))
 #else
 	#define ILAPIENTRY
