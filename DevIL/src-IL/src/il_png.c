@@ -280,9 +280,10 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 		png_set_gray_1_2_4_to_8(png_ptr);
 	}
 
-	// Expand paletted or RGB images with transparency to full alpha channels
+	// Expand RGB images with transparency to full alpha channels
 	//	so the data will be available as RGBA quartets.
-	if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
+ 	// But don't expand paletted images, since we want alpha palettes!
+	if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS) && !(png_get_valid(png_ptr, info_ptr, PNG_INFO_PLTE)))
 		png_set_tRNS_to_alpha(png_ptr);
 
 	//refresh information (added 20040224)
@@ -349,20 +350,38 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 
 	//copy palette
 	if (format == IL_COLOUR_INDEX) {
+		int chans;
+		png_bytep trans = NULL;
+		int  num_trans = -1;
 		if (!png_get_PLTE(png_ptr, info_ptr, &palette, &num_palette)) {
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
 			png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
 			return IL_FALSE;
 		}
 
+		chans = 3;
 		iCurImage->Pal.PalType = IL_PAL_RGB24;
-		iCurImage->Pal.PalSize = num_palette * 3;
+
+		if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS)) {
+			png_get_tRNS(png_ptr, info_ptr, &trans, &num_trans, NULL);
+			iCurImage->Pal.PalType = IL_PAL_RGBA32;
+			chans = 4;
+		}
+
+		iCurImage->Pal.PalSize = num_palette * chans;
+
 		iCurImage->Pal.Palette = (ILubyte*)ialloc(iCurImage->Pal.PalSize);
 
 		for (j = 0; j < num_palette; ++j) {
-			iCurImage->Pal.Palette[3*j + 0] = palette[j].red;
-			iCurImage->Pal.Palette[3*j + 1] = palette[j].green;
-			iCurImage->Pal.Palette[3*j + 2] = palette[j].blue;
+			iCurImage->Pal.Palette[chans*j + 0] = palette[j].red;
+			iCurImage->Pal.Palette[chans*j + 1] = palette[j].green;
+			iCurImage->Pal.Palette[chans*j + 2] = palette[j].blue;
+			if (trans!=NULL) {
+				if (j<num_trans)
+					iCurImage->Pal.Palette[chans*j + 3] = trans[j];
+				else
+					iCurImage->Pal.Palette[chans*j + 3] = 255;
+			}
 		}
 	}
 

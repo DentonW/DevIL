@@ -1,6 +1,7 @@
 
 1.6.8 RC2
 -----
+- applied submitted patch #1539074. Fixes some bugs with paletted images, adds iluScaleAlpha (from jbitnet)
 - fixed OpenGL loading
 - altivec code is now merged inside IL sources, not on a separate directory
 - more dds fixes

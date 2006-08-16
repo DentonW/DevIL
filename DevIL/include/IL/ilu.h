@@ -163,6 +163,7 @@ ILAPI ILboolean      ILAPIENTRY iluRotate3D(ILfloat x, ILfloat y, ILfloat z, ILf
 ILAPI ILboolean      ILAPIENTRY iluSaturate1f(ILfloat Saturation);
 ILAPI ILboolean      ILAPIENTRY iluSaturate4f(ILfloat r, ILfloat g, ILfloat b, ILfloat Saturation);
 ILAPI ILboolean      ILAPIENTRY iluScale(ILuint Width, ILuint Height, ILuint Depth);
+ILAPI ILboolean      ILAPIENTRY iluScaleAlpha(ILfloat scale);
 ILAPI ILboolean      ILAPIENTRY iluScaleColours(ILfloat r, ILfloat g, ILfloat b);
 ILAPI ILboolean      ILAPIENTRY iluSharpen(ILfloat Factor, ILuint Iter);
 ILAPI ILboolean      ILAPIENTRY iluSwapColours(ILvoid);

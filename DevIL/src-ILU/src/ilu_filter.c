@@ -711,6 +711,60 @@ ILboolean ILAPIENTRY iluEdgeDetectE()
 	return IL_TRUE;
 }
 
+ILboolean ILAPIENTRY iluScaleAlpha(ILfloat scale)
+{
+	ILuint		i;
+	ILint		alpha;
+
+	iluCurImage = ilGetCurImage();
+	if (iluCurImage == NULL) {
+		ilSetError(ILU_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	if( (iluCurImage->Format != IL_COLOUR_INDEX) && (iluCurImage->Type != IL_BYTE) ) {
+		ilSetError(ILU_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	switch (iluCurImage->Format)
+	{
+		case IL_BGRA:
+		case IL_RGBA:
+			for (i = 0; i < iluCurImage->SizeOfData; i += iluCurImage->Bpp) {
+				alpha = (ILint)(iluCurImage->Data[i+3] * scale);
+				if (alpha > UCHAR_MAX) alpha = UCHAR_MAX;
+				if (alpha < 0) alpha = 0;
+				iluCurImage->Data[i+3] = (ILubyte)alpha;
+			}
+			break;
+
+		case IL_COLOUR_INDEX:
+			switch (iluCurImage->Pal.PalType)
+			{
+				case IL_PAL_RGBA32:
+				case IL_PAL_BGRA32:
+					for (i = 0; i < iluCurImage->Pal.PalSize; i += ilGetInteger(IL_PALETTE_BPP)) {
+						alpha = (ILint)(iluCurImage->Pal.Palette[i+3] * scale);
+						if (alpha > UCHAR_MAX) alpha = UCHAR_MAX;
+						if (alpha < 0) alpha = 0;
+						iluCurImage->Pal.Palette[i+3] = (ILubyte)alpha;
+					}
+					break;
+
+				default:
+					ilSetError(ILU_ILLEGAL_OPERATION);
+					return IL_FALSE;
+			}
+			break;
+
+		default:
+			ilSetError(ILU_ILLEGAL_OPERATION);
+			return IL_FALSE;
+	}
+
+	return IL_TRUE;
+}
 
 // Everything here was taken from "Grafica Obscura",
 //	found at http://www.sgi.com/grafica/matrix/index.html
@@ -731,7 +785,7 @@ ILboolean ILAPIENTRY iluScaleColours(ILfloat r, ILfloat g, ILfloat b) {
 		return IL_FALSE;
 	}
 
-	if( iluCurImage->Type != IL_BYTE ) {
+	if( (iluCurImage->Format != IL_COLOUR_INDEX) && (iluCurImage->Type != IL_BYTE) ) {
 		ilSetError(ILU_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
@@ -822,18 +876,18 @@ ILboolean ILAPIENTRY iluScaleColours(ILfloat r, ILfloat g, ILfloat b) {
 				case IL_PAL_RGB32:
 				case IL_PAL_RGBA32:
 					for (i = 0; i < iluCurImage->Pal.PalSize; i += ilGetInteger(IL_PALETTE_BPP)) {
-						red = (ILint)(iluCurImage->Data[i] * r);
-						grn = (ILint)(iluCurImage->Data[i+1] * g);
-						blu = (ILint)(iluCurImage->Data[i+2] * b);
+						red = (ILint)(iluCurImage->Pal.Palette[i] * r);
+						grn = (ILint)(iluCurImage->Pal.Palette[i+1] * g);
+						blu = (ILint)(iluCurImage->Pal.Palette[i+2] * b);
 						if (red > UCHAR_MAX) red = UCHAR_MAX;
 						if (red < 0) red = 0;
 						if (grn > UCHAR_MAX) grn = UCHAR_MAX;
 						if (grn < 0) grn = 0;
 						if (blu > UCHAR_MAX) blu = UCHAR_MAX;
 						if (blu < 0) blu = 0;
-						iluCurImage->Data[i]   = (ILubyte)red;
-						iluCurImage->Data[i+1] = (ILubyte)grn;
-						iluCurImage->Data[i+2] = (ILubyte)blu;
+						iluCurImage->Pal.Palette[i]   = (ILubyte)red;
+						iluCurImage->Pal.Palette[i+1] = (ILubyte)grn;
+						iluCurImage->Pal.Palette[i+2] = (ILubyte)blu;
 					}
 					break;
 
@@ -841,18 +895,18 @@ ILboolean ILAPIENTRY iluScaleColours(ILfloat r, ILfloat g, ILfloat b) {
 				case IL_PAL_BGR32:
 				case IL_PAL_BGRA32:
 					for (i = 0; i < iluCurImage->Pal.PalSize; i += ilGetInteger(IL_PALETTE_BPP)) {
-						red = (ILint)(iluCurImage->Data[i+2] * r);
-						grn = (ILint)(iluCurImage->Data[i+1] * g);
-						blu = (ILint)(iluCurImage->Data[i] * b);
+						red = (ILint)(iluCurImage->Pal.Palette[i+2] * r);
+						grn = (ILint)(iluCurImage->Pal.Palette[i+1] * g);
+						blu = (ILint)(iluCurImage->Pal.Palette[i] * b);
 						if (red > UCHAR_MAX) red = UCHAR_MAX;
 						if (red < 0) red = 0;
 						if (grn > UCHAR_MAX) grn = UCHAR_MAX;
 						if (grn < 0) grn = 0;
 						if (blu > UCHAR_MAX) blu = UCHAR_MAX;
 						if (blu < 0) blu = 0;
-						iluCurImage->Data[i+2]   = (ILubyte)red;
-						iluCurImage->Data[i+1] = (ILubyte)grn;
-						iluCurImage->Data[i] = (ILubyte)blu;
+						iluCurImage->Pal.Palette[i+2]   = (ILubyte)red;
+						iluCurImage->Pal.Palette[i+1] = (ILubyte)grn;
+						iluCurImage->Pal.Palette[i] = (ILubyte)blu;
 					}
 					break;
 
@@ -861,6 +915,7 @@ ILboolean ILAPIENTRY iluScaleColours(ILfloat r, ILfloat g, ILfloat b) {
 					ilSetError(ILU_ILLEGAL_OPERATION);
 					return IL_FALSE;
 			}
+			break;
 
 		default:
 			ilSetError(ILU_ILLEGAL_OPERATION);
