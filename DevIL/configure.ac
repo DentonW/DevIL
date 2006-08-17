@@ -35,7 +35,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION($Revision: 1.11 $)
+AC_REVISION($Revision: 1.12 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -69,7 +69,7 @@ AM_PROG_LIBTOOL
 AM_MAINTAINER_MODE
 
 dnl
-dnl Check Machine Extensions
+dnl Check CPU Extensions
 dnl
 AC_DEFUN([TEST_EXT],[
 AC_ARG_ENABLE($6,AC_HELP_STRING([--disable-$6],[Doesn't compile $1 support]),
@@ -100,9 +100,23 @@ TEST_EXT([Altivec],[-faltivec -maltivec],[vector int vec;vec=vec_splat_u32(0);],
 TEST_EXT([SSE],[-msse],[__m128 v;v=_mm_sub_ss(v,v);],[SSE],[#include <xmmintrin.h>],[sse])
 TEST_EXT([SSE2],[-msse2],[__m128i v;v=_mm_add_epi32(v,v);],[SSE2],[#include <emmintrin.h>],[sse2])
 TEST_EXT([SSE3],[-msse3],[__m128d v;v=_mm_addsub_pd(v,v);],[SSE3],[#include <emmintrin.h>],[sse3])
-TEST_EXT([X86_ASM],[],[int v=0;asm("bswap %0\n ror   $8,%0\n xchg  %0,%0\n"
-									 :"=r" (v):"r" (v));],[GCC_X86_ASM],[],[x86_asm])
-TEST_EXT([PPC_ASM],[],[asm("lwz r0,r0,r0\n");],[GCC_PCC_ASM],[],[ppc_asm])
+
+dnl
+dnl Check CPU Assembly
+dnl
+AC_DEFUN([TEST_ASM],[
+AC_MSG_CHECKING([$4])
+case $host_cpu in 
+	$1) SUPPORTED_EXTENSION=$SUPPORTED_EXTENSION"$2 "
+		AC_DEFINE([$3],,[$2 assembly found]) 
+		AC_MSG_RESULT(yes)   ;;
+	*)	AC_MSG_RESULT(no)    ;;
+esac
+]) 
+
+TEST_ASM([i[[3456]]86*],[X86_ASM],[GCC_X86_ASM],x86)
+TEST_ASM([x86_64*],[X86_64_ASM],[GCC_X86_64_ASM],x86_64)
+TEST_ASM([powerpc*],[PPC_ASM],[GCC_PCC_ASM],ppc)
 
 dnl
 dnl Test release build options
