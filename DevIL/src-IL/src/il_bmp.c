@@ -17,7 +17,8 @@
 #include "il_manip.h"
 #include "il_endian.h"
 
-INLINE ILvoid GetShiftFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight) {
+// fix for inlineing
+ILvoid GetShiftFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight) {
 	ILuint Temp, i;
 
 	if (Mask == 0) {
