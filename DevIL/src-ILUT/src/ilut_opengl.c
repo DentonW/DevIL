@@ -33,7 +33,7 @@ ILvoid iGLSetMaxH( ILuint Height ) {
 #include <string.h>
 
 #ifdef __APPLE__
-static void *aglGetProcAddress( const GLubyte *name ) {
+void *aglGetProcAddress( const GLubyte *name ) {
 	NSSymbol symbol;
  	char* symbolName;
  	/* prepend a '_' for the Unix C symbol mangling convention */
