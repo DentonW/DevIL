@@ -864,7 +864,7 @@ ILboolean ilSaveTiffF(ILHANDLE File)
 
 
 //! Writes a Tiff to a memory "lump"
-ILboolean ilSaveTiffL(ILvoid *Lump, ILuint Size)
+ILboolean ilSaveTiffL(const ILvoid *Lump, ILuint Size)
 {
 /*
 	iSetOutputLump(Lump, Size);

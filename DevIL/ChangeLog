@@ -1,3 +1,6 @@
+1.6.8 
+---
+- applied submitted patch #1550471. missing const in il_tiff.c
 
 1.6.8 RC2
 -----
