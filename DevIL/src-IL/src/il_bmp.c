@@ -10,6 +10,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#define IL_BMP_C
 
 #include "il_internal.h"
 #ifndef IL_NO_BMP
@@ -17,31 +18,8 @@
 #include "il_manip.h"
 #include "il_endian.h"
 
-// fix for inlineing
-ILvoid GetShiftFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight) {
-	ILuint Temp, i;
+ILvoid GetShiftFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight);
 
-	if (Mask == 0) {
-		*ShiftLeft = *ShiftRight = 0;
-		return;
-	}
-
-	Temp = Mask;
-	for (i = 0; i < 32; i++, Temp >>= 1) {
-		if (Temp & 1)
-			break;
-	}
-	*ShiftRight = i;
-
-	// Temp is preserved, so use it again:
-	for (i = 0; i < 8; i++, Temp >>= 1) {
-		if (!(Temp & 1))
-			break;
-	}
-	*ShiftLeft = 8 - i;
-
-	return;
-}
 
 //! Checks if the file specified in FileName is a valid .bmp file.
 ILboolean ilIsValidBmp(const ILstring FileName)

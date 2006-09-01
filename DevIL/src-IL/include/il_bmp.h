@@ -16,12 +16,10 @@
 
 #include "il_internal.h"
 
-
 #ifdef _WIN32
 	#pragma pack(push, bmp_struct, 1)
 #endif
-typedef struct BMPHEAD
-{
+typedef struct BMPHEAD {
 	ILushort	bfType;
 	ILint		bfSize;
 	ILuint		bfReserved;
@@ -72,5 +70,38 @@ ILboolean	ilReadUncompBmp(BMPHEAD *Info);
 ILboolean	ilReadRLE8Bmp(BMPHEAD *Info);
 ILboolean	ilReadRLE4Bmp(BMPHEAD *Info);
 ILboolean	iGetOS2Bmp(OS2_HEAD *Header);
+
+#ifdef IL_BMP_C
+#undef NOINLINE
+#undef INLINE
+#define INLINE
+#endif
+
+#ifndef NOINLINE
+INLINE ILvoid GetShiftFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight) {
+	ILuint Temp, i;
+
+	if( Mask == 0 ) {
+		*ShiftLeft = *ShiftRight = 0;
+		return;
+	}
+
+	Temp = Mask;
+	for( i = 0; i < 32; i++, Temp >>= 1 ) {
+		if( Temp & 1 )
+			break;
+	}
+	*ShiftRight = i;
+
+	// Temp is preserved, so use it again:
+	for( i = 0; i < 8; i++, Temp >>= 1 ) {
+		if( !(Temp & 1) )
+			break;
+	}
+	*ShiftLeft = 8 - i;
+
+	return;
+}
+#endif
 
 #endif//BMP_H
