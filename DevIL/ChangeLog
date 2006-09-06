@@ -1,5 +1,6 @@
 1.6.8 
 ---
+- fixed an error in the configure script were breaking compilation if libpng-config wasn't in the path
 - applied submitted patch #1550471. missing const in il_tiff.c
 
 1.6.8 RC2
