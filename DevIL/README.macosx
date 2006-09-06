@@ -16,9 +16,6 @@ Needs the same libraries as the *nix version.
 
 Installation:
 -------------
-
-Copy the Framework inside the /Library/Framework folder.
-Then you will need to install the proper libraries.
 All the libraries can be easiliy installed from source, manually or using
 some tools like the fink project or the darwinports project.
 
