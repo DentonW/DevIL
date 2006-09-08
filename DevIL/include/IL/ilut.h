@@ -110,7 +110,7 @@
 #elif MACOSX
 	#define ILUT_USE_OPENGL
 #else
-	
+
 	// We are surely using a *nix so the configure script
 	// may have written the configured config.h header
 	#include "IL/config.h"
@@ -234,7 +234,7 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 extern "C" {
 #endif
 
-	ILAPI BITMAP* ILAPIENTRY ilutAllegLoadImage(Lstring FileName);
+	ILAPI BITMAP* ILAPIENTRY ilutAllegLoadImage(ILstring FileName);
 	ILAPI BITMAP* ILAPIENTRY ilutConvertToAlleg(PALETTE Pal);
 #endif//ILUT_USE_ALLEGRO
 

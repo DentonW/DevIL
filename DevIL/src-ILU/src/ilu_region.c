@@ -12,7 +12,7 @@
 
 
 #include "ilu_region.h"
-
+#include "ilu_internal.h"
 
 ILpointi	*RegionPointsi = NULL;
 ILpointf	*RegionPointsf = NULL;

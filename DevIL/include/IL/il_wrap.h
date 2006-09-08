@@ -3,7 +3,7 @@
 
 /*#include <il/il.h>
 #include <il/ilu.h>*/
-#include <il/ilut.h>  // Probably only have to #include this one
+#include <IL/ilut.h>  // Probably only have to #include this one
 
 #ifdef _MSC_VER
 	#ifndef _IL_WRAP_BUILD_LIB
