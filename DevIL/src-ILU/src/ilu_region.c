@@ -11,8 +11,8 @@
 //-----------------------------------------------------------------------------
 
 
-#include "ilu_region.h"
 #include "ilu_internal.h"
+#include "ilu_region.h"
 
 ILpointi	*RegionPointsi = NULL;
 ILpointf	*RegionPointsf = NULL;
