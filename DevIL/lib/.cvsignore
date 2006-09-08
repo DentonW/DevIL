@@ -1,9 +1,0 @@
-*.dll
-*.lib
-*.so
-*.exp
-*.a
-*.def
-vc6
-vc6_DLL
-
