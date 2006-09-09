@@ -27,10 +27,12 @@ ILAPI ILboolean ILAPIENTRY ilInitImage(ILimage *Image, ILuint Width, ILuint Heig
 	memset (Image, 0, sizeof(ILimage));
 
 	////
-
-	Image->Width	   = Width	== 0 ? 1 : Width;
-	Image->Height	   = Height == 0 ? 1 : Height;
-	Image->Depth	   = Depth	== 0 ? 1 : Depth;
+	if( Width  == 0 ) Width = 1;
+	if( Height == 0 ) Height = 1;
+	if( Depth  == 0 ) Depth = 1;
+	Image->Width	   = Width;
+	Image->Height	   = Height;
+	Image->Depth	   = Depth;
 	Image->Bpp		   = Bpp;
 	Image->Bpc		   = BpcType;
 	Image->Bps		   = Width * Bpp * Image->Bpc;
@@ -770,9 +772,9 @@ ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX, ILint DestY, ILint DestZ
 	StartY = DestY >= 0 ? 0 : -DestY;
 	StartZ = DestZ >= 0 ? 0 : -DestZ;
 	
-	Width = Width + SrcX < Dest->Width ? Width + SrcX : Dest->Width;
+	Width  = Width  + SrcX < Dest->Width  ? Width  + SrcX : Dest->Width;
 	Height = Height + SrcY < Dest->Height ? Height + SrcY : Dest->Height;
-	Depth = Depth + SrcZ < Dest->Depth ? Depth + SrcZ : Dest->Depth;
+	Depth  = Depth  + SrcZ < Dest->Depth  ? Depth  + SrcZ : Dest->Depth;
 	
 	if (iCurImage->Format == IL_RGBA || iCurImage->Format == IL_BGRA || iCurImage->Format == IL_LUMINANCE_ALPHA) {
 		if (iCurImage->Format == IL_LUMINANCE_ALPHA)
@@ -780,7 +782,7 @@ ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX, ILint DestY, ILint DestZ
 		else
 			AlphaOff = 3;
 		
-		for (z = StartZ; z < Depth && z + DestZ < Dest->Depth; z++) {
+		for (z = StartZ; z <= Depth && z + DestZ < Dest->Depth; z++) {
 			for (y = StartY; y < Height && y + DestY < Dest->Height; y++) {
 				for (x = StartX; x < Width && x + DestX < Dest->Width; x++) {
 					SrcIndex = (z + SrcZ) * ConvSizePlane + (y + SrcY) * ConvBps + (x + SrcX) * Dest->Bpp;
@@ -797,9 +799,8 @@ ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX, ILint DestY, ILint DestZ
 				}
 			}
 		}
-	}
-	else {
-		for (z = StartZ; z < Depth && z + DestZ < Dest->Depth; z++) {
+	} else {
+		for (z = StartZ; z <= Depth && z + DestZ < Dest->Depth; z++) {
 			for (y = StartY; y < Height && y + DestY < Dest->Height; y++) {
 				for (x = StartX; x < Width && x + DestX < Dest->Width; x++) {
 					for (c = 0; c < Dest->Bpp; c++) {
