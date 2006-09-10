@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launchConfiguration type="org.eclipse.ant.AntBuilderLaunchConfigurationType">
+<booleanAttribute key="org.eclipse.ui.externaltools.ATTR_BUILDER_ENABLED" value="false"/>
+<mapAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS">
+<mapEntry key="org.eclipse.cdt.make.core.build.arguments" value=""/>
+<mapEntry key="org.eclipse.cdt.core.errorOutputParser" value="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.VCErrorParser;"/>
+<mapEntry key="org.eclipse.cdt.make.core.enableAutoBuild" value="false"/>
+<mapEntry key="org.eclipse.cdt.make.core.environment" value=""/>
+<mapEntry key="org.eclipse.cdt.make.core.enableFullBuild" value="true"/>
+<mapEntry key="org.eclipse.cdt.make.core.build.target.inc" value="all"/>
+<mapEntry key="org.eclipse.cdt.make.core.enabledIncrementalBuild" value="true"/>
+<mapEntry key="org.eclipse.cdt.make.core.build.location" value=""/>
+<mapEntry key="org.eclipse.cdt.make.core.build.target.clean" value="clean"/>
+<mapEntry key="org.eclipse.cdt.make.core.build.command" value="make"/>
+<mapEntry key="org.eclipse.cdt.make.core.enableCleanBuild" value="true"/>
+<mapEntry key="org.eclipse.cdt.make.core.append_environment" value="true"/>
+<mapEntry key="org.eclipse.cdt.make.core.useDefaultBuildCmd" value="true"/>
+<mapEntry key="org.eclipse.cdt.make.core.build.target.auto" value="all"/>
+<mapEntry key="org.eclipse.cdt.make.core.stopOnError" value="false"/>
+</mapAttribute>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_DISABLED_BUILDER" value="org.eclipse.cdt.make.core.makeBuilder"/>
+<booleanAttribute key="org.eclipse.ui.externaltools.ATTR_TRIGGERS_CONFIGURED" value="true"/>
+</launchConfiguration>

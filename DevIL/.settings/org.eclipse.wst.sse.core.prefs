@@ -1,0 +1,6 @@
+#Sun Sep 10 15:29:44 CEST 2006
+eclipse.preferences.version=1
+task-tags/enabled=true
+task-tags/taskPriorities=1,2,1,2
+task-tags/taskTags=TODO,FIXME,XXX,NEXT
+task-tags/use-project-settings=true
