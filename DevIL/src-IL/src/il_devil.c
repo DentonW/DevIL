@@ -713,99 +713,123 @@ ILboolean ILAPIENTRY ilOverlayImage(ILuint Source, ILint XCoord, ILint YCoord, I
 	return IL_TRUE;
 }
 
-
-ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX, ILint DestY, ILint DestZ, ILuint SrcX, ILuint SrcY, ILuint SrcZ, ILuint Width, ILuint Height, ILuint Depth)
-{
-	register ILuint 	x, y, z, SrcIndex, DestIndex, ConvBps, ConvSizePlane;
-	ILimage 	*Dest;
+//@NEXT DestX,DestY,DestZ must be set to ILuint
+ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX,  ILint DestY,   ILint DestZ, 
+                                           ILuint SrcX,  ILuint SrcY,   ILuint SrcZ,
+                                           ILuint Width, ILuint Height, ILuint Depth) {
+	ILuint 		x, y, z, ConvBps, ConvSizePlane;
+	ILimage 	*Dest,*Src;
 	ILubyte 	*Converted;
 	ILuint		DestName = ilGetCurName();
 	ILint		c;
-	ILfloat 	FrontPer, BackPer;
-	ILenum		DestOrigin, SrcOrigin;
-	ILuint		StartX, StartY, StartZ, AlphaOff;
+	ILuint		StartX, StartY, StartZ;
 	ILboolean	DestFlipped = IL_FALSE;
 	ILubyte 	*SrcTemp;
 	
-	
-	if (DestName == 0 || iCurImage == NULL) {
+	// Check if the desiination image really exists
+	if( DestName == 0 || iCurImage == NULL ) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
+	Dest = iCurImage;
 	
-	if (iCurImage->Origin == IL_ORIGIN_LOWER_LEFT) {  // Dest
+	// set the destination image to upper left origin
+	if( Dest->Origin == IL_ORIGIN_LOWER_LEFT ) {  // Dest
 		DestFlipped = IL_TRUE;
 		ilFlipImage();
 	}
-	
-	Dest = iCurImage;
-	DestOrigin = iCurImage->Origin;
+	//DestOrigin = Dest->Origin;
 	ilBindImage(Source);
-	SrcOrigin = iCurImage->Origin;
 	
-	if (iCurImage->Origin == IL_ORIGIN_LOWER_LEFT) {
-		SrcTemp = iGetFlipped(iCurImage);
-		if (SrcTemp == NULL) {
-			ilBindImage(DestName);
-			if (DestFlipped)
-				ilFlipImage();
-			return IL_FALSE;
-		}
-	}
-	else {
-		SrcTemp = iCurImage->Data;
-	}
-	
-	if (Dest == NULL || iCurImage == NULL) {
+	// Check if the source image really exists
+	if( iCurImage == NULL ) {
 		ilSetError(IL_INVALID_PARAM);
 		return IL_FALSE;
 	}
 	
-	Converted = ilConvertBuffer(iCurImage->SizeOfData, iCurImage->Format, Dest->Format, iCurImage->Type, Dest->Type, SrcTemp);
-	if (Converted == NULL)
+	Src = iCurImage;
+	
+	//@TODO test if coordinates are inside the images (hard limit for source)
+	
+	// set the source image to upper left origin
+	if( Src->Origin == IL_ORIGIN_LOWER_LEFT ) {
+		SrcTemp = iGetFlipped(iCurImage);
+		if( SrcTemp == NULL ) {
+			ilBindImage(DestName);
+			if( DestFlipped )
+				ilFlipImage();
+			return IL_FALSE;
+		}
+	} else {
+		SrcTemp = iCurImage->Data;
+	}
+	
+	// convert source image to match the destination image type and format
+	Converted = ilConvertBuffer(Src->SizeOfData, Src->Format, Dest->Format, Src->Type, Dest->Type, SrcTemp);
+	if( Converted == NULL )
 		return IL_FALSE;
 	
-	ConvBps = Dest->Bpp * iCurImage->Width;
-	ConvSizePlane = ConvBps * iCurImage->Height;
+	ConvBps 	  = Dest->Bpp * Src->Width;
+	ConvSizePlane = ConvBps   * Src->Height;
 	
+	//@NEXT in next version this would have to be removed since Dest* will be unsigned
 	StartX = DestX >= 0 ? 0 : -DestX;
 	StartY = DestY >= 0 ? 0 : -DestY;
 	StartZ = DestZ >= 0 ? 0 : -DestZ;
 	
-	Width  = Width  + SrcX < Dest->Width  ? Width  + SrcX : Dest->Width;
-	Height = Height + SrcY < Dest->Height ? Height + SrcY : Dest->Height;
-	Depth  = Depth  + SrcZ < Dest->Depth  ? Depth  + SrcZ : Dest->Depth;
+	// Limit the copy of data inside of the destination image
+	if( Width  + DestX > Dest->Width  ) Width  = Dest->Width  - DestX;
+	if( Height + DestY > Dest->Height ) Height = Dest->Height - DestY;
+	if( Depth  + DestZ > Dest->Depth  ) Depth  = Dest->Depth  - DestZ;
 	
-	if (iCurImage->Format == IL_RGBA || iCurImage->Format == IL_BGRA || iCurImage->Format == IL_LUMINANCE_ALPHA) {
-		if (iCurImage->Format == IL_LUMINANCE_ALPHA)
-			AlphaOff = 1;
-		else
-			AlphaOff = 3;
-		
-		for (z = StartZ; z <= Depth && z + DestZ < Dest->Depth; z++) {
-			for (y = StartY; y < Height && y + DestY < Dest->Height; y++) {
-				for (x = StartX; x < Width && x + DestX < Dest->Width; x++) {
-					SrcIndex = (z + SrcZ) * ConvSizePlane + (y + SrcY) * ConvBps + (x + SrcX) * Dest->Bpp;
-					DestIndex = (z + DestZ) * Dest->SizeOfPlane + (y + DestY) * Dest->Bps + (x + DestX) * Dest->Bpp;
-					// Use the original alpha
-					FrontPer = iCurImage->Data[(z + SrcZ) * iCurImage->SizeOfPlane + (y + SrcY) * iCurImage->Bps + (x + SrcX) * iCurImage->Bpp + 3] / 255.0f;
-					BackPer = 1.0f - FrontPer;
-					for (c = 0; c < Dest->Bpp - 1; c++) {
-						Dest->Data[DestIndex + c] = (ILubyte)(Converted[SrcIndex + c] * FrontPer
-																  + Dest->Data[DestIndex + c] * BackPer);
+	// non funziona con rgba
+	// In case of Alpha channel the data are blended. Keeps the original alpha.
+	if( Src->Format == IL_RGBA || Src->Format == IL_BGRA || Src->Format == IL_LUMINANCE_ALPHA ) {
+		const ILuint bpp_without_alpha = Dest->Bpp - 1;
+		for( z = 0; z < Depth; z++ ) {
+			for( y = 0; y < Height; y++ ) {
+				for( x = 0; x < Width; x++ ) {
+					const ILuint  SrcIndex  = (z+SrcZ)*ConvSizePlane + (y+SrcY)*ConvBps + (x+SrcX)*Dest->Bpp;
+					const ILuint  DestIndex = (z+DestZ)*Dest->SizeOfPlane + (y+DestY)*Dest->Bps + (x+DestX)*Dest->Bpp;
+					const ILuint  AlphaIdx = SrcIndex + bpp_without_alpha;
+					ILfloat Front = 0;
+					
+					switch( Dest->Type ) {
+						case IL_BYTE:
+						case IL_UNSIGNED_BYTE:
+							Front = Converted[AlphaIdx]/((float)IL_MAX_UNSIGNED_BYTE);
+							break;
+						case IL_SHORT:
+						case IL_UNSIGNED_SHORT:
+							Front = ((ILshort*)Converted)[AlphaIdx]/((float)IL_MAX_UNSIGNED_SHORT);
+							break;
+						case IL_INT:
+						case IL_UNSIGNED_INT:
+							Front = ((ILint*)Converted)[AlphaIdx]/((float)IL_MAX_UNSIGNED_INT);
+							break;
+						case IL_FLOAT:
+							Front = ((ILfloat*)Converted)[AlphaIdx];
+							break;
+						case IL_DOUBLE:
+							Front = ((ILdouble*)Converted)[AlphaIdx];
+							break;
 					}
-					// Keep the original alpha.
-					//Dest->Data[DestIndex + c + 1] = Dest->Data[DestIndex + c + 1];
+					const ILfloat Back = 1.0f - Front;
+					for( c = 0; c < bpp_without_alpha; c++ ) {
+						Dest->Data[DestIndex + c] = 
+							(ILubyte)(Converted[SrcIndex + c] * Front
+										+ Dest->Data[DestIndex + c] * Back);
+					}
 				}
 			}
 		}
 	} else {
-		for (z = StartZ; z <= Depth && z + DestZ < Dest->Depth; z++) {
-			for (y = StartY; y < Height && y + DestY < Dest->Height; y++) {
-				for (x = StartX; x < Width && x + DestX < Dest->Width; x++) {
-					for (c = 0; c < Dest->Bpp; c++) {
-						Dest->Data[(z + DestZ) * Dest->SizeOfPlane + (y + DestY) * Dest->Bps + (x + DestX) * Dest->Bpp + c] =
-						Converted[(z + SrcZ) * ConvSizePlane + (y + SrcY) * ConvBps + (x + SrcX) * Dest->Bpp + c];
+		for( z = 0; z < Depth; z++ ) {
+			for( y = 0; y < Height; y++ ) {
+				for( x = 0; x < Width; x++ ) {
+					for( c = 0; c < Dest->Bpp; c++ ) {
+						Dest->Data[(z+DestZ)*Dest->SizeOfPlane + (y+DestY)*Dest->Bps + (x+DestX)*Dest->Bpp + c] =
+						 Converted[(z+SrcZ)*ConvSizePlane + (y+SrcY)*ConvBps + (x+SrcX)*Dest->Bpp + c];
 					}
 				}
 			}
