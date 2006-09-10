@@ -70,7 +70,7 @@ typedef float          ILclampf;
 typedef double         ILdouble;
 typedef double         ILclampd;
 typedef void           ILvoid;
-
+#include <limits.h>
 #ifdef _UNICODE
 	#ifndef _WIN32_WCE
 		#include <wchar.h>
@@ -107,6 +107,16 @@ typedef void           ILvoid;
 #define IL_FLOAT          0x1406
 #define IL_DOUBLE         0x140A
 
+
+#define IL_MAX_BYTE		  		SCHAR_MAX
+#define IL_MAX_UNSIGNED_BYTE  	UCHAR_MAX
+#define IL_MAX_SHORT	  		SHRT_MAX
+#define IL_MAX_UNSIGNED_SHORT 	USHRT_MAX
+#define IL_MAX_INT		  		INT_MAX
+#define IL_MAX_UNSIGNED_INT   	UINT_MAX
+
+#define limit(x,m,M)	(x<m?m:(x>M?M:x))
+#define clamp(x) 		limit(x,0,1)
 
 #define IL_VENDOR   0x1F00
 #define IL_LOAD_EXT 0x1F01
@@ -509,7 +519,7 @@ ILAPI ILuint    ILAPIENTRY ilSaveF(ILenum Type, ILHANDLE File);
 ILAPI ILboolean ILAPIENTRY ilSaveImage(const ILstring FileName);
 ILAPI ILuint    ILAPIENTRY ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size);
 ILAPI ILboolean ILAPIENTRY ilSavePal(const ILstring FileName);
-ILAPI ILvoid    ILAPIENTRY ilSetAlpha( ILdouble AlphaValue );
+ILAPI ILboolean ILAPIENTRY ilSetAlpha( ILdouble AlphaValue );
 ILAPI ILboolean ILAPIENTRY ilSetData(ILvoid *Data);
 ILAPI ILboolean ILAPIENTRY ilSetDuration(ILuint Duration);
 ILAPI ILvoid    ILAPIENTRY ilSetInteger(ILenum Mode, ILint Param);

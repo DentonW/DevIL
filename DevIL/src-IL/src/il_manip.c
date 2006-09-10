@@ -735,70 +735,77 @@ ILubyte* ILAPIENTRY ilGetAlpha(ILenum Type)
 }
 
 // sets the Alpha value to a specific value for each pixel in the image
-ILvoid ILAPIENTRY ilSetAlpha( ILdouble AlphaValue ) {
-    ILuint AlphaOff = 0;
-    ILboolean ret = IL_FALSE;
-    ILuint   i,j,Size;
-    ILimage *image = iCurImage;
+ILboolean ILAPIENTRY ilSetAlpha( ILdouble AlphaValue ) {
+    ILboolean ret = IL_TRUE;
+    ILuint    i,Size;
+    ILimage  *image = iCurImage;
     
     if( image == NULL ) {
         ilSetError(IL_ILLEGAL_OPERATION);
-        return;
+        return IL_FALSE;
     }
     
+    AlphaValue = clamp(AlphaValue);
+    
+    ILuint AlphaOff;
     switch( image->Format ) {
             case IL_RGB:
                 ret = ilConvertImage(IL_RGBA,image->Type);
+            case IL_RGBA:
                 AlphaOff = 4;
                 break;
             case IL_BGR:
                 ret = ilConvertImage(IL_BGRA,image->Type);
+            case IL_BGRA:
                 AlphaOff = 4;
                 break;
             case IL_LUMINANCE:
                 ret = ilConvertImage(IL_LUMINANCE_ALPHA,image->Type);
+            case IL_LUMINANCE_ALPHA:
                 AlphaOff = 2;
                 break;
-            case IL_COLOUR_INDEX:
+            case IL_COLOUR_INDEX: //@TODO use palette with alpha
                 ret = ilConvertImage(IL_RGBA,image->Type);
                 AlphaOff = 4;
                 break;
-    }    
-    
-    if( !ret ) return;
-	
+    }
+    if( ret == IL_FALSE ) {
+    	return IL_FALSE;
+    	// error has been set by ilConvertImage
+    }
 	Size = image->Width * image->Height * image->Depth * image->Bpp;
 	
     switch( iCurImage->Type ) {
-        case IL_BYTE:
+        case IL_BYTE: 
         case IL_UNSIGNED_BYTE: {
-            const ILubyte alpha = (ILubyte)(AlphaValue * 0x000000FF + .5);
-            for( i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
+        	const ILbyte alpha = (ILubyte)(AlphaValue * IL_MAX_UNSIGNED_BYTE + .5);
+            for( i = AlphaOff-1; i < Size; i += AlphaOff)
                 image->Data[i] = alpha;
-            break;}
+            break; }
         case IL_SHORT:
         case IL_UNSIGNED_SHORT: {
-            const ILushort alpha = (ILushort)(AlphaValue * 0x0000FFFF + .5);
-            for( i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
+            const ILushort alpha = (ILushort)(AlphaValue * IL_MAX_UNSIGNED_SHORT + .5);
+            for( i = AlphaOff-1; i < Size; i += AlphaOff)
                 ((ILushort*)image->Data)[i] = alpha;
             break; }
-        case IL_INT:
+        case IL_INT: 
         case IL_UNSIGNED_INT: {
-            const ILuint alpha = (ILuint)(AlphaValue * 0xFFFFFFFF + .5);
-            for( i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++ )
-                ((ILuint*)image->Data)[i] = alpha;
+            const ILushort alpha = (ILushort)(AlphaValue * IL_MAX_UNSIGNED_INT + .5);
+            for( i = AlphaOff-1; i < Size; i += AlphaOff)
+                ((ILushort*)image->Data)[i] = alpha;
             break; }
         case IL_FLOAT: {
             const ILfloat alpha = (ILfloat)AlphaValue;
-            for( i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++ )
+            for( i = AlphaOff-1; i < Size; i += AlphaOff )
                 ((ILfloat*)image->Data)[i] = alpha;
             break; }
         case IL_DOUBLE: {
             const ILdouble alpha  = AlphaValue;
-            for( i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++ )
+            for( i = AlphaOff-1; i < Size; i += AlphaOff )
                 ((ILdouble*)image->Data)[i] = alpha;
             break; }
     }
+    return IL_TRUE;
 }
 
 ILvoid ILAPIENTRY ilModAlpha( ILdouble AlphaValue ) {
