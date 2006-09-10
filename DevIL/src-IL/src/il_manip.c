@@ -738,73 +738,66 @@ ILubyte* ILAPIENTRY ilGetAlpha(ILenum Type)
 ILvoid ILAPIENTRY ilSetAlpha( ILdouble AlphaValue ) {
     ILuint AlphaOff = 0;
     ILboolean ret = IL_FALSE;
-    ILuint i,j,Size;
+    ILuint   i,j,Size;
+    ILimage *image = iCurImage;
     
-	union
-	{
-        ILubyte alpha_byte;
-        ILushort alpha_short;
-        ILuint alpha_int;
-        ILfloat alpha_float;
-        ILdouble alpha_double;
-	} Alpha;
-    
-    if (iCurImage == NULL) {
+    if( image == NULL ) {
         ilSetError(IL_ILLEGAL_OPERATION);
         return;
     }
     
-    switch( iCurImage->Format ) {
+    switch( image->Format ) {
             case IL_RGB:
-                ret = ilConvertImage(IL_RGBA,iCurImage->Type);
+                ret = ilConvertImage(IL_RGBA,image->Type);
                 AlphaOff = 4;
                 break;
             case IL_BGR:
-                ret = ilConvertImage(IL_BGRA,iCurImage->Type);
+                ret = ilConvertImage(IL_BGRA,image->Type);
                 AlphaOff = 4;
                 break;
             case IL_LUMINANCE:
-                ret = ilConvertImage(IL_LUMINANCE_ALPHA,iCurImage->Type);
+                ret = ilConvertImage(IL_LUMINANCE_ALPHA,image->Type);
                 AlphaOff = 2;
                 break;
             case IL_COLOUR_INDEX:
-                ret = ilConvertImage(IL_RGBA,iCurImage->Type);
+                ret = ilConvertImage(IL_RGBA,image->Type);
                 AlphaOff = 4;
                 break;
     }    
-    Size = iCurImage->Width * iCurImage->Height * iCurImage->Depth * iCurImage->Bpp;
     
     if( !ret ) return;
-
-    switch (iCurImage->Type) {
+	
+	Size = image->Width * image->Height * image->Depth * image->Bpp;
+	
+    switch( iCurImage->Type ) {
         case IL_BYTE:
-        case IL_UNSIGNED_BYTE:
-            Alpha.alpha_byte = (ILubyte)(AlphaValue * 0x000000FF + .5);
-            for (i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
-                iCurImage->Data[i] = Alpha.alpha_byte;
-            break;
+        case IL_UNSIGNED_BYTE: {
+            const ILubyte alpha = (ILubyte)(AlphaValue * 0x000000FF + .5);
+            for( i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
+                image->Data[i] = alpha;
+            break;}
         case IL_SHORT:
-        case IL_UNSIGNED_SHORT:
-            Alpha.alpha_short = (ILushort)(AlphaValue * 0x0000FFFF + .5);
-            for (i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
-                ((ILushort*)iCurImage->Data)[i] = Alpha.alpha_short;
-            break;
+        case IL_UNSIGNED_SHORT: {
+            const ILushort alpha = (ILushort)(AlphaValue * 0x0000FFFF + .5);
+            for( i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
+                ((ILushort*)image->Data)[i] = alpha;
+            break; }
         case IL_INT:
-        case IL_UNSIGNED_INT:
-            Alpha.alpha_int = (ILuint)(AlphaValue * 0xFFFFFFFF + .5);
-            for (i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
-                ((ILuint*)iCurImage->Data)[i] = Alpha.alpha_int;
-            break;
-        case IL_FLOAT:
-            Alpha.alpha_float = (ILfloat)AlphaValue;
-            for (i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
-                ((ILfloat*)iCurImage->Data)[i] = Alpha.alpha_float;
-            break;
-        case IL_DOUBLE:
-            Alpha.alpha_double = AlphaValue;
-            for (i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++)
-                ((ILdouble*)iCurImage->Data)[i] = Alpha.alpha_double;
-            break;
+        case IL_UNSIGNED_INT: {
+            const ILuint alpha = (ILuint)(AlphaValue * 0xFFFFFFFF + .5);
+            for( i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++ )
+                ((ILuint*)image->Data)[i] = alpha;
+            break; }
+        case IL_FLOAT: {
+            const ILfloat alpha = (ILfloat)AlphaValue;
+            for( i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++ )
+                ((ILfloat*)image->Data)[i] = alpha;
+            break; }
+        case IL_DOUBLE: {
+            const ILdouble alpha  = AlphaValue;
+            for( i = AlphaOff-1, j = 0; i < Size; i += AlphaOff, j++ )
+                ((ILdouble*)image->Data)[i] = alpha;
+            break; }
     }
 }
 
