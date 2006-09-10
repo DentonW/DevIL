@@ -315,8 +315,11 @@ ILboolean ilReadUncompBmp(BMPHEAD *Header)
 		case 8:
 			iCurImage->Format = IL_COLOUR_INDEX;
 			iCurImage->Pal.PalType = IL_PAL_BGR32;
-			iCurImage->Pal.PalSize = Header->biClrUsed * 4;  // 256 * 4 for most images
-			//iCurImage->Pal.PalSize = 256 * 4;
+			
+			// if there are 256 colors biClrUsed is 0
+			iCurImage->Pal.PalSize = Header->biClrUsed ? 
+					Header->biClrUsed * 4 : 256 * 4;
+			
 			if (Header->biBitCount == 4)  // biClrUsed is 0 for 4-bit bitmaps
 				iCurImage->Pal.PalSize = 16 * 4;
 			iCurImage->Pal.Palette = (ILubyte*)ialloc(iCurImage->Pal.PalSize);
