@@ -1,9 +1,11 @@
 1.6.8 
 ---
+- internal clamp functions now are macros
+- ilSetAlpha now returns a boolean value since it can fail
 - fixed an error in the configure script were breaking compilation if libpng-config wasn't in the path
 - applied submitted patch #1550471. missing const in il_tiff.c
-- fixed bug #1554447. broken bmp loading with less then 256 color and a palette.
-- applied submitted patch #1554358. headers fixes.
+- fixed bug #1554447. broken bmp loading with less then 256 color and a palette
+- applied submitted patch #1554358. headers fixes
 
 1.6.8 RC2
 -----
