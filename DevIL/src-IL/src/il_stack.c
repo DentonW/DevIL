@@ -501,11 +501,15 @@ ILboolean iEnlargeStack()
 }
 
 
-ILboolean IsInit = IL_FALSE;
+static ILboolean IsInit = IL_FALSE;
 
 // ONLY call at startup.
 ILvoid ILAPIENTRY ilInit()
 {
+	// if it is already initialized skip initialization
+	if( IsInit == IL_TRUE ) 
+		return;
+	
 	//ilSetMemory(NULL, NULL);  Now useless 3/4/2006 (due to modification in il_alloc.c)
 	ilSetError(IL_NO_ERROR);
 	ilDefaultStates();  // Set states to their defaults.
@@ -527,7 +531,9 @@ ILvoid ILAPIENTRY ilInit()
 //	- Called on exit
 ILvoid ILAPIENTRY ilShutDown()
 {
-	static ILboolean BeenCalled = IL_FALSE;
+	// if it is not initialized do not shutdown
+	if( IsInit == IL_FALSE )
+		return;
 	iFree *TempFree = FreeNames;
 	ILuint i;
 
@@ -553,8 +559,7 @@ ILvoid ILAPIENTRY ilShutDown()
 	ImageStack = NULL;
 	LastUsed = 0;
 	StackSize = 0;
-	BeenCalled = IL_TRUE;
-
+	IsInit = il_FALSE;
 	return;
 }
 

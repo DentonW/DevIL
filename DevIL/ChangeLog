@@ -1,5 +1,6 @@
 1.6.8 
 ---
+- ilInit and ilShutdown can now be called more then one times or shutdown even if not initialized without crashing anything.
 - fixed bug #662903 ilBlit result incorrect when source is not (0,0)
 - internal clamp functions now are macros
 - ilSetAlpha now returns a boolean value since it can fail
