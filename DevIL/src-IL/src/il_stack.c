@@ -559,7 +559,7 @@ ILvoid ILAPIENTRY ilShutDown()
 	ImageStack = NULL;
 	LastUsed = 0;
 	StackSize = 0;
-	IsInit = il_FALSE;
+	IsInit = IL_FALSE;
 	return;
 }
 
