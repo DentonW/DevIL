@@ -577,6 +577,9 @@ ILboolean PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 				iCurImage->Bps /= 2;
 				for (y = 0; y < Head->Height * iCurImage->Bps; y += iCurImage->Bps) {
 					for (x = 0; x < iCurImage->Bps; x += iCurImage->Bpp, i++) {
+					 #ifndef WORDS_BIGENDIAN
+						iSwapUShort(ShortPtr+i);
+					 #endif
 						((ILushort*)iCurImage->Data)[y + x + c] = ShortPtr[i];
 					}
 				}
