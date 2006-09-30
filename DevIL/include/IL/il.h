@@ -486,6 +486,7 @@ ILAPI ILvoid    ILAPIENTRY ilHint(ILenum Target, ILenum Mode);
 ILAPI ILvoid    ILAPIENTRY ilInit(ILvoid);
 ILAPI ILboolean ILAPIENTRY ilIsDisabled(ILenum Mode);
 ILAPI ILboolean ILAPIENTRY ilIsEnabled(ILenum Mode);
+ILAPI ILenum	ILAPIENTRY ilDetermineTypeF(ILHANDLE File);
 ILAPI ILboolean ILAPIENTRY ilIsImage(ILuint Image);
 ILAPI ILboolean ILAPIENTRY ilIsValid(ILenum Type, ILstring FileName);
 ILAPI ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File);
