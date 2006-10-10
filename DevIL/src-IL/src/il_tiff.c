@@ -40,11 +40,12 @@ static ILboolean iLoadTiffInternal(ILvoid);
 static char*     iMakeString(ILvoid);
 static TIFF*     iTIFFOpen(char *Mode);
 //static ILboolean iSaveTiffInternal();
+
 static ILboolean iSaveTiffInternal(const char* Filename);
 
 /*----------------------------------------------------------------------------*/
 
-ILboolean ilisValidTiffExtension(const ILstring FileName)
+ILboolean ilisValidTiffExtension(ILconst_string FileName)
 {
 	if (!iCheckExtension((ILstring)FileName, IL_TEXT("tif")) &&
 		!iCheckExtension((ILstring)FileName, IL_TEXT("tiff")))
@@ -56,7 +57,7 @@ ILboolean ilisValidTiffExtension(const ILstring FileName)
 /*----------------------------------------------------------------------------*/
 
 //! Checks if the file specified in FileName is a valid tiff file.
-ILboolean ilIsValidTiff(const ILstring FileName)
+ILboolean ilIsValidTiff(ILconst_string FileName)
 {
 	ILHANDLE	TiffFile;
 	ILboolean	bTiff = IL_FALSE;
@@ -128,7 +129,7 @@ ILboolean ilIsValidTiffL(const ILvoid *Lump, ILuint Size)
 /*----------------------------------------------------------------------------*/
 
 //! Reads a Tiff file
-ILboolean ilLoadTiff(const ILstring FileName)
+ILboolean ilLoadTiff(ILconst_string FileName)
 {
 	ILHANDLE	TiffFile;
 	ILboolean	bTiff = IL_FALSE;
@@ -725,6 +726,7 @@ _tiffFileSeekProc(thandle_t fd, toff_t tOff, int whence)
 }
 
 /*----------------------------------------------------------------------------*/
+
 #if 0
 static toff_t
 _tiffFileSeekProcW(thandle_t fd, toff_t tOff, int whence)
@@ -760,6 +762,7 @@ _tiffFileSizeProc(thandle_t fd)
 }
 
 /*----------------------------------------------------------------------------*/
+
 #if 0
 static toff_t
 _tiffFileSizeProcW(thandle_t fd)
@@ -824,7 +827,7 @@ TIFF *iTIFFOpen(char *Mode)
 
 
 //! Writes a Tiff file
-ILboolean ilSaveTiff(const ILstring FileName)
+ILboolean ilSaveTiff(ILconst_string FileName)
 {
 	//ILHANDLE	TiffFile;
 	ILboolean	bTiff = IL_FALSE;
@@ -844,6 +847,7 @@ ILboolean ilSaveTiff(const ILstring FileName)
 */
 	//bTiff = ilSaveTiffF(TiffFile);
 	bTiff = iSaveTiffInternal(FileName);
+
 /*
 	iclosew(TiffFile);
 */
@@ -854,9 +858,11 @@ ILboolean ilSaveTiff(const ILstring FileName)
 //! Writes a Tiff to an already-opened file
 ILboolean ilSaveTiffF(ILHANDLE File)
 {
+
 /*
 	iSetOutputFile(File);
 	return iSaveTiffInternal();
+
 */
 	//ilSetError(IL_FILE_READ_ERROR);
 	return IL_FALSE;
@@ -867,8 +873,10 @@ ILboolean ilSaveTiffF(ILHANDLE File)
 ILboolean ilSaveTiffL(const ILvoid *Lump, ILuint Size)
 {
 /*
+
 	iSetOutputLump(Lump, Size);
 	return iSaveTiffInternal();
+
 */
 	//ilSetError(IL_FILE_READ_ERROR);
 	return IL_FALSE;
@@ -879,6 +887,7 @@ ILboolean ilSaveTiffL(const ILvoid *Lump, ILuint Size)
 
 // Internal function used to save the Tiff.
 //ILboolean iSaveTiffInternal()
+
 ILboolean iSaveTiffInternal(const char* Filename)
 {
 	ILenum	Format;

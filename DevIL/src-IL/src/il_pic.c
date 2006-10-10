@@ -20,7 +20,7 @@
 
 
 //! Checks if the file specified in FileName is a valid .pic file.
-ILboolean ilIsValidPic(const ILstring FileName)
+ILboolean ilIsValidPic(ILconst_string FileName)
 {
 	ILHANDLE	PicFile;
 	ILboolean	bPic = IL_FALSE;
@@ -70,13 +70,21 @@ ILboolean ilIsValidPicL(const ILvoid *Lump, ILuint Size)
 ILboolean iGetPicHead(PIC_HEAD *Header)
 {
 	Header->Magic = GetLittleInt();
+
 	Header->Version = GetLittleFloat();
+
 	iread(Header->Comment, 1, 80);
+
 	iread(Header->Id, 1, 4);
+
 	Header->Width = GetLittleShort();
+
 	Header->Height = GetLittleShort();
+
 	Header->Ratio = GetLittleFloat();
+
 	Header->Fields = GetLittleShort();
+
 	Header->Padding = GetLittleShort();
 
 	return IL_TRUE;
@@ -113,7 +121,7 @@ ILboolean iCheckPic(PIC_HEAD *Header)
 
 
 //! Reads a .pic file
-ILboolean ilLoadPic(const ILstring FileName)
+ILboolean ilLoadPic(ILconst_string FileName)
 {
 	ILHANDLE	PicFile;
 	ILboolean	bPic = IL_FALSE;

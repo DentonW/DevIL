@@ -20,7 +20,7 @@ ILboolean iLoadMdlInternal(ILvoid);
 
 
 //! Reads a .Mdl file
-ILboolean ilLoadMdl(const ILstring FileName)
+ILboolean ilLoadMdl(ILconst_string FileName)
 {
 	ILHANDLE	MdlFile;
 	ILboolean	bMdl = IL_FALSE;

@@ -20,7 +20,7 @@ ILboolean iSaveRawInternal(ILvoid);
 
 
 //! Reads a raw file
-ILboolean ilLoadRaw(const ILstring FileName)
+ILboolean ilLoadRaw(ILconst_string FileName)
 {
 	ILHANDLE	RawFile;
 	ILboolean	bRaw = IL_FALSE;
@@ -75,10 +75,15 @@ ILboolean iLoadRawInternal()
 		return IL_FALSE;
 	}
 
+
 	iCurImage->Width = GetLittleUInt();
+
 	iCurImage->Height = GetLittleUInt();
+
 	iCurImage->Depth = GetLittleUInt();
+
 	iCurImage->Bpp = igetc();
+
 	if (iread(&iCurImage->Bpc, 1, 1) != 1)
 		return IL_FALSE;
 
@@ -112,7 +117,7 @@ ILboolean iLoadRawInternal()
 
 
 //! Writes a Raw file
-ILboolean ilSaveRaw(const ILstring FileName)
+ILboolean ilSaveRaw(ILconst_string FileName)
 {
 	ILHANDLE	RawFile;
 	ILboolean	bRaw = IL_FALSE;

@@ -35,7 +35,7 @@ typedef struct iFormatS
 #define I_LOAD_FUNC 0
 #define I_SAVE_FUNC 1
 
-ILboolean iRegisterLoad(const ILstring FileName);
-ILboolean iRegisterSave(const ILstring FileName);
+ILboolean iRegisterLoad(ILconst_string FileName);
+ILboolean iRegisterSave(ILconst_string FileName);
 
 #endif//REGISTER_H

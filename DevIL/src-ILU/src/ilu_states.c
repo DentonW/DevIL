@@ -15,8 +15,8 @@
 #include "ilu_states.h"
 
 
-const ILstring _iluVendor	= IL_TEXT("Abysmal Software");
-const ILstring _iluVersion	= IL_TEXT("Developer's Image Library Utilities (ILU) 1.6.7 " __DATE__);
+ILconst_string _iluVendor	= IL_TEXT("Abysmal Software");
+ILconst_string _iluVersion	= IL_TEXT("Developer's Image Library Utilities (ILU) 1.6.7 " __DATE__);
 
 
 ILstring ILAPIENTRY iluGetString(ILenum StringName)
@@ -24,10 +24,10 @@ ILstring ILAPIENTRY iluGetString(ILenum StringName)
 	switch (StringName)
 	{
 		case ILU_VENDOR:
-			return (const ILstring)_iluVendor;
+			return (ILconst_string)_iluVendor;
 		//changed 2003-09-04
 		case ILU_VERSION_NUM:
-			return (const ILstring)_iluVersion;
+			return (ILconst_string)_iluVersion;
 		default:
 			ilSetError(ILU_INVALID_PARAM);
 			break;

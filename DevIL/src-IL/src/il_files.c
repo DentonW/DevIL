@@ -88,7 +88,7 @@ ILvoid ILAPIENTRY iRestoreReadFuncs()
 
 // Next 7 functions are the default read functions
 
-ILHANDLE ILAPIENTRY iDefaultOpenR(const ILstring FileName)
+ILHANDLE ILAPIENTRY iDefaultOpenR(ILconst_string FileName)
 {
 #ifndef _WIN32_WCE
 	return (ILHANDLE)fopen(FileName, "rb");
@@ -169,7 +169,7 @@ ILint ILAPIENTRY iDefaultWTell(ILHANDLE Handle)
 }
 
 
-ILHANDLE ILAPIENTRY iDefaultOpenW(const ILstring FileName)
+ILHANDLE ILAPIENTRY iDefaultOpenW(ILconst_string FileName)
 {
 #ifndef _WIN32_WCE
 	return (ILHANDLE)fopen(FileName, "wb");

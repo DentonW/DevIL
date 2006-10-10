@@ -18,7 +18,7 @@
 
 
 //! Checks if the file specified in FileName is a valid .dcx file.
-ILboolean ilIsValidDcx(const ILstring FileName) {
+ILboolean ilIsValidDcx(ILconst_string FileName) {
 	ILHANDLE	DcxFile;
 	ILboolean	bDcx = IL_FALSE;
 
@@ -64,14 +64,23 @@ ILboolean ilIsValidDcxL(const ILvoid *Lump, ILuint Size) {
 // Internal function obtain the .dcx header from the current file.
 ILboolean iGetDcxHead(DCXHEAD *Head) {
 	Head->Xmin = GetLittleUShort();
+
 	Head->Ymin = GetLittleUShort();
+
 	Head->Xmax = GetLittleUShort();
+
 	Head->Ymax = GetLittleUShort();
+
 	Head->HDpi = GetLittleUShort();
+
 	Head->VDpi = GetLittleUShort();
+
 	Head->Bps = GetLittleUShort();
+
 	Head->PaletteInfo = GetLittleUShort();
+
 	Head->HScreenSize = GetLittleUShort();
+
 	Head->VScreenSize = GetLittleUShort();
 
 	return IL_TRUE;
@@ -125,7 +134,7 @@ ILboolean iCheckDcx(DCXHEAD *Header)
 
 
 //! Reads a .dcx file
-ILboolean ilLoadDcx(const ILstring FileName)
+ILboolean ilLoadDcx(ILconst_string FileName)
 {
 	ILHANDLE	DcxFile;
 	ILboolean	bDcx = IL_FALSE;

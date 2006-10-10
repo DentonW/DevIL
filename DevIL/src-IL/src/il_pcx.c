@@ -18,7 +18,7 @@
 
 
 //! Checks if the file specified in FileName is a valid .pcx file.
-ILboolean ilIsValidPcx(const ILstring FileName) {
+ILboolean ilIsValidPcx(ILconst_string FileName) {
 	ILHANDLE	PcxFile;
 	ILboolean	bPcx = IL_FALSE;
 
@@ -63,24 +63,43 @@ ILboolean ilIsValidPcxL(const ILvoid *Lump, ILuint Size) {
 
 // Internal function obtain the .pcx header from the current file.
 ILboolean iGetPcxHead(PCXHEAD *Head) {
+
 	Head->Manufacturer = igetc();
+
 	Head->Version = igetc();
+
 	Head->Encoding = igetc();
+
 	Head->Bpp = igetc();
+
 	Head->Xmin = GetLittleUShort();
+
 	Head->Ymin = GetLittleUShort();
+
 	Head->Xmax = GetLittleUShort();
+
 	Head->Ymax = GetLittleUShort();
+
 	Head->HDpi = GetLittleUShort();
+
 	Head->VDpi = GetLittleUShort();
+
 	iread(Head->ColMap, 1, 48);
+
 	Head->Reserved = igetc();
+
 	Head->NumPlanes = igetc();
+
 	Head->Bps = GetLittleUShort();
+
 	Head->PaletteInfo = GetLittleUShort();
+
 	Head->HScreenSize = GetLittleUShort();
+
 	Head->VScreenSize = GetLittleUShort();
+
 	iread(Head->Filler, 1, 54);
+
 
 	return IL_TRUE;
 }
@@ -136,7 +155,7 @@ ILboolean iCheckPcx(PCXHEAD *Header) {
 
 
 //! Reads a .pcx file
-ILboolean ilLoadPcx(const ILstring FileName) {
+ILboolean ilLoadPcx(ILconst_string FileName) {
 	ILHANDLE	PcxFile;
 	ILboolean	bPcx = IL_FALSE;
 
@@ -469,7 +488,7 @@ ILboolean iUncompressSmall(PCXHEAD *Header) {
 
 
 //! Writes a .pcx file
-ILboolean ilSavePcx(const ILstring FileName) {
+ILboolean ilSavePcx(ILconst_string FileName) {
 	ILHANDLE	PcxFile;
 	ILboolean	bPcx = IL_FALSE;
 

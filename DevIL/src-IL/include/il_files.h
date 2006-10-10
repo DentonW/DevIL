@@ -34,7 +34,7 @@ __FILES_EXTERN fTellWProc	TellWProc;
 __FILES_EXTERN fPutcProc	PutcProc;
 __FILES_EXTERN fWriteProc	WriteProc;
 
-__FILES_EXTERN ILHANDLE		ILAPIENTRY iDefaultOpen(const ILstring FileName);
+__FILES_EXTERN ILHANDLE		ILAPIENTRY iDefaultOpen(ILconst_string FileName);
 __FILES_EXTERN ILvoid		ILAPIENTRY iDefaultClose(ILHANDLE Handle);
 __FILES_EXTERN ILint		ILAPIENTRY iDefaultGetc(ILHANDLE Handle);
 __FILES_EXTERN ILint		ILAPIENTRY iDefaultRead(ILvoid *Buffer, ILuint Size, ILuint Number, ILHANDLE Handle);
@@ -48,7 +48,7 @@ __FILES_EXTERN ILint		ILAPIENTRY iDefaultWrite(const ILvoid *Buffer, ILuint Size
 __FILES_EXTERN ILvoid		iSetInputFile(ILHANDLE File);
 __FILES_EXTERN ILvoid		iSetInputLump(const ILvoid *Lump, ILuint Size);
 __FILES_EXTERN ILboolean	(ILAPIENTRY *ieof)(ILvoid);
-__FILES_EXTERN ILHANDLE		(ILAPIENTRY *iopenr)(const ILstring);
+__FILES_EXTERN ILHANDLE		(ILAPIENTRY *iopenr)(ILconst_string);
 __FILES_EXTERN ILvoid		(ILAPIENTRY *icloser)(ILHANDLE);
 __FILES_EXTERN ILint		(ILAPIENTRY *igetc)(ILvoid);
 __FILES_EXTERN ILuint		(ILAPIENTRY *iread)(ILvoid *Buffer, ILuint Size, ILuint Number);
@@ -58,7 +58,7 @@ __FILES_EXTERN ILuint		(ILAPIENTRY *itell)(ILvoid);
 __FILES_EXTERN ILvoid		iSetOutputFile(ILHANDLE File);
 __FILES_EXTERN ILvoid		iSetOutputLump(ILvoid *Lump, ILuint Size);
 __FILES_EXTERN ILvoid		(ILAPIENTRY *iclosew)(ILHANDLE);
-__FILES_EXTERN ILHANDLE		(ILAPIENTRY *iopenw)(const ILstring);
+__FILES_EXTERN ILHANDLE		(ILAPIENTRY *iopenw)(ILconst_string);
 __FILES_EXTERN ILint		(ILAPIENTRY *iputc)(ILubyte Char);
 __FILES_EXTERN ILuint		(ILAPIENTRY *iseekw)(ILint Offset, ILuint Mode);
 __FILES_EXTERN ILuint		(ILAPIENTRY *itellw)(ILvoid);

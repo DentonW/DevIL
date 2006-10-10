@@ -33,7 +33,7 @@ ILboolean iLoadWalInternal(ILvoid);
 
 
 //! Reads a .wal file
-ILboolean ilLoadWal(const ILstring FileName)
+ILboolean ilLoadWal(ILconst_string FileName)
 {
 	ILHANDLE	WalFile;
 	ILboolean	bWal = IL_FALSE;
@@ -86,16 +86,27 @@ ILboolean iLoadWalInternal()
 	}
 	CurImage = iCurImage;
 
+
 	//read header
+
 	iread(&Header.FileName, 1, 32);
+
 	Header.Width = GetLittleUInt();
+
 	Header.Height = GetLittleUInt();
+
 	for (i = 0; i < 4; i++)
+
 		Header.Offsets[i] = GetLittleUInt();
+
 	iread(Header.AnimName, 1, 32);
+
 	Header.Flags = GetLittleUInt();
+
 	Header.Contents = GetLittleUInt();
+
 	Header.Value = GetLittleUInt();
+
 
 	if (!ilTexImage(Header.Width, Header.Height, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL))
 		return IL_FALSE;

@@ -27,7 +27,7 @@ ILboolean iLoadDoomFlatInternal(ILvoid);
 //
 
 //! Reads a Doom file
-ILboolean ilLoadDoom(const ILstring FileName)
+ILboolean ilLoadDoom(ILconst_string FileName)
 {
 	ILHANDLE	DoomFile;
 	ILboolean	bDoom = IL_FALSE;
@@ -171,7 +171,7 @@ ILboolean iLoadDoomInternal()
 //
 
 //! Reads a Doom flat file
-ILboolean ilLoadDoomFlat(const ILstring FileName)
+ILboolean ilLoadDoomFlat(ILconst_string FileName)
 {
 	ILHANDLE	FlatFile;
 	ILboolean	bFlat = IL_FALSE;

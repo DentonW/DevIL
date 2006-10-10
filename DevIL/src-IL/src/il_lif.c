@@ -17,7 +17,7 @@
 
 
 //! Checks if the file specified in FileName is a valid Lif file.
-ILboolean ilIsValidLif(const ILstring FileName)
+ILboolean ilIsValidLif(ILconst_string FileName)
 {
 	ILHANDLE	LifFile;
 	ILboolean	bLif = IL_FALSE;
@@ -66,16 +66,27 @@ ILboolean ilIsValidLifL(const ILvoid *Lump, ILuint Size)
 // Internal function used to get the Lif header from the current file.
 ILboolean iGetLifHead(LIF_HEAD *Header)
 {
+
 	iread(Header->Id, 1, 8);
+
 	Header->Version = GetLittleUInt();
+
 	Header->Flags = GetLittleUInt();
+
 	Header->Width = GetLittleUInt();
+
 	Header->Height = GetLittleUInt();
+
 	Header->PaletteCRC = GetLittleUInt();
+
 	Header->ImageCRC = GetLittleUInt();
+
 	Header->PalOffset = GetLittleUInt();
+
 	Header->TeamEffect0 = GetLittleUInt();
+
 	Header->TeamEffect1 = GetLittleUInt();
+
 
 	return IL_TRUE;
 }
@@ -106,7 +117,7 @@ ILboolean iCheckLif(LIF_HEAD *Header)
 
 
 //! Reads a .Lif file
-ILboolean ilLoadLif(const ILstring FileName)
+ILboolean ilLoadLif(ILconst_string FileName)
 {
 	ILHANDLE	LifFile;
 	ILboolean	bLif = IL_FALSE;

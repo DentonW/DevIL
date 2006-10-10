@@ -22,7 +22,7 @@ ILvoid GetShiftFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight);
 
 
 //! Checks if the file specified in FileName is a valid .bmp file.
-ILboolean ilIsValidBmp(const ILstring FileName)
+ILboolean ilIsValidBmp(ILconst_string FileName)
 {
 	ILHANDLE	BitmapFile;
 	ILboolean	bBitmap = IL_FALSE;
@@ -176,7 +176,7 @@ ILboolean iCheckOS2(OS2_HEAD *Header)
 
 
 //! Reads a .bmp file
-ILboolean ilLoadBmp(const ILstring FileName)
+ILboolean ilLoadBmp(ILconst_string FileName)
 {
 	ILHANDLE	BitmapFile;
 	ILboolean	bBitmap = IL_FALSE;

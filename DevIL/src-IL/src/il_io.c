@@ -16,7 +16,7 @@
 #include <string.h>
 
 
-ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
+ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 {
 	ILstring Ext;
 
@@ -95,7 +95,7 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(const ILstring FileName)
 ILenum ilDetermineTypeF(ILHANDLE File);
 
 //changed 2003-09-17 to ILAPIENTRY
-ILAPI ILenum ILAPIENTRY ilDetermineType(const ILstring FileName)
+ILAPI ILenum ILAPIENTRY ilDetermineType(ILconst_string FileName)
 {
 	ILHANDLE	File;
 	ILenum		Type;
@@ -546,7 +546,7 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, ILvoid *Lump, ILuint Size)
 }
 
 
-ILboolean ILAPIENTRY ilLoad(ILenum Type, const ILstring FileName) {
+ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName) {
 #ifndef _UNICODE
 	if (FileName == NULL || strlen(FileName) < 1) {
 #else
@@ -1014,7 +1014,7 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const ILvoid *Lump, ILuint Size) {
 
 
 //! Attempts to load an image with various different methods before failing - very generic.
-ILboolean ILAPIENTRY ilLoadImage(const ILstring FileName)
+ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 {
 	ILstring	Ext = iGetExtension(FileName);
 	ILenum		Type;
@@ -1384,11 +1384,17 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size)
 			break;
 		#endif
 
+
 		#ifndef IL_NO_PNG
+
 		case IL_PNG:
+
 			Ret = ilSavePngL(Lump, Size);
+
 			break;
+
 		#endif
+
 
 		#ifndef IL_NO_PNM
 		case IL_PNM:
@@ -1440,7 +1446,7 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size)
 
 //! Determines what image type to save based on the extension and attempts to save
 //	the current image based on the extension given in FileName.
-ILboolean ILAPIENTRY ilSaveImage(const ILstring FileName)
+ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 {
 	ILstring Ext = iGetExtension(FileName);
 

@@ -22,8 +22,8 @@ ILboolean iIsValidJpg(ILvoid);
 	ILboolean iLoadJpegInternal(ILvoid);
 	ILboolean iSaveJpegInternal(ILvoid);
 #else
-	ILboolean iLoadJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size);
-	ILboolean iSaveJpegInternal(const ILstring FileName, ILvoid *Lump, ILuint Size);
+	ILboolean iLoadJpegInternal(ILconst_string FileName, ILvoid *Lump, ILuint Size);
+	ILboolean iSaveJpegInternal(ILconst_string FileName, ILvoid *Lump, ILuint Size);
 #endif
 
 #endif//JPEG_H

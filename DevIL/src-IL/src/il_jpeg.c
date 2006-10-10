@@ -83,7 +83,7 @@ ILboolean iIsValidJpg()
 
 
 //! Checks if the file specified in FileName is a valid .jpg file.
-ILboolean ilIsValidJpg(const ILstring FileName)
+ILboolean ilIsValidJpg(ILconst_string FileName)
 {
 	ILHANDLE	JpegFile;
 	ILboolean	bJpeg = IL_FALSE;
@@ -146,7 +146,7 @@ void OutputMsg(struct jpeg_common_struct *JpegInfo)
 
 
 //! Reads a jpeg file
-ILboolean ilLoadJpeg(const ILstring FileName)
+ILboolean ilLoadJpeg(ILconst_string FileName)
 {
 	ILHANDLE	JpegFile;
 	ILboolean	bJpeg = IL_FALSE;
@@ -398,7 +398,7 @@ devil_jpeg_write_init(j_compress_ptr cinfo)
 
 
 //! Writes a Jpeg file
-ILboolean ilSaveJpeg(const ILstring FileName)
+ILboolean ilSaveJpeg(ILconst_string FileName)
 {
 	ILHANDLE	JpegFile;
 	ILboolean	bJpeg = IL_FALSE;
@@ -553,7 +553,7 @@ ILboolean iSaveJpegInternal()
 
 
 //! Reads a jpeg file
-ILboolean ilLoadJpeg(const ILstring FileName)
+ILboolean ilLoadJpeg(ILconst_string FileName)
 {
 	if (!iFileExists(FileName)) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
@@ -670,7 +670,7 @@ ILboolean iLoadJpegInternal(ILstring FileName, ILvoid *Lump, ILuint Size)
 
 
 //! Writes a Jpeg file
-ILboolean ilSaveJpeg(const ILstring FileName)
+ILboolean ilSaveJpeg(ILconst_string FileName)
 {
 	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
 		if (iFileExists(FileName)) {

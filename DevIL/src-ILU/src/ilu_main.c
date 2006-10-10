@@ -53,7 +53,7 @@ ILvoid ILAPIENTRY iluInit()
 
 
 //#ifndef _WIN32_WCE
-ILuint ILAPIENTRY iluLoadImage(const ILstring FileName)
+ILuint ILAPIENTRY iluLoadImage(ILconst_string FileName)
 {
 	ILuint Id;
 	ilGenImages(1, &Id);
