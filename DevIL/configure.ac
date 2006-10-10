@@ -35,7 +35,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION($Revision: 1.13 $)
+AC_REVISION($Revision: 1.14 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -243,11 +243,11 @@ SET_LIB(mng,MNG)
 SET_LIB(z,Z)
 
 libpng_app=$(which libpng-config)
-if [ test -e "$libpng_app" ] ; then
-	SET_LIB(png,PNG,`libpng-config --ldflags`)
-else
+if [ -z "$libpng_app" ] ; then
 	LIBPNG=""
 	AC_SUBST(LIBPNG)
+else
+	SET_LIB(png,PNG,`libpng-config --ldflags`)
 fi
 
 dnl Just in case the library is not installed in the default header path
