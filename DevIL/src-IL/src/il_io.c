@@ -1357,7 +1357,7 @@ ILuint ILAPIENTRY ilSaveF(ILenum Type, ILHANDLE File)
 	if (Ret == IL_FALSE)
 		return 0;
 
-	return itell();
+	return itellw();
 }
 
 
