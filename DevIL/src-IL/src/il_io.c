@@ -1273,6 +1273,11 @@ ILboolean ILAPIENTRY ilSave(ILenum Type, ILstring FileName)
 			return ilSaveTiff(FileName);
 		#endif
 
+		#ifndef IL_NO_DDS
+		case IL_DDS:
+    		return ilSaveDds(FileName);
+		#endif
+
 		case IL_JASC_PAL:
 			return ilSaveJascPal(FileName);
 	}
