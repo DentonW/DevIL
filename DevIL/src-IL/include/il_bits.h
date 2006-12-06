@@ -20,7 +20,7 @@
 // Struct for dealing with reading bits from a file
 typedef struct BITFILE
 {
-	ILHANDLE	*File;
+	ILHANDLE	File;
 	ILuint		BitPos;
 	ILint		ByteBitOff;
 	ILubyte		Buff;

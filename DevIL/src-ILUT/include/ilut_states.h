@@ -33,6 +33,7 @@ typedef struct ILUT_STATES
 	// ILUT states
 	ILboolean	ilutUsePalettes;
 	ILboolean	ilutOglConv;
+	ILboolean	ilutForceIntegerFormat;
 	ILenum		ilutDXTCFormat;
 
 	// GL states

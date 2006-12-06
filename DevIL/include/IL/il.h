@@ -21,11 +21,16 @@
 extern "C" {
 #endif
 
-// Compiling Options
+// Compiling Optionsok
 #define IL_INLINE_ASM
-//#define IL_DEBUG
-//#define IL_STATIC_LIB
-//#define IL_NO_LCMS
+
+//this define controls if floats and doubles are clampled to [0..1]
+//during conversion. It takes a little more time, but it is the correct
+//way of doing this. If you are sure your floats are always valid,
+//you can undefine this value...
+#define CLAMP_HALF		1
+#define CLAMP_FLOATS	1
+#define CLAMP_DOUBLES	1
 
 #ifdef _WIN32_WCE
 	#define IL_NO_GIF
@@ -108,6 +113,7 @@ typedef void           ILvoid;
 #define IL_UNSIGNED_INT   0x1405
 #define IL_FLOAT          0x1406
 #define IL_DOUBLE         0x140A
+#define IL_HALF           0x140B
 
 
 #define IL_MAX_BYTE		  		SCHAR_MAX

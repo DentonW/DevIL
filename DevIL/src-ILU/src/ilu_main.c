@@ -29,7 +29,8 @@
 /* Only needed for MSVC++ unless extended to actually do something =) */
 #if defined(_WIN32) && defined(_MSC_VER)
 
-BOOL ILAPIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
+#ifndef IL_STATIC_LIB
+BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
 	hModule;  ul_reason_for_call;  lpReserved;
 	
@@ -41,7 +42,7 @@ BOOL ILAPIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReser
 }
 
 #endif
-
+#endif
 
 ILvoid ILAPIENTRY iluInit()
 {

@@ -20,6 +20,9 @@
 
 
 ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestType, ILvoid *Buffer);
+ILushort ILAPIENTRY ilFloatToHalf(ILuint i);
+ILuint ILAPIENTRY ilHalfToFloat (ILushort y);
+ILfloat ILAPIENTRY  ilFloatToHalfOverflow();
 
 #define CHECK_ALLOC() 	if (NewData == NULL) { \
 							if (Data != Buffer) \
@@ -89,6 +92,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 						#ifdef ALTIVEC_GCC
 							abc2cba_short((ILushort*)Data,NumPix * BpcDest,(ILushort*)NewData);
 						#else
@@ -152,6 +156,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0, j = 0; i < NumPix; i += 3, j += 4) {
 								((ILushort*)(NewData))[j] = ((ILushort*)(Data))[i];
 								((ILushort*)(NewData))[j+1] = ((ILushort*)(Data))[i+1];
@@ -203,6 +208,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0, j = 0; i < NumPix; i += 3, j += 4) {
 								((ILushort*)(NewData))[j] = ((ILushort*)(Data))[i+2];
 								((ILushort*)(NewData))[j+1] = ((ILushort*)(Data))[i+1];
@@ -256,6 +262,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0; i < Size; i++) {
 								Resultf = 0;
 								for (c = 0; c < 3; c++) {
@@ -314,6 +321,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0; i < Size; i++) {
 								Resultf = 0;
 								for (c = 0; c < 3; c++) {
@@ -388,6 +396,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 						#ifdef ALTIVEC_GCC
 							abcd2cbad_short((ILushort*)Data,iCurImage->SizeOfData,(ILushort*)NewData);
 						#else
@@ -454,6 +463,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0, j = 0; i < NumPix; i += 4, j += 3) {
 								((ILushort*)(NewData))[j] = ((ILushort*)(Data))[i];
 								((ILushort*)(NewData))[j+1] = ((ILushort*)(Data))[i+1];
@@ -500,6 +510,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0, j = 0; i < NumPix; i += 4, j += 3) {
 								((ILushort*)(NewData))[j] = ((ILushort*)(Data))[i+2];
 								((ILushort*)(NewData))[j+1] = ((ILushort*)(Data))[i+1];
@@ -549,6 +560,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0; i < Size; i++) {
 								Resultf = 0.0f;
 								for (c = 0; c < 3; c++) {
@@ -607,6 +619,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0; i < Size; i += 2) {
 								Resultf = 0.0f;
 								for (c = 0; c < 3; c++) {
@@ -680,6 +693,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 						#ifdef ALTIVEC_GCC
 							abc2cba_short((ILushort*)Data,NumPix * BpcDest,(ILushort*)NewData);
 						#else
@@ -743,6 +757,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0, j = 0; i < NumPix; i += 3, j += 4) {
 								((ILushort*)(NewData))[j] = ((ILushort*)(Data))[i];
 								((ILushort*)(NewData))[j+1] = ((ILushort*)(Data))[i+1];
@@ -794,6 +809,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0, j = 0; i < NumPix; i += 3, j += 4) {
 								((ILushort*)(NewData))[j] = ((ILushort*)(Data))[i+2];
 								((ILushort*)(NewData))[j+1] = ((ILushort*)(Data))[i+1];
@@ -847,6 +863,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0; i < Size; i++) {
 								Resultf = 0.0f;  j = 2;
 								for (c = 0; c < 3; c++, j--) {
@@ -905,6 +922,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0; i < Size; i++) {
 								Resultf = 0;
 								for (c = 0; c < 3; c++) {
@@ -979,6 +997,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 						#ifdef ALTIVEC_GCC
 							abcd2cbad_short((ILushort*)Data,iCurImage->SizeOfData,(ILushort*)NewData);
 						#else
@@ -1045,6 +1064,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0, j = 0; i < NumPix; i += 4, j += 3) {
 								((ILushort*)(NewData))[j] = ((ILushort*)(Data))[i];
 								((ILushort*)(NewData))[j+1] = ((ILushort*)(Data))[i+1];
@@ -1091,6 +1111,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0, j = 0; i < NumPix; i += 4, j += 3) {
 								((ILushort*)(NewData))[j] = ((ILushort*)(Data))[i+2];
 								((ILushort*)(NewData))[j+1] = ((ILushort*)(Data))[i+1];
@@ -1140,6 +1161,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0; i < Size; i++) {
 								Resultf = 0.0f;  j = 2;
 								for (c = 0; c < 3; c++, j--) {
@@ -1198,6 +1220,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0; i < Size; i += 2) {
 								Resultf = 0.0f;
 								for (c = 0; c < 3; c++) {
@@ -1269,6 +1292,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0, j = 0; i < NumPix; i++, j += 3) {
 								for (c = 0; c < 3; c++) {
 									((ILushort*)(NewData))[j + c] = ((ILushort*)(Data))[i];
@@ -1318,6 +1342,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0, j = 0; i < NumPix; i++, j += 4) {
 								for (c = 0; c < 3; c++) {
 									((ILushort*)(NewData))[j + c] = ((ILushort*)(Data))[i];
@@ -1368,6 +1393,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0; i < NumPix; i++) {
 								((ILushort*)(NewData))[i * 2] = ((ILushort*)(Data))[i];
 								((ILushort*)(NewData))[i * 2 + 1] = USHRT_MAX;  // Full opacity
@@ -1445,6 +1471,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0, j = 0; i < NumPix; i += 2, j += 3) {
 								for (c = 0; c < 3; c++) {
 									((ILushort*)(NewData))[j + c] = ((ILushort*)(Data))[i];
@@ -1494,6 +1521,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0, j = 0; i < NumPix; i += 2, j += 4) {
 								for (c = 0; c < 3; c++) {
 									((ILushort*)(NewData))[j + c] = ((ILushort*)(Data))[i];
@@ -1543,6 +1571,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 							break;
 						case IL_UNSIGNED_SHORT:
 						case IL_SHORT:
+						case IL_HALF:
 							for (i = 0, j = 0; i < NumPix; i += 2, j++) {
 								((ILushort*)(NewData))[j] = ((ILushort*)(Data))[i];
 							}
@@ -1601,12 +1630,6 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 	return NewData;
 }
 
-//this define controls if floats and doubles are clampled to [0..1]
-//during conversion. It takes a little more time, but it is the correct
-//way of doing this. If you are sure your floats are always valid,
-//you can undefine this value...
-#define CLAMP_FLOATS
-#define CLAMP_DOUBLES
 
 // Really shouldn't have to check for default, as in above ilConvertBuffer().
 ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestType, ILvoid *Buffer) {
@@ -1616,6 +1639,7 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 	ILuint		*IntPtr;
 	ILfloat		*FloatPtr, tempFloat;
 	ILdouble	*DblPtr, tempDouble;
+	ILushort	*HalfPtr;
 
 	BpcSrc = ilGetBpcType(SrcType);
 	BpcDest = ilGetBpcType(DestType);
@@ -1657,7 +1681,7 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 					break;
 				case IL_FLOAT:
 					for (i = 0; i < Size; i++) {
-						#ifdef CLAMP_FLOATS
+						#if CLAMP_FLOATS
 							tempFloat = clamp(((ILfloat*)Buffer)[i]);
 							BytePtr[i] = (ILubyte)(tempFloat * UCHAR_MAX);
 						#else
@@ -1665,9 +1689,21 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 						#endif
 					}
 					break;
+				case IL_HALF:
+					for (i = 0; i < Size; i++) {
+						#if CLAMP_HALF
+							*((ILuint*)&tempFloat) = ilHalfToFloat(((ILushort*)Buffer)[i]);
+							tempFloat = clamp(tempFloat);					
+							BytePtr[i] = (ILubyte)(tempFloat * UCHAR_MAX);
+						#else
+						*((ILuint*)&tempFloat) = ilHalfToFloat(((ILushort*)Buffer)[i]);
+						BytePtr[i] = (ILubyte)(tempFloat * UCHAR_MAX);
+						#endif
+					}
+					break;
 				case IL_DOUBLE:
 					for (i = 0; i < Size; i++) {
-						#ifdef CLAMP_DOUBLES
+						#if CLAMP_DOUBLES
 							tempDouble = clamp(((ILdouble*)Buffer)[i]);
 							BytePtr[i] = (ILubyte)(tempDouble * UCHAR_MAX);
 						#else
@@ -1697,7 +1733,7 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 					break;
 				case IL_FLOAT:
 					for (i = 0; i < Size; i++) {
-						#ifdef CLAMP_FLOATS
+						#if CLAMP_FLOATS
 							tempFloat = clamp(((ILfloat*)Buffer)[i]);
 							ShortPtr[i] = (ILushort)(tempFloat * USHRT_MAX);
 						#else
@@ -1705,9 +1741,21 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 						#endif
 					}
 					break;
+				case IL_HALF:
+					for (i = 0; i < Size; i++) {
+						#if CLAMP_FLOATS
+							*((ILuint*)&tempFloat) = ilHalfToFloat(((ILushort*)Buffer)[i]);
+							tempFloat = clamp(tempFloat);					
+							ShortPtr[i] = (ILushort)(tempFloat * USHRT_MAX);
+						#else
+							*((ILuint*)&tempFloat) = ilHalfToFloat(((ILushort*)Buffer)[i]);
+							ShortPtr[i] = (ILushort)(tempFloat * USHRT_MAX);
+						#endif
+					}
+					break;
 				case IL_DOUBLE:
 					for (i = 0; i < Size; i++) {
-						#ifdef CLAMP_DOUBLES
+						#if CLAMP_DOUBLES
 							tempDouble = clamp(((ILdouble*)Buffer)[i]);
 							ShortPtr[i] = (ILushort)(tempDouble * USHRT_MAX);
 						#else
@@ -1737,7 +1785,7 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 					break;
 				case IL_FLOAT:
 					for (i = 0; i < Size; i++) {
-						#ifdef CLAMP_FLOATS
+						#if CLAMP_FLOATS
 							tempFloat = clamp(((ILfloat*)Buffer)[i]);
 							IntPtr[i] = (ILuint)(tempFloat * UINT_MAX);
 						#else
@@ -1745,9 +1793,21 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 						#endif
 					}
 					break;
+				case IL_HALF:
+					for (i = 0; i < Size; i++) {
+						#if CLAMP_FLOATS
+							*((ILuint*)&tempFloat) = ilHalfToFloat(((ILushort*)Buffer)[i]);
+							tempFloat = clamp(tempFloat);					
+							IntPtr[i] = (ILuint)(tempFloat * UINT_MAX);
+						#else
+						*((ILuint*)&tempFloat) = ilHalfToFloat(((ILushort*)Buffer)[i]);
+						IntPtr[i] = (ILuint)(tempFloat * UINT_MAX);
+						#endif
+					}
+					break;
 				case IL_DOUBLE:
 					for (i = 0; i < Size; i++) {
-						#ifdef CLAMP_DOUBLES
+						#if CLAMP_DOUBLES
 							tempDouble = clamp(((ILdouble*)Buffer)[i]);
 							IntPtr[i] = (ILuint)(tempDouble * UINT_MAX);
 						#else
@@ -1793,6 +1853,10 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 						FloatPtr[i] = (ILfloat)((ILint*)Buffer)[i] / (ILfloat)UINT_MAX;
 					}
 					break;
+				case IL_HALF:
+					for (i = 0; i < Size; i++) {
+						*((ILuint*)&FloatPtr[i]) = ilHalfToFloat(((ILushort*)Buffer)[i]);
+					}
 				case IL_DOUBLE:
 					for (i = 0; i < Size; i++) {
 						FloatPtr[i] = (ILfloat)((ILdouble*)Buffer)[i];
@@ -1835,6 +1899,11 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 						DblPtr[i] = ((ILint*)Buffer)[i] / (ILdouble)UINT_MAX;
 					}
 					break;
+				case IL_HALF:
+					for (i = 0; i < Size; i++) {
+						*(ILushort*)&tempFloat = ilHalfToFloat(((ILushort*)Buffer)[i]);
+						DblPtr[i] = tempFloat;
+					}
 				case IL_FLOAT:
 					for (i = 0; i < Size; i++) {
 						DblPtr[i] = ((ILfloat*)Buffer)[i];
@@ -1842,7 +1911,281 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 					break;
 			}
 			break;
+	
+		case IL_HALF:
+			HalfPtr = (ILushort*)NewData;
+			switch (SrcType)
+			{
+			case IL_UNSIGNED_BYTE:
+				for (i = 0; i < Size; i++) {
+					tempFloat = ((ILubyte*)Buffer)[i] / (ILfloat)UCHAR_MAX;
+					*((ILushort*)&HalfPtr[i]) = ilFloatToHalf(*(ILuint*)&tempFloat);
+				}
+				break;
+			case IL_BYTE:
+				for (i = 0; i < Size; i++) {
+					tempFloat = ((ILbyte*)Buffer)[i] / (ILfloat)UCHAR_MAX;
+					*((ILushort*)&HalfPtr[i]) = ilFloatToHalf(*(ILuint*)&tempFloat);
+				}
+				break;
+			case IL_UNSIGNED_SHORT:
+				for (i = 0; i < Size; i++) {
+					tempFloat = ((ILushort*)Buffer)[i] / (ILfloat)USHRT_MAX;
+					*((ILushort*)&HalfPtr[i]) = ilFloatToHalf(*(ILuint*)&tempFloat);
+				}
+				break;
+			case IL_SHORT:
+				for (i = 0; i < Size; i++) {
+					tempFloat = ((ILshort*)Buffer)[i] / (ILfloat)USHRT_MAX;
+					*((ILushort*)&HalfPtr[i]) = ilFloatToHalf(*(ILuint*)&tempFloat);
+				}
+				break;
+			case IL_UNSIGNED_INT:
+				for (i = 0; i < Size; i++) {
+					tempFloat = ((ILuint*)Buffer)[i] / (ILfloat)UINT_MAX;
+					*((ILushort*)&HalfPtr[i]) = ilFloatToHalf(*(ILuint*)&tempFloat);
+				}
+				break;
+			case IL_INT:
+				for (i = 0; i < Size; i++) {
+					tempFloat = ((ILint*)Buffer)[i] / (ILfloat)UINT_MAX;
+					*((ILushort*)&HalfPtr[i]) = ilFloatToHalf(*(ILuint*)&tempFloat);
+				}
+				break;
+			case IL_DOUBLE:
+				for (i = 0; i < Size; i++) {
+					tempFloat = (ILfloat)((ILdouble*)Buffer)[i];
+					*((ILushort*)&HalfPtr[i]) = ilFloatToHalf(*(ILuint*)&tempFloat);
+				}
+			case IL_FLOAT:
+				for (i = 0; i < Size; i++) {
+					tempFloat = ((ILfloat*)Buffer)[i];
+					*((ILushort*)&HalfPtr[i]) = ilFloatToHalf(*(ILuint*)&tempFloat);
+				}
+				break;
+			}
+			break;
 	}
+
 
 	return NewData;
 }
+
+
+//-----------------------------------------------
+// Overflow handler for float-to-half conversion;
+// generates a hardware floating-point overflow,
+// which may be trapped by the operating system.
+//-----------------------------------------------
+
+ILfloat ILAPIENTRY ilFloatToHalfOverflow()
+{
+	ILfloat f = 1e10;
+	ILint j;
+	for (j = 0; j < 10; j++)
+		f *= f;				// this will overflow before
+	// the for­loop terminates
+	return f;
+}
+
+
+//-----------------------------------------------------
+// Float-to-half conversion -- general case, including
+// zeroes, denormalized numbers and exponent overflows.
+//-----------------------------------------------------
+ILushort ILAPIENTRY ilFloatToHalf(ILuint i)
+{
+	//
+	// Our floating point number, f, is represented by the bit
+	// pattern in integer i.  Disassemble that bit pattern into
+	// the sign, s, the exponent, e, and the significand, m.
+	// Shift s into the position where it will go in in the
+	// resulting half number.
+	// Adjust e, accounting for the different exponent bias
+	// of float and half (127 versus 15).
+	//
+
+	register int s =  (i >> 16) & 0x00008000;
+	register int e = ((i >> 23) & 0x000000ff) - (127 - 15);
+	register int m =   i        & 0x007fffff;
+
+	//
+	// Now reassemble s, e and m into a half:
+	//
+
+	if (e <= 0)
+	{
+		if (e < -10)
+		{
+			//
+			// E is less than -10.  The absolute value of f is
+			// less than HALF_MIN (f may be a small normalized
+			// float, a denormalized float or a zero).
+			//
+			// We convert f to a half zero.
+			//
+
+			return 0;
+		}
+
+		//
+		// E is between -10 and 0.  F is a normalized float,
+		// whose magnitude is less than HALF_NRM_MIN.
+		//
+		// We convert f to a denormalized half.
+		// 
+
+		m = (m | 0x00800000) >> (1 - e);
+
+		//
+		// Round to nearest, round "0.5" up.
+		//
+		// Rounding may cause the significand to overflow and make
+		// our number normalized.  Because of the way a half's bits
+		// are laid out, we don't have to treat this case separately;
+		// the code below will handle it correctly.
+		// 
+
+		if (m &  0x00001000)
+			m += 0x00002000;
+
+		//
+		// Assemble the half from s, e (zero) and m.
+		//
+
+		return s | (m >> 13);
+	}
+	else if (e == 0xff - (127 - 15))
+	{
+		if (m == 0)
+		{
+			//
+			// F is an infinity; convert f to a half
+			// infinity with the same sign as f.
+			//
+
+			return s | 0x7c00;
+		}
+		else
+		{
+			//
+			// F is a NAN; we produce a half NAN that preserves
+			// the sign bit and the 10 leftmost bits of the
+			// significand of f, with one exception: If the 10
+			// leftmost bits are all zero, the NAN would turn 
+			// into an infinity, so we have to set at least one
+			// bit in the significand.
+			//
+
+			m >>= 13;
+			return s | 0x7c00 | m | (m == 0);
+		}
+	}
+	else
+	{
+		//
+		// E is greater than zero.  F is a normalized float.
+		// We try to convert f to a normalized half.
+		//
+
+		//
+		// Round to nearest, round "0.5" up
+		//
+
+		if (m &  0x00001000)
+		{
+			m += 0x00002000;
+
+			if (m & 0x00800000)
+			{
+				m =  0;		// overflow in significand,
+				e += 1;		// adjust exponent
+			}
+		}
+
+		//
+		// Handle exponent overflow
+		//
+
+		if (e > 30)
+		{
+			ilFloatToHalfOverflow();	// Cause a hardware floating point overflow;
+			return s | 0x7c00;	// if this returns, the half becomes an
+		}   			// infinity with the same sign as f.
+
+		//
+		// Assemble the half from s, e and m.
+		//
+
+		return s | (e << 10) | (m >> 13);
+	}
+}
+
+//stolen from OpenEXR
+ILuint ILAPIENTRY ilHalfToFloat (ILushort y)
+{
+
+	int s = (y >> 15) & 0x00000001;
+	int e = (y >> 10) & 0x0000001f;
+	int m =  y		  & 0x000003ff;
+
+	if (e == 0)
+	{
+		if (m == 0)
+		{
+			//
+			// Plus or minus zero
+			//
+
+			return s << 31;
+		}
+		else
+		{
+			//
+			// Denormalized number -- renormalize it
+			//
+
+			while (!(m & 0x00000400))
+			{
+				m <<= 1;
+				e -=  1;
+			}
+
+			e += 1;
+			m &= ~0x00000400;
+		}
+	}
+	else if (e == 31)
+	{
+		if (m == 0)
+		{
+			//
+			// Positive or negative infinity
+			//
+
+			return (s << 31) | 0x7f800000;
+		}
+		else
+		{
+			//
+			// Nan -- preserve sign and significand bits
+			//
+
+			return (s << 31) | 0x7f800000 | (m << 13);
+		}
+	}
+
+	//
+	// Normalized number
+	//
+
+	e = e + (127 - 15);
+	m = m << 13;
+
+	//
+	// Assemble s, e and m.
+	//
+
+	return (s << 31) | (e << 23) | m;
+}
+

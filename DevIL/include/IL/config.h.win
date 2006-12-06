@@ -15,10 +15,10 @@
 /* #undef IL_NO_HDR */
 /* #undef IL_NO_ICO */
 /* #undef IL_NO_JPG */
-/* #undef IL_NO_LCMS */
+#define IL_NO_LCMS
 /* #undef IL_NO_LIF */
 /* #undef IL_NO_MDL */
-/* #undef IL_NO_MNG */
+#define IL_NO_MNG
 /* #undef IL_NO_PCD */
 /* #undef IL_NO_PCX */
 /* #undef IL_NO_PIC */

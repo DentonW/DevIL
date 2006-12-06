@@ -107,13 +107,13 @@ ILAPI HBITMAP	ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 		if (TempImage->Format == IL_RGBA) {//strip alpha during byte swapping for faster upload to gdi
 			//recalculate pad because it changes when bpp change
 			pad = (4 - (3*TempImage->Width)%4)%4;
-			Data = ialloc((TempImage->Width + pad)*TempImage->Height*3);
+			Data = (ILubyte*)ialloc((TempImage->Width + pad)*TempImage->Height*3);
 		}
 		//strip alpha channel from grayscale image
 		else if(TempImage->Format == IL_LUMINANCE_ALPHA)
-			Data = ialloc((TempImage->Width + pad)*TempImage->Height);
+			Data = (ILubyte*)ialloc((TempImage->Width + pad)*TempImage->Height);
 		else
-			Data = ialloc((TempImage->Width + pad)*TempImage->Height*TempImage->Bpp);
+			Data = (ILubyte*)ialloc((TempImage->Width + pad)*TempImage->Height*TempImage->Bpp);
 
 		if (Data == NULL) {
 			ilSetCurImage(ilutCurImage);
@@ -620,8 +620,8 @@ ILboolean ILAPIENTRY ilutGetWinClipboard()
 		//copy DIB to buffer because windows delivers it without the
 		//BITMAPFILEHEADER that DevIL needs to load the image
 		Size = GlobalSize(hGlobal);
-		data = ialloc(Size + sizeof(BITMAPFILEHEADER));
-		pGlobal = GlobalLock(hGlobal);
+		data = (PTSTR)ialloc(Size + sizeof(BITMAPFILEHEADER));
+		pGlobal = (PTSTR)GlobalLock(hGlobal);
 		if (!pGlobal || !data) {
 			ifree(data);
 			CloseClipboard();

@@ -998,7 +998,7 @@ ILboolean iSaveBitmapInternal() {
 	
 	if( compress_rle8 == IL_TRUE ) {
 		//@TODO compress and save
-		ILubyte *Dest = ialloc((long)((double)TempImage->SizeOfPlane*130/127));
+		ILubyte *Dest = (ILubyte*)ialloc((long)((double)TempImage->SizeOfPlane*130/127));
 		FileSize = ilRleCompress(TempImage->Data,TempImage->Width,TempImage->Height,
 						TempImage->Depth,TempImage->Bpp,Dest,IL_BMPCOMP,NULL);
 		iwrite(Dest,1,FileSize);

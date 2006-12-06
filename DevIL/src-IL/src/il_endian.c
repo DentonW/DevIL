@@ -18,7 +18,7 @@ ILvoid EndianSwapData(void *_Image) {
 		case IL_UNSIGNED_BYTE:
 			switch (Image->Bpp) {
 				case 3:
-					temp = ialloc(Image->SizeOfData);
+					temp = (ILubyte*)ialloc(Image->SizeOfData);
 					if (temp == NULL)
 						return;
 					s = Image->Data;
@@ -36,7 +36,7 @@ ILvoid EndianSwapData(void *_Image) {
 					break;
 
 				case 4:
-					temp = ialloc(Image->SizeOfData);
+					temp = (ILubyte*)ialloc(Image->SizeOfData);
 					if (temp == NULL)
 						return;
 					s = Image->Data;
@@ -60,7 +60,7 @@ ILvoid EndianSwapData(void *_Image) {
 		case IL_UNSIGNED_SHORT:
 			switch (Image->Bpp) {
 				case 3:
-					temp = ialloc(Image->SizeOfData);
+					temp = (ILubyte*)ialloc(Image->SizeOfData);
 					if (temp == NULL)
 						return;
 					ShortS = (ILushort*)Image->Data;
@@ -77,7 +77,7 @@ ILvoid EndianSwapData(void *_Image) {
 					break;
 
 				case 4:
-					temp = ialloc(Image->SizeOfData);
+					temp = (ILubyte*)ialloc(Image->SizeOfData);
 					if (temp == NULL)
 						return;
 					ShortS = (ILushort*)Image->Data;
@@ -101,7 +101,7 @@ ILvoid EndianSwapData(void *_Image) {
 			switch (Image->Bpp)
 			{
 				case 3:
-					temp = ialloc(Image->SizeOfData);
+					temp = (ILubyte*)ialloc(Image->SizeOfData);
 					if (temp == NULL)
 						return;
 					IntS = (ILuint*)Image->Data;
@@ -118,7 +118,7 @@ ILvoid EndianSwapData(void *_Image) {
 					break;
 
 				case 4:
-					temp = ialloc(Image->SizeOfData);
+					temp = (ILubyte*)ialloc(Image->SizeOfData);
 					if (temp == NULL)
 						return;
 					IntS = (ILuint*)Image->Data;
@@ -141,7 +141,7 @@ ILvoid EndianSwapData(void *_Image) {
 			switch (Image->Bpp)
 			{
 				case 3:
-					temp = ialloc(Image->SizeOfData);
+					temp = (ILubyte*)ialloc(Image->SizeOfData);
 					if (temp == NULL)
 						return;
 					FltS = (ILfloat*)Image->Data;
@@ -158,7 +158,7 @@ ILvoid EndianSwapData(void *_Image) {
 					break;
 
 				case 4:
-					temp = ialloc(Image->SizeOfData);
+					temp = (ILubyte*)ialloc(Image->SizeOfData);
 					if (temp == NULL)
 						return;
 					FltS = (ILfloat*)Image->Data;
@@ -181,7 +181,7 @@ ILvoid EndianSwapData(void *_Image) {
 			switch (Image->Bpp)
 			{
 				case 3:
-					temp = ialloc(Image->SizeOfData);
+					temp = (ILubyte*)ialloc(Image->SizeOfData);
 					if (temp == NULL)
 						return;
 					DblS = (ILdouble*)Image->Data;
@@ -198,7 +198,7 @@ ILvoid EndianSwapData(void *_Image) {
 					break;
 
 				case 4:
-					temp = ialloc(Image->SizeOfData);
+					temp = (ILubyte*)ialloc(Image->SizeOfData);
 					if (temp == NULL)
 						return;
 					DblS = (ILdouble*)Image->Data;
@@ -222,7 +222,7 @@ ILvoid EndianSwapData(void *_Image) {
 		switch (iCurImage->Pal.PalType) {
 			case IL_PAL_RGB24:
 			case IL_PAL_BGR24:
-				temp = ialloc(Image->Pal.PalSize);
+				temp = (ILubyte*)ialloc(Image->Pal.PalSize);
 				if (temp == NULL)
 					return;
 				s = Image->Pal.Palette;
@@ -243,7 +243,7 @@ ILvoid EndianSwapData(void *_Image) {
 			case IL_PAL_RGB32:
 			case IL_PAL_BGRA32:
 			case IL_PAL_BGR32:
-				temp = ialloc(Image->Pal.PalSize);
+				temp = (ILubyte*)ialloc(Image->Pal.PalSize);
 				if (temp == NULL)
 					return;
 				s = Image->Pal.Palette;

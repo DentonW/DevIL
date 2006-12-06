@@ -31,11 +31,13 @@ ILenum		D3DGetDXTCFormat(D3DFORMAT DXTCNum);
 ILboolean	iD3D9CreateMipmaps(IDirect3DTexture9 *Texture, ILimage *Image);
 IDirect3DTexture9* iD3DMakeTexture( IDirect3DDevice9 *Device, void *Data, ILuint DLen, ILuint Width, ILuint Height, D3DFORMAT Format, D3DPOOL Pool, ILuint Levels );
 
+
+#define ILUT_TEXTUREFORMAT_D3D9_COUNT		7
 ILboolean	FormatsDX9Checked = IL_FALSE;
-ILboolean	FormatsDX9supported[6] =
-	{ IL_FALSE, IL_FALSE, IL_FALSE, IL_FALSE, IL_FALSE, IL_FALSE };
-D3DFORMAT	FormatsDX9[6] =
-	{ D3DFMT_R8G8B8, D3DFMT_A8R8G8B8, D3DFMT_L8, D3DFMT_DXT1, D3DFMT_DXT3, D3DFMT_DXT5 };
+ILboolean	FormatsDX9supported[ILUT_TEXTUREFORMAT_D3D9_COUNT] =
+	{ IL_FALSE, IL_FALSE, IL_FALSE, IL_FALSE, IL_FALSE, IL_FALSE, IL_FALSE };
+D3DFORMAT	FormatsDX9[ILUT_TEXTUREFORMAT_D3D9_COUNT] =
+	{ D3DFMT_R8G8B8, D3DFMT_A8R8G8B8, D3DFMT_L8, D3DFMT_DXT1, D3DFMT_DXT3, D3DFMT_DXT5, D3DFMT_A16B16G16R16F};
 
 
 ILboolean ilutD3D9Init()
@@ -55,7 +57,7 @@ ILvoid CheckFormatsDX9(IDirect3DDevice9 *Device)
 	IDirect3DDevice9_GetDirect3D(Device, (IDirect3D9**)&TestD3D9);
 	IDirect3DDevice9_GetDisplayMode(Device, 0, &DispMode);
 
-	for (i = 0; i < 6; i++) {
+	for (i = 0; i < ILUT_TEXTUREFORMAT_D3D9_COUNT; i++) {
 		hr = IDirect3D9_CheckDeviceFormat(TestD3D9, D3DADAPTER_DEFAULT,
 			D3DDEVTYPE_HAL, DispMode.Format, 0, D3DRTYPE_TEXTURE, FormatsDX9[i]);
 		FormatsDX9supported[i] = SUCCEEDED(hr);
@@ -170,27 +172,31 @@ D3DCUBEMAP_FACES iToD3D9Cube(ILuint cube) {
     if( !FormatsDX9Checked )
     	CheckFormatsDX9(Device);
 
+	 MakeD3D9Compliant(Device, &Format);
+
     StartImage=ilutCurImage;
     if( FAILED(IDirect3DDevice9_CreateCubeTexture(Device, StartImage->Width,
-                       ilutGetInteger(ILUT_D3D_MIPLEVELS),0,Format, ilutGetInteger(ILUT_D3D_POOL), &Texture, NULL)))
+                       ilutGetInteger(ILUT_D3D_MIPLEVELS),0,Format, (D3DPOOL)ilutGetInteger(ILUT_D3D_POOL), &Texture, NULL)))
                return NULL;
 		for( i = 0; i < CUBEMAP_SIDES; i++ ) {
-       		if( ilutCurImage==NULL || ilutCurImage->CubeFlags != 0) {
+       		if( ilutCurImage==NULL || ilutCurImage->CubeFlags == 0) {
             	SAFE_RELEASE(Texture)
                 return NULL;
             }
-            Image = MakeD3D9Compliant(Device, &Format);
+            Image = ilutCurImage;
+				
+				Image = MakeD3D9Compliant(Device, &Format);
             if( Image == NULL ) {
             	SAFE_RELEASE(Texture)
                 return NULL;
             }
-            if( FAILED(IDirect3DCubeTexture9_LockRect(Texture,iToD3D9Cube(Image->CubeFlags), 0, &Box, NULL, D3DLOCK_DISCARD))) {
+            if( FAILED(IDirect3DCubeTexture9_LockRect(Texture,iToD3D9Cube(Image->CubeFlags), 0, &Box, NULL, /*D3DLOCK_DISCARD*/0))) {
                 SAFE_RELEASE(Texture)
                 return NULL;
             }
 
             memcpy(Box.pBits, Image->Data, Image->SizeOfData);
-            if (!IDirect3DCubeTexture9_UnlockRect(Texture,iToD3D9Cube(Image->CubeFlags), 0)) {
+				if (IDirect3DCubeTexture9_UnlockRect(Texture,iToD3D9Cube(Image->CubeFlags), 0) != D3D_OK) {
           		SAFE_RELEASE(Texture)
             	return IL_FALSE;
         	}
@@ -199,8 +205,8 @@ D3DCUBEMAP_FACES iToD3D9Cube(ILuint cube) {
        	ilutCurImage=StartImage;
 
        	// We don't want to have mipmaps for such a large image.
-		if (Image != ilutCurImage)
-	       	ilCloseImage(Image);
+		//if (Image != ilutCurImage)
+	 //      	ilCloseImage(Image);
 
        	return Texture;
 }
@@ -314,7 +320,7 @@ D3DFORMAT D3DGetDXTCNumDX9(ILenum DXTCFormat)
 			return D3DFMT_DXT5;
 	}
 
-	return 0;
+	return D3DFMT_UNKNOWN;
 }
 
 
@@ -330,7 +336,7 @@ ILenum D3DGetDXTCFormat(D3DFORMAT DXTCNum)
 			return IL_DXT5;
 	}
 
-	return 0;
+	return D3DFMT_UNKNOWN;
 }
 
 
@@ -377,7 +383,7 @@ IDirect3DTexture9* ILAPIENTRY ilutD3D9Texture(IDirect3DDevice9 *Device)
 
 			Texture = iD3DMakeTexture(Device, ilutCurImage->DxtcData, ilutCurImage->DxtcSize,
 				ilutCurImage->Width, ilutCurImage->Height, Format,
-				ilutGetInteger(ILUT_D3D_POOL) == D3DPOOL_DEFAULT ? D3DPOOL_SYSTEMMEM : ilutGetInteger(ILUT_D3D_POOL), ilutGetInteger(ILUT_D3D_MIPLEVELS));
+				(D3DPOOL)(ilutGetInteger(ILUT_D3D_POOL) == D3DPOOL_DEFAULT ? D3DPOOL_SYSTEMMEM : ilutGetInteger(ILUT_D3D_POOL)), ilutGetInteger(ILUT_D3D_MIPLEVELS));
 			if (!Texture)
 				return NULL;
 			iD3D9CreateMipmaps(Texture, Image);
@@ -427,7 +433,7 @@ Image = MakeD3D9Compliant(Device, &Format);
 				Format = D3DGetDXTCNumDX9(DXTCFormat);
 				Texture = iD3DMakeTexture(Device, Buffer, Size,
 					ilutCurImage->Width, ilutCurImage->Height, Format,
-					ilutGetInteger(ILUT_D3D_POOL) == D3DPOOL_DEFAULT ? D3DPOOL_SYSTEMMEM : ilutGetInteger(ILUT_D3D_POOL), ilutGetInteger(ILUT_D3D_MIPLEVELS));
+					(D3DPOOL)(ilutGetInteger(ILUT_D3D_POOL) == D3DPOOL_DEFAULT ? D3DPOOL_SYSTEMMEM : ilutGetInteger(ILUT_D3D_POOL)), ilutGetInteger(ILUT_D3D_MIPLEVELS));
 				if (!Texture)
 					return NULL;
 				iD3D9CreateMipmaps(Texture, Image);
@@ -461,7 +467,7 @@ Image = MakeD3D9Compliant(Device, &Format);
 
 	Texture = iD3DMakeTexture(Device, Image->Data, Image->SizeOfPlane,
 		Image->Width, Image->Height, Format,
-		ilutGetInteger(ILUT_D3D_POOL) == D3DPOOL_DEFAULT ? D3DPOOL_SYSTEMMEM : ilutGetInteger(ILUT_D3D_POOL), ilutGetInteger(ILUT_D3D_MIPLEVELS));
+		(D3DPOOL)(ilutGetInteger(ILUT_D3D_POOL) == D3DPOOL_DEFAULT ? D3DPOOL_SYSTEMMEM : ilutGetInteger(ILUT_D3D_POOL)), ilutGetInteger(ILUT_D3D_MIPLEVELS));
 	if (!Texture)
 		return NULL;
 	iD3D9CreateMipmaps(Texture, Image);
@@ -470,7 +476,7 @@ Image = MakeD3D9Compliant(Device, &Format);
 		// create texture in system memory
 		if (FAILED(IDirect3DDevice9_CreateTexture(Device, Image->Width,
 				Image->Height, ilutGetInteger(ILUT_D3D_MIPLEVELS), 0, Format,
-				ilutGetInteger(ILUT_D3D_POOL), &Texture, NULL))) {
+				(D3DPOOL)ilutGetInteger(ILUT_D3D_POOL), &Texture, NULL))) {
 			IDirect3DTexture9_Release(SysTex);
 			return NULL;
 		}
@@ -512,7 +518,7 @@ IDirect3DVolumeTexture9* ILAPIENTRY ilutD3D9VolumeTexture(IDirect3DDevice9 *Devi
 	if (Image == NULL)
 		return NULL;
 	if (FAILED(IDirect3DDevice9_CreateVolumeTexture(Device, Image->Width, Image->Height,
-		Image->Depth, 1, 0, Format, ilutGetInteger(ILUT_D3D_POOL), &Texture, NULL)))
+		Image->Depth, 1, 0, Format, (D3DPOOL)ilutGetInteger(ILUT_D3D_POOL), &Texture, NULL)))
 		return NULL;	
 	if (FAILED(IDirect3DVolumeTexture9_LockBox(Texture, 0, &Box, NULL, 0)))
 		return NULL;
@@ -530,50 +536,89 @@ IDirect3DVolumeTexture9* ILAPIENTRY ilutD3D9VolumeTexture(IDirect3DDevice9 *Devi
 }
 
 
+
 ILimage *MakeD3D9Compliant(IDirect3DDevice9 *Device, D3DFORMAT *DestFormat)
 {
 	ILuint	color;
 	ILimage	*Converted, *Scaled, *CurImage;
+	ILuint nConversionType, ilutFormat;
+	ILboolean bForceIntegerFormat = ilutGetBoolean(ILUT_FORCE_INTEGER_FORMAT);
 
-	*DestFormat = D3DFMT_A8R8G8B8;
+	if (!ilutCurImage)
+		return NULL;
+	
+	switch (ilutCurImage->Type)
+	{
+	case IL_UNSIGNED_BYTE:
+	case IL_BYTE:
+	case IL_SHORT:
+	case IL_UNSIGNED_SHORT:
+	case IL_INT:
+	case IL_UNSIGNED_INT:
+		*DestFormat     = D3DFMT_A8R8G8B8;
+		nConversionType = IL_UNSIGNED_BYTE;
+		ilutFormat      = IL_BGRA;
+		break;
+	case IL_FLOAT:
+	case IL_DOUBLE:
+		if (bForceIntegerFormat || (!FormatsDX9supported[6]))
+		{
+			*DestFormat     = D3DFMT_A8R8G8B8;
+			nConversionType = IL_UNSIGNED_BYTE;
+			ilutFormat      = IL_BGRA;
+		}
+		else
+		{
+			*DestFormat     = D3DFMT_A16B16G16R16F;
+			nConversionType = IL_HALF;
+			ilutFormat      = IL_RGBA;
+
+			//
+		}
+		break;
+	}
 
 	// Images must be in BGRA format.
-	if (ilutCurImage->Format != IL_BGRA) {
-		Converted = iConvertImage(ilutCurImage, IL_BGRA, IL_UNSIGNED_BYTE);
+	if (((ilutCurImage->Format != ilutFormat))
+		|| (ilutCurImage->Type != nConversionType)) 
+	{
+		Converted = iConvertImage(ilutCurImage, ilutFormat, nConversionType);
 		if (Converted == NULL)
 			return NULL;
 	}
-	else {
+	else 
+	{
 		Converted = ilutCurImage;
 	}
 
 	// perform alpha key on images if requested
 	color=ilutGetInteger(ILUT_D3D_ALPHA_KEY_COLOR);
-	if(color>=0)
+	if((color>=0) && (nConversionType == IL_UNSIGNED_BYTE))
 	{
-	ILubyte *data;
-	ILubyte *maxdata;
-	ILuint t;
+		ILubyte *data;
+		ILubyte *maxdata;
+		ILuint t;
 
-		data=(Converted->Data);
-		maxdata=(Converted->Data+Converted->SizeOfData);
-		while(data<maxdata)
-		{
-			t= (data[2]<<16) + (data[1]<<8) + (data[0]) ;
-
-			if((t&0x00ffffff)==(color&0x00ffffff))
+			data=(Converted->Data);
+			maxdata=(Converted->Data+Converted->SizeOfData);
+			while(data<maxdata)
 			{
-				data[0]=0;
-				data[1]=0;
-				data[2]=0;
-				data[3]=0;
+				t= (data[2]<<16) + (data[1]<<8) + (data[0]) ;
+
+				if((t&0x00ffffff)==(color&0x00ffffff))
+				{
+					data[0]=0;
+					data[1]=0;
+					data[2]=0;
+					data[3]=0;
+				}
+				data+=4;
 			}
-			data+=4;
-		}
 	}
 
 	// Images must have their origin in the upper left.
-	if (Converted->Origin != IL_ORIGIN_UPPER_LEFT) {
+	if (Converted->Origin != IL_ORIGIN_UPPER_LEFT) 
+	{
 		CurImage = ilutCurImage;
 		ilSetCurImage(Converted);
 		iluFlipImage();
@@ -594,9 +639,6 @@ ILimage *MakeD3D9Compliant(IDirect3DDevice9 *Device, D3DFORMAT *DestFormat)
 			}
 			Converted = Scaled;
 	}
-
-
-
 
 	return Converted;
 }

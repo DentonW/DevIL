@@ -450,7 +450,7 @@ ILboolean ILAPIENTRY iluEdgeDetectP()
 		else if (VPass[i] == 0)
 			iluCurImage->Data[i] = HPass[i];
 		else
-			iluCurImage->Data[i] = (ILubyte)sqrt(HPass[i]*HPass[i]+VPass[i]*VPass[i]);
+			iluCurImage->Data[i] = (ILubyte)sqrt((float)(HPass[i]*HPass[i]+VPass[i]*VPass[i]));
 	}
 
 	/*for (i = 0; i < iluCurImage->SizeOfData; i++) {
@@ -508,7 +508,7 @@ ILboolean ILAPIENTRY iluEdgeDetectS()
 		else if (VPass[i] == 0)
 			iluCurImage->Data[i] = HPass[i];
 		else
-			iluCurImage->Data[i] = (ILubyte)sqrt(HPass[i]*HPass[i]+VPass[i]*VPass[i]);
+			iluCurImage->Data[i] = (ILubyte)sqrt((float)(HPass[i]*HPass[i]+VPass[i]*VPass[i]));
 	}
 
 	/*for (i = 0; i < iluCurImage->SizeOfData; i++) {

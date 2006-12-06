@@ -1,10 +1,9 @@
 //-----------------------------------------------------------------------------
 
 // Description: Image manipulation
-
 #include "il_internal.h"
+#include <il/il.h>
 #include "il_manip.h"
-
 
 ILAPI ILvoid ILAPIENTRY iFlipBuffer( ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num ) {
 	ILubyte *StartPtr, *EndPtr;
@@ -739,15 +738,16 @@ ILboolean ILAPIENTRY ilSetAlpha( ILdouble AlphaValue ) {
     ILboolean ret = IL_TRUE;
     ILuint    i,Size;
     ILimage  *image = iCurImage;
+	ILuint AlphaOff;
     
-    if( image == NULL ) {
+    if( image == NULL ) 
+	{
         ilSetError(IL_ILLEGAL_OPERATION);
         return IL_FALSE;
     }
     
     AlphaValue = clamp(AlphaValue);
     
-    ILuint AlphaOff;
     switch( image->Format ) {
             case IL_RGB:
                 ret = ilConvertImage(IL_RGBA,image->Type);

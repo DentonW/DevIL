@@ -64,6 +64,7 @@
 #define ILUT_D3D_POOL             0x0706
 #define ILUT_D3D_ALPHA_KEY_COLOR  0x0707
 #define ILUT_D3D_ALPHA_KEY_COLOUR 0x0707
+#define ILUT_FORCE_INTEGER_FORMAT 0x0636
 
 //This new state does automatic texture target detection
 //if enabled. Currently, only cubemap detection is supported.
@@ -128,8 +129,8 @@
 
 
 
-#include "IL/config.h"
-
+#include "IL/config.h" 
+ 
 //////////////
 // Opengl
 //////////////
@@ -139,7 +140,7 @@
 		//#define WIN32_LEAN_AND_MEAN
 		#include <windows.h>
 	#endif//_MSC_VER
-
+ 
 	#ifdef __APPLE__
 		#include <OpenGL/gl.h>
 		#include <OpenGL/glu.h>

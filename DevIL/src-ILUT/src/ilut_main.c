@@ -14,7 +14,7 @@
 #include "ilut_internal.h"
 
 #ifdef _WIN32
-#ifndef	_ILUT_NO_DLLMAIN
+#ifndef IL_STATIC_LIB
 	//#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
 

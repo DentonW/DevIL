@@ -35,7 +35,7 @@ ILvoid ILAPIENTRY ilGenImages(ILsizei Num, ILuint *Images)
 
 	do {
 		if (FreeNames != NULL) {  // If any have been deleted, then reuse their image names.
-                        TempFree = FreeNames->Next;
+                        TempFree = (iFree*)FreeNames->Next;
                         Images[Index] = FreeNames->Name;
                         ImageStack[FreeNames->Name] = ilNewImage(1, 1, 1, 1, 1);
                         ifree(FreeNames);
@@ -489,11 +489,13 @@ ILboolean iEnlargeStack()
 		#ifdef _MEM_DEBUG
 			AddToAtexit();  // So iFreeMem doesn't get called after unfreed information.
 		#endif//_MEM_DEBUG
-		atexit((void*)ilShutDown);
+#if (!defined(_WIN32_WCE)) && (!defined(IL_STATIC_LIB))
+			atexit((void*)ilShutDown);
+#endif
 		OnExit = IL_TRUE;
 	}
 
-	if (!(ImageStack = ilRecalloc(ImageStack, StackSize * sizeof(ILimage*), (StackSize + I_STACK_INCREMENT) * sizeof(ILimage*)))) {
+	if (!(ImageStack = (ILimage**)ilRecalloc(ImageStack, StackSize * sizeof(ILimage*), (StackSize + I_STACK_INCREMENT) * sizeof(ILimage*)))) {
 		return IL_FALSE;
 	}
 	StackSize += I_STACK_INCREMENT;
@@ -507,7 +509,7 @@ static ILboolean IsInit = IL_FALSE;
 ILvoid ILAPIENTRY ilInit()
 {
 	// if it is already initialized skip initialization
-	if( IsInit == IL_TRUE ) 
+	if (IsInit == IL_TRUE ) 
 		return;
 	
 	//ilSetMemory(NULL, NULL);  Now useless 3/4/2006 (due to modification in il_alloc.c)
@@ -516,9 +518,10 @@ ILvoid ILAPIENTRY ilInit()
 	// Sets default file-reading callbacks.
 	ilResetRead();
 	ilResetWrite();
-#ifndef _WIN32_WCE
+#if (!defined(_WIN32_WCE)) && (!defined(IL_STATIC_LIB))
 	atexit((void*)ilRemoveRegistered);
-#endif//_WIN32_WCE
+#endif
+	//_WIN32_WCE
 	//ilShutDown();
 	iSetImage0();  // Beware!  Clears all existing textures!
 	iBindImageTemp();  // Go ahead and create the temporary image.
@@ -532,10 +535,11 @@ ILvoid ILAPIENTRY ilInit()
 ILvoid ILAPIENTRY ilShutDown()
 {
 	// if it is not initialized do not shutdown
-	if( IsInit == IL_FALSE )
-		return;
-	iFree *TempFree = FreeNames;
+	iFree* TempFree = (iFree*)FreeNames;
 	ILuint i;
+	
+	if (!IsInit)
+		return;
 
 	if (!IsInit) {  // Prevent from being called when not initialized.
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -543,7 +547,7 @@ ILvoid ILAPIENTRY ilShutDown()
 	}
 
 	while (TempFree != NULL) {
-		FreeNames = TempFree->Next;
+		FreeNames = (iFree*)TempFree->Next;
 		ifree(TempFree);
 		TempFree = FreeNames;
 	}

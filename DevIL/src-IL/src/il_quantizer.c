@@ -448,9 +448,9 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 		return NULL;
 	}
 
-	Ir = ialloc(Width * Height * Depth);
-	Ig = ialloc(Width * Height * Depth);
-	Ib = ialloc(Width * Height * Depth);
+	Ir = (ILubyte*)ialloc(Width * Height * Depth);
+	Ig = (ILubyte*)ialloc(Width * Height * Depth);
+	Ib = (ILubyte*)ialloc(Width * Height * Depth);
 	if (!Ir || !Ig || !Ib) {
 		ifree(Ir);
 		ifree(Ig);

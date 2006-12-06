@@ -716,7 +716,7 @@ ILboolean ILAPIENTRY iluReplaceColour(ILubyte Red, ILubyte Green, ILubyte Blue, 
 					Dist1 = (ILint)iluCurImage->Data[i] - (ILint)ClearCol[0];
 					Dist2 = (ILint)iluCurImage->Data[i+1] - (ILint)ClearCol[1];
 					Dist3 = (ILint)iluCurImage->Data[i+2] - (ILint)ClearCol[2];
-					Distance = (ILint)sqrt(Dist1 * Dist1 + Dist2 * Dist2 + Dist3 * Dist3);
+					Distance = (ILint)sqrt((float)(Dist1 * Dist1 + Dist2 * Dist2 + Dist3 * Dist3));
 					if (Distance >= -TolVal && Distance <= TolVal) {
 						iluCurImage->Data[i] = Red;
 						iluCurImage->Data[i+1] = Green;
@@ -730,7 +730,7 @@ ILboolean ILAPIENTRY iluReplaceColour(ILubyte Red, ILubyte Green, ILubyte Blue, 
 					Dist1 = (ILint)iluCurImage->Data[i] - (ILint)ClearCol[0];
 					Dist2 = (ILint)iluCurImage->Data[i+1] - (ILint)ClearCol[1];
 					Dist3 = (ILint)iluCurImage->Data[i+2] - (ILint)ClearCol[2];
-					Distance = (ILint)sqrt(Dist1 * Dist1 + Dist2 * Dist2 + Dist3 * Dist3);
+					Distance = (ILint)sqrt((float)(Dist1 * Dist1 + Dist2 * Dist2 + Dist3 * Dist3));
 					if (Distance >= -TolVal && Distance <= TolVal) {
 						iluCurImage->Data[i+2] = Red;
 						iluCurImage->Data[i+1] = Green;

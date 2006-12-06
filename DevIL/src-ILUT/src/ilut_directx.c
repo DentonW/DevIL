@@ -14,7 +14,7 @@
 #ifdef ILUT_USE_DIRECTX8
 
 #include <d3d8.h>
-#include <d3dx8tex.h>
+//#include <d3dx8tex.h>
 //pragma comment(lib, "d3d8.lib")
 //pragma comment(lib, "d3dx8.lib")
 
@@ -184,7 +184,7 @@ D3DFORMAT D3DGetDXTCNumDX8(ILenum DXTCFormat)
 			return D3DFMT_DXT5;
 	}
 
-	return 0;
+	return D3DFMT_UNKNOWN;
 }
 
 
@@ -213,7 +213,7 @@ IDirect3DTexture8* ILAPIENTRY ilutD3D8Texture(IDirect3DDevice8 *Device)
 
 			if (FAILED(IDirect3DDevice8_CreateTexture(Device, ilutCurImage->Width,
 				ilutCurImage->Height, ilutGetInteger(ILUT_D3D_MIPLEVELS), 0, Format,
-				ilutGetInteger(ILUT_D3D_POOL), &Texture)))
+				(D3DPOOL)ilutGetInteger(ILUT_D3D_POOL), &Texture)))
 					return NULL;
 			if (FAILED(IDirect3DTexture8_LockRect(Texture, 0, &Rect, NULL, 0)))
 				return NULL;
@@ -238,7 +238,7 @@ IDirect3DTexture8* ILAPIENTRY ilutD3D8Texture(IDirect3DDevice8 *Device)
 				Format = D3DGetDXTCNumDX8(DXTCFormat);
 				if (FAILED(IDirect3DDevice8_CreateTexture(Device, ilutCurImage->Width,
 					ilutCurImage->Height, ilutGetInteger(ILUT_D3D_MIPLEVELS), 0, Format,
-					ilutGetInteger(ILUT_D3D_POOL), &Texture))) {
+					(D3DPOOL)ilutGetInteger(ILUT_D3D_POOL), &Texture))) {
 						ifree(Buffer);
 						return NULL;
 				}
@@ -260,7 +260,7 @@ IDirect3DTexture8* ILAPIENTRY ilutD3D8Texture(IDirect3DDevice8 *Device)
 		return NULL;
 	}
 	if (FAILED(IDirect3DDevice8_CreateTexture(Device, Image->Width, Image->Height,
-		ilutGetInteger(ILUT_D3D_MIPLEVELS), 0, Format, ilutGetInteger(ILUT_D3D_POOL), &Texture))) {
+		ilutGetInteger(ILUT_D3D_MIPLEVELS), 0, Format, (D3DPOOL)ilutGetInteger(ILUT_D3D_POOL), &Texture))) {
 		if (Image != ilutCurImage)
 			ilCloseImage(Image);
 		return NULL;
@@ -302,7 +302,7 @@ IDirect3DVolumeTexture8* ILAPIENTRY ilutD3D8VolumeTexture(IDirect3DDevice8 *Devi
 	if (Image == NULL)
 		return NULL;
 	if (FAILED(IDirect3DDevice8_CreateVolumeTexture(Device, Image->Width, Image->Height,
-		Image->Depth, 1, 0, Format, ilutGetInteger(ILUT_D3D_POOL), &Texture)))
+		Image->Depth, 1, 0, Format, (D3DPOOL)ilutGetInteger(ILUT_D3D_POOL), &Texture)))
 		return NULL;	
 	if (FAILED(IDirect3DVolumeTexture8_LockBox(Texture, 0, &Box, NULL, 0)))
 		return NULL;

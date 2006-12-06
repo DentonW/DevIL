@@ -201,12 +201,12 @@ ILboolean iLoadPicInternal()
 				// Clean up the list before erroring out.
 				while (Channel) {
 					Prev = Channel;
-					Channel = Channel->Next;
+					Channel = (CHANNEL*)Channel->Next;
 					ifree(Prev);
 				}
 				return IL_FALSE;
 			}
-			Channels = Channels->Next;
+			Channels = (CHANNEL*)Channels->Next;
 		}
 		Channels->Next = NULL;
 
@@ -232,7 +232,7 @@ finish:
 	// Destroy channels
 	while (Channel) {
 		Prev = Channel;
-		Channel = Channel->Next;
+		Channel = (CHANNEL*)Channel->Next;
 		ifree(Prev);
 	}
 
@@ -322,7 +322,7 @@ ILuint readScanline(ILubyte *scan, ILint width, CHANNEL *channel, ILint bytes)
 		if (!status)
 			break;
 
-		channel = channel->Next;
+		channel = (CHANNEL*)channel->Next;
 	}
 	return status;
 }

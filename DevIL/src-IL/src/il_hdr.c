@@ -221,7 +221,7 @@ ILboolean iLoadHdrInternal()
 		iPreCache(iCurImage->Width / 8 * iCurImage->Height);
 
 	data = (ILfloat*)iCurImage->Data;
-	scanline = ialloc(Header.Width*4);
+	scanline = (ILubyte*)ialloc(Header.Width*4);
 	for (i = 0; i < Header.Height; ++i) {
 		ReadScanline(scanline, Header.Width);
 

@@ -57,6 +57,7 @@ ILAPI ILubyte ILAPIENTRY ilGetBpcType(ILenum Type) {
 			return 1;
 		case IL_SHORT:
 		case IL_UNSIGNED_SHORT:
+		case IL_HALF:
 			return 2;
 		case IL_INT:
 		case IL_UNSIGNED_INT:
@@ -135,7 +136,7 @@ ILAPI ILvoid ILAPIENTRY iMemSwap( ILubyte *s1, ILubyte *s2, const ILuint size ) 
 	const ILuint blocks = size/block_size;
 	ILuint i;
 
-	ILubyte *block = ialloc(block_size);
+	ILubyte *block = (ILubyte*)ialloc(block_size);
 	if(block == NULL) return;
 	for( i = 0; i < blocks; i++ ) {
 		memcpy(block,s1,block_size);

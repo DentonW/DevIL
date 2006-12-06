@@ -46,16 +46,16 @@ ILconst_string iluLibErrorStrings[IL_LIB_MNG_ERROR - IL_LIB_GIF_ERROR + 1] = {
 ILstring ILAPIENTRY iluErrorString(ILenum Error)
 {
 	if (Error == IL_NO_ERROR) {
-		return (ILconst_string)"no error";
+		return (ILstring)"no error";
 	}
 	if (Error == IL_UNKNOWN_ERROR) {
-		return (ILconst_string)"unknown error";
+		return (ILstring)"unknown error";
 	}
 	if (Error >= IL_INVALID_ENUM && Error <= IL_FILE_READ_ERROR) {
-		return iluErrorStrings[Error - IL_INVALID_ENUM];
+		return (ILstring)iluErrorStrings[Error - IL_INVALID_ENUM];
 	}
 	if (Error >= IL_LIB_GIF_ERROR && Error <= IL_LIB_MNG_ERROR) {
-		return iluLibErrorStrings[Error - IL_LIB_GIF_ERROR];
+		return (ILstring)iluLibErrorStrings[Error - IL_LIB_GIF_ERROR];
 	}
 
 	// Siigron: changed this from NULL to "no error"

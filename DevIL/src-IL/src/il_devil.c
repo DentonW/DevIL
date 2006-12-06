@@ -654,7 +654,7 @@ ILboolean ILAPIENTRY ilOverlayImage(ILuint Source, ILint XCoord, ILint YCoord, I
 			return IL_FALSE;
 	}
 		
-	Converted = ilConvertBuffer(iCurImage->SizeOfData, iCurImage->Format, Dest->Format, iCurImage->Type, Dest->Type, SrcTemp);
+	Converted = (ILubyte*)ilConvertBuffer(iCurImage->SizeOfData, iCurImage->Format, Dest->Format, iCurImage->Type, Dest->Type, SrcTemp);
 	if (Converted == NULL)
 			return IL_FALSE;
 		
@@ -725,7 +725,8 @@ ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX,  ILint DestY,   ILint De
 	ILuint		StartX, StartY, StartZ;
 	ILboolean	DestFlipped = IL_FALSE;
 	ILubyte 	*SrcTemp;
-	
+	ILfloat		Back;
+
 	// Check if the desiination image really exists
 	if( DestName == 0 || iCurImage == NULL ) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -765,7 +766,7 @@ ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX,  ILint DestY,   ILint De
 	}
 	
 	// convert source image to match the destination image type and format
-	Converted = ilConvertBuffer(Src->SizeOfData, Src->Format, Dest->Format, Src->Type, Dest->Type, SrcTemp);
+	Converted = (ILubyte*)ilConvertBuffer(Src->SizeOfData, Src->Format, Dest->Format, Src->Type, Dest->Type, SrcTemp);
 	if( Converted == NULL )
 		return IL_FALSE;
 	
@@ -814,7 +815,7 @@ ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX,  ILint DestY,   ILint De
 							Front = ((ILdouble*)Converted)[AlphaIdx];
 							break;
 					}
-					const ILfloat Back = 1.0f - Front;
+					Back = 1.0f - Front;
 					for( c = 0; c < bpp_without_alpha; c++ ) {
 						Dest->Data[DestIndex + c] = 
 							(ILubyte)(Converted[SrcIndex + c] * Front

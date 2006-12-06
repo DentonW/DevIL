@@ -244,7 +244,7 @@ ILAPI ILimage* ILAPIENTRY iConvertImage(ILimage *Image, ILenum DestFormat, ILenu
 		if (DestType == NewImage->Type)
 			return NewImage;
 
-		NewData = ilConvertBuffer(NewImage->SizeOfData, NewImage->Format, DestFormat, NewImage->Type, DestType, NewImage->Data);
+		NewData = (ILubyte*)ilConvertBuffer(NewImage->SizeOfData, NewImage->Format, DestFormat, NewImage->Type, DestType, NewImage->Data);
 		if (NewData == NULL) {
 			ifree(NewImage);  // ilCloseImage not needed.
 			return NULL;
@@ -305,7 +305,7 @@ ILAPI ILimage* ILAPIENTRY iConvertImage(ILimage *Image, ILenum DestFormat, ILenu
 			memcpy(NewImage->Data, Image->Data, Image->SizeOfData);
 		}
 		else {
-			NewImage->Data = ilConvertBuffer(Image->SizeOfData, Image->Format, DestFormat, Image->Type, DestType, Image->Data);
+			NewImage->Data = (ILubyte*)ilConvertBuffer(Image->SizeOfData, Image->Format, DestFormat, Image->Type, DestType, Image->Data);
 			if (NewImage->Data == NULL) {
 				ifree(NewImage);  // ilCloseImage not needed.
 				return NULL;

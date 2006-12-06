@@ -629,7 +629,7 @@ void CompressToRXGB(ILimage *Image, ILushort** xgb, ILubyte** r)
 	}
 
 	*xgb = (ILushort*)ialloc(iCurImage->Width * iCurImage->Height * 2 * iCurImage->Depth);
-	*r = ialloc(iCurImage->Width * iCurImage->Height * iCurImage->Depth);
+	*r = (ILubyte*)ialloc(iCurImage->Width * iCurImage->Height * iCurImage->Depth);
 	if (*xgb == NULL || *r == NULL) {
 		if (TempImage != Image)
 			ilCloseImage(TempImage);

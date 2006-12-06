@@ -92,7 +92,7 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 }
 
 
-ILenum ilDetermineTypeF(ILHANDLE File);
+//ILenum ilDetermineTypeF(ILHANDLE File);
 
 //changed 2003-09-17 to ILAPIENTRY
 ILAPI ILenum ILAPIENTRY ilDetermineType(ILconst_string FileName)
@@ -115,7 +115,7 @@ ILAPI ILenum ILAPIENTRY ilDetermineType(ILconst_string FileName)
 }
 
 
-ILenum ilDetermineTypeF(ILHANDLE File)
+ILenum ILAPIENTRY ilDetermineTypeF(ILHANDLE File)
 {
 	if (File == NULL)
 		return IL_TYPE_UNKNOWN;
@@ -1348,6 +1348,10 @@ ILuint ILAPIENTRY ilSaveF(ILenum Type, ILHANDLE File)
 			break;
 		#endif
 
+		case IL_DDS:
+			Ret = ilSaveDdsF(File);
+			break;
+
 		/*#ifndef IL_NO_TIF
 		case IL_TIF:
 			Ret = ilSaveTiffF(File);
@@ -1430,6 +1434,10 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size)
 			Ret = ilSaveTargaL(Lump, Size);
 			break;
 		#endif
+		
+		case IL_DDS:
+			Ret = ilSaveDdsL(Lump, Size);
+			break;
 
 		/*#ifndef IL_NO_TIF
 		case IL_TIF:

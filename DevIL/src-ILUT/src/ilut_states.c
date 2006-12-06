@@ -27,6 +27,7 @@ const char *_ilutVersion	= "Developer's Image Library Utility Toolkit (ILUT) 1.6
 ILvoid ilutDefaultStates()
 {
 	ilutStates[ilutCurrentPos].ilutUsePalettes = IL_FALSE;
+	ilutStates[ilutCurrentPos].ilutForceIntegerFormat = IL_FALSE;
 	ilutStates[ilutCurrentPos].ilutOglConv = IL_FALSE;  // IL_TRUE ?
 	ilutStates[ilutCurrentPos].ilutDXTCFormat = 0;
 	ilutStates[ilutCurrentPos].ilutUseS3TC = IL_FALSE;
@@ -81,6 +82,10 @@ ILboolean ilutAble(ILenum Mode, ILboolean Flag)
 			ilutStates[ilutCurrentPos].ilutUsePalettes = Flag;
 			break;
 
+		case ILUT_FORCE_INTEGER_FORMAT:
+			ilutStates[ilutCurrentPos].ilutForceIntegerFormat = Flag;
+			break;
+
 		case ILUT_OPENGL_CONV:
 			ilutStates[ilutCurrentPos].ilutOglConv = Flag;
 			break;
@@ -113,6 +118,9 @@ ILboolean ILAPIENTRY ilutIsEnabled(ILenum Mode)
 	{
 		case ILUT_PALETTE_MODE:
 			return ilutStates[ilutCurrentPos].ilutUsePalettes;
+
+		case ILUT_FORCE_INTEGER_FORMAT:
+			return ilutStates[ilutCurrentPos].ilutForceIntegerFormat;
 
 		case ILUT_OPENGL_CONV:
 			return ilutStates[ilutCurrentPos].ilutOglConv;
@@ -147,6 +155,10 @@ ILvoid ILAPIENTRY ilutGetBooleanv(ILenum Mode, ILboolean *Param)
 	{
 		case ILUT_PALETTE_MODE:
 			*Param = ilutStates[ilutCurrentPos].ilutUsePalettes;
+			break;
+
+		case ILUT_FORCE_INTEGER_FORMAT:
+			*Param = ilutStates[ilutCurrentPos].ilutForceIntegerFormat;
 			break;
 
 		case ILUT_OPENGL_CONV:
@@ -192,6 +204,9 @@ ILvoid ILAPIENTRY ilutGetIntegerv(ILenum Mode, ILint *Param)
 			break;
 		case ILUT_PALETTE_MODE:
 			*Param = ilutStates[ilutCurrentPos].ilutUsePalettes;
+			break;
+		case ILUT_FORCE_INTEGER_FORMAT:
+			*Param = ilutStates[ilutCurrentPos].ilutForceIntegerFormat;
 			break;
 		case ILUT_OPENGL_CONV:
 			*Param = ilutStates[ilutCurrentPos].ilutOglConv;

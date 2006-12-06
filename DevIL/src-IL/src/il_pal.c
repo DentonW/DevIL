@@ -393,11 +393,11 @@ ILboolean ilLoadColPal(ILconst_string FileName)
 	}
 
 	iseek(0, IL_SEEK_END);
-	RealFileSize = ftell(ColFile);
+	RealFileSize = ftell((FILE*)ColFile);
 	iseek(0, IL_SEEK_SET);
 
 	if (RealFileSize > 768) {  // has a header
-		fread(&FileSize, 4, 1, ColFile);
+		fread(&FileSize, 4, 1, (FILE*)ColFile);
 		if ((FileSize - 8) % 3 != 0) {  // check to make sure an even multiple of 3!
 			icloser(ColFile);
 			ilSetError(IL_ILLEGAL_FILE_VALUE);

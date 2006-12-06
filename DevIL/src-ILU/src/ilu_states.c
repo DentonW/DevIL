@@ -24,10 +24,10 @@ ILstring ILAPIENTRY iluGetString(ILenum StringName)
 	switch (StringName)
 	{
 		case ILU_VENDOR:
-			return (ILconst_string)_iluVendor;
+			return (ILstring)_iluVendor;
 		//changed 2003-09-04
 		case ILU_VERSION_NUM:
-			return (ILconst_string)_iluVersion;
+			return (ILstring)_iluVersion;
 		default:
 			ilSetError(ILU_INVALID_PARAM);
 			break;
