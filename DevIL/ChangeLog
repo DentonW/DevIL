@@ -1,5 +1,6 @@
 1.6.8 RC3
 ---
+- fixed bug #1609417. Bug in iluGetImageInfo
 - iGetIntegervImage(IL_IMAGE_CHANNELS) now returns a correct value
 - fixed bug #1561642. ILstring is poorly implemented (w.r.t const and others)
 - fixed bug #1562955. PSD 16 bits
