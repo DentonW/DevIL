@@ -22,7 +22,7 @@ ILboolean	ILAPIENTRY iEofLump(ILvoid);
 ILint		ILAPIENTRY iGetcFile(ILvoid);
 ILint		ILAPIENTRY iGetcLump(ILvoid);
 ILuint		ILAPIENTRY iReadFile(ILvoid *Buffer, ILuint Size, ILuint Number);
-ILuint		ILAPIENTRY iReadLump(ILvoid *Buffer, ILuint Size, ILuint Number);
+ILuint		ILAPIENTRY iReadLump(ILvoid *Buffer, const ILuint Size, const ILuint Number);
 ILuint		ILAPIENTRY iSeekRFile(ILint Offset, ILuint Mode);
 ILuint		ILAPIENTRY iSeekRLump(ILint Offset, ILuint Mode);
 ILuint		ILAPIENTRY iSeekWFile(ILint Offset, ILuint Mode);
@@ -434,31 +434,23 @@ ILuint ILAPIENTRY iReadFile(ILvoid *Buffer, ILuint Size, ILuint Number)
 	return TotalBytes;
 }
 
-
-ILuint ILAPIENTRY iReadLump(ILvoid *Buffer, ILuint Size, ILuint Number)
-{
-	ILuint i, ByteSize = Size * Number;
-
-	for (i = 0; i < ByteSize; i++) {
-		*((ILubyte*)Buffer + i) = *((ILubyte*)ReadLump + ReadLumpPos + i);
-		if (ReadLumpSize > 0) {  // ReadLumpSize is too large to care about apparently
-			if (ReadLumpPos + i > ReadLumpSize) {
-				ReadLumpPos += i;
-				if (i != Number)
-					ilSetError(IL_FILE_READ_ERROR);
-				return i;
-			}
-		}
-	}
-
-	ReadLumpPos += i;
-	if (Size != 0)
-		i /= Size;
-	if (i != Number)
+ILuint ILAPIENTRY iReadLump( ILvoid *Buffer, const ILuint size, const ILuint num ) {
+	const ILuint len = size * num;
+	
+	// check if it would read past the end of the lump
+	if( ReadLumpPos + len > ReadLumpSize ) {
 		ilSetError(IL_FILE_READ_ERROR);
-	return i;
+		return ReadLumpPos;
+	}
+	
+	// copy data
+	memcpy((ILubyte*)Buffer,(ILubyte*)(ReadLump + ReadLumpPos),len);
+	
+	// adjust counters
+	ReadLumpPos += len;
+	
+	return num;
 }
-
 
 ILboolean iPreCache(ILuint Size)
 {
