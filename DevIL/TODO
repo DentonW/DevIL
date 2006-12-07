@@ -7,8 +7,9 @@ For 1.7.0
 - iluReplaceColour should have a color to describe which color to set
 - ilBindIMage must return a result. it may fail!
 - ilInit() call iSetImage0 and ilBindTemp. this shouldn't happend and image names must start from 0
+- rename rename to iGetIntegervImage to ilGetImageIntegerv and make it public
 
-To fix
+Features to be added
 - Add a real Layer facility.
 - iluScaleColours is BUGGED, doesn't handle the image with the correct type! more Bpc (except luminance and paletted one)
 - IL_LUMINANCE_ALPHA support must be tested in ilApplyPal();

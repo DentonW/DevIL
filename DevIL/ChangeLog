@@ -1,5 +1,6 @@
 1.6.8 RC3
 ---
+- iGetIntegervImage(IL_IMAGE_CHANNELS) now returns a correct value
 - fixed bug #1561642. ILstring is poorly implemented (w.r.t const and others)
 - fixed bug #1562955. PSD 16 bits
 - ilInit and ilShutdown can now be called more then one times or shutdown even if not initialized without crashing anything.

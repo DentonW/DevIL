@@ -470,7 +470,7 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param) {
 	return;
 }
 
-
+//@TODO rename to ilGetImageIntegerv for 1.6.9 and make it public
 //! Sets Param equal to the current value of the Mode
 ILvoid ILAPIENTRY iGetIntegervImage(ILimage *Image, ILenum Mode, ILint *Param) {
     ILimage *SubImage;
@@ -505,7 +505,7 @@ ILvoid ILAPIENTRY iGetIntegervImage(ILimage *Image, ILenum Mode, ILint *Param) {
             *Param = Image->Bpc;
             break;
         case IL_IMAGE_CHANNELS:
-            *Param = Image->Bpp / Image->Bpc;
+            *Param = Image->Bpp;
             break;
         case IL_IMAGE_CUBEFLAGS:
             *Param = Image->CubeFlags;
