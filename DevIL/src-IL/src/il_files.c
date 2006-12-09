@@ -444,7 +444,7 @@ ILuint ILAPIENTRY iReadLump( ILvoid *Buffer, const ILuint size, const ILuint num
 	}
 	
 	// copy data
-	memcpy((ILubyte*)Buffer,(ILubyte*)(ReadLump + ReadLumpPos),len);
+	memcpy((ILubyte*)Buffer,(ILubyte*)ReadLump + ReadLumpPos,len);
 	
 	// adjust counters
 	ReadLumpPos += len;
