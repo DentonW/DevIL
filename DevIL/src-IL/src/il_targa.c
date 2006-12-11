@@ -677,9 +677,9 @@ ILboolean iSaveTargaInternal()
 			ifree(ID);
 			ifree(AuthName);
 			ifree(AuthComment);
-			return IL_FALSE;
 			PalSize = 0;
 			PalEntSize = 0;
+			return IL_FALSE;
 	}
 	SaveLittleShort(PalSize);
 	iwrite(&PalEntSize, sizeof(ILubyte), 1);
@@ -851,7 +851,7 @@ ILvoid iGetDateTime(ILuint *Month, ILuint *Day, ILuint *Yr, ILuint *Hr, ILuint *
 	*Sec = curtime.ti_sec;
 	
 	return;
-#endif
+#else
 	
 #ifdef _WIN32
 	SYSTEMTIME Time;
@@ -867,7 +867,7 @@ ILvoid iGetDateTime(ILuint *Month, ILuint *Day, ILuint *Yr, ILuint *Hr, ILuint *
 	*Sec = Time.wSecond;
 	
 	return;
-#endif
+#else
 	
 	*Month = 0;
 	*Day = 0;
@@ -878,6 +878,8 @@ ILvoid iGetDateTime(ILuint *Month, ILuint *Day, ILuint *Yr, ILuint *Hr, ILuint *
 	*Sec = 0;
 	
 	return;
+#endif
+#endif
 }
 
 

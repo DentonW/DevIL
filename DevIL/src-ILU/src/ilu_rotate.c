@@ -66,7 +66,7 @@ ILboolean ILAPIENTRY iluRotate3D(ILfloat x, ILfloat y, ILfloat z, ILfloat Angle)
 {
 	ILimage *Temp;
 
-return IL_FALSE;
+// return IL_FALSE;
 
 	iluCurImage = ilGetCurImage();
 	Temp = iluRotate3D_(iluCurImage, x, y, z, Angle);

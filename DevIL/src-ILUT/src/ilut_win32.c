@@ -667,12 +667,10 @@ ILboolean ILAPIENTRY ilutGetWinClipboard()
 
 		CloseClipboard();
 	}*/
-	else { //no data in clipboard
-		ilSetError(ILUT_ILLEGAL_OPERATION);
-		return IL_FALSE;
-	}
-
-	return IL_TRUE;
+	
+	//no data in clipboard
+	ilSetError(ILUT_ILLEGAL_OPERATION);
+	return IL_FALSE;
 }
 
 
