@@ -46,6 +46,7 @@ ilutInit
 ilutIsDisabled
 ilutIsEnabled
 ilutLoadResource
+ilutGLSubTex
 ilutGLBindMipmaps
 ilutGLBindTexImage
 ilutGLBuildMipmaps
