@@ -35,7 +35,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION($Revision: 1.16 $)
+AC_REVISION($Revision: 1.17 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -116,7 +116,7 @@ AS_IF(
 [test "$use_$4" = "no"],
     AC_MSG_RESULT(no),[
 AS_CASE($host_cpu, 
-	[$1],SUPPORTED_EXTENSION=$SUPPORTED_EXTENSION"$2 "
+	[$1],[SUPPORTED_EXTENSION=$SUPPORTED_EXTENSION"$2 "]
 		 AC_DEFINE([$3],,[$2 assembly found]) 
 		 AC_MSG_RESULT(yes))])])
 
@@ -284,15 +284,13 @@ AS_CASE($target,
 AS_IF([test "$use_opengl" = "yes"],[
 AS_CASE($target,
 [*-*-cygwin* | *-*-mingw32*],
-	LIBGL="-lopengl32 -lglu32",
+	[LIBGL="-lopengl32 -lglu32"],
 [*-apple-darwin*],
-	dnl must test if the LIBILUT CFLAGS done here is really usefull. should not...
-	LIBGL="-Wl,-framework -Wl,OpenGL",
-
-	AC_CHECK_LIB(GL,glLoadIdentity,[LIBGL="-lGL"])
+	[LIBGL='-Wl,-framework -Wl,OpenGL']
+   ,AC_CHECK_LIB(GL,glLoadIdentity,[LIBGL="-lGL"])
 	AC_CHECK_LIB(GLU,gluPerspective,[LIBGL="-lGLU"]))
-   AC_DEFINE(ILUT_USE_OPENGL,,[Support OpenGL API])
-   SUPPORTED_API=$SUPPORTED_API"OpenGL "
+    AC_DEFINE(ILUT_USE_OPENGL,,[Support OpenGL API])
+    [SUPPORTED_API=$SUPPORTED_API"OpenGL "]
 ],[LIBGL=""])
 AC_SUBST(LIBGL)
 
@@ -314,18 +312,18 @@ AC_SUBST(HALLEGRO)
 dnl Win32
 AS_CASE($host,
 [*mingw32*],
-		LIBIL_CFLAGS=$LIBIL_CFLAGS" -mno-cygwin"
-		LIBILU_CFLAGS=$LIBILU_CFLAGS" -mno-cygwin"
-		LIBILUT_CFLAGS=$LIBILUT_CFLAGS" -mno-cygwin"
-		VERSIONINFO="",
+		[LIBIL_CFLAGS=$LIBIL_CFLAGS" -mno-cygwin"]
+		[LIBILU_CFLAGS=$LIBILU_CFLAGS" -mno-cygwin"]
+		[LIBILUT_CFLAGS=$LIBILUT_CFLAGS" -mno-cygwin"]
+		[VERSIONINFO=""],
 [*cygwin*],
-		LIBILUT_WIN32LIBPATH="-L/usr/lib/w32api"
-		VERSIONINFO="",
-use_win32=no
-VERSIONINFO="-version-info $DEVIL_LTVERSION")
+		[LIBILUT_WIN32LIBPATH="-L/usr/lib/w32api"]
+		[VERSIONINFO=""],
+[use_win32=no]
+[VERSIONINFO="-version-info $DEVIL_LTVERSION"])
 
 AC_SUBST(VERSIONINFO)
-AS_IF([test "$use_win32" = "no"],LIBGDI32="",LIBGDI32="-lgdi32")
+AS_IF([test "$use_win32" = "no"],[LIBGDI32=""],[LIBGDI32="-lgdi32"])
 AC_SUBST(LIBGDI32)
 
 dnl DirectX 8
@@ -376,7 +374,6 @@ echo +----------------------------------------+
 echo \|      Detected Machine Extensions       \|
 echo +----------------------------------------+-------+
 echo $SUPPORTED_EXTENSION
-echo
 echo
 
 
