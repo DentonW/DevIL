@@ -6,6 +6,11 @@ Just type ./configure && make. It should find automatically what can
 
 NB : ./configure --help gives you all compiling options available for the three
       libs. This includes enabling/disabling picture formats, ilut apis.
+      
+Enable/Disable:
+The disabilitable features are basically enabled, a test will be performed
+to verify if is possible to compile them in. If they are explicitely enabled
+or disabled no test will occour.
 
 
 Libraries needed to compile DevIL* :

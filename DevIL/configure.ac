@@ -35,7 +35,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION($Revision: 1.15 $)
+AC_REVISION($Revision: 1.16 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -55,8 +55,7 @@ AC_DEFUN([ADD_CFLAGS],[
 LIBIL_CFLAGS="$LIBIL_CFLAGS $1"
 LIBILU_CFLAGS="$LIBILU_CFLAGS $1"
 LIBILUT_CFLAGS="$LIBILUT_CFLAGS $1"
-CFLAGS="$CFLAGS $1"
-])
+CFLAGS="$CFLAGS $1"    ])
 
 ADD_CFLAGS([$CFLAGS])
 
@@ -72,7 +71,7 @@ dnl
 dnl Check CPU Extensions
 dnl
 AC_DEFUN([TEST_EXT],[
-AC_ARG_ENABLE($6,AC_HELP_STRING([--disable-$6],[Doesn't compile $1 support]),[use_$1=$enable_$6],[use_$1=test])
+AC_ARG_ENABLE($6,AC_HELP_STRING([--enable-$6],[Doesn't compile $1 support]),[use_$1=$enable_$6],[use_$1=test])
 AC_MSG_CHECKING([$1])
 AS_IF(
 [test "$use_$1" = "yes"],
@@ -104,16 +103,22 @@ TEST_EXT([SSE3],[-msse3],[__m128d v;v=_mm_addsub_pd(v,v);],[SSE3],[#include <emm
 dnl
 dnl Check CPU Assembly
 dnl
+dnl add test to have only an ASM for compilation
 AC_DEFUN([TEST_ASM],[
-AC_ARG_ENABLE($4,AC_HELP_STRING([--disable-$4],[Doesn't compile $4 support]),
-[use_$4=$enable_$4],[use_$4=yes])
+AC_ARG_ENABLE($4,AC_HELP_STRING([--enable-$4],[Compile with $4 support]),
+[use_$4=$enable_$4],[use_$4=test])
 AC_MSG_CHECKING([$4])
+AS_IF(
+[test "$use_$4" = "yes"],
+         SUPPORTED_EXTENSION=$SUPPORTED_EXTENSION"$2 "
+		 AC_DEFINE([$3],,[$2 assembly found]) 
+		 AC_MSG_RESULT(yes),
+[test "$use_$4" = "no"],
+    AC_MSG_RESULT(no),[
 AS_CASE($host_cpu, 
 	[$1],SUPPORTED_EXTENSION=$SUPPORTED_EXTENSION"$2 "
 		 AC_DEFINE([$3],,[$2 assembly found]) 
-		 AC_MSG_RESULT(yes),
-	[AC_MSG_RESULT(no)])
-]) 
+		 AC_MSG_RESULT(yes))])])
 
 TEST_ASM([i[[3456]]86*],[X86_ASM],[GCC_X86_ASM],x86)
 TEST_ASM([x86_64*],[X86_64_ASM],[GCC_X86_64_ASM],x86_64)
