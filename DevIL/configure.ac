@@ -35,7 +35,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION($Revision: 1.14 $)
+AC_REVISION($Revision: 1.15 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -66,35 +66,35 @@ AM_INIT_AUTOMAKE("DevIL", $DEVIL_MAJOR.$DEVIL_MINOR.$DEVIL_REVISION)
 AM_CONFIG_HEADER(include/IL/config.h)
 AM_DISABLE_STATIC
 AM_PROG_LIBTOOL
-AM_MAINTAINER_MODE
+dnl AM_MAINTAINER_MODE
 
 dnl
 dnl Check CPU Extensions
 dnl
 AC_DEFUN([TEST_EXT],[
-AC_ARG_ENABLE($6,AC_HELP_STRING([--disable-$6],[Doesn't compile $1 support]),
-[use_$1=$enable_$1],[use_$1=yes])
+AC_ARG_ENABLE($6,AC_HELP_STRING([--disable-$6],[Doesn't compile $1 support]),[use_$1=$enable_$6],[use_$1=test])
 AC_MSG_CHECKING([$1])
-CFLAGS_TMP=$CFLAGS
-CFLAGS=$CFLAGS" $2"
-AC_COMPILE_IFELSE([
-$5
-int main() {
-$3
-return 0;}]
-,[
-if test "$use_$1" = "yes" ; then
-  AC_DEFINE([$4],,[$1 extension found])
-  AC_DEFINE([VECTORMEM],,[Memory must be vector aligned])
-  ADD_CFLAGS([$2])
-  AC_MSG_RESULT(yes)
-  SUPPORTED_EXTENSION=$SUPPORTED_EXTENSION"$1 "
-else
-  AC_MSG_RESULT(disabled)
-fi]
-,[AC_MSG_RESULT(no)])
- [CFLAGS=$CFLAGS_TMP]
-]) 
+AS_IF(
+[test "$use_$1" = "yes"],
+    AC_DEFINE([$4],,[$1 extension found])
+    AC_DEFINE([VECTORMEM],,[Memory must be vector aligned])
+    ADD_CFLAGS([$2])
+    AC_MSG_RESULT(yes)
+    SUPPORTED_EXTENSION=$SUPPORTED_EXTENSION"$1 ",
+[test "$use_$1" = "test"],
+    CFLAGS_TMP=$CFLAGS
+    CFLAGS=$CFLAGS" $2"
+    AC_COMPILE_IFELSE([
+      $5
+      int main() {$3;return 0;}],
+      [AC_DEFINE([$4],,[$1 extension found])
+       AC_DEFINE([VECTORMEM],,[Memory must be vector aligned])
+       ADD_CFLAGS([$2])
+       AC_MSG_RESULT(yes)
+       SUPPORTED_EXTENSION=$SUPPORTED_EXTENSION"$1 "],
+      [AC_MSG_RESULT(no)]
+      [CFLAGS=$CFLAGS_TMP]),
+AC_MSG_RESULT(disabled))])
 
 TEST_EXT([Altivec],[-faltivec -maltivec],[vector int vec;vec=vec_splat_u32(0);],[ALTIVEC_GCC],[],[altivec])
 TEST_EXT([SSE],[-msse],[__m128 v;v=_mm_sub_ss(v,v);],[SSE],[#include <xmmintrin.h>],[sse])
@@ -105,13 +105,14 @@ dnl
 dnl Check CPU Assembly
 dnl
 AC_DEFUN([TEST_ASM],[
+AC_ARG_ENABLE($4,AC_HELP_STRING([--disable-$4],[Doesn't compile $4 support]),
+[use_$4=$enable_$4],[use_$4=yes])
 AC_MSG_CHECKING([$4])
-case $host_cpu in 
-	$1) SUPPORTED_EXTENSION=$SUPPORTED_EXTENSION"$2 "
-		AC_DEFINE([$3],,[$2 assembly found]) 
-		AC_MSG_RESULT(yes)   ;;
-	*)	AC_MSG_RESULT(no)    ;;
-esac
+AS_CASE($host_cpu, 
+	[$1],SUPPORTED_EXTENSION=$SUPPORTED_EXTENSION"$2 "
+		 AC_DEFINE([$3],,[$2 assembly found]) 
+		 AC_MSG_RESULT(yes),
+	[AC_MSG_RESULT(no)])
 ]) 
 
 TEST_ASM([i[[3456]]86*],[X86_ASM],[GCC_X86_ASM],x86)
@@ -125,22 +126,16 @@ AC_ARG_ENABLE(release,
 AC_HELP_STRING([--disable-release],[Compile a debug version of the library]),
 [build_release="$enable_release"],[build_release="no"])
 
-if test "$build_release" = "no" ; then
-	ADD_CFLAGS([-Wall -g -O0])
-else
-	ADD_CFLAGS([-O3])
-fi
+AS_IF([test "$build_release" = "no"],[ADD_CFLAGS([-Wall -g -O0])]
+	 ,[ADD_CFLAGS(-O3)])
 
 dnl
 dnl Test warning build options
 dnl
 AC_ARG_ENABLE(warning,
-AC_HELP_STRING([--enable-warning],[Compile breaks on warnings]),
-[build_warning="$enable_warning"],[build_warning="no"])
+AC_HELP_STRING([--enable-warning],[Compile breaks on warnings]),[build_warning="$enable_warning"],[build_warning="no"])
 
-if test "$build_warning" = "yes" ; then
-	ADD_CFLAGS([-Wall -g -Werror -DNOINLINE])
-fi
+AS_IF([test "$build_warning" = "yes"],[ADD_CFLAGS([-Wall -g -Werror -DNOINLINE])],[])
 
 dnl
 dnl Memory alignment functions
@@ -163,26 +158,17 @@ AC_CHECK_HEADER(libmng.h,,no_mng="yes")
 AC_CHECK_HEADER(zlib.h, use_z=yes, use_z=no)
 
 dnl Special code for LCMS
-if test "$lcms_nodirinclude" = "yes" ; then
-	no_lcms=no
-else
-	AC_DEFINE(LCMS_NODIRINCLUDE,,[LCMS include without lcms/ support])	
-fi
+AS_IF([test "$lcms_nodirinclude" = "yes"],[no_lcms=no]
+	,[AC_DEFINE(LCMS_NODIRINCLUDE,,[LCMS include without lcms/ support])])
 
 dnl
 dnl Formats
 dnl
 AC_DEFUN([TEST_FORMAT],[
 AC_ARG_ENABLE([$1],AC_HELP_STRING([--disable-$1],[Doesn't compile $1 support]),[use_$1="$enable_$1"],[use_$1="yes"])
-if test "$no_$1" = "yes" ; then	
-	AC_DEFINE([IL_NO_$2],,[$2 support])
-else
-if test "$use_$1" = "yes" ; then
-	SUPPORTED_FORMATS=$SUPPORTED_FORMATS"$2 "
-else
-	AC_DEFINE([IL_NO_$2],,[$2 support])
-fi
-fi
+AS_IF([test "$no_$1" = "yes"],[AC_DEFINE([IL_NO_$2],,[$2 support])]
+     ,[test "$use_$1" = "yes"],[SUPPORTED_FORMATS=$SUPPORTED_FORMATS"$2 "]
+	 ,[AC_DEFINE([IL_NO_$2],,[$2 support])])
 ])
 
 TEST_FORMAT(bmp,BMP)
@@ -225,15 +211,9 @@ AC_ARG_ENABLE($1dir,AC_HELP_STRING([--with-$1dir=path],[Specify the lib$1 instal
 	LIB$2="-L$enable_$1dir/lib"
 	no_$1=no
 	use_$1=yes )
-if test ! "$no_$1" = "yes" ; then
-	if test "$use_$1" = "yes" ; then
-		if test -z "$3" ; then
-			LIB$2="$LIB$2 -l$1"
-		else
-			LIB$2="$3"
-		fi
-	fi
-fi
+
+AS_IF([test ! "$no_$1" = "yes" && test "$use_$1" = "yes" && test -z "$3"],[LIB$2="$LIB$2 -l$1"]
+     ,[test ! "$no_$1" = "yes" && test "$use_$1" = "yes" && ! test -z "$3"],[LIB$2="$3"],[])
 AC_SUBST(LIB$2) ])
 
 SET_LIB(jpeg,JPG)
@@ -243,12 +223,10 @@ SET_LIB(mng,MNG)
 SET_LIB(z,Z)
 
 libpng_app=$(which libpng-config)
-if [ -z "$libpng_app" ] ; then
+AS_IF([test -z "$libpng_app"],
 	LIBPNG=""
 	AC_SUBST(LIBPNG)
-else
-	SET_LIB(png,PNG,`libpng-config --ldflags`)
-fi
+   ,SET_LIB(png,PNG,`libpng-config --ldflags`))
 
 dnl Just in case the library is not installed in the default header path
 LIBPNG_INCLUDE=`libpng-config --I_opts`
@@ -281,108 +259,90 @@ m4_ifndef([AM_PATH_SDL],[AC_DEFUN([AM_PATH_SDL],[
 dnl SDL
 HSDL=""
 LIBSDL=""
-if test "$use_sdl" = "yes" ; then
-	AM_PATH_SDL(1.2.5,use_sdl="yes",use_sdl="no")
-	if test "$use_sdl" = "yes" ; then
+AS_IF([test "$use_sdl" = "yes"],
+	AM_PATH_SDL(1.2.5,use_sdl="yes",use_sdl="no"))
+
+AS_IF([test "$use_sdl" = "yes"],
 		HSDL="$SDL_CFLAGS"
 		LIBSDL="$SDL_LIBS"
 		AC_DEFINE(ILUT_USE_SDL,,[Support SDL API])
-  		SUPPORTED_API=$SUPPORTED_API"SDL "
-  	fi
-fi
+  		SUPPORTED_API=$SUPPORTED_API"SDL ")
+
 AC_SUBST(LIBSDL)
 AC_SUBST(HSDL)
 
 dnl OpenGL
-case "$target" in
- 	*apple-darwin*)
-		AC_CHECK_HEADER(OpenGL/gl.h,,use_opengl=no) ;;
-	*)
-		AC_CHECK_HEADER(GL/gl.h,,use_opengl=no) ;;
-esac
-if test "$use_opengl" = "yes" ; then
-case "$target" in
-*-*-cygwin* | *-*-mingw32*)
-	LIBGL="-lopengl32 -lglu32"
-	;;
-*-apple-darwin*)
+AS_CASE($target,
+[*apple-darwin*],[AC_CHECK_HEADER(OpenGL/gl.h,,use_opengl=no)]
+                ,[AC_CHECK_HEADER(GL/gl.h,,use_opengl=no)])
+
+AS_IF([test "$use_opengl" = "yes"],[
+AS_CASE($target,
+[*-*-cygwin* | *-*-mingw32*],
+	LIBGL="-lopengl32 -lglu32",
+[*-apple-darwin*],
 	dnl must test if the LIBILUT CFLAGS done here is really usefull. should not...
-	LIBGL="-Wl,-framework -Wl,OpenGL"
-	;;
-*-*-*)
+	LIBGL="-Wl,-framework -Wl,OpenGL",
+
 	AC_CHECK_LIB(GL,glLoadIdentity,[LIBGL="-lGL"])
-	AC_CHECK_LIB(GLU,gluPerspective,[LIBGL="-lGLU"])
-	;;
-esac
+	AC_CHECK_LIB(GLU,gluPerspective,[LIBGL="-lGLU"]))
    AC_DEFINE(ILUT_USE_OPENGL,,[Support OpenGL API])
    SUPPORTED_API=$SUPPORTED_API"OpenGL "
-else
-  LIBGL=""
-fi
+],[LIBGL=""])
 AC_SUBST(LIBGL)
 
 dnl Allegro
 LIBALLEGRO=""
 HALLEGRO=""
-if test $use_allegro = yes ; then
-  AC_CHECK_PROG(allegro_config, allegro-config, yes, no, )
-  if test $allegro_config = yes ; then
-  	AC_DEFINE(ILUT_USE_ALLEGRO,,[Support Allegro API])
-    SUPPORTED_API=$SUPPORTED_API"Allegro "
-    LIBALLEGRO=`allegro-config --libs`
-    HALLEGRO=`allegro-config --cflags`
-  fi
-fi
+AS_IF([test $use_allegro = yes],
+  [AC_CHECK_PROG(allegro_config, allegro-config, yes, no, )])
+
+AS_IF([test $allegro_config = yes],
+  	[AC_DEFINE(ILUT_USE_ALLEGRO,,[Support Allegro API])]
+    [SUPPORTED_API=$SUPPORTED_API"Allegro "]
+    [LIBALLEGRO=`allegro-config --libs`]
+    [HALLEGRO=`allegro-config --cflags`])
+
 AC_SUBST(LIBALLEGRO)
 AC_SUBST(HALLEGRO)
 
 dnl Win32
-case "$host" in
-  *mingw32*)
+AS_CASE($host,
+[*mingw32*],
 		LIBIL_CFLAGS=$LIBIL_CFLAGS" -mno-cygwin"
 		LIBILU_CFLAGS=$LIBILU_CFLAGS" -mno-cygwin"
 		LIBILUT_CFLAGS=$LIBILUT_CFLAGS" -mno-cygwin"
-		VERSIONINFO=""
-              ;;
-  *cygwin*)
+		VERSIONINFO="",
+[*cygwin*],
 		LIBILUT_WIN32LIBPATH="-L/usr/lib/w32api"
-		VERSIONINFO=""
-              ;;
-  *)
-		use_win32=no
-		VERSIONINFO="-version-info $DEVIL_LTVERSION"
-              ;;
-esac
+		VERSIONINFO="",
+use_win32=no
+VERSIONINFO="-version-info $DEVIL_LTVERSION")
+
 AC_SUBST(VERSIONINFO)
-if test "$use_win32" = "no" ; then
-  LIBGDI32=""
-else
-  LIBGDI32="-lgdi32"
-fi
+AS_IF([test "$use_win32" = "no"],LIBGDI32="",LIBGDI32="-lgdi32")
 AC_SUBST(LIBGDI32)
 
 dnl DirectX 8
-if test $use_directx8 = yes ; then
-	AC_CHECK_HEADER(d3d8.h,,use_directx8=no)
-	if test $use_directx8 = yes ; then
-		AC_DEFINE(ILUT_USE_DIRECTX8,,[Support DirectX8 API])
-	    SUPPORTED_API=$SUPPORTED_API"DirectX8 "
-	fi
-fi
+AS_IF([test $use_directx8 = yes],
+	[AC_CHECK_HEADER(d3d8.h,,use_directx8=no)])
+
+AS_IF([test $use_directx8 = yes],
+    [AC_DEFINE(ILUT_USE_DIRECTX8,,[Support DirectX8 API])]
+    [SUPPORTED_API=$SUPPORTED_API"DirectX8 "],[])
 
 dnl DirectX 9
-if test $use_directx9 = yes ; then
-	AC_CHECK_HEADER(d3d9.h,,use_directx9=no)
-	if test $use_directx9 = yes ; then
-		AC_DEFINE(ILUT_USE_DIRECTX9,,[Support DirectX9 API])
- 		SUPPORTED_API=$SUPPORTED_API"DirectX9 "
-	fi
-fi
+AS_IF([test $use_directx9 = yes],
+	[AC_CHECK_HEADER(d3d9.h,,use_directx9=no)])
+
+AS_IF([test $use_directx9 = yes],
+    [AC_DEFINE(ILUT_USE_DIRECTX9,,[Support DirectX9 API])]
+    [SUPPORTED_API=$SUPPORTED_API"DirectX9 "],[])
 
 dnl Mac OS X Specific test
-case "$target" in
-    *-apple-darwin*) AC_DEFINE(MAX_OS_X,,[Building on Mac OS X])
-esac
+AS_CASE($target,
+[*-apple-darwin*],[AC_DEFINE(MAX_OS_X,,[Building on Mac OS X])],[])
+
 dnl Final substitution
 AC_SUBST(LIBIL_CFLAGS)
 AC_SUBST(LIBILU_CFLAGS)
