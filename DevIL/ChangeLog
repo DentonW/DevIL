@@ -1,5 +1,7 @@
 1.6.8 RC3
 ---
+- incorporated patches from debian.
+- Added support for non power of 2 texture loading (if available)
 - fixed bug #1609417. Bug in iluGetImageInfo
 - iGetIntegervImage(IL_IMAGE_CHANNELS) now returns a correct value
 - fixed bug #1561642. ILstring is poorly implemented (w.r.t const and others)

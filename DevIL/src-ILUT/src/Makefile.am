@@ -9,8 +9,8 @@ libILUT_la_SOURCES = ilut_allegro.c     ilut_main.c \
 AM_CFLAGS = @LIBILUT_CFLAGS@
 
 libILUT_la_LDFLAGS = -no-undefined @VERSIONINFO@ \
-                     $(top_srcdir)/src-IL/src/libIL.la \
-                     $(top_srcdir)/src-ILU/src/libILU.la \
+                     $(top_builddir)/src-IL/src/libIL.la \
+                     $(top_builddir)/src-ILU/src/libILU.la \
                      @LIBSDL@ @LIBALLEGRO@ @LIBILUT_WIN32LIBPATH@
 
 libILUT_la_LIBADD = @LIBGL@ @LIBGDI32@

@@ -140,7 +140,7 @@ ILboolean ilLoadJascPal(ILconst_string FileName)
 //	MaxLen must be greater than 1, because the trailing NULL is always stored.
 char *iFgetw(ILubyte *Buff, ILint MaxLen, FILE *File)
 {
-	ILbyte Temp;
+	ILint Temp;
 	ILint i;
 
 	if (Buff == NULL || File == NULL || MaxLen < 2) {

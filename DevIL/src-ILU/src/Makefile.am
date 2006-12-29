@@ -12,4 +12,4 @@ CFLAGS = @LIBILU_CFLAGS@
 libILU_la_LDFLAGS = -version-info @DEVIL_LTVERSION@ \
                     $(top_srcdir)/src-IL/src/libIL.la
 
-INCLUDES = -I$(top_srcdir)/include -I$(top_srcdir)/src-ILU/include
+INCLUDES = -I$(top_builddir)/include -I$(top_builddir)/src-ILU/include

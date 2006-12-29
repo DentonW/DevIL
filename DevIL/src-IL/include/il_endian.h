@@ -21,7 +21,9 @@
 	#endif
 #endif
 
-#ifdef __BIG_ENDIAN__
+#if (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __BIG_ENDIAN__) \
+  || (defined(__BIG_ENDIAN__) && !defined(__LITTLE_ENDIAN__))
+ 	#undef __LITTLE_ENDIAN__
 	#define Short(s) iSwapShort(s)
 	#define UShort(s) iSwapUShort(s)
 	#define Int(i) iSwapInt(i)
@@ -36,6 +38,7 @@
 	#define BigFloat(f)  
 	#define BigDouble(d)  
 #else
+	#undef __BIG_ENDIAN__
 	#undef __LITTLE_ENDIAN__  // Not sure if it's defined by any compiler...
 	#define __LITTLE_ENDIAN__
 	#define Short(s)  

@@ -63,9 +63,9 @@ extern "C" {
 typedef unsigned int   ILenum;
 typedef unsigned char  ILboolean;
 typedef unsigned int   ILbitfield;
-typedef char           ILbyte;
-typedef short          ILshort;
-typedef int            ILint;
+typedef signed char    ILbyte;
+typedef signed short   ILshort;
+typedef int     	   ILint;
 typedef int            ILsizei;
 typedef unsigned char  ILubyte;
 typedef unsigned short ILushort;
