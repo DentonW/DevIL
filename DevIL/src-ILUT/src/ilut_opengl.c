@@ -73,7 +73,8 @@ void *aglGetProcAddress( const GLubyte *name ) {
 #define ILGL_TEXTURE_WRAP_R					0x8072
 
 
-ILboolean HasCubemapHardware = IL_FALSE;
+static ILboolean HasCubemapHardware = IL_FALSE;
+static ILboolean HasNonPowerOfTwoHardware = IL_FALSE;
 #if defined(_MSC_VER) || defined(linux) || defined(__APPLE__)
 	ILGLCOMPRESSEDTEXIMAGE2DARBPROC ilGLCompressed2D = NULL;
 #endif
@@ -124,7 +125,9 @@ ILboolean ilutGLInit()
 
 	if (IsExtensionSupported("GL_ARB_texture_cube_map"))
 		HasCubemapHardware = IL_TRUE;
-
+	if (IsExtensionSupported("GL_ARB_texture_non_power_of_two"))
+		HasNonPowerOfTwoHardware = IL_TRUE;
+	
 	return IL_TRUE;
 }
 
@@ -411,7 +414,8 @@ ILimage* MakeGLCompliant(ILimage *Src)
 	ILboolean	Created = IL_FALSE;
 	ILenum		Filter;
 	ILubyte		*Flipped;
-
+	ILboolean   need_resize = IL_FALSE;
+	
 	if (Src->Pal.Palette != NULL && Src->Pal.PalSize != 0 && Src->Pal.PalType != IL_PAL_NONE) {
 		//ilSetCurImage(Src);
 		Dest = iConvertImage(Src, ilGetPalBaseType(Src->Pal.PalType), IL_UNSIGNED_BYTE);
@@ -429,9 +433,16 @@ ILimage* MakeGLCompliant(ILimage *Src)
 		Dest->Pal.PalType = IL_PAL_NONE;
 	}
 
-	if (Src->Width  != ilNextPower2(Src->Width)  ||
-		Src->Height != ilNextPower2(Src->Height) ||
-		(ILint)Src->Width > MaxTexW || (ILint)Src->Height > MaxTexH) {
+	if (HasNonPowerOfTwoHardware == IL_FALSE && 
+		  (Src->Width  != ilNextPower2(Src->Width)  ||
+		   Src->Height != ilNextPower2(Src->Height)  )) {
+				need_resize = IL_TRUE;
+			}
+
+	if ((ILint)Src->Width > MaxTexW || (ILint)Src->Height > MaxTexH)
+		need_resize = IL_TRUE;
+
+	if (need_resize == IL_TRUE) {
 		if (!Created) {
 			Dest = ilCopyImage_(Src);
 			if (Dest == NULL) {
@@ -443,12 +454,17 @@ ILimage* MakeGLCompliant(ILimage *Src)
 		Filter = iluGetInteger(ILU_FILTER);
 		if (Src->Format == IL_COLOUR_INDEX) {
 			iluImageParameter(ILU_FILTER, ILU_NEAREST);
-			Temp = iluScale_(Dest, min(MaxTexW, (ILint)ilNextPower2(Dest->Width)), min(MaxTexH, (ILint)ilNextPower2(Dest->Height)), 1);
+			Temp = HasNonPowerOfTwoHardware == IL_TRUE ? 
+				iluScale_(Dest, min(MaxTexW, Dest->Width), min(MaxTexH, Dest->Height), 1)
+			  : iluScale_(Dest, min(MaxTexW, (ILint)ilNextPower2(Dest->Width)),
+			  		min(MaxTexH, (ILint)ilNextPower2(Dest->Height)), 1);
 			iluImageParameter(ILU_FILTER, Filter);
-		}
-		else {
+		} else {
 			iluImageParameter(ILU_FILTER, ILU_BILINEAR);
-			Temp = iluScale_(Dest, min(MaxTexW, (ILint)ilNextPower2(Dest->Width)), min(MaxTexH, (ILint)ilNextPower2(Dest->Height)), 1);
+			Temp = HasNonPowerOfTwoHardware == IL_TRUE ?
+				iluScale_(Dest, min(MaxTexW, Dest->Width), min(MaxTexH, Dest->Height), 1)
+			 :	iluScale_(Dest, min(MaxTexW, (ILint)ilNextPower2(Dest->Width)),
+			 		min(MaxTexH, (ILint)ilNextPower2(Dest->Height)), 1);
 			iluImageParameter(ILU_FILTER, Filter);
 		}
 

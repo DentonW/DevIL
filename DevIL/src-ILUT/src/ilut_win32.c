@@ -707,7 +707,7 @@ ILboolean ILAPIENTRY ilutWinPrint(ILuint XPos, ILuint YPos, ILuint Width, ILuint
 		return (0L);
 
 	Di.cbSize = sizeof(DOCINFO);
-	Di.lpszDocName = "DevIL Print Job";
+	Di.lpszDocName = IL_TEXT("DevIL Print Job");
 	Di.lpszOutput = NULL;
 	Di.lpszDatatype = NULL;
 	Di.fwType = 0;
@@ -754,7 +754,7 @@ ILboolean ILAPIENTRY ilutWinLoadUrl(ILstring Url)
 		return IL_FALSE;
 	}
 
-	Handle = InternetOpen("Developer's Image Library", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
+	Handle = InternetOpen(IL_TEXT("Developer's Image Library"), INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
 	if (Handle == NULL) {
 		ifree(Buffer);
 		ilSetError(ILUT_COULD_NOT_OPEN_FILE);
@@ -765,7 +765,7 @@ ILboolean ILAPIENTRY ilutWinLoadUrl(ILstring Url)
 	UrlHandle = InternetOpenUrl(Handle, Url, NULL, 0, 0, Context);
 	if (UrlHandle == NULL) {
 		InternetCloseHandle(Handle);
-		Handle = InternetOpen("Developer's Image Library", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, INTERNET_FLAG_FROM_CACHE);
+		Handle = InternetOpen(IL_TEXT("Developer's Image Library"), INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, INTERNET_FLAG_FROM_CACHE);
 		if (Handle == NULL) {
 			ifree(Buffer);
 			ilSetError(ILUT_COULD_NOT_OPEN_FILE);

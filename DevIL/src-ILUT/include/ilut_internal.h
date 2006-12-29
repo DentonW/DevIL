@@ -45,6 +45,17 @@ extern ILimage *ilutCurImage;
 
 ILvoid	ilutDefaultStates(ILvoid);
 
+/* These defition should be collected in just one file */
+#ifdef _WIN32_WCE
+	#include <windows.h>
+	#define IL_TEXT(s) ((char*)TEXT(s))
+#elif _WIN32
+	#include <windows.h>
+	#define IL_TEXT(s) TEXT(s)
+#else
+	#define IL_TEXT(s) (s)
+	#define TEXT(s) (s)
+#endif
 
 // ImageLib Utility Toolkit's OpenGL Functions
 #ifdef ILUT_USE_OPENGL
