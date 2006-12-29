@@ -41,10 +41,10 @@
 	#define IL_TEXT(s) ((char*)TEXT(s))
 #elif _WIN32
 	#include <windows.h>
-	#define IL_TEXT(s) (s)
+	#define IL_TEXT(s) s
 #else
-	#define IL_TEXT(s) (s)
-	#define TEXT(s) (s)
+	#define IL_TEXT(s) s
+	#define TEXT(s) s
 #endif
 
 extern ILimage *iluCurImage;
