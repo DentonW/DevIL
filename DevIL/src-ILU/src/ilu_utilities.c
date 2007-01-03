@@ -14,14 +14,14 @@
 #include "ilu_internal.h"
 
 
-ILvoid ILAPIENTRY iluDeleteImage(ILuint Id)
+ILvoid ILAPIENTRY iluDeleteImage(ILuint Id) __attribute__ ((deprecated))
 {
 	ilDeleteImages(1, &Id);
 	return;
 }
 
 
-ILuint ILAPIENTRY iluGenImage()
+ILuint ILAPIENTRY iluGenImage() __attribute__ ((deprecated))
 {
 	ILuint Id;
 	ilGenImages(1, &Id);
