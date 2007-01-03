@@ -397,6 +397,11 @@ ILboolean ILAPIENTRY ilutGLSubTex(GLuint TexID, ILuint XOff, ILuint YOff)
 		return IL_FALSE;
 	}
 
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+	glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+	glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+	glPixelStorei(GL_UNPACK_SWAP_BYTES, IL_FALSE);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, XOff, YOff, Image->Width, Image->Height, Image->Format,
 			Image->Type, Image->Data);
 
