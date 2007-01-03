@@ -33,18 +33,36 @@ ILvoid iGLSetMaxH( ILuint Height ) {
 #include <string.h>
 
 #ifdef __APPLE__
+#include <OpenGL/glext.h>
+#include <dlfcn.h>
 void *aglGetProcAddress( const GLubyte *name ) {
-	NSSymbol symbol;
+	// deprecated code! and wasn't working
+	/*NSSymbol symbol;
  	char* symbolName;
- 	/* prepend a '_' for the Unix C symbol mangling convention */
- 	symbolName = malloc(strlen((const char*)name) + 2);
- 	strcpy(symbolName+1, (const char*)name);
+ 	// prepend a '_' for the Unix C symbol mangling convention
+ 	int len = strlen((const char*)name);
+ 	symbolName = malloc(len + 2);
+ 	memcpy(symbolName+1, (const char*)name, len );
  	symbolName[0] = '_';
  	symbol = NULL;
  	if (NSIsSymbolNameDefined(symbolName))
    		symbol = NSLookupAndBindSymbol(symbolName);
  	free(symbolName);
  	return symbol ? NSAddressOfSymbol(symbol) : NULL;
+ 	*/
+ 	// not deprecated code! and isn't working :( 
+ 	// now the address is directly known with glext.h include
+ 	const int len = strlen((const char*)name);
+ 	char *symbolName = calloc(len + 2,1);
+ 	
+ 	memcpy(symbolName+1, (const char*)name, len );
+ 	symbolName[0] = '_';
+ 	printf("searching %s as %s ",name,symbolName);
+ 	void *image = dlopen(NULL,RTLD_LAZY); // brutal solution
+ 	if( image == NULL ) {
+		return NULL;
+ 	}
+ 	return dlsym(image,symbolName);
 }
 #endif
 
@@ -119,7 +137,7 @@ ILboolean ilutGLInit()
 #elif defined(__APPLE__)
 	if( IsExtensionSupported("GL_ARB_texture_compression") &&
         	IsExtensionSupported("GL_EXT_texture_compression_s3tc")) {
-		ilGLCompressed2D = (ILGLCOMPRESSEDTEXIMAGE2DARBPROC)aglGetProcAddress((const GLubyte *)"glCompressedTexImage2DARB");
+		ilGLCompressed2D = glCompressedTexImage2DARB;//(ILGLCOMPRESSEDTEXIMAGE2DARBPROC)aglGetProcAddress((const GLubyte *)"glCompressedTexImage2DARB");
 	}
 #endif
 
