@@ -378,6 +378,16 @@ typedef void           ILvoid;
 #define IL_IMAGE_ORIGIN          0x0DFE
 #define IL_IMAGE_CHANNELS        0x0DFF
 
+# if defined __GNUC__ && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 0))
+// __attribute__((deprecated)) is supported by GCC 3.1 and later.
+#  define DEPRECATED(D) D __attribute__((deprecated))
+# elif defined _MSC_VER && _MSC_VER >= 1300
+// __declspec(deprecated) is supported by MSVC 7.0 and later.
+#  define DEPRECATED(D) __declspec(deprecated) D
+# else
+#  define DEPRECATED (D) D
+# endif
+
 //
 // Section shamelessly modified from the glut header.
 //

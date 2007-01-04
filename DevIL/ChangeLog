@@ -1,5 +1,6 @@
 1.6.8 RC3
 ---
+- added the DEPRECATED macro and deprecated iluGenImage and iluDeleteImage
 - glCompress2DARB now works with OS X too.
 - incorporated patches from debian.
 - Added support for non power of 2 texture loading (if available)
