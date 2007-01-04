@@ -53,6 +53,9 @@ ILboolean ILAPIENTRY ilApplyProfile(ILstring InProfile, ILstring OutProfile)
 	cmsHTRANSFORM	hTransform;
 	ILubyte			*Temp;
 	ILint			Format=0;
+#ifdef _UNICODE
+	char AnsiName[512];
+#endif//_UNICODE
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -129,10 +132,19 @@ ILboolean ILAPIENTRY ilApplyProfile(ILstring InProfile, ILstring OutProfile)
 		hInProfile = iCurImage->Profile;
 	}
 	else {
-		hInProfile = cmsOpenProfileFromFile(InProfile, "r");
+#ifndef _UNICODE
+ 		hInProfile = cmsOpenProfileFromFile(InProfile, "r");
+#else
+		wcstombs(AnsiName, InProfile, 512);
+		hInProfile = cmsOpenProfileFromFile(AnsiName, "r");
+#endif//_UNICODE
 	}
-
-	hOutProfile = cmsOpenProfileFromFile(OutProfile, "r");
+#ifndef _UNICODE
+ 	hOutProfile = cmsOpenProfileFromFile(OutProfile, "r");
+#else
+	wcstombs(AnsiName, OutProfile, 512);
+	hOutProfile = cmsOpenProfileFromFile(AnsiName, "r");
+#endif//_UNICODE
 
 	hTransform = cmsCreateTransform(hInProfile, Format, hOutProfile, Format, INTENT_PERCEPTUAL, 0);
 

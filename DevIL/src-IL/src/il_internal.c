@@ -110,7 +110,7 @@ ILboolean iCheckExtension(ILconst_string Arg, ILconst_string Ext)
 		return IL_TRUE;
 
 #else
-	wchar_t *Argu = Arg;
+	wchar_t *Argu = (wchar_t*)Arg;
 
 	if (Arg == NULL || Ext == NULL || !wcslen(Arg) || !wcslen(Ext))  // if not a good filename/extension, exit early
 		return IL_FALSE;
@@ -144,7 +144,7 @@ ILstring iGetExtension(ILconst_string FileName) {
 	char *Ext = (char*)FileName;
 	ILint i, Len = strlen(FileName);
 #else
-	wchar_t *Ext = FileName;
+	wchar_t *Ext = (wchar_t*)FileName;
 	ILint i, Len = wcslen(FileName);
 #endif//_UNICODE
 

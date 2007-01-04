@@ -550,7 +550,6 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName) {
 #ifndef _UNICODE
 	if (FileName == NULL || strlen(FileName) < 1) {
 #else
-	char AnsiName[512];
 	if (FileName == NULL || wcslen(FileName) < 1) {
 #endif//_UNICODE
 		ilSetError(IL_INVALID_PARAM);
@@ -681,13 +680,13 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName) {
 
 		#ifndef IL_NO_TIF
 		case IL_TIF:
-			#ifndef _UNICODE
+			//#ifndef _UNICODE
 				return ilLoadTiff(FileName);
-			#else
-				wcstombs(AnsiName, FileName, 512);
-				//WideCharToMultiByte(CP_ACP, 0, FileName, -1, AnsiName, 512, NULL, NULL);
-				return ilLoadTiff(AnsiName);
-			#endif//_UNICODE
+			//#else
+			//	wcstombs(AnsiName, FileName, 512);
+			//	//WideCharToMultiByte(CP_ACP, 0, FileName, -1, AnsiName, 512, NULL, NULL);
+			//	return ilLoadTiff(AnsiName);
+			//#endif//_UNICODE
 		#endif
 
 		#ifndef IL_NO_WAL

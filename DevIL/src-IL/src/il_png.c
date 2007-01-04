@@ -56,7 +56,7 @@ ILboolean ilIsValidPng(ILconst_string FileName)
 	ILHANDLE	PngFile;
 	ILboolean	bPng = IL_FALSE;
 
-	if (!iCheckExtension(FileName, "png")) {
+	if (!iCheckExtension(FileName, IL_TEXT( "png" ))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bPng;
 	}

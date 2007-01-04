@@ -41,7 +41,7 @@ static char*     iMakeString(ILvoid);
 static TIFF*     iTIFFOpen(char *Mode);
 //static ILboolean iSaveTiffInternal();
 
-static ILboolean iSaveTiffInternal(const char* Filename);
+static ILboolean iSaveTiffInternal(ILconst_string Filename);
 
 /*----------------------------------------------------------------------------*/
 
@@ -888,7 +888,7 @@ ILboolean ilSaveTiffL(const ILvoid *Lump, ILuint Size)
 // Internal function used to save the Tiff.
 //ILboolean iSaveTiffInternal()
 
-ILboolean iSaveTiffInternal(ILconst_string * Filename)
+ILboolean iSaveTiffInternal(ILconst_string Filename)
 {
 	ILenum	Format;
 	ILenum	Compression;
@@ -932,8 +932,12 @@ ILboolean iSaveTiffInternal(ILconst_string * Filename)
 		TempImage = iCurImage;
 	}
 
-	File = TIFFOpen(Filename, "w");
-	//File = iTIFFOpen("w");
+	#ifndef _UNICODE
+		File = TIFFOpen(Filename, "w");
+	#else
+		File = TIFFOpenW(Filename, "w");
+	#endif
+	
 	if (File == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
 		return IL_FALSE;

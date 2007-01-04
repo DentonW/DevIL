@@ -90,11 +90,11 @@ ILvoid ILAPIENTRY iRestoreReadFuncs()
 
 ILHANDLE ILAPIENTRY iDefaultOpenR(ILconst_string FileName)
 {
-#ifndef _WIN32_WCE
+#ifndef _UNICODE
 	return (ILHANDLE)fopen(FileName, "rb");
 #else
 	return (ILHANDLE)_wfopen(FileName, L"rb");
-#endif//_WIN32_WCE
+#endif//UNICODE
 }
 
 
@@ -171,11 +171,11 @@ ILint ILAPIENTRY iDefaultWTell(ILHANDLE Handle)
 
 ILHANDLE ILAPIENTRY iDefaultOpenW(ILconst_string FileName)
 {
-#ifndef _WIN32_WCE
+#ifndef _UNICODE
 	return (ILHANDLE)fopen(FileName, "wb");
 #else
 	return (ILHANDLE)_wfopen(FileName, L"wb");
-#endif//_WIN32_WCE
+#endif//_UNICODE
 }
 
 
