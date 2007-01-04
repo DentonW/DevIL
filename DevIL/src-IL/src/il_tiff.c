@@ -888,7 +888,7 @@ ILboolean ilSaveTiffL(const ILvoid *Lump, ILuint Size)
 // Internal function used to save the Tiff.
 //ILboolean iSaveTiffInternal()
 
-ILboolean iSaveTiffInternal(const char* Filename)
+ILboolean iSaveTiffInternal(ILconst_string * Filename)
 {
 	ILenum	Format;
 	ILenum	Compression;
@@ -914,7 +914,7 @@ ILboolean iSaveTiffInternal(const char* Filename)
 	TIFFSetErrorHandler(errorHandler);
 #endif
 	if (iGetHint(IL_COMPRESSION_HINT) == IL_USE_COMPRESSION)
-		Compression = COMPRESSION_PACKBITS;
+		Compression = COMPRESSION_LZW;
 	else
 		Compression = COMPRESSION_NONE;
 
