@@ -99,16 +99,16 @@ ILboolean ilLoadJascPal(ILconst_string FileName)
 	}
 
 	iFgetw(Buff, BUFFLEN, PalFile);
-	if (stricmp((ILbyte*)Buff, "JASC-PAL")) {
+	if (stricmp((const char*)Buff, "JASC-PAL")) {
 		Error = IL_TRUE;
 	}
 	iFgetw(Buff, BUFFLEN, PalFile);
-	if (stricmp((ILbyte*)Buff, "0100")) {
+	if (stricmp((const char*)Buff, "0100")) {
 		Error = IL_TRUE;
 	}
 
 	iFgetw(Buff, BUFFLEN, PalFile);
-	NumColours = atoi((ILbyte*)Buff);
+	NumColours = atoi((const char*)Buff);
 	if (NumColours == 0 || Error) {
 		ilSetError(IL_INVALID_FILE_HEADER);
 		fclose(PalFile);
@@ -126,7 +126,7 @@ ILboolean ilLoadJascPal(ILconst_string FileName)
 	for (i = 0; i < NumColours; i++) {
 		for (c = 0; c < PALBPP; c++) {
 			iFgetw(Buff, BUFFLEN, PalFile);
-			Pal->Palette[i * PALBPP + c] = atoi((ILbyte*)Buff);
+			Pal->Palette[i * PALBPP + c] = atoi((const char*)Buff);
 		}
 	}
 
@@ -174,7 +174,7 @@ char *iFgetw(ILubyte *Buff, ILint MaxLen, FILE *File)
 	}
 
 	Buff[i] = '\0';
-	return (ILbyte*)Buff;
+	return (char *)Buff;
 }
 
 

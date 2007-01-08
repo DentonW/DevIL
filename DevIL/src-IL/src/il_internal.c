@@ -200,7 +200,7 @@ ILbyte *iFgets(char *buffer, ILuint maxlen)
 	if (temp == IL_EOF && counter == 0)  // Only return NULL if no data was "got".
 		return NULL;
 
-	return buffer;
+	return (ILbyte*)buffer;
 }
 
 

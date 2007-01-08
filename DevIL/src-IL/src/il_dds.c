@@ -158,7 +158,7 @@ ILboolean iIsValidDds()
 // Internal function used to check if the HEADER is a valid .dds header.
 ILboolean iCheckDds(DDSHEAD *Head)
 {
-	if (strnicmp(Head->Signature, "DDS ", 4))
+	if (strnicmp((const char*)Head->Signature, "DDS ", 4))
 		return IL_FALSE;
 	//note that if Size1 is "DDS " this is not a valid dds file according
 	//to the file spec. Some broken tool out there seems to produce files

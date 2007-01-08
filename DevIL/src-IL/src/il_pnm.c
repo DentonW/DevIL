@@ -11,6 +11,7 @@
 //-----------------------------------------------------------------------------
 
 
+
 #include "il_internal.h"
 #ifndef IL_NO_PNM
 #include "il_pnm.h"
@@ -19,6 +20,11 @@
 #include "il_manip.h"
 #include "il_bits.h"
 
+// According to the ppm specs, it's 70, but PSP
+//  likes to output longer lines...
+#define MAX_BUFFER 180  
+static ILbyte LineBuffer[MAX_BUFFER];
+static ILbyte SmallBuff[MAX_BUFFER];
 
 // Can't read direct bits from a lump yet
 ILboolean IsLump = IL_FALSE;
@@ -204,7 +210,7 @@ ILboolean iLoadPnmInternal()
 	// Retrieve the width and height
 	if (iGetWord() == IL_FALSE)
 		return IL_FALSE;
-	Info.Width = atoi(SmallBuff);
+	Info.Width = atoi((const char*)SmallBuff);
 	if (Info.Width == 0) {
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
@@ -212,7 +218,7 @@ ILboolean iLoadPnmInternal()
 
 	if (iGetWord() == IL_FALSE)
 		return IL_FALSE;
-	Info.Height = atoi(SmallBuff);
+	Info.Height = atoi((const char*)SmallBuff);
 	if (Info.Height == 0) {
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
@@ -222,7 +228,7 @@ ILboolean iLoadPnmInternal()
 	if (Info.Type != IL_PBM_ASCII && Info.Type != IL_PBM_BINARY) {
 		if (iGetWord() == IL_FALSE)
 			return IL_FALSE;
-		if ((Info.MaxColour = atoi(SmallBuff)) == 0) {
+		if ((Info.MaxColour = atoi((const char*)SmallBuff)) == 0) {
 			ilSetError(IL_INVALID_FILE_HEADER);
 			return IL_FALSE;
 		}
@@ -314,7 +320,7 @@ ILimage *ilReadAsciiPpm(PPMINFO *Info)
 	while (DataInc < Size) {  // && !feof(File)) {
 		LineInc = 0;
 
-		if (iFgets(LineBuffer, MAX_BUFFER) == NULL) {
+		if (iFgets((char *)LineBuffer, MAX_BUFFER) == NULL) {
 			//ilSetError(IL_ILLEGAL_FILE_VALUE);
 			//return NULL;
 			//return iCurImage;
@@ -336,7 +342,7 @@ ILimage *ilReadAsciiPpm(PPMINFO *Info)
 				LineInc++;
 			}
 			SmallBuff[SmallInc] = NUL;
-			iCurImage->Data[DataInc] = atoi(SmallBuff);  // Convert from string to colour
+			iCurImage->Data[DataInc] = atoi((const char*)SmallBuff);  // Convert from string to colour
 
 			// PSP likes to put whitespace at the end of lines...figures. =/
 			while (!isalnum(LineBuffer[LineInc]) && LineBuffer[LineInc] != NUL) {  // Skip any whitespace

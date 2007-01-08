@@ -109,7 +109,7 @@ ILboolean iCheckPic(PIC_HEAD *Header)
 {
 	if (Header->Magic != 0x5380F634)
 		return IL_FALSE;
-	if (strncmp(Header->Id, "PICT", 4))
+	if (strncmp((const char*)Header->Id, "PICT", 4))
 		return IL_FALSE;
 	if (Header->Width == 0)
 		return IL_FALSE;
