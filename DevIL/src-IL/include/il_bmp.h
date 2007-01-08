@@ -59,13 +59,13 @@ typedef struct OS2_HEAD
 #endif
 
 // Internal functions
-ILboolean	iGetBmpHead(BMPHEAD *Header);
-ILboolean	iGetOS2Head(OS2_HEAD *Header);
-ILboolean	iIsValidBmp(ILvoid);
-ILboolean	iCheckBmp(BMPHEAD *Header);
-ILboolean	iCheckOS2(OS2_HEAD *Header);
-ILboolean	iLoadBitmapInternal(ILvoid);
-ILboolean	iSaveBitmapInternal(ILvoid);
+ILboolean	iGetBmpHead(BMPHEAD * const Header);
+ILboolean	iGetOS2Head(OS2_HEAD * const Header);
+ILboolean	iIsValidBmp();
+ILboolean	iCheckBmp(const BMPHEAD *CONST_RESTRICT Header);
+ILboolean	iCheckOS2(const OS2_HEAD *CONST_RESTRICT Header);
+ILboolean	iLoadBitmapInternal();
+ILboolean	iSaveBitmapInternal();
 ILboolean	ilReadUncompBmp(BMPHEAD *Info);
 ILboolean	ilReadRLE8Bmp(BMPHEAD *Info);
 ILboolean	ilReadRLE4Bmp(BMPHEAD *Info);
@@ -78,7 +78,7 @@ ILboolean	iGetOS2Bmp(OS2_HEAD *Header);
 #endif
 
 #ifndef NOINLINE
-INLINE ILvoid GetShiftFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight) {
+INLINE ILvoid GetShiftFromMask(const ILuint Mask, ILuint * CONST_RESTRICT ShiftLeft, ILuint * CONST_RESTRICT ShiftRight) {
 	ILuint Temp, i;
 
 	if( Mask == 0 ) {

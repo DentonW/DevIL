@@ -18,12 +18,10 @@
 #include "il_manip.h"
 #include "il_endian.h"
 
-ILvoid GetShiftFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight);
-
+ILvoid GetShiftFromMask(const ILuint Mask, ILuint * CONST_RESTRICT ShiftLeft, ILuint * CONST_RESTRICT ShiftRight);
 
 //! Checks if the file specified in FileName is a valid .bmp file.
-ILboolean ilIsValidBmp(ILconst_string FileName)
-{
+ILboolean ilIsValidBmp(const ILconst_string CONST_RESTRICT FileName) {
 	ILHANDLE	BitmapFile;
 	ILboolean	bBitmap = IL_FALSE;
 
@@ -46,8 +44,7 @@ ILboolean ilIsValidBmp(ILconst_string FileName)
 
 
 //! Checks if the ILHANDLE contains a valid .bmp file at the current position.
-ILboolean ilIsValidBmpF(ILHANDLE File)
-{
+ILboolean ilIsValidBmpF(ILHANDLE File) {
 	ILuint		FirstPos;
 	ILboolean	bRet;
 
@@ -61,16 +58,13 @@ ILboolean ilIsValidBmpF(ILHANDLE File)
 
 
 //! Checks if Lump is a valid .bmp lump.
-ILboolean ilIsValidBmpL(const ILvoid *Lump, ILuint Size)
-{
+ILboolean ilIsValidBmpL(const ILvoid * Lump, const ILuint Size) {
 	iSetInputLump(Lump, Size);
 	return iIsValidBmp();
 }
 
-
 // Internal function used to get the .bmp header from the current file.
-ILboolean iGetBmpHead(BMPHEAD *Header)
-{
+ILboolean iGetBmpHead(BMPHEAD *Header) {
 	Header->bfType = GetLittleUShort();
 	Header->bfSize = GetLittleInt();
 	Header->bfReserved = GetLittleUInt();
@@ -86,13 +80,11 @@ ILboolean iGetBmpHead(BMPHEAD *Header)
 	Header->biYPelsPerMeter = GetLittleInt();
 	Header->biClrUsed = GetLittleInt();
 	Header->biClrImportant = GetLittleInt();
-
 	return IL_TRUE;
 }
 
 
-ILboolean iGetOS2Head(OS2_HEAD *Header)
-{
+ILboolean iGetOS2Head(OS2_HEAD * Header) {
 	if (iread(Header, sizeof(OS2_HEAD), 1) != 1)
 		return IL_FALSE;
 
@@ -116,8 +108,7 @@ ILboolean iGetOS2Head(OS2_HEAD *Header)
 
 
 // Internal function to get the header and check it.
-ILboolean iIsValidBmp()
-{
+ILboolean iIsValidBmp() {
 	BMPHEAD		Head;
 	OS2_HEAD	Os2Head;
 	ILboolean	IsValid;
@@ -131,14 +122,12 @@ ILboolean iIsValidBmp()
 		iseek(-(ILint)sizeof(BMPHEAD), IL_SEEK_CUR);
 		IsValid = iCheckOS2(&Os2Head);
 	}
-
 	return IsValid;
 }
 
 
 // Internal function used to check if the HEADER is a valid .bmp header.
-ILboolean iCheckBmp(BMPHEAD *Header)
-{
+ILboolean iCheckBmp(const BMPHEAD * CONST_RESTRICT Header) {
 	//if ((Header->bfType != ('B'|('M'<<8))) || ((Header->biSize != 0x28) && (Header->biSize != 0x0C)))
 	if ((Header->bfType != ('B'|('M'<<8))) || (Header->biSize != 0x28))
 		return IL_FALSE;
@@ -154,13 +143,11 @@ ILboolean iCheckBmp(BMPHEAD *Header)
 	if (Header->biBitCount != 1 && Header->biBitCount != 4 && Header->biBitCount != 8 &&
 		Header->biBitCount != 16 && Header->biBitCount != 24 && Header->biBitCount != 32)
 		return IL_FALSE;
-
 	return IL_TRUE;
 }
 
 
-ILboolean iCheckOS2(OS2_HEAD *Header)
-{
+ILboolean iCheckOS2( const OS2_HEAD * CONST_RESTRICT Header) {
 	if ((Header->bfType != ('B'|('M'<<8))) || (Header->DataOff < 26) || (Header->cbFix < 12))
 		return IL_FALSE;
 	if (Header->cPlanes != 1)
@@ -176,8 +163,7 @@ ILboolean iCheckOS2(OS2_HEAD *Header)
 
 
 //! Reads a .bmp file
-ILboolean ilLoadBmp(ILconst_string FileName)
-{
+ILboolean ilLoadBmp(ILconst_string FileName) {
 	ILHANDLE	BitmapFile;
 	ILboolean	bBitmap = IL_FALSE;
 
@@ -195,8 +181,7 @@ ILboolean ilLoadBmp(ILconst_string FileName)
 
 
 //! Reads an already-opened .bmp file
-ILboolean ilLoadBmpF(ILHANDLE File)
-{
+ILboolean ilLoadBmpF(ILHANDLE File) {
 	ILuint		FirstPos;
 	ILboolean	bRet;
 
@@ -210,7 +195,7 @@ ILboolean ilLoadBmpF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a .bmp
-ILboolean ilLoadBmpL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadBmpL(const ILvoid *Lump, const ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadBitmapInternal();
@@ -218,8 +203,7 @@ ILboolean ilLoadBmpL(const ILvoid *Lump, ILuint Size)
 
 
 // Internal function used to load the .bmp.
-ILboolean iLoadBitmapInternal()
-{
+ILboolean iLoadBitmapInternal() {
 	BMPHEAD		Header;
 	OS2_HEAD	Os2Head;
 	ILboolean	bBitmap;
@@ -275,8 +259,7 @@ ILboolean iLoadBitmapInternal()
 
 // Reads an uncompressed .bmp
 //	One of the absolute ugliest functions I've ever written!
-ILboolean ilReadUncompBmp(BMPHEAD *Header)
-{
+ILboolean ilReadUncompBmp(BMPHEAD * Header) {
 	ILuint i, j, k, c, Read;
 	ILubyte Bpp, ByteData, PadSize, Padding[4];
 	ILuint rMask, gMask, bMask; //required for bitfields packing
