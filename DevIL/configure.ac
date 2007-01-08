@@ -35,7 +35,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION($Revision: 1.18 $)
+AC_REVISION($Revision: 1.19 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -212,7 +212,7 @@ dnl Setup Libraries
 dnl
 AC_DEFUN([SET_LIB],[
 LIB$2=""
-AC_ARG_ENABLE($1dir,AC_HELP_STRING([--with-$1dir=path],[Specify the lib$1 installation path]),
+AC_ARG_WITH($1,AC_HELP_STRING([--with-$1=path],[Specify the lib$1 installation path]),
 	ADD_CFLAGS([-I$enable_$1dir/include])
 	LIB$2="-L$enable_$1dir/lib"
 	no_$1=no
@@ -228,14 +228,23 @@ SET_LIB(lcms,LCMS)
 SET_LIB(mng,MNG)
 SET_LIB(z,Z)
 
-libpng_app=$(which libpng-config)
+dnl libpng configuration
+LIBPNG_INCLUDE=""
+LIBPNG=""
+AC_ARG_WITH(png,AC_HELP_STRING([--with-pngdir=path],[Specify the libpng installation path])
+	,[libpng_app="$withval/bin/libpng-config"]
+	 [no_png=no]
+	 [use_png=yes])
+if test "$use_png" = "yes" && test "$no_png" = "no" ; then
+AS_IF([test -z "$libpng_app"],[libpng_app=$(which libpng-config)],[])
+AS_IF([test ! -e "$libpng_app"],[libpng_app=""],[])
 AS_IF([test -z "$libpng_app"],
-	LIBPNG=""
-	AC_SUBST(LIBPNG)
-   ,SET_LIB(png,PNG,`libpng-config --ldflags`))
-
+	AC_DEFINE([IL_NO_PNG],,[PNG support])
+   ,LIBPNG=`$libpng_app --ldflags`
+    LIBPNG_INCLUDE=`$libpng_app --cflags`)
+fi
 dnl Just in case the library is not installed in the default header path
-LIBPNG_INCLUDE=`libpng-config --I_opts`
+AC_SUBST(LIBPNG)
 AC_SUBST(LIBPNG_INCLUDE)
 
 dnl
