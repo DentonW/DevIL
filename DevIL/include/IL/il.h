@@ -58,6 +58,14 @@ extern "C" {
 	#endif
 #endif
 
+#ifdef RESTRICT_KEYWORD
+#define RESTRICT restrict
+#define CONST_RESTRICT const restrict
+#else
+#define RESTRICT
+#define CONST_RESTRICT const
+#endif
+
 #include <stdio.h>
 
 typedef unsigned int   ILenum;
@@ -456,8 +464,8 @@ typedef ILint    (ILAPIENTRY *fTellWProc) (ILHANDLE);
 typedef ILint    (ILAPIENTRY *fWriteProc) (const void*, ILuint, ILuint, ILHANDLE);
 
 // Callback functions for allocation and deallocation
-typedef ILvoid* (ILAPIENTRY *mAlloc)(ILuint);
-typedef ILvoid  (ILAPIENTRY *mFree) (ILvoid*);
+typedef ILvoid* (ILAPIENTRY *mAlloc)(const ILuint);
+typedef ILvoid  (ILAPIENTRY *mFree) (const ILvoid*);
 
 // Registered format procedures
 typedef ILenum (ILAPIENTRY *IL_LOADPROC)(ILconst_string);
@@ -530,7 +538,7 @@ ILAPI ILboolean ILAPIENTRY ilRegisterSave(ILconst_string Ext, IL_SAVEPROC Save);
 ILAPI ILvoid    ILAPIENTRY ilRegisterType(ILenum Type);
 ILAPI ILboolean ILAPIENTRY ilRemoveLoad(ILconst_string Ext);
 ILAPI ILboolean ILAPIENTRY ilRemoveSave(ILconst_string Ext);
-ILAPI ILvoid    ILAPIENTRY ilResetMemory(ILvoid);
+DEPRECATED(ILAPI ILvoid    ILAPIENTRY ilResetMemory(ILvoid));
 ILAPI ILvoid    ILAPIENTRY ilResetRead(ILvoid);
 ILAPI ILvoid    ILAPIENTRY ilResetWrite(ILvoid);
 ILAPI ILboolean ILAPIENTRY ilSave(ILenum Type, ILstring FileName);

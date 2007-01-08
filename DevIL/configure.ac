@@ -35,7 +35,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION($Revision: 1.19 $)
+AC_REVISION($Revision: 1.20 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -58,6 +58,27 @@ LIBILUT_CFLAGS="$LIBILUT_CFLAGS $1"
 CFLAGS="$CFLAGS $1"    ])
 
 ADD_CFLAGS([$CFLAGS])
+
+dnl Test for restrict c/c++ keyword
+AC_MSG_CHECKING([restrict keyword])
+AC_COMPILE_IFELSE([[void foo(void * restrict test){}]],
+	[AC_DEFINE(RESTRICT_KEYWORD,,restric keyword available)]
+	[restrict_keyword=found]
+	[AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+if test ! "$restrict_keyword" = "found" ; then
+dnl checking if the -std=gnu99 flag is required
+TMP_CFLAGS="$CFLAGS"
+CFLAGS="$CFLAGS -std=gnu99"
+AC_MSG_CHECKING([restrict gnu99 keyword])
+AC_COMPILE_IFELSE([[void foo(void * restrict test){}]],
+	[AC_DEFINE(RESTRICT_KEYWORD,,restric keyword available)]
+	[AC_MSG_RESULT(yes)]
+	[CFLAGS="$TMP_CFLAGS"]
+	[ADD_CFLAGS(-std=gnu99)]
+	,[AC_MSG_RESULT(no)]
+	 [CFLAGS="$TMP_CFLAGS"])
+fi
 
 dnl must add AC_CACHE_CHECK support where possible
 
@@ -141,7 +162,7 @@ dnl
 AC_ARG_ENABLE(warning,
 AC_HELP_STRING([--enable-warning],[Compile breaks on warnings]),[build_warning="$enable_warning"],[build_warning="no"])
 
-AS_IF([test "$build_warning" = "yes"],[ADD_CFLAGS([-Wall -g -Werror -DNOINLINE])],[])
+AS_IF([test "$build_warning" = "yes"],[ADD_CFLAGS([-Wall -Werror -DNOINLINE])],[])
 
 dnl
 dnl Memory alignment functions
