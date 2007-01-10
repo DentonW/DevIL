@@ -10,6 +10,7 @@ For 1.7.0
 - rename rename to iGetIntegervImage to ilGetImageIntegerv and make it public
 
 Features to be added
+- global use of restricted pointers where available (for now only il_bmp.{c,h} uses it)
 - Add a real Layer facility.
 - iluScaleColours is BUGGED, doesn't handle the image with the correct type! more Bpc (except luminance and paletted one)
 - IL_LUMINANCE_ALPHA support must be tested in ilApplyPal();
