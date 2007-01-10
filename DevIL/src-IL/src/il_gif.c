@@ -147,17 +147,11 @@ ILboolean iLoadGifInternal()
 
 
 	//read header
-
 	iread(&Header.Sig, 1, 6);
-
 	Header.Width = GetLittleUShort();
-
 	Header.Height = GetLittleUShort();
-
 	Header.ColourInfo = igetc();
-
 	Header.Background = igetc();
-
 	Header.Aspect = igetc();
 
 
@@ -241,30 +235,19 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 		if (!SkipExtensions(&Gfx))
 			goto error_clean;
 		i = itell();
-
+		
 		if (!Gfx.Used)
-
 			DisposalMethod = (Gfx.Packed & 0x1C) >> 2;
 
-
-
-
 		//read image descriptor
-
 		ImageDesc.Separator = igetc();
-
 		if (ImageDesc.Separator != 0x2C) //end of image
-
 			break;
 
 		ImageDesc.OffX = GetLittleUShort();
-
 		ImageDesc.OffY = GetLittleUShort();
-
 		ImageDesc.Width = GetLittleUShort();
-
 		ImageDesc.Height = GetLittleUShort();
-
 		ImageDesc.ImageInfo = igetc();
 
 		if (ieof()) {
@@ -274,80 +257,49 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 
 
 		if (!BaseImage) {
-
 			NumImages++;
 			Image->Next = ilNewImage(iCurImage->Width, iCurImage->Height, 1, 1, 1);
 			if (Image->Next == NULL)
 				goto error_clean;
 
 			//20040612: DisposalMethod controls how the new images data is to be combined
-
 			//with the old image. 0 means that it doesn't matter how they are combined,
-
 			//1 means keep the old image, 2 means set to background color, 3 is
-
 			//load the image that was in place before the current (this is not implemented
-
 			//here! (TODO?))
-
 			if (DisposalMethod == 2 || DisposalMethod == 3)
-
 				//Note that this is actually wrong, too: If the image has a local
-
 				//color table, we should really search for the best fit of the
-
 				//background color table and use that index (?). Furthermore,
-
 				//we should only memset the part of the image that is not read
-
 				//later (if we are sure that no parts of the read image are transparent).
-
 				if (!Gfx.Used && Gfx.Packed & 0x1)
-
 					memset(Image->Next->Data, Gfx.Transparent, Image->SizeOfData);
-
 				else
-
 					memset(Image->Next->Data, GifHead->Background, Image->SizeOfData);
-
 			else if (DisposalMethod == 1 || DisposalMethod == 0)
-
 				memcpy(Image->Next->Data, Image->Data, Image->SizeOfData);
 
-
 			//Interlacing has to be removed after the image was copied (line above)
-
 			if (OldImageDesc.ImageInfo & (1 << 6)) {  // Image is interlaced.
-
 				if (!RemoveInterlace(Image))
-
 					goto error_clean;
-
 			}
-
-
-
 
 			Image = Image->Next;
 			Image->Format = IL_COLOUR_INDEX;
 			Image->Origin = IL_ORIGIN_UPPER_LEFT;
 		} else {
 			BaseImage = IL_FALSE;
-
 			if (!Gfx.Used && Gfx.Packed & 0x1)
-
 				memset(Image->Data, Gfx.Transparent, Image->SizeOfData);
-
 			else
-
 				memset(Image->Data, GifHead->Background, Image->SizeOfData);
 			//memset(Image->Data, GifHead->Background, Image->SizeOfData);
-
 		}
 
 		Image->OffX = ImageDesc.OffX;
 		Image->OffY = ImageDesc.OffY;
-
 
 		// Check to see if the image has its own palette.
 		if (ImageDesc.ImageInfo & (1 << 7)) {
@@ -363,7 +315,6 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 
 
 		if (!GifGetData(Image->Data + ImageDesc.OffX + ImageDesc.OffY*Image->Width, Image->SizeOfData,
-
 				ImageDesc.Width, ImageDesc.Height, Image->Width, &Gfx)) {
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
 			goto error_clean;
@@ -385,35 +336,21 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 		i = itell();
 
 		// Terminates each block.
-
 		if((input = igetc()) == IL_EOF)
-
 			goto error_clean;
 
-
-
 		if (input != 0x00)
-
 			iseek(-1, IL_SEEK_CUR);
 		//	break;
-
-
 
 		OldImageDesc = ImageDesc;
 	}
 
-
 	//Deinterlace last image
-
 	if (OldImageDesc.ImageInfo & (1 << 6)) {  // Image is interlaced.
-
 		if (!RemoveInterlace(Image))
-
 			goto error_clean;
-
 	}
-
-
 
 	if (BaseImage)  // Was not able to load any images in...
 		return IL_FALSE;
@@ -444,9 +381,7 @@ ILboolean SkipExtensions(GFXCONTROL *Gfx)
 
 	do {
 		if((Code = igetc()) == IL_EOF)
-
 			return IL_FALSE;
-
 
 		if (Code != 0x21) {
 			iseek(-1, IL_SEEK_CUR);
@@ -454,26 +389,19 @@ ILboolean SkipExtensions(GFXCONTROL *Gfx)
 		}
 
 		if((Label = igetc()) == IL_EOF)
-
 			return IL_FALSE;
 
 		switch (Label)
 		{
 			case 0xF9:
-
 				Gfx->Size = igetc();
-
 				Gfx->Packed = igetc();
-
 				Gfx->Delay = GetLittleUShort();
-
 				Gfx->Transparent = igetc();
-
 				Gfx->Terminator = igetc();
 				if (ieof())
 					return IL_FALSE;
 				Gfx->Used = IL_FALSE;
-
 				break;
 
 			/*case 0xFE:
@@ -527,51 +455,32 @@ ILuint code_mask[13] =
    0x07FFL, 0x0FFFL
 };
 
-
 ILint get_next_code(void)
 {
 	ILint	i, t;
 	ILuint	ret;
 
-
 	//20050102: Tests for IL_EOF were added because this function
-
 	//crashed sometimes if igetc() returned IL_EOF
-
 	//(for example "table-add-column-before-active.gif" included in the
-
 	//mozilla source package)
-
-
 	if (!nbits_left) {
 		if (navail_bytes <= 0) {
 			pbytes = byte_buff;
 			navail_bytes = igetc();
-
-
-
+			
 			if(navail_bytes == IL_EOF) {
-
 				success = IL_FALSE;
-
 				return ending;
-
 			}
-
 
 			if (navail_bytes) {
 				for (i = 0; i < navail_bytes; i++) {
-
 					if((t = igetc()) == IL_EOF) {
-
 						success = IL_FALSE;
-
 						return ending;
-
 					}
-
 					byte_buff[i] = t;
-
 				}
 			}
 		}
@@ -586,25 +495,16 @@ ILint get_next_code(void)
 			pbytes = byte_buff;
 			navail_bytes = igetc();
 
-
-
 			if(navail_bytes == IL_EOF) {
-
 				success = IL_FALSE;
-
 				return ending;
-
 			}
-
 
 			if (navail_bytes) {
 				for (i = 0; i < navail_bytes; i++) {
 					if((t = igetc()) == IL_EOF) {
-
 						success = IL_FALSE;
-
 						return ending;
-
 					}
 
 					byte_buff[i] = t;
@@ -630,16 +530,11 @@ ILboolean GifGetData(ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Heigh
 	ILint	c, size;
 	ILuint	i = 0, Read = 0;
 
-
-
 	if (!Gfx->Used)
-
 		DisposalMethod = (Gfx->Packed & 0x1C) >> 2;
 
 	if((size = igetc()) == IL_EOF)
-
 		return IL_FALSE;
-
 
 	if (size < 2 || 9 < size) {
 		return IL_FALSE;
@@ -665,7 +560,6 @@ ILboolean GifGetData(ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Heigh
 	sp = stack;
 	success = IL_TRUE;
 
-
 	while ((c = get_next_code()) != ending && Read < Height) {
 		if (c == clear) {
 			curr_size = size + 1;
@@ -681,30 +575,30 @@ ILboolean GifGetData(ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Heigh
 
 			if (DisposalMethod == 1 && !Gfx->Used && Gfx->Transparent == c && (Gfx->Packed & 0x1) != 0)
 				i++;
-
 			else
-
 				Data[i++] = c;
 
-
 			if (i == Width) {
-
 				Data += Stride;
-
 				i = 0;
-
 				Read += 1;
-
 			}
-
 		}
 		else {
 			code = c;
 			if (code >= slot) {
 				code = oc;
+				if (sp >= stack + MAX_CODES) {
+					success = IL_FALSE;
+					goto GifGetData_end; // here we may use a break
+				}
 				*sp++ = fc;
 			}
 			while (code >= newcodes) {
+				if (sp >= stack + MAX_CODES) {
+					success = IL_FALSE;
+					goto GifGetData_end;
+				}
 				*sp++ = suffix[code];
 				code = prefix[code];
 			}
@@ -721,38 +615,24 @@ ILboolean GifGetData(ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Heigh
 			}
 			while (sp > stack) {
 				sp--;
-
-
 				if (DisposalMethod == 1 && !Gfx->Used && Gfx->Transparent == *sp && (Gfx->Packed & 0x1) != 0)
 					i++;
-
 				else
-
 					Data[i++] = *sp;
 
-
-
 				if (i == Width) {
-
 					Data += Stride;
-
 					i = 0;
-
 					Read += 1;
-
 				}
-
 			}
 		}
-
-
-
 	}
 
+GifGetData_end:
 	ifree(stack);
 	ifree(suffix);
 	ifree(prefix);
-
 	return success;
 }
 
@@ -776,17 +656,11 @@ ILboolean RemoveInterlace(ILimage *image)
 	if (NewData == NULL)
 		return IL_FALSE;
 
-
 	//changed 20041230: images with offsety != 0 were not
-
 	//deinterlaced correctly before...
-
 	for (i = 0; i < image->OffY; i++, j++) {
-
 		memcpy(&NewData[i * image->Bps], &image->Data[j * image->Bps], image->Bps);
-
 	}
-
 
 	for (i = 0 + image->OffY; i < image->Height; i += 8, j++) {
 		memcpy(&NewData[i * image->Bps], &image->Data[j * image->Bps], image->Bps);

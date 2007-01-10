@@ -1,5 +1,6 @@
 1.6.8 RC3
 ---
+- applied submitted patch #1632474. GIF loading fails on incomplete images
 - applied patch #1612477. _UNICODE / UNICODE fixes. more win32 unicode fixes.
 - TIFF compression method changed to LZW
 - added the DEPRECATED macro and deprecated iluGenImage and iluDeleteImage
