@@ -465,7 +465,7 @@ typedef ILint    (ILAPIENTRY *fWriteProc) (const void*, ILuint, ILuint, ILHANDLE
 
 // Callback functions for allocation and deallocation
 typedef ILvoid* (ILAPIENTRY *mAlloc)(const ILuint);
-typedef ILvoid  (ILAPIENTRY *mFree) (const ILvoid*);
+typedef ILvoid  (ILAPIENTRY *mFree) (const ILvoid* CONST_RESTRICT);
 
 // Registered format procedures
 typedef ILenum (ILAPIENTRY *IL_LOADPROC)(ILconst_string);
