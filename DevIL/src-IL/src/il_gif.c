@@ -602,6 +602,10 @@ ILboolean GifGetData(ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Heigh
 				*sp++ = suffix[code];
 				code = prefix[code];
 			}
+			if (sp >= stack + MAX_CODES) {
+				success = IL_FALSE;
+				goto GifGetData_end;
+			}
 			*sp++ = (ILbyte)code;
 			if (slot < top_slot) {
 				fc = code;
