@@ -35,7 +35,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION($Revision: 1.21 $)
+AC_REVISION($Revision: 1.22 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -66,7 +66,7 @@ AC_COMPILE_IFELSE([[void foo(void * restrict test){}]],
 	[restrict_keyword=found]
 	[AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
-if test ! "$restrict_keyword" = "found" ; then
+AS_IF([test ! "$restrict_keyword" = "found"],[
 dnl checking if the -std=gnu99 flag is required
 TMP_CFLAGS="$CFLAGS"
 CFLAGS="$CFLAGS -std=gnu99"
@@ -78,7 +78,7 @@ AC_COMPILE_IFELSE([[void foo(void * restrict test){}]],
 	[ADD_CFLAGS(-std=gnu99)]
 	,[AC_MSG_RESULT(no)]
 	 [CFLAGS="$TMP_CFLAGS"])
-fi
+])
 
 dnl must add AC_CACHE_CHECK support where possible
 
@@ -199,7 +199,6 @@ AC_ARG_WITH($1,AC_HELP_STRING([--with-$1=path],[Specify the lib$1 installation p
 	LIB$2="-L$enable_$1dir/lib"
 	no_$1=no
 	use_$1=yes )
-
 AS_IF([test ! "$no_$1" = "yes" && test "$use_$1" = "yes" && test -z "$3"],[LIB$2="$LIB$2 -l$1"]
      ,[test ! "$no_$1" = "yes" && test "$use_$1" = "yes" && ! test -z "$3"],[LIB$2="$3"],[])
 AC_SUBST(LIB$2) ])
@@ -217,23 +216,19 @@ LIBPNG=""
 AC_ARG_WITH(png,AC_HELP_STRING([--with-pngdir=path],[Specify the libpng installation path])
 	,[libpng_app="$withval/bin/libpng-config"]
 	 [no_png=no])
-if test ! "$with_png" = "no" ; then
+AS_IF([test ! "$with_png" = "no"],[
 AS_IF([test -z "$libpng_app"],[libpng_app=$(which libpng-config)],[])
 dnl AS_IF([test ! -e "$libpng_app"],[libpng_app=""],[])
 AS_IF([test -z "$libpng_app"],
 	AC_DEFINE([IL_NO_PNG],,[PNG support])
    ,LIBPNG=`$libpng_app --ldflags`
-    LIBPNG_INCLUDE=`$libpng_app --cflags`)
-else
-	libpng_app=""
-fi
-if test -z "$libpng_app" ; then
+    LIBPNG_INCLUDE=`$libpng_app --cflags`)]
+   ,[libpng_app=""])
+AS_IF([test -z "$libpng_app"],[
 	AC_MSG_RESULT(no)
-	no_png=yes
-else
-	AC_MSG_RESULT(yes)
-	no_png=no
-fi
+	no_png=yes]
+  ,[AC_MSG_RESULT(yes)
+	no_png=no])
 dnl Just in case the library is not installed in the default header path
 AC_SUBST(LIBPNG)
 AC_SUBST(LIBPNG_INCLUDE)
