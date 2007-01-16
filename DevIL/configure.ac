@@ -35,7 +35,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION($Revision: 1.20 $)
+AC_REVISION($Revision: 1.21 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -177,8 +177,6 @@ dnl Libraries development checking
 dnl
 AC_CHECK_HEADER(jpeglib.h,,no_jpeg=yes)
 AC_CHECK_HEADER(tiffio.h,,no_tiff=yes)
-dnl AC_CHECK_HEADER(png.h,,no_png=yes)
-no_png=no
 AC_CHECK_HEADER(lcms/lcms.h,,no_lcms=yes)
 AC_CHECK_HEADER(lcms.h,lcms_nodirinclude=yes)
 AC_CHECK_HEADER(libmng.h,,no_mng="yes")
@@ -187,6 +185,58 @@ AC_CHECK_HEADER(zlib.h, use_z=yes, use_z=no)
 dnl Special code for LCMS
 AS_IF([test "$lcms_nodirinclude" = "yes"],[no_lcms=no]
 	,[AC_DEFINE(LCMS_NODIRINCLUDE,,[LCMS include without lcms/ support])])
+
+dnl Special code for libjpeg
+AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED,,[Use libjpeg without modification. always enabled.])
+
+dnl
+dnl Setup Libraries
+dnl
+AC_DEFUN([SET_LIB],[
+LIB$2=""
+AC_ARG_WITH($1,AC_HELP_STRING([--with-$1=path],[Specify the lib$1 installation path]),
+	ADD_CFLAGS([-I$enable_$1dir/include])
+	LIB$2="-L$enable_$1dir/lib"
+	no_$1=no
+	use_$1=yes )
+
+AS_IF([test ! "$no_$1" = "yes" && test "$use_$1" = "yes" && test -z "$3"],[LIB$2="$LIB$2 -l$1"]
+     ,[test ! "$no_$1" = "yes" && test "$use_$1" = "yes" && ! test -z "$3"],[LIB$2="$3"],[])
+AC_SUBST(LIB$2) ])
+
+SET_LIB(jpeg,JPG)
+SET_LIB(tiff,TIFF)
+SET_LIB(lcms,LCMS)
+SET_LIB(mng,MNG)
+SET_LIB(z,Z)
+
+dnl libpng configuration
+AC_MSG_CHECKING(libpng)
+LIBPNG_INCLUDE=""
+LIBPNG=""
+AC_ARG_WITH(png,AC_HELP_STRING([--with-pngdir=path],[Specify the libpng installation path])
+	,[libpng_app="$withval/bin/libpng-config"]
+	 [no_png=no])
+if test ! "$with_png" = "no" ; then
+AS_IF([test -z "$libpng_app"],[libpng_app=$(which libpng-config)],[])
+dnl AS_IF([test ! -e "$libpng_app"],[libpng_app=""],[])
+AS_IF([test -z "$libpng_app"],
+	AC_DEFINE([IL_NO_PNG],,[PNG support])
+   ,LIBPNG=`$libpng_app --ldflags`
+    LIBPNG_INCLUDE=`$libpng_app --cflags`)
+else
+	libpng_app=""
+fi
+if test -z "$libpng_app" ; then
+	AC_MSG_RESULT(no)
+	no_png=yes
+else
+	AC_MSG_RESULT(yes)
+	no_png=no
+fi
+dnl Just in case the library is not installed in the default header path
+AC_SUBST(LIBPNG)
+AC_SUBST(LIBPNG_INCLUDE)
 
 dnl
 dnl Formats
@@ -224,49 +274,6 @@ TEST_FORMAT(tga,TGA)
 TEST_FORMAT(tiff,TIF)
 TEST_FORMAT(xpm,XPM)
 TEST_FORMAT(wal,WAL)
-
-dnl Special code for libjpeg
-AC_DEFINE(IL_USE_JPEGLIB_UNMODIFIED,,[Use libjpeg without modification. always enabled.])
-
-dnl
-dnl Setup Libraries
-dnl
-AC_DEFUN([SET_LIB],[
-LIB$2=""
-AC_ARG_WITH($1,AC_HELP_STRING([--with-$1=path],[Specify the lib$1 installation path]),
-	ADD_CFLAGS([-I$enable_$1dir/include])
-	LIB$2="-L$enable_$1dir/lib"
-	no_$1=no
-	use_$1=yes )
-
-AS_IF([test ! "$no_$1" = "yes" && test "$use_$1" = "yes" && test -z "$3"],[LIB$2="$LIB$2 -l$1"]
-     ,[test ! "$no_$1" = "yes" && test "$use_$1" = "yes" && ! test -z "$3"],[LIB$2="$3"],[])
-AC_SUBST(LIB$2) ])
-
-SET_LIB(jpeg,JPG)
-SET_LIB(tiff,TIFF)
-SET_LIB(lcms,LCMS)
-SET_LIB(mng,MNG)
-SET_LIB(z,Z)
-
-dnl libpng configuration
-LIBPNG_INCLUDE=""
-LIBPNG=""
-AC_ARG_WITH(png,AC_HELP_STRING([--with-pngdir=path],[Specify the libpng installation path])
-	,[libpng_app="$withval/bin/libpng-config"]
-	 [no_png=no]
-	 [use_png=yes])
-if test "$use_png" = "yes" && test "$no_png" = "no" ; then
-AS_IF([test -z "$libpng_app"],[libpng_app=$(which libpng-config)],[])
-AS_IF([test ! -e "$libpng_app"],[libpng_app=""],[])
-AS_IF([test -z "$libpng_app"],
-	AC_DEFINE([IL_NO_PNG],,[PNG support])
-   ,LIBPNG=`$libpng_app --ldflags`
-    LIBPNG_INCLUDE=`$libpng_app --cflags`)
-fi
-dnl Just in case the library is not installed in the default header path
-AC_SUBST(LIBPNG)
-AC_SUBST(LIBPNG_INCLUDE)
 
 dnl
 dnl ILUT APIs checking
