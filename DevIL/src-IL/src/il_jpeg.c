@@ -246,7 +246,7 @@ skip_input_data (j_decompress_ptr cinfo, long num_bytes)
 	iread_ptr src = (iread_ptr) cinfo->src;
 
 	if (num_bytes > 0) {
-		while (num_bytes > (long) src->pub.bytes_in_buffer) {
+		while (num_bytes > 0 &&  src->pub.bytes_in_buffer > 0) {
 			num_bytes -= (long) src->pub.bytes_in_buffer;
 			(void) fill_input_buffer(cinfo);
 		}

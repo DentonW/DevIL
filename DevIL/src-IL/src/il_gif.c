@@ -521,14 +521,18 @@ ILint get_next_code(void)
 	return (ret & code_mask[curr_size]);
 }
 
+static void cleanUpGifLoadState() {
+	ifree(stack);
+	ifree(suffix);
+	ifree(prefix);
+}
 
-ILboolean GifGetData(ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Height, ILuint Stride, GFXCONTROL *Gfx)
-{
+ILboolean GifGetData(ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Height, ILuint Stride, GFXCONTROL *Gfx) {
 	ILubyte	*sp;
 	ILint	code, fc, oc;
 	ILubyte	DisposalMethod = 0;
 	ILint	c, size;
-	ILuint	i = 0, Read = 0;
+	ILuint	i = 0, Read = 0, j = 0;
 
 	if (!Gfx->Used)
 		DisposalMethod = (Gfx->Packed & 0x1C) >> 2;
@@ -536,17 +540,14 @@ ILboolean GifGetData(ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Heigh
 	if((size = igetc()) == IL_EOF)
 		return IL_FALSE;
 
-	if (size < 2 || 9 < size) {
+	if (size < 2 || 9 < size)
 		return IL_FALSE;
-	}
 
 	stack  = (ILubyte*)ialloc(MAX_CODES + 1);
 	suffix = (ILubyte*)ialloc(MAX_CODES + 1);
 	prefix = (ILshort*)ialloc(sizeof(*prefix) * (MAX_CODES + 1));
 	if (!stack || !suffix || !prefix) {
-		ifree(stack);
-		ifree(suffix);
-		ifree(prefix);
+		cleanUpGifLoadState();
 		return IL_FALSE;
 	}
 
@@ -558,7 +559,6 @@ ILboolean GifGetData(ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Heigh
 	navail_bytes = nbits_left = 0;
 	oc = fc = 0;
 	sp = stack;
-	success = IL_TRUE;
 
 	while ((c = get_next_code()) != ending && Read < Height) {
 		if (c == clear) {
@@ -573,71 +573,92 @@ ILboolean GifGetData(ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Heigh
 			oc = fc = c;
 
 
-			if (DisposalMethod == 1 && !Gfx->Used && Gfx->Transparent == c && (Gfx->Packed & 0x1) != 0)
+			if (DisposalMethod == 1 && !Gfx->Used && Gfx->Transparent == c && (Gfx->Packed & 0x1) != 0) {
 				i++;
-			else
-				Data[i++] = c;
-
+			} else {
+			   if (i < Width) {
+				    Data[i++] = c;
+               }
+            }
 			if (i == Width) {
 				Data += Stride;
 				i = 0;
 				Read += 1;
+
+                ++j;
+
+                if (j >= Height) {
+                    cleanUpGifLoadState();
+                    return IL_FALSE;
+                }
 			}
-		}
-		else {
+		} else {
 			code = c;
 			if (code >= slot) {
 				code = oc;
-				if (sp >= stack + MAX_CODES) {
-					success = IL_FALSE;
-					goto GifGetData_end; // here we may use a break
-				}
-				*sp++ = fc;
-			}
-			while (code >= newcodes) {
-				if (sp >= stack + MAX_CODES) {
-					success = IL_FALSE;
-					goto GifGetData_end;
-				}
-				*sp++ = suffix[code];
-				code = prefix[code];
-			}
-			if (sp >= stack + MAX_CODES) {
-				success = IL_FALSE;
-				goto GifGetData_end;
-			}
-			*sp++ = (ILbyte)code;
-			if (slot < top_slot) {
-				fc = code;
-				suffix[slot]   = fc;
-				prefix[slot++] = oc;
-				oc = c;
-			}
-			if (slot >= top_slot && curr_size < 12) {
-				top_slot <<= 1;
-				curr_size++;
-			}
-			while (sp > stack) {
-				sp--;
-				if (DisposalMethod == 1 && !Gfx->Used && Gfx->Transparent == *sp && (Gfx->Packed & 0x1) != 0)
-					i++;
-				else
-					Data[i++] = *sp;
+            }
+            if (sp >= stack + MAX_CODES) {
+               cleanUpGifLoadState();
+               return IL_FALSE;
+            }
+            *sp++ = fc;
 
-				if (i == Width) {
-					Data += Stride;
-					i = 0;
-					Read += 1;
-				}
+		}
+
+        if (code >= MAX_CODES) {
+            return IL_FALSE; 
+		}
+		
+		while (code >= newcodes) {
+            if (sp >= stack + MAX_CODES) {
+               cleanUpGifLoadState();
+               return IL_FALSE;
+            }
+            *sp++ = suffix[code];
+			code = prefix[code];
+		}
+
+
+        if (sp >= stack + MAX_CODES) {
+            cleanUpGifLoadState();
+            return IL_FALSE;
+        }
+
+        *sp++ = (ILbyte)code;
+		if (slot < top_slot) {
+            fc = code;
+			suffix[slot]   = fc;
+			prefix[slot++] = oc;
+			oc = c;
+		}
+		if (slot >= top_slot && curr_size < 12) {
+			top_slot <<= 1;
+			curr_size++;
+		}
+		while (sp > stack) {
+			sp--;
+			if (DisposalMethod == 1 && !Gfx->Used && Gfx->Transparent == *sp && (Gfx->Packed & 0x1) != 0) {
+				i++;
+			} else {
+                if (i < Width) {
+					Data[i++] = *sp;
+                }
+            }
+            
+			if (i == Width) {
+                Data += Stride;
+				i = 0;
+				Read += 1;
+                ++j;
+                if (j >= Height) {
+                    cleanUpGifLoadState();
+                    return IL_FALSE;
+                }
 			}
 		}
 	}
-
-GifGetData_end:
-	ifree(stack);
-	ifree(suffix);
-	ifree(prefix);
-	return success;
+	cleanUpGifLoadState();
+	return IL_TRUE;
 }
 
 
@@ -742,3 +763,4 @@ ILboolean ConvertTransparent(ILimage *Image, ILubyte TransColour)
 }
 
 #endif //IL_NO_GIF
+

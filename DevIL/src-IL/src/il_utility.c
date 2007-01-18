@@ -142,7 +142,7 @@ ILAPI ILvoid ILAPIENTRY iMemSwap( ILubyte *s1, ILubyte *s2, const ILuint size ) 
 		memcpy(block,s1,block_size);
 		memcpy(s1,s2,block_size);
 		memcpy(s2,block,block_size);
-		s1 += block_size;
+		s2 += block_size;
 		s1 += block_size;
 	}
 	i = size - i*block_size;
