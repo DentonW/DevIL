@@ -1,6 +1,7 @@
 1.6.8 RC3
 ---
-- Fixed many securety holes patched from Bjürn Ganster
+- Fixed some iluCompareImage patched from James Kirkpatrick
+- Fixed many security holes patched from Bjürn Ganster
 - fixed bug #1637588. iMemSwap bugs
 - fixed bug #1634099. Infinite loop on corrupt JPEG
 - applied submitted patch #1632474. GIF loading fails on incomplete images

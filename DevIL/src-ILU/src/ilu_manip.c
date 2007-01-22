@@ -645,7 +645,7 @@ ILboolean ILAPIENTRY iluCompareImage(ILuint Comp)
 	ILuint		OrigName, i;
 	ILboolean	Same = IL_TRUE;
 
-	Original = iluCurImage = ilGetCurImage();
+	iluCurImage = ilGetCurImage();
 	OrigName = ilGetCurName();
 
 	// Same image, so return true.
@@ -658,11 +658,11 @@ ILboolean ILAPIENTRY iluCompareImage(ILuint Comp)
 	}
 
 	ilBindImage(Comp);
-
+    Original = ilGetCurImage();
 
 	// @TODO:  Should we check palettes, too?
-	if (Original->Bpp != iluCurImage->Bpp ||
-		Original->Depth != iluCurImage->Bpp ||
+	if (Original->Bpp != iluCurImage->Bpp       ||
+		Original->Depth != iluCurImage->Depth   ||
 		Original->Format != iluCurImage->Format ||
 		Original->Height != iluCurImage->Height ||
 		Original->Origin != iluCurImage->Origin ||
