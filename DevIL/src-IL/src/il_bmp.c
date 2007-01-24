@@ -1011,7 +1011,9 @@ ILboolean iSaveBitmapInternal() {
 		ifree(TempData);
 	if (TempImage != iCurImage)
 		ilCloseImage(TempImage);
-
+	
+	iseekw(FileSize, IL_SEEK_SET);
+	
 	return IL_TRUE;
 }
 

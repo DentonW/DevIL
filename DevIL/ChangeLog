@@ -1,5 +1,6 @@
 1.6.8 RC3
 ---
+- Fixed bug #1643309.  wrong buffer size on ilSaveL with IL_BMP
 - Fixed some iluCompareImage patched from James Kirkpatrick
 - Fixed many security holes patched from Bjürn Ganster
 - fixed bug #1637588. iMemSwap bugs
