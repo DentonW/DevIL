@@ -610,6 +610,7 @@ ILboolean ilReadRLE8Bmp(BMPHEAD *Header)
    				memset( iCurImage->Data + y * iCurImage->Width + x, Bytes[1], count);
    				x += Bytes[0];
 			}
+		}		
 	}
 	return IL_TRUE;
 }
