@@ -606,10 +606,10 @@ ILboolean ilReadRLE8Bmp(BMPHEAD *Header)
 							return IL_FALSE;
 				}
 			} else {
-				memset( iCurImage->Data + y * iCurImage->Width + x, Bytes[1], Bytes[0] );
-				x += Bytes[0];
+   				size_t count = min (Bytes[0], iCurImage->Width-x);
+   				memset( iCurImage->Data + y * iCurImage->Width + x, Bytes[1], count);
+   				x += Bytes[0];
 			}
-		}
 	}
 	return IL_TRUE;
 }
