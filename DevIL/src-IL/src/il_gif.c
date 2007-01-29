@@ -24,7 +24,7 @@
 ILenum	GifType;
 
 //! Checks if the file specified in FileName is a valid Gif file.
-ILboolean ilIsValidGif(ILconst_ILstring FileName)
+ILboolean ilIsValidGif(ILconst_string FileName)
 {
 	ILHANDLE	GifFile;
 	ILboolean	bGif = IL_FALSE;
