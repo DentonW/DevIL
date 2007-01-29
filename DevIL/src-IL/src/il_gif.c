@@ -24,7 +24,7 @@
 ILenum	GifType;
 
 //! Checks if the file specified in FileName is a valid Gif file.
-ILboolean ilIsValidGif(ILconst_string FileName)
+ILboolean ilIsValidGif(ILconst_ILstring FileName)
 {
 	ILHANDLE	GifFile;
 	ILboolean	bGif = IL_FALSE;
@@ -126,7 +126,7 @@ ILboolean ilLoadGifF(ILHANDLE File)
 ILboolean ilLoadGifL(const ILvoid *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
-	return iLoadGifInternal();
+   	return iLoadGifInternal();
 }
 
 
@@ -153,7 +153,6 @@ ILboolean iLoadGifInternal()
 	Header.ColourInfo = igetc();
 	Header.Background = igetc();
 	Header.Aspect = igetc();
-
 
 	if (!strnicmp(Header.Sig, "GIF87A", 6)) {
 		GifType = GIF87A;
@@ -219,23 +218,19 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 	ILboolean	BaseImage = IL_TRUE;
 	ILimage		*Image = iCurImage, *TempImage = NULL;
 	ILuint		NumImages = 0, i;
-
 	ILint		input;
 
 	OldImageDesc.ImageInfo = 0; // to initialize the data with an harmless value 
-
 	Gfx.Used = IL_TRUE;
 
 	while (!ieof()) {
 		ILubyte DisposalMethod = 1;
-
-
-
+		
 		i = itell();
 		if (!SkipExtensions(&Gfx))
 			goto error_clean;
 		i = itell();
-		
+
 		if (!Gfx.Used)
 			DisposalMethod = (Gfx.Packed & 0x1C) >> 2;
 
@@ -243,7 +238,6 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 		ImageDesc.Separator = igetc();
 		if (ImageDesc.Separator != 0x2C) //end of image
 			break;
-
 		ImageDesc.OffX = GetLittleUShort();
 		ImageDesc.OffY = GetLittleUShort();
 		ImageDesc.Width = GetLittleUShort();
@@ -261,7 +255,6 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 			Image->Next = ilNewImage(iCurImage->Width, iCurImage->Height, 1, 1, 1);
 			if (Image->Next == NULL)
 				goto error_clean;
-
 			//20040612: DisposalMethod controls how the new images data is to be combined
 			//with the old image. 0 means that it doesn't matter how they are combined,
 			//1 means keep the old image, 2 means set to background color, 3 is
@@ -279,7 +272,6 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 					memset(Image->Next->Data, GifHead->Background, Image->SizeOfData);
 			else if (DisposalMethod == 1 || DisposalMethod == 0)
 				memcpy(Image->Next->Data, Image->Data, Image->SizeOfData);
-
 			//Interlacing has to be removed after the image was copied (line above)
 			if (OldImageDesc.ImageInfo & (1 << 6)) {  // Image is interlaced.
 				if (!RemoveInterlace(Image))
@@ -294,8 +286,7 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 			if (!Gfx.Used && Gfx.Packed & 0x1)
 				memset(Image->Data, Gfx.Transparent, Image->SizeOfData);
 			else
-				memset(Image->Data, GifHead->Background, Image->SizeOfData);
-			//memset(Image->Data, GifHead->Background, Image->SizeOfData);
+			    memset(Image->Data, GifHead->Background, Image->SizeOfData);
 		}
 
 		Image->OffX = ImageDesc.OffX;
@@ -306,15 +297,13 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 			if (!iGetPalette(ImageDesc.ImageInfo, &Image->Pal)) {
 				goto error_clean;
 			}
-		}
-		else {
+		} else {
 			if (!iCopyPalette(&Image->Pal, GlobalPal)) {
 				goto error_clean;
 			}
 		}
 
-
-		if (!GifGetData(Image->Data + ImageDesc.OffX + ImageDesc.OffY*Image->Width, Image->SizeOfData,
+		if (!GifGetData(Image, Image->Data + ImageDesc.OffX + ImageDesc.OffY*Image->Width, Image->SizeOfData,
 				ImageDesc.Width, ImageDesc.Height, Image->Width, &Gfx)) {
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
 			goto error_clean;
@@ -330,17 +319,15 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 				if (!ConvertTransparent(Image, Gfx.Transparent)) {
 					goto error_clean;
 				}
-			}
+	    	}
 		}
-
 		i = itell();
-
 		// Terminates each block.
 		if((input = igetc()) == IL_EOF)
 			goto error_clean;
 
 		if (input != 0x00)
-			iseek(-1, IL_SEEK_CUR);
+		    iseek(-1, IL_SEEK_CUR);
 		//	break;
 
 		OldImageDesc = ImageDesc;
@@ -359,12 +346,11 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 
 error_clean:
 	Image = iCurImage->Next;
-	while (Image) {
+    /*	while (Image) {
 		TempImage = Image;
 		Image = Image->Next;
 		ilCloseImage(TempImage);
-	}
-	
+	}*/
 	return IL_FALSE;
 }
 
@@ -403,20 +389,15 @@ ILboolean SkipExtensions(GFXCONTROL *Gfx)
 					return IL_FALSE;
 				Gfx->Used = IL_FALSE;
 				break;
-
 			/*case 0xFE:
 				break;
 
 			case 0x01:
 				break;*/
-
 			default:
 				do {
 					if((Size = igetc()) == IL_EOF)
-
 						return IL_FALSE;
-
-
 					iseek(Size, IL_SEEK_CUR);
 				} while (!ieof() && Size != 0);
 		}
@@ -455,8 +436,8 @@ ILuint code_mask[13] =
    0x07FFL, 0x0FFFL
 };
 
-ILint get_next_code(void)
-{
+
+ILint get_next_code(void) {
 	ILint	i, t;
 	ILuint	ret;
 
@@ -464,11 +445,12 @@ ILint get_next_code(void)
 	//crashed sometimes if igetc() returned IL_EOF
 	//(for example "table-add-column-before-active.gif" included in the
 	//mozilla source package)
+
 	if (!nbits_left) {
 		if (navail_bytes <= 0) {
 			pbytes = byte_buff;
 			navail_bytes = igetc();
-			
+
 			if(navail_bytes == IL_EOF) {
 				success = IL_FALSE;
 				return ending;
@@ -506,7 +488,6 @@ ILint get_next_code(void)
 						success = IL_FALSE;
 						return ending;
 					}
-
 					byte_buff[i] = t;
 				}
 			}
@@ -525,9 +506,10 @@ static void cleanUpGifLoadState() {
 	ifree(stack);
 	ifree(suffix);
 	ifree(prefix);
+
 }
 
-ILboolean GifGetData(ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Height, ILuint Stride, GFXCONTROL *Gfx) {
+ILboolean GifGetData(ILimage *Image, ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Height, ILuint Stride, GFXCONTROL *Gfx) {
 	ILubyte	*sp;
 	ILint	code, fc, oc;
 	ILubyte	DisposalMethod = 0;
@@ -536,12 +518,12 @@ ILboolean GifGetData(ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Heigh
 
 	if (!Gfx->Used)
 		DisposalMethod = (Gfx->Packed & 0x1C) >> 2;
-
 	if((size = igetc()) == IL_EOF)
 		return IL_FALSE;
 
-	if (size < 2 || 9 < size)
+	if (size < 2 || 9 < size) {
 		return IL_FALSE;
+	}
 
 	stack  = (ILubyte*)ialloc(MAX_CODES + 1);
 	suffix = (ILubyte*)ialloc(MAX_CODES + 1);
@@ -572,88 +554,73 @@ ILboolean GifGetData(ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Heigh
 				c = 0;
 			oc = fc = c;
 
-
-			if (DisposalMethod == 1 && !Gfx->Used && Gfx->Transparent == c && (Gfx->Packed & 0x1) != 0) {
+			if (DisposalMethod == 1 && !Gfx->Used && Gfx->Transparent == c && (Gfx->Packed & 0x1) != 0)
 				i++;
-			} else {
-			   if (i < Width) {
-				    Data[i++] = c;
-               }
-            }
+			else if (i < Width)
+				Data[i++] = c;
+
 			if (i == Width) {
 				Data += Stride;
 				i = 0;
 				Read += 1;
-
                 ++j;
-
                 if (j >= Height) {
-                    cleanUpGifLoadState();
-                    return IL_FALSE;
+                   cleanUpGifLoadState();
+                   return IL_FALSE;
                 }
 			}
 		} else {
 			code = c;
+            //BG-2007-01-10: several fixes for incomplete GIFs
 			if (code >= slot) {
 				code = oc;
-            }
-            if (sp >= stack + MAX_CODES) {
-               cleanUpGifLoadState();
-               return IL_FALSE;
-            }
-            *sp++ = fc;
-
-		}
-
-        if (code >= MAX_CODES) {
-            return IL_FALSE; 
-		}
-		
-		while (code >= newcodes) {
-            if (sp >= stack + MAX_CODES) {
-               cleanUpGifLoadState();
-               return IL_FALSE;
-            }
-            *sp++ = suffix[code];
-			code = prefix[code];
-		}
-
-
-        if (sp >= stack + MAX_CODES) {
-            cleanUpGifLoadState();
-            return IL_FALSE;
-        }
-
-        *sp++ = (ILbyte)code;
-		if (slot < top_slot) {
-            fc = code;
-			suffix[slot]   = fc;
-			prefix[slot++] = oc;
-			oc = c;
-		}
-		if (slot >= top_slot && curr_size < 12) {
-			top_slot <<= 1;
-			curr_size++;
-		}
-		while (sp > stack) {
-			sp--;
-			if (DisposalMethod == 1 && !Gfx->Used && Gfx->Transparent == *sp && (Gfx->Packed & 0x1) != 0) {
-				i++;
-			} else {
-                if (i < Width) {
-					Data[i++] = *sp;
+                if (sp >= stack + MAX_CODES) {
+                   cleanUpGifLoadState();
+                   return IL_FALSE;
                 }
-            }
+                *sp++ = fc;
+			}
+
+            if (code >= MAX_CODES)
+                return IL_FALSE; 
+                while (code >= newcodes) {
+                    if (sp >= stack + MAX_CODES) {
+                        cleanUpGifLoadState();
+                        return IL_FALSE;
+                    }
+                    *sp++ = suffix[code];
+                    code = prefix[code];
+                }
             
-			if (i == Width) {
-                Data += Stride;
-				i = 0;
-				Read += 1;
-                ++j;
-                if (j >= Height) {
-                    cleanUpGifLoadState();
-                    return IL_FALSE;
-                }
+                if (sp >= stack + MAX_CODES) {
+                cleanUpGifLoadState();
+                return IL_FALSE;
+            }
+
+            *sp++ = (ILbyte)code;
+			if (slot < top_slot) {
+				fc = code;
+				suffix[slot]   = fc;
+				prefix[slot++] = oc;
+				oc = c;
+			}
+			if (slot >= top_slot && curr_size < 12) {
+				top_slot <<= 1;
+				curr_size++;
+			}
+			while (sp > stack) {
+				sp--;
+				if (DisposalMethod == 1 && !Gfx->Used && Gfx->Transparent == *sp && (Gfx->Packed & 0x1) != 0)
+					i++;
+				else if (i < Width)
+					Data[i++] = *sp;
+
+				if (i == Width) {
+					i = 0;
+					Read += 1;
+                    j = (j+1) % Height;
+                    Data = Image->Data + j*Stride;
+				}
 			}
 		}
 	}
@@ -763,4 +730,3 @@ ILboolean ConvertTransparent(ILimage *Image, ILubyte TransColour)
 }
 
 #endif //IL_NO_GIF
-

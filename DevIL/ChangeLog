@@ -1,5 +1,6 @@
 1.6.8 RC3
 ---
+- Fixed gif loading patched from Bjürn Ganster
 - Fixed bug #1643309.  wrong buffer size on ilSaveL with IL_BMP
 - Fixed some iluCompareImage patched from James Kirkpatrick
 - Fixed many security holes patched from Bjürn Ganster
