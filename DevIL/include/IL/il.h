@@ -564,9 +564,6 @@ ILAPI ILboolean ILAPIENTRY ilLoadDataF(ILHANDLE File, ILuint Width, ILuint Heigh
 ILAPI ILboolean ILAPIENTRY ilLoadDataL(ILvoid *Lump, ILuint Size, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp);
 ILAPI ILboolean ILAPIENTRY ilSaveData(ILconst_string FileName);
 
-ILAPI ILboolean ILAPIENTRY ilLoadFromJpegStruct(ILvoid* JpegDecompressorPtr);
-ILAPI ILboolean ILAPIENTRY ilSaveFromJpegStruct(ILvoid* JpegCompressorPtr);
-
 // For all those weirdos that spell "colour" without the 'u'.
 #define ilClearColor	ilClearColour
 #define ilKeyColor      ilKeyColour

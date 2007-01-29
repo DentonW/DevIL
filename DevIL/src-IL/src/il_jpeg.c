@@ -817,7 +817,7 @@ ILboolean iSaveJpegInternal(ILstring FileName, ILvoid *Lump, ILuint Size)
 // this function is called. The caller must call jpeg_finish_decompress because
 // the caller may still need decompressor after calling this for e.g. examining
 // saved markers.
-ILboolean ILAPIENTRY ilLoadFromJpegStruct(ILvoid *_JpegInfo)
+ILboolean ilLoadFromJpegStruct(ILvoid *_JpegInfo)
 {
 #ifndef IL_NO_JPG
 #ifndef IL_USE_IJL
@@ -885,7 +885,7 @@ ILboolean ILAPIENTRY ilLoadFromJpegStruct(ILvoid *_JpegInfo)
 // is also responsible for calling jpeg_finish_compress in case the
 // caller still needs to compressor for something.
 // 
-ILboolean ILAPIENTRY ilSaveFromJpegStruct(ILvoid *_JpegInfo)
+ILboolean ilSaveFromJpegStruct(ILvoid *_JpegInfo)
 {
 #ifndef IL_NO_JPG
 #ifndef IL_USE_IJL
