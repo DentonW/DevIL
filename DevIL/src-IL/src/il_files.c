@@ -437,7 +437,7 @@ ILuint ILAPIENTRY iReadFile(ILvoid *Buffer, ILuint Size, ILuint Number)
 
 ILuint ILAPIENTRY iReadLump(ILvoid *Buffer, const ILuint Size, const ILuint Number)
 {
-	ILuint i, ByteSize = Size * Number;
+	ILuint i, ByteSize = IL_MIN( Size*Number, ReadLumpSize-ReadLumpPos);
 
 	for (i = 0; i < ByteSize; i++) {
 		*((ILubyte*)Buffer + i) = *((ILubyte*)ReadLump + ReadLumpPos + i);
