@@ -1,5 +1,6 @@
 1.6.8 RC3
 ---
+- applied submitted patch #1645286. patch for reading X offset and Y offset from TIFF files.
 - fixed lump reading bug. from Bjürn Ganster
 - Fixed gif loading patched from Bjürn Ganster
 - Fixed bug #1643309.  wrong buffer size on ilSaveL with IL_BMP

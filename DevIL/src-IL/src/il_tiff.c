@@ -267,6 +267,7 @@ ILboolean iLoadTiffInternal()
 	ILvoid	 *Buffer;
 	ILimage  *Image, *TempImage;
 	ILushort si;
+        ILfloat  x_position, x_resolution, y_position, y_resolution;
 	//TIFFRGBAImage img;
 	//char emsg[1024];
 
@@ -673,6 +674,34 @@ ILboolean iLoadTiffInternal()
 			//removed on 2003-08-24 as explained in bug 579574 on sourceforge
 			//_TIFFfree(Buffer);
 		}
+
+                // dangelo: read offset from tiff tags.
+                //If nothing is stored in these tags, then this must be an "uncropped" TIFF 
+                //file, in which case, the "full size" width/height is the same as the 
+                //"cropped" width and height
+                //
+                // the full size is currently not supported by DevIL
+                //if (TIFFGetField(tif, TIFFTAG_PIXAR_IMAGEFULLWIDTH, &(c->full_width)) ==
+                //        0)
+                //    (c->full_width = c->cropped_width);
+                //if (TIFFGetField(tif, TIFFTAG_PIXAR_IMAGEFULLLENGTH, &(c->full_height)) ==
+                //        0)
+                //    (c->full_height = c->cropped_height);
+
+                if (TIFFGetField(tif, TIFFTAG_XPOSITION, &x_position) == 0)
+                    x_position = 0;
+                if (TIFFGetField(tif, TIFFTAG_XRESOLUTION, &x_resolution) == 0)
+                    x_resolution = 0;
+                if (TIFFGetField(tif, TIFFTAG_YPOSITION, &y_position) == 0)
+                    y_position = 0;
+                if (TIFFGetField(tif, TIFFTAG_YRESOLUTION, &y_resolution) == 0)
+                    y_resolution = 0;
+
+                //offset in pixels of "cropped" image from top left corner of 
+                //full image (rounded to nearest integer)
+                Image->offX = (uint32) ((x_position * x_resolution) + 0.49);
+                Image->offY = (uint32) ((y_position * y_resolution) + 0.49);
+                
 
 		/*
 		 Image = Image->Next;
