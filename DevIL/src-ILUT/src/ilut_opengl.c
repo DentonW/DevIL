@@ -657,6 +657,11 @@ ILenum ilutGLFormat(ILenum Format, ILubyte Bpp)
 		}
 	}
 
+	// A small hack to allow GL_ALPHA as a parameter for this function
+	if (Format == GL_ALPHA && ilutIsEnabled(ILUT_OPENGL_CONV)) {
+		return GL_ALPHA;
+	}
+
 	return Bpp;
 }
 
