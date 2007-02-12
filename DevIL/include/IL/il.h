@@ -538,7 +538,7 @@ ILAPI ILboolean ILAPIENTRY ilRegisterSave(ILconst_string Ext, IL_SAVEPROC Save);
 ILAPI ILvoid    ILAPIENTRY ilRegisterType(ILenum Type);
 ILAPI ILboolean ILAPIENTRY ilRemoveLoad(ILconst_string Ext);
 ILAPI ILboolean ILAPIENTRY ilRemoveSave(ILconst_string Ext);
-DEPRECATED(ILAPI ILvoid    ILAPIENTRY ilResetMemory(ILvoid));
+ILAPI ILvoid    ILAPIENTRY ilResetMemory(ILvoid); // Deprecated
 ILAPI ILvoid    ILAPIENTRY ilResetRead(ILvoid);
 ILAPI ILvoid    ILAPIENTRY ilResetWrite(ILvoid);
 ILAPI ILboolean ILAPIENTRY ilSave(ILenum Type, ILstring FileName);

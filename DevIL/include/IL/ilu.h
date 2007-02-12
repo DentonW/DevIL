@@ -128,7 +128,7 @@ ILAPI ILuint         ILAPIENTRY iluColoursUsed(ILvoid);
 ILAPI ILboolean      ILAPIENTRY iluCompareImage(ILuint Comp);
 ILAPI ILboolean      ILAPIENTRY iluContrast(ILfloat Contrast);
 ILAPI ILboolean      ILAPIENTRY iluCrop(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Width, ILuint Height, ILuint Depth);
-DEPRECATED(ILAPI ILvoid         ILAPIENTRY iluDeleteImage(ILuint Id));
+ILAPI ILvoid         ILAPIENTRY iluDeleteImage(ILuint Id); // Deprecated
 ILAPI ILboolean      ILAPIENTRY iluEdgeDetectE(ILvoid);
 ILAPI ILboolean      ILAPIENTRY iluEdgeDetectP(ILvoid);
 ILAPI ILboolean      ILAPIENTRY iluEdgeDetectS(ILvoid);
@@ -140,7 +140,7 @@ ILAPI ILstring 		 ILAPIENTRY iluErrorString(ILenum Error);
 ILAPI ILboolean      ILAPIENTRY iluConvolution(ILint *matrix, ILint scale, ILint bias);
 ILAPI ILboolean      ILAPIENTRY iluFlipImage(ILvoid);
 ILAPI ILboolean      ILAPIENTRY iluGammaCorrect(ILfloat Gamma);
-DEPRECATED(ILAPI ILuint         ILAPIENTRY iluGenImage(ILvoid));
+ILAPI ILuint         ILAPIENTRY iluGenImage(ILvoid); // Deprecated
 ILAPI ILvoid         ILAPIENTRY iluGetImageInfo(ILinfo *Info);
 ILAPI ILint          ILAPIENTRY iluGetInteger(ILenum Mode);
 ILAPI ILvoid         ILAPIENTRY iluGetIntegerv(ILenum Mode, ILint *Param);
