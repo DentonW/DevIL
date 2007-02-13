@@ -145,10 +145,13 @@ ILboolean iLoadGifInternal()
 	GlobalPal.PalSize = 0;
 
 	//read header
-	iread(&Header.Sig, 1, sizeof(Header));
-	UShort(&Header.Width);
-	UShort(&Header.Height);
-
+	iread(&Header.Sig, 1, 6);
+  	Header.Width = GetLittleUShort();
+    Header.Height = GetLittleUShort();
+	Header.ColourInfo = igetc();
+	Header.Background = igetc();
+	Header.Aspect = igetc();
+		  
 	if (!strnicmp(Header.Sig, "GIF87A", 6)) {
 		GifType = GIF87A;
 	}
