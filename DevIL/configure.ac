@@ -35,7 +35,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION($Revision: 1.22 $)
+AC_REVISION($Revision: 1.23 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -151,10 +151,10 @@ dnl Test release build options
 dnl
 AC_ARG_ENABLE(release,
 AC_HELP_STRING([--disable-release],[Compile a debug version of the library]),
-[build_release="$enable_release"],[build_release="no"])
-
-AS_IF([test "$build_release" = "no"],[ADD_CFLAGS([-Wall -g -O0])]
-	 ,[ADD_CFLAGS(-O3)])
+[build_release="$enable_release"],[build_release="yes"])
+AS_IF([test "$build_release" = "no"],
+	[ADD_CFLAGS([-DNOINLINE -Wall -g -O0])],
+	[ADD_CFLAGS(-O3)])
 
 dnl
 dnl Test warning build options
@@ -162,7 +162,7 @@ dnl
 AC_ARG_ENABLE(warning,
 AC_HELP_STRING([--enable-warning],[Compile breaks on warnings]),[build_warning="$enable_warning"],[build_warning="no"])
 
-AS_IF([test "$build_warning" = "yes"],[ADD_CFLAGS([-Wall -Werror -DNOINLINE])],[])
+AS_IF([test "$build_warning" = "yes"],[ADD_CFLAGS([-Wall -Werror])],[])
 
 dnl
 dnl Memory alignment functions
@@ -216,22 +216,18 @@ LIBPNG=""
 AC_ARG_WITH(png,AC_HELP_STRING([--with-pngdir=path],[Specify the libpng installation path])
 	,[libpng_app="$withval/bin/libpng-config"]
 	 [no_png=no])
-AS_IF([test ! "$with_png" = "no"],[
-AS_IF([test -z "$libpng_app"],[libpng_app=$(which libpng-config)],[])
-dnl AS_IF([test ! -e "$libpng_app"],[libpng_app=""],[])
+AS_IF([test ! "$with_png" = "no"],
+	[AS_IF([test -z "$libpng_app"],[libpng_app=$(which libpng-config)],[])])
+AS_IF([test ! -e "$libpng_app"],[libpng_app=""])
 AS_IF([test -z "$libpng_app"],
 	AC_DEFINE([IL_NO_PNG],,[PNG support])
-   ,LIBPNG=`$libpng_app --ldflags`
-    LIBPNG_INCLUDE=`$libpng_app --cflags`)]
-   ,[libpng_app=""])
-AS_IF([test -z "$libpng_app"],[
 	AC_MSG_RESULT(no)
-	no_png=yes]
-  ,[AC_MSG_RESULT(yes)
-	no_png=no])
+	no_png=yes
+   ,LIBPNG=`$libpng_app --ldflags`
+    LIBPNG_INCLUDE=`$libpng_app --cflags`
+	AC_MSG_RESULT(yes)
+	no_png=no)
 dnl Just in case the library is not installed in the default header path
-AC_SUBST(LIBPNG)
-AC_SUBST(LIBPNG_INCLUDE)
 
 dnl
 dnl Formats
@@ -269,6 +265,12 @@ TEST_FORMAT(tga,TGA)
 TEST_FORMAT(tiff,TIF)
 TEST_FORMAT(xpm,XPM)
 TEST_FORMAT(wal,WAL)
+
+AS_IF([test "$no_png" = "yes"],
+	LIBPNG=""
+	LIBPNG_INCLUDE="")
+AC_SUBST(LIBPNG)
+AC_SUBST(LIBPNG_INCLUDE)
 
 dnl
 dnl ILUT APIs checking
