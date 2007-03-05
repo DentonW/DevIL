@@ -15,6 +15,12 @@
 
 #include "IL/il.h"
 
+#ifdef DEBUG
+	#include <assert.h>
+#else
+	#define assert(x)
+#endif
+
 #ifndef NOINLINE
 #ifndef INLINE
 #if defined(__GNUC__)

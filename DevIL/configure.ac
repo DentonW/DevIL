@@ -35,7 +35,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION($Revision: 1.24 $)
+AC_REVISION($Revision: 1.25 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -153,7 +153,8 @@ AC_ARG_ENABLE(release,
 AC_HELP_STRING([--disable-release],[Compile a debug version of the library]),
 [build_release="$enable_release"],[build_release="yes"])
 AS_IF([test "$build_release" = "no"],
-	[ADD_CFLAGS([-DNOINLINE -Wall -g -O0])],
+	[ADD_CFLAGS([-DNOINLINE -Wall -g -O0])]
+	[AC_DEFINE(DEBUG,,"Enable debug code features")],
 	[ADD_CFLAGS(-O3)])
 
 dnl
