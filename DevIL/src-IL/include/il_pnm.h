@@ -39,7 +39,7 @@ ILboolean	iSavePnmInternal(ILvoid);
 ILimage		*ilReadAsciiPpm(PPMINFO *Info);
 ILimage		*ilReadBinaryPpm(PPMINFO *Info);
 ILimage		*ilReadBitPbm(PPMINFO *Info);
-ILboolean	iGetWord(ILvoid);
+ILboolean	iGetWord(ILboolean);
 ILvoid		PbmMaximize(ILimage *Image);
 
 

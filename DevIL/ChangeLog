@@ -1,5 +1,6 @@
 1.6.8 RC3
 ---
+- fixed PNM loading problem if the image contained 0x20 (a gray) in the beginning of the image
 - added internal asserts to check pedanticaly check consistency in debug builds
 - fixed SSE3 check
 - added support for lua with swig

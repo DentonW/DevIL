@@ -172,7 +172,7 @@ ILboolean iLoadPnmInternal()
 	}
 
 	// Find out what type of pgm/ppm this is
-	if (iGetWord() == IL_FALSE)
+	if (iGetWord(IL_FALSE) == IL_FALSE)
 		return IL_FALSE;
 
 	if (SmallBuff[0] != 'P') {
@@ -180,35 +180,36 @@ ILboolean iLoadPnmInternal()
 		return IL_FALSE;
 	}
 
-	if (SmallBuff[1] == '1') {
-		Info.Type = IL_PBM_ASCII;
-	}
-	else if (SmallBuff[1] == '2') {
-		Info.Type = IL_PGM_ASCII;
-	}
-	else if (SmallBuff[1] == '3') {
-		Info.Type = IL_PPM_ASCII;
-	}
-	else if (SmallBuff[1] == '4') {
-		Info.Type = IL_PBM_BINARY;
-		if (IsLump) {
-			ilSetError(IL_FORMAT_NOT_SUPPORTED);
+	switch( SmallBuff[1] ) {
+		case '1':
+			Info.Type = IL_PBM_ASCII;
+			break;
+		case '2':
+			Info.Type = IL_PGM_ASCII;
+			break;
+		case '3':
+			Info.Type = IL_PPM_ASCII;
+			break;
+		case '4':
+			Info.Type = IL_PBM_BINARY;
+			if (IsLump) {
+				ilSetError(IL_FORMAT_NOT_SUPPORTED);
+				return IL_FALSE;
+			}
+			break;
+		case '5':
+			Info.Type = IL_PGM_BINARY;
+			break;
+		case '6':
+			Info.Type = IL_PPM_BINARY;
+			break;
+		default:
+			ilSetError(IL_INVALID_FILE_HEADER);
 			return IL_FALSE;
-		}
 	}
-	else if (SmallBuff[1] == '5') {
-		Info.Type = IL_PGM_BINARY;
-	}
-	else if (SmallBuff[1] == '6') {
-		Info.Type = IL_PPM_BINARY;
-	}
-	else {
-		ilSetError(IL_INVALID_FILE_HEADER);
-		return IL_FALSE;
-	}
-
+	
 	// Retrieve the width and height
-	if (iGetWord() == IL_FALSE)
+	if (iGetWord(IL_FALSE) == IL_FALSE)
 		return IL_FALSE;
 	Info.Width = atoi((const char*)SmallBuff);
 	if (Info.Width == 0) {
@@ -216,7 +217,7 @@ ILboolean iLoadPnmInternal()
 		return IL_FALSE;
 	}
 
-	if (iGetWord() == IL_FALSE)
+	if (iGetWord(IL_FALSE) == IL_FALSE)
 		return IL_FALSE;
 	Info.Height = atoi((const char*)SmallBuff);
 	if (Info.Height == 0) {
@@ -226,33 +227,28 @@ ILboolean iLoadPnmInternal()
 
 	// Retrieve the maximum colour component value
 	if (Info.Type != IL_PBM_ASCII && Info.Type != IL_PBM_BINARY) {
-		if (iGetWord() == IL_FALSE)
+		if (iGetWord(IL_TRUE) == IL_FALSE)
 			return IL_FALSE;
 		if ((Info.MaxColour = atoi((const char*)SmallBuff)) == 0) {
 			ilSetError(IL_INVALID_FILE_HEADER);
 			return IL_FALSE;
 		}
-	}
-	else
+	} else {
 		Info.MaxColour = 1;
-
+	}
+	
 	if (Info.Type == IL_PBM_ASCII || Info.Type == IL_PBM_BINARY ||
 		Info.Type == IL_PGM_ASCII || Info.Type == IL_PGM_BINARY) {
 		if (Info.Type == IL_PGM_ASCII) {
-			if (Info.MaxColour < 256)
-				Info.Bpp = 1;
-			else
-				Info.Bpp = 2;
-		}
-		else
+			Info.Bpp = Info.MaxColour < 256 ? 1 : 2;
+		} else {
 			Info.Bpp = 1;
-	}
-	else {
+		}
+	} else {
 		Info.Bpp = 3;
 	}
-
-	switch (Info.Type)
-	{
+	
+	switch (Info.Type) {
 		case IL_PBM_ASCII:
 		case IL_PGM_ASCII:
 		case IL_PPM_ASCII:
@@ -380,9 +376,20 @@ ILimage *ilReadBinaryPpm(PPMINFO *Info)
 	}
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 
-	if (iread(iCurImage->Data, 1, Size) != Size)
+	/* 4/3/2007 Dario Meloni
+	 Here it seems we have eaten too much bytes and it is needed to fix 
+	 the starting point
+	 works well on various images
+	
+	No more need of this workaround. fixed iGetWord
+	iseek(0,IL_SEEK_END);
+	ILuint size = itell();
+	iseek(size-Size,IL_SEEK_SET);
+	*/
+	if (iread(iCurImage->Data, 1, Size ) != Size) {
+		ilCloseImage(iCurImage);	
 		return NULL;
-
+	}
 	return iCurImage;
 }
 
@@ -410,8 +417,7 @@ ILimage *ilReadBitPbm(PPMINFO *Info)
 }
 
 
-ILboolean iGetWord(ILvoid)
-{
+ILboolean iGetWord( ILboolean final) {
 	ILint WordPos = 0;
 	ILint Current = 0;
 	ILboolean Started = IL_FALSE;
@@ -421,7 +427,8 @@ ILboolean iGetWord(ILvoid)
 		return IL_FALSE;
 
 	while (Looping) {
-		while ((Current = igetc()) != IL_EOF && Current != '\n' && Current != '#' && Current != ' ') {
+	    Current = igetc();
+		while (Current != IL_EOF && Current != '\n' && Current != '#' && Current != ' ') {
 			if (Current == IL_EOF)
 				return IL_FALSE;
 			if (!isalnum(Current)) {
@@ -434,9 +441,10 @@ ILboolean iGetWord(ILvoid)
 
 			if (Looping)
 				SmallBuff[WordPos++] = Current;
+			if (final == IL_TRUE)
+		        break;
 		}
-
-		SmallBuff[WordPos] = NUL;
+		SmallBuff[WordPos] = NULL;
 
 		if (!Looping)
 			break;
