@@ -35,7 +35,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION($Revision: 1.25 $)
+AC_REVISION($Revision: 1.26 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -286,6 +286,8 @@ TEST_API(directx9)
 TEST_API(opengl)
 TEST_API(sdl)
 TEST_API(win32)
+TEST_API(x11)
+TEST_API(xshm)
 
 dnl
 dnl ILUT APIs library checking
@@ -311,6 +313,25 @@ AS_IF([test "$use_sdl" = "yes"],
 
 AC_SUBST(LIBSDL)
 AC_SUBST(HSDL)
+
+dnl X11
+LIBX11=""
+AS_IF([test "$use_x11" = "yes"],[
+    AC_CHECK_HEADER(X11/Xlib.h,,use_x11=no)
+	AS_IF([test "$use_x11" = "yes"],[
+		AC_DEFINE(ILUT_USE_X11,,[Support X11 API])
+		SUPPORTED_API=$SUPPORTED_API"X11 "
+		AC_CHECK_HEADER(X11/extensions/XShm.h,,use_xshm=no)
+		AS_IF([test "$use_xshm" = "yes"],[
+			AC_DEFINE(ILUT_USE_XSHM,,[Support X11 XShm extension])
+			SUPPORTED_API=$SUPPORTED_API"XShm ";
+			LIBX11="-lX11 -lXext"
+		])
+		AS_CASE($target,
+		[*apple-darwin*],[LIBX11="$LIBX11 -L/usr/X11R6/lib"])
+	])
+])
+AC_SUBST(LIBX11)
 
 dnl OpenGL
 AS_CASE($target,

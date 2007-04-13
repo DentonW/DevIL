@@ -7,7 +7,7 @@ libILU_la_SOURCES = ilu_alloc.c       ilu_internal.c  ilu_noise.c \
                     ilu_filter_rcg.c  ilu_mipmap.c    ilu_scale3d.c \
                     ilu_utilities.c	  ilu_region.c
 
-CFLAGS = @LIBILU_CFLAGS@
+AM_CFLAGS = @LIBILU_CFLAGS@
 
 libILU_la_LDFLAGS = -version-info @DEVIL_LTVERSION@ \
                     $(top_srcdir)/src-IL/src/libIL.la

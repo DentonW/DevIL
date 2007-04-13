@@ -82,6 +82,7 @@
 #define ILUT_WIN32     2
 #define ILUT_DIRECT3D8 3
 #define	ILUT_DIRECT3D9 4
+#define ILUT_X11       5
 
 /*
 // Includes specific config
@@ -180,6 +181,16 @@
 #ifdef ILUT_USE_DIRECTX9
 //	#include <d3d9.h>
 #endif//ILUT_USE_DIRECTX9
+
+#ifdef ILUT_USE_X11
+	#include <X11/Xlib.h>
+	#include <X11/Xutil.h>
+#ifdef ILUT_USE_XSHM
+	#include <sys/ipc.h>
+	#include <sys/shm.h>
+	#include <X11/extensions/XShm.h>
+#endif//ILUT_USE_XSHM
+#endif//ILUT_USE_X11
 
 
 
@@ -313,6 +324,23 @@ extern "C" {
 	ILAPI ILboolean ILAPIENTRY ilutD3D9VolTexFromResource(struct IDirect3DDevice9 *Device, HMODULE SrcModule, char *SrcResource, struct IDirect3DVolumeTexture9 **Texture);
 	ILAPI ILboolean ILAPIENTRY ilutD3D9LoadSurface(struct IDirect3DDevice9 *Device, struct IDirect3DSurface9 *Surface);
 #endif//ILUT_USE_DIRECTX9
+
+
+#ifdef ILUT_USE_X11
+	ILAPI XImage * ILAPIENTRY ilutXCreateImage( Display* );
+	ILAPI Pixmap ILAPIENTRY ilutXCreatePixmap( Display*,Drawable );
+	ILAPI XImage * ILAPIENTRY ilutXLoadImage( Display*,char* );
+	ILAPI Pixmap ILAPIENTRY ilutXLoadPixmap( Display*,Drawable,char* );
+#ifdef ILUT_USE_XSHM
+	ILAPI XImage * ILAPIENTRY ilutXShmCreateImage( Display*,XShmSegmentInfo* );
+	ILAPI void ILAPIENTRY ilutXShmDestroyImage( Display*,XImage*,XShmSegmentInfo* );
+	ILAPI Pixmap ILAPIENTRY ilutXShmCreatePixmap( Display*,Drawable,XShmSegmentInfo* );
+	ILAPI void ILAPIENTRY ilutXShmFreePixmap( Display*,Pixmap,XShmSegmentInfo* );
+	ILAPI XImage * ILAPIENTRY ilutXShmLoadImage( Display*,char*,XShmSegmentInfo* );
+	ILAPI Pixmap ILAPIENTRY ilutXShmLoadPixmap( Display*,Drawable,char*,XShmSegmentInfo* );
+#endif//ILUT_USE_XSHM
+#endif//ILUT_USE_X11
+
 
 #ifdef __cplusplus
 }
