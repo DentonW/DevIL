@@ -254,7 +254,7 @@ ILubyte* ILAPIENTRY iGetPaddedData(ILimage *Image)
 	}
 
 	PadSize = (4 - (Image->Bps % 4)) % 4;
-	NewData = (ILubyte*)ialloc((Image->Width + PadSize) * Image->Height * Image->Bpp);
+	NewData = (ILubyte*)ialloc((Image->Bps + PadSize) * Image->Height);
 	if (NewData == NULL) {
 		return NULL;
 	}
@@ -302,7 +302,7 @@ ILvoid ILAPIENTRY ilutGetBmpInfo(BITMAPINFO *Info)
 	}
 
 	Padding = (4 - (ilutCurImage->Bps % 4)) % 4;
-	NewBps = ilutCurImage->Bps/* + Padding*/;
+	NewBps = ilutCurImage->Bps + Padding;
 
 	Info->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 	Info->bmiHeader.biWidth = ilutCurImage->Width;
