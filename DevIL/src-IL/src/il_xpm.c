@@ -24,7 +24,7 @@
 
 //#define XPM_DONT_USE_HASHTABLE
 
-ILboolean iLoadXpmInternal(ILvoid);
+ILboolean iLoadXpmInternal(void);
 
 
 // Reads an .xpm file

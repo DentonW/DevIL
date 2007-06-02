@@ -23,9 +23,9 @@
 struct ILimage;
 ILAPI ILimage*	ILAPIENTRY iConvertImage(ILenum DestFormat, ILenum DestType);
 ILAPI ILubyte*	ILAPIENTRY iGetPaddedData(ILimage *Image);
-ILAPI ILimage*	ILAPIENTRY ilGetCurImage(ILvoid);
+ILAPI ILimage*	ILAPIENTRY ilGetCurImage(void);
 ILAPI ILvoid	ILAPIENTRY ilCloseImage(ILimage *Image);
-ILAPI ILvoid	ILAPIENTRY iBindImageTemp(ILvoid);
+ILAPI ILvoid	ILAPIENTRY iBindImageTemp(void);
 
 // Functions for the static library.
 CBitmap *ilutConvertToCBitmap();

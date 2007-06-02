@@ -43,10 +43,10 @@ typedef struct PCXHEAD
 #endif
 
 // For checking and reading
-ILboolean iIsValidPcx(ILvoid);
+ILboolean iIsValidPcx(void);
 ILboolean iCheckPcx(PCXHEAD *Header);
-ILboolean iLoadPcxInternal(ILvoid);
-ILboolean iSavePcxInternal(ILvoid);
+ILboolean iLoadPcxInternal(void);
+ILboolean iSavePcxInternal(void);
 ILboolean iUncompressPcx(PCXHEAD *Header);
 ILboolean iUncompressSmall(PCXHEAD *Header);
 

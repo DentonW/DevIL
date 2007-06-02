@@ -15,8 +15,8 @@
 #ifndef IL_NO_RAW
 
 
-ILboolean iLoadRawInternal(ILvoid);
-ILboolean iSaveRawInternal(ILvoid);
+ILboolean iLoadRawInternal(void);
+ILboolean iSaveRawInternal(void);
 
 
 //! Reads a raw file

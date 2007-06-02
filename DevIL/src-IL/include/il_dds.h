@@ -110,8 +110,10 @@ typedef struct DXTAlphaBlock3BitLinear
 #define DDS_CAPS				0x00000001L
 #define DDS_HEIGHT				0x00000002L
 #define DDS_WIDTH				0x00000004L
+
 #define DDS_RGB					0x00000040L
 #define DDS_PIXELFORMAT			0x00001000L
+
 #define DDS_LUMINANCE			0x00020000L
 
 #define DDS_ALPHAPIXELS			0x00000001L
@@ -148,17 +150,29 @@ enum PixFormat
 	PF_DXT3,
 	PF_DXT4,
 	PF_DXT5,
+
 	PF_3DC,
+
 	PF_ATI1N,
+
 	PF_LUMINANCE,
+
 	PF_LUMINANCE_ALPHA,
+
 	PF_RXGB, //Doom3 normal maps
+
 	PF_A16B16G16R16,
+
 	PF_R16F,
+
 	PF_G16R16F,
+
 	PF_A16B16G16R16F,
+
 	PF_R32F,
+
 	PF_G32R32F,
+
 	PF_A32B32G32R32F,
 	PF_UNKNOWN = 0xFF
 };
@@ -167,33 +181,39 @@ enum PixFormat
 
 // Internal functions
 ILboolean	iLoadDdsInternal(ILvoid);
-ILboolean	iIsValidDds(ILvoid);
+ILboolean	iIsValidDds(void);
 ILboolean	iCheckDds(DDSHEAD *Head);
 ILvoid		AdjustVolumeTexture(DDSHEAD *Head);
-ILboolean	ReadData(ILvoid);
-ILboolean	AllocImage(ILvoid);
-ILboolean	Decompress(ILvoid);
-ILboolean	ReadMipmaps(ILvoid);
-ILuint		DecodePixelFormat(ILvoid);
-ILboolean	DecompressARGB(ILvoid);
-ILboolean	DecompressDXT1(ILvoid);
-ILboolean	DecompressDXT2(ILvoid);
-ILboolean	DecompressDXT3(ILvoid);
-ILboolean	DecompressDXT4(ILvoid);
-ILboolean	DecompressDXT5(ILvoid);
-ILboolean	Decompress3Dc(ILvoid);
-ILboolean	DecompressAti1n(ILvoid);
-ILboolean	DecompressRXGB(ILvoid);
-ILboolean	DecompressFloat(ILvoid);
-ILvoid		CorrectPreMult(ILvoid);
+ILboolean	ReadData(void);
+ILboolean	AllocImage(void);
+ILboolean	Decompress(void);
+ILboolean	ReadMipmaps(void);
+ILuint		DecodePixelFormat(void);
+ILboolean	DecompressARGB(void);
+ILboolean	DecompressDXT1(void);
+ILboolean	DecompressDXT2(void);
+ILboolean	DecompressDXT3(void);
+ILboolean	DecompressDXT4(void);
+ILboolean	DecompressDXT5(void);
+
+ILboolean	Decompress3Dc(void);
+
+ILboolean	DecompressAti1n(void);
+
+ILboolean	DecompressRXGB(void);
+
+ILboolean	DecompressFloat(void);
+ILvoid		CorrectPreMult(void);
 ILvoid		GetBitsFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight);
-ILboolean	iSaveDdsInternal(ILvoid);
+ILboolean	iSaveDdsInternal(void);
 ILboolean	WriteHeader(ILimage *Image, ILenum DXTCFormat, ILuint CubeFlags);
 ILushort	*CompressTo565(ILimage *Image);
+
 ILubyte		*CompressTo88(ILimage *Image);
 ILuint		Compress(ILimage *Image, ILenum DXTCFormat);
 ILboolean	GetBlock(ILushort *Block, ILushort *Data, ILimage *Image, ILuint XPos, ILuint YPos);
 ILboolean	GetAlphaBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XPos, ILuint YPos);
+
 ILboolean	Get3DcBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XPos, ILuint YPos, int channel);
 ILvoid		ShortToColor565(ILushort Pixel, Color565 *Colour);
 ILvoid		ShortToColor888(ILushort Pixel, Color888 *Colour);
@@ -207,6 +227,7 @@ ILvoid		ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1);
 ILvoid		ChooseAlphaEndpoints(ILubyte *Block, ILubyte *a0, ILubyte *a1);
 ILvoid		CorrectEndDXT1(ILushort *ex0, ILushort *ex1, ILboolean HasAlpha);
 ILvoid		PreMult(ILushort *Data, ILubyte *Alpha);
+
 
 extern ILuint CubemapDirections[CUBEMAP_SIDES];
 

@@ -120,37 +120,37 @@ typedef struct ILpointi {
 	ILint y;
 } ILpointi;
 
-ILAPI ILboolean      ILAPIENTRY iluAlienify(ILvoid);
+ILAPI ILboolean      ILAPIENTRY iluAlienify(void);
 ILAPI ILboolean      ILAPIENTRY iluBlurAvg(ILuint Iter);
 ILAPI ILboolean      ILAPIENTRY iluBlurGaussian(ILuint Iter);
-ILAPI ILboolean      ILAPIENTRY iluBuildMipmaps(ILvoid);
-ILAPI ILuint         ILAPIENTRY iluColoursUsed(ILvoid);
+ILAPI ILboolean      ILAPIENTRY iluBuildMipmaps(void);
+ILAPI ILuint         ILAPIENTRY iluColoursUsed(void);
 ILAPI ILboolean      ILAPIENTRY iluCompareImage(ILuint Comp);
 ILAPI ILboolean      ILAPIENTRY iluContrast(ILfloat Contrast);
 ILAPI ILboolean      ILAPIENTRY iluCrop(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Width, ILuint Height, ILuint Depth);
 ILAPI ILvoid         ILAPIENTRY iluDeleteImage(ILuint Id); // Deprecated
-ILAPI ILboolean      ILAPIENTRY iluEdgeDetectE(ILvoid);
-ILAPI ILboolean      ILAPIENTRY iluEdgeDetectP(ILvoid);
-ILAPI ILboolean      ILAPIENTRY iluEdgeDetectS(ILvoid);
-ILAPI ILboolean      ILAPIENTRY iluEmboss(ILvoid);
+ILAPI ILboolean      ILAPIENTRY iluEdgeDetectE(void);
+ILAPI ILboolean      ILAPIENTRY iluEdgeDetectP(void);
+ILAPI ILboolean      ILAPIENTRY iluEdgeDetectS(void);
+ILAPI ILboolean      ILAPIENTRY iluEmboss(void);
 ILAPI ILboolean      ILAPIENTRY iluEnlargeCanvas(ILuint Width, ILuint Height, ILuint Depth);
 ILAPI ILboolean      ILAPIENTRY iluEnlargeImage(ILfloat XDim, ILfloat YDim, ILfloat ZDim);
-ILAPI ILboolean      ILAPIENTRY iluEqualize(ILvoid);
+ILAPI ILboolean      ILAPIENTRY iluEqualize(void);
 ILAPI ILstring 		 ILAPIENTRY iluErrorString(ILenum Error);
 ILAPI ILboolean      ILAPIENTRY iluConvolution(ILint *matrix, ILint scale, ILint bias);
-ILAPI ILboolean      ILAPIENTRY iluFlipImage(ILvoid);
+ILAPI ILboolean      ILAPIENTRY iluFlipImage(void);
 ILAPI ILboolean      ILAPIENTRY iluGammaCorrect(ILfloat Gamma);
-ILAPI ILuint         ILAPIENTRY iluGenImage(ILvoid); // Deprecated
+ILAPI ILuint         ILAPIENTRY iluGenImage(void); // Deprecated
 ILAPI ILvoid         ILAPIENTRY iluGetImageInfo(ILinfo *Info);
 ILAPI ILint          ILAPIENTRY iluGetInteger(ILenum Mode);
 ILAPI ILvoid         ILAPIENTRY iluGetIntegerv(ILenum Mode, ILint *Param);
 ILAPI ILstring 		 ILAPIENTRY iluGetString(ILenum StringName);
 ILAPI ILvoid         ILAPIENTRY iluImageParameter(ILenum PName, ILenum Param);
-ILAPI ILvoid         ILAPIENTRY iluInit(ILvoid);
-ILAPI ILboolean      ILAPIENTRY iluInvertAlpha(ILvoid);
+ILAPI ILvoid         ILAPIENTRY iluInit(void);
+ILAPI ILboolean      ILAPIENTRY iluInvertAlpha(void);
 ILAPI ILuint         ILAPIENTRY iluLoadImage(ILconst_string FileName);
-ILAPI ILboolean      ILAPIENTRY iluMirror(ILvoid);
-ILAPI ILboolean      ILAPIENTRY iluNegative(ILvoid);
+ILAPI ILboolean      ILAPIENTRY iluMirror(void);
+ILAPI ILboolean      ILAPIENTRY iluNegative(void);
 ILAPI ILboolean      ILAPIENTRY iluNoisify(ILclampf Tolerance);
 ILAPI ILboolean      ILAPIENTRY iluPixelize(ILuint PixSize);
 ILAPI ILvoid         ILAPIENTRY iluRegionfv(ILpointf *Points, ILuint n);
@@ -164,7 +164,7 @@ ILAPI ILboolean      ILAPIENTRY iluScale(ILuint Width, ILuint Height, ILuint Dep
 ILAPI ILboolean      ILAPIENTRY iluScaleAlpha(ILfloat scale);
 ILAPI ILboolean      ILAPIENTRY iluScaleColours(ILfloat r, ILfloat g, ILfloat b);
 ILAPI ILboolean      ILAPIENTRY iluSharpen(ILfloat Factor, ILuint Iter);
-ILAPI ILboolean      ILAPIENTRY iluSwapColours(ILvoid);
+ILAPI ILboolean      ILAPIENTRY iluSwapColours(void);
 ILAPI ILboolean      ILAPIENTRY iluWave(ILfloat Angle);
 
 #define iluColorsUsed   iluColoursUsed

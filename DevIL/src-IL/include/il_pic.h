@@ -65,9 +65,9 @@ typedef struct CHANNEL
 #define PIC_AUXILIARY_1_CHANNEL	0x02	// XXX: Not implemented
 #define PIC_AUXILIARY_2_CHANNEL	0x01	// XXX: Not implemented
 
-ILboolean iIsValidPic(ILvoid);
+ILboolean iIsValidPic(void);
 ILboolean iCheckPic(PIC_HEAD *Header);
-ILboolean iLoadPicInternal(ILvoid);
+ILboolean iLoadPicInternal(void);
 ILboolean readScanlines(ILuint *image, ILint width, ILint height, CHANNEL *channel, ILuint alpha);
 ILuint    readScanline(ILubyte *scan, ILint width, CHANNEL *channel,  ILint bytes);
 ILboolean channelReadRaw(ILubyte *scan, ILint width, ILint noCol, ILint *off, ILint bytes);

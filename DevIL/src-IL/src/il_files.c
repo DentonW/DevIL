@@ -17,20 +17,20 @@
 
 
 // All specific to the next set of functions
-ILboolean	ILAPIENTRY iEofFile(ILvoid);
-ILboolean	ILAPIENTRY iEofLump(ILvoid);
-ILint		ILAPIENTRY iGetcFile(ILvoid);
-ILint		ILAPIENTRY iGetcLump(ILvoid);
+ILboolean	ILAPIENTRY iEofFile(void);
+ILboolean	ILAPIENTRY iEofLump(void);
+ILint		ILAPIENTRY iGetcFile(void);
+ILint		ILAPIENTRY iGetcLump(void);
 ILuint		ILAPIENTRY iReadFile(ILvoid *Buffer, ILuint Size, ILuint Number);
 ILuint		ILAPIENTRY iReadLump(ILvoid *Buffer, const ILuint Size, const ILuint Number);
 ILuint		ILAPIENTRY iSeekRFile(ILint Offset, ILuint Mode);
 ILuint		ILAPIENTRY iSeekRLump(ILint Offset, ILuint Mode);
 ILuint		ILAPIENTRY iSeekWFile(ILint Offset, ILuint Mode);
 ILuint		ILAPIENTRY iSeekWLump(ILint Offset, ILuint Mode);
-ILuint		ILAPIENTRY iTellRFile(ILvoid);
-ILuint		ILAPIENTRY iTellRLump(ILvoid);
-ILuint		ILAPIENTRY iTellWFile(ILvoid);
-ILuint		ILAPIENTRY iTellWLump(ILvoid);
+ILuint		ILAPIENTRY iTellRFile(void);
+ILuint		ILAPIENTRY iTellRLump(void);
+ILuint		ILAPIENTRY iTellWFile(void);
+ILuint		ILAPIENTRY iTellWLump(void);
 ILint		ILAPIENTRY iPutcFile(ILubyte Char);
 ILint		ILAPIENTRY iPutcLump(ILubyte Char);
 ILint		ILAPIENTRY iWriteFile(const ILvoid *Buffer, ILuint Size, ILuint Number);
@@ -341,13 +341,13 @@ ILvoid ipad(ILuint NumZeros)
 
 // Next 12 functions are the default write functions
 
-ILboolean ILAPIENTRY iEofFile(ILvoid)
+ILboolean ILAPIENTRY iEofFile(void)
 {
 	return EofProc((FILE*)FileRead);
 }
 
 
-ILboolean ILAPIENTRY iEofLump(ILvoid)
+ILboolean ILAPIENTRY iEofLump(void)
 {
 	if (ReadLumpSize)
 		return (ReadLumpPos >= ReadLumpSize);
@@ -355,7 +355,7 @@ ILboolean ILAPIENTRY iEofLump(ILvoid)
 }
 
 
-ILint ILAPIENTRY iGetcFile(ILvoid)
+ILint ILAPIENTRY iGetcFile(void)
 {
 	if (!UseCache) {
 		return GetcProc(FileRead);
@@ -369,7 +369,7 @@ ILint ILAPIENTRY iGetcFile(ILvoid)
 }
 
 
-ILint ILAPIENTRY iGetcLump(ILvoid)
+ILint ILAPIENTRY iGetcLump(void)
 {
 	// If ReadLumpSize is 0, don't even check to see if we've gone past the bounds.
 	if (ReadLumpSize > 0) {
@@ -565,25 +565,25 @@ ILuint ILAPIENTRY iSeekRLump(ILint Offset, ILuint Mode)
 }
 
 
-ILuint ILAPIENTRY iTellRFile(ILvoid)
+ILuint ILAPIENTRY iTellRFile(void)
 {
 	return TellRProc(FileRead);
 }
 
 
-ILuint ILAPIENTRY iTellRLump(ILvoid)
+ILuint ILAPIENTRY iTellRLump(void)
 {
 	return ReadLumpPos;
 }
 
 
-ILHANDLE ILAPIENTRY iGetFile(ILvoid)
+ILHANDLE ILAPIENTRY iGetFile(void)
 {
 	return FileRead;
 }
 
 
-const ILubyte* ILAPIENTRY iGetLump(ILvoid) {
+const ILubyte* ILAPIENTRY iGetLump(void) {
 	return (ILubyte *)ReadLump;
 }
 
@@ -683,13 +683,13 @@ ILuint ILAPIENTRY iSeekWLump(ILint Offset, ILuint Mode)
 }
 
 
-ILuint ILAPIENTRY iTellWFile(ILvoid)
+ILuint ILAPIENTRY iTellWFile(void)
 {
 	return TellWProc(FileWrite);
 }
 
 
-ILuint ILAPIENTRY iTellWLump(ILvoid)
+ILuint ILAPIENTRY iTellWLump(void)
 {
 	return WriteLumpPos;
 }

@@ -137,10 +137,10 @@ ILstring	iGetExtension(ILconst_string FileName);
 char*		ilStrDup(const char *Str);
 ILuint		ilStrLen(const char *Str);
 // Miscellaneous functions
-ILvoid					ilDefaultStates(ILvoid);
+ILvoid					ilDefaultStates(void);
 ILenum					iGetHint(ILenum Target);
 ILint					iGetInt(ILenum Mode);
-ILvoid					ilRemoveRegistered(ILvoid);
+ILvoid					ilRemoveRegistered(void);
 ILAPI ILvoid ILAPIENTRY	ilSetCurImage(ILimage *Image);
 //
 // Rle compression
@@ -151,14 +151,14 @@ ILAPI ILvoid ILAPIENTRY	ilSetCurImage(ILimage *Image);
 #define     IL_BMPCOMP 0x04
 ILboolean	ilRleCompressLine(ILubyte *ScanLine, ILuint Width, ILubyte Bpp, ILubyte *Dest, ILuint *DestWidth, ILenum CompressMode);
 ILuint		ilRleCompress(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILubyte *Dest, ILenum CompressMode, ILuint *ScanTable);
-ILvoid		iSetImage0(ILvoid);
+ILvoid		iSetImage0(void);
 // Conversion functions
-ILboolean	ilAddAlpha(ILvoid);
+ILboolean	ilAddAlpha(void);
 ILboolean	ilAddAlphaKey(ILimage *Image);
 ILboolean	iFastConvert(ILenum DestFormat);
-ILboolean	ilFixImage(ILvoid);
-ILboolean	ilRemoveAlpha(ILvoid);
-ILboolean	ilSwapColours(ILvoid);
+ILboolean	ilFixImage(void);
+ILboolean	ilRemoveAlpha(void);
+ILboolean	ilSwapColours(void);
 // Miscellaneous functions
 char *iGetString(ILenum StringName);  // Internal version of ilGetString
 // Library usage

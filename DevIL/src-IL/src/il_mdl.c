@@ -16,7 +16,7 @@
 #include "il_mdl.h"
 
 
-ILboolean iLoadMdlInternal(ILvoid);
+ILboolean iLoadMdlInternal(void);
 
 
 //! Reads a .Mdl file

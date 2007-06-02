@@ -18,7 +18,7 @@
 #include "il_manip.h"
 
 
-ILboolean iLoadPcdInternal(ILvoid);
+ILboolean iLoadPcdInternal(void);
 
 //! Reads a .pcd file
 ILboolean ilLoadPcd(ILconst_string FileName)

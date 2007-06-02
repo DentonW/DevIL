@@ -33,7 +33,7 @@ typedef struct PIXHEAD
 #endif
 
 ILboolean iCheckPix(PIXHEAD *Header);
-ILboolean iLoadPixInternal(ILvoid);
+ILboolean iLoadPixInternal(void);
 
 
 // Internal function used to get the Pix header from the current file.

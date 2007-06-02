@@ -308,7 +308,7 @@ ILboolean ILAPIENTRY ilGetBoolean(ILenum Mode)
 }
 
 
-ILimage *iGetBaseImage(ILvoid);
+ILimage *iGetBaseImage(void);
 
 ILuint iGetActiveNum(ILenum Type)
 {

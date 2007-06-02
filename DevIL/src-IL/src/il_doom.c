@@ -18,8 +18,8 @@
 #include "il_doompal.h"
 
 
-ILboolean iLoadDoomInternal(ILvoid);
-ILboolean iLoadDoomFlatInternal(ILvoid);
+ILboolean iLoadDoomInternal(void);
+ILboolean iLoadDoomFlatInternal(void);
 
 
 //

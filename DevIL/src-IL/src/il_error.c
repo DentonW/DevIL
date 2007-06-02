@@ -41,7 +41,7 @@ ILAPI ILvoid ILAPIENTRY ilSetError(ILenum Error)
 
 
 //! Gets the last error on the error stack
-ILenum ILAPIENTRY ilGetError(ILvoid)
+ILenum ILAPIENTRY ilGetError(void)
 {
 	ILenum ilReturn;
 

@@ -30,8 +30,8 @@ typedef struct LIF_HEAD
 	ILuint	TeamEffect1;	// Team effect offset 1
 } LIF_HEAD;
 
-ILboolean iIsValidLif(ILvoid);
+ILboolean iIsValidLif(void);
 ILboolean iCheckLif(LIF_HEAD *Header);
-ILboolean iLoadLifInternal(ILvoid);
+ILboolean iLoadLifInternal(void);
 
 #endif//LIF_H

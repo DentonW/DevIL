@@ -37,9 +37,9 @@ typedef struct PSDHEAD
 
 ILushort	ChannelNum;
 
-ILboolean	iIsValidPsd(ILvoid);
+ILboolean	iIsValidPsd(void);
 ILboolean	iCheckPsd(PSDHEAD *Header);
-ILboolean	iLoadPsdInternal(ILvoid);
+ILboolean	iLoadPsdInternal(void);
 ILboolean	ReadPsd(PSDHEAD *Head);
 ILboolean	ReadGrey(PSDHEAD *Head);
 ILboolean	ReadIndexed(PSDHEAD *Head);
@@ -49,7 +49,7 @@ ILuint		*GetCompChanLen(PSDHEAD *Head);
 ILboolean	PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed);
 ILboolean	ParseResources(ILuint ResourceSize, ILubyte *Resources);
 ILboolean	GetSingleChannel(PSDHEAD *Head, ILubyte *Buffer, ILboolean Compressed);
-ILboolean	iSavePsdInternal(ILvoid);
+ILboolean	iSavePsdInternal(void);
 
 
 

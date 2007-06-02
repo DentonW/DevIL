@@ -1106,7 +1106,7 @@ ILboolean ILAPIENTRY iluSaturate4f(ILfloat r, ILfloat g, ILfloat b, ILfloat Satu
 
 
 //! Funny as hell filter that I stumbled upon accidentally
-ILboolean ILAPIENTRY iluAlienify(ILvoid)
+ILboolean ILAPIENTRY iluAlienify(void)
 {
 	ILfloat	Mat[3][3];
 	ILubyte	*Data;

@@ -210,10 +210,10 @@ ILAPI ILvoid		ILAPIENTRY ilutGetBooleanv(ILenum Mode, ILboolean *Param);
 ILAPI ILint			ILAPIENTRY ilutGetInteger(ILenum Mode);
 ILAPI ILvoid		ILAPIENTRY ilutGetIntegerv(ILenum Mode, ILint *Param);
 ILAPI ILstring		ILAPIENTRY ilutGetString(ILenum StringName);
-ILAPI ILvoid		ILAPIENTRY ilutInit(ILvoid);
+ILAPI ILvoid		ILAPIENTRY ilutInit(void);
 ILAPI ILboolean		ILAPIENTRY ilutIsDisabled(ILenum Mode);
 ILAPI ILboolean		ILAPIENTRY ilutIsEnabled(ILenum Mode);
-ILAPI ILvoid		ILAPIENTRY ilutPopAttrib(ILvoid);
+ILAPI ILvoid		ILAPIENTRY ilutPopAttrib(void);
 ILAPI ILvoid		ILAPIENTRY ilutPushAttrib(ILuint Bits);
 ILAPI ILvoid		ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param);
 
@@ -223,11 +223,11 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 // ImageLib Utility Toolkit's OpenGL Functions
 #ifdef ILUT_USE_OPENGL
 	ILAPI GLuint	ILAPIENTRY ilutGLBindTexImage();
-	ILAPI GLuint	ILAPIENTRY ilutGLBindMipmaps(ILvoid);
-	ILAPI ILboolean	ILAPIENTRY ilutGLBuildMipmaps(ILvoid);
+	ILAPI GLuint	ILAPIENTRY ilutGLBindMipmaps(void);
+	ILAPI ILboolean	ILAPIENTRY ilutGLBuildMipmaps(void);
 	ILAPI GLuint	ILAPIENTRY ilutGLLoadImage(ILstring FileName);
-	ILAPI ILboolean	ILAPIENTRY ilutGLScreen(ILvoid);
-	ILAPI ILboolean	ILAPIENTRY ilutGLScreenie(ILvoid);
+	ILAPI ILboolean	ILAPIENTRY ilutGLScreen(void);
+	ILAPI ILboolean	ILAPIENTRY ilutGLScreenie(void);
 	ILAPI ILboolean	ILAPIENTRY ilutGLSaveImage(ILstring FileName, GLuint TexID);
 	ILAPI ILboolean	ILAPIENTRY ilutGLSetTex(GLuint TexID);
 	ILAPI ILboolean	ILAPIENTRY ilutGLTexImage(GLuint Level);
@@ -261,7 +261,7 @@ extern "C" {
 
 // ImageLib Utility Toolkit's BeOS Functions
 #ifdef  ILUT_USE_BEOS
-	ILAPI BBitmap ILAPIENTRY ilutConvertToBBitmap(ILvoid);
+	ILAPI BBitmap ILAPIENTRY ilutConvertToBBitmap(void);
 #endif//ILUT_USE_BEOS
 
 
@@ -271,13 +271,13 @@ extern "C" {
 	ILAPI HBITMAP	ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice);
 	ILAPI ILvoid	ILAPIENTRY ilutFreePaddedData(ILubyte *Data);
 	ILAPI ILvoid	ILAPIENTRY ilutGetBmpInfo(BITMAPINFO *Info);
-	ILAPI HPALETTE	ILAPIENTRY ilutGetHPal(ILvoid);
-	ILAPI ILubyte*	ILAPIENTRY ilutGetPaddedData(ILvoid);
-	ILAPI ILboolean	ILAPIENTRY ilutGetWinClipboard(ILvoid);
+	ILAPI HPALETTE	ILAPIENTRY ilutGetHPal(void);
+	ILAPI ILubyte*	ILAPIENTRY ilutGetPaddedData(void);
+	ILAPI ILboolean	ILAPIENTRY ilutGetWinClipboard(void);
 	ILAPI ILboolean	ILAPIENTRY ilutLoadResource(HINSTANCE hInst, ILint ID, ILstring ResourceType, ILenum Type);
 	ILAPI ILboolean	ILAPIENTRY ilutSetHBitmap(HBITMAP Bitmap);
 	ILAPI ILboolean	ILAPIENTRY ilutSetHPal(HPALETTE Pal);
-	ILAPI ILboolean	ILAPIENTRY ilutSetWinClipboard(ILvoid);
+	ILAPI ILboolean	ILAPIENTRY ilutSetWinClipboard(void);
 	ILAPI HBITMAP	ILAPIENTRY ilutWinLoadImage(ILstring FileName, HDC hDC);
 	ILAPI ILboolean	ILAPIENTRY ilutWinLoadUrl(ILstring Url);
 	ILAPI ILboolean ILAPIENTRY ilutWinPrint(ILuint XPos, ILuint YPos, ILuint Width, ILuint Height, HDC hDC);

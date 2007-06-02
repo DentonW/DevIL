@@ -34,7 +34,7 @@ typedef struct PIXHEAD
 #pragma pack(pop, pxr_struct)
 #endif
 
-ILboolean iLoadPxrInternal(ILvoid);
+ILboolean iLoadPxrInternal(void);
 
 
 //! Reads a Pxr file

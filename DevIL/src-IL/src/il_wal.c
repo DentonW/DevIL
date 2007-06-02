@@ -29,7 +29,7 @@ typedef struct WALHEAD
 	ILuint	Value;			// ??
 } WALHEAD;
 
-ILboolean iLoadWalInternal(ILvoid);
+ILboolean iLoadWalInternal(void);
 
 
 //! Reads a .wal file

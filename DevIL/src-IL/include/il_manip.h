@@ -17,8 +17,8 @@
 extern "C" {
 #endif
 
-ILboolean ilFlipImage(ILvoid);
-ILboolean ilMirrorImage(ILvoid);	//@JASON New routine created 03/28/2001
+ILboolean ilFlipImage(void);
+ILboolean ilMirrorImage(void);	//@JASON New routine created 03/28/2001
 
 //-----------------------------------------------
 // Overflow handler for float-to-half conversion;

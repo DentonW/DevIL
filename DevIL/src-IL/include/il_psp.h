@@ -232,18 +232,18 @@ typedef struct ALPHA_CHUNK
 
 
 // Function definitions
-ILboolean	iLoadPspInternal(ILvoid);
-ILboolean	iCheckPsp(ILvoid);
-ILboolean	iIsValidPsp(ILvoid);
-ILboolean	ReadGenAttributes(ILvoid);
-ILboolean	ParseChunks(ILvoid);
+ILboolean	iLoadPspInternal(void);
+ILboolean	iCheckPsp(void);
+ILboolean	iIsValidPsp(void);
+ILboolean	ReadGenAttributes(void);
+ILboolean	ParseChunks(void);
 ILboolean	ReadLayerBlock(ILuint BlockLen);
 ILboolean	ReadAlphaBlock(ILuint BlockLen);
-ILubyte		*GetChannel(ILvoid);
+ILubyte		*GetChannel(void);
 ILboolean	UncompRLE(ILubyte *CompData, ILubyte *Data, ILuint CompLen);
 ILboolean	ReadPalette(ILuint BlockLen);
-ILboolean	AssembleImage(ILvoid);
-ILboolean	Cleanup(ILvoid);
+ILboolean	AssembleImage(void);
+ILboolean	Cleanup(void);
 
 
 

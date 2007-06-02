@@ -27,8 +27,8 @@ typedef struct iFree
 
 
 // Internal functions
-ILboolean	iEnlargeStack(ILvoid);
-ILvoid		iFreeMem(ILvoid);
+ILboolean	iEnlargeStack(void);
+ILvoid		iFreeMem(void);
 
 // Globals for il_stack.c
 ILuint		StackSize = 0;

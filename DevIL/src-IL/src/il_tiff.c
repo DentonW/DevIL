@@ -36,8 +36,8 @@
 /*----------------------------------------------------------------------------*/
 
 // No need for a separate header
-static ILboolean iLoadTiffInternal(ILvoid);
-static char*     iMakeString(ILvoid);
+static ILboolean iLoadTiffInternal(void);
+static char*     iMakeString(void);
 static TIFF*     iTIFFOpen(char *Mode);
 //static ILboolean iSaveTiffInternal();
 

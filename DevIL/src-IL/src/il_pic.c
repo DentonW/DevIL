@@ -250,7 +250,7 @@ ILboolean readScanlines(ILuint *image, ILint width, ILint height, CHANNEL *chann
 	ILint	i;
 	ILuint	*scan;
 
-	(ILvoid)alpha;
+	(void)alpha;
 	
 	for (i = height - 1; i >= 0; i--) {
 		scan = image + i * width;

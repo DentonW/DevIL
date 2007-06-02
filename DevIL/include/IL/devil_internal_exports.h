@@ -97,7 +97,7 @@ ILAPI ILvoid* ILAPIENTRY ivec_align_buffer(ILvoid *buffer, const ILuint size);
 #endif
 
 // Internal library functions in IL
-ILAPI ILimage* ILAPIENTRY ilGetCurImage(ILvoid);
+ILAPI ILimage* ILAPIENTRY ilGetCurImage(void);
 ILAPI ILvoid   ILAPIENTRY ilSetCurImage(ILimage *Image);
 ILAPI ILvoid   ILAPIENTRY ilSetError(ILenum Error);
 ILAPI ILvoid   ILAPIENTRY ilSetPal(ILpal *Pal);
@@ -119,15 +119,15 @@ ILAPI ILvoid  ILAPIENTRY iMemSwap( ILubyte *, ILubyte *, const ILuint );
 //
 // Image functions
 //
-ILAPI ILvoid    ILAPIENTRY iBindImageTemp  (ILvoid);
+ILAPI ILvoid    ILAPIENTRY iBindImageTemp  (void);
 ILAPI ILboolean ILAPIENTRY ilClearImage_   (ILimage *Image);
 ILAPI ILvoid    ILAPIENTRY ilCloseImage    (ILimage *Image);
 ILAPI ILvoid    ILAPIENTRY ilClosePal      (ILpal *Palette);
-ILAPI ILpal*    ILAPIENTRY iCopyPal        (ILvoid);
+ILAPI ILpal*    ILAPIENTRY iCopyPal        (void);
 ILAPI ILboolean ILAPIENTRY ilCopyImageAttr (ILimage *Dest, ILimage *Src);
 ILAPI ILimage*  ILAPIENTRY ilCopyImage_    (ILimage *Src);
 ILAPI ILvoid    ILAPIENTRY ilGetClear      (ILvoid *Colours, ILenum Format, ILenum Type);
-ILAPI ILuint    ILAPIENTRY ilGetCurName    (ILvoid);
+ILAPI ILuint    ILAPIENTRY ilGetCurName    (void);
 ILAPI ILboolean ILAPIENTRY ilIsValidPal    (ILpal *Palette);
 ILAPI ILimage*  ILAPIENTRY ilNewImage      (ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILubyte Bpc);
 ILAPI ILimage*  ILAPIENTRY ilNewImageFull  (ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, ILvoid *Data);

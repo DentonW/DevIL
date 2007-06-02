@@ -43,9 +43,9 @@ typedef struct DCXHEAD
 #endif
 
 // For checking and reading
-ILboolean iIsValidDcx(ILvoid);
+ILboolean iIsValidDcx(void);
 ILboolean iCheckDcx(DCXHEAD *Header);
-ILboolean iLoadDcxInternal(ILvoid);
+ILboolean iLoadDcxInternal(void);
 ILimage*  iUncompressDcx(DCXHEAD *Header);
 ILimage*  iUncompressDcxSmall(DCXHEAD *Header);
 

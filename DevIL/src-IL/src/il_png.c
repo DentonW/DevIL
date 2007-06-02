@@ -36,13 +36,13 @@
 #endif
 
 
-ILboolean	iIsValidPng(ILvoid);
-ILboolean	iLoadPngInternal(ILvoid);
-ILboolean	iSavePngInternal(ILvoid);
+ILboolean	iIsValidPng(void);
+ILboolean	iLoadPngInternal(void);
+ILboolean	iSavePngInternal(void);
 
-ILint		readpng_init(ILvoid);
+ILint		readpng_init(void);
 ILboolean	readpng_get_image(ILdouble display_exponent);
-ILvoid		readpng_cleanup(ILvoid);
+ILvoid		readpng_cleanup(void);
 
 png_structp png_ptr = NULL;
 png_infop info_ptr = NULL;
@@ -178,7 +178,7 @@ ILboolean iLoadPngInternal()
 
 static ILvoid png_read(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-	(ILvoid)png_ptr;
+	(void)png_ptr;
 	iread(data, 1, length);
 	return;
 }
@@ -464,7 +464,7 @@ ILboolean ilSavePngL(ILvoid *Lump, ILuint Size)
 
 ILvoid png_write(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-	(ILvoid)png_ptr;
+	(void)png_ptr;
 	iwrite(data, 1, length);
 	return;
 }

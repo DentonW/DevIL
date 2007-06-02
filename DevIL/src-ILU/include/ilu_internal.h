@@ -84,7 +84,7 @@ INLINE ILint ilRound(ILfloat Num) {
 
 
 ILuint	iluScaleAdvanced(ILuint Width, ILuint Height, ILenum Filter);
-ILubyte	*iScanFill(ILvoid);
+ILubyte	*iScanFill(void);
 
 
 #endif//INTERNAL_H

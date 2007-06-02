@@ -16,11 +16,11 @@
 #include "il_internal.h"
 
 ILboolean iCheckJpg(ILubyte Header[2]);
-ILboolean iIsValidJpg(ILvoid);
+ILboolean iIsValidJpg(void);
 
 #ifndef IL_USE_IJL
-	ILboolean iLoadJpegInternal(ILvoid);
-	ILboolean iSaveJpegInternal(ILvoid);
+	ILboolean iLoadJpegInternal(void);
+	ILboolean iSaveJpegInternal(void);
 #else
 	ILboolean iLoadJpegInternal(ILconst_string FileName, ILvoid *Lump, ILuint Size);
 	ILboolean iSaveJpegInternal(ILconst_string FileName, ILvoid *Lump, ILuint Size);

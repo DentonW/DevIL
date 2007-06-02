@@ -21,8 +21,8 @@
 #include <IL/il.h>
 
 
-__FILES_EXTERN ILvoid ILAPIENTRY iPreserveReadFuncs(ILvoid);
-__FILES_EXTERN ILvoid ILAPIENTRY iRestoreReadFuncs(ILvoid);
+__FILES_EXTERN ILvoid ILAPIENTRY iPreserveReadFuncs(void);
+__FILES_EXTERN ILvoid ILAPIENTRY iRestoreReadFuncs(void);
 
 __FILES_EXTERN fEofProc		EofProc;
 __FILES_EXTERN fGetcProc	GetcProc;
@@ -47,13 +47,13 @@ __FILES_EXTERN ILint		ILAPIENTRY iDefaultWrite(const ILvoid *Buffer, ILuint Size
 
 __FILES_EXTERN ILvoid		iSetInputFile(ILHANDLE File);
 __FILES_EXTERN ILvoid		iSetInputLump(const ILvoid *Lump, ILuint Size);
-__FILES_EXTERN ILboolean	(ILAPIENTRY *ieof)(ILvoid);
+__FILES_EXTERN ILboolean	(ILAPIENTRY *ieof)(void);
 __FILES_EXTERN ILHANDLE		(ILAPIENTRY *iopenr)(ILconst_string);
 __FILES_EXTERN ILvoid		(ILAPIENTRY *icloser)(ILHANDLE);
-__FILES_EXTERN ILint		(ILAPIENTRY *igetc)(ILvoid);
+__FILES_EXTERN ILint		(ILAPIENTRY *igetc)(void);
 __FILES_EXTERN ILuint		(ILAPIENTRY *iread)(ILvoid *Buffer, ILuint Size, ILuint Number);
 __FILES_EXTERN ILuint		(ILAPIENTRY *iseek)(ILint Offset, ILuint Mode);
-__FILES_EXTERN ILuint		(ILAPIENTRY *itell)(ILvoid);
+__FILES_EXTERN ILuint		(ILAPIENTRY *itell)(void);
 
 __FILES_EXTERN ILvoid		iSetOutputFile(ILHANDLE File);
 __FILES_EXTERN ILvoid		iSetOutputLump(ILvoid *Lump, ILuint Size);
@@ -61,16 +61,16 @@ __FILES_EXTERN ILvoid		(ILAPIENTRY *iclosew)(ILHANDLE);
 __FILES_EXTERN ILHANDLE		(ILAPIENTRY *iopenw)(ILconst_string);
 __FILES_EXTERN ILint		(ILAPIENTRY *iputc)(ILubyte Char);
 __FILES_EXTERN ILuint		(ILAPIENTRY *iseekw)(ILint Offset, ILuint Mode);
-__FILES_EXTERN ILuint		(ILAPIENTRY *itellw)(ILvoid);
+__FILES_EXTERN ILuint		(ILAPIENTRY *itellw)(void);
 __FILES_EXTERN ILint		(ILAPIENTRY *iwrite)(const ILvoid *Buffer, ILuint Size, ILuint Number);
  
-__FILES_EXTERN ILHANDLE		ILAPIENTRY iGetFile(ILvoid);
-__FILES_EXTERN const ILubyte*		ILAPIENTRY iGetLump(ILvoid);
+__FILES_EXTERN ILHANDLE		ILAPIENTRY iGetFile(void);
+__FILES_EXTERN const ILubyte*		ILAPIENTRY iGetLump(void);
 
 __FILES_EXTERN ILuint		ILAPIENTRY ilprintf(const char *, ...);
 __FILES_EXTERN ILvoid		ipad(ILuint NumZeros);
 
 __FILES_EXTERN ILboolean	iPreCache(ILuint Size);
-__FILES_EXTERN ILvoid		iUnCache(ILvoid);
+__FILES_EXTERN ILvoid		iUnCache(void);
 
 #endif//FILES_H

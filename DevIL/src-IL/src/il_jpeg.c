@@ -528,7 +528,7 @@ ILboolean iSaveJpegInternal()
 		// Here the array is only one element long, but you could pass
 		// more than one scanline at a time if that's more convenient.
 		row_pointer[0] = &TempData[JpegInfo.next_scanline * TempImage->Bps];
-		(ILvoid) jpeg_write_scanlines(&JpegInfo, row_pointer, 1);
+		(void) jpeg_write_scanlines(&JpegInfo, row_pointer, 1);
 	}
 
 	// Step 6: Finish compression
@@ -942,7 +942,7 @@ ILboolean ilSaveFromJpegStruct(ILvoid *_JpegInfo)
 		// Here the array is only one element long, but you could pass
 		// more than one scanline at a time if that's more convenient.
 		row_pointer[0] = &TempData[JpegInfo->next_scanline * TempImage->Bps];
-		(ILvoid) jpeg_write_scanlines(JpegInfo, row_pointer, 1);
+		(void) jpeg_write_scanlines(JpegInfo, row_pointer, 1);
 	}
 
 	if (TempImage->Origin == IL_ORIGIN_LOWER_LEFT)

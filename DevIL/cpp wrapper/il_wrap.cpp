@@ -374,7 +374,7 @@ ILuint ilImage::GetId() const
 	return this->Id;
 }
 
-ILenum ilImage::GetOrigin(ILvoid)
+ILenum ilImage::GetOrigin(void)
 {
     ILinfo Info;
 

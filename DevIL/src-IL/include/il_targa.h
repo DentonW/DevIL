@@ -95,8 +95,8 @@ typedef struct TARGAEXT
 ILboolean	iIsValidTarga();
 ILboolean	iGetTgaHead(TARGAHEAD *Header);
 ILboolean	iCheckTarga(TARGAHEAD *Header);
-ILboolean	iLoadTargaInternal(ILvoid);
-ILboolean	iSaveTargaInternal(ILvoid);
+ILboolean	iLoadTargaInternal(void);
+ILboolean	iSaveTargaInternal(void);
 //ILvoid		iMakeString(char *Str);
 ILboolean	iReadBwTga(TARGAHEAD *Header);
 ILboolean	iReadColMapTga(TARGAHEAD *Header);
