@@ -51,6 +51,8 @@
 
 static ILboolean jpgErrorOccured = IL_FALSE;
 
+// define a protype of ilLoadFromJpegStruct
+ILboolean ilLoadFromJpegStruct(ILvoid *_JpegInfo);
 
 // Internal function used to get the .jpg header from the current file.
 ILvoid iGetJpgHead(ILubyte *Header)
