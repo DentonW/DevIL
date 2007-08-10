@@ -2,7 +2,7 @@
 
 // Description: Image manipulation
 #include "il_internal.h"
-#include <il/il.h>
+#include <IL/il.h>
 #include "il_manip.h"
 
 ILAPI ILvoid ILAPIENTRY iFlipBuffer( ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num ) {
