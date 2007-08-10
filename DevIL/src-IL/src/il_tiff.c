@@ -699,8 +699,8 @@ ILboolean iLoadTiffInternal()
 
                 //offset in pixels of "cropped" image from top left corner of 
                 //full image (rounded to nearest integer)
-                Image->offX = (uint32) ((x_position * x_resolution) + 0.49);
-                Image->offY = (uint32) ((y_position * y_resolution) + 0.49);
+                Image->OffX = (uint32) ((x_position * x_resolution) + 0.49);
+                Image->OffY = (uint32) ((y_position * y_resolution) + 0.49);
                 
 
 		/*
