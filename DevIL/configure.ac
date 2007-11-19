@@ -35,7 +35,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION($Revision: 1.26 $)
+AC_REVISION($Revision: 1.27 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -354,10 +354,10 @@ AC_SUBST(LIBGL)
 dnl Allegro
 LIBALLEGRO=""
 HALLEGRO=""
-AS_IF([test $use_allegro = yes],
+AS_IF([test "$use_allegro" = "yes"],
   [AC_CHECK_PROG(allegro_config, allegro-config, yes, no, )])
 
-AS_IF([test $allegro_config = yes],
+AS_IF([test "$allegro_config" = "yes"],
   	[AC_DEFINE(ILUT_USE_ALLEGRO,,[Support Allegro API])]
     [SUPPORTED_API=$SUPPORTED_API"Allegro "]
     [LIBALLEGRO=`allegro-config --libs`]
@@ -403,6 +403,16 @@ dnl Mac OS X Specific test
 AS_CASE($target,
 [*-apple-darwin*],[AC_DEFINE(MAX_OS_X,,[Building on Mac OS X])],[])
 
+dnl If we're on Windows we need the -no-undefined flag to get dlls
+WIN32_EXTRA_LDFLAGS=
+AC_MSG_CHECKING(for the suffix of shared libraries)
+case "$host_os" in
+  cygwin* | mingw*)
+    WIN32_EXTRA_LDFLAGS="-no-undefined"
+    ;;
+esac
+AC_SUBST(WIN32_EXTRA_LDFLAGS)
+
 dnl Final substitution
 AC_SUBST(LIBIL_CFLAGS)
 AC_SUBST(LIBILU_CFLAGS)
@@ -432,5 +442,3 @@ echo \|      Detected Machine Extensions       \|
 echo +----------------------------------------+-------+
 echo $SUPPORTED_EXTENSION
 echo
-
-
