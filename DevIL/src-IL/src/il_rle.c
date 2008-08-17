@@ -36,8 +36,8 @@ ILboolean ilRleCompressLine(ILubyte *p, ILuint n, ILubyte bpp,
 
 	while( n > 0 ) {	
 		// Analyze pixels
-		DiffCount = CountDiffPixels(p, bpp, n > MaxRun ? MaxRun : n);
-		SameCount = CountSamePixels(p, bpp, n > MaxRun ? MaxRun : n);
+		DiffCount = CountDiffPixels(p, bpp, (ILint)n > MaxRun ? MaxRun : n);
+		SameCount = CountSamePixels(p, bpp, (ILint)n > MaxRun ? MaxRun : n);
 
 		if( CompressMode == IL_BMPCOMP ) {
 			ILint remaining_data = n - DiffCount - SameCount;

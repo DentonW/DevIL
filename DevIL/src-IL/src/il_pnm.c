@@ -417,7 +417,8 @@ ILimage *ilReadBitPbm(PPMINFO *Info)
 }
 
 
-ILboolean iGetWord( ILboolean final) {
+ILboolean iGetWord(ILboolean final)
+{
 	ILint WordPos = 0;
 	ILint Current = 0;
 	ILboolean Started = IL_FALSE;
@@ -444,7 +445,7 @@ ILboolean iGetWord( ILboolean final) {
 			if (final == IL_TRUE)
 		        break;
 		}
-		SmallBuff[WordPos] = NULL;
+		SmallBuff[WordPos] = 0; // 08-17-2008 - was NULL, changed to avoid warning
 
 		if (!Looping)
 			break;

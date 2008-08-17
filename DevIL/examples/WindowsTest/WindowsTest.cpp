@@ -73,7 +73,7 @@ bool IsOpenable(char *FileName);
 
 extern "C"
 // Colour picker export
-__declspec( dllexport ) bool WINAPI FSColorPickerDoModal(unsigned int * currentColor, unsigned int * originalColor, const int initialExpansionState);
+__declspec( dllimport ) bool WINAPI FSColorPickerDoModal(unsigned int * currentColor, const bool currentColorIsDefault, unsigned int * originalColor, const bool originalColorIsDefault, const int initialExpansionState);
 
 
 
@@ -441,7 +441,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					return (0L);
 
 				case ID_EFFECTSTOOLS_BACKGROUNDCOLOUR:
-					userClickedOK = FSColorPickerDoModal(&currentColor, &originalColor, 0);
+					userClickedOK = FSColorPickerDoModal(&currentColor, true, &originalColor, true, 0);
 
 					if (userClickedOK) {
 						Red = (ILfloat)((currentColor & 0xff0000) >> 16) / 255.0f;

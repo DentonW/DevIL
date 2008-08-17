@@ -16,7 +16,8 @@ static mFree  ifree_ptr = DefaultFreeFunc;
 
 /*** Vector Allocation/Deallocation Function ***/
 #ifdef VECTORMEM
-ILvoid *vec_malloc( const ILuint size ) {
+ILvoid *vec_malloc(const ILuint size)
+{
 	const ILuint _size =  size % 16 > 0 ? size + 16 - (size % 16) : size; // align size value
 	
 #ifdef MM_MALLOC
@@ -46,7 +47,8 @@ ILvoid *vec_malloc( const ILuint size ) {
 #endif //MM_MALLOC
 }
 
-ILvoid *ivec_align_buffer( ILvoid *buffer, const ILuint size ) {
+ILvoid *ivec_align_buffer(ILvoid *buffer, const ILuint size)
+{
 	if( (size_t)buffer % 16 != 0 ) {
         void *aligned_buffer = vec_malloc( size );
         memcpy( aligned_buffer, buffer, size );
@@ -71,7 +73,8 @@ ILvoid ILAPIENTRY ifree(const ILvoid * CONST_RESTRICT Ptr) {
 	return;
 }
 
-ILvoid* ILAPIENTRY icalloc(const ILuint Size, const ILuint Num) {
+ILvoid* ILAPIENTRY icalloc(const ILuint Size, const ILuint Num)
+{
     ILvoid *Ptr = ialloc(Size * Num);
     if (Ptr == NULL)
     	return Ptr;
@@ -80,7 +83,8 @@ ILvoid* ILAPIENTRY icalloc(const ILuint Size, const ILuint Num) {
 }
 
 /*** Default Allocation/Deallocation Function ***/
-static ILvoid* ILAPIENTRY DefaultAllocFunc(const ILuint Size) {
+static ILvoid* ILAPIENTRY DefaultAllocFunc(const ILuint Size)
+{
 #ifdef VECTORMEM
 	return (ILvoid*)vec_malloc(Size);
 #else
@@ -88,27 +92,31 @@ static ILvoid* ILAPIENTRY DefaultAllocFunc(const ILuint Size) {
 #endif //VECTORMEM
 }
 
-static ILvoid ILAPIENTRY DefaultFreeFunc(const ILvoid * CONST_RESTRICT ptr) {
-	if( ptr ) {
+static ILvoid ILAPIENTRY DefaultFreeFunc(const ILvoid * CONST_RESTRICT ptr)
+{
+	if (ptr)
+	{
 #ifdef MM_MALLOC
 	    _mm_free((ILvoid*)ptr);
 #else
 #if defined(VECTORMEM) & !defined(POSIX_MEMALIGN) & !defined(VALLOC) & !defined(MEMALIGN) & !defined(MM_MALLOC)
 	    free(ptr - ((char*)ptr)[-1]);
 #else	    
-	    free(ptr);
+	    free((void*)ptr);
 #endif //OTHERS...
 #endif //MM_MALLOC
 	}
 }
 
 /*** Manipulate Allocation/Deallocation Function ***/
-ILvoid ILAPIENTRY ilResetMemory() { // Deprecated
+ILvoid ILAPIENTRY ilResetMemory()  // Deprecated
+{
 	ialloc_ptr = DefaultAllocFunc;
 	ifree_ptr = DefaultFreeFunc;
 }
 
-ILvoid ILAPIENTRY ilSetMemory(mAlloc AllocFunc, mFree FreeFunc) {
+ILvoid ILAPIENTRY ilSetMemory(mAlloc AllocFunc, mFree FreeFunc)
+{
 	ialloc_ptr = AllocFunc == NULL ? DefaultAllocFunc : AllocFunc;
 	ifree_ptr = FreeFunc == NULL ? DefaultFreeFunc : FreeFunc;
 }

@@ -716,12 +716,13 @@ ILboolean ILAPIENTRY ilOverlayImage(ILuint Source, ILint XCoord, ILint YCoord, I
 //@NEXT DestX,DestY,DestZ must be set to ILuint
 ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX,  ILint DestY,   ILint DestZ, 
                                            ILuint SrcX,  ILuint SrcY,   ILuint SrcZ,
-                                           ILuint Width, ILuint Height, ILuint Depth) {
+                                           ILuint Width, ILuint Height, ILuint Depth)
+{
 	ILuint 		x, y, z, ConvBps, ConvSizePlane;
 	ILimage 	*Dest,*Src;
 	ILubyte 	*Converted;
 	ILuint		DestName = ilGetCurName();
-	ILint		c;
+	ILuint		c;
 	ILuint		StartX, StartY, StartZ;
 	ILboolean	DestFlipped = IL_FALSE;
 	ILubyte 	*SrcTemp;
@@ -753,21 +754,25 @@ ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX,  ILint DestY,   ILint De
 	//@TODO test if coordinates are inside the images (hard limit for source)
 	
 	// set the source image to upper left origin
-	if( Src->Origin == IL_ORIGIN_LOWER_LEFT ) {
+	if (Src->Origin == IL_ORIGIN_LOWER_LEFT)
+	{
 		SrcTemp = iGetFlipped(iCurImage);
-		if( SrcTemp == NULL ) {
+		if (SrcTemp == NULL)
+		{
 			ilBindImage(DestName);
-			if( DestFlipped )
+			if (DestFlipped)
 				ilFlipImage();
 			return IL_FALSE;
 		}
-	} else {
+	}
+	else
+	{
 		SrcTemp = iCurImage->Data;
 	}
 	
 	// convert source image to match the destination image type and format
 	Converted = (ILubyte*)ilConvertBuffer(Src->SizeOfData, Src->Format, Dest->Format, Src->Type, Dest->Type, SrcTemp);
-	if( Converted == NULL )
+	if (Converted == NULL)
 		return IL_FALSE;
 	
 	ConvBps 	  = Dest->Bpp * Src->Width;
@@ -779,12 +784,12 @@ ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX,  ILint DestY,   ILint De
 	StartZ = DestZ >= 0 ? 0 : -DestZ;
 	
 	// Limit the copy of data inside of the destination image
-	if( Width  + DestX > Dest->Width  ) Width  = Dest->Width  - DestX;
-	if( Height + DestY > Dest->Height ) Height = Dest->Height - DestY;
-	if( Depth  + DestZ > Dest->Depth  ) Depth  = Dest->Depth  - DestZ;
+	if (Width  + DestX > Dest->Width)  Width  = Dest->Width  - DestX;
+	if (Height + DestY > Dest->Height) Height = Dest->Height - DestY;
+	if (Depth  + DestZ > Dest->Depth)  Depth  = Dest->Depth  - DestZ;
 	
 	// non funziona con rgba
-	// In case of Alpha channel the data are blended. Keeps the original alpha.
+	// In case of Alpha channelm the data is blended. Keeps the original alpha.
 	if( Src->Format == IL_RGBA || Src->Format == IL_BGRA || Src->Format == IL_LUMINANCE_ALPHA ) {
 		const ILuint bpp_without_alpha = Dest->Bpp - 1;
 		for( z = 0; z < Depth; z++ ) {
@@ -795,7 +800,8 @@ ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX,  ILint DestY,   ILint De
 					const ILuint  AlphaIdx = SrcIndex + bpp_without_alpha;
 					ILfloat Front = 0;
 					
-					switch( Dest->Type ) {
+					switch (Dest->Type)
+					{
 						case IL_BYTE:
 						case IL_UNSIGNED_BYTE:
 							Front = Converted[AlphaIdx]/((float)IL_MAX_UNSIGNED_BYTE);
@@ -812,11 +818,12 @@ ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX,  ILint DestY,   ILint De
 							Front = ((ILfloat*)Converted)[AlphaIdx];
 							break;
 						case IL_DOUBLE:
-							Front = ((ILdouble*)Converted)[AlphaIdx];
+							Front = (ILfloat)(((ILdouble*)Converted)[AlphaIdx]);
 							break;
 					}
 					Back = 1.0f - Front;
-					for( c = 0; c < bpp_without_alpha; c++ ) {
+					for (c = 0; c < bpp_without_alpha; c++)
+					{
 						Dest->Data[DestIndex + c] = 
 							(ILubyte)(Converted[SrcIndex + c] * Front
 										+ Dest->Data[DestIndex + c] * Back);

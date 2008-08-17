@@ -500,14 +500,16 @@ ILint get_next_code(void) {
 	return (ret & code_mask[curr_size]);
 }
 
-static void cleanUpGifLoadState() {
+static void cleanUpGifLoadState()
+{
 	ifree(stack);
 	ifree(suffix);
 	ifree(prefix);
 
 }
 
-ILboolean GifGetData(ILimage *Image, ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Height, ILuint Stride, GFXCONTROL *Gfx) {
+ILboolean GifGetData(ILimage *Image, ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Height, ILuint Stride, GFXCONTROL *Gfx)
+{
 	ILubyte	*sp;
 	ILint	code, fc, oc;
 	ILubyte	DisposalMethod = 0;
@@ -526,7 +528,8 @@ ILboolean GifGetData(ILimage *Image, ILubyte *Data, ILuint ImageSize, ILuint Wid
 	stack  = (ILubyte*)ialloc(MAX_CODES + 1);
 	suffix = (ILubyte*)ialloc(MAX_CODES + 1);
 	prefix = (ILshort*)ialloc(sizeof(*prefix) * (MAX_CODES + 1));
-	if (!stack || !suffix || !prefix) {
+	if (!stack || !suffix || !prefix)
+	{
 		cleanUpGifLoadState();
 		return IL_FALSE;
 	}
@@ -541,7 +544,8 @@ ILboolean GifGetData(ILimage *Image, ILubyte *Data, ILuint ImageSize, ILuint Wid
 	sp = stack;
 
 	while ((c = get_next_code()) != ending && Read < Height) {
-		if (c == clear) {
+		if (c == clear)
+		{
 			curr_size = size + 1;
 			slot = newcodes;
 			top_slot = 1 << curr_size;
@@ -557,7 +561,8 @@ ILboolean GifGetData(ILimage *Image, ILubyte *Data, ILuint ImageSize, ILuint Wid
 			else if (i < Width)
 				Data[i++] = c;
 
-			if (i == Width) {
+			if (i == Width)
+			{
 				Data += Stride;
 				i = 0;
 				Read += 1;
@@ -567,10 +572,13 @@ ILboolean GifGetData(ILimage *Image, ILubyte *Data, ILuint ImageSize, ILuint Wid
                    return IL_FALSE;
                 }
 			}
-		} else {
+		}
+		else
+		{
 			code = c;
             //BG-2007-01-10: several fixes for incomplete GIFs
-			if (code >= slot) {
+			if (code >= slot)
+			{
 				code = oc;
                 if (sp >= stack + MAX_CODES) {
                    cleanUpGifLoadState();
@@ -581,8 +589,10 @@ ILboolean GifGetData(ILimage *Image, ILubyte *Data, ILuint ImageSize, ILuint Wid
 
             if (code >= MAX_CODES)
                 return IL_FALSE; 
-                while (code >= newcodes) {
-                    if (sp >= stack + MAX_CODES) {
+                while (code >= newcodes)
+				{
+                    if (sp >= stack + MAX_CODES)
+					{
                         cleanUpGifLoadState();
                         return IL_FALSE;
                     }
@@ -596,24 +606,28 @@ ILboolean GifGetData(ILimage *Image, ILubyte *Data, ILuint ImageSize, ILuint Wid
             }
 
             *sp++ = (ILbyte)code;
-			if (slot < top_slot) {
+			if (slot < top_slot)
+			{
 				fc = code;
 				suffix[slot]   = fc;
 				prefix[slot++] = oc;
 				oc = c;
 			}
-			if (slot >= top_slot && curr_size < 12) {
+			if (slot >= top_slot && curr_size < 12)
+			{
 				top_slot <<= 1;
 				curr_size++;
 			}
-			while (sp > stack) {
+			while (sp > stack)
+			{
 				sp--;
 				if (DisposalMethod == 1 && !Gfx->Used && Gfx->Transparent == *sp && (Gfx->Packed & 0x1) != 0)
 					i++;
 				else if (i < Width)
 					Data[i++] = *sp;
 
-				if (i == Width) {
+				if (i == Width)
+				{
 					i = 0;
 					Read += 1;
                     j = (j+1) % Height;

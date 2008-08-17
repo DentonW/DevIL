@@ -1,164 +1,689 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="9.00"
 	Name="zlib"
-	ProjectGUID="{3FD80B28-BF8A-4512-92CE-E1A2A458CF6B}"
+	ProjectGUID="{92492731-D068-432B-A02C-EE995EFBFF91}"
 	RootNamespace="zlib"
-	SccProjectName=""
-	SccLocalPath="">
+	TargetFrameworkVersion="0"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
-			Name="Dynamic|Win32"
-			OutputDirectory=".\..\..\..\extlibs\lib"
-			IntermediateDirectory=".\zlib___Win32_Dynamic"
+			Name="DLL ASM Debug|Win32"
+			OutputDirectory=".\Win32_DLL_ASM_Debug"
+			IntermediateDirectory=".\Win32_DLL_ASM_Debug"
 			ConfigurationType="2"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			>
 			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="1"
-				InlineFunctionExpansion="1"
-				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;ZLIB_DLL"
-				StringPooling="TRUE"
-				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="TRUE"
-				PrecompiledHeaderFile=".\zlib___Win32_Dynamic/zlib.pch"
-				AssemblerListingLocation=".\zlib___Win32_Dynamic/"
-				ObjectFile=".\zlib___Win32_Dynamic/"
-				ProgramDataBaseFileName=".\zlib___Win32_Dynamic/"
-				WarningLevel="3"
-				SuppressStartupBanner="TRUE"/>
+				Name="VCPreBuildEventTool"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCCustomBuildTool"
+			/>
 			<Tool
-				Name="VCLinkerTool"
-				ModuleDefinitionFile="zlib.def"
-				ImportLibrary="$(OutDir)/$(TargetName)_DLL.lib"/>
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\..\..\..\extlibs\lib/zlib.tlb"
-				HeaderFileName=""/>
+				PreprocessorDefinitions="_DEBUG"
+				MkTypLibCompatible="true"
+				SuppressStartupBanner="true"
+				TargetEnvironment="1"
+				TypeLibraryName=".\Win32_DLL_ASM_Debug/zlib.tlb"
+				HeaderFileName=""
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				PreprocessorDefinitions="WIN32;_DEBUG;ASMV;ASMINF"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				PrecompiledHeaderFile=".\Win32_DLL_ASM_Debug/zlib.pch"
+				AssemblerListingLocation=".\Win32_DLL_ASM_Debug/"
+				ObjectFile=".\Win32_DLL_ASM_Debug/"
+				ProgramDataBaseFileName=".\Win32_DLL_ASM_Debug/"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+				DebugInformationFormat="4"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1033"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="odbc32.lib odbccp32.lib"
+				OutputFile="Win32_DLL_ASM_Debug\zlib1d.dll"
+				LinkIncremental="2"
+				SuppressStartupBanner="true"
+				ModuleDefinitionFile="..\..\win32\zlib.def"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile=".\Win32_DLL_ASM_Debug/zlib1d.pdb"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				ImportLibrary=".\Win32_DLL_ASM_Debug/zlib1d.lib"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+				SuppressStartupBanner="true"
+				OutputFile=".\Win32_DLL_ASM_Debug/zlib.bsc"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="DLL Release|Win32"
+			OutputDirectory=".\Win32_DLL_Release"
+			IntermediateDirectory=".\Win32_DLL_Release"
+			ConfigurationType="2"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="true"
+				SuppressStartupBanner="true"
+				TargetEnvironment="1"
+				TypeLibraryName=".\Win32_DLL_Release/zlib.tlb"
+				HeaderFileName=""
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="1"
+				PreprocessorDefinitions="WIN32;NDEBUG"
+				StringPooling="true"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				PrecompiledHeaderFile=".\Win32_DLL_Release/zlib.pch"
+				AssemblerListingLocation=".\Win32_DLL_Release/"
+				ObjectFile=".\Win32_DLL_Release/"
+				ProgramDataBaseFileName=".\Win32_DLL_Release/"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"/>
+				Culture="1033"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCLinkerTool"
+				AdditionalDependencies="odbc32.lib odbccp32.lib"
+				OutputFile="Win32_DLL_Release\zlib1.dll"
+				LinkIncremental="1"
+				SuppressStartupBanner="true"
+				ModuleDefinitionFile="..\..\win32\zlib.def"
+				ProgramDatabaseFile=".\Win32_DLL_Release/zlib1.pdb"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				ImportLibrary=".\Win32_DLL_Release/zlib1.lib"
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+				SuppressStartupBanner="true"
+				OutputFile=".\Win32_DLL_Release/zlib.bsc"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
-			Name="Debug|Win32"
-			OutputDirectory=".\..\..\..\extlibs\lib"
-			IntermediateDirectory=".\zlib___Win32_Debug"
+			Name="LIB ASM Debug|Win32"
+			OutputDirectory=".\Win32_LIB_ASM_Debug"
+			IntermediateDirectory=".\Win32_LIB_ASM_Debug"
 			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				PreprocessorDefinitions="WIN32;_DEBUG;ASMV;ASMINF"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				PrecompiledHeaderFile=".\Win32_LIB_ASM_Debug/zlib.pch"
+				AssemblerListingLocation=".\Win32_LIB_ASM_Debug/"
+				ObjectFile=".\Win32_LIB_ASM_Debug/"
+				ProgramDataBaseFileName=".\Win32_LIB_ASM_Debug/"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+				DebugInformationFormat="4"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1033"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="Win32_LIB_ASM_Debug\zlibd.lib"
+				SuppressStartupBanner="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+				SuppressStartupBanner="true"
+				OutputFile=".\Win32_LIB_ASM_Debug/zlib.bsc"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="DLL ASM Release|Win32"
+			OutputDirectory=".\Win32_DLL_ASM_Release"
+			IntermediateDirectory=".\Win32_DLL_ASM_Release"
+			ConfigurationType="2"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="true"
+				SuppressStartupBanner="true"
+				TargetEnvironment="1"
+				TypeLibraryName=".\Win32_DLL_ASM_Release/zlib.tlb"
+				HeaderFileName=""
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="1"
+				PreprocessorDefinitions="WIN32;NDEBUG;ASMV;ASMINF"
+				StringPooling="true"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				PrecompiledHeaderFile=".\Win32_DLL_ASM_Release/zlib.pch"
+				AssemblerListingLocation=".\Win32_DLL_ASM_Release/"
+				ObjectFile=".\Win32_DLL_ASM_Release/"
+				ProgramDataBaseFileName=".\Win32_DLL_ASM_Release/"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="odbc32.lib odbccp32.lib"
+				OutputFile="Win32_DLL_ASM_Release\zlib1.dll"
+				LinkIncremental="1"
+				SuppressStartupBanner="true"
+				ModuleDefinitionFile="..\..\win32\zlib.def"
+				ProgramDatabaseFile=".\Win32_DLL_ASM_Release/zlib1.pdb"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				ImportLibrary=".\Win32_DLL_ASM_Release/zlib1.lib"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+				SuppressStartupBanner="true"
+				OutputFile=".\Win32_DLL_ASM_Release/zlib.bsc"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="LIB Debug|Win32"
+			OutputDirectory=".\Win32_LIB_Debug"
+			IntermediateDirectory=".\Win32_LIB_Debug"
+			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				PreprocessorDefinitions="WIN32;_DEBUG"
+				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
-				PrecompiledHeaderFile=".\zlib___Win32_Debug/zlib.pch"
-				AssemblerListingLocation=".\zlib___Win32_Debug/"
-				ObjectFile=".\zlib___Win32_Debug/"
-				ProgramDataBaseFileName=".\zlib___Win32_Debug/"
+				RuntimeLibrary="3"
+				PrecompiledHeaderFile=".\Win32_LIB_Debug/zlib.pch"
+				AssemblerListingLocation=".\Win32_LIB_Debug/"
+				ObjectFile=".\Win32_LIB_Debug/"
+				ProgramDataBaseFileName=".\Win32_LIB_Debug/"
 				WarningLevel="3"
-				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="3"/>
+				SuppressStartupBanner="true"
+				DebugInformationFormat="4"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/$(ProjectName)_DBG.lib"
-				SuppressStartupBanner="TRUE"
-				ModuleDefinitionFile=""/>
-			<Tool
-				Name="VCMIDLTool"/>
-			<Tool
-				Name="VCPostBuildEventTool"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG"
-				Culture="1033"/>
+				Culture="1033"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
-		</Configuration>
-		<Configuration
-			Name="Release|Win32"
-			OutputDirectory=".\..\..\..\extlibs\lib"
-			IntermediateDirectory=".\zlib___Win32_Release"
-			ConfigurationType="4"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE">
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="1"
-				InlineFunctionExpansion="1"
-				PreprocessorDefinitions="WIN32;NDEBUG"
-				StringPooling="TRUE"
-				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="TRUE"
-				PrecompiledHeaderFile=".\zlib___Win32_Release/zlib.pch"
-				AssemblerListingLocation=".\zlib___Win32_Release/"
-				ObjectFile=".\zlib___Win32_Release/"
-				ProgramDataBaseFileName=".\zlib___Win32_Release/"
-				WarningLevel="3"
-				SuppressStartupBanner="TRUE"/>
-			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/$(ProjectName).lib"
-				SuppressStartupBanner="TRUE"/>
+				OutputFile="Win32_LIB_Debug\zlibd.lib"
+				SuppressStartupBanner="true"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCBscMakeTool"
+				SuppressStartupBanner="true"
+				OutputFile=".\Win32_LIB_Debug/zlib.bsc"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="DLL Debug|Win32"
+			OutputDirectory=".\Win32_DLL_Debug"
+			IntermediateDirectory=".\Win32_DLL_Debug"
+			ConfigurationType="2"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="_DEBUG"
+				MkTypLibCompatible="true"
+				SuppressStartupBanner="true"
+				TargetEnvironment="1"
+				TypeLibraryName=".\Win32_DLL_Debug/zlib.tlb"
+				HeaderFileName=""
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				PreprocessorDefinitions="WIN32;_DEBUG"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				PrecompiledHeaderFile=".\Win32_DLL_Debug/zlib.pch"
+				AssemblerListingLocation=".\Win32_DLL_Debug/"
+				ObjectFile=".\Win32_DLL_Debug/"
+				ProgramDataBaseFileName=".\Win32_DLL_Debug/"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+				DebugInformationFormat="4"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1033"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="odbc32.lib odbccp32.lib"
+				OutputFile="Win32_DLL_Debug\zlib1d.dll"
+				LinkIncremental="2"
+				SuppressStartupBanner="true"
+				ModuleDefinitionFile="..\..\win32\zlib.def"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile=".\Win32_DLL_Debug/zlib1d.pdb"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				ImportLibrary=".\Win32_DLL_Debug/zlib1d.lib"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+				SuppressStartupBanner="true"
+				OutputFile=".\Win32_DLL_Debug/zlib.bsc"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="LIB Release|Win32"
+			OutputDirectory=".\Win32_LIB_Release"
+			IntermediateDirectory=".\Win32_LIB_Release"
+			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="1"
+				PreprocessorDefinitions="WIN32;NDEBUG"
+				StringPooling="true"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				PrecompiledHeaderFile=".\Win32_LIB_Release/zlib.pch"
+				AssemblerListingLocation=".\Win32_LIB_Release/"
+				ObjectFile=".\Win32_LIB_Release/"
+				ProgramDataBaseFileName=".\Win32_LIB_Release/"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"/>
+				Culture="1033"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCLibrarianTool"
+				OutputFile=".\Win32_LIB_Release\zlib.lib"
+				SuppressStartupBanner="true"
+			/>
 			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+				SuppressStartupBanner="true"
+				OutputFile=".\Win32_LIB_Release/zlib.bsc"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="LIB ASM Release|Win32"
+			OutputDirectory=".\..\..\..\extlibs\lib"
+			IntermediateDirectory=".\Win32_LIB_ASM_Release"
+			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+				CommandLine=""
+				Outputs=""
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="..\..\..\extlibs\ZLib"
+				PreprocessorDefinitions="WIN32;NDEBUG;ASMV"
+				StringPooling="true"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				PrecompiledHeaderFile=".\Win32_LIB_ASM_Release/zlib.pch"
+				AssemblerListingLocation=".\Win32_LIB_ASM_Release/"
+				ObjectFile=".\Win32_LIB_ASM_Release/"
+				ProgramDataBaseFileName=".\Win32_LIB_ASM_Release/"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile=".\..\..\..\extlibs\lib\zlib.lib"
+				SuppressStartupBanner="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+				SuppressStartupBanner="true"
+				OutputFile=".\Win32_LIB_ASM_Release/zlib.bsc"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine=""
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -166,504 +691,1044 @@
 	<Files>
 		<Filter
 			Name="Source Files"
-			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
+			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+			>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\adler32.c">
+				RelativePath="..\..\..\extlibs\zlib\adler32.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
+					Name="DLL ASM Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;ZLIB_DLL;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="DLL Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions=""/>
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\compress.c">
+				RelativePath="..\..\..\extlibs\zlib\compress.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
+					Name="DLL ASM Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;ZLIB_DLL;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="DLL Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions=""/>
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\crc32.c">
+				RelativePath="..\..\..\extlibs\zlib\crc32.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
+					Name="DLL ASM Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;ZLIB_DLL;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="DLL Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions=""/>
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\deflate.c">
+				RelativePath="..\..\..\extlibs\zlib\deflate.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
+					Name="DLL ASM Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;ZLIB_DLL;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="DLL Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions=""/>
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\contrib\asm386\gvmat32c.c">
+				RelativePath="..\..\..\extlibs\zlib\gzio.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32"
-					ExcludedFromBuild="TRUE">
+					Name="DLL ASM Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;ZLIB_DLL;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="TRUE">
+					Name="DLL Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions=""/>
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\gzio.c">
+				RelativePath="..\..\..\extlibs\zlib\infback.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
+					Name="DLL ASM Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;ZLIB_DLL;$(NoInherit)"
-						UsePrecompiledHeader="1"
-						PrecompiledHeaderThrough="zutil.h"/>
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="DLL Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						UsePrecompiledHeader="1"
-						PrecompiledHeaderThrough="zutil.h"/>
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="LIB ASM Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
 						PreprocessorDefinitions=""
-						UsePrecompiledHeader="1"
-						PrecompiledHeaderThrough="zutil.h"/>
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\infblock.c">
+				RelativePath="..\..\..\extlibs\zlib\inffast.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
+					Name="DLL ASM Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;ZLIB_DLL;$(NoInherit)"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="DLL Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="LIB ASM Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
 						PreprocessorDefinitions=""
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\infcodes.c">
+				RelativePath="..\..\..\extlibs\zlib\inflate.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
+					Name="DLL ASM Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;ZLIB_DLL;$(NoInherit)"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="DLL Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="LIB ASM Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
 						PreprocessorDefinitions=""
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\inffast.c">
+				RelativePath="..\..\..\extlibs\zlib\inftrees.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
+					Name="DLL ASM Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;ZLIB_DLL;$(NoInherit)"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="DLL Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="LIB ASM Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
 						PreprocessorDefinitions=""
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\inflate.c">
+				RelativePath="..\..\..\extlibs\zlib\trees.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
+					Name="DLL ASM Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;ZLIB_DLL;$(NoInherit)"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="DLL Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="LIB ASM Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
 						PreprocessorDefinitions=""
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\inftrees.c">
+				RelativePath="..\..\..\extlibs\zlib\uncompr.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
+					Name="DLL ASM Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;ZLIB_DLL;$(NoInherit)"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="DLL Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="LIB ASM Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
 						PreprocessorDefinitions=""
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\infutil.c">
+				RelativePath="..\..\..\extlibs\zlib\zutil.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
+					Name="DLL ASM Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;ZLIB_DLL;$(NoInherit)"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="DLL Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
 						PreprocessorDefinitions=""
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\zlib\trees.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;ZLIB_DLL;$(NoInherit)"/>
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="LIB ASM Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="DLL ASM Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions=""/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\zlib\uncompr.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;ZLIB_DLL;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"/>
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="LIB Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions=""/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="zlib.def">
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\zlib\msdos\zlib.rc">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCResourceCompilerTool"
 						PreprocessorDefinitions=""
-						AdditionalIncludeDirectories="\XIX\S\sourceforge\DevIL\extlibs\zlib\msdos"/>
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCResourceCompilerTool"
-						PreprocessorDefinitions=""
-						AdditionalIncludeDirectories="\XIX\S\sourceforge\DevIL\extlibs\zlib\msdos"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCResourceCompilerTool"
-						PreprocessorDefinitions=""
-						AdditionalIncludeDirectories="\XIX\S\sourceforge\DevIL\extlibs\zlib\msdos"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\zlib\zutil.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
+					Name="DLL Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;ZLIB_DLL;$(NoInherit)"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
+						PreprocessorDefinitions=""
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="LIB Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="0"
 						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="LIB ASM Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
 						PreprocessorDefinitions=""
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="zutil.h"/>
+					/>
 				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl">
+			Filter="h;hpp;hxx;hm;inl"
+			>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\deflate.h">
+				RelativePath="..\..\..\extlibs\ZLib\crc32.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\infblock.h">
+				RelativePath="..\..\..\extlibs\ZLib\deflate.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\infcodes.h">
+				RelativePath="..\..\..\extlibs\ZLib\inffast.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\inffast.h">
+				RelativePath="..\..\..\extlibs\ZLib\inffixed.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\inffixed.h">
+				RelativePath="..\..\..\extlibs\ZLib\inflate.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\inftrees.h">
+				RelativePath="..\..\..\extlibs\ZLib\inftrees.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\infutil.h">
+				RelativePath="..\..\..\extlibs\ZLib\trees.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\trees.h">
+				RelativePath="..\..\..\extlibs\ZLib\zconf.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\zconf.h">
+				RelativePath="..\..\..\extlibs\ZLib\zlib.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\zlib\zlib.h">
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\zlib\zutil.h">
+				RelativePath="..\..\..\extlibs\ZLib\zutil.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
-			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+			>
+			<File
+				RelativePath="..\..\..\extlibs\ZLib\win32\zlib1.rc"
+				>
+			</File>
 		</Filter>
+		<Filter
+			Name="Assembler Files (Unsupported)"
+			Filter="asm;obj;c;cpp;cxx;h;hpp;hxx"
+			>
+			<File
+				RelativePath="..\..\..\extlibs\zlib\contrib\masmx86\gvmat32.asm"
+				>
+				<FileConfiguration
+					Name="DLL ASM Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Assembling..."
+						CommandLine="ml.exe /nologo /c /coff /Cx /Zi /Fo&quot;$(IntDir)\$(InputName).obj&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						Outputs="$(IntDir)\$(InputName).obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Assembling..."
+						CommandLine="ml.exe /nologo /c /coff /Cx /Zi /Fo&quot;$(IntDir)\$(InputName).obj&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						Outputs="$(IntDir)\$(InputName).obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Assembling..."
+						CommandLine="ml.exe /nologo /c /coff /Cx /Fo&quot;$(IntDir)\$(InputName).obj&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						Outputs="$(IntDir)\$(InputName).obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Assembling..."
+						CommandLine="ml.exe /nologo /c /coff /Cx /Fo&quot;$(IntDir)\$(InputName).obj&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						Outputs="$(IntDir)\$(InputName).obj"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\zlib\contrib\masmx86\gvmat32c.c"
+				>
+				<FileConfiguration
+					Name="DLL ASM Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="..\.."
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="..\.."
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="..\.."
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="..\.."
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="..\.."
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="..\.."
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="..\.."
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="LIB ASM Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="..\.."
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<File
+			RelativePath="README.txt"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

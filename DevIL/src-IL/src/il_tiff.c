@@ -14,7 +14,7 @@
 #include "il_internal.h"
 #ifndef IL_NO_TIF
 
-#include <tiffio.h>
+#include "tiffio.h"
 
 #include <time.h>
 #include "il_manip.h"

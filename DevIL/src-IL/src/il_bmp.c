@@ -21,7 +21,8 @@
 ILvoid GetShiftFromMask(const ILuint Mask, ILuint * CONST_RESTRICT ShiftLeft, ILuint * CONST_RESTRICT ShiftRight);
 
 //! Checks if the file specified in FileName is a valid .bmp file.
-ILboolean ilIsValidBmp(const ILconst_string CONST_RESTRICT FileName) {
+ILboolean ilIsValidBmp(ILconst_string CONST_RESTRICT FileName)
+{
 	ILHANDLE	BitmapFile;
 	ILboolean	bBitmap = IL_FALSE;
 
@@ -58,13 +59,15 @@ ILboolean ilIsValidBmpF(ILHANDLE File) {
 
 
 //! Checks if Lump is a valid .bmp lump.
-ILboolean ilIsValidBmpL(const ILvoid * Lump, const ILuint Size) {
+ILboolean ilIsValidBmpL(const ILvoid * Lump, const ILuint Size)
+{
 	iSetInputLump(Lump, Size);
 	return iIsValidBmp();
 }
 
 // Internal function used to get the .bmp header from the current file.
-ILboolean iGetBmpHead(BMPHEAD *Header) {
+ILboolean iGetBmpHead(BMPHEAD * const Header)
+{
 	Header->bfType = GetLittleUShort();
 	Header->bfSize = GetLittleInt();
 	Header->bfReserved = GetLittleUInt();
@@ -84,7 +87,8 @@ ILboolean iGetBmpHead(BMPHEAD *Header) {
 }
 
 
-ILboolean iGetOS2Head(OS2_HEAD * Header) {
+ILboolean iGetOS2Head(OS2_HEAD * const Header)
+{
 	if (iread(Header, sizeof(OS2_HEAD), 1) != 1)
 		return IL_FALSE;
 
@@ -195,7 +199,8 @@ ILboolean ilLoadBmpF(ILHANDLE File) {
 
 
 //! Reads from a memory "lump" that contains a .bmp
-ILboolean ilLoadBmpL(const ILvoid *Lump, const ILuint Size) {
+ILboolean ilLoadBmpL(const ILvoid *Lump, const ILuint Size)
+{
 	iSetInputLump(Lump, Size);
 	return iLoadBitmapInternal();
 }

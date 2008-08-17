@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="IL"
 	ProjectGUID="{0F088168-B0B4-4350-9E6A-7FB271C76D39}"
 	RootNamespace="IL"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -47,6 +48,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot; /D &quot;_CRT_NONSTDC_NO_DEPRECATE&quot;"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include;..\..\include;..\..\extlibs\libpng;..\..\extlibs\libjpeg;..\..\extlibs\zlib;..\..\extlibs\libtiff"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
@@ -73,6 +75,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="libjpeg.lib libpng.lib libtiff.lib zlib.lib"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -91,9 +96,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -133,8 +135,9 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot; /D &quot;_CRT_NONSTDC_NO_DEPRECATE&quot;"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\include;..\..\include;..\..\extlibs\libpng;..\..\extlibs\libjpeg;..\..\extlibs\zlib;..\..\extlibs\libtiff"
+				AdditionalIncludeDirectories="..\include;..\..\include;..\..\extlibs\libpng;..\..\extlibs\libjpeg;..\..\extlibs\zlib;..\..\extlibs\libtiff\libtiff"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -158,6 +161,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="libjpeg.lib libpng.lib libtiff.lib zlib.lib"
+				OutputFile="$(OutDir)\DevIL.dll"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -178,11 +185,8 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)\DevIL.lib&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)\DevIL.exp&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -218,6 +222,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot; /D &quot;_CRT_NONSTDC_NO_DEPRECATE&quot;"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include;..\..\include;..\..\extlibs\libpng;..\..\extlibs\libjpeg;..\..\extlibs\zlib;..\..\extlibs\libtiff"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;IL_STATIC_LIB"
@@ -297,6 +302,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot; /D &quot;_CRT_NONSTDC_NO_DEPRECATE&quot;"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\include;..\..\include;..\..\extlibs\libpng;..\..\extlibs\libjpeg;..\..\extlibs\zlib;..\..\extlibs\libtiff"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;IL_STATIC_LIB"
@@ -2356,6 +2362,10 @@
 			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
+			<File
+				RelativePath=".\IL.rc"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Text Files"

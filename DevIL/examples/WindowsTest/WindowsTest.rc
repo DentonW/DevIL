@@ -77,7 +77,7 @@ BEGIN
     CTEXT           "",IDC_ERROR2,40,119,79,8
     CTEXT           "",IDC_ERROR5,158,120,79,8
     CTEXT           "",IDC_ERROR3,40,142,79,8
-    LTEXT           "Visit the DevIL website at http://www.imagelib.org",
+	LTEXT           "Visit the DevIL website at http://openil.sf.net.",
                     IDC_OPENIL_LINK,56,182,164,8
     ICON            172,IDC_STATIC,243,15,20,20,SS_REALSIZEIMAGE
 END
