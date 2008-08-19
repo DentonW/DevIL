@@ -890,14 +890,16 @@ ILboolean iSaveBitmapInternal() {
 	SaveLittleUInt(0);  // Will come back and change later in this function (filesize)
 	SaveLittleUInt(0);  // Reserved
 
-	if( compress_rle8 == IL_TRUE ) {
+	if (compress_rle8 == IL_TRUE)
+	{
 		TempImage = iConvertImage(iCurImage, IL_COLOR_INDEX, IL_UNSIGNED_BYTE);
-		if( TempImage == NULL )
+		if (TempImage == NULL)
 			return IL_FALSE;
 		TempPal = iConvertPal(&TempImage->Pal, IL_PAL_BGR32);
-		if( TempPal == NULL ) {
-			return IL_FALSE;
+		if (TempPal == NULL)
+		{
 			ilCloseImage(TempImage);
+			return IL_FALSE;
 		}
 	}
 

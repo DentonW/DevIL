@@ -77,19 +77,19 @@ ILboolean ilIsValidTgaL(const ILvoid *Lump, ILuint Size)
 // Internal function used to get the Targa header from the current file.
 ILboolean iGetTgaHead(TARGAHEAD *Header)
 {
-	Header->IDLen = igetc();
-	Header->ColMapPresent = igetc();
-	Header->ImageType = igetc();
+	Header->IDLen = (ILubyte)igetc();
+	Header->ColMapPresent = (ILubyte)igetc();
+	Header->ImageType = (ILubyte)igetc();
 	Header->FirstEntry = GetLittleShort();
 	Header->ColMapLen = GetLittleShort();
-	Header->ColMapEntSize = igetc();
+	Header->ColMapEntSize = (ILubyte)igetc();
 
 	Header->OriginX = GetLittleShort();
 	Header->OriginY = GetLittleShort();
 	Header->Width = GetLittleUShort();
 	Header->Height = GetLittleUShort();
-	Header->Bpp = igetc();
-	Header->ImageDesc = igetc();
+	Header->Bpp = (ILubyte)igetc();
+	Header->ImageDesc = (ILubyte)igetc();
 	
 	return IL_TRUE;
 }
@@ -293,13 +293,15 @@ ILboolean iReadColMapTga(TARGAHEAD *Header)
 	
 	// Do we need to do something with FirstEntry?	Like maybe:
 	//	iread(Image->Pal + Targa->FirstEntry, 1, Image->Pal.PalSize);  ??
-	if (Header->ColMapEntSize != 16) {
+	if (Header->ColMapEntSize != 16)
+	{
 		if (iread(iCurImage->Pal.Palette, 1, iCurImage->Pal.PalSize) != iCurImage->Pal.PalSize)
 			return IL_FALSE;
 	}
 	else {
 		// 16 bit palette, so we have to break it up.
-		for (i = 0; i < iCurImage->Pal.PalSize; i += 4) {
+		for (i = 0; i < iCurImage->Pal.PalSize; i += 4)
+		{
 			Pixel = GetBigUShort();
 			if (ieof())
 				return IL_FALSE;
@@ -310,13 +312,17 @@ ILboolean iReadColMapTga(TARGAHEAD *Header)
 		}
 	}
 	
-	if (Header->ImageType == TGA_COLMAP_COMP) {
-		if (!iUncompressTgaData(iCurImage)) {
+	if (Header->ImageType == TGA_COLMAP_COMP)
+	{
+		if (!iUncompressTgaData(iCurImage))
+		{
 			return IL_FALSE;
 		}
 	}
-	else {
-		if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) != iCurImage->SizeOfData) {
+	else
+	{
+		if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) != iCurImage->SizeOfData)
+		{
 			return IL_FALSE;
 		}
 	}
@@ -338,7 +344,8 @@ ILboolean iReadUnmapTga(TARGAHEAD *Header)
 	else*/
 	Bpp = (ILubyte)(Header->Bpp >> 3);
 	
-	if (!ilTexImage(Header->Width, Header->Height, 1, Bpp, 0, IL_UNSIGNED_BYTE, NULL)) {
+	if (!ilTexImage(Header->Width, Header->Height, 1, Bpp, 0, IL_UNSIGNED_BYTE, NULL))
+	{
 		return IL_FALSE;
 	}
 	
@@ -445,7 +452,7 @@ ILboolean iUncompressTgaData(ILimage *Image)
 		iPreCache(iCurImage->SizeOfData / 2);
 	
 	while (BytesRead < Size) {
-		Header = igetc();
+		Header = (ILubyte)igetc();
 		if (Header & BIT_7) {
 			ClearBits(Header, BIT_7);
 			if (iread(Color, 1, Image->Bpp) != Image->Bpp) {
@@ -656,7 +663,7 @@ ILboolean iSaveTargaInternal()
 			PalEntSize = 0;
 			break;
 		case IL_PAL_BGR24:
-			PalSize = iCurImage->Pal.PalSize / 3;
+			PalSize = (ILshort)(iCurImage->Pal.PalSize / 3);
 			PalEntSize = 24;
 			TempPal = &iCurImage->Pal;
 			break;
@@ -669,7 +676,7 @@ ILboolean iSaveTargaInternal()
 			TempPal = iConvertPal(&iCurImage->Pal, IL_PAL_BGR24);
 			if (TempPal == NULL)
 				return IL_FALSE;
-				PalSize = TempPal->PalSize / 3;
+				PalSize = (ILshort)(TempPal->PalSize / 3);
 			PalEntSize = 24;
 			break;
 		default:

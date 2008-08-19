@@ -105,7 +105,7 @@ ILboolean ILAPIENTRY iluScale(ILuint Width, ILuint Height, ILuint Depth)
 					}
 				}
 
-				return iluScaleAdvanced(Width, Height, iluFilter);
+				return (ILboolean)iluScaleAdvanced(Width, Height, iluFilter);
 		}
 	}
 

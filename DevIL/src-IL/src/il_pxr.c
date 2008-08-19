@@ -91,7 +91,7 @@ ILboolean iLoadPxrInternal()
 	Height = GetLittleUShort();
 	Width = GetLittleUShort();
 	iseek(424, IL_SEEK_SET);
-	Bpp = igetc();
+	Bpp = (ILubyte)igetc();
 
 	switch (Bpp)
 	{

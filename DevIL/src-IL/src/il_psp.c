@@ -311,6 +311,7 @@ ILboolean ReadLayerBlock(ILuint BlockLen)
 	ILuint				ChunkSize, Padding, i, j;
 	ILushort			NumChars;
 
+	BlockLen;
 
 	// Layer sub-block header
 	if (iread(&Block, 1, sizeof(Block)) != sizeof(Block))

@@ -292,13 +292,13 @@ ILint XpmGetsInternal(ILubyte *Buffer, ILint MaxLen)
 
 
 
-			Buffer[i++] = Current;
+			Buffer[i++] = (ILubyte)Current;
 
 			continue;
 
 		}
 
-		Buffer[i++] = Current;
+		Buffer[i++] = (ILubyte)Current;
 	}
 
 	Buffer[i++] = 0;
@@ -472,9 +472,9 @@ ILboolean XpmPredefCol(char *Buff, XpmPixel *Colour)
 				}
 				val = (255*val)/100;
 			}
-			(*Colour)[0] = val;
-			(*Colour)[1] = val;
-			(*Colour)[2] = val;
+			(*Colour)[0] = (ILubyte)val;
+			(*Colour)[1] = (ILubyte)val;
+			(*Colour)[2] = (ILubyte)val;
 			return IL_TRUE;
 		}
 	}

@@ -66,8 +66,8 @@ ILboolean ilIsValidSgiL(const ILvoid *Lump, ILuint Size)
 ILboolean iGetSgiHead(iSgiHeader *Header)
 {
 	Header->MagicNum = GetBigUShort();
-	Header->Storage = igetc();
-	Header->Bpc = igetc();
+	Header->Storage = (ILbyte)igetc();
+	Header->Bpc = (ILbyte)igetc();
 	Header->Dim = GetBigUShort();
 	Header->XSize = GetBigUShort();
 	Header->YSize = GetBigUShort();

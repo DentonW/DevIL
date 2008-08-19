@@ -175,12 +175,14 @@ ILboolean ilLoadTiffL(const ILvoid *Lump, ILuint Size)
 
 void warningHandler(const char* mod, const char* fmt, va_list ap)
 {
+	mod; fmt; ap;
 	//char buff[1024];
 	//_vsnprintf(buff, 1024, fmt, ap);
 }
 
 void errorHandler(const char* mod, const char* fmt, va_list ap)
 {
+	mod; fmt; ap;
 	//char buff[1024];
 	//_vsnprintf(buff, 1024, fmt, ap);
 }
@@ -727,6 +729,7 @@ ILboolean iLoadTiffInternal()
 static tsize_t 
 _tiffFileReadProc(thandle_t fd, tdata_t pData, tsize_t tSize)
 {
+	fd;
 	return iread(pData, 1, tSize);
 }
 
@@ -735,6 +738,7 @@ _tiffFileReadProc(thandle_t fd, tdata_t pData, tsize_t tSize)
 static tsize_t 
 _tiffFileWriteProc(thandle_t fd, tdata_t pData, tsize_t tSize)
 {
+	fd;
 	/*TIFFWarning("TIFFMemFile", "_tiffFileWriteProc() Not implemented");
 	return(0);
 	*/
@@ -746,6 +750,7 @@ _tiffFileWriteProc(thandle_t fd, tdata_t pData, tsize_t tSize)
 static toff_t
 _tiffFileSeekProc(thandle_t fd, toff_t tOff, int whence)
 {
+	fd;
 	/* we use this as a special code, so avoid accepting it */
 	if (tOff == 0xFFFFFFFF)
 		return 0xFFFFFFFF;
@@ -773,6 +778,7 @@ _tiffFileSeekProcW(thandle_t fd, toff_t tOff, int whence)
 static int
 _tiffFileCloseProc(thandle_t fd)
 {
+	fd;
 	return (0);
 }
 
@@ -786,6 +792,8 @@ _tiffFileSizeProc(thandle_t fd)
 	iseek(0, IL_SEEK_END);
 	Size = itell();
 	iseek(Offset, IL_SEEK_SET);
+
+	fd;
 
 	return Size;
 }
@@ -813,6 +821,7 @@ _tiffFileSizeProcW(thandle_t fd)
 static int
 _tiffDummyMapProc(thandle_t fd, tdata_t* pbase, toff_t* psize)
 {
+	fd; pbase; psize;
 	return 0;
 }
 
@@ -824,6 +833,7 @@ _tiffDummyMapProc(thandle_t fd, tdata_t* pbase, toff_t* psize)
 static void
 _tiffDummyUnmapProc(thandle_t fd, tdata_t base, toff_t size)
 {
+	fd; base; size;
 	return;
 }
 
@@ -887,7 +897,7 @@ ILboolean ilSaveTiff(ILconst_string FileName)
 //! Writes a Tiff to an already-opened file
 ILboolean ilSaveTiffF(ILHANDLE File)
 {
-
+	File;
 /*
 	iSetOutputFile(File);
 	return iSaveTiffInternal();

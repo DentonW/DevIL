@@ -92,17 +92,20 @@ ILboolean Hist3d(ILubyte *Ir, ILubyte *Ig, ILubyte *Ib, ILint *vwt, ILint *vmr, 
 	ILint	inr, ing, inb, table[2560];
 	ILuint	i;
 		
-	for (i = 0; i < 256; i++) {
+	for (i = 0; i < 256; i++)
+	{
 		table[i] = i * i;
 	}
 	Qadd = (ILushort*)ialloc(sizeof(ILushort) * size);
-	if (Qadd == NULL) {
+	if (Qadd == NULL)
+	{
 		return IL_FALSE;
 	}
 	
         imemclear(Qadd, sizeof(ILushort) * size);
         
-        for (i = 0; i < size; i++) {
+	for (i = 0; i < size; i++)
+	{
 	    r = Ir[i]; g = Ig[i]; b = Ib[i];
 	    inr = (r>>3) + 1; 
 	    ing = (g>>3) + 1; 

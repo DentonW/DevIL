@@ -82,7 +82,7 @@ ILboolean iLoadRawInternal()
 
 	iCurImage->Depth = GetLittleUInt();
 
-	iCurImage->Bpp = igetc();
+	iCurImage->Bpp = (ILubyte)igetc();
 
 	if (iread(&iCurImage->Bpc, 1, 1) != 1)
 		return IL_FALSE;
