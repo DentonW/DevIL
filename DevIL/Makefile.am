@@ -15,3 +15,4 @@ dist-hook:
 	find $(distdir) -name obj -type d -exec echo \"{}\" \; | xargs rm -rf
 	find $(distdir) -name Debug -type d -exec echo \"{}\" \; | xargs rm -rf
 	find $(distdir) -name Release -type d -exec echo \"{}\" \; | xargs rm -rf
+

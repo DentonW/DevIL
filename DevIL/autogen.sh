@@ -13,7 +13,7 @@ log() {
 	else
 		output=$($1 2>&1)
 	fi
-	
+
 	# show output only in case of errors
 	if [ $? -ne 0 ] ; then
 		echo $output
@@ -26,3 +26,4 @@ log "autoheader"
 log "automake --foreign --include-deps --add-missing --copy"
 log "autoconf"
 exit 0
+

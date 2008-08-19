@@ -50,10 +50,10 @@
 //
 #undef ILUT_USE_ALLEGRO
 
-#define ILUT_USE_DIRECTX8 1
+//#define ILUT_USE_DIRECTX8 1
 #define ILUT_USE_DIRECTX9 1
 #define ILUT_USE_OPENGL 1
-#define ILUT_USE_SDL 1
+//#define ILUT_USE_SDL 1
 #define ILUT_USE_WIN32 1
 
 
@@ -70,7 +70,8 @@
 #define HAVE_STDINT_H 1
 
 /* Define to 1 if you have the <stdlib.h> header file. */
-#define HAVE_STDLIB_H 1
+//#define HAVE_STDLIB_H 1
+// jconfig.h of libjpeg already has this.
 
 /* Define to 1 if you have the <strings.h> header file. */
 #define HAVE_STRINGS_H 1
@@ -109,7 +110,7 @@
 #define STDC_HEADERS 1
 
 /* Version number of package */
-#define VERSION "1.6.7"
+#define VERSION "1.6.8"
 
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */
