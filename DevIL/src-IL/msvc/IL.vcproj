@@ -1,194 +1,277 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="9.00"
 	Name="IL"
 	ProjectGUID="{0F088168-B0B4-4350-9E6A-7FB271C76D39}"
 	RootNamespace="IL"
-	SccProjectName="IL"
-	SccLocalPath="..\..">
+	TargetFrameworkVersion="131072"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="_DEBUG"
+				MkTypLibCompatible="true"
+				SuppressStartupBanner="true"
+				TargetEnvironment="1"
+				TypeLibraryName=".\../../lib/debug/IL.tlb"
+				HeaderFileName=""
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../include;../../include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
-				ExceptionHandling="FALSE"
+				ExceptionHandling="0"
 				BasicRuntimeChecks="2"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderThrough=""
 				WarningLevel="4"
-				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="4"/>
+				SuppressStartupBanner="true"
+				DebugInformationFormat="4"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/DevIL_DBG.lib"
-				IgnoreDefaultLibraryNames=""/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG"
-				MkTypLibCompatible="TRUE"
-				SuppressStartupBanner="TRUE"
-				TargetEnvironment="1"
-				TypeLibraryName=".\../../lib/debug/IL.tlb"
-				HeaderFileName=""/>
-			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG"
-				Culture="1033"/>
+				Culture="1033"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)/DevIL_DBG.lib"
+				IgnoreDefaultLibraryNames=""
+			/>
 			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Dynamic|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="true"
+				SuppressStartupBanner="true"
+				TargetEnvironment="1"
+				TypeLibraryName=".\../../lib/IL.tlb"
+				HeaderFileName=""
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="../include;../../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;ZLIB_DLL;PNG_USE_DLL;MNG_USE_DLL;LCMS_DLL"
-				StringPooling="TRUE"
+				StringPooling="true"
 				RuntimeLibrary="2"
-				BufferSecurityCheck="FALSE"
-				UsePrecompiledHeader="2"
+				BufferSecurityCheck="false"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderThrough=""
 				WarningLevel="3"
-				SuppressStartupBanner="TRUE"/>
+				SuppressStartupBanner="true"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="zlib_DLL.lib libpng_DLL.lib libmng_DLL.lib libtiff_DLL.lib lcmsdll.lib libjpeg_DLL.lib"
 				OutputFile="$(OutDir)/DevIL.dll"
 				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
+				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=""
-				IgnoreAllDefaultLibraries="FALSE"
+				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile=".\il.def"
 				DelayLoadDLLs=""
 				ProgramDatabaseFile=".\../../lib/DevIL-l.pdb"
 				OptimizeForWindows98="0"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				ImportLibrary="$(OutDir)/DevIL_DLL.lib"
-				TargetMachine="1"/>
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="TRUE"
-				SuppressStartupBanner="TRUE"
-				TargetEnvironment="1"
-				TypeLibraryName=".\../../lib/IL.tlb"
-				HeaderFileName=""/>
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;
-copy &quot;$(TargetDir)\$(TargetName)_DLL.lib&quot; &quot;..\..\lib&quot;
-"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)\$(TargetName)_DLL.lib&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="4"
+			ConfigurationType="2"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
 			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="2"
-				AdditionalIncludeDirectories="../include;../../include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;IL_STATIC_LIB"
-				StringPooling="TRUE"
-				RuntimeLibrary="2"
-				BufferSecurityCheck="FALSE"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough=""
-				WarningLevel="3"
-				SuppressStartupBanner="TRUE"/>
+				Name="VCPreBuildEventTool"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCCustomBuildTool"
+			/>
 			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/DevIL.lib"
-				IgnoreDefaultLibraryNames=""/>
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="TRUE"
-				SuppressStartupBanner="TRUE"
+				MkTypLibCompatible="true"
+				SuppressStartupBanner="true"
 				TargetEnvironment="1"
 				TypeLibraryName=".\../../lib/IL.tlb"
-				HeaderFileName=""/>
+				HeaderFileName=""
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;"/>
+				Name="VCCLCompilerTool"
+				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot; /D &quot;_CRT_NONSTDC_NO_DEPRECATE&quot;"
+				Optimization="2"
+				AdditionalIncludeDirectories="../include;../../include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				StringPooling="true"
+				RuntimeLibrary="2"
+				BufferSecurityCheck="false"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough=""
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"/>
+				Culture="1033"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCLinkerTool"
+				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib"
+				OutputFile="$(OutDir)\DevIL.dll"
+			/>
 			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)\DevIL.lib&quot; &quot;..\..\lib&quot;"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -196,291 +279,386 @@ copy &quot;$(TargetDir)\$(TargetName)_DLL.lib&quot; &quot;..\..\lib&quot;
 	<Files>
 		<Filter
 			Name="Source Files"
-			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
+			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+			>
 			<File
-				RelativePath="..\src\il_alloc.c">
+				RelativePath="..\src\il_alloc.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_bits.c">
+				RelativePath="..\src\il_bits.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_bmp.c">
+				RelativePath="..\src\il_bmp.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_convbuff.c">
+				RelativePath="..\src\il_convbuff.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_convert.c">
+				RelativePath="..\src\il_convert.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_cut.c">
+				RelativePath="..\src\il_cut.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_dcx.c">
+				RelativePath="..\src\il_dcx.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_dds-save.c">
+				RelativePath="..\src\il_dds-save.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_dds.c">
+				RelativePath="..\src\il_dds.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_devil.c">
+				RelativePath="..\src\il_devil.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_doom.c">
+				RelativePath="..\src\il_doom.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_endian.c">
+				RelativePath="..\src\il_endian.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_error.c">
+				RelativePath="..\src\il_error.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_fastconv.c">
+				RelativePath="..\src\il_fastconv.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_files.c">
+				RelativePath="..\src\il_files.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_gif.c">
+				RelativePath="..\src\il_gif.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_hdr.c">
+				RelativePath="..\src\il_hdr.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_header.c">
+				RelativePath="..\src\il_header.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_icon.c">
+				RelativePath="..\src\il_icon.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_internal.c">
+				RelativePath="..\src\il_internal.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_io.c">
+				RelativePath="..\src\il_io.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_jpeg.c">
+				RelativePath="..\src\il_jpeg.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_lif.c">
+				RelativePath="..\src\il_lif.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_main.c">
+				RelativePath="..\src\il_main.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_manip.c">
+				RelativePath="..\src\il_manip.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_mdl.c">
+				RelativePath="..\src\il_mdl.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_mng.c">
+				RelativePath="..\src\il_mng.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_neuquant.c">
+				RelativePath="..\src\il_neuquant.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_pal.c">
+				RelativePath="..\src\il_pal.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_pcd.c">
+				RelativePath="..\src\il_pcd.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_pcx.c">
+				RelativePath="..\src\il_pcx.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_pic.c">
+				RelativePath="..\src\il_pic.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_pix.c">
+				RelativePath="..\src\il_pix.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_png.c">
+				RelativePath="..\src\il_png.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_pnm.c">
+				RelativePath="..\src\il_pnm.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_profiles.c">
+				RelativePath="..\src\il_profiles.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_psd.c">
+				RelativePath="..\src\il_psd.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_psp.c">
+				RelativePath="..\src\il_psp.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_pxr.c">
+				RelativePath="..\src\il_pxr.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_quantizer.c">
+				RelativePath="..\src\il_quantizer.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_raw.c">
+				RelativePath="..\src\il_raw.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_rawdata.c">
+				RelativePath="..\src\il_rawdata.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_register.c">
+				RelativePath="..\src\il_register.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_rle.c">
+				RelativePath="..\src\il_rle.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_sgi.c">
+				RelativePath="..\src\il_sgi.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_stack.c">
+				RelativePath="..\src\il_stack.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_states.c">
+				RelativePath="..\src\il_states.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_targa.c">
+				RelativePath="..\src\il_targa.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_tiff.c">
+				RelativePath="..\src\il_tiff.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_utility.c">
+				RelativePath="..\src\il_utility.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_wal.c">
+				RelativePath="..\src\il_wal.c"
+				>
 			</File>
 			<File
-				RelativePath="..\src\il_xpm.c">
+				RelativePath="..\src\il_xpm.c"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl">
+			Filter="h;hpp;hxx;hm;inl"
+			>
 			<File
-				RelativePath="..\..\include\IL\config.h">
+				RelativePath="..\..\include\IL\config.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\include\IL\devil_internal_exports.h">
+				RelativePath="..\..\include\IL\devil_internal_exports.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\include\il\il.h">
+				RelativePath="..\..\include\il\il.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_alloc.h">
+				RelativePath="..\include\il_alloc.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_bits.h">
+				RelativePath="..\include\il_bits.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_bmp.h">
+				RelativePath="..\include\il_bmp.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_dcx.h">
+				RelativePath="..\include\il_dcx.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_dds.h">
+				RelativePath="..\include\il_dds.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_doompal.h">
+				RelativePath="..\include\il_doompal.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_endian.h">
+				RelativePath="..\include\il_endian.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_files.h">
+				RelativePath="..\include\il_files.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_gif.h">
+				RelativePath="..\include\il_gif.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_icon.h">
+				RelativePath="..\include\il_icon.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_internal.h">
+				RelativePath="..\include\il_internal.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_jpeg.h">
+				RelativePath="..\include\il_jpeg.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_lif.h">
+				RelativePath="..\include\il_lif.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_manip.h">
+				RelativePath="..\include\il_manip.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_mdl.h">
+				RelativePath="..\include\il_mdl.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_pal.h">
+				RelativePath="..\include\il_pal.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_pcx.h">
+				RelativePath="..\include\il_pcx.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_pic.h">
+				RelativePath="..\include\il_pic.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_pnm.h">
+				RelativePath="..\include\il_pnm.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_psd.h">
+				RelativePath="..\include\il_psd.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_psp.h">
+				RelativePath="..\include\il_psp.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_q2pal.h">
+				RelativePath="..\include\il_q2pal.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_register.h">
+				RelativePath="..\include\il_register.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_rle.h">
+				RelativePath="..\include\il_rle.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_sgi.h">
+				RelativePath="..\include\il_sgi.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_stack.h">
+				RelativePath="..\include\il_stack.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_states.h">
+				RelativePath="..\include\il_states.h"
+				>
 			</File>
 			<File
-				RelativePath="..\include\il_targa.h">
+				RelativePath="..\include\il_targa.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
-			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+			>
 		</Filter>
 		<Filter
 			Name="Text Files"
-			Filter="txt">
+			Filter="txt"
+			>
 			<File
-				RelativePath="..\..\AUTHORS">
+				RelativePath="..\..\AUTHORS"
+				>
 			</File>
 			<File
-				RelativePath="..\..\BUGS">
+				RelativePath="..\..\BUGS"
+				>
 			</File>
 			<File
-				RelativePath="..\..\ChangeLog">
+				RelativePath="..\..\ChangeLog"
+				>
 			</File>
 			<File
-				RelativePath="..\..\CREDITS">
+				RelativePath="..\..\CREDITS"
+				>
 			</File>
 			<File
-				RelativePath="..\..\libraries.txt">
+				RelativePath="..\..\libraries.txt"
+				>
 			</File>
 			<File
-				RelativePath="..\..\MSVC++.txt">
+				RelativePath="..\..\MSVC++.txt"
+				>
 			</File>
 			<File
-				RelativePath="..\..\README.unix">
+				RelativePath="..\..\README.unix"
+				>
 			</File>
 			<File
-				RelativePath="..\..\README.win">
+				RelativePath="..\..\README.win"
+				>
 			</File>
 		</Filter>
 	</Files>
