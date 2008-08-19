@@ -48,6 +48,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot; /D &quot;_CRT_NONSTDC_NO_DEPRECATE&quot;"
 				Optimization="2"
 				AdditionalIncludeDirectories="../include;../../include;../../../../PC/_inc/DX"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"

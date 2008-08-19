@@ -478,15 +478,15 @@ ILimage* MakeGLCompliant(ILimage *Src)
 		if (Src->Format == IL_COLOUR_INDEX) {
 			iluImageParameter(ILU_FILTER, ILU_NEAREST);
 			Temp = HasNonPowerOfTwoHardware == IL_TRUE ? 
-				iluScale_(Dest, min(MaxTexW, Dest->Width), min(MaxTexH, Dest->Height), 1)
-			  : iluScale_(Dest, min(MaxTexW, (ILint)ilNextPower2(Dest->Width)),
-			  		min(MaxTexH, (ILint)ilNextPower2(Dest->Height)), 1);
+				iluScale_(Dest, min((ILuint)MaxTexW, Dest->Width), min((ILuint)MaxTexH, Dest->Height), 1)
+			  : iluScale_(Dest, min((ILuint)MaxTexW, ilNextPower2(Dest->Width)),
+			  		min((ILuint)MaxTexH, ilNextPower2(Dest->Height)), 1);
 			iluImageParameter(ILU_FILTER, Filter);
 		} else {
 			iluImageParameter(ILU_FILTER, ILU_BILINEAR);
 			Temp = HasNonPowerOfTwoHardware == IL_TRUE ?
-				iluScale_(Dest, min(MaxTexW, Dest->Width), min(MaxTexH, Dest->Height), 1)
-			 :	iluScale_(Dest, min(MaxTexW, (ILint)ilNextPower2(Dest->Width)),
+				iluScale_(Dest, min((ILuint)MaxTexW, Dest->Width), min((ILuint)MaxTexH, Dest->Height), 1)
+			 :	iluScale_(Dest, min((ILuint)MaxTexW, (ILint)ilNextPower2(Dest->Width)),
 			 		min(MaxTexH, (ILint)ilNextPower2(Dest->Height)), 1);
 			iluImageParameter(ILU_FILTER, Filter);
 		}
