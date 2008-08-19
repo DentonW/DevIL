@@ -1,0 +1,1 @@
+This file is just a placeholder so that the /lib directory is created when checking out the CVS with the -P option.
