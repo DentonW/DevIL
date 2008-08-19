@@ -35,7 +35,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION($Revision: 1.28 $)
+AC_REVISION($Revision: 1.29 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -75,7 +75,7 @@ AC_COMPILE_IFELSE([[void foo(void * restrict test){}]],
 	[AC_DEFINE(RESTRICT_KEYWORD,,restric keyword available)]
 	[AC_MSG_RESULT(yes)]
 	[CFLAGS="$TMP_CFLAGS"]
-	[ADD_CFLAGS(-std=gnu99)]
+	[ADD_CFLAGS(-std=gnu99 -fgnu89-inline)]
 	,[AC_MSG_RESULT(no)]
 	 [CFLAGS="$TMP_CFLAGS"])
 ])
