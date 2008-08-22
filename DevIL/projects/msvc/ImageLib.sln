@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ILUT", "..\..\src-ILUT\msvc
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IL", "..\..\src-IL\msvc\IL.vcproj", "{0F088168-B0B4-4350-9E6A-7FB271C76D39}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowsTest", "..\..\examples\WindowsTest\WindowsTest.vcproj", "{DEA982DD-5797-4D77-A33A-367D0395612B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -38,6 +40,12 @@ Global
 		{0F088168-B0B4-4350-9E6A-7FB271C76D39}.Dynamic|Win32.Build.0 = Debug|Win32
 		{0F088168-B0B4-4350-9E6A-7FB271C76D39}.Release|Win32.ActiveCfg = Release|Win32
 		{0F088168-B0B4-4350-9E6A-7FB271C76D39}.Release|Win32.Build.0 = Release|Win32
+		{DEA982DD-5797-4D77-A33A-367D0395612B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DEA982DD-5797-4D77-A33A-367D0395612B}.Debug|Win32.Build.0 = Debug|Win32
+		{DEA982DD-5797-4D77-A33A-367D0395612B}.Dynamic|Win32.ActiveCfg = Dynamic|Win32
+		{DEA982DD-5797-4D77-A33A-367D0395612B}.Dynamic|Win32.Build.0 = Dynamic|Win32
+		{DEA982DD-5797-4D77-A33A-367D0395612B}.Release|Win32.ActiveCfg = Release|Win32
+		{DEA982DD-5797-4D77-A33A-367D0395612B}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
