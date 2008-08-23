@@ -14,6 +14,11 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IL", "..\..\src-IL\msvc\IL.vcproj", "{0F088168-B0B4-4350-9E6A-7FB271C76D39}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowsTest", "..\..\examples\WindowsTest\WindowsTest.vcproj", "{DEA982DD-5797-4D77-A33A-367D0395612B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{98884911-2B7F-45C7-B0FD-CB909E8CB7C1} = {98884911-2B7F-45C7-B0FD-CB909E8CB7C1}
+		{A4563D37-173F-4459-BDC5-9F42992AEF45} = {A4563D37-173F-4459-BDC5-9F42992AEF45}
+		{0F088168-B0B4-4350-9E6A-7FB271C76D39} = {0F088168-B0B4-4350-9E6A-7FB271C76D39}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

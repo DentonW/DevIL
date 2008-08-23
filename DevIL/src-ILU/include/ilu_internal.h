@@ -41,7 +41,7 @@
 	#define IL_TEXT(s) ((char*)TEXT(s))
 #elif _WIN32
 	#include <windows.h>
-	#define IL_TEXT(s) s
+	#define IL_TEXT(s) TEXT(s)
 #else
 	#define IL_TEXT(s) s
 	#define TEXT(s) s

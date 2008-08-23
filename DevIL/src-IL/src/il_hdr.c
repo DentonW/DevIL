@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2004 by Denton Woods (this file by thakis)
-// Last modified: 09/06/2004
+// Copyright (C) 2000-2008 by Denton Woods (this file by thakis)
+// Last modified: 12/06/2006
 //
 // Filename: src-IL/src/il_bmp.c
 //

@@ -45,7 +45,7 @@ ILboolean	readpng_get_image(ILdouble display_exponent);
 ILvoid		readpng_cleanup(void);
 
 png_structp png_ptr = NULL;
-png_infop info_ptr = NULL;
+png_infop   info_ptr = NULL;
 ILint color_type;
 
 #define GAMMA_CORRECTION 1.0  // Doesn't seem to be doing anything...
@@ -56,7 +56,7 @@ ILboolean ilIsValidPng(ILconst_string FileName)
 	ILHANDLE	PngFile;
 	ILboolean	bPng = IL_FALSE;
 
-	if (!iCheckExtension(FileName, IL_TEXT( "png" ))) {
+	if (!iCheckExtension(FileName, IL_TEXT("png"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bPng;
 	}
@@ -203,6 +203,7 @@ static void png_warn_func(png_structp png_ptr, png_const_charp message)
 {
 	return;
 }
+
 
 ILint readpng_init()
 {

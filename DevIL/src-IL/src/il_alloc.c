@@ -1,3 +1,14 @@
+//-----------------------------------------------------------------------------
+//
+// ImageLib Sources
+// Last modified: 08/17/2008
+//
+// Filename: src-IL/src/il_alloc.c
+//
+// Description: Memory allocation functions
+//
+//-----------------------------------------------------------------------------
+
 
 #define __ALLOC_C
 #include "il_internal.h"

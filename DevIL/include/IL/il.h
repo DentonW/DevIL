@@ -21,7 +21,7 @@
 extern "C" {
 #endif
 
-// Compiling Optionsok
+// Compiling Options
 #define IL_INLINE_ASM
 
 //this define controls if floats and doubles are clampled to [0..1]
@@ -143,8 +143,8 @@ typedef void           ILvoid;
 // IL-specific #define's
 //
 
-#define IL_VERSION_1_6_8 1
-#define IL_VERSION       168
+#define IL_VERSION_1_7_0 1
+#define IL_VERSION       170
 
 
 // Attribute Bits

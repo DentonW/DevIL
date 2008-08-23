@@ -1,4 +1,4 @@
-1.6.8 RC3
+1.7.0 RC1
 ---
 - Fixed a windows padding problem with bitmaps (thanks to robin_charlton)
 - Added ILUT-X11 thank's to Jesse Maurais patch
@@ -35,6 +35,8 @@
 - applied submitted patch #1550471. missing const in il_tiff.c
 - fixed bug #1554447. broken bmp loading with less then 256 color and a palette
 - applied submitted patch #1554358. headers fixes
+- Added MSVC++ Express 2008 projects and removed MSVC++ 6 projects.
+- Added support for loading Windows Vista icons.
 
 1.6.8 RC2
 -----
@@ -71,7 +73,7 @@
 1.6.8 RC1
 -----
 
-- Fixed a lot of minor bugs in various image format ( expecialy TIFF )
+- Fixed a lot of minor bugs in various image format (especially TIFF)
 - Rewritten documentation
 - Dev-Cpp support
 - Added ilSetAlpha

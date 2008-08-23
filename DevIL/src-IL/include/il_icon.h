@@ -16,9 +16,6 @@
 
 #include "il_internal.h"
 
-ILboolean iLoadIconInternal();
-
-
 #ifdef _WIN32
 	#pragma pack(push, ico_struct, 1)
 #endif
@@ -67,5 +64,7 @@ typedef struct ICOIMAGE
 	#pragma pack(pop, ico_struct)
 #endif
 
+ILboolean iLoadIconInternal();
+ILboolean iLoadIconPNG(ICOIMAGE *Icon);
 
 #endif//ICON_H

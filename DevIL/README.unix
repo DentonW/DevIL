@@ -1,16 +1,18 @@
 How do I compile the 3 libraries ?
 -----------------------------------------
 
-Just type ./configure && make. It should find automatically what can
-(or cannot) be built on your system.
+Just type ./autogen.sh, ./configure and then make. It should find automatically what can
+(or cannot) be built on your system.  Libtool, autoconf and automake will need
+to be installed.  You may need to copy files from your libtool into the libtools
+directory and overwrite ltmain.sh if it will not compile with the included files.
 
 NB : ./configure --help gives you all compiling options available for the three
       libs. This includes enabling/disabling picture formats, ilut apis.
       
 Enable/Disable:
-The disabilitable features are basically enabled, a test will be performed
-to verify if is possible to compile them in. If they are explicitely enabled
-or disabled no test will occour.
+The features that can be disabled are basically enabled, and a test will be performed
+to verify if is possible to compile them in. If they are explicitly enabled
+or disabled, no test will occour.
 
 
 Libraries needed to compile DevIL* :

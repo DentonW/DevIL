@@ -4,10 +4,10 @@ DevIL TODO:
 
 For 1.7.0
 - fixed OpenGL Loading (breaks old code which inverted the images)
-- iluReplaceColour should have a color to describe which color to set
-- ilBindIMage must return a result. it may fail!
-- ilInit() call iSetImage0 and ilBindTemp. this shouldn't happend and image names must start from 0
-- rename rename to iGetIntegervImage to ilGetImageIntegerv and make it public
+- iluReplaceColour should have a color to describe which color to set.
+- ilBindImage must return a result. It may fail!
+- ilInit() call iSetImage0 and ilBindTemp. This shouldn't happen and image names must start from 0
+- Rename iGetIntegervImage to ilGetImageIntegerv and make it public
 
 Features to be added
 - global use of restricted pointers where available (for now only il_bmp.{c,h} uses it)

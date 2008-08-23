@@ -1,3 +1,14 @@
+//-----------------------------------------------------------------------------
+//
+// ImageLib Sources
+// Last modified: 12/06/2006
+//
+// Filename: src-IL/src/il_endian.c
+//
+// Description: Takes care of endian issues
+//
+//-----------------------------------------------------------------------------
+
 
 #define IL_ENDIAN_C
 

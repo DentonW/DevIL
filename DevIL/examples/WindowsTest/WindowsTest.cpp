@@ -1,8 +1,8 @@
 //--------------------------------------------------------------------------------
 //
 // ImageLib Windows (GDI) Test Source
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/29/2002 <--Y2K Compliant! =]
+// Copyright (C) 2000-2008 by Denton Woods
+// Last modified: 08/22/2008
 //
 // Filename: testil/windowstest/windowstest.c
 //
@@ -39,7 +39,7 @@ HBRUSH BackBrush;
 
 #define BORDER_W	8
 #define MENU_H		54
-#define MIN_W		205  // Accomodate the menu bar.
+#define MIN_W		250  // Accomodate the menu bar.
 #define MAX_W		400
 #define MAX_H		400
 #define TITLE		"DevIL Windows Test"
@@ -857,7 +857,7 @@ BOOL APIENTRY AboutDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
 			sprintf(VersionNum, "Num:  %d", ilGetInteger(IL_VERSION_NUM));
 
 			SetDlgItemText(hDlg, IDC_ABOUT_VENDOR, ilGetString(IL_VENDOR));
-			SetDlgItemText(hDlg, IDC_ABOUT_VER_STRING, ilGetString(IL_VERSION));
+			SetDlgItemText(hDlg, IDC_ABOUT_VER_STRING, ilGetString(IL_VERSION_NUM));
 			SetDlgItemText(hDlg, IDC_ABOUT_VER_NUM, VersionNum);
 
 			for (i = 0; i < 6; i++) {
