@@ -1,10 +1,11 @@
-1.7.0 RC2
+1.7.1
 ---
 - Added Mac OS X .icns support
 - Fixed a bug with non-standard .ico files that have PNG compression and palettes.
+- Addded JPEG 2000 support with JasPer.
+- Added support for 256x256 and 512x512 JPEG 2000 encoded .icns.
 
-
-1.7.0 RC1
+1.7.0
 ---
 - Fixed a windows padding problem with bitmaps (thanks to robin_charlton)
 - Added ILUT-X11 thank's to Jesse Maurais patch

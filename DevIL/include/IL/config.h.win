@@ -15,7 +15,7 @@
 /* #undef IL_NO_HDR */
 /* #undef IL_NO_ICO */
 /* #undef IL_NO_JPG */
-#define IL_NO_LCMS
+/* #undef IL_NO_LCMS */
 /* #undef IL_NO_LIF */
 /* #undef IL_NO_MDL */
 #define IL_NO_MNG
@@ -67,7 +67,7 @@
 #define HAVE_MEMORY_H 1
 
 /* Define to 1 if you have the <stdint.h> header file. */
-#define HAVE_STDINT_H 1
+//#define HAVE_STDINT_H 1
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 //#define HAVE_STDLIB_H 1
@@ -89,28 +89,29 @@
 //#define HAVE_UNISTD_H 1
 
 /* Name of package */
-#define PACKAGE "DevIL"
+//#define PACKAGE "DevIL"
+// 08-24-2008: Got rid of all PACKAGE_s, because it conflicts with jasper.h.
 
 /* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT ""
+//#define PACKAGE_BUGREPORT ""
 
 /* Define to the full name of this package. */
-#define PACKAGE_NAME ""
+//#define PACKAGE_NAME ""
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING ""
+//#define PACKAGE_STRING ""
 
 /* Define to the one symbol short name of this package. */
-#define PACKAGE_TARNAME ""
+//#define PACKAGE_TARNAME ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION ""
+//#define PACKAGE_VERSION ""
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
 
 /* Version number of package */
-#define VERSION "1.7.0"
+//#define VERSION "1.7.1"
 
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */
