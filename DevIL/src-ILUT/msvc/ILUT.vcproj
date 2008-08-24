@@ -94,7 +94,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)\ILUT.lib&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)\ILUT.lib&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;..\..\examples\bin&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -156,7 +156,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\ILUT-d.dll"
+				OutputFile="$(OutDir)\ILUT.dll"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -178,7 +179,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)\ILUT.lib&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;..\..\examples\bin&quot;"
 			/>
 		</Configuration>
 		<Configuration

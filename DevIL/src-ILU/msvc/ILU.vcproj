@@ -164,7 +164,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\ILU-d.dll"
+				OutputFile="$(OutDir)\ILU.dll"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -186,7 +187,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)\ILU.lib&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;..\..\examples\bin\debug&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -268,7 +269,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)\ILU.lib&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)\ILU.lib&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;..\..\examples\bin&quot;"
 			/>
 		</Configuration>
 	</Configurations>
