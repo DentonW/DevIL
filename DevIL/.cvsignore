@@ -11,6 +11,6 @@ configure
 aclocal.m4
 Makefile.in
 config.cache
-Version Numbers.txt
+"Version Numbers.txt"
 Release.bat
-Release Files.txt
+"Release Files.txt"
