@@ -70,7 +70,7 @@ ILboolean iLoadIconInternal()
 	ILint		i;
 	ILuint		Size, PadSize, ANDPadSize, j, k, l, m, x, w, CurAndByte, AndBytes;
 	ILboolean	BaseCreated = IL_FALSE;
-	ILuint		PNGTest;
+	ILubyte		PNGTest[3];
 
 
 	if (iCurImage == NULL) {
@@ -118,8 +118,9 @@ ILboolean iLoadIconInternal()
 		iseek(DirEntries[i].Offset, IL_SEEK_SET);
 
 		// 08-22-2008: Adding test for compressed PNG data
-		PNGTest = GetLittleUInt();
-		if (PNGTest == 1196314761)  // Characters 89, 'P', 'N', 'G' for PNG header
+		igetc(); // Skip the first character...seems to vary.
+		iread(PNGTest, 3, 1);
+		if (!strnicmp(PNGTest, "PNG", 3))  // Characters 'P', 'N', 'G' for PNG header
 		{
 #ifdef IL_NO_PNG
 			ilSetError(IL_FORMAT_NOT_SUPPORTED);  // Cannot handle thesse without libpng.
@@ -315,7 +316,14 @@ ILboolean iLoadIconInternal()
 				Image->Data[j] = IconImages[i].Pal[IconImages[i].Data[k] * 4];
 				Image->Data[j+1] = IconImages[i].Pal[IconImages[i].Data[k] * 4 + 1];
 				Image->Data[j+2] = IconImages[i].Pal[IconImages[i].Data[k] * 4 + 2];
-				Image->Data[j+3] = (IconImages[i].AND[CurAndByte] & l) != 0 ? 0 : 255;
+				if (IconImages[i].AND == NULL)  // PNG Palette
+				{
+					Image->Data[j+3] = IconImages[i].Pal[IconImages[i].Data[k] * 4 + 3];
+				}
+				else
+				{
+					Image->Data[j+3] = (IconImages[i].AND[CurAndByte] & l) != 0 ? 0 : 255;
+				}
 				l >>= 1;
 
 				++x;
@@ -517,7 +525,7 @@ ILboolean ico_readpng_get_image(ICOIMAGE *Icon, ILdouble display_exponent)
 	png_bytepp	row_pointers = NULL;
 	png_uint_32 width, height; // Changed the type to fix AMD64 bit problems, thanks to Eric Werness
 	ILdouble	screen_gamma = 1.0;
-	ILuint		i, channels;
+	ILuint		i, channels, Size, ANDPadSize;
 	ILenum		format;
 	png_colorp	palette;
 	ILint num_palette, j, bit_depth;
@@ -584,12 +592,15 @@ ILboolean ico_readpng_get_image(ICOIMAGE *Icon, ILdouble display_exponent)
 	{
 		case PNG_COLOR_TYPE_PALETTE:
 			Icon->Head.BitCount = 8;
+			format = IL_COLOUR_INDEX;
 			break;
 		case PNG_COLOR_TYPE_RGB:
 			Icon->Head.BitCount = 24;
+			format = IL_RGB;
 			break;
 		case PNG_COLOR_TYPE_RGB_ALPHA:
 			Icon->Head.BitCount = 32;
+			format = IL_RGBA;
 			break;
 		default:
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
@@ -621,7 +632,7 @@ ILboolean ico_readpng_get_image(ICOIMAGE *Icon, ILdouble display_exponent)
 			return IL_FALSE;
 		}
 
-		chans = 3;
+		chans = 4;
 
 		if (png_get_valid(ico_png_ptr, ico_info_ptr, PNG_INFO_tRNS)) {
 			png_get_tRNS(ico_png_ptr, ico_info_ptr, &trans, &num_trans, NULL);
@@ -631,16 +642,18 @@ ILboolean ico_readpng_get_image(ICOIMAGE *Icon, ILdouble display_exponent)
 		Icon->Pal = (ILubyte*)ialloc(num_palette * chans);
 
 		for (j = 0; j < num_palette; ++j) {
-			Icon->Pal[chans*j + 0] = palette[j].red;
+			Icon->Pal[chans*j + 0] = palette[j].blue;
 			Icon->Pal[chans*j + 1] = palette[j].green;
-			Icon->Pal[chans*j + 2] = palette[j].blue;
-			if (trans!=NULL) {
-				if (j<num_trans)
-					iCurImage->Pal.Palette[chans*j + 3] = trans[j];
+			Icon->Pal[chans*j + 2] = palette[j].red;
+			if (trans != NULL) {
+				if (j < num_trans)
+					Icon->Pal[chans*j + 3] = trans[j];
 				else
-					iCurImage->Pal.Palette[chans*j + 3] = 255;
+					Icon->Pal[chans*j + 3] = 255;
 			}
 		}
+
+		Icon->AND = NULL;
 	}
 
 	//allocate row pointers
