@@ -74,7 +74,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib"
+				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libmng.lib libjasper.lib"
 				OutputFile="$(OutDir)\DevIL.dll"
 				GenerateDebugInformation="true"
 				AssemblyDebug="0"
@@ -256,7 +256,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib"
+				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libmng.lib libjasper.lib"
 				OutputFile="$(OutDir)\DevIL.dll"
 			/>
 			<Tool
@@ -376,6 +376,10 @@
 			</File>
 			<File
 				RelativePath="..\src\il_io.c"
+				>
+			</File>
+			<File
+				RelativePath="..\src\il_jp2.c"
 				>
 			</File>
 			<File
@@ -565,6 +569,10 @@
 			</File>
 			<File
 				RelativePath="..\include\il_internal.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\il_jp2.h"
 				>
 			</File>
 			<File

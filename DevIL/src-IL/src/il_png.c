@@ -29,8 +29,8 @@
 #ifdef _WIN32
 	#if (defined(IL_USE_PRAGMA_LIBS))
 		#if defined(_MSC_VER) || defined(__BORLANDC__)
-			#pragma comment(lib, "DevIL_libpng.lib")
-			#pragma comment(lib, "DevIL_zlib.lib")
+			#pragma comment(lib, "libpng.lib")
+			#pragma comment(lib, "zlib.lib")
 		#endif
 	#endif
 #endif
@@ -258,9 +258,9 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 	png_uint_32 width, height; // Changed the type to fix AMD64 bit problems, thanks to Eric Werness
 	ILdouble	screen_gamma = 1.0;
 	ILuint		i, channels;
-	ILenum format;
+	ILenum		format;
 	png_colorp	palette;
-	ILint num_palette, j, bit_depth;
+	ILint		num_palette, j, bit_depth;
 #if _WIN32 || DJGPP
 	ILdouble image_gamma;
 #endif

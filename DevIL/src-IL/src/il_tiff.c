@@ -27,7 +27,7 @@
 #ifdef _WIN32
 	#if (defined(IL_USE_PRAGMA_LIBS))
 		#if defined(_MSC_VER) || defined(__BORLANDC__)
-			#pragma comment(lib, "DevIL_libtiff.lib")
+			#pragma comment(lib, "libtiff.lib")
 		#endif
 	#endif
 #endif

@@ -23,10 +23,10 @@
 #ifdef _WIN32
 	#if (defined(IL_USE_PRAGMA_LIBS))
 		#if defined(_MSC_VER) || defined(__BORLANDC__)
-			#pragma comment(lib, "DevIL_libmng.lib")
-			#pragma comment(lib, "DevIL_lcms.lib")
-			#pragma comment(lib, "DevIL_libjpeg.lib")
-			#pragma comment(lib, "DevIL_zlib.lib")
+			#pragma comment(lib, "libmng.lib")
+			#pragma comment(lib, "lcms.lib")
+			#pragma comment(lib, "libjpeg.lib")
+			#pragma comment(lib, "zlib.lib")
 		#endif
 	#endif
 #endif

@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 06/23/2002 <--Y2K Compliant! =]
+// Copyright (C) 2000-2008 by Denton Woods
+// Last modified: 08/23/2008
 //
 // Filename: IL/il.h
 //
@@ -205,6 +205,7 @@ typedef void           ILvoid;
 #define IL_XPM          0x043E
 #define IL_HDR          0x043F
 #define IL_ICNS			0x0440
+#define IL_JP2			0x0441
 
 
 #define IL_JASC_PAL     0x0475
@@ -237,6 +238,7 @@ typedef void           ILvoid;
 #define IL_LIB_PNG_ERROR  0x05E3
 #define IL_LIB_TIFF_ERROR 0x05E4
 #define IL_LIB_MNG_ERROR  0x05E5
+#define IL_LIB_JP2_ERROR  0x05E6
 #define IL_UNKNOWN_ERROR  0x05FF
 
 

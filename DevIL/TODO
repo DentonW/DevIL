@@ -2,6 +2,11 @@ DevIL TODO:
 
 -----------
 
+Denton:
+- Add ilIsValid* for .icns and .jp2 (and more?)
+- Get MNG support working again.
+
+
 For 1.7.0
 - fixed OpenGL Loading (breaks old code which inverted the images)
 - iluReplaceColour should have a color to describe which color to set.

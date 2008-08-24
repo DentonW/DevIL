@@ -39,6 +39,8 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 		return IL_TGA;
 	if (!iStrCmp(Ext, IL_TEXT("jpg")) || !iStrCmp(Ext, IL_TEXT("jpe")) || !iStrCmp(Ext, IL_TEXT("jpeg")))
 		return IL_JPG;
+	if (!iStrCmp(Ext, IL_TEXT("jp2")))
+		return IL_JP2;
 	if (!iStrCmp(Ext, IL_TEXT("dds")))
 		return IL_DDS;
 	if (!iStrCmp(Ext, IL_TEXT("png")))
@@ -574,6 +576,11 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 			return ilLoadJpeg(FileName);
 		#endif
 
+		#ifndef IL_NO_JP2
+		case IL_JP2:
+			return ilLoadJp2(FileName);
+		#endif
+
 		#ifndef IL_NO_DDS
 		case IL_DDS:
 			return ilLoadDds(FileName);
@@ -740,6 +747,12 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			#endif
 		#endif
 
+		// There is not a way to do this with the JasPer library.
+		/*#ifndef IL_NO_JP2
+		case IL_JP2:
+			return ilLoadJp2F(File);
+		#endif*/
+
 		#ifndef IL_NO_DDS
 		case IL_DDS:
 			return ilLoadDdsF(File);
@@ -780,6 +793,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 		#ifndef IL_NO_ICO
 		case IL_ICO:
 			return ilLoadIconF(File);
+		#endif
+
+		#ifndef IL_NO_ICNS
+		case IL_ICNS:
+			return ilLoadIcnsF(File);
 		#endif
 
 		#ifndef IL_NO_LIF
@@ -892,6 +910,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const ILvoid *Lump, ILuint Size) {
 			return ilLoadJpegL(Lump, Size);
 		#endif
 
+		#ifndef IL_NO_JP2
+		case IL_JP2:
+			return ilLoadJp2L(Lump, Size);
+		#endif
+
 		#ifndef IL_NO_DDS
 		case IL_DDS:
 			return ilLoadDdsL(Lump, Size);
@@ -932,6 +955,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const ILvoid *Lump, ILuint Size) {
 		#ifndef IL_NO_ICO
 		case IL_ICO:
 			return ilLoadIconL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_ICNS
+		case IL_ICNS:
+			return ilLoadIcnsL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_LIF
@@ -1056,6 +1084,12 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		if (!iStrCmp(Ext, IL_TEXT("jpg")) || !iStrCmp(Ext, IL_TEXT("jpe")) ||
 			!iStrCmp(Ext, IL_TEXT("jpeg"))) {
 			return ilLoadJpeg(FileName);
+		}
+		#endif
+
+		#ifndef IL_NO_JP2
+		if (!iStrCmp(Ext, IL_TEXT("jp2"))) {
+			return ilLoadJp2(FileName);
 		}
 		#endif
 

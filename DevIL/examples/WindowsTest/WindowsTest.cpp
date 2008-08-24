@@ -45,7 +45,7 @@ HBRUSH BackBrush;
 #define TITLE		"DevIL Windows Test"
 ILuint	NumUndosAllowed = 4, UndoSize = 0;
 ILuint	Undos[11] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-ILuint	Width, Height, Depth;  // Main image
+ILuint	Width, Height, Depth, CurImage;  // Main image
 char	CurFileName[2048];
 
 ILint	XOff, YOff;
@@ -125,6 +125,7 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 		ilGenImages(1, Undos);
 		ilBindImage(Undos[0]);
 		if (ilLoadImage(__argv[1])) {
+			CurImage = 0;
 			//ilConvertImage(IL_BGRA);
 			ilutRenderer(ILUT_WIN32);
 			ResizeWin();
@@ -164,7 +165,7 @@ void CreateGDI()
 	DeleteObject(SelectObject(hMemDC, hBitmap));
 	ilBindImage(CurName);
 	if (CurImg)
-		ilActiveImage(CurImg);
+		ilActiveImage(CurImg);ilBindImage(Undos[0]);
 	if (CurMip)
 		ilActiveMipmap(CurMip);
 	ilDeleteImages(1, &CopyName);
@@ -307,7 +308,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	unsigned int		currentColor = 0x80000000;
 	unsigned int		originalColor = 0x80000000;
 	bool				userClickedOK;
-	ILclampf			Red, Green, Blue;
+	ILclampf			Red = 255, Green = 255, Blue = 255;
 	ILubyte				*AlphaChannel;
 	ILenum				Origin;
 
@@ -391,6 +392,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			ilGenImages(1, Undos);
 			ilBindImage(Undos[0]);
 			ilLoadImage(OpenFileName);
+			CurImage = 0;
 
 			ilutRenderer(ILUT_WIN32);
 			ResizeWin();
@@ -554,6 +556,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 					//last_elapsed = SDL_GetTicks();
 					ilLoadImage(OpenFileName);
+					CurImage = 0;
 					//cur_elapsed = SDL_GetTicks();
 					//elapsed = cur_elapsed - last_elapsed;
 					//last_elapsed = cur_elapsed;
@@ -634,6 +637,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				case ID_EDIT_VIEWIMAGENUM:
 					if (DialogBox(hInstance, MAKEINTRESOURCE(IDD_DIALOG_FILTER),
 						hWnd, FilterDlgProc) == TRUE) {
+						ilBindImage(Undos[0]);  // @TODO: Implement undos better with this.
 						ilActiveImage(FilterParamInt);
 						ilutRenderer(ILUT_WIN32);
 						ResizeWin();
@@ -651,6 +655,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					}
 					return (0L);
 
+				case ID_EDIT_NEXT:
+					ilBindImage(Undos[0]);  // @TODO: Implement undos better with this.
+					CurImage++;
+					ilActiveImage(CurImage);
+					ilutRenderer(ILUT_WIN32);
+					ResizeWin();
+					CreateGDI();
+					return (0L);
+
+				case ID_EDIT_PREV:
+					ilBindImage(Undos[0]);  // @TODO: Implement undos better with this.
+					CurImage--;
+					ilActiveImage(CurImage);
+					ilutRenderer(ILUT_WIN32);
+					ResizeWin();
+					CreateGDI();
+					return (0L);
 			}
 
 

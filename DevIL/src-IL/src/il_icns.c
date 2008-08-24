@@ -7,11 +7,15 @@
 // Filename: src-IL/src/il_icns.c
 //
 // Description: Reads from a Mac OS X icon (.icns) file.
+//		Credit for the format of .icns files goes to
+//		http://www.macdisk.com/maciconen.php3 and
+//		http://ezix.org/project/wiki/MacOSXIcons
 //
 //-----------------------------------------------------------------------------
 
 //@TODO: Put ilSetError calls in when errors occur.
 //@TODO: Should we clear the alpha channel just in case there isn't one in the file?
+//@TODO: Checks on iread
 
 #include "il_internal.h"
 #ifndef IL_NO_ICNS
@@ -66,6 +70,7 @@ ILboolean iLoadIcnsInternal()
 	ICNSDATA	Entry;
 	ILimage		*Image = NULL;
 	ILboolean	BaseCreated = IL_FALSE;
+
 
 	if (iCurImage == NULL)
 	{
@@ -124,6 +129,18 @@ ILboolean iLoadIcnsInternal()
 			if (iIcnsReadData(&BaseCreated, IL_TRUE, 16, &Entry, &Image) == IL_FALSE)
 				goto icns_error;
 		}
+#ifndef IL_NO_JP2
+		else if (!strncmp(Entry.ID, "ic09", 4))  // 512x512 JPEG2000 encoded - Uses JasPer
+		{
+			if (iIcnsReadData(&BaseCreated, IL_FALSE, 512, &Entry, &Image) == IL_FALSE)
+				goto icns_error;
+		}
+		else if (!strncmp(Entry.ID, "ic08", 4))  // 256x256 JPEG2000 encoded - Uses JasPer
+		{
+			if (iIcnsReadData(&BaseCreated, IL_FALSE, 256, &Entry, &Image) == IL_FALSE)
+				goto icns_error;
+		}
+#endif//IL_NO_JP2
 		else  // Not a valid format or one that we can use
 		{
 			iseek(Entry.Size - 8, IL_SEEK_CUR);
@@ -141,7 +158,7 @@ icns_error:
 ILboolean iIcnsReadData(ILboolean *BaseCreated, ILboolean IsAlpha, ILint Width, ICNSDATA *Entry, ILimage **Image)
 {
 	ILint		Position = 0, RLEPos = 0, Channel, i;
-	ILubyte		RLERead, *Data;
+	ILubyte		RLERead, *Data = NULL;
 	ILimage		*TempImage = NULL;
 	ILboolean	ImageAlreadyExists = IL_FALSE;
 
@@ -200,6 +217,18 @@ ILboolean iIcnsReadData(ILboolean *BaseCreated, ILboolean IsAlpha, ILint Width, 
 			TempImage->Data[(i * 4) + 3] = Data[i];
 		}
 	}
+#ifndef IL_NO_JP2
+	else if (Width == 256 || Width == 512)  // JPEG2000 encoded - uses JasPer
+	{
+		iread(Data, Entry->Size - 8, 1);  // Size includes the header
+		if (ilLoadJp2LInternal(Data, Entry->Size - 8, TempImage) == IL_FALSE)
+		{
+			ifree(Data);
+			ilSetError(IL_LIB_JP2_ERROR);
+			return IL_TRUE;
+		}
+	}
+#endif//IL_NO_JP2
 	else  // RGB data
 	{
 		iread(Data, Entry->Size - 8, 1);  // Size includes the header
@@ -254,4 +283,4 @@ ILboolean iIcnsReadData(ILboolean *BaseCreated, ILboolean IsAlpha, ILint Width, 
 	return IL_TRUE;
 }
 
-#endif//IL_NO_ICO
+#endif//IL_NO_ICNS

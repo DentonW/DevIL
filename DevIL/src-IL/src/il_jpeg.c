@@ -90,7 +90,7 @@
 
 			#if defined(IL_USE_PRAGMA_LIBS) || defined(__BORLANDC__)
 
-				#pragma comment(lib, "DevIL_libjpeg.lib")
+				#pragma comment(lib, "libjpeg.lib")
 
 			#endif
 

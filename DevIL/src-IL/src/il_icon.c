@@ -362,22 +362,15 @@ ILboolean iLoadIconInternal()
 		}
 
 		else if (IconImages[i].Head.BitCount == 32) {
-
 			for (; j < Image->SizeOfData; j += 4, k += 4) {
-
 				Image->Data[j] = IconImages[i].Data[k];
-
 				Image->Data[j+1] = IconImages[i].Data[k+1];
-
 				Image->Data[j+2] = IconImages[i].Data[k+2];
 
 				//If the icon has 4 channels, use 4th channel for alpha...
 				//(for Windows XP style icons with true alpha channel
-
 				Image->Data[j+3] = IconImages[i].Data[k+3];
-
 			}
-
 		}
 	}
 
@@ -410,6 +403,7 @@ file_read_error:
 		ifree(DirEntries);
 	return IL_FALSE;
 }
+
 
 #ifndef IL_NO_PNG
 // 08-22-2008: Copying a lot of this over from il_png.c for the moment.
@@ -525,10 +519,10 @@ ILboolean ico_readpng_get_image(ICOIMAGE *Icon, ILdouble display_exponent)
 	png_bytepp	row_pointers = NULL;
 	png_uint_32 width, height; // Changed the type to fix AMD64 bit problems, thanks to Eric Werness
 	ILdouble	screen_gamma = 1.0;
-	ILuint		i, channels, Size, ANDPadSize;
+	ILuint		i, channels;
 	ILenum		format;
 	png_colorp	palette;
-	ILint num_palette, j, bit_depth;
+	ILint		num_palette, j, bit_depth;
 #if _WIN32 || DJGPP
 	ILdouble image_gamma;
 #endif
@@ -625,7 +619,7 @@ ILboolean ico_readpng_get_image(ICOIMAGE *Icon, ILdouble display_exponent)
 	{
 		int chans;
 		png_bytep trans = NULL;
-		int  num_trans = -1;
+		int num_trans = -1;
 		if (!png_get_PLTE(ico_png_ptr, ico_info_ptr, &palette, &num_palette)) {
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
 			png_destroy_read_struct(&ico_png_ptr, &ico_info_ptr, NULL);
@@ -653,7 +647,7 @@ ILboolean ico_readpng_get_image(ICOIMAGE *Icon, ILdouble display_exponent)
 			}
 		}
 
-		Icon->AND = NULL;
+		Icon->AND = NULL;  // Transparency information is obtained from libpng.
 	}
 
 	//allocate row pointers
@@ -673,12 +667,10 @@ ILboolean ico_readpng_get_image(ICOIMAGE *Icon, ILdouble display_exponent)
 	// Now we can go ahead and just read the whole image
 	png_read_image(ico_png_ptr, row_pointers);
 
-
 	/* and we're done!	(png_read_end() can be omitted if no processing of
 	 * post-IDAT text/time/etc. is desired) */
 	//png_read_end(ico_png_ptr, NULL);
 	ifree(row_pointers);
-//@TODO: Free the palette?!
 
 	return IL_TRUE;
 }
