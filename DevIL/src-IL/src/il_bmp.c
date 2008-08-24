@@ -591,7 +591,7 @@ ILboolean ilReadRLE8Bmp(BMPHEAD *Header) {
 				break;
 			case 0x2:
 				if (iread(Bytes, sizeof(Bytes), 1) != 1)
-				return IL_FALSE;
+					return IL_FALSE;
 				offset += Bytes[0] + Bytes[1] * iCurImage->Width;
 				endOfLine += Bytes[1] * iCurImage->Width;
 				break;

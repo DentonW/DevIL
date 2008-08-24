@@ -614,54 +614,40 @@ ILboolean iLoadJpegInternal()
 
 
 
-	if ( iCurImage == NULL )
-
+	if (iCurImage == NULL)
 	{
-
-		ilSetError( IL_ILLEGAL_OPERATION );
-
+		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
-
 	}
 
 
 
 	JpegInfo.err = jpeg_std_error( &Error );		// init standard error handlers
-
 	Error.error_exit = iJpegErrorExit;				// add our exit handler
-
 	Error.output_message = OutputMsg;
 
 
 
-	if ( (result = setjmp( JpegJumpBuffer ) == 0) != IL_FALSE )
-
+	if ((result = setjmp(JpegJumpBuffer) == 0) != IL_FALSE)
 	{
-
 		jpeg_create_decompress( &JpegInfo );
-
 		JpegInfo.do_block_smoothing = IL_TRUE;
-
 		JpegInfo.do_fancy_upsampling = IL_TRUE;
-
-
 
 		//jpeg_stdio_src(&JpegInfo, iGetFile());
 
 		devil_jpeg_read_init( &JpegInfo );
-
 		jpeg_read_header( &JpegInfo, IL_TRUE );
-
-
 
 		result = ilLoadFromJpegStruct( &JpegInfo );
 
-
-
 		jpeg_finish_decompress( &JpegInfo );
-
 		jpeg_destroy_decompress( &JpegInfo );
 
+	}
+	else
+	{
+		jpeg_destroy_decompress(&JpegInfo);
 	}
 
 	return result;

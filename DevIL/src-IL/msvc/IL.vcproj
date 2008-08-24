@@ -363,6 +363,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\il_icns.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\il_icon.c"
 				>
 			</File>
@@ -549,6 +553,10 @@
 			</File>
 			<File
 				RelativePath="..\include\il_gif.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\il_icns.h"
 				>
 			</File>
 			<File

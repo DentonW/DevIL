@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 06/23/2002 <--Y2K Compliant! =]
+// Copyright (C) 2000-2008 by Denton Woods
+// Last modified: 08/23/2008
 //
 // Filename: IL/ilu.h
 //
@@ -27,14 +27,14 @@ extern "C" {
 #ifdef _WIN32
 	#if (defined(IL_USE_PRAGMA_LIBS)) && (!defined(_IL_BUILD_LIBRARY))
 		#if defined(_MSC_VER) || defined(__BORLANDC__)
-			#pragma comment(lib, "DevILU.lib")
+			#pragma comment(lib, "ILU.lib")
 		#endif
 	#endif
 #endif
 
 
-#define ILU_VERSION_1_6_8 1
-#define ILU_VERSION       168
+#define ILU_VERSION_1_7_0 1
+#define ILU_VERSION       170
 
 
 #define ILU_FILTER         0x2600

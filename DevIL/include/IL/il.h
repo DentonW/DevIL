@@ -204,6 +204,8 @@ typedef void           ILvoid;
 #define IL_PXR          0x043D
 #define IL_XPM          0x043E
 #define IL_HDR          0x043F
+#define IL_ICNS			0x0440
+
 
 #define IL_JASC_PAL     0x0475
 

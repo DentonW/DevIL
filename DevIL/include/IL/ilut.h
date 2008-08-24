@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Toolkit Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 06/23/2002 <--Y2K Compliant! =]
+// Copyright (C) 2000-2008 by Denton Woods
+// Last modified: 08/23/2008
 //
 // Filename: IL/ilut.h
 //
@@ -25,8 +25,8 @@
 // Defines
 //-----------------------------------------------------------------------------
 
-#define ILUT_VERSION_1_6_8 1
-#define ILUT_VERSION       168
+#define ILUT_VERSION_1_7_0 1
+#define ILUT_VERSION       170
 
 
 // Attribute Bits
@@ -122,7 +122,7 @@
 #ifdef _WIN32
 	#if (defined(IL_USE_PRAGMA_LIBS)) && (!defined(_IL_BUILD_LIBRARY))
 		#if defined(_MSC_VER) || defined(__BORLANDC__)
-			#pragma comment(lib, "DevILUT.lib")
+			#pragma comment(lib, "ILUT.lib")
 		#endif
 	#endif
 #endif
@@ -302,6 +302,8 @@ extern "C" {
 #endif//ILUT_USE_DIRECTX8
 
 #ifdef ILUT_USE_DIRECTX9
+	#pragma warning(push)
+	#pragma warning(disable : 4115)  // Disables 'named type definition in parentheses' warning
 //	ILAPI ILvoid  ILAPIENTRY ilutD3D9MipFunc(ILuint NumLevels);
 	ILAPI struct IDirect3DTexture9*       ILAPIENTRY ilutD3D9Texture       (struct IDirect3DDevice9* Device);
 	ILAPI struct IDirect3DVolumeTexture9* ILAPIENTRY ilutD3D9VolumeTexture (struct IDirect3DDevice9* Device);
@@ -323,6 +325,7 @@ extern "C" {
 	ILAPI ILboolean ILAPIENTRY ilutD3D9TexFromResource(struct IDirect3DDevice9 *Device, HMODULE SrcModule, char *SrcResource, struct IDirect3DTexture9 **Texture);
 	ILAPI ILboolean ILAPIENTRY ilutD3D9VolTexFromResource(struct IDirect3DDevice9 *Device, HMODULE SrcModule, char *SrcResource, struct IDirect3DVolumeTexture9 **Texture);
 	ILAPI ILboolean ILAPIENTRY ilutD3D9LoadSurface(struct IDirect3DDevice9 *Device, struct IDirect3DSurface9 *Surface);
+	#pragma warning(pop)
 #endif//ILUT_USE_DIRECTX9
 
 
