@@ -16,7 +16,7 @@ AC_PREREQ(2.52)
 
 DEVIL_MAJOR=1
 DEVIL_MINOR=7
-DEVIL_REVISION=0
+DEVIL_REVISION=1
 DEVIL_VERSION=$DEVIL_MAJOR$DEVIL_MINOR$DEVIL_REVISION
 
 dnl
@@ -35,7 +35,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION($Revision: 1.30 $)
+AC_REVISION($Revision: 1.31 $)
 AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
@@ -181,6 +181,7 @@ AC_CHECK_HEADER(tiffio.h,,no_tiff=yes)
 AC_CHECK_HEADER(lcms/lcms.h,,no_lcms=yes)
 AC_CHECK_HEADER(lcms.h,lcms_nodirinclude=yes)
 AC_CHECK_HEADER(libmng.h,,no_mng="yes")
+AC_CHECK_HEADER(jasper/jasper.h,, no_jp2=yes)
 AC_CHECK_HEADER(zlib.h, use_z=yes, use_z=no)
 
 dnl Special code for LCMS
@@ -208,6 +209,7 @@ SET_LIB(jpeg,JPG)
 SET_LIB(tiff,TIFF)
 SET_LIB(lcms,LCMS)
 SET_LIB(mng,MNG)
+SET_LIB(jp2,JP2)
 SET_LIB(z,Z)
 
 dnl libpng configuration
@@ -247,6 +249,7 @@ TEST_FORMAT(gif,GIF)
 TEST_FORMAT(hdr,HDR)
 TEST_FORMAT(icon,ICON)
 TEST_FORMAT(jpeg,JPG)
+TEST_FORMAT(jp2,JP2)
 TEST_FORMAT(lcms,LCMS)
 TEST_FORMAT(lif,LIF)
 TEST_FORMAT(mdl,MDL)
