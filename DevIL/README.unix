@@ -18,6 +18,15 @@ to verify if is possible to compile them in. If they are explicitly enabled
 or disabled no test will occour.
 
 
+Config.h and JasPer:
+-------------------
+
+If compiling with JasPer, you may need to modify config.h so that it does not
+redefine things that are defined in JasPer's jas_config.h.  PACKAGE, PACKAGE_NAME,
+etc. are generated for both projects, since they use a similar configuration
+program.  If there are conflicts, just comment out the ones in DevIL's config.h.
+
+
 Libraries needed to compile DevIL* :
 -----------------------------------
 
