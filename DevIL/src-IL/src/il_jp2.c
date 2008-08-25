@@ -106,11 +106,12 @@ ILboolean iLoadJp2Internal(jas_stream_t	*Stream, ILimage *Image)
 {
 	jas_image_t		*Jp2Image = NULL;
 	jas_matrix_t	*origdata;
-	ILint			Test, x, y, c;
+	ILint			x, y, c;
 	ILimage			*TempImage;
 
 	// Decode image
-	if (!(Jp2Image = jas_image_decode(Stream, -1, 0)))
+	Jp2Image = jas_image_decode(Stream, -1, 0);
+	if (!Jp2Image)
 	{
 		ilSetError(IL_ILLEGAL_FILE_VALUE);
 		jas_stream_close(Stream);
@@ -160,7 +161,8 @@ ILboolean iLoadJp2Internal(jas_stream_t	*Stream, ILimage *Image)
 	//  I am assuming RGBA format.  Is it possible for other formats to be included?
 	for (c = 0; c < TempImage->Bpp; c++)
 	{
-		if (!(origdata = jas_matrix_create(TempImage->Height, TempImage->Width)))
+		origdata = jas_matrix_create(TempImage->Height, TempImage->Width);
+		if (!origdata)
 		{
 			ilSetError(IL_LIB_JP2_ERROR);
 			return IL_FALSE;  // @TODO: Error
