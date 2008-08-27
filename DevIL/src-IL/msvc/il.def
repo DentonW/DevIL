@@ -19,6 +19,7 @@ ilCopyPixels
 ilCreateSubImage
 ilDefaultImage
 ilDeleteImages
+
 ilDetermineType ; added 2003-09-17
 ilDisable
 ilEnable

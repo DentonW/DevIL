@@ -291,6 +291,10 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
+				RelativePath=".\il.def"
+				>
+			</File>
+			<File
 				RelativePath="..\src\il_alloc.c"
 				>
 			</File>
