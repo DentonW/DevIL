@@ -5,6 +5,7 @@ DevIL TODO:
 Denton:
 - Add ilIsValid* for .icns and .jp2 (and more?)
 - Get MNG support working again.
+- Better static lib support in MSVC++ 9
 
 
 For 1.7.0

@@ -165,6 +165,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)\ILU.dll"
+				ModuleDefinitionFile="ilu.def"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
@@ -248,6 +249,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				ModuleDefinitionFile="ilu.def"
 			/>
 			<Tool
 				Name="VCALinkTool"

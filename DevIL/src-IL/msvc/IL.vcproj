@@ -76,6 +76,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib"
 				OutputFile="$(OutDir)\DevIL.dll"
+				ModuleDefinitionFile="il.def"
 				GenerateDebugInformation="true"
 				AssemblyDebug="0"
 			/>
@@ -258,6 +259,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib"
 				OutputFile="$(OutDir)\DevIL.dll"
+				ModuleDefinitionFile="il.def"
 			/>
 			<Tool
 				Name="VCALinkTool"
