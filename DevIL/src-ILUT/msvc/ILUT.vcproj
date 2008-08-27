@@ -94,7 +94,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)\ILUT.lib&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;..\..\examples\bin&quot;"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)\ILUT.lib&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;..\..\examples\bin&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -179,7 +179,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)\ILUT.lib&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;..\..\examples\bin&quot;"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)\ILUT.lib&quot; &quot;..\..\lib&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;..\..\examples\bin&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
