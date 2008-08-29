@@ -257,7 +257,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib"
+				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib IlmImf.lib IlmThread.lib Half.lib Iex.lib"
 				OutputFile="$(OutDir)\DevIL.dll"
 				ModuleDefinitionFile="il.def"
 			/>
@@ -346,6 +346,10 @@
 			</File>
 			<File
 				RelativePath="..\src\il_error.c"
+				>
+			</File>
+			<File
+				RelativePath="..\src\il_exr.cpp"
 				>
 			</File>
 			<File
