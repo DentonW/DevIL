@@ -713,6 +713,11 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 		case IL_XPM:
 			return ilLoadXpm(FileName);
 		#endif
+
+		#ifndef IL_NO_EXR
+		case IL_EXR:
+			return ilLoadExr(FileName);
+		#endif
 	}
 
 	ilSetError(IL_INVALID_ENUM);
@@ -1244,6 +1249,12 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#ifndef IL_NO_XPM
 		if (!iStrCmp(Ext, IL_TEXT("xpm"))) {
 			return ilLoadXpm(FileName);
+		}
+		#endif
+
+		#ifndef IL_NO_EXR
+		if (!iStrCmp(Ext, IL_TEXT("exr"))) {
+			return ilLoadExr(FileName);
 		}
 		#endif
 	}

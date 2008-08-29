@@ -74,7 +74,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib"
+				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib IlmImf.lib IlmThread.lib Half.lib Iex.lib"
 				OutputFile="$(OutDir)\DevIL.dll"
 				ModuleDefinitionFile="il.def"
 				GenerateDebugInformation="true"
@@ -559,6 +559,10 @@
 			</File>
 			<File
 				RelativePath="..\include\il_endian.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\il_exr.h"
 				>
 			</File>
 			<File

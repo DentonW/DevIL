@@ -206,6 +206,7 @@ typedef void           ILvoid;
 #define IL_HDR          0x043F
 #define IL_ICNS			0x0440
 #define IL_JP2			0x0441
+#define IL_EXR			0x0442
 
 
 #define IL_JASC_PAL     0x0475

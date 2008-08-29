@@ -14,14 +14,15 @@
 #include "il_internal.h"
 #ifndef IL_NO_EXR
 
+#include "il_exr.h"
 #include <ImfRgba.h>
 #include <ImfArray.h>
 #include <ImfRgbaFile.h>
-#include <ImfTiledRgbaFile.h>
-#include <ImfInputFile.h>
-#include <ImfTiledInputFile.h>
-#include <ImfPreviewImage.h>
-#include <ImfChannelList.h>
+//#include <ImfTiledRgbaFile.h>
+//#include <ImfInputFile.h>
+//#include <ImfTiledInputFile.h>
+//#include <ImfPreviewImage.h>
+//#include <ImfChannelList.h>
 
 using namespace Imath;
 using namespace Imf;
@@ -29,24 +30,18 @@ using namespace std;
 
 
 //! Reads an icon file.
-ILboolean ilLoadIcns(ILconst_string FileName)
+ILboolean ilLoadExr(ILconst_string FileName)
 {
-
-	return IL_TRUE;
+	return iLoadExrInternal(FileName);
 }
 
 
-
-
-
-void
-loadImage (const char fileName[],
-	   Box2i &displayWindow,
-	   Box2i &dataWindow,
-	   float &pixelAspectRatio,
-	   Array<Rgba> &pixels)
+ILboolean iLoadExrInternal(const char FileName[])
 {
-    RgbaInputFile in (fileName);
+	Array<Rgba> pixels;
+	Box2i displayWindow, dataWindow;
+	float pixelAspectRatio;
+    RgbaInputFile in (FileName);
 
     displayWindow = in.displayWindow();
     dataWindow = in.dataWindow();
@@ -62,20 +57,22 @@ loadImage (const char fileName[],
     pixels.resizeErase (dw * dh);
     in.setFrameBuffer (pixels - dx - dy * dw, 1, dw);
 
-    try
-    {
-	in.readPixels (dataWindow.min.y, dataWindow.max.y);
-    }
-    catch (const exception &e)
-    {
+    //try
+    //{
+		in.readPixels (dataWindow.min.y, dataWindow.max.y);
+    //}
+    //catch (const exception &e)
+    //{
 	//
 	// If some of the pixels in the file cannot be read,
 	// print an error message, and return a partial image
 	// to the caller.
 	//
 
-	cerr << e.what() << endl;
-    }
+	//	return IL_FALSE;
+    //}
+
+	return ilTexImage(dw, dh, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL);
 }
 
 

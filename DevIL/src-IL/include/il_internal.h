@@ -242,6 +242,7 @@ ILboolean ilLoadDoomL(const ILvoid *Lump, ILuint Size);
 ILboolean ilLoadDoomFlat(ILconst_string FileName);
 ILboolean ilLoadDoomFlatF(ILHANDLE File);
 ILboolean ilLoadDoomFlatL(const ILvoid *Lump, ILuint Size);
+ILboolean ilLoadExr(ILconst_string FileName);
 ILboolean ilIsValidGif(ILconst_string FileName);
 ILboolean ilIsValidGifF(ILHANDLE File);
 ILboolean ilIsValidGifL(const ILvoid *Lump, ILuint Size);
