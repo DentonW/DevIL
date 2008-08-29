@@ -24,16 +24,18 @@
 //#include <ImfPreviewImage.h>
 //#include <ImfChannelList.h>
 
-using namespace Imath;
-using namespace Imf;
-using namespace std;
 
-
-//! Reads an icon file.
+//! Reads an .exr file.
 ILboolean ilLoadExr(ILconst_string FileName)
 {
 	return iLoadExrInternal(FileName);
 }
+
+
+
+using namespace Imath;
+using namespace Imf;
+using namespace std;
 
 
 ILboolean iLoadExrInternal(const char FileName[])
