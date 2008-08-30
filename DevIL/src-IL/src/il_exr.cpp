@@ -28,7 +28,10 @@
 //! Reads an .exr file.
 ILboolean ilLoadExr(ILconst_string FileName)
 {
-	return iLoadExrInternal(FileName);
+	ILboolean bRet;
+	bRet = iLoadExrInternal(FileName);
+
+	return bRet;
 }
 
 
@@ -38,7 +41,7 @@ using namespace Imf;
 using namespace std;
 
 
-ILboolean iLoadExrInternal(const char FileName[])
+ILboolean iLoadExrInternal(ILconst_string FileName)
 {
 	Array<Rgba> pixels;
 	Box2i displayWindow, dataWindow;
@@ -59,22 +62,53 @@ ILboolean iLoadExrInternal(const char FileName[])
     pixels.resizeErase (dw * dh);
     in.setFrameBuffer (pixels - dx - dy * dw, 1, dw);
 
-    //try
-    //{
+    try
+    {
 		in.readPixels (dataWindow.min.y, dataWindow.max.y);
-    //}
-    //catch (const exception &e)
-    //{
-	//
+    }
+    catch (const exception &e)
+    {
 	// If some of the pixels in the file cannot be read,
 	// print an error message, and return a partial image
 	// to the caller.
-	//
 
-	//	return IL_FALSE;
-    //}
+		return IL_FALSE;
+    }
 
-	return ilTexImage(dw, dh, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL);
+	//if (ilTexImage(dw, dh, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL) == IL_FALSE)
+	//if (ilTexImage(dw, dh, 1, 4, IL_RGBA, IL_UNSIGNED_SHORT, NULL) == IL_FALSE)
+	if (ilTexImage(dw, dh, 1, 4, IL_RGBA, IL_FLOAT, NULL) == IL_FALSE)
+		return IL_FALSE;
+	
+	if (in.lineOrder() == INCREASING_Y)
+		iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
+	else
+		iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
+
+
+	for (int i = 0; i < dw * dh; i++)
+	{
+		// Too much data lost
+		/*iCurImage->Data[i * 4 + 0] = (ILubyte)(pixels[i].r.bits() >> 8);
+		iCurImage->Data[i * 4 + 1] = (ILubyte)(pixels[i].g.bits() >> 8);
+		iCurImage->Data[i * 4 + 2] = (ILubyte)(pixels[i].b.bits() >> 8);
+		iCurImage->Data[i * 4 + 3] = (ILubyte)(pixels[i].a.bits() >> 8);*/
+
+		// The images look kind of washed out with this.
+		/*((ILshort*)(iCurImage->Data))[i * 4 + 0] = pixels[i].r.bits();
+		((ILshort*)(iCurImage->Data))[i * 4 + 1] = pixels[i].g.bits();
+		((ILshort*)(iCurImage->Data))[i * 4 + 2] = pixels[i].b.bits();
+		((ILshort*)(iCurImage->Data))[i * 4 + 3] = pixels[i].a.bits();*/
+
+		// This seems to give the best results, but the images can be saturated quite a bit.
+		((ILfloat*)(iCurImage->Data))[i * 4 + 0] = pixels[i].r;
+		((ILfloat*)(iCurImage->Data))[i * 4 + 1] = pixels[i].g;
+		((ILfloat*)(iCurImage->Data))[i * 4 + 2] = pixels[i].b;
+		((ILfloat*)(iCurImage->Data))[i * 4 + 3] = pixels[i].a;
+
+	}
+
+	return IL_TRUE;
 }
 
 

@@ -16,6 +16,16 @@
 
 #include "il_internal.h"
 
-ILboolean iLoadExrInternal(const char FileName[]);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+ILboolean ilLoadExr(ILconst_string FileName);
+
+#ifdef __cplusplus
+}
+#endif
+
+ILboolean iLoadExrInternal(ILconst_string FileName);
 
 #endif//EXR_H

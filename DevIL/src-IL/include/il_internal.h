@@ -19,6 +19,10 @@
 #include <math.h>
 #include <string.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Local headers
 #if defined(_WIN32) && !defined(HAVE_CONFIG_H)
 #define HAVE_CONFIG_H
@@ -242,7 +246,6 @@ ILboolean ilLoadDoomL(const ILvoid *Lump, ILuint Size);
 ILboolean ilLoadDoomFlat(ILconst_string FileName);
 ILboolean ilLoadDoomFlatF(ILHANDLE File);
 ILboolean ilLoadDoomFlatL(const ILvoid *Lump, ILuint Size);
-ILboolean ilLoadExr(ILconst_string FileName);
 ILboolean ilIsValidGif(ILconst_string FileName);
 ILboolean ilIsValidGifF(ILHANDLE File);
 ILboolean ilIsValidGifL(const ILvoid *Lump, ILuint Size);
@@ -384,4 +387,24 @@ ILboolean ilLoadWalL(const ILvoid *Lump, ILuint Size);
 ILboolean ilLoadXpm(ILconst_string FileName);
 ILboolean ilLoadXpmF(ILHANDLE File);
 ILboolean ilLoadXpmL(const ILvoid *Lump, ILuint Size);
+
+
+// OpenEXR is written in C++, so we have to wrap this to avoid linker errors.
+/*#ifndef IL_NO_EXR
+	#ifdef __cplusplus
+	extern "C" {
+	#endif
+		ILboolean ilLoadExr(ILconst_string FileName);
+	#ifdef __cplusplus
+	}
+	#endif
+#endif*/
+
+ILboolean ilLoadExr(ILconst_string FileName);
+
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif//INTERNAL_H
