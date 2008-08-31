@@ -549,7 +549,7 @@ ILAPI ILboolean ILAPIENTRY ilClearImage_(ILimage *Image)
 				ShortPtr = (ILushort*)Colours;
 				for (c = 0; c < NumBytes; c += Image->Bpc) {
 					for (i = c; i < Image->SizeOfData; i += NumBytes) {
-						*((ILushort*)(Image->Data + i)) = ShortPtr[c];
+						*((ILushort*)(Image->Data + i)) = ShortPtr[c / Image->Bpc];
 					}
 				}
 					break;
@@ -559,7 +559,7 @@ ILAPI ILboolean ILAPIENTRY ilClearImage_(ILimage *Image)
 				IntPtr = (ILuint*)Colours;
 				for (c = 0; c < NumBytes; c += Image->Bpc) {
 					for (i = c; i < Image->SizeOfData; i += NumBytes) {
-						*((ILuint*)(Image->Data + i)) = IntPtr[c];
+						*((ILuint*)(Image->Data + i)) = IntPtr[c / Image->Bpc];
 					}
 				}
 					break;
@@ -568,7 +568,7 @@ ILAPI ILboolean ILAPIENTRY ilClearImage_(ILimage *Image)
 				FloatPtr = (ILfloat*)Colours;
 				for (c = 0; c < NumBytes; c += Image->Bpc) {
 					for (i = c; i < Image->SizeOfData; i += NumBytes) {
-						*((ILfloat*)(Image->Data + i)) = FloatPtr[c];
+						*((ILfloat*)(Image->Data + i)) = FloatPtr[c / Image->Bpc];
 					}
 				}
 					break;
@@ -577,7 +577,7 @@ ILAPI ILboolean ILAPIENTRY ilClearImage_(ILimage *Image)
 				DblPtr = (ILdouble*)Colours;
 				for (c = 0; c < NumBytes; c += Image->Bpc) {
 					for (i = c; i < Image->SizeOfData; i += NumBytes) {
-						*((ILdouble*)(Image->Data + i)) = DblPtr[c];
+						*((ILdouble*)(Image->Data + i)) = DblPtr[c / Image->Bpc];
 					}
 				}
 					break;

@@ -374,7 +374,7 @@ ILboolean ILAPIENTRY ilConvertImage(ILenum DestFormat, ILenum DestType)
 //	Must be either an 8, 24 or 32-bit (coloured) image (or palette).
 ILboolean ilSwapColours()
 {
-	ILuint		i = 0, Size = iCurImage->Bps * iCurImage->Height;
+	ILuint		i = 0, Size = iCurImage->Bpp * iCurImage->Width * iCurImage->Height;
 	ILbyte		PalBpp = ilGetBppPal(iCurImage->Pal.PalType);
 	ILushort	*ShortPtr;
 	ILuint		*IntPtr, Temp;
