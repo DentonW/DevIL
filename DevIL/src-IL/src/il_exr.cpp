@@ -54,13 +54,13 @@ ILboolean iLoadExrInternal(ILconst_string FileName)
 
     int dw, dh, dx, dy;
 
-    dw = dataWindow.max.x - dataWindow.min.x + 1;
+	dw = dataWindow.max.x - dataWindow.min.x + 1;
     dh = dataWindow.max.y - dataWindow.min.y + 1;
     dx = dataWindow.min.x;
     dy = dataWindow.min.y;
 
     pixels.resizeErase (dw * dh);
-    in.setFrameBuffer (pixels - dx - dy * dw, 1, dw);
+	in.setFrameBuffer (pixels - dx - dy * dw, 1, dw);
 
     try
     {
@@ -89,16 +89,16 @@ ILboolean iLoadExrInternal(ILconst_string FileName)
 	for (int i = 0; i < dw * dh; i++)
 	{
 		// Too much data lost
-		/*iCurImage->Data[i * 4 + 0] = (ILubyte)(pixels[i].r.bits() >> 8);
-		iCurImage->Data[i * 4 + 1] = (ILubyte)(pixels[i].g.bits() >> 8);
-		iCurImage->Data[i * 4 + 2] = (ILubyte)(pixels[i].b.bits() >> 8);
-		iCurImage->Data[i * 4 + 3] = (ILubyte)(pixels[i].a.bits() >> 8);*/
+		//iCurImage->Data[i * 4 + 0] = (ILubyte)(pixels[i].r.bits() >> 8);
+		//iCurImage->Data[i * 4 + 1] = (ILubyte)(pixels[i].g.bits() >> 8);
+		//iCurImage->Data[i * 4 + 2] = (ILubyte)(pixels[i].b.bits() >> 8);
+		//iCurImage->Data[i * 4 + 3] = (ILubyte)(pixels[i].a.bits() >> 8);
 
 		// The images look kind of washed out with this.
-		/*((ILshort*)(iCurImage->Data))[i * 4 + 0] = pixels[i].r.bits();
-		((ILshort*)(iCurImage->Data))[i * 4 + 1] = pixels[i].g.bits();
-		((ILshort*)(iCurImage->Data))[i * 4 + 2] = pixels[i].b.bits();
-		((ILshort*)(iCurImage->Data))[i * 4 + 3] = pixels[i].a.bits();*/
+		//((ILshort*)(iCurImage->Data))[i * 4 + 0] = pixels[i].r.bits();
+		//((ILshort*)(iCurImage->Data))[i * 4 + 1] = pixels[i].g.bits();
+		//((ILshort*)(iCurImage->Data))[i * 4 + 2] = pixels[i].b.bits();
+		//((ILshort*)(iCurImage->Data))[i * 4 + 3] = pixels[i].a.bits();
 
 		// This seems to give the best results, but the images can be saturated quite a bit.
 		((ILfloat*)(iCurImage->Data))[i * 4 + 0] = pixels[i].r;

@@ -74,7 +74,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib IlmImf.lib"
+				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib IlmImf.lib IlmThread.lib Iex.lib Half.lib"
 				OutputFile="$(OutDir)\DevIL.dll"
 				ModuleDefinitionFile="il.def"
 				GenerateDebugInformation="true"
@@ -257,7 +257,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib IlmImf.lib"
+				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib IlmImf.lib IlmThread.lib Iex.lib Half.lib"
 				OutputFile="$(OutDir)\DevIL.dll"
 				ModuleDefinitionFile="il.def"
 			/>

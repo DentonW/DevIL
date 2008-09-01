@@ -2,6 +2,7 @@
 
 EXPORTS
 ilutConvertToHBitmap
+
 ilutConvertSliceToHBitmap
 ;ilutConvertToSDLSurface
 ;ilutSDLSurfaceFromBitmap
@@ -46,7 +47,6 @@ ilutInit
 ilutIsDisabled
 ilutIsEnabled
 ilutLoadResource
-ilutGLSubTex
 ilutGLBindMipmaps
 ilutGLBindTexImage
 ilutGLBuildMipmaps
