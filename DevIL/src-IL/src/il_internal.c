@@ -46,6 +46,11 @@ ILimage *iCurImage = NULL;
 	{
 		return wcsicmp(src1, src2);
 	}
+
+	int iNormalStrCmp(char const *src1, char const *src2)
+	{
+		return stricmp(src1, src2);
+	}
 #else
 	int iStrCmp(ILconst_string src1, ILconst_string src2)
 	{
@@ -146,6 +151,7 @@ ILstring iGetExtension(ILconst_string FileName) {
 #else
 	wchar_t *Ext = (wchar_t*)FileName;
 	ILint i, Len = wcslen(FileName);
+	char *Ext1 = (char*)FileName;
 #endif//_UNICODE
 
 	if (FileName == NULL || !Len)  // if not a good filename/extension, exit early
@@ -161,10 +167,28 @@ ILstring iGetExtension(ILconst_string FileName) {
 		Ext--;
 	}
 
-	if (!PeriodFound)  // if no period, no extension
-		return NULL;
+	if (PeriodFound)  // if no period, no extension
+		return Ext+1;
 
-	return Ext+1;
+	// Let's see if our input isn't in a Unicode format,
+	//  even if we have compiled with _UNICODE.
+#ifdef _UNICODE
+	Len = strlen((char*)FileName);
+	Ext1 += Len;  // start at the end
+
+	for (i = Len; i >= 0; i--) {
+		if (*Ext1 == '.') {  // try to find a period 
+			PeriodFound = IL_TRUE;
+			break;
+		}
+		Ext1--;
+	}
+
+	if (PeriodFound)  // if no period, no extension
+		return (ILstring)(Ext1+1);
+#endif
+
+	return NULL;
 }
 
 

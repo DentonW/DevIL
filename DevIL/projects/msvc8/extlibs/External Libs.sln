@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "zlib.vcproj", "{FE4
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libjasper", "libjasper.vcproj", "{71D05AD3-2DCA-4E36-A6ED-555BB6642D35}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lcms", "lcms.vcproj", "{75EE92E6-DF8D-4FB1-89C0-B2BA687D1144}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -56,6 +58,12 @@ Global
 		{71D05AD3-2DCA-4E36-A6ED-555BB6642D35}.Dynamic|Win32.Build.0 = Debug|Win32
 		{71D05AD3-2DCA-4E36-A6ED-555BB6642D35}.Release|Win32.ActiveCfg = Release|Win32
 		{71D05AD3-2DCA-4E36-A6ED-555BB6642D35}.Release|Win32.Build.0 = Release|Win32
+		{75EE92E6-DF8D-4FB1-89C0-B2BA687D1144}.Debug|Win32.ActiveCfg = Debug|Win32
+		{75EE92E6-DF8D-4FB1-89C0-B2BA687D1144}.Debug|Win32.Build.0 = Debug|Win32
+		{75EE92E6-DF8D-4FB1-89C0-B2BA687D1144}.Dynamic|Win32.ActiveCfg = Dynamic|Win32
+		{75EE92E6-DF8D-4FB1-89C0-B2BA687D1144}.Dynamic|Win32.Build.0 = Dynamic|Win32
+		{75EE92E6-DF8D-4FB1-89C0-B2BA687D1144}.Release|Win32.ActiveCfg = Release|Win32
+		{75EE92E6-DF8D-4FB1-89C0-B2BA687D1144}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

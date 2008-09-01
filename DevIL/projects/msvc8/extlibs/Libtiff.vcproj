@@ -118,7 +118,7 @@
 				InlineFunctionExpansion="1"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="true"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				PrecompiledHeaderFile=".\libtiff___Win32_Release/Libtiff.pch"
 				AssemblerListingLocation=".\libtiff___Win32_Release/"
@@ -140,6 +140,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="User32.lib"
 				OutputFile=".\..\..\..\extlibs\lib\vc8\Libtiff.lib"
 				SuppressStartupBanner="true"
 			/>
@@ -192,7 +193,7 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
 				PrecompiledHeaderFile=".\libtiff___Win32_Debug/Libtiff.pch"
 				AssemblerListingLocation=".\libtiff___Win32_Debug/"
 				ObjectFile=".\libtiff___Win32_Debug/"
@@ -214,6 +215,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="User32.lib"
 				OutputFile=".\..\..\..\extlibs\lib\vc8\debug\Libtiff.lib"
 				SuppressStartupBanner="true"
 			/>
@@ -244,906 +246,202 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_aux.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\mkg3states.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_close.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_aux.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_codec.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_close.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_compress.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_codec.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_dir.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_color.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_dirinfo.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_compress.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_dirread.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_dir.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_dirwrite.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_dirinfo.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_dumpmode.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_dirread.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_error.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_dirwrite.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_fax3.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_dumpmode.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_flush.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_error.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_getimage.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_extension.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_jpeg.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_fax3.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_luv.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_fax3sm.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_lzw.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_flush.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_msdos.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_getimage.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_next.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_jpeg.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_open.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_luv.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_packbits.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_lzw.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_pixarlog.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_ojpeg.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_predict.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_open.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_print.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_packbits.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_read.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_pixarlog.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_strip.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_predict.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_swab.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_print.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_thunder.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_read.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_tile.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_strip.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_version.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_swab.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_warning.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_thunder.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_write.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_tile.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\LibTIFF\libtiff\tif_zip.c"
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_version.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_warning.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_win32.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_write.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_zip.c"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl"
 			>
+			<File
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\t4.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_config.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_dir.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_fax3.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_predict.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tiff.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tiffconf.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tiffio.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tiffio.hxx"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tiffiop.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tiffvers.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\LibTiff\libtiff\uvcode.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

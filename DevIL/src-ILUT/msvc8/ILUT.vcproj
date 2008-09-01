@@ -73,15 +73,15 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="devil.lib ilu.lib odbc32.lib odbccp32.lib"
-				OutputFile=".\../../lib/ILUT.dll"
+				AdditionalDependencies="devil.lib ilu.lib odbc32.lib odbccp32.lib Gdi32.lib User32.lib Comdlg32.lib"
+				OutputFile=".\../../lib/vc8/ILUT.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../lib"
 				ModuleDefinitionFile=".\ilut.def"
 				DelayLoadDLLs="d3d8.dll,sdl.dll"
 				ProgramDatabaseFile=".\../../lib/ILUT.pdb"
-				ImportLibrary=".\../../lib/ILUT.lib"
+				ImportLibrary=".\../../lib/vc8/ILUT.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -109,7 +109,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy ..\..\lib\ilut.dll &quot;C:\path\ilut.dll&quot;"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
@@ -172,8 +172,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="devil.lib ilu.lib delayimp.lib odbc32.lib odbccp32.lib"
-				OutputFile="c:\path\ilut.dll"
+				AdditionalDependencies="devil.lib ilu.lib delayimp.lib odbc32.lib odbccp32.lib Gdi32.lib User32.lib Comdlg32.lib"
+				OutputFile=".\../../lib/vc8/debug/ILUT.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../lib"
@@ -181,7 +181,7 @@
 				DelayLoadDLLs="d3d8.dll,sdl.dll"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\../../lib/debug/ilut.pdb"
-				ImportLibrary=".\../../lib/debug/ilut.lib"
+				ImportLibrary=".\../../lib/vc8/debug/ilut.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -211,104 +211,6 @@
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
-		<Configuration
-			Name="Dynamic|Win32"
-			OutputDirectory=".\../../lib"
-			IntermediateDirectory=".\../src/obj/dynamic"
-			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="2"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="true"
-				SuppressStartupBanner="true"
-				TargetEnvironment="1"
-				TypeLibraryName=".\../../lib/ILUT.tlb"
-				HeaderFileName=""
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="1"
-				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ILUT_EXPORTS"
-				StringPooling="true"
-				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
-				PrecompiledHeaderFile=".\../src/obj/dynamic/ILUT.pch"
-				AssemblerListingLocation=".\../src/obj/dynamic/"
-				ObjectFile=".\../src/obj/dynamic/"
-				ProgramDataBaseFileName=".\../src/obj/dynamic/"
-				WarningLevel="3"
-				SuppressStartupBanner="true"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="delayimp.lib odbc32.lib odbccp32.lib"
-				OutputFile="../../lib/ilut-l.dll"
-				LinkIncremental="1"
-				SuppressStartupBanner="true"
-				ModuleDefinitionFile=".\ilut.def"
-				DelayLoadDLLs="d3d8.dll,sdl.dll"
-				ProgramDatabaseFile=".\../../lib/ilut-l.pdb"
-				ImportLibrary=".\../../lib/ilut-l.lib"
-				TargetMachine="1"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\../../lib/ILUT.bsc"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="..\..\projects\msvc\insdll.bat ..\..\lib\$(TargetName).dll"
-			/>
-		</Configuration>
 	</Configurations>
 	<References>
 	</References>
@@ -330,14 +232,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Dynamic|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -366,15 +260,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\ilut_directx9.c"
+				>
 			</File>
 			<File
 				RelativePath="..\src\ilut_internal.c"
@@ -390,15 +279,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Dynamic|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -428,15 +308,6 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\src\ilut_opengl.c"
@@ -452,15 +323,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Dynamic|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -490,15 +352,6 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\src\ilut_states.c"
@@ -521,15 +374,6 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\src\ilut_win32.c"
@@ -545,15 +389,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Dynamic|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -613,14 +448,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCResourceCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Dynamic|Win32"
 					>
 					<Tool
 						Name="VCResourceCompilerTool"
