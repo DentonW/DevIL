@@ -62,7 +62,7 @@ ILboolean iLoadExrInternal(ILconst_string FileName)
     pixels.resizeErase (dw * dh);
 	in.setFrameBuffer (pixels - dx - dy * dw, 1, dw);
 
-    try
+	try
     {
 		in.readPixels (dataWindow.min.y, dataWindow.max.y);
     }

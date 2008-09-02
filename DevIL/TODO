@@ -7,6 +7,8 @@ Denton:
 - Get MNG support working again.
 - Better static lib support in MSVC++ 9
 - Commenting out lines 729-731 in pngread.c of libpng will allow reading of certain malformed Vista PNG-compressed .ico files with extra data at the end of the stream.  An example can be found in test/in and was created using Microangelo.
+- Linking against debug OpenEXR in release DevIL will crash and vice-versa.
+
 
 
 For 1.7.0
