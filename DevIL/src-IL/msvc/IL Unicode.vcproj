@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="IL"
-	ProjectGUID="{0F088168-B0B4-4350-9E6A-7FB271C76D39}"
-	RootNamespace="IL"
+	Name="IL Unicode"
+	ProjectGUID="{1FD529FA-1CF1-4C28-B280-E7BDAE1689AB}"
+	RootNamespace="IL Unicode"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -17,13 +17,13 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\lib"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="..\..\lib\unicode\debug"
+			IntermediateDirectory="unicode\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="2"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -43,7 +43,7 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\../../lib/debug/IL.tlb"
+				TypeLibraryName=".\../../lib/unicode/debug/IL.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -100,18 +100,18 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\examples\bin\debug&quot;&#x0D;&#x0A;"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\lib"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="..\..\lib\unicode"
+			IntermediateDirectory="unicode\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="2"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -131,7 +131,7 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\../../lib/IL.tlb"
+				TypeLibraryName=".\../../lib/unicode/IL.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -185,7 +185,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\examples\bin&quot;&#x0D;&#x0A;"
+				CommandLine="&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>

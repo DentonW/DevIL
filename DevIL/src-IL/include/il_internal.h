@@ -123,9 +123,7 @@ extern ILimage *iCurImage;
 	int strnicmp(const char *src1, const char *src2, size_t max);
 #endif//_WIN32
 int iStrCmp(ILconst_string src1, ILconst_string src2);
-#ifdef _UNICODE
-int iNormalStrCmp(ILconst_string src1, ILconst_string src2);
-#endif
+
 //
 // Some math functions
 //

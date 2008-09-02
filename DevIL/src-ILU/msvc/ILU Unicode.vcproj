@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="ILUT"
-	ProjectGUID="{A4563D37-173F-4459-BDC5-9F42992AEF45}"
-	RootNamespace="ILUT"
+	Name="ILU Unicode"
+	ProjectGUID="{E3236F31-10DD-4FE3-9FAB-D9665A6B5D24}"
+	RootNamespace="ILU Unicode"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -16,97 +16,14 @@
 	</ToolFiles>
 	<Configurations>
 		<Configuration
-			Name="Release|Win32"
-			OutputDirectory="..\..\lib"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="2"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="true"
-				SuppressStartupBanner="true"
-				TargetEnvironment="1"
-				TypeLibraryName=".\../../lib/ILUT.tlb"
-				HeaderFileName=""
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot; /D &quot;_CRT_NONSTDC_NO_DEPRECATE&quot;"
-				Optimization="2"
-				AdditionalIncludeDirectories="../include;../../include;../../../../PC/_inc/DX"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
-				StringPooling="true"
-				RuntimeLibrary="2"
-				BufferSecurityCheck="false"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough=""
-				WarningLevel="3"
-				SuppressStartupBanner="true"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				ModuleDefinitionFile="ilut.def"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\examples\bin&quot;&#x0D;&#x0A;"
-			/>
-		</Configuration>
-		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\lib"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="..\..\lib\unicode\debug"
+			IntermediateDirectory="unicode\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="2"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -126,14 +43,14 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\../../lib/debug/ILUT.tlb"
+				TypeLibraryName=".\../../lib/debug/ILU.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot; /D &quot;_CRT_NONSTDC_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;../../include;../../../../PC/_inc/DX"
+				AdditionalIncludeDirectories="../include;../../include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -157,8 +74,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\ILUT.dll"
-				ModuleDefinitionFile="ilut.def"
+				OutputFile="$(OutDir)\ILU.dll"
+				ModuleDefinitionFile="ilu.def"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
@@ -181,7 +98,91 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;..\..\examples\bin\debug&quot;&#x0D;&#x0A;"
+				CommandLine=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="..\..\lib\unicode"
+			IntermediateDirectory="unicode\$(ConfigurationName)"
+			ConfigurationType="2"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="true"
+				SuppressStartupBanner="true"
+				TargetEnvironment="1"
+				TypeLibraryName=".\../../lib/unicode/ILU.tlb"
+				HeaderFileName=""
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot; /D &quot;_CRT_NONSTDC_NO_DEPRECATE&quot;"
+				Optimization="2"
+				AdditionalIncludeDirectories="../include;../../include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				StringPooling="true"
+				RuntimeLibrary="2"
+				BufferSecurityCheck="false"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough=""
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				OutputFile="$(OutDir)\ILU.dll"
+				ModuleDefinitionFile="ilu.def"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine=""
 			/>
 		</Configuration>
 	</Configurations>
@@ -193,39 +194,67 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="ilut.def"
+				RelativePath="ilu.def"
 				>
 			</File>
 			<File
-				RelativePath="..\src\ilut_directx.c"
+				RelativePath="..\src\ilu_error.c"
 				>
 			</File>
 			<File
-				RelativePath="..\src\ilut_directx9.c"
+				RelativePath="..\src\ilu_filter.c"
 				>
 			</File>
 			<File
-				RelativePath="..\src\ilut_internal.c"
+				RelativePath="..\src\ilu_filter_rcg.c"
 				>
 			</File>
 			<File
-				RelativePath="..\src\ilut_main.c"
+				RelativePath="..\src\ilu_internal.c"
 				>
 			</File>
 			<File
-				RelativePath="..\src\ilut_opengl.c"
+				RelativePath="..\src\ilu_main.c"
 				>
 			</File>
 			<File
-				RelativePath="..\src\ilut_sdlsurface.c"
+				RelativePath="..\src\ilu_manip.c"
 				>
 			</File>
 			<File
-				RelativePath="..\src\ilut_states.c"
+				RelativePath="..\src\ilu_mipmap.c"
 				>
 			</File>
 			<File
-				RelativePath="..\src\ilut_win32.c"
+				RelativePath="..\src\ilu_noise.c"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ilu_region.c"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ilu_rotate.c"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ilu_scale.c"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ilu_scale2d.c"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ilu_scale3d.c"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ilu_states.c"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ilu_utilities.c"
 				>
 			</File>
 		</Filter>
@@ -238,23 +267,27 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\il\ilut.h"
+				RelativePath="..\..\include\il\ilu.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\ilut_internal.h"
+				RelativePath="..\include\ilu_filter.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\ilut_opengl.h"
+				RelativePath="..\include\ilu_internal.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\ilut_states.h"
+				RelativePath="..\include\ilu_mipmap.h"
 				>
 			</File>
 			<File
-				RelativePath="resource.h"
+				RelativePath="..\include\ilu_region.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ilu_states.h"
 				>
 			</File>
 		</Filter>

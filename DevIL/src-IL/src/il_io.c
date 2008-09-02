@@ -1603,7 +1603,7 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 	#endif
 
 	#ifndef IL_NO_TGA
-	if (!iStrCmp(Ext, IL_TEXT("tga")) || !iNormalStrCmp(Ext, "tga")) {
+	if (!iStrCmp(Ext, IL_TEXT("tga"))) {
 		return ilSaveTarga(FileName);
 	}
 	#endif
