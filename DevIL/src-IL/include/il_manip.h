@@ -26,6 +26,9 @@ ILboolean ilMirrorImage(void);	//@JASON New routine created 03/28/2001
 // which may be trapped by the operating system.
 //-----------------------------------------------
 #ifndef NOINLINE
+
+#pragma warning(push)
+#pragma warning(disable : 4756)  // Disables 'named type definition in parentheses' warning
 INLINE ILfloat ILAPIENTRY ilFloatToHalfOverflow() {
 	ILfloat f = 1e10;
 	ILint j;
@@ -34,7 +37,7 @@ INLINE ILfloat ILAPIENTRY ilFloatToHalfOverflow() {
 	// the for loop terminates
 	return f;
 }
-
+#pragma warning(pop)
 
 //-----------------------------------------------------
 // Float-to-half conversion -- general case, including

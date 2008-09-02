@@ -1,190 +1,177 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="9.00"
 	Name="libmng"
 	ProjectGUID="{C82A8ADB-AADE-4D50-B6E8-912E69F08106}"
 	RootNamespace="libmng"
-	SccProjectName=""
-	SccLocalPath="">
+	TargetFrameworkVersion="131072"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
-		<Configuration
-			Name="Dynamic|Win32"
-			OutputDirectory=".\..\..\..\extlibs\lib"
-			IntermediateDirectory=".\libmng___Win32_Dynamic"
-			ConfigurationType="2"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="2"
-				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../../../extlibs/littlecms/include;../../../extlibs/zlib;../../../extlibs/libjpeg"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;MNG_BUILD_DLL;ZLIB_DLL"
-				StringPooling="TRUE"
-				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="TRUE"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile=".\libmng___Win32_Dynamic/libmng.pch"
-				AssemblerListingLocation=".\libmng___Win32_Dynamic/"
-				ObjectFile=".\libmng___Win32_Dynamic/"
-				ProgramDataBaseFileName=".\libmng___Win32_Dynamic/"
-				WarningLevel="3"
-				SuppressStartupBanner="TRUE"/>
-			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="zlib_DLL.lib lcms_DLL.lib libjpeg_DLL.lib"
-				AdditionalLibraryDirectories="$(OutDir)/"
-				IgnoreDefaultLibraryNames="zlib.lib;lcms.lib;libjpeg.lib"
-				ModuleDefinitionFile="libmng.def"
-				ImportLibrary="$(OutDir)/$(TargetName)_DLL.lib"/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="TRUE"
-				SuppressStartupBanner="TRUE"
-				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\..\extlibs\lib/libmng.tlb"
-				HeaderFileName=""/>
-			<Tool
-				Name="VCPostBuildEventTool"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
-		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory=".\..\..\..\extlibs\lib"
-			IntermediateDirectory=".\libmng___Win32_Release"
+			IntermediateDirectory="Release\libmng"
 			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="true"
+				SuppressStartupBanner="true"
+				TargetEnvironment="1"
+				TypeLibraryName=".\..\..\..\extlibs\lib/libmng.tlb"
+				HeaderFileName=""
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="../../../extlibs/littlecms/include;../../../extlibs/zlib;../../../extlibs/libjpeg"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;MNG_BUILD_SO;MNG_USE_SO"
-				StringPooling="TRUE"
-				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="TRUE"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile=".\libmng___Win32_Release/libmng.pch"
-				AssemblerListingLocation=".\libmng___Win32_Release/"
-				ObjectFile=".\libmng___Win32_Release/"
-				ProgramDataBaseFileName=".\libmng___Win32_Release/"
+				StringPooling="true"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderFile="Release\libmng\libmng.pch"
+				AssemblerListingLocation="Release\libmng\"
+				ObjectFile="Release\libmng\"
+				ProgramDataBaseFileName="Release\libmng\"
 				WarningLevel="3"
-				SuppressStartupBanner="TRUE"/>
+				SuppressStartupBanner="true"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/$(ProjectName).lib"/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="TRUE"
-				SuppressStartupBanner="TRUE"
-				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\..\extlibs\lib/libmng.tlb"
-				HeaderFileName=""/>
-			<Tool
-				Name="VCPostBuildEventTool"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"/>
+				Culture="1033"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)/$(ProjectName).lib"
+			/>
 			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory=".\..\..\..\extlibs\lib"
-			IntermediateDirectory=".\libmng___Win32_Debug"
+			IntermediateDirectory="Debug\libmng"
 			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="true"
+				SuppressStartupBanner="true"
+				TargetEnvironment="1"
+				TypeLibraryName=".\..\..\..\extlibs\lib\debug/libmng.tlb"
+				HeaderFileName=""
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="../../../extlibs/littlecms/include;../../../extlibs/zlib;../../../extlibs/libjpeg"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;MNG_BUILD_SO;MNG_USE_SO"
-				StringPooling="TRUE"
-				RuntimeLibrary="1"
-				EnableFunctionLevelLinking="TRUE"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile=".\libmng___Win32_Debug/libmng.pch"
-				AssemblerListingLocation=".\libmng___Win32_Debug/"
-				ObjectFile=".\libmng___Win32_Debug/"
-				ProgramDataBaseFileName=".\libmng___Win32_Debug/"
+				StringPooling="true"
+				RuntimeLibrary="3"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderFile="Debug\libmng\libmng.pch"
+				AssemblerListingLocation="Debug\libmng\"
+				ObjectFile="Debug\libmng\"
+				ProgramDataBaseFileName="Debug\libmng\"
 				WarningLevel="3"
-				SuppressStartupBanner="TRUE"/>
+				SuppressStartupBanner="true"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/$(ProjectName)_DBG.lib"/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="TRUE"
-				SuppressStartupBanner="TRUE"
-				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\..\extlibs\lib\debug/libmng.tlb"
-				HeaderFileName=""/>
-			<Tool
-				Name="VCPostBuildEventTool"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"/>
+				Culture="1033"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)/$(ProjectName)_DBG.lib"
+			/>
 			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -192,465 +179,468 @@
 	<Files>
 		<Filter
 			Name="mng"
-			Filter="">
+			>
 			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng.h">
+				RelativePath="..\..\..\extlibs\libmng\libmng.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\Libmng\libmng_callback_xs.c">
+				RelativePath="..\..\..\extlibs\Libmng\libmng_callback_xs.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=" "/>
+						AdditionalIncludeDirectories=" "
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\Libmng\libmng_chunk_io.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=" "/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_chunk_io.h">
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\Libmng\libmng_chunk_prc.c">
+				RelativePath="..\..\..\extlibs\Libmng\libmng_chunk_io.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=" "/>
+						AdditionalIncludeDirectories=" "
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_chunk_prc.h">
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\Libmng\libmng_chunk_xs.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=" "/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_chunks.h">
+				RelativePath="..\..\..\extlibs\libmng\libmng_chunk_io.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\Libmng\libmng_cms.c">
+				RelativePath="..\..\..\extlibs\Libmng\libmng_chunk_prc.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=" "/>
+						AdditionalIncludeDirectories=" "
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_cms.h">
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_conf.h">
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_data.h">
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\Libmng\libmng_display.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=" "/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_display.h">
+				RelativePath="..\..\..\extlibs\libmng\libmng_chunk_prc.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\Libmng\libmng_dither.c">
+				RelativePath="..\..\..\extlibs\Libmng\libmng_chunk_xs.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=" "/>
+						AdditionalIncludeDirectories=" "
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_dither.h">
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\Libmng\libmng_error.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=" "/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_error.h">
+				RelativePath="..\..\..\extlibs\libmng\libmng_chunks.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\Libmng\libmng_filter.c">
+				RelativePath="..\..\..\extlibs\Libmng\libmng_cms.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=" "/>
+						AdditionalIncludeDirectories=" "
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_filter.h">
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\Libmng\libmng_hlapi.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=" "/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\Libmng\libmng_jpeg.c">
+				RelativePath="..\..\..\extlibs\libmng\libmng_cms.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\libmng\libmng_conf.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\libmng\libmng_data.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\Libmng\libmng_display.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=" "/>
+						AdditionalIncludeDirectories=" "
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_jpeg.h">
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_memory.h">
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\Libmng\libmng_object_prc.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=" "/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_object_prc.h">
+				RelativePath="..\..\..\extlibs\libmng\libmng_display.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_objects.h">
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\Libmng\libmng_pixels.c">
+				RelativePath="..\..\..\extlibs\Libmng\libmng_dither.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=" "/>
+						AdditionalIncludeDirectories=" "
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_pixels.h">
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\Libmng\libmng_prop_xs.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=" "/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\Libmng\libmng_read.c">
+				RelativePath="..\..\..\extlibs\libmng\libmng_dither.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\Libmng\libmng_error.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=" "/>
+						AdditionalIncludeDirectories=" "
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_read.h">
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\Libmng\libmng_trace.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=" "/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_trace.h">
+				RelativePath="..\..\..\extlibs\libmng\libmng_error.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_types.h">
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\Libmng\libmng_write.c">
+				RelativePath="..\..\..\extlibs\Libmng\libmng_filter.c"
+				>
 				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=" "/>
+						AdditionalIncludeDirectories=" "
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_write.h">
-			</File>
-			<File
-				RelativePath="..\..\..\extlibs\Libmng\libmng_zlib.c">
-				<FileConfiguration
-					Name="Dynamic|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=" "/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"/>
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\extlibs\libmng\libmng_zlib.h">
+				RelativePath="..\..\..\extlibs\libmng\libmng_filter.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\Libmng\libmng_hlapi.c"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=" "
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\Libmng\libmng_jpeg.c"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=" "
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\libmng\libmng_jpeg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\libmng\libmng_memory.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\Libmng\libmng_object_prc.c"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=" "
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\libmng\libmng_object_prc.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\libmng\libmng_objects.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\Libmng\libmng_pixels.c"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=" "
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\libmng\libmng_pixels.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\Libmng\libmng_prop_xs.c"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=" "
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\Libmng\libmng_read.c"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=" "
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\libmng\libmng_read.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\Libmng\libmng_trace.c"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=" "
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\libmng\libmng_trace.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\libmng\libmng_types.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\Libmng\libmng_write.c"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=" "
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\libmng\libmng_write.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\Libmng\libmng_zlib.c"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=" "
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\libmng\libmng_zlib.h"
+				>
 			</File>
 		</Filter>
 	</Files>

@@ -3,6 +3,9 @@
 - Added preliminary OpenEXR support.
 - Fixed crash in ilSwapColours with images having bits-per-channel greater than 8.
 - Fixed ilClearImage not clearing images properly with bpc greater than 8.
+- Added MSVC++ 8 projects back.
+- Added MSVC++ Unicode projects.
+
 
 1.7.1
 ---

@@ -101,10 +101,10 @@ ILboolean iLoadIconInternal()
 		imemclear(&IconImages[i], sizeof(ICOIMAGE));
 
 	for (i = 0; i < IconDir.Count; ++i) {
-		DirEntries[i].Width = igetc();
-		DirEntries[i].Height = igetc();
-		DirEntries[i].NumColours = igetc();
-		DirEntries[i].Reserved = igetc();
+		DirEntries[i].Width = (ILubyte)igetc();
+		DirEntries[i].Height = (ILubyte)igetc();
+		DirEntries[i].NumColours = (ILubyte)igetc();
+		DirEntries[i].Reserved = (ILubyte)igetc();
 		DirEntries[i].Planes = GetLittleShort();
 		DirEntries[i].Bpp = GetLittleShort();
 		DirEntries[i].SizeOfData = GetLittleUInt();
@@ -120,7 +120,7 @@ ILboolean iLoadIconInternal()
 		// 08-22-2008: Adding test for compressed PNG data
 		igetc(); // Skip the first character...seems to vary.
 		iread(PNGTest, 3, 1);
-		if (!strnicmp(PNGTest, "PNG", 3))  // Characters 'P', 'N', 'G' for PNG header
+		if (!strnicmp((char*)PNGTest, "PNG", 3))  // Characters 'P', 'N', 'G' for PNG header
 		{
 #ifdef IL_NO_PNG
 			ilSetError(IL_FORMAT_NOT_SUPPORTED);  // Cannot handle thesse without libpng.
@@ -136,27 +136,16 @@ ILboolean iLoadIconInternal()
 			iseek(DirEntries[i].Offset, IL_SEEK_SET);
 
 			IconImages[i].Head.Size = GetLittleInt();
-
 			IconImages[i].Head.Width = GetLittleInt();
-
 			IconImages[i].Head.Height = GetLittleInt();
-
 			IconImages[i].Head.Planes = GetLittleShort();
-
 			IconImages[i].Head.BitCount = GetLittleShort();
-
 			IconImages[i].Head.Compression = GetLittleInt();
-
 			IconImages[i].Head.SizeImage = GetLittleInt();
-
 			IconImages[i].Head.XPixPerMeter = GetLittleInt();
-
 			IconImages[i].Head.YPixPerMeter = GetLittleInt();
-
 			IconImages[i].Head.ColourUsed = GetLittleInt();
-
 			IconImages[i].Head.ColourImportant = GetLittleInt();
-
 
 			if (ieof())
 				goto file_read_error;
@@ -191,11 +180,8 @@ ILboolean iLoadIconInternal()
 			}
 
 			PadSize = (4 - ((IconImages[i].Head.Width*IconImages[i].Head.BitCount + 7) / 8) % 4) % 4;  // Has to be DWORD-aligned.
-
 			ANDPadSize = (4 - ((IconImages[i].Head.Width + 7) / 8) % 4) % 4;  // AND is 1 bit/pixel
-
 			Size = ((IconImages[i].Head.Width*IconImages[i].Head.BitCount + 7) / 8 + PadSize)
-
 								* (IconImages[i].Head.Height / 2);
 
 
@@ -451,6 +437,7 @@ static ILvoid ico_png_read(png_structp png_ptr, png_bytep data, png_size_t lengt
 
 static void ico_png_error_func(png_structp png_ptr, png_const_charp message)
 {
+	message;
 	ilSetError(IL_LIB_PNG_ERROR);
 
 	/*
@@ -466,6 +453,7 @@ static void ico_png_error_func(png_structp png_ptr, png_const_charp message)
 
 static void ico_png_warn_func(png_structp png_ptr, png_const_charp message)
 {
+	png_ptr; message;
 	return;
 }
 
@@ -526,6 +514,8 @@ ILboolean ico_readpng_get_image(ICOIMAGE *Icon, ILdouble display_exponent)
 #if _WIN32 || DJGPP
 	ILdouble image_gamma;
 #endif
+
+	display_exponent;
 
 	/* setjmp() must be called in every function that calls a PNG-reading
 	 * libpng function */

@@ -15,96 +15,9 @@
 	</ToolFiles>
 	<Configurations>
 		<Configuration
-			Name="Dynamic|Win32"
-			OutputDirectory=".\..\..\..\extlibs\lib"
-			IntermediateDirectory=".\libpng___Win32_Dynamic"
-			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				TypeLibraryName=".\..\..\..\extlibs\lib/libpng.tlb"
-				HeaderFileName=""
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="1"
-				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..,..\..\..\zlib"
-				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;PNG_BUILD_DLL;ZLIB_DLL"
-				StringPooling="true"
-				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="png.h"
-				PrecompiledHeaderFile=".\libpng___Win32_Dynamic/libpng.pch"
-				AssemblerListingLocation=".\libpng___Win32_Dynamic/"
-				ObjectFile=".\libpng___Win32_Dynamic/"
-				ProgramDataBaseFileName=".\libpng___Win32_Dynamic/"
-				WarningLevel="3"
-				SuppressStartupBanner="true"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"
-				AdditionalIncludeDirectories="..\.."
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="zlib_DLL.lib"
-				AdditionalLibraryDirectories="$(OutDir)/"
-				ModuleDefinitionFile="libpng.def"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				ImportLibrary="$(OutDir)/$(TargetName)_DLL.lib"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
 			Name="Release|Win32"
 			OutputDirectory=".\..\..\..\extlibs\lib"
-			IntermediateDirectory=".\libpng___Win32_Release"
+			IntermediateDirectory="Release\libpng"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -129,17 +42,17 @@
 				Name="VCCLCompilerTool"
 				Optimization="1"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..,..\..\..\zlib"
+				AdditionalIncludeDirectories="..\..\..\..\..\zlib"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				StringPooling="true"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="png.h"
-				PrecompiledHeaderFile=".\libpng___Win32_Release/libpng.pch"
-				AssemblerListingLocation=".\libpng___Win32_Release/"
-				ObjectFile=".\libpng___Win32_Release/"
-				ProgramDataBaseFileName=".\libpng___Win32_Release/"
+				PrecompiledHeaderFile="Release\libpng\libpng.pch"
+				AssemblerListingLocation="Release\libpng\"
+				ObjectFile="Release\libpng\"
+				ProgramDataBaseFileName="Release\libpng\"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>
@@ -179,7 +92,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory=".\..\..\..\extlibs\lib"
-			IntermediateDirectory=".\libpng___Win32_Debug"
+			IntermediateDirectory="Debug\libpng"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -203,16 +116,16 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..,..\..\..\zlib"
+				AdditionalIncludeDirectories="..\..\..\..\..\zlib"
 				PreprocessorDefinitions="DEBUG;_DEBUG;PNG_DEBUG=1;WIN32"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="png.h"
-				PrecompiledHeaderFile=".\libpng___Win32_Debug/libpng.pch"
-				AssemblerListingLocation=".\libpng___Win32_Debug/"
-				ObjectFile=".\libpng___Win32_Debug/"
-				ProgramDataBaseFileName=".\libpng___Win32_Debug/"
+				PrecompiledHeaderFile="Debug\libpng\libpng.pch"
+				AssemblerListingLocation="Debug\libpng\"
+				ObjectFile="Debug\libpng\"
+				ProgramDataBaseFileName="Debug\libpng\"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -230,7 +143,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/$(ProjectName)_DBG.lib"
+				OutputFile="$(OutDir)/$(ProjectName).lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -261,16 +174,6 @@
 				RelativePath="..\..\..\extlibs\LibPNG\png.c"
 				>
 				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;PNG_BUILD_DLL;ZLIB_DLL;$(NoInherit)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Release|Win32"
 					>
 					<Tool
@@ -300,17 +203,6 @@
 				RelativePath="..\..\..\extlibs\LibPNG\pngerror.c"
 				>
 				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;PNG_BUILD_DLL;ZLIB_DLL;$(NoInherit)"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Release|Win32"
 					>
 					<Tool
@@ -338,16 +230,6 @@
 				RelativePath="..\..\..\extlibs\LibPNG\pngget.c"
 				>
 				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;PNG_BUILD_DLL;ZLIB_DLL;$(NoInherit)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Release|Win32"
 					>
 					<Tool
@@ -372,16 +254,6 @@
 			<File
 				RelativePath="..\..\..\extlibs\LibPNG\pngmem.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;PNG_BUILD_DLL;ZLIB_DLL;$(NoInherit)"
-					/>
-				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
 					>
@@ -408,16 +280,6 @@
 				RelativePath="..\..\..\extlibs\LibPNG\pngpread.c"
 				>
 				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;PNG_BUILD_DLL;ZLIB_DLL;$(NoInherit)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Release|Win32"
 					>
 					<Tool
@@ -442,16 +304,6 @@
 			<File
 				RelativePath="..\..\..\extlibs\LibPNG\pngread.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;PNG_BUILD_DLL;ZLIB_DLL;$(NoInherit)"
-					/>
-				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
 					>
@@ -478,16 +330,6 @@
 				RelativePath="..\..\..\extlibs\LibPNG\pngrio.c"
 				>
 				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;PNG_BUILD_DLL;ZLIB_DLL;$(NoInherit)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Release|Win32"
 					>
 					<Tool
@@ -512,16 +354,6 @@
 			<File
 				RelativePath="..\..\..\extlibs\LibPNG\pngrtran.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;PNG_BUILD_DLL;ZLIB_DLL;$(NoInherit)"
-					/>
-				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
 					>
@@ -548,16 +380,6 @@
 				RelativePath="..\..\..\extlibs\LibPNG\pngrutil.c"
 				>
 				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;PNG_BUILD_DLL;ZLIB_DLL;$(NoInherit)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Release|Win32"
 					>
 					<Tool
@@ -582,16 +404,6 @@
 			<File
 				RelativePath="..\..\..\extlibs\LibPNG\pngset.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;PNG_BUILD_DLL;ZLIB_DLL;$(NoInherit)"
-					/>
-				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
 					>
@@ -618,16 +430,6 @@
 				RelativePath="..\..\..\extlibs\LibPNG\pngtrans.c"
 				>
 				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;PNG_BUILD_DLL;ZLIB_DLL;$(NoInherit)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Release|Win32"
 					>
 					<Tool
@@ -652,17 +454,6 @@
 			<File
 				RelativePath="..\..\..\extlibs\LibPNG\pngvcrd.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;PNG_BUILD_DLL;ZLIB_DLL;$(NoInherit)"
-					/>
-				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="true"
@@ -691,16 +482,6 @@
 				RelativePath="..\..\..\extlibs\LibPNG\pngwio.c"
 				>
 				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;PNG_BUILD_DLL;ZLIB_DLL;$(NoInherit)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Release|Win32"
 					>
 					<Tool
@@ -725,16 +506,6 @@
 			<File
 				RelativePath="..\..\..\extlibs\LibPNG\pngwrite.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;PNG_BUILD_DLL;ZLIB_DLL;$(NoInherit)"
-					/>
-				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
 					>
@@ -761,16 +532,6 @@
 				RelativePath="..\..\..\extlibs\LibPNG\pngwtran.c"
 				>
 				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;PNG_BUILD_DLL;ZLIB_DLL;$(NoInherit)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Release|Win32"
 					>
 					<Tool
@@ -795,16 +556,6 @@
 			<File
 				RelativePath="..\..\..\extlibs\LibPNG\pngwutil.c"
 				>
-				<FileConfiguration
-					Name="Dynamic|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;PNG_BUILD_DLL;ZLIB_DLL;$(NoInherit)"
-					/>
-				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
 					>
@@ -849,14 +600,6 @@
 		<File
 			RelativePath="readme.txt"
 			>
-			<FileConfiguration
-				Name="Dynamic|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
-				/>
-			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32"
 				ExcludedFromBuild="true"
