@@ -10,19 +10,17 @@ with a bit of luck, these projects will just work.
 Installation
 ------------
 
-Run configure.bat to tell DevIL what external libraries you are using.
+Edit config.h to tell DevIL what external libraries you are using.
 
 Then go to Tools - Options - Directories to add in the include and lib
 directories for DevIL.
+
+All MSVC++ project files are in the projects/msvc or projects/msvc8 folders.
 
 
 
 Usage
 -----
-
-In the Post-Build step, a Copy command used to copy the resultant dlls to the
-Windows\System directory.  If your Windows System directory is not
-c:\Windows\System, edit the post-build step for all the DevIL* projects.
 
 When compiling a program that uses DevIL*, it must be configured to use the
 multithreaded dll version of the libc runtime.  To do this, go to Project

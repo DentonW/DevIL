@@ -25,6 +25,9 @@
 //#include <ImfChannelList.h>
 
 
+// @TODO: Determine how to load from file streams and lumps.
+//   Probably need to overload RgbaInputFile.
+
 //! Reads an .exr file.
 ILboolean ilLoadExr(ILconst_string FileName)
 {
@@ -46,7 +49,7 @@ ILboolean iLoadExrInternal(ILconst_string FileName)
 	Array<Rgba> pixels;
 	Box2i displayWindow, dataWindow;
 	float pixelAspectRatio;
-    RgbaInputFile in (FileName);
+    RgbaInputFile in ((const char*)FileName);  // @TODO: This will completely fail with Unicode.
 
     displayWindow = in.displayWindow();
     dataWindow = in.dataWindow();

@@ -17,16 +17,16 @@
 #define __ilut_h_
 #define __ILUT_H__
 
-#include "IL/il.h"
-#include "IL/ilu.h"
+#include <IL/il.h>
+#include <IL/ilu.h>
 
 
 //-----------------------------------------------------------------------------
 // Defines
 //-----------------------------------------------------------------------------
 
-#define ILUT_VERSION_1_7_1 1
-#define ILUT_VERSION       171
+#define ILUT_VERSION_1_7_2 1
+#define ILUT_VERSION       172
 
 
 // Attribute Bits

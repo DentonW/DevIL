@@ -1,4 +1,4 @@
-Developer's Image Library version 1.7.1 Readme, Notes and Quick Use
+Developer's Image Library version 1.7.2 Readme, Notes and Quick Use
 -------------------------------------------------------------------
 
 <DZA[afk]> DevIL song: "la la la, a cross-platform image library utilizing a
@@ -19,7 +19,7 @@ own project.
 Where can I find it?
 --------------------
 
-DevIL can be found at http://www.imagelib.org and http://openil.sourceforge.net
+DevIL can be found at http://openil.sourceforge.net
 
 
 How do I build and install the 3 libraries ?
@@ -38,7 +38,7 @@ More Extensive Documentation
 
 This file is only a quick guide to point you to more detailed information on
 how to use DevIL.  More extensive documentation can currently be found on the
-DevIL site at http://www.imagelib.org and in the /Docs directory in a normal
+DevIL site at http://openil.sf.net and in the /Docs directory in a normal
 install.
 
 
@@ -156,7 +156,7 @@ Windows right now but showcases several of DevIL's features through various
 menus.
 
 If you want more in-depth tutorials, you can find them on
-http://www.imagelib.org, or they may be in your installation under the /examples
+http://openil.sf.net, or they may be in your installation under the /examples
 directory.  Documents are also available in the /docs directory.
 
 
@@ -173,4 +173,4 @@ Legalese
 --------
 
 All contents of this file are intellectual property of Denton Woods,
-copyright 2001-2004.
+copyright 2001-2008.

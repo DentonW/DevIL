@@ -141,22 +141,46 @@ IL_HINTS ilHints;
 	#define IL_DDS_EXT ""
 #endif
 
+#ifndef IL_NO_EXR
+	#define IL_EXR_EXT "exr "
+#else
+	#define IL_EXR_EXT ""
+#endif
+
 #ifndef IL_NO_GIF
 	#define IL_GIF_EXT "gif "
 #else
 	#define IL_GIF_EXT ""
 #endif
 
+
 #ifndef IL_NO_HDR
+
 	#define IL_HDR_EXT "hdr "
+
 #else
+
 	#define IL_HDR_EXT ""
+
+#endif
+
+
+#ifndef IL_NO_ICNS
+	#define IL_ICNS_EXT "icns "
+#else
+	#define IL_ICNS_EXT ""
 #endif
 
 #ifndef IL_NO_ICO
 	#define IL_ICO_EXT "ico cur "
 #else
 	#define IL_ICO_EXT ""
+#endif
+
+#ifndef IL_NO_JP2
+	#define IL_JP2_EXT "jp2 "
+#else
+	#define IL_JP2_EXT ""
 #endif
 
 #ifndef IL_NO_JPG

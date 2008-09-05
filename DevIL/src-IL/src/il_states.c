@@ -20,7 +20,7 @@
 #include <stdlib.h>
 
 ILstring _ilVendor		= IL_TEXT("Abysmal Software");
-ILstring _ilVersion		= IL_TEXT("Developer's Image Library (DevIL) 1.7.1");
+ILstring _ilVersion		= IL_TEXT("Developer's Image Library (DevIL) 1.7.2");
 
 
 char* _ilLoadExt		= "" IL_BMP_EXT IL_CUT_EXT IL_DCX_EXT IL_DDS_EXT
@@ -28,7 +28,8 @@ char* _ilLoadExt		= "" IL_BMP_EXT IL_CUT_EXT IL_DCX_EXT IL_DDS_EXT
 									IL_MDL_EXT IL_MNG_EXT IL_PCX_EXT IL_PIC_EXT
 									IL_PIX_EXT IL_PNG_EXT IL_PNM_EXT IL_PSD_EXT
 									IL_PSP_EXT IL_PXR_EXT IL_SGI_EXT IL_TGA_EXT
-									IL_TIF_EXT IL_WAL_EXT IL_XPM_EXT;
+									IL_TIF_EXT IL_WAL_EXT IL_XPM_EXT IL_JP2_EXT
+									IL_EXR_EXT IL_ICNS_EXT;
 char* _ilSaveExt		= "" IL_BMP_EXT IL_CHEAD_EXT IL_DDS_EXT IL_JPG_EXT
 									IL_PCX_EXT IL_PNG_EXT IL_PNM_EXT IL_PSD_EXT
 									IL_SGI_EXT IL_TGA_EXT IL_TIF_EXT;

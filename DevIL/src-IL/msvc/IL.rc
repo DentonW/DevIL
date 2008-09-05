@@ -11,8 +11,8 @@
 //
 LANGUAGE LANG_ENGLISH, SUBLANG_DEFAULT
 1 VERSIONINFO
-    FILEVERSION     0,1,7,1
-    PRODUCTVERSION  0,1,7,1
+    FILEVERSION     0,1,7,2
+    PRODUCTVERSION  0,1,7,2
     FILEOS          VOS__WINDOWS32
     FILETYPE        VFT_DLL
 BEGIN
@@ -23,14 +23,14 @@ BEGIN
             VALUE "Comments", "DevIL: A portable image library in development\0"
             VALUE "CompanyName", "Abysmal Software\0"
             VALUE "FileDescription", "DevIL: A portable image library in development\0"
-            VALUE "FileVersion", "1.7.1\0"
+            VALUE "FileVersion", "1.7.2\0"
             VALUE "InternalName", "Developer's Image Library (DevIL)\0"
             VALUE "LegalCopyright", "Copyright © 2000-2008\0"
             VALUE "LegalTrademarks", "Under LGPL License\0"
             VALUE "OriginalFilename", "DevIL.dll\0"
             VALUE "PrivateBuild", "Open Source\0"
             VALUE "ProductName", "Developer's Image Library (DevIL)\0"
-            VALUE "ProductVersion", "1.7.1\0"
+            VALUE "ProductVersion", "1.7.2\0"
             VALUE "SpecialBuild", "eh?\0"
         END
     END
