@@ -18,12 +18,15 @@ ilCopyImage
 ilCopyPixels
 ilCreateSubImage
 ilDefaultImage
+ilDeleteImage
 ilDeleteImages
 
 ilDetermineType ; added 2003-09-17
+ilDetermineTypeF
 ilDisable
 ilEnable
 ilFormatFunc
+ilGenImage
 ilGenImages
 ilGetAlpha
 ilGetBoolean
@@ -47,6 +50,7 @@ ilGetString
 ilGetTypeBpc
 ilHint
 ilInit
+ilInitImage
 ilIsDisabled
 ilIsEnabled
 ilIsImage
@@ -59,6 +63,8 @@ ilLoadF
 ilLoadImage
 ilLoadL
 ilLoadPal
+ilModAlpha
+ilNewImageFull
 ilNextPower2
 ilOriginFunc
 ilOverlayImage
@@ -84,6 +90,7 @@ ilSaveImage
 ilSaveL
 ilSavePal
 ilSaveData
+ilSetAlpha
 ilSetData
 ilSetDuration
 ilSetError

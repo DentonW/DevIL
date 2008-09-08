@@ -10,7 +10,6 @@ Denton:
 - Linking against debug OpenEXR in release DevIL will crash and vice-versa.
 
 
-
 For 1.7.0
 - fixed OpenGL Loading (breaks old code which inverted the images)
 - iluReplaceColour should have a color to describe which color to set.

@@ -534,6 +534,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\il_exr.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\il_fastconv.c"
 				>
 				<FileConfiguration
@@ -1442,6 +1446,10 @@
 			</File>
 			<File
 				RelativePath="..\include\il_endian.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\il_exr.h"
 				>
 			</File>
 			<File
