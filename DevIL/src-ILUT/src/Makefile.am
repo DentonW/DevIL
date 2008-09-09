@@ -13,7 +13,7 @@ libILUT_la_LDFLAGS = @WIN32_EXTRA_LDFLAGS@ @VERSIONINFO@ \
                      $(top_builddir)/src-ILU/src/libILU.la \
                      @LIBSDL@ @LIBALLEGRO@ @LIBILUT_WIN32LIBPATH@
 
-libILUT_la_LIBADD = @LIBGL@ @LIBGDI32@ @LIBX11@
+libILUT_la_LIBADD = @LIBGL@ @LIBGDI32@ @X_LIBS@ @LIBX11@
 
 INCLUDES = -I$(top_srcdir)/include -I$(top_srcdir)/src-ILUT/include \
            @HSDL@ @HALLEGRO@
