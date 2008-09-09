@@ -223,10 +223,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ILU.rc"
-				>
-			</File>
-			<File
 				RelativePath="..\src\ilu_error.c"
 				>
 				<FileConfiguration
@@ -596,6 +592,10 @@
 			>
 			<File
 				RelativePath="resources\IL Logo.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\ILU.rc"
 				>
 			</File>
 		</Filter>

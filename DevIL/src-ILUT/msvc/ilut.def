@@ -2,6 +2,7 @@
 
 EXPORTS
 ilutConvertToHBitmap
+
 ilutConvertSliceToHBitmap
 ;ilutConvertToSDLSurface
 ;ilutSDLSurfaceFromBitmap
