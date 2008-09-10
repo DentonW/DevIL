@@ -12,6 +12,12 @@ Denton:
 - Add .ico/.icns saving.
 - Add .exr saving.
 - Add .jp2 saving.
+- Added Nutter's patches.
+- Fix Daniel's suggestions.
+- Possibly readd VC6 projects?
+- Enable descriptive error strings in IL.
+- Return UNICODE strings when needed.
+- Put in SVN changes.
 
 
 For 1.7.0
