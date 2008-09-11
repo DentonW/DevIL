@@ -1,0 +1,1499 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		A36D10E8080E8E5D0012BB8B /* Configure */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = EACAFE5A0E7936340024FAE4 /* Build configuration list for PBXAggregateTarget "Configure" */;
+			buildPhases = (
+				A36D10E7080E8E5D0012BB8B /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = Configure;
+			productName = Configure;
+		};
+		A36D10F5080E8FD80012BB8B /* Install */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = EACAFE5E0E7936340024FAE4 /* Build configuration list for PBXAggregateTarget "Install" */;
+			buildPhases = (
+				A36D10F4080E8FD80012BB8B /* ShellScript */,
+			);
+			dependencies = (
+				A36D10F9080E8FE80012BB8B /* PBXTargetDependency */,
+				A36D10FB080E8FE80012BB8B /* PBXTargetDependency */,
+				A36D10FD080E8FE80012BB8B /* PBXTargetDependency */,
+			);
+			name = Install;
+			productName = Install;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		A32D48C408102349008510AC /* ilu_alloc.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D48B008102349008510AC /* ilu_alloc.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D48C508102349008510AC /* ilu_error.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D48B108102349008510AC /* ilu_error.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D48C608102349008510AC /* ilu_filter.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D48B208102349008510AC /* ilu_filter.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D48C708102349008510AC /* ilu_filter_rcg.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D48B308102349008510AC /* ilu_filter_rcg.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D48C808102349008510AC /* ilu_internal.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D48B408102349008510AC /* ilu_internal.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D48C908102349008510AC /* ilu_main.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D48B508102349008510AC /* ilu_main.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D48CA08102349008510AC /* ilu_manip.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D48B608102349008510AC /* ilu_manip.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D48CB08102349008510AC /* ilu_mipmap.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D48B708102349008510AC /* ilu_mipmap.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D48CC08102349008510AC /* ilu_noise.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D48B808102349008510AC /* ilu_noise.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D48CD08102349008510AC /* ilu_region.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D48B908102349008510AC /* ilu_region.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D48CE08102349008510AC /* ilu_rotate.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D48BA08102349008510AC /* ilu_rotate.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D48CF08102349008510AC /* ilu_scale.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D48BB08102349008510AC /* ilu_scale.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D48D008102349008510AC /* ilu_scale2d.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D48BC08102349008510AC /* ilu_scale2d.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D48D108102349008510AC /* ilu_scale3d.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D48BD08102349008510AC /* ilu_scale3d.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D48D208102349008510AC /* ilu_scaling.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D48BE08102349008510AC /* ilu_scaling.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D48D308102349008510AC /* ilu_states.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D48BF08102349008510AC /* ilu_states.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D48D408102349008510AC /* ilu_utilities.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D48C008102349008510AC /* ilu_utilities.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D48E20810234E008510AC /* ilu_filter.h in Headers */ = {isa = PBXBuildFile; fileRef = A32D48D90810234E008510AC /* ilu_filter.h */; };
+		A32D48E30810234E008510AC /* ilu_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = A32D48DA0810234E008510AC /* ilu_internal.h */; };
+		A32D48E40810234E008510AC /* ilu_mipmap.h in Headers */ = {isa = PBXBuildFile; fileRef = A32D48DB0810234E008510AC /* ilu_mipmap.h */; };
+		A32D48E50810234E008510AC /* ilu_region.h in Headers */ = {isa = PBXBuildFile; fileRef = A32D48DC0810234E008510AC /* ilu_region.h */; };
+		A32D48E60810234E008510AC /* ilu_states.h in Headers */ = {isa = PBXBuildFile; fileRef = A32D48DD0810234E008510AC /* ilu_states.h */; };
+		A32D48FD081023D6008510AC /* libIL.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A3009526080E7F6E003DEA28 /* libIL.dylib */; };
+		A32D490508102403008510AC /* libIL.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A3009526080E7F6E003DEA28 /* libIL.dylib */; };
+		A32D490608102405008510AC /* libILU.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A3009515080E7F44003DEA28 /* libILU.dylib */; };
+		A32D49630810244F008510AC /* ilut_allegro.h in Headers */ = {isa = PBXBuildFile; fileRef = A32D49440810244F008510AC /* ilut_allegro.h */; };
+		A32D49640810244F008510AC /* ilut_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = A32D49450810244F008510AC /* ilut_internal.h */; };
+		A32D49650810244F008510AC /* ilut_opengl.h in Headers */ = {isa = PBXBuildFile; fileRef = A32D49460810244F008510AC /* ilut_opengl.h */; };
+		A32D49660810244F008510AC /* ilut_states.h in Headers */ = {isa = PBXBuildFile; fileRef = A32D49470810244F008510AC /* ilut_states.h */; };
+		A32D49680810244F008510AC /* ilut_allegro.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D49570810244F008510AC /* ilut_allegro.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D49690810244F008510AC /* ilut_directx.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D49580810244F008510AC /* ilut_directx.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D496A0810244F008510AC /* ilut_directx9.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D49590810244F008510AC /* ilut_directx9.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D496B0810244F008510AC /* ilut_internal.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D495A0810244F008510AC /* ilut_internal.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D496C0810244F008510AC /* ilut_main.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D495B0810244F008510AC /* ilut_main.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D496D0810244F008510AC /* ilut_opengl.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D495C0810244F008510AC /* ilut_opengl.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D496E0810244F008510AC /* ilut_sdlsurface.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D495D0810244F008510AC /* ilut_sdlsurface.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D496F0810244F008510AC /* ilut_states.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D495E0810244F008510AC /* ilut_states.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A32D49700810244F008510AC /* ilut_win32.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D495F0810244F008510AC /* ilut_win32.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A33D1E4A080EA43E00FEBAC9 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A33D1E37080EA43A00FEBAC9 /* OpenGL.framework */; };
+		A35C9CAB080EBA5100CCD137 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A35C9CAA080EBA5100CCD137 /* libz.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
+		A36D10A6080E84D80012BB8B /* il_alloc.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D106F080E84D70012BB8B /* il_alloc.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10A7080E84D80012BB8B /* il_bits.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1070080E84D70012BB8B /* il_bits.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10A8080E84D80012BB8B /* il_bmp.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1071080E84D70012BB8B /* il_bmp.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10A9080E84D80012BB8B /* il_convbuff.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1072080E84D70012BB8B /* il_convbuff.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10AA080E84D80012BB8B /* il_convert.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1073080E84D70012BB8B /* il_convert.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10AB080E84D80012BB8B /* il_cut.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1074080E84D70012BB8B /* il_cut.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10AC080E84D80012BB8B /* il_dcx.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1075080E84D70012BB8B /* il_dcx.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10AD080E84D80012BB8B /* il_dds-save.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1076080E84D80012BB8B /* il_dds-save.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10AE080E84D80012BB8B /* il_dds.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1077080E84D80012BB8B /* il_dds.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10AF080E84D80012BB8B /* il_devil.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1078080E84D80012BB8B /* il_devil.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10B0080E84D80012BB8B /* il_doom.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1079080E84D80012BB8B /* il_doom.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10B1080E84D80012BB8B /* il_endian.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D107A080E84D80012BB8B /* il_endian.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10B2080E84D80012BB8B /* il_error.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D107B080E84D80012BB8B /* il_error.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10B3080E84D80012BB8B /* il_fastconv.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D107C080E84D80012BB8B /* il_fastconv.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10B4080E84D80012BB8B /* il_files.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D107D080E84D80012BB8B /* il_files.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10B5080E84D80012BB8B /* il_gif.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D107E080E84D80012BB8B /* il_gif.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10B6080E84D80012BB8B /* il_hdr.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D107F080E84D80012BB8B /* il_hdr.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10B7080E84D80012BB8B /* il_header.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1080080E84D80012BB8B /* il_header.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10B8080E84D80012BB8B /* il_icon.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1081080E84D80012BB8B /* il_icon.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10B9080E84D80012BB8B /* il_internal.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1082080E84D80012BB8B /* il_internal.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10BA080E84D80012BB8B /* il_io.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1083080E84D80012BB8B /* il_io.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10BB080E84D80012BB8B /* il_jpeg.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1084080E84D80012BB8B /* il_jpeg.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10BC080E84D80012BB8B /* il_lif.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1085080E84D80012BB8B /* il_lif.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10BD080E84D80012BB8B /* il_main.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1086080E84D80012BB8B /* il_main.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10BE080E84D80012BB8B /* il_manip.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1087080E84D80012BB8B /* il_manip.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10BF080E84D80012BB8B /* il_mdl.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1088080E84D80012BB8B /* il_mdl.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10C0080E84D80012BB8B /* il_mng.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1089080E84D80012BB8B /* il_mng.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10C1080E84D80012BB8B /* il_neuquant.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D108A080E84D80012BB8B /* il_neuquant.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10C2080E84D80012BB8B /* il_pal.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D108B080E84D80012BB8B /* il_pal.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10C3080E84D80012BB8B /* il_pcd.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D108C080E84D80012BB8B /* il_pcd.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10C4080E84D80012BB8B /* il_pcx.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D108D080E84D80012BB8B /* il_pcx.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10C5080E84D80012BB8B /* il_pic.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D108E080E84D80012BB8B /* il_pic.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10C6080E84D80012BB8B /* il_pix.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D108F080E84D80012BB8B /* il_pix.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10C7080E84D80012BB8B /* il_png.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1090080E84D80012BB8B /* il_png.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10C8080E84D80012BB8B /* il_pnm.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1091080E84D80012BB8B /* il_pnm.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10C9080E84D80012BB8B /* il_profiles.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1092080E84D80012BB8B /* il_profiles.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10CA080E84D80012BB8B /* il_psd.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1093080E84D80012BB8B /* il_psd.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10CB080E84D80012BB8B /* il_psp.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1094080E84D80012BB8B /* il_psp.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10CC080E84D80012BB8B /* il_pxr.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1095080E84D80012BB8B /* il_pxr.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10CD080E84D80012BB8B /* il_quantizer.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1096080E84D80012BB8B /* il_quantizer.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10CE080E84D80012BB8B /* il_raw.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1097080E84D80012BB8B /* il_raw.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10CF080E84D80012BB8B /* il_rawdata.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1098080E84D80012BB8B /* il_rawdata.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10D0080E84D80012BB8B /* il_register.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D1099080E84D80012BB8B /* il_register.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10D1080E84D80012BB8B /* il_rle.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D109A080E84D80012BB8B /* il_rle.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10D2080E84D80012BB8B /* il_sgi.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D109B080E84D80012BB8B /* il_sgi.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10D3080E84D80012BB8B /* il_stack.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D109C080E84D80012BB8B /* il_stack.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10D4080E84D80012BB8B /* il_states.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D109D080E84D80012BB8B /* il_states.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10D5080E84D80012BB8B /* il_targa.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D109E080E84D80012BB8B /* il_targa.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10D6080E84D80012BB8B /* il_tiff.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D109F080E84D80012BB8B /* il_tiff.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10D7080E84D80012BB8B /* il_utility.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D10A0080E84D80012BB8B /* il_utility.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10D8080E84D80012BB8B /* il_wal.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D10A1080E84D80012BB8B /* il_wal.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D10D9080E84D80012BB8B /* il_xpm.c in Sources */ = {isa = PBXBuildFile; fileRef = A36D10A2080E84D80012BB8B /* il_xpm.c */; settings = {COMPILER_FLAGS = "-I../../include"; }; };
+		A36D1123080E92150012BB8B /* il_alloc.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1103080E92150012BB8B /* il_alloc.h */; };
+		A36D1124080E92150012BB8B /* il_bits.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1104080E92150012BB8B /* il_bits.h */; };
+		A36D1125080E92150012BB8B /* il_bmp.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1105080E92150012BB8B /* il_bmp.h */; };
+		A36D1126080E92150012BB8B /* il_dcx.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1106080E92150012BB8B /* il_dcx.h */; };
+		A36D1127080E92150012BB8B /* il_dds.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1107080E92150012BB8B /* il_dds.h */; };
+		A36D1128080E92150012BB8B /* il_doompal.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1108080E92150012BB8B /* il_doompal.h */; };
+		A36D1129080E92150012BB8B /* il_endian.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1109080E92150012BB8B /* il_endian.h */; };
+		A36D112A080E92150012BB8B /* il_files.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D110A080E92150012BB8B /* il_files.h */; };
+		A36D112B080E92150012BB8B /* il_gif.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D110B080E92150012BB8B /* il_gif.h */; };
+		A36D112C080E92150012BB8B /* il_hdr.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D110C080E92150012BB8B /* il_hdr.h */; };
+		A36D112D080E92150012BB8B /* il_icon.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D110D080E92150012BB8B /* il_icon.h */; };
+		A36D112E080E92150012BB8B /* il_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D110E080E92150012BB8B /* il_internal.h */; };
+		A36D112F080E92150012BB8B /* il_jpeg.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D110F080E92150012BB8B /* il_jpeg.h */; };
+		A36D1130080E92150012BB8B /* il_lif.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1110080E92150012BB8B /* il_lif.h */; };
+		A36D1131080E92150012BB8B /* il_manip.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1111080E92150012BB8B /* il_manip.h */; };
+		A36D1132080E92150012BB8B /* il_mdl.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1112080E92150012BB8B /* il_mdl.h */; };
+		A36D1133080E92150012BB8B /* il_pal.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1113080E92150012BB8B /* il_pal.h */; };
+		A36D1134080E92150012BB8B /* il_pcx.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1114080E92150012BB8B /* il_pcx.h */; };
+		A36D1135080E92150012BB8B /* il_pic.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1115080E92150012BB8B /* il_pic.h */; };
+		A36D1136080E92150012BB8B /* il_pnm.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1116080E92150012BB8B /* il_pnm.h */; };
+		A36D1137080E92150012BB8B /* il_psd.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1117080E92150012BB8B /* il_psd.h */; };
+		A36D1138080E92150012BB8B /* il_psp.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1118080E92150012BB8B /* il_psp.h */; };
+		A36D1139080E92150012BB8B /* il_q2pal.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1119080E92150012BB8B /* il_q2pal.h */; };
+		A36D113A080E92150012BB8B /* il_register.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D111A080E92150012BB8B /* il_register.h */; };
+		A36D113B080E92150012BB8B /* il_rle.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D111B080E92150012BB8B /* il_rle.h */; };
+		A36D113C080E92150012BB8B /* il_sgi.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D111C080E92150012BB8B /* il_sgi.h */; };
+		A36D113D080E92150012BB8B /* il_stack.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D111D080E92150012BB8B /* il_stack.h */; };
+		A36D113E080E92150012BB8B /* il_states.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D111E080E92150012BB8B /* il_states.h */; };
+		A36D113F080E92150012BB8B /* il_targa.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D111F080E92150012BB8B /* il_targa.h */; };
+		A36D1171080E95D60012BB8B /* ilut.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D115F080E95D60012BB8B /* ilut.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A36D1172080E95D60012BB8B /* ilu_region.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1165080E95D60012BB8B /* ilu_region.h */; };
+		A36D1173080E95D60012BB8B /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1166080E95D60012BB8B /* config.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A36D1174080E95D60012BB8B /* il.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1167080E95D60012BB8B /* il.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A36D1175080E95D60012BB8B /* ilu.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1168080E95D60012BB8B /* ilu.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A36D1176080E95D60012BB8B /* devil_internal_exports.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D116C080E95D60012BB8B /* devil_internal_exports.h */; };
+		A36D1177080E95D60012BB8B /* il_wrap.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D116E080E95D60012BB8B /* il_wrap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A36D0EDF080E81800012BB8B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A3009525080E7F6E003DEA28;
+			remoteInfo = libIL;
+		};
+		A36D0EE1080E81850012BB8B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A3009525080E7F6E003DEA28;
+			remoteInfo = libIL;
+		};
+		A36D0EE3080E81850012BB8B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A3009514080E7F44003DEA28;
+			remoteInfo = libILU;
+		};
+		A36D10F8080E8FE80012BB8B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A3009525080E7F6E003DEA28;
+			remoteInfo = libIL;
+		};
+		A36D10FA080E8FE80012BB8B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A3009514080E7F44003DEA28;
+			remoteInfo = libILU;
+		};
+		A36D10FC080E8FE80012BB8B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A3009519080E7F51003DEA28;
+			remoteInfo = libILUT;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A3009515080E7F44003DEA28 /* libILU.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libILU.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		A300951A080E7F51003DEA28 /* libILUT.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libILUT.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3009526080E7F6E003DEA28 /* libIL.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libIL.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		A30B34820818DB240067D04E /* AUTHORS */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = AUTHORS; path = /Users/dario/Desktop/Developer/Projects/DevIL/cvsroot/DevIL/AUTHORS; sourceTree = "<absolute>"; };
+		A30B34870818DB400067D04E /* TODO */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = TODO; path = ../../TODO; sourceTree = SOURCE_ROOT; };
+		A30B34880818DB400067D04E /* autogen.sh */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; name = autogen.sh; path = ../../autogen.sh; sourceTree = SOURCE_ROOT; };
+		A30B34890818DB400067D04E /* COPYING */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = COPYING; path = ../../COPYING; sourceTree = SOURCE_ROOT; };
+		A30B348A0818DB400067D04E /* README.win */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = README.win; path = ../../README.win; sourceTree = SOURCE_ROOT; };
+		A30B348B0818DB400067D04E /* README.unix */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = README.unix; path = ../../README.unix; sourceTree = SOURCE_ROOT; };
+		A30B348C0818DB400067D04E /* README.macosx */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = README.macosx; path = ../../README.macosx; sourceTree = SOURCE_ROOT; };
+		A30B348D0818DB400067D04E /* README */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = README; path = ../../README; sourceTree = SOURCE_ROOT; };
+		A30B348E0818DB400067D04E /* NEWS */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = NEWS; path = ../../NEWS; sourceTree = SOURCE_ROOT; };
+		A30B348F0818DB400067D04E /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = ../../Makefile.am; sourceTree = SOURCE_ROOT; };
+		A30B34900818DB400067D04E /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = ChangeLog; path = ../../ChangeLog; sourceTree = SOURCE_ROOT; };
+		A30B34910818DB400067D04E /* BUGS */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = BUGS; path = ../../BUGS; sourceTree = SOURCE_ROOT; };
+		A30B34920818DB400067D04E /* Libraries.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Libraries.txt; path = ../../Libraries.txt; sourceTree = SOURCE_ROOT; };
+		A30B34930818DB400067D04E /* INSTALL */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = INSTALL; path = ../../INSTALL; sourceTree = SOURCE_ROOT; };
+		A30B34940818DB400067D04E /* CREDITS */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = CREDITS; path = ../../CREDITS; sourceTree = SOURCE_ROOT; };
+		A30B349E0818DB5C0067D04E /* configure.in */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = configure.in; path = ../../configure.in; sourceTree = SOURCE_ROOT; };
+		A32D48B008102349008510AC /* ilu_alloc.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilu_alloc.c; sourceTree = "<group>"; };
+		A32D48B108102349008510AC /* ilu_error.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilu_error.c; sourceTree = "<group>"; };
+		A32D48B208102349008510AC /* ilu_filter.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilu_filter.c; sourceTree = "<group>"; };
+		A32D48B308102349008510AC /* ilu_filter_rcg.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilu_filter_rcg.c; sourceTree = "<group>"; };
+		A32D48B408102349008510AC /* ilu_internal.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilu_internal.c; sourceTree = "<group>"; };
+		A32D48B508102349008510AC /* ilu_main.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilu_main.c; sourceTree = "<group>"; };
+		A32D48B608102349008510AC /* ilu_manip.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilu_manip.c; sourceTree = "<group>"; };
+		A32D48B708102349008510AC /* ilu_mipmap.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilu_mipmap.c; sourceTree = "<group>"; };
+		A32D48B808102349008510AC /* ilu_noise.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilu_noise.c; sourceTree = "<group>"; };
+		A32D48B908102349008510AC /* ilu_region.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilu_region.c; sourceTree = "<group>"; };
+		A32D48BA08102349008510AC /* ilu_rotate.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilu_rotate.c; sourceTree = "<group>"; };
+		A32D48BB08102349008510AC /* ilu_scale.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilu_scale.c; sourceTree = "<group>"; };
+		A32D48BC08102349008510AC /* ilu_scale2d.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilu_scale2d.c; sourceTree = "<group>"; };
+		A32D48BD08102349008510AC /* ilu_scale3d.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilu_scale3d.c; sourceTree = "<group>"; };
+		A32D48BE08102349008510AC /* ilu_scaling.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilu_scaling.c; sourceTree = "<group>"; };
+		A32D48BF08102349008510AC /* ilu_states.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilu_states.c; sourceTree = "<group>"; };
+		A32D48C008102349008510AC /* ilu_utilities.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilu_utilities.c; sourceTree = "<group>"; };
+		A32D48D80810234E008510AC /* include */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = folder; name = include; path = "../../src-ILU/include"; sourceTree = SOURCE_ROOT; };
+		A32D48D90810234E008510AC /* ilu_filter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ilu_filter.h; path = "../../src-ILU/include/ilu_filter.h"; sourceTree = SOURCE_ROOT; };
+		A32D48DA0810234E008510AC /* ilu_internal.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ilu_internal.h; path = "../../src-ILU/include/ilu_internal.h"; sourceTree = SOURCE_ROOT; };
+		A32D48DB0810234E008510AC /* ilu_mipmap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ilu_mipmap.h; path = "../../src-ILU/include/ilu_mipmap.h"; sourceTree = SOURCE_ROOT; };
+		A32D48DC0810234E008510AC /* ilu_region.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ilu_region.h; path = "../../src-ILU/include/ilu_region.h"; sourceTree = SOURCE_ROOT; };
+		A32D48DD0810234E008510AC /* ilu_states.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ilu_states.h; path = "../../src-ILU/include/ilu_states.h"; sourceTree = SOURCE_ROOT; };
+		A32D49440810244F008510AC /* ilut_allegro.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ilut_allegro.h; sourceTree = "<group>"; };
+		A32D49450810244F008510AC /* ilut_internal.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ilut_internal.h; sourceTree = "<group>"; };
+		A32D49460810244F008510AC /* ilut_opengl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ilut_opengl.h; sourceTree = "<group>"; };
+		A32D49470810244F008510AC /* ilut_states.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ilut_states.h; sourceTree = "<group>"; };
+		A32D49570810244F008510AC /* ilut_allegro.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilut_allegro.c; sourceTree = "<group>"; };
+		A32D49580810244F008510AC /* ilut_directx.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilut_directx.c; sourceTree = "<group>"; };
+		A32D49590810244F008510AC /* ilut_directx9.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilut_directx9.c; sourceTree = "<group>"; };
+		A32D495A0810244F008510AC /* ilut_internal.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilut_internal.c; sourceTree = "<group>"; };
+		A32D495B0810244F008510AC /* ilut_main.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilut_main.c; sourceTree = "<group>"; };
+		A32D495C0810244F008510AC /* ilut_opengl.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilut_opengl.c; sourceTree = "<group>"; };
+		A32D495D0810244F008510AC /* ilut_sdlsurface.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilut_sdlsurface.c; sourceTree = "<group>"; };
+		A32D495E0810244F008510AC /* ilut_states.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilut_states.c; sourceTree = "<group>"; };
+		A32D495F0810244F008510AC /* ilut_win32.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ilut_win32.c; sourceTree = "<group>"; };
+		A33D1E37080EA43A00FEBAC9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		A33E80930810140D00578C1B /* libjpeg.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjpeg.dylib; path = /usr/local/lib/libjpeg.62.0.0.dylib; sourceTree = "<absolute>"; };
+		A33E809F0810145F00578C1B /* libmng.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libmng.dylib; path = /usr/local/lib/libmng.1.0.0.dylib; sourceTree = "<absolute>"; };
+		A33E80AA081014BF00578C1B /* liblcms.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = liblcms.dylib; path = /sw/lib/liblcms.1.0.14.dylib; sourceTree = "<absolute>"; };
+		A35C9C81080EB93900CCD137 /* libpng.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng.dylib; path = /usr/local/lib/libpng.3.1.2.8.dylib; sourceTree = "<absolute>"; };
+		A35C9C82080EB93900CCD137 /* libtiff.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libtiff.dylib; path = /usr/local/lib/libtiff.3.7.2.dylib; sourceTree = "<absolute>"; };
+		A35C9CAA080EBA5100CCD137 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.1.dylib; sourceTree = "<absolute>"; };
+		A35E96760823F02E0061C1C7 /* configure */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; name = configure; path = ../../configure; sourceTree = SOURCE_ROOT; };
+		A36D106F080E84D70012BB8B /* il_alloc.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_alloc.c; sourceTree = "<group>"; };
+		A36D1070080E84D70012BB8B /* il_bits.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_bits.c; sourceTree = "<group>"; };
+		A36D1071080E84D70012BB8B /* il_bmp.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_bmp.c; sourceTree = "<group>"; };
+		A36D1072080E84D70012BB8B /* il_convbuff.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_convbuff.c; sourceTree = "<group>"; };
+		A36D1073080E84D70012BB8B /* il_convert.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_convert.c; sourceTree = "<group>"; };
+		A36D1074080E84D70012BB8B /* il_cut.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_cut.c; sourceTree = "<group>"; };
+		A36D1075080E84D70012BB8B /* il_dcx.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_dcx.c; sourceTree = "<group>"; };
+		A36D1076080E84D80012BB8B /* il_dds-save.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = "il_dds-save.c"; sourceTree = "<group>"; };
+		A36D1077080E84D80012BB8B /* il_dds.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_dds.c; sourceTree = "<group>"; };
+		A36D1078080E84D80012BB8B /* il_devil.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_devil.c; sourceTree = "<group>"; };
+		A36D1079080E84D80012BB8B /* il_doom.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_doom.c; sourceTree = "<group>"; };
+		A36D107A080E84D80012BB8B /* il_endian.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_endian.c; sourceTree = "<group>"; };
+		A36D107B080E84D80012BB8B /* il_error.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_error.c; sourceTree = "<group>"; };
+		A36D107C080E84D80012BB8B /* il_fastconv.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_fastconv.c; sourceTree = "<group>"; };
+		A36D107D080E84D80012BB8B /* il_files.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_files.c; sourceTree = "<group>"; };
+		A36D107E080E84D80012BB8B /* il_gif.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_gif.c; sourceTree = "<group>"; };
+		A36D107F080E84D80012BB8B /* il_hdr.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_hdr.c; sourceTree = "<group>"; };
+		A36D1080080E84D80012BB8B /* il_header.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_header.c; sourceTree = "<group>"; };
+		A36D1081080E84D80012BB8B /* il_icon.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_icon.c; sourceTree = "<group>"; };
+		A36D1082080E84D80012BB8B /* il_internal.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_internal.c; sourceTree = "<group>"; };
+		A36D1083080E84D80012BB8B /* il_io.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_io.c; sourceTree = "<group>"; };
+		A36D1084080E84D80012BB8B /* il_jpeg.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_jpeg.c; sourceTree = "<group>"; };
+		A36D1085080E84D80012BB8B /* il_lif.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_lif.c; sourceTree = "<group>"; };
+		A36D1086080E84D80012BB8B /* il_main.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_main.c; sourceTree = "<group>"; };
+		A36D1087080E84D80012BB8B /* il_manip.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_manip.c; sourceTree = "<group>"; };
+		A36D1088080E84D80012BB8B /* il_mdl.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_mdl.c; sourceTree = "<group>"; };
+		A36D1089080E84D80012BB8B /* il_mng.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_mng.c; sourceTree = "<group>"; };
+		A36D108A080E84D80012BB8B /* il_neuquant.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_neuquant.c; sourceTree = "<group>"; };
+		A36D108B080E84D80012BB8B /* il_pal.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_pal.c; sourceTree = "<group>"; };
+		A36D108C080E84D80012BB8B /* il_pcd.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_pcd.c; sourceTree = "<group>"; };
+		A36D108D080E84D80012BB8B /* il_pcx.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_pcx.c; sourceTree = "<group>"; };
+		A36D108E080E84D80012BB8B /* il_pic.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_pic.c; sourceTree = "<group>"; };
+		A36D108F080E84D80012BB8B /* il_pix.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_pix.c; sourceTree = "<group>"; };
+		A36D1090080E84D80012BB8B /* il_png.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_png.c; sourceTree = "<group>"; };
+		A36D1091080E84D80012BB8B /* il_pnm.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_pnm.c; sourceTree = "<group>"; };
+		A36D1092080E84D80012BB8B /* il_profiles.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_profiles.c; sourceTree = "<group>"; };
+		A36D1093080E84D80012BB8B /* il_psd.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_psd.c; sourceTree = "<group>"; };
+		A36D1094080E84D80012BB8B /* il_psp.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_psp.c; sourceTree = "<group>"; };
+		A36D1095080E84D80012BB8B /* il_pxr.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_pxr.c; sourceTree = "<group>"; };
+		A36D1096080E84D80012BB8B /* il_quantizer.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_quantizer.c; sourceTree = "<group>"; };
+		A36D1097080E84D80012BB8B /* il_raw.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_raw.c; sourceTree = "<group>"; };
+		A36D1098080E84D80012BB8B /* il_rawdata.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_rawdata.c; sourceTree = "<group>"; };
+		A36D1099080E84D80012BB8B /* il_register.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_register.c; sourceTree = "<group>"; };
+		A36D109A080E84D80012BB8B /* il_rle.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_rle.c; sourceTree = "<group>"; };
+		A36D109B080E84D80012BB8B /* il_sgi.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_sgi.c; sourceTree = "<group>"; };
+		A36D109C080E84D80012BB8B /* il_stack.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_stack.c; sourceTree = "<group>"; };
+		A36D109D080E84D80012BB8B /* il_states.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_states.c; sourceTree = "<group>"; };
+		A36D109E080E84D80012BB8B /* il_targa.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_targa.c; sourceTree = "<group>"; };
+		A36D109F080E84D80012BB8B /* il_tiff.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_tiff.c; sourceTree = "<group>"; };
+		A36D10A0080E84D80012BB8B /* il_utility.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_utility.c; sourceTree = "<group>"; };
+		A36D10A1080E84D80012BB8B /* il_wal.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_wal.c; sourceTree = "<group>"; };
+		A36D10A2080E84D80012BB8B /* il_xpm.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = il_xpm.c; sourceTree = "<group>"; };
+		A36D1103080E92150012BB8B /* il_alloc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_alloc.h; sourceTree = "<group>"; };
+		A36D1104080E92150012BB8B /* il_bits.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_bits.h; sourceTree = "<group>"; };
+		A36D1105080E92150012BB8B /* il_bmp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_bmp.h; sourceTree = "<group>"; };
+		A36D1106080E92150012BB8B /* il_dcx.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_dcx.h; sourceTree = "<group>"; };
+		A36D1107080E92150012BB8B /* il_dds.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_dds.h; sourceTree = "<group>"; };
+		A36D1108080E92150012BB8B /* il_doompal.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_doompal.h; sourceTree = "<group>"; };
+		A36D1109080E92150012BB8B /* il_endian.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_endian.h; sourceTree = "<group>"; };
+		A36D110A080E92150012BB8B /* il_files.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_files.h; sourceTree = "<group>"; };
+		A36D110B080E92150012BB8B /* il_gif.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_gif.h; sourceTree = "<group>"; };
+		A36D110C080E92150012BB8B /* il_hdr.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_hdr.h; sourceTree = "<group>"; };
+		A36D110D080E92150012BB8B /* il_icon.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_icon.h; sourceTree = "<group>"; };
+		A36D110E080E92150012BB8B /* il_internal.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_internal.h; sourceTree = "<group>"; };
+		A36D110F080E92150012BB8B /* il_jpeg.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_jpeg.h; sourceTree = "<group>"; };
+		A36D1110080E92150012BB8B /* il_lif.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_lif.h; sourceTree = "<group>"; };
+		A36D1111080E92150012BB8B /* il_manip.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_manip.h; sourceTree = "<group>"; };
+		A36D1112080E92150012BB8B /* il_mdl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_mdl.h; sourceTree = "<group>"; };
+		A36D1113080E92150012BB8B /* il_pal.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_pal.h; sourceTree = "<group>"; };
+		A36D1114080E92150012BB8B /* il_pcx.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_pcx.h; sourceTree = "<group>"; };
+		A36D1115080E92150012BB8B /* il_pic.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_pic.h; sourceTree = "<group>"; };
+		A36D1116080E92150012BB8B /* il_pnm.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_pnm.h; sourceTree = "<group>"; };
+		A36D1117080E92150012BB8B /* il_psd.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_psd.h; sourceTree = "<group>"; };
+		A36D1118080E92150012BB8B /* il_psp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_psp.h; sourceTree = "<group>"; };
+		A36D1119080E92150012BB8B /* il_q2pal.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_q2pal.h; sourceTree = "<group>"; };
+		A36D111A080E92150012BB8B /* il_register.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_register.h; sourceTree = "<group>"; };
+		A36D111B080E92150012BB8B /* il_rle.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_rle.h; sourceTree = "<group>"; };
+		A36D111C080E92150012BB8B /* il_sgi.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_sgi.h; sourceTree = "<group>"; };
+		A36D111D080E92150012BB8B /* il_stack.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_stack.h; sourceTree = "<group>"; };
+		A36D111E080E92150012BB8B /* il_states.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_states.h; sourceTree = "<group>"; };
+		A36D111F080E92150012BB8B /* il_targa.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = il_targa.h; sourceTree = "<group>"; };
+		A36D115F080E95D60012BB8B /* ilut.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ilut.h; path = ../../include/IL/ilut.h; sourceTree = SOURCE_ROOT; };
+		A36D1165080E95D60012BB8B /* ilu_region.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ilu_region.h; path = ../../include/IL/ilu_region.h; sourceTree = SOURCE_ROOT; };
+		A36D1166080E95D60012BB8B /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = config.h; path = ../../include/IL/config.h; sourceTree = SOURCE_ROOT; };
+		A36D1167080E95D60012BB8B /* il.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = il.h; path = ../../include/IL/il.h; sourceTree = SOURCE_ROOT; };
+		A36D1168080E95D60012BB8B /* ilu.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ilu.h; path = ../../include/IL/ilu.h; sourceTree = SOURCE_ROOT; };
+		A36D116C080E95D60012BB8B /* devil_internal_exports.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = devil_internal_exports.h; path = ../../include/IL/devil_internal_exports.h; sourceTree = SOURCE_ROOT; };
+		A36D116E080E95D60012BB8B /* il_wrap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = il_wrap.h; path = ../../include/IL/il_wrap.h; sourceTree = SOURCE_ROOT; };
+		A38C3BE40818FAB2008EE126 /* altivec_common.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = altivec_common.c; sourceTree = "<group>"; };
+		A38C3BE50818FAB2008EE126 /* altivec_common.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = altivec_common.h; sourceTree = "<group>"; };
+		A38C3C0A0818FC10008EE126 /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = "../../src-IL/src/Makefile.am"; sourceTree = SOURCE_ROOT; };
+		A38C3C170818FC42008EE126 /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = "../../src-ILU/src/Makefile.am"; sourceTree = "<group>"; };
+		A38C3C1F0818FC55008EE126 /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = "../../src-ILUT/src/Makefile.am"; sourceTree = "<group>"; };
+		A39B3BAC081C189200115B25 /* altivec_typeconversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = altivec_typeconversion.h; sourceTree = "<group>"; };
+		A39B3BAD081C189200115B25 /* altivec_typeconversion.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = altivec_typeconversion.c; sourceTree = "<group>"; };
+		A39B3BAE081C18DF00115B25 /* altivec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = altivec.h; sourceTree = "<group>"; };
+		EA942B270E79433800D95BD5 /* ilu_alloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ilu_alloc.h; path = "../../src-ILU/include/ilu_alloc.h"; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A3009513080E7F44003DEA28 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A32D48FD081023D6008510AC /* libIL.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3009518080E7F51003DEA28 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A32D490508102403008510AC /* libIL.dylib in Frameworks */,
+				A32D490608102405008510AC /* libILU.dylib in Frameworks */,
+				A33D1E4A080EA43E00FEBAC9 /* OpenGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3009524080E7F6E003DEA28 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A35C9CAB080EBA5100CCD137 /* libz.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* DevIL */ = {
+			isa = PBXGroup;
+			children = (
+				EA942B270E79433800D95BD5 /* ilu_alloc.h */,
+				A38C3BE30818FAB2008EE126 /* altivec */,
+				A36D1100080E91B20012BB8B /* IL */,
+				A32D489B0810233E008510AC /* ILU */,
+				A32D490A08102417008510AC /* ILUT */,
+				A30E01C208101A1700B16732 /* Libraries */,
+				A33D1D86080E969A00FEBAC9 /* Includes */,
+				A3009534080E8006003DEA28 /* Docs */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+			);
+			name = DevIL;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A3009526080E7F6E003DEA28 /* libIL.dylib */,
+				A3009515080E7F44003DEA28 /* libILU.dylib */,
+				A300951A080E7F51003DEA28 /* libILUT.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A3009534080E8006003DEA28 /* Docs */ = {
+			isa = PBXGroup;
+			children = (
+				A30B34870818DB400067D04E /* TODO */,
+				A30B34880818DB400067D04E /* autogen.sh */,
+				A30B34890818DB400067D04E /* COPYING */,
+				A30B348A0818DB400067D04E /* README.win */,
+				A30B348B0818DB400067D04E /* README.unix */,
+				A30B348C0818DB400067D04E /* README.macosx */,
+				A30B348D0818DB400067D04E /* README */,
+				A30B349E0818DB5C0067D04E /* configure.in */,
+				A35E96760823F02E0061C1C7 /* configure */,
+				A30B348E0818DB400067D04E /* NEWS */,
+				A30B348F0818DB400067D04E /* Makefile.am */,
+				A30B34900818DB400067D04E /* ChangeLog */,
+				A30B34910818DB400067D04E /* BUGS */,
+				A30B34920818DB400067D04E /* Libraries.txt */,
+				A30B34930818DB400067D04E /* INSTALL */,
+				A30B34940818DB400067D04E /* CREDITS */,
+				A30B34820818DB240067D04E /* AUTHORS */,
+			);
+			name = Docs;
+			sourceTree = "<group>";
+		};
+		A30E01C208101A1700B16732 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				A33E80AA081014BF00578C1B /* liblcms.dylib */,
+				A33E809F0810145F00578C1B /* libmng.dylib */,
+				A33E80930810140D00578C1B /* libjpeg.dylib */,
+				A35C9CAA080EBA5100CCD137 /* libz.dylib */,
+				A35C9C81080EB93900CCD137 /* libpng.dylib */,
+				A35C9C82080EB93900CCD137 /* libtiff.dylib */,
+				A33D1E37080EA43A00FEBAC9 /* OpenGL.framework */,
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+		};
+		A32D489B0810233E008510AC /* ILU */ = {
+			isa = PBXGroup;
+			children = (
+				A38C3C170818FC42008EE126 /* Makefile.am */,
+				A32D48D60810234E008510AC /* include */,
+				A32D489C08102349008510AC /* src */,
+			);
+			name = ILU;
+			sourceTree = "<group>";
+		};
+		A32D489C08102349008510AC /* src */ = {
+			isa = PBXGroup;
+			children = (
+				A32D48B008102349008510AC /* ilu_alloc.c */,
+				A32D48B108102349008510AC /* ilu_error.c */,
+				A32D48B208102349008510AC /* ilu_filter.c */,
+				A32D48B308102349008510AC /* ilu_filter_rcg.c */,
+				A32D48B408102349008510AC /* ilu_internal.c */,
+				A32D48B508102349008510AC /* ilu_main.c */,
+				A32D48B608102349008510AC /* ilu_manip.c */,
+				A32D48B708102349008510AC /* ilu_mipmap.c */,
+				A32D48B808102349008510AC /* ilu_noise.c */,
+				A32D48B908102349008510AC /* ilu_region.c */,
+				A32D48BA08102349008510AC /* ilu_rotate.c */,
+				A32D48BB08102349008510AC /* ilu_scale.c */,
+				A32D48BC08102349008510AC /* ilu_scale2d.c */,
+				A32D48BD08102349008510AC /* ilu_scale3d.c */,
+				A32D48BE08102349008510AC /* ilu_scaling.c */,
+				A32D48BF08102349008510AC /* ilu_states.c */,
+				A32D48C008102349008510AC /* ilu_utilities.c */,
+			);
+			name = src;
+			path = "../../src-ILU/src";
+			sourceTree = SOURCE_ROOT;
+		};
+		A32D48D60810234E008510AC /* include */ = {
+			isa = PBXGroup;
+			children = (
+				A32D48D80810234E008510AC /* include */,
+				A32D48D90810234E008510AC /* ilu_filter.h */,
+				A32D48DA0810234E008510AC /* ilu_internal.h */,
+				A32D48DB0810234E008510AC /* ilu_mipmap.h */,
+				A32D48DC0810234E008510AC /* ilu_region.h */,
+				A32D48DD0810234E008510AC /* ilu_states.h */,
+			);
+			name = include;
+			path = "/Users/dario/Desktop/Developer/Projects/DevIL/cvsroot/DevIL/src-ILU/include";
+			sourceTree = "<absolute>";
+		};
+		A32D490A08102417008510AC /* ILUT */ = {
+			isa = PBXGroup;
+			children = (
+				A38C3C1F0818FC55008EE126 /* Makefile.am */,
+				A32D49420810244F008510AC /* include */,
+				A32D494B0810244F008510AC /* src */,
+			);
+			name = ILUT;
+			sourceTree = "<group>";
+		};
+		A32D49420810244F008510AC /* include */ = {
+			isa = PBXGroup;
+			children = (
+				A32D49440810244F008510AC /* ilut_allegro.h */,
+				A32D49450810244F008510AC /* ilut_internal.h */,
+				A32D49460810244F008510AC /* ilut_opengl.h */,
+				A32D49470810244F008510AC /* ilut_states.h */,
+			);
+			name = include;
+			path = "../../src-ILUT/include";
+			sourceTree = SOURCE_ROOT;
+		};
+		A32D494B0810244F008510AC /* src */ = {
+			isa = PBXGroup;
+			children = (
+				A32D49570810244F008510AC /* ilut_allegro.c */,
+				A32D49580810244F008510AC /* ilut_directx.c */,
+				A32D49590810244F008510AC /* ilut_directx9.c */,
+				A32D495A0810244F008510AC /* ilut_internal.c */,
+				A32D495B0810244F008510AC /* ilut_main.c */,
+				A32D495C0810244F008510AC /* ilut_opengl.c */,
+				A32D495D0810244F008510AC /* ilut_sdlsurface.c */,
+				A32D495E0810244F008510AC /* ilut_states.c */,
+				A32D495F0810244F008510AC /* ilut_win32.c */,
+			);
+			name = src;
+			path = "../../src-ILUT/src";
+			sourceTree = SOURCE_ROOT;
+		};
+		A33D1D86080E969A00FEBAC9 /* Includes */ = {
+			isa = PBXGroup;
+			children = (
+				A36D115F080E95D60012BB8B /* ilut.h */,
+				A36D1165080E95D60012BB8B /* ilu_region.h */,
+				A36D1166080E95D60012BB8B /* config.h */,
+				A36D1167080E95D60012BB8B /* il.h */,
+				A36D1168080E95D60012BB8B /* ilu.h */,
+				A36D116C080E95D60012BB8B /* devil_internal_exports.h */,
+				A36D116E080E95D60012BB8B /* il_wrap.h */,
+			);
+			name = Includes;
+			sourceTree = "<group>";
+		};
+		A36D10DB080E85070012BB8B /* src */ = {
+			isa = PBXGroup;
+			children = (
+				A36D106F080E84D70012BB8B /* il_alloc.c */,
+				A36D1070080E84D70012BB8B /* il_bits.c */,
+				A36D1071080E84D70012BB8B /* il_bmp.c */,
+				A36D1072080E84D70012BB8B /* il_convbuff.c */,
+				A36D1073080E84D70012BB8B /* il_convert.c */,
+				A36D1074080E84D70012BB8B /* il_cut.c */,
+				A36D1075080E84D70012BB8B /* il_dcx.c */,
+				A36D1076080E84D80012BB8B /* il_dds-save.c */,
+				A36D1077080E84D80012BB8B /* il_dds.c */,
+				A36D1078080E84D80012BB8B /* il_devil.c */,
+				A36D1079080E84D80012BB8B /* il_doom.c */,
+				A36D107A080E84D80012BB8B /* il_endian.c */,
+				A36D107B080E84D80012BB8B /* il_error.c */,
+				A36D107C080E84D80012BB8B /* il_fastconv.c */,
+				A36D107D080E84D80012BB8B /* il_files.c */,
+				A36D107E080E84D80012BB8B /* il_gif.c */,
+				A36D107F080E84D80012BB8B /* il_hdr.c */,
+				A36D1080080E84D80012BB8B /* il_header.c */,
+				A36D1081080E84D80012BB8B /* il_icon.c */,
+				A36D1082080E84D80012BB8B /* il_internal.c */,
+				A36D1083080E84D80012BB8B /* il_io.c */,
+				A36D1084080E84D80012BB8B /* il_jpeg.c */,
+				A36D1085080E84D80012BB8B /* il_lif.c */,
+				A36D1086080E84D80012BB8B /* il_main.c */,
+				A36D1087080E84D80012BB8B /* il_manip.c */,
+				A36D1088080E84D80012BB8B /* il_mdl.c */,
+				A36D1089080E84D80012BB8B /* il_mng.c */,
+				A36D108A080E84D80012BB8B /* il_neuquant.c */,
+				A36D108B080E84D80012BB8B /* il_pal.c */,
+				A36D108C080E84D80012BB8B /* il_pcd.c */,
+				A36D108D080E84D80012BB8B /* il_pcx.c */,
+				A36D108E080E84D80012BB8B /* il_pic.c */,
+				A36D108F080E84D80012BB8B /* il_pix.c */,
+				A36D1090080E84D80012BB8B /* il_png.c */,
+				A36D1091080E84D80012BB8B /* il_pnm.c */,
+				A36D1092080E84D80012BB8B /* il_profiles.c */,
+				A36D1093080E84D80012BB8B /* il_psd.c */,
+				A36D1094080E84D80012BB8B /* il_psp.c */,
+				A36D1095080E84D80012BB8B /* il_pxr.c */,
+				A36D1096080E84D80012BB8B /* il_quantizer.c */,
+				A36D1097080E84D80012BB8B /* il_raw.c */,
+				A36D1098080E84D80012BB8B /* il_rawdata.c */,
+				A36D1099080E84D80012BB8B /* il_register.c */,
+				A36D109A080E84D80012BB8B /* il_rle.c */,
+				A36D109B080E84D80012BB8B /* il_sgi.c */,
+				A36D109C080E84D80012BB8B /* il_stack.c */,
+				A36D109D080E84D80012BB8B /* il_states.c */,
+				A36D109E080E84D80012BB8B /* il_targa.c */,
+				A36D109F080E84D80012BB8B /* il_tiff.c */,
+				A36D10A0080E84D80012BB8B /* il_utility.c */,
+				A36D10A1080E84D80012BB8B /* il_wal.c */,
+				A36D10A2080E84D80012BB8B /* il_xpm.c */,
+			);
+			name = src;
+			path = "../../src-IL/src";
+			sourceTree = SOURCE_ROOT;
+		};
+		A36D1100080E91B20012BB8B /* IL */ = {
+			isa = PBXGroup;
+			children = (
+				A38C3C0A0818FC10008EE126 /* Makefile.am */,
+				A36D1101080E92150012BB8B /* include */,
+				A36D10DB080E85070012BB8B /* src */,
+			);
+			name = IL;
+			sourceTree = "<group>";
+		};
+		A36D1101080E92150012BB8B /* include */ = {
+			isa = PBXGroup;
+			children = (
+				A36D1103080E92150012BB8B /* il_alloc.h */,
+				A36D1104080E92150012BB8B /* il_bits.h */,
+				A36D1105080E92150012BB8B /* il_bmp.h */,
+				A36D1106080E92150012BB8B /* il_dcx.h */,
+				A36D1107080E92150012BB8B /* il_dds.h */,
+				A36D1108080E92150012BB8B /* il_doompal.h */,
+				A36D1109080E92150012BB8B /* il_endian.h */,
+				A36D110A080E92150012BB8B /* il_files.h */,
+				A36D110B080E92150012BB8B /* il_gif.h */,
+				A36D110C080E92150012BB8B /* il_hdr.h */,
+				A36D110D080E92150012BB8B /* il_icon.h */,
+				A36D110E080E92150012BB8B /* il_internal.h */,
+				A36D110F080E92150012BB8B /* il_jpeg.h */,
+				A36D1110080E92150012BB8B /* il_lif.h */,
+				A36D1111080E92150012BB8B /* il_manip.h */,
+				A36D1112080E92150012BB8B /* il_mdl.h */,
+				A36D1113080E92150012BB8B /* il_pal.h */,
+				A36D1114080E92150012BB8B /* il_pcx.h */,
+				A36D1115080E92150012BB8B /* il_pic.h */,
+				A36D1116080E92150012BB8B /* il_pnm.h */,
+				A36D1117080E92150012BB8B /* il_psd.h */,
+				A36D1118080E92150012BB8B /* il_psp.h */,
+				A36D1119080E92150012BB8B /* il_q2pal.h */,
+				A36D111A080E92150012BB8B /* il_register.h */,
+				A36D111B080E92150012BB8B /* il_rle.h */,
+				A36D111C080E92150012BB8B /* il_sgi.h */,
+				A36D111D080E92150012BB8B /* il_stack.h */,
+				A36D111E080E92150012BB8B /* il_states.h */,
+				A36D111F080E92150012BB8B /* il_targa.h */,
+			);
+			name = include;
+			path = "../../src-IL/include";
+			sourceTree = SOURCE_ROOT;
+		};
+		A38C3BE30818FAB2008EE126 /* altivec */ = {
+			isa = PBXGroup;
+			children = (
+				A39B3BAE081C18DF00115B25 /* altivec.h */,
+				A39B3BAC081C189200115B25 /* altivec_typeconversion.h */,
+				A39B3BAD081C189200115B25 /* altivec_typeconversion.c */,
+				A38C3BE40818FAB2008EE126 /* altivec_common.c */,
+				A38C3BE50818FAB2008EE126 /* altivec_common.h */,
+			);
+			name = altivec;
+			path = ../../altivec;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		A3009511080E7F44003DEA28 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A32D48E20810234E008510AC /* ilu_filter.h in Headers */,
+				A32D48E30810234E008510AC /* ilu_internal.h in Headers */,
+				A32D48E40810234E008510AC /* ilu_mipmap.h in Headers */,
+				A32D48E50810234E008510AC /* ilu_region.h in Headers */,
+				A32D48E60810234E008510AC /* ilu_states.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3009516080E7F51003DEA28 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A32D49630810244F008510AC /* ilut_allegro.h in Headers */,
+				A32D49640810244F008510AC /* ilut_internal.h in Headers */,
+				A32D49650810244F008510AC /* ilut_opengl.h in Headers */,
+				A32D49660810244F008510AC /* ilut_states.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3009522080E7F6E003DEA28 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A36D1123080E92150012BB8B /* il_alloc.h in Headers */,
+				A36D1124080E92150012BB8B /* il_bits.h in Headers */,
+				A36D1125080E92150012BB8B /* il_bmp.h in Headers */,
+				A36D1126080E92150012BB8B /* il_dcx.h in Headers */,
+				A36D1127080E92150012BB8B /* il_dds.h in Headers */,
+				A36D1128080E92150012BB8B /* il_doompal.h in Headers */,
+				A36D1129080E92150012BB8B /* il_endian.h in Headers */,
+				A36D112A080E92150012BB8B /* il_files.h in Headers */,
+				A36D112B080E92150012BB8B /* il_gif.h in Headers */,
+				A36D112C080E92150012BB8B /* il_hdr.h in Headers */,
+				A36D112D080E92150012BB8B /* il_icon.h in Headers */,
+				A36D112E080E92150012BB8B /* il_internal.h in Headers */,
+				A36D112F080E92150012BB8B /* il_jpeg.h in Headers */,
+				A36D1130080E92150012BB8B /* il_lif.h in Headers */,
+				A36D1131080E92150012BB8B /* il_manip.h in Headers */,
+				A36D1132080E92150012BB8B /* il_mdl.h in Headers */,
+				A36D1133080E92150012BB8B /* il_pal.h in Headers */,
+				A36D1134080E92150012BB8B /* il_pcx.h in Headers */,
+				A36D1135080E92150012BB8B /* il_pic.h in Headers */,
+				A36D1136080E92150012BB8B /* il_pnm.h in Headers */,
+				A36D1137080E92150012BB8B /* il_psd.h in Headers */,
+				A36D1138080E92150012BB8B /* il_psp.h in Headers */,
+				A36D1139080E92150012BB8B /* il_q2pal.h in Headers */,
+				A36D113A080E92150012BB8B /* il_register.h in Headers */,
+				A36D113B080E92150012BB8B /* il_rle.h in Headers */,
+				A36D113C080E92150012BB8B /* il_sgi.h in Headers */,
+				A36D113D080E92150012BB8B /* il_stack.h in Headers */,
+				A36D113E080E92150012BB8B /* il_states.h in Headers */,
+				A36D113F080E92150012BB8B /* il_targa.h in Headers */,
+				A36D1171080E95D60012BB8B /* ilut.h in Headers */,
+				A36D1172080E95D60012BB8B /* ilu_region.h in Headers */,
+				A36D1173080E95D60012BB8B /* config.h in Headers */,
+				A36D1174080E95D60012BB8B /* il.h in Headers */,
+				A36D1175080E95D60012BB8B /* ilu.h in Headers */,
+				A36D1176080E95D60012BB8B /* devil_internal_exports.h in Headers */,
+				A36D1177080E95D60012BB8B /* il_wrap.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		A3009514080E7F44003DEA28 /* libILU */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EACAFE5C0E7936340024FAE4 /* Build configuration list for PBXNativeTarget "libILU" */;
+			buildPhases = (
+				A3009511080E7F44003DEA28 /* Headers */,
+				A3009512080E7F44003DEA28 /* Sources */,
+				A3009513080E7F44003DEA28 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A36D0EE0080E81800012BB8B /* PBXTargetDependency */,
+			);
+			name = libILU;
+			productName = libILU;
+			productReference = A3009515080E7F44003DEA28 /* libILU.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		A3009519080E7F51003DEA28 /* libILUT */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EACAFE5D0E7936340024FAE4 /* Build configuration list for PBXNativeTarget "libILUT" */;
+			buildPhases = (
+				A3009516080E7F51003DEA28 /* Headers */,
+				A3009517080E7F51003DEA28 /* Sources */,
+				A3009518080E7F51003DEA28 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A36D0EE2080E81850012BB8B /* PBXTargetDependency */,
+				A36D0EE4080E81850012BB8B /* PBXTargetDependency */,
+			);
+			name = libILUT;
+			productName = libILUT;
+			productReference = A300951A080E7F51003DEA28 /* libILUT.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		A3009525080E7F6E003DEA28 /* libIL */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EACAFE5B0E7936340024FAE4 /* Build configuration list for PBXNativeTarget "libIL" */;
+			buildPhases = (
+				A3009522080E7F6E003DEA28 /* Headers */,
+				A3009523080E7F6E003DEA28 /* Sources */,
+				A3009524080E7F6E003DEA28 /* Frameworks */,
+				A36D10E3080E856E0012BB8B /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libIL;
+			productName = libIL;
+			productReference = A3009526080E7F6E003DEA28 /* libIL.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = EACAFE590E7936340024FAE4 /* Build configuration list for PBXProject "DevIL" */;
+			compatibilityVersion = "Xcode 2.4";
+			hasScannedForEncodings = 1;
+			mainGroup = 08FB7794FE84155DC02AAC07 /* DevIL */;
+			projectDirPath = "";
+			projectRoot = ../..;
+			targets = (
+				A36D10E8080E8E5D0012BB8B /* Configure */,
+				A3009525080E7F6E003DEA28 /* libIL */,
+				A3009514080E7F44003DEA28 /* libILU */,
+				A3009519080E7F51003DEA28 /* libILUT */,
+				A36D10F5080E8FD80012BB8B /* Install */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A36D10E3080E856E0012BB8B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "";
+		};
+		A36D10E7080E8E5D0012BB8B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "# get to the root of the installation\ncd ../../\n\n# check if configure script is available or generate it\nif [ ! -x configure ] ; then\n\t./autogen.sh\nfi\n\n# call configuration script\nif [ |\n./configure\n\n# successfull exit\nexit $?\n";
+		};
+		A36D10F4080E8FD80012BB8B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\ncd build\nsudo cp libIL.dylib libILU.dylib libILUT.dylib /usr/local/lib\nif [ $? -ne 0 ] ; then\n\techo \"Failure installing the libraries\"\n\texit 1\nfi\nsudo cp usr/local/include/* /usr/local/include/\nif [ $? -ne 0 ] ; then\n\techo \"Failure installing the includes\"\n\texit 1\nfi\nexit 0";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A3009512080E7F44003DEA28 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A32D48C408102349008510AC /* ilu_alloc.c in Sources */,
+				A32D48C508102349008510AC /* ilu_error.c in Sources */,
+				A32D48C608102349008510AC /* ilu_filter.c in Sources */,
+				A32D48C708102349008510AC /* ilu_filter_rcg.c in Sources */,
+				A32D48C808102349008510AC /* ilu_internal.c in Sources */,
+				A32D48C908102349008510AC /* ilu_main.c in Sources */,
+				A32D48CA08102349008510AC /* ilu_manip.c in Sources */,
+				A32D48CB08102349008510AC /* ilu_mipmap.c in Sources */,
+				A32D48CC08102349008510AC /* ilu_noise.c in Sources */,
+				A32D48CD08102349008510AC /* ilu_region.c in Sources */,
+				A32D48CE08102349008510AC /* ilu_rotate.c in Sources */,
+				A32D48CF08102349008510AC /* ilu_scale.c in Sources */,
+				A32D48D008102349008510AC /* ilu_scale2d.c in Sources */,
+				A32D48D108102349008510AC /* ilu_scale3d.c in Sources */,
+				A32D48D208102349008510AC /* ilu_scaling.c in Sources */,
+				A32D48D308102349008510AC /* ilu_states.c in Sources */,
+				A32D48D408102349008510AC /* ilu_utilities.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3009517080E7F51003DEA28 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A32D49680810244F008510AC /* ilut_allegro.c in Sources */,
+				A32D49690810244F008510AC /* ilut_directx.c in Sources */,
+				A32D496A0810244F008510AC /* ilut_directx9.c in Sources */,
+				A32D496B0810244F008510AC /* ilut_internal.c in Sources */,
+				A32D496C0810244F008510AC /* ilut_main.c in Sources */,
+				A32D496D0810244F008510AC /* ilut_opengl.c in Sources */,
+				A32D496E0810244F008510AC /* ilut_sdlsurface.c in Sources */,
+				A32D496F0810244F008510AC /* ilut_states.c in Sources */,
+				A32D49700810244F008510AC /* ilut_win32.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3009523080E7F6E003DEA28 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A36D10A6080E84D80012BB8B /* il_alloc.c in Sources */,
+				A36D10A7080E84D80012BB8B /* il_bits.c in Sources */,
+				A36D10A8080E84D80012BB8B /* il_bmp.c in Sources */,
+				A36D10A9080E84D80012BB8B /* il_convbuff.c in Sources */,
+				A36D10AA080E84D80012BB8B /* il_convert.c in Sources */,
+				A36D10AB080E84D80012BB8B /* il_cut.c in Sources */,
+				A36D10AC080E84D80012BB8B /* il_dcx.c in Sources */,
+				A36D10AD080E84D80012BB8B /* il_dds-save.c in Sources */,
+				A36D10AE080E84D80012BB8B /* il_dds.c in Sources */,
+				A36D10AF080E84D80012BB8B /* il_devil.c in Sources */,
+				A36D10B0080E84D80012BB8B /* il_doom.c in Sources */,
+				A36D10B1080E84D80012BB8B /* il_endian.c in Sources */,
+				A36D10B2080E84D80012BB8B /* il_error.c in Sources */,
+				A36D10B3080E84D80012BB8B /* il_fastconv.c in Sources */,
+				A36D10B4080E84D80012BB8B /* il_files.c in Sources */,
+				A36D10B5080E84D80012BB8B /* il_gif.c in Sources */,
+				A36D10B6080E84D80012BB8B /* il_hdr.c in Sources */,
+				A36D10B7080E84D80012BB8B /* il_header.c in Sources */,
+				A36D10B8080E84D80012BB8B /* il_icon.c in Sources */,
+				A36D10B9080E84D80012BB8B /* il_internal.c in Sources */,
+				A36D10BA080E84D80012BB8B /* il_io.c in Sources */,
+				A36D10BB080E84D80012BB8B /* il_jpeg.c in Sources */,
+				A36D10BC080E84D80012BB8B /* il_lif.c in Sources */,
+				A36D10BD080E84D80012BB8B /* il_main.c in Sources */,
+				A36D10BE080E84D80012BB8B /* il_manip.c in Sources */,
+				A36D10BF080E84D80012BB8B /* il_mdl.c in Sources */,
+				A36D10C0080E84D80012BB8B /* il_mng.c in Sources */,
+				A36D10C1080E84D80012BB8B /* il_neuquant.c in Sources */,
+				A36D10C2080E84D80012BB8B /* il_pal.c in Sources */,
+				A36D10C3080E84D80012BB8B /* il_pcd.c in Sources */,
+				A36D10C4080E84D80012BB8B /* il_pcx.c in Sources */,
+				A36D10C5080E84D80012BB8B /* il_pic.c in Sources */,
+				A36D10C6080E84D80012BB8B /* il_pix.c in Sources */,
+				A36D10C7080E84D80012BB8B /* il_png.c in Sources */,
+				A36D10C8080E84D80012BB8B /* il_pnm.c in Sources */,
+				A36D10C9080E84D80012BB8B /* il_profiles.c in Sources */,
+				A36D10CA080E84D80012BB8B /* il_psd.c in Sources */,
+				A36D10CB080E84D80012BB8B /* il_psp.c in Sources */,
+				A36D10CC080E84D80012BB8B /* il_pxr.c in Sources */,
+				A36D10CD080E84D80012BB8B /* il_quantizer.c in Sources */,
+				A36D10CE080E84D80012BB8B /* il_raw.c in Sources */,
+				A36D10CF080E84D80012BB8B /* il_rawdata.c in Sources */,
+				A36D10D0080E84D80012BB8B /* il_register.c in Sources */,
+				A36D10D1080E84D80012BB8B /* il_rle.c in Sources */,
+				A36D10D2080E84D80012BB8B /* il_sgi.c in Sources */,
+				A36D10D3080E84D80012BB8B /* il_stack.c in Sources */,
+				A36D10D4080E84D80012BB8B /* il_states.c in Sources */,
+				A36D10D5080E84D80012BB8B /* il_targa.c in Sources */,
+				A36D10D6080E84D80012BB8B /* il_tiff.c in Sources */,
+				A36D10D7080E84D80012BB8B /* il_utility.c in Sources */,
+				A36D10D8080E84D80012BB8B /* il_wal.c in Sources */,
+				A36D10D9080E84D80012BB8B /* il_xpm.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A36D0EE0080E81800012BB8B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A3009525080E7F6E003DEA28 /* libIL */;
+			targetProxy = A36D0EDF080E81800012BB8B /* PBXContainerItemProxy */;
+		};
+		A36D0EE2080E81850012BB8B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A3009525080E7F6E003DEA28 /* libIL */;
+			targetProxy = A36D0EE1080E81850012BB8B /* PBXContainerItemProxy */;
+		};
+		A36D0EE4080E81850012BB8B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A3009514080E7F44003DEA28 /* libILU */;
+			targetProxy = A36D0EE3080E81850012BB8B /* PBXContainerItemProxy */;
+		};
+		A36D10F9080E8FE80012BB8B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A3009525080E7F6E003DEA28 /* libIL */;
+			targetProxy = A36D10F8080E8FE80012BB8B /* PBXContainerItemProxy */;
+		};
+		A36D10FB080E8FE80012BB8B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A3009514080E7F44003DEA28 /* libILU */;
+			targetProxy = A36D10FA080E8FE80012BB8B /* PBXContainerItemProxy */;
+		};
+		A36D10FD080E8FE80012BB8B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A3009519080E7F51003DEA28 /* libILUT */;
+			targetProxy = A36D10FC080E8FE80012BB8B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		EACAFE470E7936330024FAE4 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Development;
+		};
+		EACAFE480E7936330024FAE4 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Deployment;
+		};
+		EACAFE490E7936330024FAE4 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Default;
+		};
+		EACAFE4A0E7936330024FAE4 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = NO;
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_PEDANTIC = NO;
+				OTHER_CFLAGS = (
+					"-DHAVE_CONFIG_H",
+					"-maltivec",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-DHAVE_CONFIG_H",
+					"-maltivec",
+				);
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Configure;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wall";
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		EACAFE4B0E7936330024FAE4 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = "";
+				GCC_OPTIMIZATION_LEVEL = 2;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Configure;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		EACAFE4C0E7936330024FAE4 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Configure;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Default;
+		};
+		EACAFE4D0E7936330024FAE4 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_ALTIVEC_EXTENSIONS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_PPC64 = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = NO;
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_PEDANTIC = NO;
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					"\"/Users/dario/Desktop/DevIL o /src-IL/src/.libs\"",
+					/sw/lib,
+				);
+				LIBRARY_STYLE = DYNAMIC;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "-DHAVE_CONFIG_H";
+				OTHER_CPLUSPLUSFLAGS = "-DHAVE_CONFIG_H";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = libIL;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wall";
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		EACAFE4E0E7936330024FAE4 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_ALTIVEC_EXTENSIONS = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_PPC64 = NO;
+				GCC_MODEL_TUNING = "";
+				GCC_OPTIMIZATION_LEVEL = 2;
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					"\"/Users/dario/Desktop/DevIL o /src-IL/src/.libs\"",
+					/sw/lib,
+				);
+				LIBRARY_STYLE = DYNAMIC;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = (
+					"-I../../include",
+					"-I../Include",
+					"-DHAVE_CONFIG_H",
+				);
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = libIL;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		EACAFE4F0E7936330024FAE4 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_ALTIVEC_EXTENSIONS = YES;
+				GCC_MODEL_PPC64 = NO;
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					"\"/Users/dario/Desktop/DevIL o /src-IL/src/.libs\"",
+					/sw/lib,
+				);
+				LIBRARY_STYLE = DYNAMIC;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = (
+					"-I../../include",
+					"-I../Include",
+				);
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = libIL;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Default;
+		};
+		EACAFE500E7936330024FAE4 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_ALTIVEC_EXTENSIONS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = NO;
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_PEDANTIC = NO;
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_STYLE = DYNAMIC;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = (
+					"-I../../include",
+					"-I../../src-ILU/include",
+					"-DHAVE_CONFIG_H",
+				);
+				OTHER_CPLUSPLUSFLAGS = "-DHAVE_CONFIG_H";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = libILU;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wall";
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		EACAFE510E7936330024FAE4 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_ALTIVEC_EXTENSIONS = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = "";
+				GCC_OPTIMIZATION_LEVEL = 2;
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_STYLE = DYNAMIC;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "-DHAVE_CONFIG_H";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = libILU;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		EACAFE520E7936330024FAE4 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_ALTIVEC_EXTENSIONS = YES;
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_STYLE = DYNAMIC;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = libILU;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Default;
+		};
+		EACAFE530E7936330024FAE4 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_ALTIVEC_EXTENSIONS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = NO;
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_PEDANTIC = NO;
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_STYLE = DYNAMIC;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "-DHAVE_CONFIG_H";
+				OTHER_CPLUSPLUSFLAGS = "-DHAVE_CONFIG_H";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = libILUT;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wall";
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		EACAFE540E7936330024FAE4 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_ALTIVEC_EXTENSIONS = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = "";
+				GCC_OPTIMIZATION_LEVEL = 2;
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_STYLE = DYNAMIC;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "-DHAVE_CONFIG_H";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = libILUT;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		EACAFE550E7936330024FAE4 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_ALTIVEC_EXTENSIONS = YES;
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_STYLE = DYNAMIC;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = libILUT;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Default;
+		};
+		EACAFE560E7936330024FAE4 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = NO;
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_PEDANTIC = NO;
+				OTHER_CFLAGS = (
+					"-DHAVE_CONFIG_H",
+					"-maltivec",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-DHAVE_CONFIG_H",
+					"-maltivec",
+				);
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Install;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wall";
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		EACAFE570E7936330024FAE4 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = "";
+				GCC_OPTIMIZATION_LEVEL = 2;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Install;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		EACAFE580E7936330024FAE4 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Install;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		EACAFE590E7936340024FAE4 /* Build configuration list for PBXProject "DevIL" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EACAFE470E7936330024FAE4 /* Development */,
+				EACAFE480E7936330024FAE4 /* Deployment */,
+				EACAFE490E7936330024FAE4 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		EACAFE5A0E7936340024FAE4 /* Build configuration list for PBXAggregateTarget "Configure" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EACAFE4A0E7936330024FAE4 /* Development */,
+				EACAFE4B0E7936330024FAE4 /* Deployment */,
+				EACAFE4C0E7936330024FAE4 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		EACAFE5B0E7936340024FAE4 /* Build configuration list for PBXNativeTarget "libIL" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EACAFE4D0E7936330024FAE4 /* Development */,
+				EACAFE4E0E7936330024FAE4 /* Deployment */,
+				EACAFE4F0E7936330024FAE4 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		EACAFE5C0E7936340024FAE4 /* Build configuration list for PBXNativeTarget "libILU" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EACAFE500E7936330024FAE4 /* Development */,
+				EACAFE510E7936330024FAE4 /* Deployment */,
+				EACAFE520E7936330024FAE4 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		EACAFE5D0E7936340024FAE4 /* Build configuration list for PBXNativeTarget "libILUT" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EACAFE530E7936330024FAE4 /* Development */,
+				EACAFE540E7936330024FAE4 /* Deployment */,
+				EACAFE550E7936330024FAE4 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		EACAFE5E0E7936340024FAE4 /* Build configuration list for PBXAggregateTarget "Install" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EACAFE560E7936330024FAE4 /* Development */,
+				EACAFE570E7936330024FAE4 /* Deployment */,
+				EACAFE580E7936330024FAE4 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}
