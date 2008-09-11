@@ -39,7 +39,7 @@ ILvoid *vec_malloc(const ILuint size)
 #else
 #ifdef POSIX_MEMALIGN
 	char *buffer;
-	return posix_memalign(&buffer, 16, _size) == 0 ? buffer : NULL;
+	return posix_memalign((void**)&buffer, 16, _size) == 0 ? buffer : NULL;
 #else
 #ifdef MEMALIGN
 	return memalign( 16, _size );
