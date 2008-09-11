@@ -20,8 +20,7 @@ ilCreateSubImage
 ilDefaultImage
 ilDeleteImage
 ilDeleteImages
-
-ilDetermineType ; added 2003-09-17
+ilDetermineType
 ilDetermineTypeF
 ilDisable
 ilEnable
