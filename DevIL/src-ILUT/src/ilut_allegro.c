@@ -11,10 +11,14 @@
 //-----------------------------------------------------------------------------
 
 
+#include "config.h"
+#ifdef ILUT_USE_ALLEGRO
+#include "ilut_allegro.h"
+#endif
+
 #include "ilut_internal.h"
 
 #ifdef ILUT_USE_ALLEGRO
-#include "ilut_allegro.h"
 
 ILboolean ilConvertPal(ILenum DestFormat);
 

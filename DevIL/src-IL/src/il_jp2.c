@@ -86,7 +86,7 @@ ILboolean ilLoadJp2LInternal(const ILvoid *Lump, ILuint Size, ILimage *Image)
 		ilSetError(IL_LIB_JP2_ERROR);
 		return IL_FALSE;
 	}
-	Stream = jas_stream_memopen(Lump, Size);
+	Stream = jas_stream_memopen((char*)Lump, Size);
 	if (!Stream)
 	{
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
@@ -106,7 +106,7 @@ ILboolean iLoadJp2Internal(jas_stream_t	*Stream, ILimage *Image)
 {
 	jas_image_t		*Jp2Image = NULL;
 	jas_matrix_t	*origdata;
-	ILint			x, y, c;
+	ILuint			x, y, c;
 	ILimage			*TempImage;
 
 	// Decode image

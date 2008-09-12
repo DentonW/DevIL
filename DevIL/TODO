@@ -17,7 +17,7 @@ Denton:
 - Possibly readd VC6 projects?
 - Enable descriptive error strings in IL.
 - Return UNICODE strings when needed.
-- Put in SVN changes.
+- Progressive saving of JPG.
 
 
 For 1.7.0

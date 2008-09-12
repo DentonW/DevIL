@@ -1591,6 +1591,10 @@
 				RelativePath="..\..\README.win"
 				>
 			</File>
+			<File
+				RelativePath="..\..\TODO"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

@@ -45,18 +45,17 @@ extern "C" {
 			#pragma intrinsic(strcmp)
 			#pragma intrinsic(strlen)
 			#pragma intrinsic(strcpy)
-			/*
-			#if _MSC_VER >= 1300  // Erroneous size_t conversion warnings
-				pragma warning(disable : 4267)
+			
+			#if _MSC_VER >= 1300
+				#pragma warning(disable : 4996)  // MSVC++ 8/9 deprecation warnings
 			#endif
-			pragma comment(linker, "/NODEFAULTLIB:libc")
-			pragma comment(linker, "/NODEFAULTLIB:libcd")
-			pragma comment(linker, "/NODEFAULTLIB:libcmt.lib")
-			#ifdef _DEBUG
-				pragma comment(linker, "/NODEFAULTLIB:libcmtd")
-				pragma comment(linker, "/NODEFAULTLIB:msvcrt.lib")
-			#endif // _DEBUG
-			*/
+			//pragma comment(linker, "/NODEFAULTLIB:libc")
+			//pragma comment(linker, "/NODEFAULTLIB:libcd")
+			//pragma comment(linker, "/NODEFAULTLIB:libcmt.lib")
+			//#ifdef _DEBUG
+			//	pragma comment(linker, "/NODEFAULTLIB:libcmtd")
+			//	pragma comment(linker, "/NODEFAULTLIB:msvcrt.lib")
+			//#endif // _DEBUG
 		#endif // _MSC_VER > 1000
 	#endif
 	#define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers

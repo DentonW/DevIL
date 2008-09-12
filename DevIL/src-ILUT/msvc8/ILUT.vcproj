@@ -73,13 +73,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="devil.lib ilu.lib odbc32.lib odbccp32.lib Gdi32.lib User32.lib Comdlg32.lib"
+				AdditionalDependencies="devil.lib ilu.lib alleg.lib odbc32.lib odbccp32.lib Gdi32.lib User32.lib Comdlg32.lib"
 				OutputFile=".\../../lib/vc8/ILUT.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../lib"
 				ModuleDefinitionFile=".\ilut.def"
-				DelayLoadDLLs="d3d8.dll,sdl.dll"
+				DelayLoadDLLs="d3d8.dll,sdl.dll,alleg42.dll"
 				ProgramDatabaseFile=".\../../lib/ILUT.pdb"
 				ImportLibrary=".\../../lib/vc8/ILUT.lib"
 				TargetMachine="1"
@@ -172,13 +172,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="devil.lib ilu.lib delayimp.lib odbc32.lib odbccp32.lib Gdi32.lib User32.lib Comdlg32.lib"
+				AdditionalDependencies="devil.lib ilu.lib alleg.lib delayimp.lib odbc32.lib odbccp32.lib Gdi32.lib User32.lib Comdlg32.lib"
 				OutputFile=".\../../lib/vc8/debug/ILUT.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../lib"
 				ModuleDefinitionFile=".\ilut.def"
-				DelayLoadDLLs="d3d8.dll,sdl.dll"
+				DelayLoadDLLs="d3d8.dll,sdl.dll,alleg42.dll"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\../../lib/debug/ilut.pdb"
 				ImportLibrary=".\../../lib/vc8/debug/ilut.lib"
@@ -221,6 +221,10 @@
 			>
 			<File
 				RelativePath="..\msvc\ilut.def"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ilut_allegro.c"
 				>
 			</File>
 			<File
