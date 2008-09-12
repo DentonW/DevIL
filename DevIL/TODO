@@ -18,6 +18,8 @@ Denton:
 - Enable descriptive error strings in IL.
 - Return UNICODE strings when needed.
 - Progressive saving of JPG.
+- Lib EXIF support
+- FITS support
 
 
 For 1.7.0
