@@ -6,7 +6,7 @@ includedir=/usr/include
 Name: Developers Image Library
 Description: An image library.
 Requires: 
-Version: 1.6.8
+Version: 1.7.2
 Libs: -L${libdir} -Wl,--export-dynamic -lalleg-4.2.2 -lalleg_unsharable
 -lIL -lILU -lILUT 
 Cflags: -I${includedir}
