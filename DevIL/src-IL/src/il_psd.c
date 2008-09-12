@@ -8,6 +8,24 @@
 #ifndef IL_NO_PSD
 #include "il_psd.h"
 
+static float ubyte_to_float(ILubyte val)
+{
+	return ((float)val) / 255.0f;
+}
+static float ushort_to_float(ILushort val)
+{
+	return ((float)val) / 65535.0f;
+}
+
+static ILubyte float_to_ubyte(float val)
+{
+	return (ILubyte)(val * 255.0f);
+}
+static ILushort float_to_ushort(float val)
+{
+	return (ILushort)(val * 65535.0f);
+}
+
 
 //! Checks if the file specified in FileName is a valid Psd file.
 ILboolean ilIsValidPsd(ILconst_string FileName)
@@ -353,23 +371,27 @@ ILboolean ReadRGB(PSDHEAD *Head)
 	Compressed = GetBigUShort();
 
 	ChannelNum = Head->Channels;
-	switch (Head->Channels)
-	{
-		case 3:
-			Format = IL_RGB;
-			break;
-		case 4:
-			Format = IL_RGBA;
-			break;
-		default:
-		//	ilSetError(IL_FORMAT_NOT_SUPPORTED);
-		//	return IL_FALSE;
-			//drop additional channels. This is not the 100% correct
-			//way of loading the image, but it is better than loading
-			//the image not at all.
-			Format = IL_RGBA;
-			Head->Channels = 4;
+	if (Head->Channels == 3)
+ 	{
+		Format = IL_RGB;
 	}
+	else if (Head->Channels == 4)
+	{
+		Format = IL_RGBA;
+	}
+	else if (Head->Channels >= 5)
+	{
+		// Additional channels are accumulated as a single alpha channel, since
+		// if an image does not have a layer set as the "background", but also
+		// has a real alpha channel, there will be 5 channels (or more).
+		Format = IL_RGBA;
+	}
+	else
+	{
+		ilSetError(IL_FORMAT_NOT_SUPPORTED);
+		return IL_FALSE;
+	}
+
 	switch (Head->Depth)
 	{
 		case 8:
@@ -382,7 +404,7 @@ ILboolean ReadRGB(PSDHEAD *Head)
 			ilSetError(IL_FORMAT_NOT_SUPPORTED);
 			return IL_FALSE;
 	}
-	if (!ilTexImage(Head->Width, Head->Height, 1, (ILubyte)Head->Channels, Format, Type, NULL))
+	if (!ilTexImage(Head->Width, Head->Height, 1, (Format==IL_RGB) ? 3 : 4, Format, Type, NULL))
 		goto cleanup_error;
 	if (!PsdGetData(Head, iCurImage->Data, (ILboolean)Compressed))
 		goto cleanup_error;
@@ -529,15 +551,76 @@ ILuint *GetCompChanLen(PSDHEAD *Head)
 }
 
 
+
+static const ILuint READ_COMPRESSED_SUCCESS					= 0;
+static const ILuint READ_COMPRESSED_ERROR_FILE_CORRUPT		= 1;
+static const ILuint READ_COMPRESSED_ERROR_FILE_READ_ERROR	= 2;
+
+static ILuint ReadCompressedChannel(const ILuint ChanLen, ILuint Size, ILubyte* Channel)
+{
+	ILuint		i;
+	ILint		Run;
+	ILboolean	PreCache = IL_FALSE;
+	ILbyte		HeadByte;
+
+	if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST)
+		PreCache = IL_TRUE;
+
+	if (PreCache)
+		iPreCache(ChanLen);
+	for (i = 0; i < Size; ) {
+		HeadByte = igetc();
+
+		if (HeadByte >= 0) {  //  && HeadByte <= 127
+			if (i + HeadByte > Size)
+			{
+				if (PreCache)
+					iUnCache();
+				return READ_COMPRESSED_ERROR_FILE_CORRUPT;
+			}
+			if (iread(Channel + i, HeadByte + 1, 1) != 1)
+			{
+				if (PreCache)
+					iUnCache();
+				return READ_COMPRESSED_ERROR_FILE_READ_ERROR;
+			}
+
+			i += HeadByte + 1;
+		}
+		if (HeadByte >= -127 && HeadByte <= -1) {
+			Run = igetc();
+			if (Run == IL_EOF)
+			{
+				if (PreCache)
+					iUnCache();
+				return READ_COMPRESSED_ERROR_FILE_READ_ERROR;
+			}
+			if (i + (-HeadByte + 1) > Size)
+			{
+				if (PreCache)
+					iUnCache();
+				return READ_COMPRESSED_ERROR_FILE_CORRUPT;
+			}
+
+			memset(Channel + i, Run, -HeadByte + 1);
+			i += -HeadByte + 1;
+		}
+		if (HeadByte == -128)
+		{ }  // Noop
+	}
+	if (PreCache)
+		iUnCache();
+
+	return READ_COMPRESSED_SUCCESS;
+}
+
+
 ILboolean PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 {
-	ILuint		c, x, y, i, Size;
+	ILuint		c, x, y, i, Size, ReadResult;
 	ILubyte		*Channel = NULL;
 	ILushort	*ShortPtr;
-	ILbyte		HeadByte;
-	ILint		Run;
 	ILuint		*ChanLen = NULL;
-	ILboolean	PreCache = IL_FALSE;
 
 	Channel = (ILubyte*)ialloc(Head->Width * Head->Height * iCurImage->Bpc);
 	if (Channel == NULL) {
@@ -554,7 +637,7 @@ ILboolean PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 
 	if (!Compressed) {
 		if (iCurImage->Bpc == 1) {
-			for (c = 0; c < Head->Channels; c++) {
+			for (c = 0; c < 3; c++) {
 				i = 0;
 				if (iread(Channel, Head->Width * Head->Height, 1) != 1) {
 					ifree(Channel);
@@ -566,9 +649,24 @@ ILboolean PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 					}
 				}
 			}
+			// Accumulate any remaining channels into a single alpha channel
+			for (; c < Head->Channels; c++) {
+				i = 0;
+				if (iread(Channel, Head->Width * Head->Height, 1) != 1) {
+					ifree(Channel);
+					return IL_FALSE;
+				}
+				for (y = 0; y < Head->Height * iCurImage->Bps; y += iCurImage->Bps) {
+					for (x = 0; x < iCurImage->Bps; x += iCurImage->Bpp, i++) {
+						float curVal = ubyte_to_float(iCurImage->Data[y + x + 3]);
+						float newVal = ubyte_to_float(Channel[i]);
+						iCurImage->Data[y + x + 3] = float_to_ubyte(curVal * newVal);
+					}
+				}
+			}
 		}
 		else {  // iCurImage->Bpc == 2
-			for (c = 0; c < Head->Channels; c++) {
+			for (c = 0; c < 3; c++) {
 				i = 0;
 				if (iread(Channel, Head->Width * Head->Height * 2, 1) != 1) {
 					ifree(Channel);
@@ -585,48 +683,66 @@ ILboolean PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 				}
 				iCurImage->Bps *= 2;
 			}
+			// Accumulate any remaining channels into a single alpha channel
+			for (; c < Head->Channels; c++) {
+				i = 0;
+				if (iread(Channel, Head->Width * Head->Height * 2, 1) != 1) {
+					ifree(Channel);
+					return IL_FALSE;
+				}
+				iCurImage->Bps /= 2;
+				for (y = 0; y < Head->Height * iCurImage->Bps; y += iCurImage->Bps) {
+					for (x = 0; x < iCurImage->Bps; x += iCurImage->Bpp, i++) {
+						float curVal = ushort_to_float(((ILushort*)iCurImage->Data)[y + x + 3]);
+						float newVal = ushort_to_float(ShortPtr[i]);
+						((ILushort*)iCurImage->Data)[y + x + 3] = float_to_ushort(curVal * newVal);
+					}
+				}
+				iCurImage->Bps *= 2;
+			}
 		}
 	}
 	else {
 		ChanLen = GetCompChanLen(Head);
-		if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST)
-			PreCache = IL_TRUE;
 
 		Size = Head->Width * Head->Height;
-		for (c = 0; c < Head->Channels; c++) {
-			if (PreCache)
-				iPreCache(ChanLen[c]);
-			for (i = 0; i < Size; ) {
-				HeadByte = igetc();
-
-				if (HeadByte >= 0) {  //  && HeadByte <= 127
-					if (i + HeadByte > Size)
-						goto file_corrupt;
-					if (iread(Channel + i, HeadByte + 1, 1) != 1)
-						goto file_read_error;
-
-					i += HeadByte + 1;
-				}
-				if (HeadByte >= -127 && HeadByte <= -1) {
-					Run = igetc();
-					if (Run == IL_EOF)
-						goto file_read_error;
-					if (i + (-HeadByte + 1) > Size)
-						goto file_corrupt;
-
-					memset(Channel + i, Run, -HeadByte + 1);
-					i += -HeadByte + 1;
-				}
-				if (HeadByte == -128)
-				{ }  // Noop
-			}
-			if (PreCache)
-				iUnCache();
+		for (c = 0; c < 3; c++) {
+			ReadResult = ReadCompressedChannel(ChanLen[c], Size, Channel);
+			if (ReadResult == READ_COMPRESSED_ERROR_FILE_CORRUPT)
+				goto file_corrupt;
+			else if (ReadResult == READ_COMPRESSED_ERROR_FILE_READ_ERROR)
+				goto file_read_error;
 
 			i = 0;
 			for (y = 0; y < Head->Height * iCurImage->Bps; y += iCurImage->Bps) {
 				for (x = 0; x < iCurImage->Bps; x += iCurImage->Bpp, i++) {
 					iCurImage->Data[y + x + c] = Channel[i];
+				}
+			}
+		}
+
+		// Initialize the alpha channel to solid
+		if (Head->Channels >= 4) {
+			for (y = 0; y < Head->Height * iCurImage->Bps; y += iCurImage->Bps) {
+				for (x = 0; x < iCurImage->Bps; x += iCurImage->Bpp) {
+					iCurImage->Data[y + x + 3] = 255;
+				}
+			}
+					
+			for (; c < Head->Channels; c++) {
+				ReadResult = ReadCompressedChannel(ChanLen[c], Size, Channel);
+				if (ReadResult == READ_COMPRESSED_ERROR_FILE_CORRUPT)
+					goto file_corrupt;
+				else if (ReadResult == READ_COMPRESSED_ERROR_FILE_READ_ERROR)
+					goto file_read_error;
+
+				i = 0;
+				for (y = 0; y < Head->Height * iCurImage->Bps; y += iCurImage->Bps) {
+					for (x = 0; x < iCurImage->Bps; x += iCurImage->Bpp, i++) {
+						float curVal = ubyte_to_float(iCurImage->Data[y + x + 3]);
+						float newVal = ubyte_to_float(Channel[i]);
+						iCurImage->Data[y + x + 3] = float_to_ubyte(curVal * newVal);
+					}
 				}
 			}
 		}
@@ -641,16 +757,12 @@ ILboolean PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
 file_corrupt:
 	ifree(ChanLen);
 	ifree(Channel);
-	if (PreCache)
-		iUnCache();
 	ilSetError(IL_ILLEGAL_FILE_VALUE);
 	return IL_FALSE;
 
 file_read_error:
 	ifree(ChanLen);
 	ifree(Channel);
-	if (PreCache)
-		iUnCache();
 	return IL_FALSE;
 }
 

@@ -57,7 +57,7 @@
 				AssemblerListingLocation=".\../src/obj/"
 				ObjectFile=".\../src/obj/"
 				ProgramDataBaseFileName=".\../src/obj/"
-				WarningLevel="3"
+				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -155,7 +155,7 @@
 				AssemblerListingLocation=".\../src/obj/debug/"
 				ObjectFile=".\../src/obj/debug/"
 				ProgramDataBaseFileName=".\../src/obj/debug/"
-				WarningLevel="3"
+				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
 			/>

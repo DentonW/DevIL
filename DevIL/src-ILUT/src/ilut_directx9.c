@@ -561,6 +561,7 @@ ILimage *MakeD3D9Compliant(IDirect3DDevice9 *Device, D3DFORMAT *DestFormat)
 		break;
 	case IL_FLOAT:
 	case IL_DOUBLE:
+	case IL_HALF:
 		if (bForceIntegerFormat || (!FormatsDX9supported[6]))
 		{
 			*DestFormat     = D3DFMT_A8R8G8B8;

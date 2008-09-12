@@ -22,6 +22,14 @@
 
 #include <string.h>
 
+#ifdef _WIN32
+	#ifdef _MSC_VER
+		#if _MSC_VER > 1000
+			#pragma warning(disable: 4996)	// "The POSIX name for this item is deprecated." AND "This function or variable may be unsafe."
+		#endif // _MSC_VER > 1000
+	#endif
+#endif
+
 /*
 #ifdef _MSC_VER
 	#if _MSC_VER > 1000

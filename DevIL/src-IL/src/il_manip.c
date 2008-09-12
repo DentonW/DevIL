@@ -342,7 +342,7 @@ ILuint ILAPIENTRY ilCopyPixels(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Wid
 	}
 
 	if (Format == iCurImage->Format && Type == iCurImage->Type) {
-		return IL_TRUE;
+		return DestSize;
 	}
 
 	Converted = ilConvertBuffer(SrcSize, iCurImage->Format, Format, iCurImage->Type, Type, TempBuff);
