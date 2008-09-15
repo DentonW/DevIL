@@ -1,3 +1,10 @@
+1.7.3
+---
+
+- ilGenImage now returns ILuint.
+- Added pkgconfig devil.pc.
+- Applied bugfixes from Richard Sims (mainly .psd).
+
 1.7.2
 ---
 - Added preliminary OpenEXR support.
