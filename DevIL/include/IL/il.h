@@ -528,7 +528,7 @@ ILAPI ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File);
 ILAPI ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName);
 ILAPI ILboolean ILAPIENTRY ilLoadL(ILenum Type, const ILvoid *Lump, ILuint Size);
 ILAPI ILboolean ILAPIENTRY ilLoadPal(ILconst_string FileName);
-ILAPI ILvoid    ILAPIENTRY ilModAlpha( ILdouble AlphaValue );
+ILAPI ILvoid    ILAPIENTRY ilModAlpha(ILdouble AlphaValue);
 ILAPI ILboolean ILAPIENTRY ilOriginFunc(ILenum Mode);
 ILAPI ILboolean ILAPIENTRY ilOverlayImage(ILuint Source, ILint XCoord, ILint YCoord, ILint ZCoord);
 ILAPI ILvoid    ILAPIENTRY ilPopAttrib(void);
