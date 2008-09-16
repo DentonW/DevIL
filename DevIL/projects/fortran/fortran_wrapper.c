@@ -5,6 +5,7 @@
 // NOTE!
 //  The biggest problem about using DevIL from Fortran is the
 //  fact that Fortran does arrays in colum-major format.
+//  This wrapper does no conversions between the two!
 //
 //  We are using DevIL return values as the first parameter.
 //
@@ -43,7 +44,7 @@ void ilFApplyPal_(int *RetVal, struct descriptor *Desc)
 {
 	char *Filename = malloc(Desc->length + 1);
 	strncpy(Filename, Desc->string_ptr, Desc->length);
-	Filename[Desc->length] = (char)NULL;
+	Filename[Desc->length] = 0;  // Should really be NULL...getting a warning, though.
 	*RetVal = ilApplyPal(Filename);
 
 	free(Filename);
@@ -68,12 +69,6 @@ void ilFClearColour_(float *Red, float *Green, float *Blue, float *Alpha)
 	return;
 }
 
-ILAPI ILboolean ILAPIENTRY ilClearImage(void);
-ILAPI ILuint    ILAPIENTRY ilCloneCurImage(void);
-ILAPI ILboolean ILAPIENTRY ilCompressFunc(ILenum Mode);
-ILAPI ILboolean ILAPIENTRY ilConvertImage(ILenum DestFormat, ILenum DestType);
-ILAPI ILboolean ILAPIENTRY ilConvertPal(ILenum DestFormat);
-
 void ilFClearImage_(int *RetVal)
 {
 	*RetVal = ilClearImage();
@@ -96,5 +91,20 @@ void ilFConvertImage_(int *RetVal, int *DestFormat, int *DestType)
 {
 	*RetVal = ilConvertImage(*DestFormat, *DestType);
 	return;
+}
+
+void ilFConvertPal_(int *RetVal, int *DestFormat)
+{
+	*RetVal = ilConvertPal(*DestFormat);
+}
+
+void ilFCopyImage_(int *RetVal, int *Src)
+{
+	*RetVal = ilCopyImage(*Src);
+}
+
+void ilFCopyPixels_(int *RetVal, int *XOff, int *YOff, int *ZOff, int *Width, int *Height, int *Depth, int *Format, int *Type, void *Data)
+{
+	*RetVal = ilCopyPixels(*XOff, *YOff, *ZOff, *Width, *Height, *Depth, *Format, *Type, Data);
 }
 

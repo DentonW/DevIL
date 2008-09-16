@@ -1,10 +1,11 @@
 1.7.3
 ---
 
-- ilGenImage now returns ILuint.
+- ilGenImage now returns ILuint instead of ILint.
 - Added pkgconfig devil.pc.
 - Applied bugfixes from Richard Sims (mainly .psd).
 - Added new Xcode framework.
+- Added Fortran support.
 
 1.7.2
 ---

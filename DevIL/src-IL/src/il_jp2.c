@@ -11,6 +11,10 @@
 //-----------------------------------------------------------------------------
 
 
+// @TODO:  Look in jas_stream.c of JasPer and make own version of
+//  jas_stream_fopen that will return a jas_stream_t and
+//  work on file streams instead of just a filename.
+
 #include "il_internal.h"
 #ifndef IL_NO_JP2
 #include <jasper/jasper.h>
