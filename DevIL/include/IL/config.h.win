@@ -11,6 +11,7 @@
 // #define IL_NO_DCX
 // #define IL_NO_DDS
 // #define IL_NO_DOOM
+// #define IL_NO_EXR
 // #define IL_NO_GIF
 // #define IL_NO_HDR
 // #define IL_NO_ICO
