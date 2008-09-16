@@ -4,6 +4,7 @@
 - ilGenImage now returns ILuint.
 - Added pkgconfig devil.pc.
 - Applied bugfixes from Richard Sims (mainly .psd).
+- Added new Xcode framework.
 
 1.7.2
 ---

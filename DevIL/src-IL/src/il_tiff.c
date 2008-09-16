@@ -177,14 +177,14 @@ void warningHandler(const char* mod, const char* fmt, va_list ap)
 {
 	mod; fmt; ap;
 	//char buff[1024];
-	//_vsnprintf(buff, 1024, fmt, ap);
+	//vsnprintf(buff, 1024, fmt, ap);
 }
 
 void errorHandler(const char* mod, const char* fmt, va_list ap)
 {
 	mod; fmt; ap;
 	//char buff[1024];
-	//_vsnprintf(buff, 1024, fmt, ap);
+	//vsnprintf(buff, 1024, fmt, ap);
 }
 
 ////
