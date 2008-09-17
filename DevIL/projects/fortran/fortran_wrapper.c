@@ -108,3 +108,7 @@ void ilFCopyPixels_(int *RetVal, int *XOff, int *YOff, int *ZOff, int *Width, in
 	*RetVal = ilCopyPixels(*XOff, *YOff, *ZOff, *Width, *Height, *Depth, *Format, *Type, Data);
 }
 
+void ilFCreateSubImage_(int *RetVal, int *Type, int *Num)
+{
+	*RetVal = ilCreateSubImage(*Type, *Num);
+}
