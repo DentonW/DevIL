@@ -11,7 +11,7 @@
 //-----------------------------------------------------------------------------
 
 
-#include "config.h"
+#include "IL/config.h"
 #ifdef ILUT_USE_ALLEGRO
 #include "ilut_allegro.h"
 #endif

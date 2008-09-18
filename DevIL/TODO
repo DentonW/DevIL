@@ -20,9 +20,11 @@ Denton:
 - Progressive saving of JPG.
 - Lib EXIF support
 - FITS support
+- APNG support
 - D language support
 - Fortran support
 - JP2 and EXR loading from file streams.
+- Librsvg
 
 
 For 1.7.0
