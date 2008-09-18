@@ -12,7 +12,6 @@ Denton:
 - Add .ico/.icns saving.
 - Add .exr saving.
 - Add .jp2 saving.
-- Added Nutter's patches.
 - Fix Daniel's suggestions.
 - Possibly readd VC6 projects?
 - Enable descriptive error strings in IL.
@@ -25,6 +24,7 @@ Denton:
 - Fortran support
 - JP2 and EXR loading from file streams.
 - Librsvg
+- Readd CMAKE support
 
 
 For 1.7.0
