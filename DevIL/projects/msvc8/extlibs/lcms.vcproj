@@ -221,7 +221,7 @@
 				AdditionalIncludeDirectories="..\..\include;../../../extlibs/littlecms/include"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS"
 				StringPooling="true"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\lcms___Win32_Release/lcms.pch"

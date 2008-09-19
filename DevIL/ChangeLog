@@ -6,6 +6,7 @@
 - Applied bugfixes from Richard Sims (mainly .psd).
 - Added new Xcode framework.
 - Added Fortran support.
+- Changed MSVC++ 2005 project to link with static MSVCRT library.
 
 1.7.2
 ---

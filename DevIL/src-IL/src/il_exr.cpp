@@ -14,6 +14,8 @@
 #include "il_internal.h"
 #ifndef IL_NO_EXR
 
+#define OPENEXR_DLL
+#define HALF_EXPORTS
 #include "il_exr.h"
 #include <ImfRgba.h>
 #include <ImfArray.h>

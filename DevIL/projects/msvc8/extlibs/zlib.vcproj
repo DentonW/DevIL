@@ -204,7 +204,7 @@
 				InlineFunctionExpansion="1"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				StringPooling="true"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				PrecompiledHeaderFile=".\zlib___Win32_Release/zlib.pch"
 				AssemblerListingLocation=".\zlib___Win32_Release/"

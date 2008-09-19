@@ -137,7 +137,7 @@
 				AdditionalIncludeDirectories="..\..,..\..\..\zlib"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				StringPooling="true"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="png.h"

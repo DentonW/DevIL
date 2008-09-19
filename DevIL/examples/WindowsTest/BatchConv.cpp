@@ -57,23 +57,23 @@ void ParseDirs(const string &_Dir, char **ExtList, char *ConvExt, bool Recurse)
 	HANDLE			Search;
 	WIN32_FIND_DATA	FindData;
 
-	chdir(_Dir.c_str());
+	_chdir(_Dir.c_str());
 	Search = FindFirstFile("*.*", &FindData);
 
 	do {
 		if (!strcmp(FindData.cFileName, ".") || !strcmp(FindData.cFileName, ".."))
 			continue;
 		if (IsDir(&FindData) && Recurse) {
-			chdir(FindData.cFileName);
+			_chdir(FindData.cFileName);
 			string NewDir = _Dir + string("\\");
 			NewDir += FindData.cFileName;
 			ParseDirs(NewDir, ExtList, ConvExt, Recurse);
-			chdir("..");
+			_chdir("..");
 		}
 		Ext = GetExtension(FindData.cFileName);
 		if (Ext == NULL)
 			continue;
-		if (!stricmp(Ext, ConvExt))  // Already has that extension.
+		if (!_stricmp(Ext, ConvExt))  // Already has that extension.
 			continue;
 		for (j = 0; ExtList[j] != NULL; j++) {
 			if (CheckExtension(FindData.cFileName, ExtList[j])) {
@@ -154,7 +154,7 @@ bool CheckExtension(char *Arg, char *Ext)
 	if (!PeriodFound)  // if no period, no extension
 		return false;
 
-	if (!stricmp(Argu+1, Ext))  // extension and ext match?
+	if (!_stricmp(Argu+1, Ext))  // extension and ext match?
 		return true;
 
 	return false;  // if all else fails, return IL_FALSE

@@ -118,7 +118,7 @@
 				InlineFunctionExpansion="1"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="true"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				PrecompiledHeaderFile=".\libtiff___Win32_Release/Libtiff.pch"
 				AssemblerListingLocation=".\libtiff___Win32_Release/"
@@ -246,10 +246,6 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\..\..\extlibs\LibTiff\libtiff\mkg3states.c"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_aux.c"
 				>
 			</File>
@@ -323,6 +319,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\extlibs\LibTiff\libtiff\tif_lzw.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\extlibs\libtiff\libtiff\tif_next.c"
 				>
 			</File>
 			<File

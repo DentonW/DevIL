@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="ILUT"
 	ProjectGUID="{7D060DA4-F2FA-44CC-80BE-065024DD6CA9}"
+	RootNamespace="ILUT"
 	>
 	<Platforms>
 		<Platform
@@ -51,7 +52,7 @@
 				AdditionalIncludeDirectories="../include,../../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ILUT_EXPORTS;IL_STATIC_LIB"
 				StringPooling="true"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				PrecompiledHeaderFile=".\../src/obj/ILUT.pch"
 				AssemblerListingLocation=".\../src/obj/"
@@ -73,13 +74,14 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="devil.lib ilu.lib alleg.lib odbc32.lib odbccp32.lib Gdi32.lib User32.lib Comdlg32.lib"
+				AdditionalDependencies="devil.lib ilu.lib odbc32.lib odbccp32.lib Gdi32.lib User32.lib Comdlg32.lib"
 				OutputFile=".\../../lib/vc8/ILUT.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../lib"
+				IgnoreDefaultLibraryNames="msvcrt.lib"
 				ModuleDefinitionFile=".\ilut.def"
-				DelayLoadDLLs="d3d8.dll,sdl.dll,alleg42.dll"
+				DelayLoadDLLs="opengl32.dll,glu32.dll,d3d8.dll,d3d9.dll,sdl.dll,alleg42.dll,wininet.dll"
 				ProgramDatabaseFile=".\../../lib/ILUT.pdb"
 				ImportLibrary=".\../../lib/vc8/ILUT.lib"
 				TargetMachine="1"
@@ -109,7 +111,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine="copy $(TargetPath) ..\..\examples\bin"
 			/>
 		</Configuration>
 		<Configuration
@@ -172,7 +174,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="devil.lib ilu.lib alleg.lib delayimp.lib odbc32.lib odbccp32.lib Gdi32.lib User32.lib Comdlg32.lib"
+				AdditionalDependencies="devil.lib ilu.lib delayimp.lib odbc32.lib odbccp32.lib Gdi32.lib User32.lib Comdlg32.lib"
 				OutputFile=".\../../lib/vc8/debug/ILUT.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -209,6 +211,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy $(TargetPath) ..\..\examples\bin\debug"
 			/>
 		</Configuration>
 	</Configurations>

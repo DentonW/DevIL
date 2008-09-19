@@ -108,7 +108,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine="copy $(TargetPath) ..\..\examples\bin\debug"
 			/>
 		</Configuration>
 		<Configuration
@@ -149,7 +149,7 @@
 				AdditionalIncludeDirectories="../include,../../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ILU_EXPORTS"
 				StringPooling="true"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				PrecompiledHeaderFile=".\../src/obj/ILU.pch"
 				AssemblerListingLocation=".\../src/obj/"
@@ -177,6 +177,7 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../lib"
+				IgnoreDefaultLibraryNames="msvcrt.lib"
 				ModuleDefinitionFile=".\ilu.def"
 				ProgramDatabaseFile=".\../../lib/ILU.pdb"
 				ImportLibrary=".\../../lib/vc8/ILU.lib"
@@ -207,7 +208,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine="copy $(TargetPath) ..\..\examples\bin"
 			/>
 		</Configuration>
 	</Configurations>

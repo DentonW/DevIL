@@ -144,7 +144,7 @@
 				AdditionalIncludeDirectories="../../../extlibs/littlecms/include;../../../extlibs/zlib;../../../extlibs/libjpeg"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;MNG_BUILD_SO;MNG_USE_SO"
 				StringPooling="true"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\libmng___Win32_Release/libmng.pch"

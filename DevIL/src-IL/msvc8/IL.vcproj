@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="IL"
 	ProjectGUID="{B46B180B-6079-4CE6-8647-A7D712774255}"
+	RootNamespace="IL"
 	>
 	<Platforms>
 		<Platform
@@ -73,12 +74,14 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="odbc32.lib odbccp32.lib libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib"
+				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib IlmImf.lib half.lib imath.lib iex.lib ilmthread.lib"
 				OutputFile="../../lib/vc8/debug/DevIL.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../projects/msvc/extlibs"
+				IgnoreDefaultLibraryNames="libcmt.lib"
 				ModuleDefinitionFile=".\il.def"
+				DelayLoadDLLs="ilmimf.dll half.dll"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\../../lib/vc8/debug/devil.pdb"
 				ImportLibrary=".\../../lib/vc8/debug/devil.lib"
@@ -109,6 +112,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy $(TargetPath) ..\..\examples\bin\debug"
 			/>
 		</Configuration>
 		<Configuration
@@ -149,7 +153,7 @@
 				AdditionalIncludeDirectories="../../projects/msvc/extlibs/,../include,../../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;IL_EXPORTS"
 				StringPooling="true"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				PrecompiledHeaderFile=".\../src/obj/IL.pch"
 				AssemblerListingLocation=".\../src/obj/"
@@ -172,12 +176,15 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib"
+				AdditionalOptions="/NODEFAULTLIB:msvcrtd.lib"
+				AdditionalDependencies="comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib libcmt.lib libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib IlmImf.lib half.lib imath.lib iex.lib ilmthread.lib"
 				OutputFile="../../lib/vc8/DevIL.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../projects/msvc/extlibs"
+				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile=".\il.def"
+				DelayLoadDLLs="ilmimf.dll half.dll"
 				ProgramDatabaseFile=".\../../lib/vc8/DevIL.pdb"
 				OptimizeForWindows98="1"
 				ImportLibrary=".\../../lib/vc8/DevIL.lib"
@@ -208,7 +215,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine="copy $(TargetPath) ..\..\examples\bin"
 			/>
 		</Configuration>
 	</Configurations>
