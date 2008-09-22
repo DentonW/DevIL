@@ -247,6 +247,9 @@ ILubyte* ILAPIENTRY iGetPaddedData(ILimage *Image)
 			TempBuff[i] = TempData[i+2];
 			TempBuff[i+1] = TempData[i+1];
 			TempBuff[i+2] = TempData[i];
+			// Copy the alpha channel if present. 
+			if (Image->Bpp == 4) 
+				TempBuff[i+3] = TempData[i+3]; 
 		}
 	}
 	else {
@@ -254,7 +257,7 @@ ILubyte* ILAPIENTRY iGetPaddedData(ILimage *Image)
 	}
 
 	PadSize = (4 - (Image->Bps % 4)) % 4;
-	NewData = (ILubyte*)ialloc((Image->Bps + PadSize) * Image->Height);
+	NewData = (ILubyte*)ialloc((Image->Width + PadSize) * Image->Height * Image->Bpp); 
 	if (NewData == NULL) {
 		return NULL;
 	}
@@ -302,7 +305,7 @@ ILvoid ILAPIENTRY ilutGetBmpInfo(BITMAPINFO *Info)
 	}
 
 	Padding = (4 - (ilutCurImage->Bps % 4)) % 4;
-	NewBps = ilutCurImage->Bps + Padding;
+	NewBps = ilutCurImage->Bps/* + Padding*/; 
 
 	Info->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 	Info->bmiHeader.biWidth = ilutCurImage->Width;

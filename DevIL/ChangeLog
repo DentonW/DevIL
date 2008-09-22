@@ -7,6 +7,7 @@
 - Added new Xcode framework.
 - Added Fortran support.
 - Changed MSVC++ 2005 project to link with static MSVCRT library.
+- Added patch by SF user robin_charlton for Windows BMP support in ILUT.
 
 1.7.2
 ---

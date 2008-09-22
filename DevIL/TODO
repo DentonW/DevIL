@@ -25,6 +25,8 @@ Denton:
 - JP2 and EXR loading from file streams.
 - Librsvg
 - Readd CMAKE support
+- .iff support?
+- Respond to all forum requests.
 
 
 For 1.7.0

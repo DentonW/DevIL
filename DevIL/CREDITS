@@ -230,3 +230,5 @@ Matej Tyc for fixing configure.ac.
 Matevz Tadel for fixing makefile for Scientific Linux.
 
 Richard Sim for contributing several fixes, especially for .psd loading
+
+robin_charlton for contributing a patch for Windows BMP support in ILUT.
