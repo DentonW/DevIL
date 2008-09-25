@@ -1,10 +1,10 @@
+cmake_minimum_required(VERSION 2.6)
 
 
+PROJECT(ImageLib)
 
-PROJECT(DEVIL)
 
-
-OPTION(BUILD_SHARED_LIBS "Build with shared (.DLL .SO) libraries." OFF)
+OPTION(BUILD_SHARED_LIBS "Build with shared (.DLL .SO) libraries." ON)
 
 
 SET(DEVIL_INCS
@@ -19,23 +19,23 @@ SET(DEVIL_INCS
 )
 
 SUBDIRS(
-	src-XTRA
+#	src-XTRA
 	src-IL
 	src-ILU
 	src-ILUT
 
-	examples
+#	examples
 )
 
 
 # need to check for vc6 or vc2003 output dir
 IF(BUILD_SHARED_LIBS)
 
-	SET(DEVIL_LIB_DEST_DIR	${CMAKE_CURRENT_SOURCE_DIR}/lib/vc6_DLL	)
+	SET(DEVIL_LIB_DEST_DIR	${CMAKE_CURRENT_SOURCE_DIR}/lib/	)
 
 ELSE(BUILD_SHARED_LIBS)
 
-	SET(DEVIL_LIB_DEST_DIR	${CMAKE_CURRENT_SOURCE_DIR}/lib/vc6	)
+	SET(DEVIL_LIB_DEST_DIR	${CMAKE_CURRENT_SOURCE_DIR}/lib/	)
 
 ENDIF(BUILD_SHARED_LIBS)
 
