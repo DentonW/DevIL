@@ -22,7 +22,7 @@
 #ifdef _WIN32
 	#if (defined(IL_USE_PRAGMA_LIBS))
 		#if defined(_MSC_VER) || defined(__BORLANDC__)
-			#pragma comment(lib, "DevILU.lib")
+			#pragma comment(lib, "ILU.lib")
 		#endif
 	#endif
 #endif
