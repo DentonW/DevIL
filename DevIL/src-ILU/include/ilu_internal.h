@@ -28,7 +28,7 @@
 #define _ILU_BUILD_LIBRARY
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <IL/config.h>
 #endif
 
 #include <IL/ilu.h>
