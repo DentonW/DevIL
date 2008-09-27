@@ -240,6 +240,9 @@ ILboolean ilAble(ILenum Mode, ILboolean Flag)
 		case IL_SAVE_INTERLACED:
 			ilStates[ilCurrentPos].ilInterlace = Flag;
 			break;
+		case IL_USE_UNICODE:
+			ilStates[ilCurrentPos].ilInterlace = Flag;
+			break;
 
 		default:
 			ilSetError(IL_INVALID_ENUM);
@@ -269,6 +272,10 @@ ILboolean ILAPIENTRY ilIsEnabled(ILenum Mode)
 			return ilStates[ilCurrentPos].ilDefaultOnFail;
 		case IL_USE_KEY_COLOUR:
 			return ilStates[ilCurrentPos].ilUseKeyColour;
+		case IL_SAVE_INTERLACED:
+			return ilStates[ilCurrentPos].ilInterlace;
+		case IL_USE_UNICODE:
+			return ilStates[ilCurrentPos].ilUseUnicode;
 
 		default:
 			ilSetError(IL_INVALID_ENUM);

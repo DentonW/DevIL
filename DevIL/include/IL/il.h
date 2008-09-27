@@ -265,6 +265,7 @@ typedef void           ILvoid;
 
 // String handling
 #define IL_USE_UNICODE		0x626
+#define IL_USE_ANSI			0x627
 
 
 // Palette definitions
