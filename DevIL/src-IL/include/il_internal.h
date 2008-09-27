@@ -13,6 +13,11 @@
 #define INTERNAL_H
 #define _IL_BUILD_LIBRARY
 
+// @TODO: REMOVE THIS!
+#pragma warning(disable : 4005)
+// Remove this if you need to compile without Unicode support.
+#define _UNICODE
+
 // Standard headers
 #include <stdlib.h>
 #include <stdio.h>

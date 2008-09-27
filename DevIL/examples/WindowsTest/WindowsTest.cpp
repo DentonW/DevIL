@@ -23,6 +23,8 @@
 #include <IL/ilut.h>
 //#include <sdl.h>
 #include "resource.h"
+#include <stdlib.h>
+#include <wchar.h>
 
 //#pragma comment(lib, "sdl.lib")
 //#pragma comment(lib, "sdlmain.lib")
@@ -42,11 +44,11 @@ HBRUSH BackBrush;
 #define MIN_W		250  // Accomodate the menu bar.
 #define MAX_W		400
 #define MAX_H		400
-#define TITLE		"DevIL Windows Test"
+#define TITLE		L"DevIL Windows Test"
 ILuint	NumUndosAllowed = 4, UndoSize = 0;
 ILuint	Undos[11] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 ILuint	Width, Height, Depth, CurImage;  // Main image
-char	CurFileName[2048];
+TCHAR	CurFileName[2048];
 
 ILint	XOff, YOff;
 
@@ -55,9 +57,9 @@ ILdouble last_elapsed, cur_elapsed, elapsed;
 ILuint	FilterType;
 ILuint	FilterParamInt;
 ILfloat	FilterParamFloat;
-char	FilterEditString[255];
+TCHAR	FilterEditString[255];
 
-char	NewTitle[512];
+TCHAR	NewTitle[512];
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 BOOL APIENTRY AboutDlgProc (HWND hDlg, UINT message, UINT wParam, LONG lParam);
@@ -66,10 +68,10 @@ BOOL APIENTRY FilterDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam);
 BOOL APIENTRY ResizeDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam);
 BOOL APIENTRY BatchDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam);
 void BatchConv(char *Directory, char *ExtList, char *ConvExt, bool Recurse);
-void GenFilterString(char *Out, char **Strings);
+void GenFilterString(TCHAR *Out, TCHAR **Strings);
 void ResizeWin(void);
 void CreateGDI(void);
-bool IsOpenable(char *FileName);
+bool IsOpenable(TCHAR *FileName);
 
 extern "C"
 // Colour picker export
@@ -96,7 +98,7 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 	wcex.hIcon			= LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
 	wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
 	wcex.hbrBackground	= BackBrush;
-	wcex.lpszMenuName	= (LPCSTR)IDR_MENU1;
+	wcex.lpszMenuName	= (LPCWSTR)IDR_MENU1; //@TODO: (LPCSTR)IDR_MENU1;
 	wcex.lpszClassName	= TITLE;
 	wcex.hIconSm		= LoadIcon(wcex.hInstance, (LPCTSTR)IDI_ICON1);
 
@@ -119,12 +121,13 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 	ilInit();
 	iluInit();
 	ilutRenderer(ILUT_WIN32);
+	ilEnable(IL_USE_UNICODE);
 
 	// Is there a file to load from the command-line?
 	if (__argc > 1) {
 		ilGenImages(1, Undos);
 		ilBindImage(Undos[0]);
-		if (ilLoadImage(__argv[1])) {
+		/*if (ilLoadImage(__argv[1])) {
 			CurImage = 0;
 			//ilConvertImage(IL_BGRA);
 			ilutRenderer(ILUT_WIN32);
@@ -132,7 +135,7 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 			CreateGDI();
 			sprintf(NewTitle, "%s - %s", TITLE, __argv[1]);
 			SetWindowText(HWnd, NewTitle);
-		}
+		}*/
 	}
 
 	hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDR_MENU1);
@@ -227,53 +230,53 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static PAINTSTRUCT	ps;
     static HDROP		hDrop;
 
-	static char OpenFileName[2048];
-	static char OpenFilter[2048];
-	static char SaveFileName[2048];
-	static char SaveFilter[2048];
-	static char *OFilter[] = {
-		"All Files (*.*)", "*.*",
-		"Alias|Wavefront Files (*.pix)", "*.pix",
-		"Cut Files (*.cut)", "*.cut",
-		"Dcx Files (*.dcx)", "*.dcx",
-		"Graphics Interchange Format (*.gif)", "*.gif",
-		"Half-Life Model Files (*.mdl)", "*.mdl",
-		"Homeworld Image Files (*.lif)", "*.lif",
-		"Image Files (All Supported Types)", "*.jpe;*.jpg;*.jpeg;*.lif;*.bmp;*.ico;*.pbm;*.pgm;*.pnm;*.ppm;*.png;*.bw;*.rgb;*.rgba;*.sgi;*.tga;*.tif;*.tiff;*.pcx;*.xpm;*.psp;*.psd;*.pix;*.pxr;*.cut;*.dcx",
-		"Jpeg Files (*.jpe, *.jpg, *.jpeg)", "*.jpe;*.jpg;*.jpeg",
-		"Kodak Photo CD Files (*.pcd)", "*.pcd",
-		"Microsoft Bitmap Files (*.bmp)", "*.bmp",
-		"Microsoft DirectDraw Surface (*.dds)", "*.dds",
-		"Microsoft Icon Files (*.ico, *.cur)", "*.ico, *.cur",
-		"Multiple Network Graphics Files (*.mng)", "*.mng",
-		"Paint Shop Pro Files (*.psp)", "*.psp",
-		"PhotoShop Files (*.psd)", "*.psd",
-		"Pic Files (*.pic)", "*.pic",
-		"Pixar Files (*.pix)", "*.pix",
-		"Portable AnyMap Files (*.pbm, *.pgm, *.pnm, *.ppm)", "*.pbm;*.pgm;*.pnm;*.ppm",
-		"Portable Network Graphics Files (*.png)", "*.png",
-		"Sgi Files (*.sgi)", "*.bw;*.rgb;*.rgba;*.sgi",
-		"Targa Files (*.tga, *.vda, *.icb, *.vst)", "*.tga;*.vda;*.icb;*.vst",
-		"Tiff Files (*.tif)", "*.tif;*.tiff",
-		"Quake Wal Files (*.wal)", "*.wal",
-		"X PixelMap (*.xpm)", "*.xpm",
-		"ZSoft Pcx Files (*.pcx)", "*.pcx",
-		"\0\0"
+	static TCHAR OpenFileName[2048];
+	static TCHAR OpenFilter[2048];
+	static TCHAR SaveFileName[2048];
+	static TCHAR SaveFilter[2048];
+	static TCHAR *OFilter[] = {
+		L"All Files (*.*)", L"*.*",
+		L"Alias|Wavefront Files (*.pix)", L"*.pix",
+		L"Cut Files (*.cut)", L"*.cut",
+		L"Dcx Files (*.dcx)", L"*.dcx",
+		L"Graphics Interchange Format (*.gif)", L"*.gif",
+		L"Half-Life Model Files (*.mdl)", L"*.mdl",
+		L"Homeworld Image Files (*.lif)", L"*.lif",
+		L"Image Files (All Supported Types)", L"*.jpe;*.jpg;*.jpeg;*.lif;*.bmp;*.ico;*.pbm;*.pgm;*.pnm;*.ppm;*.png;*.bw;*.rgb;*.rgba;*.sgi;*.tga;*.tif;*.tiff;*.pcx;*.xpm;*.psp;*.psd;*.pix;*.pxr;*.cut;*.dcx",
+		L"Jpeg Files (*.jpe, *.jpg, *.jpeg)", L"*.jpe;*.jpg;*.jpeg",
+		L"Kodak Photo CD Files (*.pcd)", L"*.pcd",
+		L"Microsoft Bitmap Files (*.bmp)", L"*.bmp",
+		L"Microsoft DirectDraw Surface (*.dds)", L"*.dds",
+		L"Microsoft Icon Files (*.ico, *.cur)", L"*.ico, *.cur",
+		L"Multiple Network Graphics Files (*.mng)", L"*.mng",
+		L"Paint Shop Pro Files (*.psp)", L"*.psp",
+		L"PhotoShop Files (*.psd)", L"*.psd",
+		L"Pic Files (*.pic)", L"*.pic",
+		L"Pixar Files (*.pix)", L"*.pix",
+		L"Portable AnyMap Files (*.pbm, *.pgm, *.pnm, *.ppm)", L"*.pbm;*.pgm;*.pnm;*.ppm",
+		L"Portable Network Graphics Files (*.png)", L"*.png",
+		L"Sgi Files (*.sgi)", L"*.bw;*.rgb;*.rgba;*.sgi",
+		L"Targa Files (*.tga, *.vda, *.icb, *.vst)", L"*.tga;*.vda;*.icb;*.vst",
+		L"Tiff Files (*.tif)", L"*.tif;*.tiff",
+		L"Quake Wal Files (*.wal)", L"*.wal",
+		L"X PixelMap (*.xpm)", L"*.xpm",
+		L"ZSoft Pcx Files (*.pcx)", L"*.pcx",
+		L"\0\0"
 	};
-	static char *SFilter[] = {
-		"All Files (*.*)", "*.*",
-		"C-Style Header (*.h)", "*.h",
-		"Jpeg Files (*.jpe, *.jpg, *.jpeg)", "*.jpe;*.jpg;*.jpeg",
-		"Microsoft Bitmap Files (*.bmp)", "*.bmp",
-		"Microsoft DirectDraw Surface (*.dds)", "*.dds",
-		"PhotoShop Files (*.psd)", "*.psd",
-		"Portable AnyMap Files (*.pbm, *.pgm, *.ppm)", "*.pbm;*.pgm;*.ppm",
-		"Portable Network Graphics Files (*.png)", "*.png",
-		"Sgi Files (*.sgi)", "*.bw;*.rgb;*.rgba;*.sgi",
-		"Targa Files (*.tga)", "*.tga",
-		"Tiff Files (*.tif)", "*.tif",
-		"ZSoft Pcx Files (*.pcx)", "*.pcx",
-		"\0\0"
+	static TCHAR *SFilter[] = {
+		L"All Files (*.*)", L"*.*",
+		L"C-Style Header (*.h)", L"*.h",
+		L"Jpeg Files (*.jpe, *.jpg, *.jpeg)", L"*.jpe;*.jpg;*.jpeg",
+		L"Microsoft Bitmap Files (*.bmp)", L"*.bmp",
+		L"Microsoft DirectDraw Surface (*.dds)", L"*.dds",
+		L"PhotoShop Files (*.psd)", L"*.psd",
+		L"Portable AnyMap Files (*.pbm, *.pgm, *.ppm)", L"*.pbm;*.pgm;*.ppm",
+		L"Portable Network Graphics Files (*.png)", L"*.png",
+		L"Sgi Files (*.sgi)", L"*.bw;*.rgb;*.rgba;*.sgi",
+		L"Targa Files (*.tga)", L"*.tga",
+		L"Tiff Files (*.tif)", L"*.tif",
+		L"ZSoft Pcx Files (*.pcx)", L"*.pcx",
+		L"\0\0"
 	};
 
 	static OPENFILENAME Ofn = {
@@ -398,8 +401,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			ResizeWin();
 			CreateGDI();
 
-			sprintf(CurFileName, "%s", OpenFileName);
-			sprintf(NewTitle, "%s - %s", TITLE, OpenFileName);
+			wsprintf(CurFileName, L"%s", OpenFileName);
+			wsprintf(NewTitle, L"%s - %s", TITLE, OpenFileName);
 			SetWindowText(hWnd, NewTitle);
 
 			DragFinish(hDrop);
@@ -437,9 +440,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 				case ID_EFFECTS_COUNTCOLORS:
 					Colours = iluColoursUsed();
-					char ColourString[255];
-					sprintf(ColourString, "The number of colours in this image is:  %d", Colours);
-					MessageBox(NULL, ColourString, "Colour Count", MB_OK);
+					TCHAR ColourString[255];
+					wsprintf(ColourString, L"The number of colours in this image is:  %d", Colours);
+					MessageBox(NULL, ColourString, L"Colour Count", MB_OK);
 					return (0L);
 
 				case ID_EFFECTSTOOLS_BACKGROUNDCOLOUR:
@@ -481,8 +484,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					ilBindImage(Undos[0]);
 					ilutGetWinClipboard();
 
-					sprintf(CurFileName, "Clipboard Paste");
-					sprintf(NewTitle, "%s - Pasted from the Clipboard", TITLE);
+					wsprintf(CurFileName, L"Clipboard Paste");
+					wsprintf(NewTitle, L"%s - Pasted from the Clipboard", TITLE);
 					SetWindowText(hWnd, NewTitle);
 
 					//ilConvertImage(IL_BGRA);
@@ -535,10 +538,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					return (0L);
 
 				case ID_FILE_LOAD:
-					sprintf(OpenFileName, "*.*");
+					wsprintf(OpenFileName, L"*.*");
 					Ofn.lpstrFilter = OpenFilter;
 					Ofn.lpstrFile = OpenFileName;
-					Ofn.lpstrTitle = "Open File";
+					Ofn.lpstrTitle = L"Open File";
 					Ofn.nFilterIndex = 1;
 					Ofn.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST;
 
@@ -566,8 +569,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					ResizeWin();
 					CreateGDI();
 
-					sprintf(CurFileName, "%s", OpenFileName);
-					sprintf(NewTitle, "%s - %s:  %g ms", TITLE, OpenFileName, elapsed);
+					wsprintf(CurFileName, L"%s", OpenFileName);
+					wsprintf(NewTitle, L"%s - %s:  %g ms", TITLE, OpenFileName, elapsed);
 					SetWindowText(hWnd, NewTitle);
 
 					return (0L);
@@ -586,23 +589,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 					ilGenImages(1, Undos);
 					ilBindImage(Undos[0]);
-					if (!ilutWinLoadUrl(FilterEditString))
-						return (0L);
+					/*if (!ilutWinLoadUrl(FilterEditString))
+						return (0L);*/
 
 					ilutRenderer(ILUT_WIN32);
 					ResizeWin();
 					CreateGDI();
 					
-					sprintf(NewTitle, "%s - %s", TITLE, FilterEditString);
+					wsprintf(NewTitle, L"%s - %s", TITLE, FilterEditString);
 					SetWindowText(hWnd, NewTitle);
 
 					return (0L);
 
 				case ID_FILE_SAVE:
-					sprintf(SaveFileName, "monkey.tga");
+					wsprintf(SaveFileName, L"monkey.tga");
 					Ofn.lpstrFilter = SaveFilter;
 					Ofn.lpstrFile = SaveFileName;
-					Ofn.lpstrTitle = "Save File";
+					Ofn.lpstrTitle = L"Save File";
 					Ofn.nFilterIndex = 1;
 					Ofn.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
 
@@ -612,8 +615,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					ilEnable(IL_FILE_OVERWRITE);
 					ilSaveImage(SaveFileName);
 
-					sprintf(CurFileName, "%s", SaveFileName);
-					sprintf(NewTitle, "%s - %s", TITLE, SaveFileName);
+					wsprintf(CurFileName, L"%s", SaveFileName);
+					wsprintf(NewTitle, L"%s - %s", TITLE, SaveFileName);
 					SetWindowText(hWnd, NewTitle);
 
 					return (0L);
@@ -849,13 +852,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-void GenFilterString(char *Out, char **Strings)
+void GenFilterString(TCHAR *Out, TCHAR **Strings)
 {
 	int OutPos = 0, StringPos = 0;
 
 	while (Strings[StringPos][0] != 0) {
-		sprintf(Out + OutPos, Strings[StringPos]);
-		OutPos += (int)strlen(Strings[StringPos++]) + 1;
+		wsprintf(Out + OutPos, Strings[StringPos]);
+		OutPos += (int)wcslen(Strings[StringPos++]) + 1;
 	}
 
 	Out[OutPos++] = 0;
@@ -873,9 +876,9 @@ BOOL APIENTRY AboutDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
 		{
 			int i;
 			ILenum ilError;
-			char VersionNum[256];
+			TCHAR VersionNum[256];
 
-			sprintf(VersionNum, "Num:  %d", ilGetInteger(IL_VERSION_NUM));
+			wsprintf(VersionNum, L"Num:  %d", ilGetInteger(IL_VERSION_NUM));
 
 			SetDlgItemText(hDlg, IDC_ABOUT_VENDOR, ilGetString(IL_VENDOR));
 			SetDlgItemText(hDlg, IDC_ABOUT_VER_STRING, ilGetString(IL_VERSION_NUM));
@@ -916,16 +919,16 @@ BOOL APIENTRY PropertiesDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lPara
 	{
 	    case WM_INITDIALOG:
 		{
-			char Temp[256];
+			TCHAR Temp[256];
 
 			SetDlgItemText(hDlg, IDC_PROP_FILENAME, CurFileName);
-			sprintf(Temp, "%d", ilGetInteger(IL_IMAGE_WIDTH));
+			wsprintf(Temp, L"%d", ilGetInteger(IL_IMAGE_WIDTH));
 			SetDlgItemText(hDlg, IDC_PROP_WIDTH, Temp);
-			sprintf(Temp, "%d", ilGetInteger(IL_IMAGE_HEIGHT));
+			wsprintf(Temp, L"%d", ilGetInteger(IL_IMAGE_HEIGHT));
 			SetDlgItemText(hDlg, IDC_PROP_HEIGHT, Temp);
-			sprintf(Temp, "%d", ilGetInteger(IL_IMAGE_DEPTH));
+			wsprintf(Temp, L"%d", ilGetInteger(IL_IMAGE_DEPTH));
 			SetDlgItemText(hDlg, IDC_PROP_DEPTH, Temp);
-			sprintf(Temp, "%d", ilGetInteger(IL_IMAGE_SIZE_OF_DATA));
+			wsprintf(Temp, L"%d", ilGetInteger(IL_IMAGE_SIZE_OF_DATA));
 			SetDlgItemText(hDlg, IDC_PROP_SIZE, Temp);
 
 			return (TRUE);
@@ -959,53 +962,53 @@ BOOL APIENTRY FilterDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
 			switch (FilterType)
 			{
 				case ID_FILTER_PIXELIZE:
-					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, "Width of pixelized block:");
-					SetDlgItemText(hDlg, IDC_FILTER_EDIT, "1");
+					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, L"Width of pixelized block:");
+					SetDlgItemText(hDlg, IDC_FILTER_EDIT, L"1");
 					break;
 				case ID_FILTER_NOISE:
-					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, "Amount of noise threshold:");
-					SetDlgItemText(hDlg, IDC_FILTER_EDIT, "1.0");
+					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, L"Amount of noise threshold:");
+					SetDlgItemText(hDlg, IDC_FILTER_EDIT, L"1.0");
 					break;
 				case ID_EFFECTS_FILTERS_WAVE:
-					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, "Angle of wave to apply:");
-					SetDlgItemText(hDlg, IDC_FILTER_EDIT, "0.0");
+					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, L"Angle of wave to apply:");
+					SetDlgItemText(hDlg, IDC_FILTER_EDIT, L"0.0");
 					break;
 				case ID_FILTERS_BLUR_AVERAGE:
-					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, "Number of iterations:");
-					SetDlgItemText(hDlg, IDC_FILTER_EDIT, "1");
+					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, L"Number of iterations:");
+					SetDlgItemText(hDlg, IDC_FILTER_EDIT, L"1");
 					break;
 				case ID_FILTERS_BLUR_GAUSSIAN:
-					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, "Number of iterations:");
-					SetDlgItemText(hDlg, IDC_FILTER_EDIT, "1");
+					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, L"Number of iterations:");
+					SetDlgItemText(hDlg, IDC_FILTER_EDIT, L"1");
 					break;
 				case ID_FILTER_GAMMACORRECT:
-					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, "Amount of gamma correction:");
-					SetDlgItemText(hDlg, IDC_FILTER_EDIT, "1.0");
+					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, L"Amount of gamma correction:");
+					SetDlgItemText(hDlg, IDC_FILTER_EDIT, L"1.0");
 					break;
 				case ID_FILTER_SHARPEN:
-					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, "Sharpening factor:");
-					SetDlgItemText(hDlg, IDC_FILTER_EDIT, "1.0");
+					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, L"Sharpening factor:");
+					SetDlgItemText(hDlg, IDC_FILTER_EDIT, L"1.0");
 					break;
 				case ID_EFFECTS_FILTERS_ROTATE:
-					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, "Number of degress to rotate:");
-					SetDlgItemText(hDlg, IDC_FILTER_EDIT, "0.0");
+					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, L"Number of degress to rotate:");
+					SetDlgItemText(hDlg, IDC_FILTER_EDIT, L"0.0");
 					break;
 
 				case ID_EDIT_UNDOLEVEL:
-					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, "Set level of undo:");
-					SetDlgItemText(hDlg, IDC_FILTER_EDIT, "4");
+					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, L"Set level of undo:");
+					SetDlgItemText(hDlg, IDC_FILTER_EDIT, L"4");
 					break;
 				case ID_EDIT_VIEWIMAGENUM:
-					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, "Enter image number:");
-					SetDlgItemText(hDlg, IDC_FILTER_EDIT, "0");
+					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, L"Enter image number:");
+					SetDlgItemText(hDlg, IDC_FILTER_EDIT, L"0");
 					break;
 				case ID_EDIT_VIEWMIPMAP:
-					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, "Enter mipmap number:");
-					SetDlgItemText(hDlg, IDC_FILTER_EDIT, "0");
+					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, L"Enter mipmap number:");
+					SetDlgItemText(hDlg, IDC_FILTER_EDIT, L"0");
 					break;
 				case ID_FILE_OPENURL:
-					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, "Enter url of image:");
-					SetDlgItemText(hDlg, IDC_FILTER_EDIT, "");
+					SetDlgItemText(hDlg, IDC_FILTER_DESC_TEXT, L"Enter url of image:");
+					SetDlgItemText(hDlg, IDC_FILTER_EDIT, L"");
 					break;
 			}
 
@@ -1017,8 +1020,8 @@ BOOL APIENTRY FilterDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
 		{
 			if (LOWORD(wParam) == IDOK) {
 				GetDlgItemText(hDlg, IDC_FILTER_EDIT, FilterEditString, 255);
-				FilterParamInt = atoi(FilterEditString);
-				FilterParamFloat = (float)atof(FilterEditString);
+				FilterParamInt = _wtoi(FilterEditString);
+				FilterParamFloat = (float)_wtof(FilterEditString);
 				EndDialog(hDlg, TRUE);
 			}
 			if (LOWORD(wParam) == IDCANCEL) {
@@ -1038,7 +1041,7 @@ BOOL APIENTRY FilterDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
 
 BOOL APIENTRY ResizeDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
 {
-	static char x[255], y[255], z[255];
+	static TCHAR x[255], y[255], z[255];
 	static ILuint xsize, ysize, zsize;
 	static RECT Rect;
 
@@ -1046,9 +1049,9 @@ BOOL APIENTRY ResizeDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
 	{
 	    case WM_INITDIALOG:
 		{
-			sprintf(x, "%d", Width);
-			sprintf(y, "%d", Height);
-			sprintf(z, "%d", Depth);
+			wsprintf(x, L"%d", Width);
+			wsprintf(y, L"%d", Height);
+			wsprintf(z, L"%d", Depth);
 			SetDlgItemText(hDlg, IDC_EDIT_RESIZE_X, x);
 			SetDlgItemText(hDlg, IDC_EDIT_RESIZE_Y, y);
 			SetDlgItemText(hDlg, IDC_EDIT_RESIZE_Z, z);
@@ -1062,9 +1065,9 @@ BOOL APIENTRY ResizeDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
 				GetDlgItemText(hDlg, IDC_EDIT_RESIZE_X, x, 255);
 				GetDlgItemText(hDlg, IDC_EDIT_RESIZE_Y, y, 255);
 				GetDlgItemText(hDlg, IDC_EDIT_RESIZE_Z, z, 255);
-				xsize = atoi(x);
-				ysize = atoi(y);
-				zsize = atoi(z);
+				xsize = _wtoi(x);
+				ysize = _wtoi(y);
+				zsize = _wtoi(z);
 				if (xsize && ysize && zsize) {
 					iluScale(xsize, ysize, zsize);
 
@@ -1098,16 +1101,16 @@ BOOL APIENTRY ResizeDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
 
 BOOL APIENTRY BatchDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
 {
-	static char	Dir[255], NewExt[255];
-	static bool	Recurse;
-	static RECT	Rect;
+	static TCHAR	Dir[255], NewExt[255];
+	static bool		Recurse;
+	static RECT		Rect;
 
     switch (message)
 	{
 	    case WM_INITDIALOG:
 		{
-			sprintf(Dir, "");
-			sprintf(NewExt, "tga");
+			wsprintf(Dir, L"");
+			wsprintf(NewExt, L"tga");
 			SetDlgItemText(hDlg, IDC_BATCH_DIR, Dir);
 			SetDlgItemText(hDlg, IDC_BATCH_NEWEXT, NewExt);
 			return TRUE;
@@ -1123,7 +1126,7 @@ BOOL APIENTRY BatchDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
 
 				// Do shit here.
 
-				BatchConv(Dir, NULL, NewExt, Recurse);
+				//BatchConv(Dir, NULL, NewExt, Recurse);
 
 				EndDialog(hDlg, TRUE);
 			}

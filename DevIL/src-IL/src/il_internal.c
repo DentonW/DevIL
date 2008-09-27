@@ -41,7 +41,7 @@ ILimage *iCurImage = NULL;
 	}
 #endif /* _WIN32 */
 
-#if _UNICODE //_WIN32_WCE
+#ifdef _UNICODE //_WIN32_WCE
 	int iStrCmp(ILconst_string src1, ILconst_string src2)
 	{
 		return wcsicmp(src1, src2);

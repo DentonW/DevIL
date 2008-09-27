@@ -50,6 +50,7 @@ ILvoid ilDefaultStates()
 	ilStates[ilCurrentPos].ilUseKeyColour = IL_FALSE;
 	ilStates[ilCurrentPos].ilCompression = IL_COMPRESS_ZLIB;
 	ilStates[ilCurrentPos].ilInterlace = IL_FALSE;
+	ilStates[ilCurrentPos].ilUseUnicode = IL_FALSE;
 
 	ilStates[ilCurrentPos].ilTgaCreateStamp = IL_FALSE;
 	ilStates[ilCurrentPos].ilJpgQuality = 99;
@@ -241,7 +242,7 @@ ILboolean ilAble(ILenum Mode, ILboolean Flag)
 			ilStates[ilCurrentPos].ilInterlace = Flag;
 			break;
 		case IL_USE_UNICODE:
-			ilStates[ilCurrentPos].ilInterlace = Flag;
+			ilStates[ilCurrentPos].ilUseUnicode = Flag;
 			break;
 
 		default:

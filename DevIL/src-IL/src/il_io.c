@@ -1063,8 +1063,13 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const ILvoid *Lump, ILuint Size) {
 //! Attempts to load an image with various different methods before failing - very generic.
 ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 {
-	ILstring	Ext = iGetExtension(FileName);
+	ILstring	Ext;
 	ILenum		Type;
+	ILboolean	bRet = IL_FALSE;
+#ifdef _UNICODE
+	ILint		Length;
+	wchar_t		*Temp;
+#endif//_UNICODE
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -1080,6 +1085,30 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		return IL_FALSE;
 	}
 
+	// If DevIL is not compiled using _UNICODE, we can just pass FileName.
+	//  If it is compiled with _UNICODE and IL_USE_UNICODE is not set,
+	//  we have to convert the ANSI FileName to Unicode.
+#ifdef _UNICODE
+	// Code help from
+	//  https://buildsecurityin.us-cert.gov/daisy/bsi-rules/home/g1/769-BSI.html
+	if (ilIsDisabled(IL_USE_UNICODE)) {
+		Length = mbstowcs(NULL, (const char*)FileName, 0) + 1; // note error return of -1 is possible
+		if (Length == 0) {
+			ilSetError(IL_INVALID_PARAM);
+			return IL_FALSE;
+		}
+		if (Length > ULONG_MAX/sizeof(wchar_t)) {
+			ilSetError(IL_INTERNAL_ERROR);
+			return IL_FALSE;
+		}
+		Temp = (wchar_t*)ialloc(Length * sizeof(wchar_t));
+		mbstowcs(Temp, FileName, Length); 
+		FileName = Temp;
+	}
+#endif//_UNICODE
+
+	Ext = iGetExtension(FileName);
+
 	// Try registered procedures first (so users can override default lib functions).
 	if (Ext) {
 		if (iRegisterLoad(FileName))
@@ -1088,186 +1117,225 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#ifndef IL_NO_TGA
 		if (!iStrCmp(Ext, IL_TEXT("tga")) || !iStrCmp(Ext, IL_TEXT("vda")) ||
 			!iStrCmp(Ext, IL_TEXT("icb")) || !iStrCmp(Ext, IL_TEXT("vst"))) {
-			return ilLoadTarga(FileName);
+			bRet = ilLoadTarga(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_JPG
 		if (!iStrCmp(Ext, IL_TEXT("jpg")) || !iStrCmp(Ext, IL_TEXT("jpe")) ||
 			!iStrCmp(Ext, IL_TEXT("jpeg"))) {
-			return ilLoadJpeg(FileName);
+			bRet = ilLoadJpeg(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_JP2
-		if (!iStrCmp(Ext, IL_TEXT("jp2"))) {
-			return ilLoadJp2(FileName);
+		// @TODO: Get JasPer to use Unicode filenames.
+		if (!ilIsEnabled(IL_USE_UNICODE)) {
+			if (!iStrCmp(Ext, IL_TEXT("jp2"))) {
+				bRet = ilLoadJp2(FileName);
+				goto finish;
+			}
 		}
 		#endif
 
 		#ifndef IL_NO_DDS
 		if (!iStrCmp(Ext, IL_TEXT("dds"))) {
-			return ilLoadDds(FileName);
+			bRet = ilLoadDds(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_PNG
 		if (!iStrCmp(Ext, IL_TEXT("png"))) {
-			return ilLoadPng(FileName);
+			bRet = ilLoadPng(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_BMP
 		if (!iStrCmp(Ext, IL_TEXT("bmp")) || !iStrCmp(Ext, IL_TEXT("dib"))) {
-			return ilLoadBmp(FileName);
+			bRet = ilLoadBmp(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_GIF
 		if (!iStrCmp(Ext, IL_TEXT("gif"))) {
-			return ilLoadGif(FileName);
+			bRet = ilLoadGif(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_HDR
 		if (!iStrCmp(Ext, IL_TEXT("hdr"))) {
-			return ilLoadHdr(FileName);
+			bRet = ilLoadHdr(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_CUT
 		if (!iStrCmp(Ext, IL_TEXT("cut"))) {
-			return ilLoadCut(FileName);
+			bRet = ilLoadCut(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_DCX
 		if (!iStrCmp(Ext, IL_TEXT("dcx"))) {
-			return ilLoadDcx(FileName);
+			bRet = ilLoadDcx(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_ICO
 		if (!iStrCmp(Ext, IL_TEXT("ico")) || !iStrCmp(Ext, IL_TEXT("cur"))) {
-			return ilLoadIcon(FileName);
+			bRet = ilLoadIcon(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_ICNS
 		if (!iStrCmp(Ext, IL_TEXT("icns"))) {
-			return ilLoadIcns(FileName);
+			bRet = ilLoadIcns(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_LIF
 		if (!iStrCmp(Ext, IL_TEXT("lif"))) {
-			return ilLoadLif(FileName);
+			bRet = ilLoadLif(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_MDL
 		if (!iStrCmp(Ext, IL_TEXT("mdl"))) {
-			return ilLoadMdl(FileName);
+			bRet = ilLoadMdl(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_MNG
 		if (!iStrCmp(Ext, IL_TEXT("mng")) || !iStrCmp(Ext, IL_TEXT("jng"))) {
-			return ilLoadMng(FileName);
+			bRet = ilLoadMng(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_PCD
 		if (!iStrCmp(Ext, IL_TEXT("pcd"))) {
-			return IL_FALSE;//return ilLoadPcd(FileName);
+			bRet = IL_FALSE;//bRet = ilLoadPcd(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_PCX
 		if (!iStrCmp(Ext, IL_TEXT("pcx"))) {
-			return ilLoadPcx(FileName);
+			bRet = ilLoadPcx(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_PIC
 		if (!iStrCmp(Ext, IL_TEXT("pic"))) {
-			return ilLoadPic(FileName);
+			bRet = ilLoadPic(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_PIX
 		if (!iStrCmp(Ext, IL_TEXT("pix"))) {
-			return ilLoadPix(FileName);
+			bRet = ilLoadPix(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_PNM
 		if (!iStrCmp(Ext, IL_TEXT("pbm"))) {
-			return ilLoadPnm(FileName);
+			bRet = ilLoadPnm(FileName);
+			goto finish;
 		}
 		if (!iStrCmp(Ext, IL_TEXT("pgm"))) {
-			return ilLoadPnm(FileName);
+			bRet = ilLoadPnm(FileName);
+			goto finish;
 		}
 		if (!iStrCmp(Ext, IL_TEXT("pnm"))) {
-			return ilLoadPnm(FileName);
+			bRet = ilLoadPnm(FileName);
+			goto finish;
 		}
 		if (!iStrCmp(Ext, IL_TEXT("ppm"))) {
-			return ilLoadPnm(FileName);
+			bRet = ilLoadPnm(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_PSD
 		if (!iStrCmp(Ext, IL_TEXT("psd")) || !iStrCmp(Ext, IL_TEXT("pdd"))) {
-			return ilLoadPsd(FileName);
+			bRet = ilLoadPsd(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_PSP
 		if (!iStrCmp(Ext, IL_TEXT("psp"))) {
-			return ilLoadPsp(FileName);
+			bRet = ilLoadPsp(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_PXR
 		if (!iStrCmp(Ext, IL_TEXT("pxr"))) {
-			return ilLoadPxr(FileName);
+			bRet = ilLoadPxr(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_SGI
 		if (!iStrCmp(Ext, IL_TEXT("sgi")) || !iStrCmp(Ext, IL_TEXT("bw")) ||
 			!iStrCmp(Ext, IL_TEXT("rgb")) || !iStrCmp(Ext, IL_TEXT("rgba"))) {
-			return ilLoadSgi(FileName);
+			bRet = ilLoadSgi(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_TIF
 		if (!iStrCmp(Ext, IL_TEXT("tif")) || !iStrCmp(Ext, IL_TEXT("tiff"))) {
-			return ilLoadTiff(FileName);
+			bRet = ilLoadTiff(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_WAL
 		if (!iStrCmp(Ext, IL_TEXT("wal"))) {
-			return ilLoadWal(FileName);
+			bRet = ilLoadWal(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_WDP
-		if (!iStrCmp(Ext, IL_TEXT("wdp")) || !iStrCmp(Ext, IL_TEXT("hdp")) ) {
-			return ilLoadWdp(FileName);
+		if (!ilIsEnabled(IL_USE_UNICODE)) {
+			if (!iStrCmp(Ext, IL_TEXT("wdp")) || !iStrCmp(Ext, IL_TEXT("hdp")) ) {
+				bRet = ilLoadWdp(FileName);
+				goto finish;
+			}
 		}
 		#endif
 
 		#ifndef IL_NO_XPM
 		if (!iStrCmp(Ext, IL_TEXT("xpm"))) {
-			return ilLoadXpm(FileName);
+			bRet = ilLoadXpm(FileName);
+			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_EXR
-		if (!iStrCmp(Ext, IL_TEXT("exr"))) {
-			return ilLoadExr(FileName);
+		if (!ilIsEnabled(IL_USE_UNICODE)) {
+			if (!iStrCmp(Ext, IL_TEXT("exr"))) {
+				bRet = ilLoadExr(FileName);
+				goto finish;
+			}
 		}
 		#endif
 	}
@@ -1279,6 +1347,15 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		return IL_FALSE;
 	}
 	return ilLoad(Type, FileName);
+
+finish:
+
+#ifdef _UNICODE
+	if (ilIsDisabled(IL_USE_UNICODE))
+		ifree(Temp);
+#endif//_UNICODE
+
+	return bRet;
 }
 
 
@@ -1532,17 +1609,44 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size)
 //	the current image based on the extension given in FileName.
 ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 {
-	ILstring Ext = iGetExtension(FileName);
+	ILstring Ext;
+	ILboolean	bRet = IL_FALSE;
+#ifdef _UNICODE
+	ILint		Length;
+	wchar_t		*Temp;
+#endif//_UNICODE
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
-#ifndef _UNICODE
-	if (FileName == NULL || strlen(FileName) < 1 || Ext == NULL) {
-#else
+	// If DevIL is not compiled using _UNICODE, we can just pass FileName.
+	//  If it is compiled with _UNICODE and IL_USE_UNICODE is not set,
+	//  we have to convert the ANSI FileName to Unicode.
+#ifdef _UNICODE
+	// Code help from
+	//  https://buildsecurityin.us-cert.gov/daisy/bsi-rules/home/g1/769-BSI.html
+	if (ilIsDisabled(IL_USE_UNICODE)) {
+		Length = mbstowcs(NULL, (const char*)FileName, 0) + 1; // note error return of -1 is possible
+		if (Length == 0) {
+			ilSetError(IL_INVALID_PARAM);
+			return IL_FALSE;
+		}
+		if (Length > ULONG_MAX/sizeof(wchar_t)) {
+			ilSetError(IL_INTERNAL_ERROR);
+			return IL_FALSE;
+		}
+		Temp = (wchar_t*)ialloc(Length * sizeof(wchar_t));
+		mbstowcs(Temp, FileName, Length); 
+		FileName = Temp;
+	}
+
+	Ext = iGetExtension(FileName);
+
 	if (FileName == NULL || wcslen(FileName) < 1 || Ext == NULL) {
+#else
+	if (FileName == NULL || strlen(FileName) < 1 || Ext == NULL) {
 #endif//_UNICODE
 		ilSetError(IL_INVALID_PARAM);
 		return IL_FALSE;
@@ -1550,86 +1654,101 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 
 	#ifndef IL_NO_BMP
 	if (!iStrCmp(Ext, IL_TEXT("bmp"))) {
-		return ilSaveBmp(FileName);
+		bRet = ilSaveBmp(FileName);
+		goto finish;
 	}
 	#endif
 
 	#ifndef IL_NO_CHEAD
 	if (!iStrCmp(Ext, IL_TEXT("h"))) {
-		return ilSaveCHeader(FileName, "IL_IMAGE");
+		bRet = ilSaveCHeader(FileName, "IL_IMAGE");
+		goto finish;
 	}
 	#endif
 
 	#ifndef IL_NO_DDS
 	if (!iStrCmp(Ext, IL_TEXT("dds"))) {
-		return ilSaveDds(FileName);
+		bRet = ilSaveDds(FileName);
+		goto finish;
 	}
 	#endif
 
 	#ifndef IL_NO_JPG
 	if (!iStrCmp(Ext, IL_TEXT("jpg")) || !iStrCmp(Ext, IL_TEXT("jpeg")) || !iStrCmp(Ext, IL_TEXT("jpe"))) {
-		return ilSaveJpeg(FileName);
+		bRet = ilSaveJpeg(FileName);
+		goto finish;
 	}
 	#endif
 
 	#ifndef IL_NO_PCX
 	if (!iStrCmp(Ext, IL_TEXT("pcx"))) {
-		return ilSavePcx(FileName);
+		bRet = ilSavePcx(FileName);
+		goto finish;
 	}
 	#endif
 
 	#ifndef IL_NO_PNG
 	if (!iStrCmp(Ext, IL_TEXT("png"))) {
-		return ilSavePng(FileName);
+		bRet = ilSavePng(FileName);
+		goto finish;
 	}
 	#endif
 
 	#ifndef IL_NO_PNM  // Not sure if binary or ascii should be defaulted...maybe an option?
 	if (!iStrCmp(Ext, IL_TEXT("pbm"))) {
-		return ilSavePnm(FileName);
+		bRet = ilSavePnm(FileName);
+		goto finish;
 	}
 	if (!iStrCmp(Ext, IL_TEXT("pgm"))) {
-		return ilSavePnm(FileName);
+		bRet = ilSavePnm(FileName);
+		goto finish;
 	}
 	if (!iStrCmp(Ext, IL_TEXT("ppm"))) {
-		return ilSavePnm(FileName);
+		bRet = ilSavePnm(FileName);
+		goto finish;
 	}
 	#endif
 
 	#ifndef IL_NO_PSD
 	if (!iStrCmp(Ext, IL_TEXT("psd"))) {
-		return ilSavePsd(FileName);
+		bRet = ilSavePsd(FileName);
+		goto finish;
 	}
 	#endif
 
 	#ifndef IL_NO_RAW
 	if (!iStrCmp(Ext, IL_TEXT("raw"))) {
-		return ilSaveRaw(FileName);
+		bRet = ilSaveRaw(FileName);
+		goto finish;
 	}
 	#endif
 
 	#ifndef IL_NO_SGI
 	if (!iStrCmp(Ext, IL_TEXT("sgi")) || !iStrCmp(Ext, IL_TEXT("bw")) ||
 		!iStrCmp(Ext, IL_TEXT("rgb")) || !iStrCmp(Ext, IL_TEXT("rgba"))) {
-		return ilSaveSgi(FileName);
+		bRet = ilSaveSgi(FileName);
+		goto finish;
 	}
 	#endif
 
 	#ifndef IL_NO_TGA
 	if (!iStrCmp(Ext, IL_TEXT("tga"))) {
-		return ilSaveTarga(FileName);
+		bRet = ilSaveTarga(FileName);
+		goto finish;
 	}
 	#endif
 
 	#ifndef IL_NO_TIF
 	if (!iStrCmp(Ext, IL_TEXT("tif")) || !iStrCmp(Ext, IL_TEXT("tiff"))) {
-		return ilSaveTiff(FileName);
+		bRet = ilSaveTiff(FileName);
+		goto finish;
 	}
 	#endif
 
 	// Check if we just want to save the palette.
 	if (!iStrCmp(Ext, IL_TEXT("pal"))) {
-		return ilSavePal(FileName);
+		bRet = ilSavePal(FileName);
+		goto finish;
 	}
 
 	// Try registered procedures
@@ -1638,4 +1757,12 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 
 	ilSetError(IL_INVALID_EXTENSION);
 	return IL_FALSE;
+
+finish:
+#ifdef _UNICODE
+	if (ilIsDisabled(IL_USE_UNICODE))
+		ifree(Temp);
+#endif//_UNICODE
+
+	return bRet;
 }
