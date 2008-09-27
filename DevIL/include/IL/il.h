@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 08/23/2008
+// Last modified: 09/27/2008
 //
 // Filename: IL/il.h
 //
@@ -207,6 +207,7 @@ typedef void           ILvoid;
 #define IL_ICNS			0x0440
 #define IL_JP2			0x0441
 #define IL_EXR			0x0442
+#define IL_WDP			0x0443
 
 
 #define IL_JASC_PAL     0x0475
@@ -258,8 +259,12 @@ typedef void           ILvoid;
 
 
 // File definitions
-#define IL_FILE_OVERWRITE 0x0620
-#define IL_FILE_MODE      0x0621
+#define IL_FILE_OVERWRITE	0x0620
+#define IL_FILE_MODE		0x0621
+
+
+// String handling
+#define IL_USE_UNICODE		0x626
 
 
 // Palette definitions

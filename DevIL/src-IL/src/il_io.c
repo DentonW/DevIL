@@ -89,6 +89,8 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 		return IL_TIF;
 	if (!iStrCmp(Ext, IL_TEXT("wal")))
 		return IL_WAL;
+	if (!iStrCmp(Ext, IL_TEXT("wdp")) || !iStrCmp(Ext, IL_TEXT("hdp")))
+		return IL_WDP;
 	if (!iStrCmp(Ext, IL_TEXT("xpm")))
 		return IL_XPM;
 
@@ -714,6 +716,11 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 			return ilLoadXpm(FileName);
 		#endif
 
+		#ifndef IL_NO_WDP
+		case IL_WDP:
+			return ilLoadWdp(FileName);
+		#endif
+
 		#ifndef IL_NO_EXR
 		case IL_EXR:
 			return ilLoadExr(FileName);
@@ -1243,6 +1250,12 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#ifndef IL_NO_WAL
 		if (!iStrCmp(Ext, IL_TEXT("wal"))) {
 			return ilLoadWal(FileName);
+		}
+		#endif
+
+		#ifndef IL_NO_WDP
+		if (!iStrCmp(Ext, IL_TEXT("wdp")) || !iStrCmp(Ext, IL_TEXT("hdp")) ) {
+			return ilLoadWdp(FileName);
 		}
 		#endif
 

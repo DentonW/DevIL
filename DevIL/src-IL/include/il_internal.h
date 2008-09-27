@@ -384,6 +384,7 @@ ILboolean ilSaveTiffL(const ILvoid *Lump, ILuint Size);
 ILboolean ilLoadWal(ILconst_string FileName);
 ILboolean ilLoadWalF(ILHANDLE File);
 ILboolean ilLoadWalL(const ILvoid *Lump, ILuint Size);
+ILboolean ilLoadWdp(ILconst_string FileName);
 ILboolean ilLoadXpm(ILconst_string FileName);
 ILboolean ilLoadXpmF(ILHANDLE File);
 ILboolean ilLoadXpmL(const ILvoid *Lump, ILuint Size);

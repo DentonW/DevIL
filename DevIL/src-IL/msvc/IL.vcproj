@@ -74,7 +74,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib IlmImf.lib IlmThread.lib Iex.lib Half.lib"
+				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib  WMPGlue.lib WMPMetaLib.lib DecodeLib.lib EncodeLib.lib CommonLib.lib MemtraceLib.lib"
 				OutputFile="$(OutDir)\DevIL.dll"
 				ModuleDefinitionFile="il.def"
 				GenerateDebugInformation="true"
@@ -161,8 +161,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib IlmImf.lib IlmThread.lib Iex.lib Half.lib"
+				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib WMPGlue.lib WMPMetaLib.lib DecodeLib.lib EncodeLib.lib CommonLib.lib MemtraceLib.lib"
 				OutputFile="$(OutDir)\DevIL.dll"
+				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile="il.def"
 			/>
 			<Tool
@@ -414,6 +415,10 @@
 			</File>
 			<File
 				RelativePath="..\src\il_wal.c"
+				>
+			</File>
+			<File
+				RelativePath="..\src\il_wdp.c"
 				>
 			</File>
 			<File
