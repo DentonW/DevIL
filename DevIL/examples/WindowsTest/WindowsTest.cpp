@@ -17,6 +17,8 @@
 #define IL_DEBUG
 #endif//_DEBUG
 
+#define _UNICODE
+
 #include <windows.h>
 #include <IL/il.h>
 #include <IL/ilu.h>

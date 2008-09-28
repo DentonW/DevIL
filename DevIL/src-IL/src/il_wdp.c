@@ -38,6 +38,7 @@ ILboolean iLoadWdpInternal(ILconst_string FileName)
 	PKImageDecode* pDecoder = NULL;
     PKPixelInfo PI;
 	PKPixelFormatGUID guidPixFormat;
+	PKFormatConverter* pConverter = NULL;
     U32 cFrame = 0, i = 0;
 	PKRect Rect;
 	U8 *Data;
@@ -90,12 +91,13 @@ ILboolean iLoadWdpInternal(ILconst_string FileName)
 	//pDecoder->GetRawStream(pDecoder, pDecoder->pStream);
 	Data = ialloc(pDecoder->uWidth * pDecoder->uHeight * 3);
 	Rect.Height = pDecoder->uHeight; Rect.Width = pDecoder->uWidth; Rect.X = 0; Rect.Y = 0;
-	for (i = 0; i < pDecoder->uHeight; i++)
-	{
+	//for (i = 0; i < pDecoder->uHeight; i++)
+	//{
 	//	Rect.Y = i;
 	//	pDecoder->Copy(pDecoder, &Rect, Data + pDecoder->uWidth * 3 * i, 0);
 	//}
 	pDecoder->Copy(pDecoder, &Rect, Data, pDecoder->uWidth);
+	//pCodecFactory->CreateFormatConverter(&pConverter));
 
     //    // multi-frame support NYI
     //    if (i + 1 == cFrame)
@@ -103,7 +105,7 @@ ILboolean iLoadWdpInternal(ILconst_string FileName)
     //        break;
     //    }
     //    pDecoder->SelectFrame(pDecoder, i + 1);
-    }
+    //}
 
 
 

@@ -100,7 +100,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;c:\windows\system32\&quot;&#x0D;&#x0A;"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;../../examples/bin/debug&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -186,7 +186,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;c:\windows\system32\&quot;"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;../../examples/bin/&quot;"
 			/>
 		</Configuration>
 	</Configurations>

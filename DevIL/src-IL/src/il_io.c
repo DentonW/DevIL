@@ -1132,7 +1132,7 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 
 		#ifndef IL_NO_JP2
 		// @TODO: Get JasPer to use Unicode filenames.
-		if (!ilIsEnabled(IL_USE_UNICODE)) {
+		if (ilIsDisabled(IL_USE_UNICODE)) {
 			if (!iStrCmp(Ext, IL_TEXT("jp2"))) {
 				bRet = ilLoadJp2(FileName);
 				goto finish;
@@ -1315,7 +1315,7 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#endif
 
 		#ifndef IL_NO_WDP
-		if (!ilIsEnabled(IL_USE_UNICODE)) {
+		if (ilIsDisabled(IL_USE_UNICODE)) {
 			if (!iStrCmp(Ext, IL_TEXT("wdp")) || !iStrCmp(Ext, IL_TEXT("hdp")) ) {
 				bRet = ilLoadWdp(FileName);
 				goto finish;
@@ -1331,7 +1331,7 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#endif
 
 		#ifndef IL_NO_EXR
-		if (!ilIsEnabled(IL_USE_UNICODE)) {
+		if (ilIsDisabled(IL_USE_UNICODE)) {
 			if (!iStrCmp(Ext, IL_TEXT("exr"))) {
 				bRet = ilLoadExr(FileName);
 				goto finish;
