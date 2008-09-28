@@ -13,51 +13,118 @@
 
 #include "ilu_internal.h"
 
-ILconst_string iluErrorStrings[IL_FILE_READ_ERROR - IL_INVALID_ENUM + 1] = {
-	IL_TEXT("invalid enumerant"),
-    IL_TEXT("out of memory"),
-	IL_TEXT("format not supported yet"),
-	IL_TEXT("internal error"),
-	IL_TEXT("invalid value"),
-    IL_TEXT("illegal operation"),
-	IL_TEXT("illegal file value"),
-	IL_TEXT("invalid file header"),
-	IL_TEXT("invalid parameter"),
-	IL_TEXT("could not open file"),
-	IL_TEXT("invalid extension"),
-	IL_TEXT("file already exists"),
-	IL_TEXT("out format equivalent"),
-	IL_TEXT("stack overflow"),
-    IL_TEXT("stack underflow"),
-	IL_TEXT("invalid conversion"),
-	IL_TEXT("bad dimensions"),
-	IL_TEXT("file read error")
+#ifdef _UNICODE
+#include <tchar.h>
+ILconst_string iluErrorStringsW[IL_FILE_READ_ERROR - IL_INVALID_ENUM + 1] = {
+	L"invalid enumerant",
+    L"out of memory",
+	L"format not supported yet",
+	L"internal error",
+	L"invalid value",
+    L"illegal operation",
+	L"illegal file value",
+	L"invalid file header",
+	L"invalid parameter",
+	L"could not open file",
+	L"invalid extension",
+	L"file already exists",
+	L"out format equivalent",
+	L"stack overflow",
+    L"stack underflow",
+	L"invalid conversion",
+	L"bad dimensions",
+	L"file read error"
 };
 
-ILconst_string iluLibErrorStrings[IL_LIB_MNG_ERROR - IL_LIB_GIF_ERROR + 1] = {
-	IL_TEXT("gif library error"),
-	IL_TEXT("jpeg library error"),
-	IL_TEXT("png library error"),
-	IL_TEXT("tiff library error"),
-	IL_TEXT("mng library error")
+ILconst_string iluLibErrorStringsW[IL_LIB_MNG_ERROR - IL_LIB_GIF_ERROR + 1] = {
+	L"gif library error",
+	L"jpeg library error",
+	L"png library error",
+	L"tiff library error",
+	L"mng library error"
+};
+#endif//_UNICODE
+
+const char *iluErrorStrings[IL_FILE_READ_ERROR - IL_INVALID_ENUM + 1] = {
+	"invalid enumerant",
+    "out of memory",
+	"format not supported yet",
+	"internal error",
+	"invalid value",
+    "illegal operation",
+	"illegal file value",
+	"invalid file header",
+	"invalid parameter",
+	"could not open file",
+	"invalid extension",
+	"file already exists",
+	"out format equivalent",
+	"stack overflow",
+    "stack underflow",
+	"invalid conversion",
+	"bad dimensions",
+	"file read error"
+};
+
+const char *iluLibErrorStrings[IL_LIB_MNG_ERROR - IL_LIB_GIF_ERROR + 1] = {
+	"gif library error",
+	"jpeg library error",
+	"png library error",
+	"tiff library error",
+	"mng library error"
 };
 
 
 ILstring ILAPIENTRY iluErrorString(ILenum Error)
 {
+#ifndef _UNICODE
 	if (Error == IL_NO_ERROR) {
-		return (ILstring)"no error";
+		return "no error";
 	}
 	if (Error == IL_UNKNOWN_ERROR) {
-		return (ILstring)"unknown error";
+		return "unknown error";
 	}
 	if (Error >= IL_INVALID_ENUM && Error <= IL_FILE_READ_ERROR) {
-		return (ILstring)iluErrorStrings[Error - IL_INVALID_ENUM];
+		return iluErrorStrings[Error - IL_INVALID_ENUM];
 	}
 	if (Error >= IL_LIB_GIF_ERROR && Error <= IL_LIB_MNG_ERROR) {
-		return (ILstring)iluLibErrorStrings[Error - IL_LIB_GIF_ERROR];
+		return iluLibErrorStrings[Error - IL_LIB_GIF_ERROR];
 	}
 
 	// Siigron: changed this from NULL to "no error"
-	return TEXT("no error");
+	return "no error";
+#else
+	if (ilIsDisabled(IL_USE_UNICODE)) {
+		if (Error == IL_NO_ERROR) {
+			return (ILstring)"no error";
+		}
+		if (Error == IL_UNKNOWN_ERROR) {
+			return (ILstring)"unknown error";
+		}
+		if (Error >= IL_INVALID_ENUM && Error <= IL_FILE_READ_ERROR) {
+			return (ILstring)iluErrorStrings[Error - IL_INVALID_ENUM];
+		}
+		if (Error >= IL_LIB_GIF_ERROR && Error <= IL_LIB_MNG_ERROR) {
+			return (ILstring)iluLibErrorStrings[Error - IL_LIB_GIF_ERROR];
+		}
+
+		return (ILstring)"no error";
+	}
+
+	// Now we are dealing with Unicode strings.
+	if (Error == IL_NO_ERROR) {
+		return L"no error";
+	}
+	if (Error == IL_UNKNOWN_ERROR) {
+		return L"unknown error";
+	}
+	if (Error >= IL_INVALID_ENUM && Error <= IL_FILE_READ_ERROR) {
+		return (ILstring)iluErrorStringsW[Error - IL_INVALID_ENUM];
+	}
+	if (Error >= IL_LIB_GIF_ERROR && Error <= IL_LIB_MNG_ERROR) {
+		return (ILstring)iluLibErrorStringsW[Error - IL_LIB_GIF_ERROR];
+	}
+
+	return L"no error";
+#endif
 }

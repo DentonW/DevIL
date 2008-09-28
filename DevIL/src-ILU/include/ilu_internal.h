@@ -2,6 +2,11 @@
 #ifndef INTERNAL_H
 #define INTERNAL_H
 
+// @TODO: REMOVE THIS!
+#pragma warning(disable : 4005)
+// Remove this if you need to compile without Unicode support.
+#define _UNICODE
+
 #include <string.h>
 
 #ifdef _MSC_VER
