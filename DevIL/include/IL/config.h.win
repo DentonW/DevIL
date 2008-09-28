@@ -36,6 +36,7 @@
 // #define IL_NO_TGA
 // #define IL_NO_TIF
 // #define IL_NO_WAL
+#define IL_NO_WDP
 // #define IL_NO_XPM
 #define IL_USE_JPEGLIB_UNMODIFIED 1
 

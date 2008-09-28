@@ -18,83 +18,116 @@
 
 ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 {
-	ILstring Ext;
+	ILstring	Ext;
+	ILenum		Type;
 
 #ifndef _UNICODE
 	if (FileName == NULL || strlen(FileName) < 1) {
 #else
+	ILint		Length;
+	wchar_t		*Temp = NULL;
 	if (FileName == NULL || wcslen(FileName) < 1) {
 #endif//_UNICODE
 		ilSetError(IL_INVALID_PARAM);
 		return IL_TYPE_UNKNOWN;
 	}
 
+//@TODO: I use this code segment multiple times, so convert it into a function.
+	// If DevIL is not compiled using _UNICODE, we can just pass FileName.
+	//  If it is compiled with _UNICODE and IL_USE_UNICODE is not set,
+	//  we have to convert the ANSI FileName to Unicode.
+#ifdef _UNICODE
+	// Code help from
+	//  https://buildsecurityin.us-cert.gov/daisy/bsi-rules/home/g1/769-BSI.html
+	if (ilIsDisabled(IL_USE_UNICODE)) {
+		Length = mbstowcs(NULL, (const char*)FileName, 0) + 1; // note error return of -1 is possible
+		if (Length == 0) {
+			ilSetError(IL_INVALID_PARAM);
+			return IL_FALSE;
+		}
+		if (Length > ULONG_MAX/sizeof(wchar_t)) {
+			ilSetError(IL_INTERNAL_ERROR);
+			return IL_FALSE;
+		}
+		Temp = (wchar_t*)ialloc(Length * sizeof(wchar_t));
+		mbstowcs(Temp, (const char*)FileName, Length); 
+		FileName = Temp;
+	}
+#endif//_UNICODE
+
 	//added 2003-08-31: fix sf bug 789535
 	Ext = iGetExtension(FileName);
-	if(Ext == NULL)
+	if (Ext == NULL)
 		return IL_TYPE_UNKNOWN;
 
 	if (!iStrCmp(Ext, IL_TEXT("tga")) || !iStrCmp(Ext, IL_TEXT("vda")) ||
 		!iStrCmp(Ext, IL_TEXT("icb")) || !iStrCmp(Ext, IL_TEXT("vst")))
-		return IL_TGA;
-	if (!iStrCmp(Ext, IL_TEXT("jpg")) || !iStrCmp(Ext, IL_TEXT("jpe")) || !iStrCmp(Ext, IL_TEXT("jpeg")))
-		return IL_JPG;
-	if (!iStrCmp(Ext, IL_TEXT("jp2")))
-		return IL_JP2;
-	if (!iStrCmp(Ext, IL_TEXT("dds")))
-		return IL_DDS;
-	if (!iStrCmp(Ext, IL_TEXT("png")))
-		return IL_PNG;
-	if (!iStrCmp(Ext, IL_TEXT("bmp")) || !iStrCmp(Ext, IL_TEXT("dib")))
-		return IL_BMP;
-	if (!iStrCmp(Ext, IL_TEXT("gif")))
-		return IL_GIF;
-	if (!iStrCmp(Ext, IL_TEXT("cut")))
-		return IL_CUT;
-	if (!iStrCmp(Ext, IL_TEXT("hdr")))
-		return IL_HDR;
-	if (!iStrCmp(Ext, IL_TEXT("ico")) || !iStrCmp(Ext, IL_TEXT("cur")))
-		return IL_ICO;
-	if (!iStrCmp(Ext, IL_TEXT("icns")))
-		return IL_ICNS;
-	if (!iStrCmp(Ext, IL_TEXT("jng")))
-		return IL_JNG;
-	if (!iStrCmp(Ext, IL_TEXT("lif")))
-		return IL_LIF;
-	if (!iStrCmp(Ext, IL_TEXT("mdl")))
-		return IL_MDL;
-	if (!iStrCmp(Ext, IL_TEXT("mng")) || !iStrCmp(Ext, IL_TEXT("jng")))
-		return IL_MNG;
-	if (!iStrCmp(Ext, IL_TEXT("pcd")))
-		return IL_PCD;
-	if (!iStrCmp(Ext, IL_TEXT("pcx")))
-		return IL_PCX;
-	if (!iStrCmp(Ext, IL_TEXT("pic")))
-		return IL_PIC;
-	if (!iStrCmp(Ext, IL_TEXT("pix")))
-		return IL_PIX;
-	if (!iStrCmp(Ext, IL_TEXT("pbm")) || !iStrCmp(Ext, IL_TEXT("pgm")) ||
+		Type = IL_TGA;
+	else if (!iStrCmp(Ext, IL_TEXT("jpg")) || !iStrCmp(Ext, IL_TEXT("jpe")) || !iStrCmp(Ext, IL_TEXT("jpeg")))
+		Type = IL_JPG;
+	else if (!iStrCmp(Ext, IL_TEXT("jp2")))
+		Type = IL_JP2;
+	else if (!iStrCmp(Ext, IL_TEXT("dds")))
+		Type = IL_DDS;
+	else if (!iStrCmp(Ext, IL_TEXT("png")))
+		Type = IL_PNG;
+	else if (!iStrCmp(Ext, IL_TEXT("bmp")) || !iStrCmp(Ext, IL_TEXT("dib")))
+		Type = IL_BMP;
+	else if (!iStrCmp(Ext, IL_TEXT("gif")))
+		Type = IL_GIF;
+	else if (!iStrCmp(Ext, IL_TEXT("cut")))
+		Type = IL_CUT;
+	else if (!iStrCmp(Ext, IL_TEXT("hdr")))
+		Type = IL_HDR;
+	else if (!iStrCmp(Ext, IL_TEXT("ico")) || !iStrCmp(Ext, IL_TEXT("cur")))
+		Type = IL_ICO;
+	else if (!iStrCmp(Ext, IL_TEXT("icns")))
+		Type = IL_ICNS;
+	else if (!iStrCmp(Ext, IL_TEXT("jng")))
+		Type = IL_JNG;
+	else if (!iStrCmp(Ext, IL_TEXT("lif")))
+		Type = IL_LIF;
+	else if (!iStrCmp(Ext, IL_TEXT("mdl")))
+		Type = IL_MDL;
+	else if (!iStrCmp(Ext, IL_TEXT("mng")) || !iStrCmp(Ext, IL_TEXT("jng")))
+		Type = IL_MNG;
+	else if (!iStrCmp(Ext, IL_TEXT("pcd")))
+		Type = IL_PCD;
+	else if (!iStrCmp(Ext, IL_TEXT("pcx")))
+		Type = IL_PCX;
+	else if (!iStrCmp(Ext, IL_TEXT("pic")))
+		Type = IL_PIC;
+	else if (!iStrCmp(Ext, IL_TEXT("pix")))
+		Type = IL_PIX;
+	else if (!iStrCmp(Ext, IL_TEXT("pbm")) || !iStrCmp(Ext, IL_TEXT("pgm")) ||
 		!iStrCmp(Ext, IL_TEXT("pnm")) || !iStrCmp(Ext, IL_TEXT("ppm")))
-		return IL_PNM;
-	if (!iStrCmp(Ext, IL_TEXT("psd")) || !iStrCmp(Ext, IL_TEXT("pdd")))
-		return IL_PSD;
-	if (!iStrCmp(Ext, IL_TEXT("psp")))
-		return IL_PSP;
-	if (!iStrCmp(Ext, IL_TEXT("pxr")))
-		return IL_PXR;
-	if (!iStrCmp(Ext, IL_TEXT("sgi")) || !iStrCmp(Ext, IL_TEXT("bw")) ||
+		Type = IL_PNM;
+	else if (!iStrCmp(Ext, IL_TEXT("psd")) || !iStrCmp(Ext, IL_TEXT("pdd")))
+		Type = IL_PSD;
+	else if (!iStrCmp(Ext, IL_TEXT("psp")))
+		Type = IL_PSP;
+	else if (!iStrCmp(Ext, IL_TEXT("pxr")))
+		Type = IL_PXR;
+	else if (!iStrCmp(Ext, IL_TEXT("sgi")) || !iStrCmp(Ext, IL_TEXT("bw")) ||
 		!iStrCmp(Ext, IL_TEXT("rgb")) || !iStrCmp(Ext, IL_TEXT("rgba")))
-		return IL_SGI;
-	if (!iStrCmp(Ext, IL_TEXT("tif")) || !iStrCmp(Ext, IL_TEXT("tiff")))
-		return IL_TIF;
-	if (!iStrCmp(Ext, IL_TEXT("wal")))
-		return IL_WAL;
-	if (!iStrCmp(Ext, IL_TEXT("wdp")) || !iStrCmp(Ext, IL_TEXT("hdp")))
-		return IL_WDP;
-	if (!iStrCmp(Ext, IL_TEXT("xpm")))
-		return IL_XPM;
+		Type = IL_SGI;
+	else if (!iStrCmp(Ext, IL_TEXT("tif")) || !iStrCmp(Ext, IL_TEXT("tiff")))
+		Type = IL_TIF;
+	else if (!iStrCmp(Ext, IL_TEXT("wal")))
+		Type = IL_WAL;
+	else if (!iStrCmp(Ext, IL_TEXT("wdp")) || !iStrCmp(Ext, IL_TEXT("hdp")))
+		Type = IL_WDP;
+	else if (!iStrCmp(Ext, IL_TEXT("xpm")))
+		Type = IL_XPM;
+	else
+		Type = IL_TYPE_UNKNOWN;
 
-	return IL_TYPE_UNKNOWN;
+#ifdef _UNICODE
+	if (ilIsDisabled(IL_USE_UNICODE))
+		ifree(Temp);
+#endif//_UNICODE
+
+	return Type;
 }
 
 
@@ -554,6 +587,12 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, ILvoid *Lump, ILuint Size)
 
 ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 {
+	ILboolean	bRet;
+#ifdef _UNICODE
+	ILint		Length;
+	wchar_t		*Temp = NULL;
+#endif//_UNICODE
+
 #ifndef _UNICODE
 	if (FileName == NULL || strlen(FileName) < 1) {
 #else
@@ -563,172 +602,234 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 		return IL_FALSE;
 	}
 
+	// If DevIL is not compiled using _UNICODE, we can just pass FileName.
+	//  If it is compiled with _UNICODE and IL_USE_UNICODE is not set,
+	//  we have to convert the ANSI FileName to Unicode.
+#ifdef _UNICODE
+	// Code help from
+	//  https://buildsecurityin.us-cert.gov/daisy/bsi-rules/home/g1/769-BSI.html
+	if (ilIsDisabled(IL_USE_UNICODE)) {
+		Length = mbstowcs(NULL, (const char*)FileName, 0) + 1; // note error return of -1 is possible
+		if (Length == 0) {
+			ilSetError(IL_INVALID_PARAM);
+			return IL_FALSE;
+		}
+		if (Length > ULONG_MAX/sizeof(wchar_t)) {
+			ilSetError(IL_INTERNAL_ERROR);
+			return IL_FALSE;
+		}
+		Temp = (wchar_t*)ialloc(Length * sizeof(wchar_t));
+		mbstowcs(Temp, (const char*)FileName, Length); 
+		FileName = Temp;
+	}
+#endif//_UNICODE
+
 	switch (Type)
 	{
 		case IL_TYPE_UNKNOWN:
-			return ilLoadImage(FileName);
+			bRet = ilLoadImage(FileName);
+			break;
 
 		#ifndef IL_NO_TGA
 		case IL_TGA:
-			return ilLoadTarga(FileName);
+			bRet = ilLoadTarga(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_JPG
 		case IL_JPG:
-			return ilLoadJpeg(FileName);
+			bRet = ilLoadJpeg(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_JP2
 		case IL_JP2:
-			return ilLoadJp2(FileName);
+			bRet = ilLoadJp2(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_DDS
 		case IL_DDS:
-			return ilLoadDds(FileName);
+			bRet = ilLoadDds(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_PNG
 		case IL_PNG:
-			return ilLoadPng(FileName);
+			bRet = ilLoadPng(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_BMP
 		case IL_BMP:
-			return ilLoadBmp(FileName);
+			bRet = ilLoadBmp(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_GIF
 		case IL_GIF:
-			return ilLoadGif(FileName);
+			bRet = ilLoadGif(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_HDR
 		case IL_HDR:
-			return ilLoadHdr(FileName);
+			bRet = ilLoadHdr(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_CUT
 		case IL_CUT:
-			return ilLoadCut(FileName);
+			bRet = ilLoadCut(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_DOOM
 		case IL_DOOM:
-			return ilLoadDoom(FileName);
+			bRet = ilLoadDoom(FileName);
+			break;
 		case IL_DOOM_FLAT:
-			return ilLoadDoomFlat(FileName);
+			bRet = ilLoadDoomFlat(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_ICO
 		case IL_ICO:
-			return ilLoadIcon(FileName);
+			bRet = ilLoadIcon(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_ICNS
 		case IL_ICNS:
-			return ilLoadIcns(FileName);
+			bRet = ilLoadIcns(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_LIF
 		case IL_LIF:
-			return ilLoadLif(FileName);
+			bRet = ilLoadLif(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_MDL
 		case IL_MDL:
-			return ilLoadMdl(FileName);
+			bRet = ilLoadMdl(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_MNG
 		case IL_MNG:
-			return ilLoadMng(FileName);
+			bRet = ilLoadMng(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_PCD
 		case IL_PCD:
-			return IL_FALSE;//ilLoadPcd(FileName);
+			bRet = IL_FALSE;//ilLoadPcd(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_PCX
 		case IL_PCX:
-			return ilLoadPcx(FileName);
+			bRet = ilLoadPcx(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_PIC
 		case IL_PIC:
-			return ilLoadPic(FileName);
+			bRet = ilLoadPic(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_PIX
 		case IL_PIX:
-			return ilLoadPix(FileName);
+			bRet = ilLoadPix(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_PNM
 		case IL_PNM:
-			return ilLoadPnm(FileName);
+			bRet = ilLoadPnm(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_PSD
 		case IL_PSD:
-			return ilLoadPsd(FileName);
+			bRet = ilLoadPsd(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_PSP
 		case IL_PSP:
-			return ilLoadPsp(FileName);
+			bRet = ilLoadPsp(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_PXR
 		case IL_PXR:
-			return ilLoadPxr(FileName);
+			bRet = ilLoadPxr(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_RAW
 		case IL_RAW:
-			return ilLoadRaw(FileName);
+			bRet = ilLoadRaw(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_SGI
 		case IL_SGI:
-			return ilLoadSgi(FileName);
+			bRet = ilLoadSgi(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_TIF
 		case IL_TIF:
 			//#ifndef _UNICODE
-				return ilLoadTiff(FileName);
+				bRet = ilLoadTiff(FileName);
 			//#else
 			//	wcstombs(AnsiName, FileName, 512);
 			//	//WideCharToMultiByte(CP_ACP, 0, FileName, -1, AnsiName, 512, NULL, NULL);
 			//	return ilLoadTiff(AnsiName);
 			//#endif//_UNICODE
+			break;
 		#endif
 
 		#ifndef IL_NO_WAL
 		case IL_WAL:
-			return ilLoadWal(FileName);
+			bRet = ilLoadWal(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_XPM
 		case IL_XPM:
-			return ilLoadXpm(FileName);
+			bRet = ilLoadXpm(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_WDP
 		case IL_WDP:
-			return ilLoadWdp(FileName);
+			bRet = ilLoadWdp(FileName);
+			break;
 		#endif
 
 		#ifndef IL_NO_EXR
 		case IL_EXR:
-			return ilLoadExr(FileName);
+			bRet = ilLoadExr(FileName);
+			break;
 		#endif
+
+		default:
+			ilSetError(IL_INVALID_ENUM);
+			bRet = IL_FALSE;
 	}
 
-	ilSetError(IL_INVALID_ENUM);
-	return IL_FALSE;
+#ifdef _UNICODE
+	if (ilIsDisabled(IL_USE_UNICODE))
+		ifree(Temp);
+#endif//_UNICODE
+
+	return bRet;
 }
 
 
@@ -1068,7 +1169,7 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 	ILboolean	bRet = IL_FALSE;
 #ifdef _UNICODE
 	ILint		Length;
-	wchar_t		*Temp;
+	wchar_t		*Temp = NULL;
 #endif//_UNICODE
 
 	if (iCurImage == NULL) {
@@ -1102,7 +1203,7 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 			return IL_FALSE;
 		}
 		Temp = (wchar_t*)ialloc(Length * sizeof(wchar_t));
-		mbstowcs(Temp, FileName, Length); 
+		mbstowcs(Temp, (const char*)FileName, Length); 
 		FileName = Temp;
 	}
 #endif//_UNICODE
@@ -1132,12 +1233,12 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 
 		#ifndef IL_NO_JP2
 		// @TODO: Get JasPer to use Unicode filenames.
-		if (ilIsDisabled(IL_USE_UNICODE)) {
+		//if (ilIsDisabled(IL_USE_UNICODE)) {
 			if (!iStrCmp(Ext, IL_TEXT("jp2"))) {
 				bRet = ilLoadJp2(FileName);
 				goto finish;
 			}
-		}
+		//}
 		#endif
 
 		#ifndef IL_NO_DDS
@@ -1613,7 +1714,7 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 	ILboolean	bRet = IL_FALSE;
 #ifdef _UNICODE
 	ILint		Length;
-	wchar_t		*Temp;
+	wchar_t		*Temp = NULL;
 #endif//_UNICODE
 
 	if (iCurImage == NULL) {
@@ -1638,7 +1739,7 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 			return IL_FALSE;
 		}
 		Temp = (wchar_t*)ialloc(Length * sizeof(wchar_t));
-		mbstowcs(Temp, FileName, Length); 
+		mbstowcs(Temp, (const char*)FileName, Length); 
 		FileName = Temp;
 	}
 

@@ -273,6 +273,7 @@ ILboolean ilIsValidJpg(ILconst_string FileName);
 ILboolean ilIsValidJpgF(ILHANDLE File);
 ILboolean ilIsValidJpgL(const ILvoid *Lump, ILuint Size);
 ILboolean ilLoadJp2(ILconst_string FileName);
+ILboolean ilLoadJp2F(ILHANDLE File);
 ILboolean ilLoadJp2L(const ILvoid *Lump, ILuint Size);
 ILboolean ilLoadJp2LInternal(const ILvoid *Lump, ILuint Size, ILimage *Image);
 ILboolean ilLoadJpeg(ILconst_string FileName);

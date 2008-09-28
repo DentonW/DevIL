@@ -9,6 +9,8 @@
 - Changed MSVC++ 2005 project to link with static MSVCRT library.
 - Added patch by SF user robin_charlton for Windows BMP support in ILUT.
 - Added preliminary Microsoft HD Photo support.
+- Changed DevIL to use Unicode internally.  Now IL_USE_UNICODE must be set to use Unicode strings.
+- Changed .jp2 loading so that file streams can now be loaded.
 
 1.7.2
 ---
