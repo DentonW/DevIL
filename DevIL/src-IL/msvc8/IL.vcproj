@@ -22,7 +22,7 @@
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="2"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -74,7 +74,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib IlmImf.lib half.lib imath.lib iex.lib ilmthread.lib"
+				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib"
 				OutputFile="../../lib/vc8/debug/DevIL.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -123,7 +123,7 @@
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="2"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -177,7 +177,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/NODEFAULTLIB:msvcrtd.lib"
-				AdditionalDependencies="comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib libcmt.lib libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib IlmImf.lib half.lib imath.lib iex.lib ilmthread.lib"
+				AdditionalDependencies="comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib libcmt.lib libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib"
 				OutputFile="../../lib/vc8/DevIL.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

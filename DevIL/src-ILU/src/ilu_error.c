@@ -14,7 +14,7 @@
 #include "ilu_internal.h"
 
 #ifdef _UNICODE
-#include <tchar.h>
+//#include <tchar.h>
 ILconst_string iluErrorStringsW[IL_FILE_READ_ERROR - IL_INVALID_ENUM + 1] = {
 	L"invalid enumerant",
     L"out of memory",

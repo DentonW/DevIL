@@ -55,7 +55,7 @@ ILboolean ILAPIENTRY ilRegisterLoad(ILconst_string Ext, IL_LOADPROC Load) {
 #ifndef _UNICODE
 	NewNode->Ext = ilStrDup(Ext);
 #else
-	NewNode->Ext = _wcsdup(Ext);
+	NewNode->Ext = wcsdup(Ext);
 #endif//_UNICODE
 	NewNode->Load = Load;
 	NewNode->Next = NULL;
@@ -97,7 +97,7 @@ ILboolean ILAPIENTRY ilRegisterSave(ILconst_string Ext, IL_SAVEPROC Save)
 #ifndef _UNICODE
 	NewNode->Ext = ilStrDup(Ext);
 #else
-	NewNode->Ext = _wcsdup(Ext);
+	NewNode->Ext = wcsdup(Ext);
 #endif//_UNICODE
 	NewNode->Save = Save;
 	NewNode->Next = NULL;

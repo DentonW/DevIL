@@ -81,7 +81,7 @@ int main(int argc, char** argv)
 
 
 //
-// fixed to get the right numbers frpm the right library call...
+// fixed to get the right numbers from the right library call...
 //
 	if (ilGetInteger(IL_VERSION_NUM) < IL_VERSION ||
 		iluGetInteger(ILU_VERSION_NUM) < ILU_VERSION ||
@@ -104,7 +104,7 @@ int main(int argc, char** argv)
 	
 	// Bind this image name.
 	ilBindImage (ImgId);
-	
+
 	// Loads the image specified by File into the ImgId image.
 	if (!ilLoadImage (FileName)) {
 		HandleDevILErrors ();

@@ -20,6 +20,10 @@
 
 //#define	WIN32_LEAN_AND_MEAN
 
+#ifdef HAVE_CONFIG_H
+#include <IL/config.h>
+#endif
+
 #include <string.h>
 
 #ifdef _WIN32
@@ -39,10 +43,6 @@
 	#endif // _MSC_VER > 1000
 #endif
 */
-
-#ifdef HAVE_CONFIG_H
-#include <IL/config.h>
-#endif
 
 #include <IL/ilut.h>
 #include <IL/devil_internal_exports.h>

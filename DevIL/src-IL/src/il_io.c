@@ -1747,6 +1747,7 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 
 	if (FileName == NULL || wcslen(FileName) < 1 || Ext == NULL) {
 #else
+	Ext = iGetExtension(FileName);
 	if (FileName == NULL || strlen(FileName) < 1 || Ext == NULL) {
 #endif//_UNICODE
 		ilSetError(IL_INVALID_PARAM);

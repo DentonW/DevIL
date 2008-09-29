@@ -13,10 +13,13 @@
 #define INTERNAL_H
 #define _IL_BUILD_LIBRARY
 
-// @TODO: REMOVE THIS!
-#pragma warning(disable : 4005)
-// Remove this if you need to compile without Unicode support.
-#define _UNICODE
+// Local headers
+#if defined(_WIN32) && !defined(HAVE_CONFIG_H)
+#define HAVE_CONFIG_H
+#endif
+#ifdef HAVE_CONFIG_H
+	#include <IL/config.h>
+#endif
 
 // Standard headers
 #include <stdlib.h>
@@ -28,13 +31,6 @@
 extern "C" {
 #endif
 
-// Local headers
-#if defined(_WIN32) && !defined(HAVE_CONFIG_H)
-#define HAVE_CONFIG_H
-#endif
-#ifdef HAVE_CONFIG_H
-	#include <IL/config.h>
-#endif
 #include <IL/il.h>
 #include <IL/devil_internal_exports.h>
 #include "il_files.h"
@@ -78,11 +74,18 @@ extern "C" {
 	#define IL_TEXT(s) (s)
 	#define TEXT(s) (s)
 #endif*/
+
 #ifdef _UNICODE
 	#define IL_TEXT(s) L##s
+	#ifndef _WIN32  // At least in Linux, fopen works fine, and wcsicmp is not defined.
+		#define wcsicmp wcsncasecmp
+		#define _wcsicmp wcsncasecmp
+		#define _wfopen fopen
+	#endif
 #else
 	#define IL_TEXT(s) (s)
 #endif
+
 #ifdef IL_INLINE_ASM
 	#ifdef _MSC_VER  // MSVC++ only
 		#define USE_WIN32_ASM
@@ -179,7 +182,7 @@ char *iGetString(ILenum StringName);  // Internal version of ilGetString
 			#ifndef IL_DEBUG
 				//pragma comment(lib, "libjpeg.lib")
 			#else
-				//ragma comment(lib, "debug/libjpeg.lib")
+				//pragma comment(lib, "debug/libjpeg.lib")
 			#endif
 		#endif
 	#endif
