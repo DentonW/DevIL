@@ -42,6 +42,7 @@ typedef struct IL_STATES
 	ILboolean	ilOverWriteFiles;
 	// String states
 	ILboolean	ilUseUnicode;
+	ILboolean	ilUseUtf16Filenames;
 	// Palette states
 	ILboolean	ilAutoConvPal;
 	// Load fail states

@@ -131,8 +131,8 @@ typedef void           ILvoid;
 #define IL_MAX_INT		  		INT_MAX
 #define IL_MAX_UNSIGNED_INT   	UINT_MAX
 
-#define limit(x,m,M)	(x<m?m:(x>M?M:x))
-#define clamp(x) 		limit(x,0,1)
+#define IL_LIMIT(x,m,M)		(x<m?m:(x>M?M:x))
+#define IL_CLAMP(x) 		IL_LIMIT(x,0,1)
 
 #define IL_VENDOR   0x1F00
 #define IL_LOAD_EXT 0x1F01
@@ -264,25 +264,27 @@ typedef void           ILvoid;
 
 
 // String handling
-#define IL_USE_UNICODE		0x626
+#define IL_UNICODE			0x626
+#define IL_UTF16_FILENAMES	0x627
+#define IL_UTF8_FILENAMES	0x628
 
 
 // Palette definitions
-#define IL_CONV_PAL 0x0630
+#define IL_CONV_PAL			0x0630
 
 
 // Load fail definitions
-#define IL_DEFAULT_ON_FAIL 0x0632
+#define IL_DEFAULT_ON_FAIL	0x0632
 
 
 // Key colour definitions
-#define IL_USE_KEY_COLOUR 0x0635
-#define IL_USE_KEY_COLOR  0x0635
+#define IL_USE_KEY_COLOUR	0x0635
+#define IL_USE_KEY_COLOR	0x0635
 
 
 // Interlace definitions
-#define IL_SAVE_INTERLACED 0x0639
-#define IL_INTERLACE_MODE  0x063A
+#define IL_SAVE_INTERLACED	0x0639
+#define IL_INTERLACE_MODE	0x063A
 
 
 // Quantization definitions

@@ -11,6 +11,7 @@
 - Added preliminary Microsoft HD Photo support.
 - Changed DevIL to use Unicode internally.  Now IL_USE_UNICODE must be set to use Unicode strings.
 - Changed .jp2 loading so that file streams can now be loaded.
+- Changed limit/clamp in il.h to IL_LIMIT/IL_CLAMP.
 
 1.7.2
 ---

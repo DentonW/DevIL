@@ -206,10 +206,10 @@ ILboolean iRegisterLoad(ILconst_string FileName)
 		return IL_FALSE;
 
 	while (TempNode != NULL) {
-#ifndef _UNICODE
-		if (!stricmp(Ext, TempNode->Ext)) {
-#else
+#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
 		if (_wcsicmp(Ext, TempNode->Ext)) {
+#else	
+		if (!stricmp(Ext, TempNode->Ext)) {
 #endif//_UNICODE
 			Error = TempNode->Load(FileName);
 			if (Error == IL_NO_ERROR || Error == 0) {  // 0 and IL_NO_ERROR are both valid.
@@ -237,10 +237,10 @@ ILboolean iRegisterSave(ILconst_string FileName)
 		return IL_FALSE;
 
 	while (TempNode != NULL) {
-#ifndef _UNICODE
-		if (!stricmp(Ext, TempNode->Ext)) {
-#else
+#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
 		if (_wcsicmp(Ext, TempNode->Ext)) {
+#else
+		if (!stricmp(Ext, TempNode->Ext)) {
 #endif//_UNICODE
 			Error = TempNode->Save(FileName);
 			if (Error == IL_NO_ERROR || Error == 0) {  // 0 and IL_NO_ERROR are both valid.

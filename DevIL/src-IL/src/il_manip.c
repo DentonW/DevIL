@@ -746,7 +746,7 @@ ILboolean ILAPIENTRY ilSetAlpha( ILdouble AlphaValue ) {
         return IL_FALSE;
     }
     
-    AlphaValue = clamp(AlphaValue);
+    AlphaValue = IL_CLAMP(AlphaValue);
     
     switch( image->Format ) {
             case IL_RGB:

@@ -93,7 +93,12 @@ ILHANDLE ILAPIENTRY iDefaultOpenR(ILconst_string FileName)
 #ifndef _UNICODE
 	return (ILHANDLE)fopen(FileName, "rb");
 #else
-	return (ILHANDLE)_wfopen(FileName, L"rb");
+	// fopen in Windows 
+	#ifdef IL_USE_UTF16_FILENAMES
+		return (ILHANDLE)_wfopen(FileName, L"rb");
+	#else
+		return (ILHANDLE)fopen((char*)FileName, "rb");
+	#endif
 #endif//UNICODE
 }
 

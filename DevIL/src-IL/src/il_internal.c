@@ -41,7 +41,8 @@ ILimage *iCurImage = NULL;
 	}
 #endif /* _WIN32 */
 
-#ifdef _UNICODE //_WIN32_WCE
+//#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES)) //_WIN32_WCE
+#ifdef _UNICODE
 	int iStrCmp(ILconst_string src1, ILconst_string src2)
 	{
 		return wcsicmp(src1, src2);
@@ -86,7 +87,7 @@ ILboolean iCheckExtension(ILconst_string Arg, ILconst_string Ext)
 {
 	ILboolean PeriodFound = IL_FALSE;
 	ILint i;
-#ifndef _UNICODE
+#if (!defined(_UNICODE) || !defined(IL_USE_UTF16_FILENAMES))
 	char *Argu = (char*)Arg;  // pointer to arg so we don't destroy arg
 
 	if (Arg == NULL || Ext == NULL || !strlen(Arg) || !strlen(Ext))  // if not a good filename/extension, exit early
@@ -141,6 +142,7 @@ ILboolean iCheckExtension(ILconst_string Arg, ILconst_string Ext)
 ILstring iGetExtension(ILconst_string FileName)
 {
 	ILboolean PeriodFound = IL_FALSE;
+//#if (!defined(_UNICODE) || !defined(IL_USE_UTF16_FILENAMES))
 #ifndef _UNICODE
 	char *Ext = (char*)FileName;
 	ILint i, Len = strlen(FileName);
@@ -172,12 +174,11 @@ ILstring iGetExtension(ILconst_string FileName)
 // Checks if the file exists
 ILboolean iFileExists(ILconst_string FileName)
 {
-#ifndef _UNICODE
+#if (!defined(_UNICODE) || !defined(IL_USE_UTF16_FILENAMES))
 	FILE *CheckFile = fopen(FileName, "rb");
 #else
 	FILE *CheckFile = _wfopen(FileName, L"rb");
 #endif//_UNICODE
-
 
 	if (CheckFile) {
 		fclose(CheckFile);

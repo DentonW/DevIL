@@ -51,6 +51,7 @@ ILvoid ilDefaultStates()
 	ilStates[ilCurrentPos].ilCompression = IL_COMPRESS_ZLIB;
 	ilStates[ilCurrentPos].ilInterlace = IL_FALSE;
 	ilStates[ilCurrentPos].ilUseUnicode = IL_FALSE;
+	ilStates[ilCurrentPos].ilUseUtf16Filenames = IL_FALSE;
 
 	ilStates[ilCurrentPos].ilTgaCreateStamp = IL_FALSE;
 	ilStates[ilCurrentPos].ilJpgQuality = 99;
@@ -241,8 +242,11 @@ ILboolean ilAble(ILenum Mode, ILboolean Flag)
 		case IL_SAVE_INTERLACED:
 			ilStates[ilCurrentPos].ilInterlace = Flag;
 			break;
-		case IL_USE_UNICODE:
+		case IL_UNICODE:
 			ilStates[ilCurrentPos].ilUseUnicode = Flag;
+			break;
+		case IL_UTF16_FILENAMES:
+			ilStates[ilCurrentPos].ilUseUtf16Filenames = Flag;
 			break;
 
 		default:
@@ -275,8 +279,10 @@ ILboolean ILAPIENTRY ilIsEnabled(ILenum Mode)
 			return ilStates[ilCurrentPos].ilUseKeyColour;
 		case IL_SAVE_INTERLACED:
 			return ilStates[ilCurrentPos].ilInterlace;
-		case IL_USE_UNICODE:
+		case IL_UNICODE:
 			return ilStates[ilCurrentPos].ilUseUnicode;
+		case IL_UTF16_FILENAMES:
+			return ilStates[ilCurrentPos].ilUseUtf16Filenames;
 
 		default:
 			ilSetError(IL_INVALID_ENUM);

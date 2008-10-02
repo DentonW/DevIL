@@ -94,7 +94,7 @@ ILstring ILAPIENTRY iluErrorString(ILenum Error)
 	// Siigron: changed this from NULL to "no error"
 	return "no error";
 #else
-	if (ilIsDisabled(IL_USE_UNICODE)) {
+	if (ilIsDisabled(IL_UNICODE)) {
 		if (Error == IL_NO_ERROR) {
 			return (ILstring)"no error";
 		}

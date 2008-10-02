@@ -3,6 +3,9 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
+/* Text handling */
+#define IL_USE_UTF16  // Windows uses UTF16 internally, while Linux-based systems use UTF8.
+
 /* Supported images formats (il) */
 
 // #define IL_NO_BMP
@@ -11,7 +14,7 @@
 // #define IL_NO_DCX
 // #define IL_NO_DDS
 // #define IL_NO_DOOM
-// #define IL_NO_EXR
+#define IL_NO_EXR
 // #define IL_NO_GIF
 // #define IL_NO_HDR
 // #define IL_NO_ICO

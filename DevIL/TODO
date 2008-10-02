@@ -10,6 +10,7 @@ Denton:
 - Linking against debug OpenEXR in release DevIL will crash and vice-versa.
 - Add .hdr saving.
 - Add .ico/.icns saving.
+- Write own .exr routines.
 - Add .exr saving.
 - Add .jp2 saving.
 - Fix Daniel's suggestions.

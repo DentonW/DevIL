@@ -1681,7 +1681,7 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 				case IL_FLOAT:
 					for (i = 0; i < Size; i++) {
 						#if CLAMP_FLOATS
-							tempFloat = clamp(((ILfloat*)Buffer)[i]);
+							tempFloat = IL_CLAMP(((ILfloat*)Buffer)[i]);
 							BytePtr[i] = (ILubyte)(tempFloat * UCHAR_MAX);
 						#else
 							BytePtr[i] = (ILubyte)( ((ILfloat*)Buffer)[i] * UCHAR_MAX);
@@ -1692,7 +1692,7 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 					for (i = 0; i < Size; i++) {
 						#if CLAMP_HALF
 							*((ILuint*)&tempFloat) = ilHalfToFloat(((ILushort*)Buffer)[i]);
-							tempFloat = clamp(tempFloat);					
+							tempFloat = IL_CLAMP(tempFloat);					
 							BytePtr[i] = (ILubyte)(tempFloat * UCHAR_MAX);
 						#else
 						*((ILuint*)&tempFloat) = ilHalfToFloat(((ILushort*)Buffer)[i]);
@@ -1703,7 +1703,7 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 				case IL_DOUBLE:
 					for (i = 0; i < Size; i++) {
 						#if CLAMP_DOUBLES
-							tempDouble = clamp(((ILdouble*)Buffer)[i]);
+							tempDouble = IL_CLAMP(((ILdouble*)Buffer)[i]);
 							BytePtr[i] = (ILubyte)(tempDouble * UCHAR_MAX);
 						#else
 							BytePtr[i] = (ILubyte)( ((ILdouble*)Buffer)[i] * UCHAR_MAX);
@@ -1733,7 +1733,7 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 				case IL_FLOAT:
 					for (i = 0; i < Size; i++) {
 						#if CLAMP_FLOATS
-							tempFloat = clamp(((ILfloat*)Buffer)[i]);
+							tempFloat = IL_CLAMP(((ILfloat*)Buffer)[i]);
 							ShortPtr[i] = (ILushort)(tempFloat * USHRT_MAX);
 						#else
 							ShortPtr[i] = (ILushort)( ((ILfloat*)Buffer)[i] * USHRT_MAX);
@@ -1744,7 +1744,7 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 					for (i = 0; i < Size; i++) {
 						#if CLAMP_FLOATS
 							*((ILuint*)&tempFloat) = ilHalfToFloat(((ILushort*)Buffer)[i]);
-							tempFloat = clamp(tempFloat);					
+							tempFloat = IL_CLAMP(tempFloat);					
 							ShortPtr[i] = (ILushort)(tempFloat * USHRT_MAX);
 						#else
 							*((ILuint*)&tempFloat) = ilHalfToFloat(((ILushort*)Buffer)[i]);
@@ -1755,7 +1755,7 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 				case IL_DOUBLE:
 					for (i = 0; i < Size; i++) {
 						#if CLAMP_DOUBLES
-							tempDouble = clamp(((ILdouble*)Buffer)[i]);
+							tempDouble = IL_CLAMP(((ILdouble*)Buffer)[i]);
 							ShortPtr[i] = (ILushort)(tempDouble * USHRT_MAX);
 						#else
 							ShortPtr[i] = (ILushort)( ((ILdouble*)Buffer)[i] * USHRT_MAX);
@@ -1785,7 +1785,7 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 				case IL_FLOAT:
 					for (i = 0; i < Size; i++) {
 						#if CLAMP_FLOATS
-							tempFloat = clamp(((ILfloat*)Buffer)[i]);
+							tempFloat = IL_CLAMP(((ILfloat*)Buffer)[i]);
 							IntPtr[i] = (ILuint)(tempFloat * UINT_MAX);
 						#else
 							IntPtr[i] = (ILuint)( ((ILfloat*)Buffer)[i] * UINT_MAX);
@@ -1796,7 +1796,7 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 					for (i = 0; i < Size; i++) {
 						#if CLAMP_FLOATS
 							*((ILuint*)&tempFloat) = ilHalfToFloat(((ILushort*)Buffer)[i]);
-							tempFloat = clamp(tempFloat);					
+							tempFloat = IL_CLAMP(tempFloat);					
 							IntPtr[i] = (ILuint)(tempFloat * UINT_MAX);
 						#else
 						*((ILuint*)&tempFloat) = ilHalfToFloat(((ILushort*)Buffer)[i]);
@@ -1807,7 +1807,7 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 				case IL_DOUBLE:
 					for (i = 0; i < Size; i++) {
 						#if CLAMP_DOUBLES
-							tempDouble = clamp(((ILdouble*)Buffer)[i]);
+							tempDouble = IL_CLAMP(((ILdouble*)Buffer)[i]);
 							IntPtr[i] = (ILuint)(tempDouble * UINT_MAX);
 						#else
 							IntPtr[i] = (ILuint)( ((ILdouble*)Buffer)[i] * UINT_MAX);

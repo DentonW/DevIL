@@ -16,49 +16,72 @@
 #include <string.h>
 
 
+// Note A: If DevIL is not compiled using _UNICODE, we can just pass FileName.
+//  If it is compiled with _UNICODE and IL_UNICODE/IL_UTF16_FILENAMES are not set,
+//  we have to convert the ANSI FileName to Unicode.
+
+
+// Returns a widened version of a string.
+// Make sure to free this after it is used.  Code help from
+//  https://buildsecurityin.us-cert.gov/daisy/bsi-rules/home/g1/769-BSI.html
+#if defined(_UNICODE)
+wchar_t *WideFromMultiByte(const char *Multi)
+{
+	ILint	Length;
+	wchar_t	*Temp;
+
+	Length = mbstowcs(NULL, (const char*)Multi, 0) + 1; // note error return of -1 is possible
+	if (Length == 0) {
+		ilSetError(IL_INVALID_PARAM);
+		return NULL;
+	}
+	if (Length > ULONG_MAX/sizeof(wchar_t)) {
+		ilSetError(IL_INTERNAL_ERROR);
+		return NULL;
+	}
+	Temp = (wchar_t*)ialloc(Length * sizeof(wchar_t));
+	mbstowcs(Temp, (const char*)Multi, Length); 
+
+	return Temp;
+}
+#endif
+
+
 ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 {
-	ILstring	Ext;
 	ILenum		Type;
+	ILstring	Ext;
 
-#ifndef _UNICODE
-	if (FileName == NULL || strlen(FileName) < 1) {
-#else
-	ILint		Length;
+#if defined(_UNICODE)
 	wchar_t		*Temp = NULL;
 	if (FileName == NULL || wcslen(FileName) < 1) {
+#else
+	char		*Temp = NULL;
+	if (FileName == NULL || strlen((char*)FileName) < 1) {
 #endif//_UNICODE
 		ilSetError(IL_INVALID_PARAM);
 		return IL_TYPE_UNKNOWN;
 	}
 
-//@TODO: I use this code segment multiple times, so convert it into a function.
-	// If DevIL is not compiled using _UNICODE, we can just pass FileName.
-	//  If it is compiled with _UNICODE and IL_USE_UNICODE is not set,
-	//  we have to convert the ANSI FileName to Unicode.
-#ifdef _UNICODE
-	// Code help from
-	//  https://buildsecurityin.us-cert.gov/daisy/bsi-rules/home/g1/769-BSI.html
-	if (ilIsDisabled(IL_USE_UNICODE)) {
-		Length = mbstowcs(NULL, (const char*)FileName, 0) + 1; // note error return of -1 is possible
-		if (Length == 0) {
-			ilSetError(IL_INVALID_PARAM);
-			return IL_FALSE;
-		}
-		if (Length > ULONG_MAX/sizeof(wchar_t)) {
-			ilSetError(IL_INTERNAL_ERROR);
-			return IL_FALSE;
-		}
-		Temp = (wchar_t*)ialloc(Length * sizeof(wchar_t));
-		mbstowcs(Temp, (const char*)FileName, Length); 
+	// See Note A
+#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
+	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
+		Temp = WideFromMultiByte(FileName);
 		FileName = Temp;
 	}
+	Ext = iGetExtension(FileName);
+#elif (defined(_UNICODE) && !defined(IL_USE_UTF16_FILENAMES))
+	Temp = WideFromMultiByte(FileName);
+	Ext = iGetExtension(Temp);
+#else
+	Ext = iGetExtension(FileName);
 #endif//_UNICODE
 
 	//added 2003-08-31: fix sf bug 789535
-	Ext = iGetExtension(FileName);
-	if (Ext == NULL)
+	if (Ext == NULL) {
+		ifree(Temp);
 		return IL_TYPE_UNKNOWN;
+	}
 
 	if (!iStrCmp(Ext, IL_TEXT("tga")) || !iStrCmp(Ext, IL_TEXT("vda")) ||
 		!iStrCmp(Ext, IL_TEXT("icb")) || !iStrCmp(Ext, IL_TEXT("vst")))
@@ -122,9 +145,11 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 	else
 		Type = IL_TYPE_UNKNOWN;
 
-#ifdef _UNICODE
-	if (ilIsDisabled(IL_USE_UNICODE))
+#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
+	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES))
 		ifree(Temp);
+#elif (defined(_UNICODE) && !defined(IL_USE_UTF16_FILENAMES))
+	ifree(Temp);
 #endif//_UNICODE
 
 	return Type;
@@ -240,7 +265,8 @@ ILenum ILAPIENTRY ilDetermineTypeF(ILHANDLE File)
 }
 
 
-ILenum ilDetermineTypeL( const ILvoid *Lump, ILuint Size) {
+ILenum ilDetermineTypeL(const ILvoid *Lump, ILuint Size)
+{
 	if (Lump == NULL)
 		return IL_TYPE_UNKNOWN;
 
@@ -589,37 +615,20 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 {
 	ILboolean	bRet;
 #ifdef _UNICODE
-	ILint		Length;
 	wchar_t		*Temp = NULL;
-#endif//_UNICODE
-
-#ifndef _UNICODE
-	if (FileName == NULL || strlen(FileName) < 1) {
-#else
 	if (FileName == NULL || wcslen(FileName) < 1) {
+#else
+	char *Temp = NULL;
+	if (FileName == NULL || strlen(FileName) < 1) {
 #endif//_UNICODE
 		ilSetError(IL_INVALID_PARAM);
 		return IL_FALSE;
 	}
 
-	// If DevIL is not compiled using _UNICODE, we can just pass FileName.
-	//  If it is compiled with _UNICODE and IL_USE_UNICODE is not set,
-	//  we have to convert the ANSI FileName to Unicode.
-#ifdef _UNICODE
-	// Code help from
-	//  https://buildsecurityin.us-cert.gov/daisy/bsi-rules/home/g1/769-BSI.html
-	if (ilIsDisabled(IL_USE_UNICODE)) {
-		Length = mbstowcs(NULL, (const char*)FileName, 0) + 1; // note error return of -1 is possible
-		if (Length == 0) {
-			ilSetError(IL_INVALID_PARAM);
-			return IL_FALSE;
-		}
-		if (Length > ULONG_MAX/sizeof(wchar_t)) {
-			ilSetError(IL_INTERNAL_ERROR);
-			return IL_FALSE;
-		}
-		Temp = (wchar_t*)ialloc(Length * sizeof(wchar_t));
-		mbstowcs(Temp, (const char*)FileName, Length); 
+	// See Note A
+#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
+	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
+		Temp = WideFromMultiByte(FileName);
 		FileName = Temp;
 	}
 #endif//_UNICODE
@@ -825,7 +834,7 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 	}
 
 #ifdef _UNICODE
-	if (ilIsDisabled(IL_USE_UNICODE))
+	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES))
 		ifree(Temp);
 #endif//_UNICODE
 
@@ -1168,7 +1177,6 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 	ILenum		Type;
 	ILboolean	bRet = IL_FALSE;
 #ifdef _UNICODE
-	ILint		Length;
 	wchar_t		*Temp = NULL;
 #endif//_UNICODE
 
@@ -1177,38 +1185,29 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		return IL_FALSE;
 	}
 
-#ifndef _UNICODE
-	if (FileName == NULL || strlen(FileName) < 1) {
-#else
+#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
 	if (FileName == NULL || wcslen(FileName) < 1) {
+#else
+	if (FileName == NULL || strlen((char*)FileName) < 1) {
 #endif//_UNICODE
 		ilSetError(IL_INVALID_PARAM);
 		return IL_FALSE;
 	}
 
-	// If DevIL is not compiled using _UNICODE, we can just pass FileName.
-	//  If it is compiled with _UNICODE and IL_USE_UNICODE is not set,
-	//  we have to convert the ANSI FileName to Unicode.
-#ifdef _UNICODE
-	// Code help from
-	//  https://buildsecurityin.us-cert.gov/daisy/bsi-rules/home/g1/769-BSI.html
-	if (ilIsDisabled(IL_USE_UNICODE)) {
-		Length = mbstowcs(NULL, (const char*)FileName, 0) + 1; // note error return of -1 is possible
-		if (Length == 0) {
-			ilSetError(IL_INVALID_PARAM);
-			return IL_FALSE;
-		}
-		if (Length > ULONG_MAX/sizeof(wchar_t)) {
-			ilSetError(IL_INTERNAL_ERROR);
-			return IL_FALSE;
-		}
-		Temp = (wchar_t*)ialloc(Length * sizeof(wchar_t));
-		mbstowcs(Temp, (const char*)FileName, Length); 
+	// See Note A
+#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
+	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
+		Temp = WideFromMultiByte(FileName);
 		FileName = Temp;
 	}
+	Ext = iGetExtension(FileName);
+#elif (defined(_UNICODE) && !defined(IL_USE_UTF16_FILENAMES))
+	Temp = WideFromMultiByte(FileName);
+	Ext = iGetExtension(Temp);
+#else
+	Ext = iGetExtension(FileName);
 #endif//_UNICODE
 
-	Ext = iGetExtension(FileName);
 
 	// Try registered procedures first (so users can override default lib functions).
 	if (Ext) {
@@ -1232,13 +1231,10 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#endif
 
 		#ifndef IL_NO_JP2
-		// @TODO: Get JasPer to use Unicode filenames.
-		//if (ilIsDisabled(IL_USE_UNICODE)) {
-			if (!iStrCmp(Ext, IL_TEXT("jp2"))) {
-				bRet = ilLoadJp2(FileName);
-				goto finish;
-			}
-		//}
+		if (!iStrCmp(Ext, IL_TEXT("jp2"))) {
+			bRet = ilLoadJp2(FileName);
+			goto finish;
+		}
 		#endif
 
 		#ifndef IL_NO_DDS
@@ -1416,7 +1412,7 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#endif
 
 		#ifndef IL_NO_WDP
-		if (ilIsDisabled(IL_USE_UNICODE)) {
+		if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
 			if (!iStrCmp(Ext, IL_TEXT("wdp")) || !iStrCmp(Ext, IL_TEXT("hdp")) ) {
 				bRet = ilLoadWdp(FileName);
 				goto finish;
@@ -1432,7 +1428,7 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#endif
 
 		#ifndef IL_NO_EXR
-		if (ilIsDisabled(IL_USE_UNICODE)) {
+		if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
 			if (!iStrCmp(Ext, IL_TEXT("exr"))) {
 				bRet = ilLoadExr(FileName);
 				goto finish;
@@ -1451,9 +1447,11 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 
 finish:
 
-#ifdef _UNICODE
-	if (ilIsDisabled(IL_USE_UNICODE))
+#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
+	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES))
 		ifree(Temp);
+#elif (defined(_UNICODE) && !defined(IL_USE_UTF16_FILENAMES))
+	ifree(Temp);
 #endif//_UNICODE
 
 	return bRet;
@@ -1712,44 +1710,37 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 {
 	ILstring Ext;
 	ILboolean	bRet = IL_FALSE;
-#ifdef _UNICODE
-	ILint		Length;
+#if defined(_UNICODE)
 	wchar_t		*Temp = NULL;
+
+	if (FileName == NULL || wcslen(FileName) < 1) {
+#else
+	if (FileName == NULL || strlen((char*)FileName) < 1) {
 #endif//_UNICODE
+		ilSetError(IL_INVALID_PARAM);
+		return IL_FALSE;
+	}
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
-	// If DevIL is not compiled using _UNICODE, we can just pass FileName.
-	//  If it is compiled with _UNICODE and IL_USE_UNICODE is not set,
-	//  we have to convert the ANSI FileName to Unicode.
-#ifdef _UNICODE
-	// Code help from
-	//  https://buildsecurityin.us-cert.gov/daisy/bsi-rules/home/g1/769-BSI.html
-	if (ilIsDisabled(IL_USE_UNICODE)) {
-		Length = mbstowcs(NULL, (const char*)FileName, 0) + 1; // note error return of -1 is possible
-		if (Length == 0) {
-			ilSetError(IL_INVALID_PARAM);
-			return IL_FALSE;
-		}
-		if (Length > ULONG_MAX/sizeof(wchar_t)) {
-			ilSetError(IL_INTERNAL_ERROR);
-			return IL_FALSE;
-		}
-		Temp = (wchar_t*)ialloc(Length * sizeof(wchar_t));
-		mbstowcs(Temp, (const char*)FileName, Length); 
+	// See Note A
+#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
+	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
+		Temp = WideFromMultiByte(FileName);
 		FileName = Temp;
 	}
-
 	Ext = iGetExtension(FileName);
-
-	if (FileName == NULL || wcslen(FileName) < 1 || Ext == NULL) {
+#elif (defined(_UNICODE) && !defined(IL_USE_UTF16_FILENAMES))
+	Temp = WideFromMultiByte(FileName);
+	Ext = iGetExtension(Temp);
 #else
 	Ext = iGetExtension(FileName);
-	if (FileName == NULL || strlen(FileName) < 1 || Ext == NULL) {
 #endif//_UNICODE
+
+	if (Ext == NULL) {
 		ilSetError(IL_INVALID_PARAM);
 		return IL_FALSE;
 	}
@@ -1861,9 +1852,11 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 	return IL_FALSE;
 
 finish:
-#ifdef _UNICODE
-	if (ilIsDisabled(IL_USE_UNICODE))
+#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
+	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES))
 		ifree(Temp);
+#elif (defined(_UNICODE) && !defined(IL_USE_UTF16_FILENAMES))
+	ifree(Temp);
 #endif//_UNICODE
 
 	return bRet;
