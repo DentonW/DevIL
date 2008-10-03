@@ -21,7 +21,7 @@ Denton:
 - Lib EXIF support
 - FITS support
 - APNG support
-- D language support
+- D language support - There exists a program to convert C headers to D.
 - Fortran support
 - JP2 and EXR loading from file streams.
 - Librsvg
@@ -29,6 +29,10 @@ Denton:
 - .iff support?
 - Respond to all forum requests.
 - Add BeOS support back in?
+- Fix Register functions for Unicode.
+- Look into bug when rescaling.
+- Figure out how to properly do 8-bit -> 16-bit conversions.
+- Create Dev-C++/MingW/Cygwin .a files for releases?
 
 
 For 1.7.0

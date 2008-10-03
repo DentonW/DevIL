@@ -1198,9 +1198,11 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 #if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
 	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
 		Temp = WideFromMultiByte(FileName);
-		FileName = Temp;
+		Ext = iGetExtension(Temp);
 	}
-	Ext = iGetExtension(FileName);
+	else {
+		Ext = iGetExtension(FileName);
+	}
 #elif (defined(_UNICODE) && !defined(IL_USE_UTF16_FILENAMES))
 	Temp = WideFromMultiByte(FileName);
 	Ext = iGetExtension(Temp);

@@ -91,10 +91,13 @@ ILvoid ILAPIENTRY iRestoreReadFuncs()
 ILHANDLE ILAPIENTRY iDefaultOpenR(ILconst_string FileName)
 {
 #ifndef _UNICODE
-	return (ILHANDLE)fopen(FileName, "rb");
+	return (ILHANDLE)fopen((char*)FileName, "rb");
 #else
 	// fopen in Windows 
 	#ifdef IL_USE_UTF16_FILENAMES
+		if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
+			return (ILHANDLE)fopen((char*)FileName, "rb");
+		}
 		return (ILHANDLE)_wfopen(FileName, L"rb");
 	#else
 		return (ILHANDLE)fopen((char*)FileName, "rb");
@@ -177,10 +180,18 @@ ILint ILAPIENTRY iDefaultWTell(ILHANDLE Handle)
 ILHANDLE ILAPIENTRY iDefaultOpenW(ILconst_string FileName)
 {
 #ifndef _UNICODE
-	return (ILHANDLE)fopen(FileName, "wb");
+	return (ILHANDLE)fopen((char*)FileName, "wb");
 #else
-	return (ILHANDLE)_wfopen(FileName, L"wb");
-#endif//_UNICODE
+	// fopen in Windows 
+	#ifdef IL_USE_UTF16_FILENAMES
+		if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
+			return (ILHANDLE)fopen((char*)FileName, "wb");
+		}
+		return (ILHANDLE)_wfopen(FileName, L"wb");
+	#else
+		return (ILHANDLE)fopen((char*)FileName, "wb");
+	#endif
+#endif//UNICODE
 }
 
 
