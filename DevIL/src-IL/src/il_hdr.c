@@ -346,4 +346,255 @@ ILvoid ReadScanline(ILubyte *scanline, ILuint w) {
 
 
 
+//! Writes a Hdr file
+ILboolean ilSaveHdr(ILconst_string FileName)
+{
+	ILHANDLE	HdrFile;
+	ILboolean	bHdr = IL_FALSE;
+
+	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
+		if (iFileExists(FileName)) {
+			ilSetError(IL_FILE_ALREADY_EXISTS);
+			return IL_FALSE;
+		}
+	}
+
+	HdrFile = iopenw(FileName);
+	if (HdrFile == NULL) {
+		ilSetError(IL_COULD_NOT_OPEN_FILE);
+		return bHdr;
+	}
+
+	bHdr = ilSaveHdrF(HdrFile);
+	iclosew(HdrFile);
+
+	return bHdr;
+}
+
+
+//! Writes a Hdr to an already-opened file
+ILboolean ilSaveHdrF(ILHANDLE File)
+{
+	iSetOutputFile(File);
+	return iSaveHdrInternal();
+}
+
+
+//! Writes a Hdr to a memory "lump"
+ILboolean ilSaveHdrL(ILvoid *Lump, ILuint Size)
+{
+	iSetOutputLump(Lump, Size);
+	return iSaveHdrInternal();
+}
+
+//
+// Much of the saving code is based on the code by Bruce Walter,
+//  available at http://www.graphics.cornell.edu/online/formats/rgbe/.
+//
+// The actual source code file is
+//  http://www.graphics.cornell.edu/online/formats/rgbe/rgbe.c
+//
+
+
+/* standard conversion from float pixels to rgbe pixels */
+/* note: you can remove the "inline"s if your compiler complains about it */
+static INLINE void 
+float2rgbe(unsigned char rgbe[4], float red, float green, float blue)
+{
+  float v;
+  int e;
+
+  v = red;
+  if (green > v) v = green;
+  if (blue > v) v = blue;
+  if (v < 1e-32) {
+    rgbe[0] = rgbe[1] = rgbe[2] = rgbe[3] = 0;
+  }
+  else {
+    v = frexp(v,&e) * 256.0/v;
+    rgbe[0] = (unsigned char) (red * v);
+    rgbe[1] = (unsigned char) (green * v);
+    rgbe[2] = (unsigned char) (blue * v);
+    rgbe[3] = (unsigned char) (e + 128);
+  }
+}
+
+
+typedef struct {
+  int valid;            /* indicate which fields are valid */
+  char programtype[16]; /* listed at beginning of file to identify it 
+                         * after "#?".  defaults to "RGBE" */ 
+  float gamma;          /* image has already been gamma corrected with 
+                         * given gamma.  defaults to 1.0 (no correction) */
+  float exposure;       /* a value of 1.0 in an image corresponds to
+			 * <exposure> watts/steradian/m^2. 
+			 * defaults to 1.0 */
+} rgbe_header_info;
+
+/* flags indicating which fields in an rgbe_header_info are valid */
+#define RGBE_VALID_PROGRAMTYPE 0x01
+#define RGBE_VALID_GAMMA       0x02
+#define RGBE_VALID_EXPOSURE    0x04
+
+
+/* default minimal header. modify if you want more information in header */
+ILboolean RGBE_WriteHeader(ILuint width, ILuint height, rgbe_header_info *info)
+{
+	char *programtype = "RGBE";
+
+	if (info && (info->valid & RGBE_VALID_PROGRAMTYPE))
+		programtype = info->programtype;
+	if (ilprintf(fp,"#?%s\n",programtype) < 0)
+		return IL_FALSE;
+	/* The #? is to identify file type, the programtype is optional. */
+	if (info && (info->valid & RGBE_VALID_GAMMA)) {
+		if (ilprintf(fp,"GAMMA=%g\n",info->gamma) < 0)
+		  return IL_FALSE;
+	}
+	if (info && (info->valid & RGBE_VALID_EXPOSURE)) {
+		if (ilprintf(fp,"EXPOSURE=%g\n",info->exposure) < 0)
+		  return IL_FALSE;
+	}
+	if (ilprintf(fp,"FORMAT=32-bit_rle_rgbe\n\n") < 0)
+		return IL_FALSE;
+	if (ilprintf(fp, "-Y %d +X %d\n", height, width) < 0)
+		return IL_FALSE;
+	return IL_TRUE;
+}
+
+
+/* simple write routine that does not use run length encoding */
+/* These routines can be made faster by allocating a larger buffer and
+   fread-ing and iwrite-ing the data in larger chunks */
+int RGBE_WritePixels(float *data, int numpixels)
+{
+	unsigned char rgbe[4];
+
+	while (numpixels-- > 0) {
+		float2rgbe(rgbe,data[RGBE_DATA_RED],
+			   data[RGBE_DATA_GREEN],data[RGBE_DATA_BLUE]);
+		data += RGBE_DATA_SIZE;
+		if (iwrite(rgbe, sizeof(rgbe), 1, fp) < 1) {
+			ilSetError();
+			return IL_FALSE;
+		}
+	}
+	return IL_TRUE;
+}
+
+
+/* The code below is only needed for the run-length encoded files. */
+/* Run length encoding adds considerable complexity but does */
+/* save some space.  For each scanline, each channel (r,g,b,e) is */
+/* encoded separately for better compression. */
+
+static int RGBE_WriteBytes_RLE(unsigned char *data, int numbytes)
+{
+#define MINRUNLENGTH 4
+  int cur, beg_run, run_count, old_run_count, nonrun_count;
+  unsigned char buf[2];
+
+  cur = 0;
+  while(cur < numbytes) {
+    beg_run = cur;
+    /* find next run of length at least 4 if one exists */
+    run_count = old_run_count = 0;
+    while((run_count < MINRUNLENGTH) && (beg_run < numbytes)) {
+      beg_run += run_count;
+      old_run_count = run_count;
+      run_count = 1;
+      while((data[beg_run] == data[beg_run + run_count]) 
+	    && (beg_run + run_count < numbytes) && (run_count < 127))
+	run_count++;
+    }
+    /* if data before next big run is a short run then write it as such */
+    if ((old_run_count > 1)&&(old_run_count == beg_run - cur)) {
+      buf[0] = 128 + old_run_count;   /*write short run*/
+      buf[1] = data[cur];
+      if (iwrite(buf,sizeof(buf[0])*2,1,fp) < 1)
+	return rgbe_error(rgbe_write_error,NULL);
+      cur = beg_run;
+    }
+    /* write out bytes until we reach the start of the next run */
+    while(cur < beg_run) {
+      nonrun_count = beg_run - cur;
+      if (nonrun_count > 128) 
+	nonrun_count = 128;
+      buf[0] = nonrun_count;
+      if (iwrite(buf,sizeof(buf[0]),1,fp) < 1)
+	return rgbe_error(rgbe_write_error,NULL);
+      if (iwrite(&data[cur],sizeof(data[0])*nonrun_count,1,fp) < 1)
+	return rgbe_error(rgbe_write_error,NULL);
+      cur += nonrun_count;
+    }
+    /* write out next run if one was found */
+    if (run_count >= MINRUNLENGTH) {
+      buf[0] = 128 + run_count;
+      buf[1] = data[beg_run];
+      if (iwrite(buf,sizeof(buf[0])*2,1) < 1)
+	return rgbe_error(rgbe_write_error,NULL);
+      cur += run_count;
+    }
+  }
+  return RGBE_RETURN_SUCCESS;
+#undef MINRUNLENGTH
+}
+
+
+// Internal function used to save the Hdr.
+ILboolean iSaveHdrInternal()
+{
+	ILimage *TempImage;
+	rgbe_header_info stHeader
+	unsigned char rgbe[4];
+	unsigned char *buffer;
+	ILuint i;
+
+	if (iCurImage == NULL) {
+		ilSetError(IL_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+
+  if ((scanline_width < 8)||(scanline_width > 0x7fff))
+    /* run length encoding is not allowed so write flat*/
+    return RGBE_WritePixels(fp,data,scanline_width*num_scanlines);
+  buffer = (unsigned char *)malloc(sizeof(unsigned char)*4*scanline_width);
+  if (buffer == NULL) 
+    /* no buffer space so write flat */
+    return RGBE_WritePixels(fp,data,scanline_width*num_scanlines);
+  while(num_scanlines-- > 0) {
+    rgbe[0] = 2;
+    rgbe[1] = 2;
+    rgbe[2] = scanline_width >> 8;
+    rgbe[3] = scanline_width & 0xFF;
+    if (iwrite(rgbe, sizeof(rgbe), 1, fp) < 1) {
+      free(buffer);
+      return rgbe_error(rgbe_write_error,NULL);
+    }
+    for(i=0;i<scanline_width;i++) {
+      float2rgbe(rgbe,data[RGBE_DATA_RED],
+		 data[RGBE_DATA_GREEN],data[RGBE_DATA_BLUE]);
+      buffer[i] = rgbe[0];
+      buffer[i+scanline_width] = rgbe[1];
+      buffer[i+2*scanline_width] = rgbe[2];
+      buffer[i+3*scanline_width] = rgbe[3];
+      data += RGBE_DATA_SIZE;
+    }
+    /* write out each of the four channels separately run length encoded */
+    /* first red, then green, then blue, then exponent */
+    for(i=0;i<4;i++) {
+      if ((err = RGBE_WriteBytes_RLE(fp,&buffer[i*scanline_width],
+				     scanline_width)) != RGBE_RETURN_SUCCESS) {
+	free(buffer);
+	return err;
+      }
+    }
+  }
+  free(buffer);
+  return RGBE_RETURN_SUCCESS;
+	return IL_TRUE;
+}
+
+
 #endif//IL_NO_HDR
