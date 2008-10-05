@@ -36,6 +36,7 @@ ILboolean iIsValidHdr();
 ILboolean iCheckHdr(HDRHEADER *Header);
 ILboolean ilLoadHdrF(ILHANDLE file);
 ILboolean iLoadHdrInternal();
+ILboolean iSaveHdrInternal();
 
 ILvoid ReadScanline(ILubyte *scanline, ILuint w);
 

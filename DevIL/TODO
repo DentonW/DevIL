@@ -33,6 +33,7 @@ Denton:
 - Look into bug when rescaling.
 - Figure out how to properly do 8-bit -> 16-bit conversions.
 - Create Dev-C++/MingW/Cygwin .a files for releases?
+- Added ilSetError error codes to il_files.c.
 
 
 For 1.7.0

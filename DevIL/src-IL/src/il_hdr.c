@@ -16,6 +16,7 @@
 #include "il_hdr.h"
 #include "il_endian.h"
 
+
 //! Checks if the file specified in FileName is a valid .hdr file.
 ILboolean ilIsValidHdr(ILconst_string FileName)
 {
@@ -421,12 +422,12 @@ float2rgbe(unsigned char rgbe[4], float red, float green, float blue)
 
 
 typedef struct {
-  int valid;            /* indicate which fields are valid */
-  char programtype[16]; /* listed at beginning of file to identify it 
+  ILuint	valid;            /* indicate which fields are valid */
+  ILbyte	programtype[16]; /* listed at beginning of file to identify it 
                          * after "#?".  defaults to "RGBE" */ 
-  float gamma;          /* image has already been gamma corrected with 
+  ILfloat	gamma;          /* image has already been gamma corrected with 
                          * given gamma.  defaults to 1.0 (no correction) */
-  float exposure;       /* a value of 1.0 in an image corresponds to
+  ILfloat	exposure;       /* a value of 1.0 in an image corresponds to
 			 * <exposure> watts/steradian/m^2. 
 			 * defaults to 1.0 */
 } rgbe_header_info;
@@ -436,6 +437,13 @@ typedef struct {
 #define RGBE_VALID_GAMMA       0x02
 #define RGBE_VALID_EXPOSURE    0x04
 
+/* offsets to red, green, and blue components in a data (float) pixel */
+#define RGBE_DATA_RED    0
+#define RGBE_DATA_GREEN  1
+#define RGBE_DATA_BLUE   2
+/* number of floats per pixel */
+#define RGBE_DATA_SIZE   3
+
 
 /* default minimal header. modify if you want more information in header */
 ILboolean RGBE_WriteHeader(ILuint width, ILuint height, rgbe_header_info *info)
@@ -444,20 +452,20 @@ ILboolean RGBE_WriteHeader(ILuint width, ILuint height, rgbe_header_info *info)
 
 	if (info && (info->valid & RGBE_VALID_PROGRAMTYPE))
 		programtype = info->programtype;
-	if (ilprintf(fp,"#?%s\n",programtype) < 0)
+	if (ilprintf("#?%s\n",programtype) < 0)
 		return IL_FALSE;
 	/* The #? is to identify file type, the programtype is optional. */
 	if (info && (info->valid & RGBE_VALID_GAMMA)) {
-		if (ilprintf(fp,"GAMMA=%g\n",info->gamma) < 0)
+		if (ilprintf("GAMMA=%g\n",info->gamma) < 0)
 		  return IL_FALSE;
 	}
 	if (info && (info->valid & RGBE_VALID_EXPOSURE)) {
-		if (ilprintf(fp,"EXPOSURE=%g\n",info->exposure) < 0)
+		if (ilprintf("EXPOSURE=%g\n",info->exposure) < 0)
 		  return IL_FALSE;
 	}
-	if (ilprintf(fp,"FORMAT=32-bit_rle_rgbe\n\n") < 0)
+	if (ilprintf("FORMAT=32-bit_rle_rgbe\n\n") < 0)
 		return IL_FALSE;
-	if (ilprintf(fp, "-Y %d +X %d\n", height, width) < 0)
+	if (ilprintf("-Y %d +X %d\n", height, width) < 0)
 		return IL_FALSE;
 	return IL_TRUE;
 }
@@ -471,13 +479,10 @@ int RGBE_WritePixels(float *data, int numpixels)
 	unsigned char rgbe[4];
 
 	while (numpixels-- > 0) {
-		float2rgbe(rgbe,data[RGBE_DATA_RED],
-			   data[RGBE_DATA_GREEN],data[RGBE_DATA_BLUE]);
+		float2rgbe(rgbe,data[RGBE_DATA_RED],data[RGBE_DATA_GREEN],data[RGBE_DATA_BLUE]);
 		data += RGBE_DATA_SIZE;
-		if (iwrite(rgbe, sizeof(rgbe), 1, fp) < 1) {
-			ilSetError();
+		if (iwrite(rgbe, sizeof(rgbe), 1) < 1)
 			return IL_FALSE;
-		}
 	}
 	return IL_TRUE;
 }
@@ -488,55 +493,55 @@ int RGBE_WritePixels(float *data, int numpixels)
 /* save some space.  For each scanline, each channel (r,g,b,e) is */
 /* encoded separately for better compression. */
 
-static int RGBE_WriteBytes_RLE(unsigned char *data, int numbytes)
+ILboolean RGBE_WriteBytes_RLE(ILubyte *data, ILuint numbytes)
 {
 #define MINRUNLENGTH 4
-  int cur, beg_run, run_count, old_run_count, nonrun_count;
-  unsigned char buf[2];
+	ILuint	cur, beg_run, run_count, old_run_count, nonrun_count;
+	ILubyte	buf[2];
 
-  cur = 0;
-  while(cur < numbytes) {
-    beg_run = cur;
-    /* find next run of length at least 4 if one exists */
-    run_count = old_run_count = 0;
-    while((run_count < MINRUNLENGTH) && (beg_run < numbytes)) {
-      beg_run += run_count;
-      old_run_count = run_count;
-      run_count = 1;
-      while((data[beg_run] == data[beg_run + run_count]) 
-	    && (beg_run + run_count < numbytes) && (run_count < 127))
-	run_count++;
-    }
-    /* if data before next big run is a short run then write it as such */
-    if ((old_run_count > 1)&&(old_run_count == beg_run - cur)) {
-      buf[0] = 128 + old_run_count;   /*write short run*/
-      buf[1] = data[cur];
-      if (iwrite(buf,sizeof(buf[0])*2,1,fp) < 1)
-	return rgbe_error(rgbe_write_error,NULL);
-      cur = beg_run;
-    }
-    /* write out bytes until we reach the start of the next run */
-    while(cur < beg_run) {
-      nonrun_count = beg_run - cur;
-      if (nonrun_count > 128) 
-	nonrun_count = 128;
-      buf[0] = nonrun_count;
-      if (iwrite(buf,sizeof(buf[0]),1,fp) < 1)
-	return rgbe_error(rgbe_write_error,NULL);
-      if (iwrite(&data[cur],sizeof(data[0])*nonrun_count,1,fp) < 1)
-	return rgbe_error(rgbe_write_error,NULL);
-      cur += nonrun_count;
-    }
-    /* write out next run if one was found */
-    if (run_count >= MINRUNLENGTH) {
-      buf[0] = 128 + run_count;
-      buf[1] = data[beg_run];
-      if (iwrite(buf,sizeof(buf[0])*2,1) < 1)
-	return rgbe_error(rgbe_write_error,NULL);
-      cur += run_count;
-    }
-  }
-  return RGBE_RETURN_SUCCESS;
+	cur = 0;
+	while(cur < numbytes) {
+		beg_run = cur;
+		/* find next run of length at least 4 if one exists */
+		run_count = old_run_count = 0;
+		while((run_count < MINRUNLENGTH) && (beg_run < numbytes)) {
+			beg_run += run_count;
+			old_run_count = run_count;
+			run_count = 1;
+			while((data[beg_run] == data[beg_run + run_count]) 
+				&& (beg_run + run_count < numbytes) && (run_count < 127))
+			run_count++;
+		}
+		/* if data before next big run is a short run then write it as such */
+		if ((old_run_count > 1)&&(old_run_count == beg_run - cur)) {
+			buf[0] = 128 + old_run_count;   /*write short run*/
+			buf[1] = data[cur];
+			if (iwrite(buf,sizeof(buf[0])*2,1) < 1)
+				return IL_FALSE;
+			cur = beg_run;
+		}
+		/* write out bytes until we reach the start of the next run */
+		while(cur < beg_run) {
+			nonrun_count = beg_run - cur;
+			if (nonrun_count > 128) 
+				nonrun_count = 128;
+			buf[0] = nonrun_count;
+			if (iwrite(buf,sizeof(buf[0]),1) < 1)
+				return IL_FALSE;
+			if (iwrite(&data[cur],sizeof(data[0])*nonrun_count,1) < 1)
+				return IL_FALSE;
+			cur += nonrun_count;
+		}
+		/* write out next run if one was found */
+		if (run_count >= MINRUNLENGTH) {
+			buf[0] = 128 + run_count;
+			buf[1] = data[beg_run];
+			if (iwrite(buf,sizeof(buf[0])*2,1) < 1)
+				return IL_FALSE;
+			cur += run_count;
+		}
+	}
+	return IL_TRUE;
 #undef MINRUNLENGTH
 }
 
@@ -545,54 +550,90 @@ static int RGBE_WriteBytes_RLE(unsigned char *data, int numbytes)
 ILboolean iSaveHdrInternal()
 {
 	ILimage *TempImage;
-	rgbe_header_info stHeader
+	rgbe_header_info stHeader;
 	unsigned char rgbe[4];
-	unsigned char *buffer;
-	ILuint i;
+	ILubyte		*buffer;
+	ILfloat		*data;
+	ILuint		i;
+	ILboolean	bRet;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
+	stHeader.exposure = 0;
+	stHeader.gamma = 0;
+	stHeader.programtype[0] = 0;
+	stHeader.valid = 0;
 
-  if ((scanline_width < 8)||(scanline_width > 0x7fff))
-    /* run length encoding is not allowed so write flat*/
-    return RGBE_WritePixels(fp,data,scanline_width*num_scanlines);
-  buffer = (unsigned char *)malloc(sizeof(unsigned char)*4*scanline_width);
-  if (buffer == NULL) 
-    /* no buffer space so write flat */
-    return RGBE_WritePixels(fp,data,scanline_width*num_scanlines);
-  while(num_scanlines-- > 0) {
-    rgbe[0] = 2;
-    rgbe[1] = 2;
-    rgbe[2] = scanline_width >> 8;
-    rgbe[3] = scanline_width & 0xFF;
-    if (iwrite(rgbe, sizeof(rgbe), 1, fp) < 1) {
-      free(buffer);
-      return rgbe_error(rgbe_write_error,NULL);
-    }
-    for(i=0;i<scanline_width;i++) {
-      float2rgbe(rgbe,data[RGBE_DATA_RED],
-		 data[RGBE_DATA_GREEN],data[RGBE_DATA_BLUE]);
-      buffer[i] = rgbe[0];
-      buffer[i+scanline_width] = rgbe[1];
-      buffer[i+2*scanline_width] = rgbe[2];
-      buffer[i+3*scanline_width] = rgbe[3];
-      data += RGBE_DATA_SIZE;
-    }
-    /* write out each of the four channels separately run length encoded */
-    /* first red, then green, then blue, then exponent */
-    for(i=0;i<4;i++) {
-      if ((err = RGBE_WriteBytes_RLE(fp,&buffer[i*scanline_width],
-				     scanline_width)) != RGBE_RETURN_SUCCESS) {
-	free(buffer);
-	return err;
-      }
-    }
-  }
-  free(buffer);
-  return RGBE_RETURN_SUCCESS;
+	if (iCurImage->Format != IL_UNSIGNED_BYTE) {
+		TempImage = iConvertImage(iCurImage, IL_RGB, IL_FLOAT);
+		if (TempImage == NULL)
+			return IL_FALSE;
+	}
+	else
+		TempImage = iCurImage;
+
+	if (!RGBE_WriteHeader(TempImage->Width, TempImage->Height, &stHeader))
+		return IL_FALSE;
+
+	if (TempImage->Origin == IL_ORIGIN_LOWER_LEFT)
+		iFlipBuffer(TempImage->Data,TempImage->Depth,TempImage->Bps,TempImage->Height);
+	data = (ILfloat*)TempImage->Data;
+
+
+	if ((TempImage->Width < 8)||(TempImage->Width > 0x7fff)) {
+		/* run length encoding is not allowed so write flat*/
+		bRet = RGBE_WritePixels(data,TempImage->Width*TempImage->Height);
+		if (iCurImage != TempImage)
+			ilCloseImage(TempImage);
+		return bRet;
+	}
+	buffer = (ILubyte*)ialloc(sizeof(ILubyte)*4*TempImage->Width);
+	if (buffer == NULL) {
+		/* no buffer space so write flat */
+		bRet = RGBE_WritePixels(data,TempImage->Width*TempImage->Height);
+		if (iCurImage != TempImage)
+			ilCloseImage(TempImage);
+		return bRet;
+	}
+
+	while(TempImage->Height-- > 0) {
+		rgbe[0] = 2;
+		rgbe[1] = 2;
+		rgbe[2] = TempImage->Width >> 8;
+		rgbe[3] = TempImage->Width & 0xFF;
+		if (iwrite(rgbe, sizeof(rgbe), 1) < 1) {
+			free(buffer);
+			if (iCurImage != TempImage)
+				ilCloseImage(TempImage);
+			return IL_FALSE;
+		}
+
+		for(i=0;i<TempImage->Width;i++) {
+			float2rgbe(rgbe,data[RGBE_DATA_RED],data[RGBE_DATA_GREEN],data[RGBE_DATA_BLUE]);
+			buffer[i] = rgbe[0];
+			buffer[i+TempImage->Width] = rgbe[1];
+			buffer[i+2*TempImage->Width] = rgbe[2];
+			buffer[i+3*TempImage->Width] = rgbe[3];
+			data += RGBE_DATA_SIZE;
+		}
+		/* write out each of the four channels separately run length encoded */
+		/* first red, then green, then blue, then exponent */
+		for(i=0;i<4;i++) {
+			if (RGBE_WriteBytes_RLE(&buffer[i*TempImage->Width],TempImage->Width) != IL_TRUE) {
+				ifree(buffer);
+				if (iCurImage != TempImage)
+					ilCloseImage(TempImage);
+				return IL_FALSE;
+			}
+		}
+	}
+	ifree(buffer);
+
+	if (iCurImage != TempImage)
+		ilCloseImage(TempImage);
 	return IL_TRUE;
 }
 

@@ -483,6 +483,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\il_hdr.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\il_icns.h"
 				>
 			</File>
@@ -614,6 +618,10 @@
 			</File>
 			<File
 				RelativePath="..\..\README.win"
+				>
+			</File>
+			<File
+				RelativePath="..\..\TODO"
 				>
 			</File>
 		</Filter>

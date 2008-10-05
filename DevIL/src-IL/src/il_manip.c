@@ -5,16 +5,17 @@
 #include <IL/il.h>
 #include "il_manip.h"
 
-ILAPI ILvoid ILAPIENTRY iFlipBuffer( ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num ) {
+ILAPI ILvoid ILAPIENTRY iFlipBuffer(ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num)
+{
 	ILubyte *StartPtr, *EndPtr;
 	ILuint y, d;
 	const ILuint size = line_num * line_size;
 
-	for( d = 0; d < depth; d++ ) {
+	for (d = 0; d < depth; d++) {
 		StartPtr = buff + d * size;
 		EndPtr   = buff + d * size + size;
 
-		for( y = 0; y < (line_num/2); y++ ) {
+		for (y = 0; y < (line_num/2); y++) {
 			EndPtr -= line_size; 
 			iMemSwap(StartPtr,EndPtr,line_size);
 			StartPtr += line_size;
@@ -23,20 +24,21 @@ ILAPI ILvoid ILAPIENTRY iFlipBuffer( ILubyte *buff, ILuint depth, ILuint line_si
 }
 
 // Just created for internal use.
-ILubyte* iFlipNewBuffer( ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num ) {
+ILubyte* iFlipNewBuffer(ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num)
+{
 	ILubyte *data;
 	ILubyte *s1, *s2;
 	ILuint y, d;
 	const ILuint size = line_num * line_size;
 
-	if( (data = (ILubyte*)ialloc(depth*size)) == NULL)
+	if ((data = (ILubyte*)ialloc(depth*size)) == NULL)
 		return IL_FALSE;
 
-	for( d = 0; d < depth; d++ ) {
+	for (d = 0; d < depth; d++) {
 		s1 = buff + d * size;
 		s2 = data + d * size+size;
 
-		for( y = 0; y < line_num; y++ ) {
+		for (y = 0; y < line_num; y++) {
 			s2 -= line_size; 
 			memcpy(s2,s1,line_size);
 			s1 += line_size;
@@ -47,8 +49,9 @@ ILubyte* iFlipNewBuffer( ILubyte *buff, ILuint depth, ILuint line_size, ILuint l
 
 
 // Flips an image over its x axis
-ILboolean ilFlipImage() {
-	if( iCurImage == NULL ) {
+ILboolean ilFlipImage()
+{
+	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
@@ -62,8 +65,9 @@ ILboolean ilFlipImage() {
 }
 
 // Just created for internal use.
-ILubyte* ILAPIENTRY iGetFlipped(ILimage *img) {
-	if( img == NULL ) {
+ILubyte* ILAPIENTRY iGetFlipped(ILimage *img)
+{
+	if (img == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return NULL;
 	}

@@ -1477,6 +1477,16 @@ ILboolean ILAPIENTRY ilSave(ILenum Type, ILstring FileName)
 			return ilSaveCHeader(FileName, "IL_IMAGE");
 		#endif
 
+		#ifndef IL_NO_DDS
+		case IL_DDS:
+    		return ilSaveDds(FileName);
+		#endif
+
+		#ifndef IL_NO_HDR
+		case IL_HDR:
+			return ilSaveHdr(FileName);
+		#endif
+
 		#ifndef IL_NO_JPG
 		case IL_JPG:
 			return ilSaveJpeg(FileName);
@@ -1522,11 +1532,6 @@ ILboolean ILAPIENTRY ilSave(ILenum Type, ILstring FileName)
 			return ilSaveTiff(FileName);
 		#endif
 
-		#ifndef IL_NO_DDS
-		case IL_DDS:
-    		return ilSaveDds(FileName);
-		#endif
-
 		case IL_JASC_PAL:
 			return ilSaveJascPal(FileName);
 	}
@@ -1550,6 +1555,18 @@ ILuint ILAPIENTRY ilSaveF(ILenum Type, ILHANDLE File)
 		#ifndef IL_NO_BMP
 		case IL_BMP:
 			Ret = ilSaveBmpF(File);
+			break;
+		#endif
+
+		#ifndef IL_NO_DDS
+		case IL_DDS:
+			Ret = ilSaveDdsF(File);
+			break;
+		#endif
+
+		#ifndef IL_NO_HDR
+		case IL_HDR:
+			Ret = ilSaveHdrF(File);
 			break;
 		#endif
 
@@ -1597,10 +1614,6 @@ ILuint ILAPIENTRY ilSaveF(ILenum Type, ILHANDLE File)
 			break;
 		#endif
 
-		case IL_DDS:
-			Ret = ilSaveDdsF(File);
-			break;
-
 		/*#ifndef IL_NO_TIF
 		case IL_TIF:
 			Ret = ilSaveTiffF(File);
@@ -1636,6 +1649,12 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size)
 			break;
 		#endif
 
+		#ifndef IL_NO_HDR
+		case IL_HDR:
+			Ret = ilSaveHdrL(Lump, Size);
+			break;
+		#endif
+
 		#ifndef IL_NO_JPG
 		case IL_JPG:
 			Ret = ilSaveJpegL(Lump, Size);
@@ -1644,15 +1663,10 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size)
 
 
 		#ifndef IL_NO_PNG
-
 		case IL_PNG:
-
 			Ret = ilSavePngL(Lump, Size);
-
 			break;
-
 		#endif
-
 
 		#ifndef IL_NO_PNM
 		case IL_PNM:
@@ -1768,7 +1782,14 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 	}
 	#endif
 
-	#ifndef IL_NO_JPG
+	#ifndef IL_NO_HDR
+	if (!iStrCmp(Ext, IL_TEXT("hdr"))) {
+		bRet = ilSaveHdr(FileName);
+		goto finish;
+	}
+	#endif
+
+#ifndef IL_NO_JPG
 	if (!iStrCmp(Ext, IL_TEXT("jpg")) || !iStrCmp(Ext, IL_TEXT("jpeg")) || !iStrCmp(Ext, IL_TEXT("jpe"))) {
 		bRet = ilSaveJpeg(FileName);
 		goto finish;
