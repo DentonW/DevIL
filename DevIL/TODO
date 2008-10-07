@@ -34,6 +34,7 @@ Denton:
 - Figure out how to properly do 8-bit -> 16-bit conversions.
 - Create Dev-C++/MingW/Cygwin .a files for releases?
 - Added ilSetError error codes to il_files.c.
+- DirectX 10 support
 
 
 For 1.7.0
