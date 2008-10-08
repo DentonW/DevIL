@@ -815,7 +815,7 @@ ILboolean iSaveTargaInternal()
 	
 	if (TempImage != iCurImage)
 		ilCloseImage(TempImage);
-	
+
 	return IL_TRUE;
 }
 
