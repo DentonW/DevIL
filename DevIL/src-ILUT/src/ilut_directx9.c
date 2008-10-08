@@ -164,21 +164,26 @@ D3DCUBEMAP_FACES iToD3D9Cube(ILuint cube) {
     Texture=NULL;
     Image=NULL;
     ilutCurImage = ilGetCurImage();
-    if( ilutCurImage == NULL ) {
+    if (ilutCurImage == NULL) {
     	ilSetError(ILUT_ILLEGAL_OPERATION);
         return NULL;
     }
 
-    if( !FormatsDX9Checked )
+    if (!FormatsDX9Checked)
     	CheckFormatsDX9(Device);
 
-	 MakeD3D9Compliant(Device, &Format);
+	Image = MakeD3D9Compliant(Device, &Format);
+	if (Image == NULL) {
+		if (Image != ilutCurImage)
+			ilCloseImage(Image);
+		return NULL;
+	}
 
     StartImage=ilutCurImage;
-    if( FAILED(IDirect3DDevice9_CreateCubeTexture(Device, StartImage->Width,
+    if (FAILED(IDirect3DDevice9_CreateCubeTexture(Device, StartImage->Width,
                        ilutGetInteger(ILUT_D3D_MIPLEVELS),0,Format, (D3DPOOL)ilutGetInteger(ILUT_D3D_POOL), &Texture, NULL)))
                return NULL;
-		for( i = 0; i < CUBEMAP_SIDES; i++ ) {
+		for (i = 0; i < CUBEMAP_SIDES; i++) {
        		if( ilutCurImage==NULL || ilutCurImage->CubeFlags == 0) {
             	SAFE_RELEASE(Texture)
                 return NULL;

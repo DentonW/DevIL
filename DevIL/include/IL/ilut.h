@@ -154,6 +154,11 @@
 
 #ifdef ILUT_USE_WIN32
 	//#define WIN32_LEAN_AND_MEAN
+	#ifdef _DEBUG 
+		#define _CRTDBG_MAP_ALLOC
+		#include <stdlib.h>
+		#include <crtdbg.h>
+	#endif
 	#include <windows.h>
 #endif
 

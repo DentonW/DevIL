@@ -11,6 +11,16 @@
 
 
 #define __ALLOC_C
+
+// Memory leak detection
+#ifdef _WIN32
+	#ifdef _DEBUG 
+		#define _CRTDBG_MAP_ALLOC
+		#include <stdlib.h>
+		#include <crtdbg.h>
+	#endif
+#endif//_WIN32
+
 #include "il_internal.h"
 #include <stdlib.h>
 #include <math.h>

@@ -19,6 +19,13 @@
 
 #define _UNICODE
 
+// Memory leak detection
+#ifdef _DEBUG 
+	#define _CRTDBG_MAP_ALLOC
+	#include <stdlib.h>
+	#include <crtdbg.h>
+#endif
+
 #include <windows.h>
 #include <IL/il.h>
 #include <IL/ilu.h>
@@ -149,6 +156,10 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 			DispatchMessage(&msg);
 		}
 	}
+
+#ifdef _DEBUG
+	_CrtDumpMemoryLeaks();
+#endif
 
 	return (int)msg.wParam;
 }
@@ -331,6 +342,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case WM_CLOSE:
+
+#ifdef _DEBUG
+		_CrtDumpMemoryLeaks();
+#endif
 			DestroyGDI();
 			DestroyWindow(hWnd);
 			UnregisterClass(TITLE, hInstance);

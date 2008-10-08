@@ -32,6 +32,7 @@ static ILuint		*IntPtr, *SIntPtr;
 static ILfloat		*FloatPtr, *SFloatPtr;
 
 
+
 ILimage *iluScale2D_(ILimage *Image, ILimage *Scaled, ILuint Width, ILuint Height)
 {
 	if (Image == NULL) {
@@ -310,7 +311,9 @@ ILimage *iluScale2DBilinear_(ILimage *Image, ILimage *Scaled, ILuint Width, ILui
 			break;
 
 		case 4:
+
 			if (Image->Type != IL_FLOAT) {
+
 				IntPtr = (ILuint*)Image->Data;
 				SIntPtr = (ILuint*)Scaled->Data;
 				Height--;  // Only use regular Height once in the following loop.
@@ -363,61 +366,117 @@ ILimage *iluScale2DBilinear_(ILimage *Image, ILimage *Scaled, ILuint Width, ILui
 							f * IntPtr[NewY1 + NewX2 + c]);
 					}
 				}
+
 			}
+
 			else {  // IL_FLOAT
+
 				FloatPtr = (ILfloat*)Image->Data;
+
 				SFloatPtr = (ILfloat*)Scaled->Data;
+
 				Height--;  // Only use regular Height once in the following loop.
+
 				for (y = 0; y < Height; y++) {
+
 					NewY1 = (ILuint)(y / ScaleY) * ImgBps;
+
 					NewY2 = (ILuint)((y+1) / ScaleY) * ImgBps;
+
 					for (x = 0; x < Width; x++) {
+
 						NewX = Width / ScaleX;
+
 						t1 = x / (ILdouble)Width;
+
 						t4 = t1 * Width;
+
 						t2 = t4 - (ILuint)(t4);
+
 						t3 = (1.0 - t2);
+
 						t4 = t1 * NewX;
+
 						NewX1 = (ILuint)(t4) * Image->Bpp;
+
 						NewX2 = (ILuint)(t4 + 1) * Image->Bpp;
 
+
+
 						for (c = 0; c < Scaled->Bpp; c++) {
+
 							Table[0][c] = t3 * FloatPtr[NewY1 + NewX1 + c] +
+
 								t2 * FloatPtr[NewY1 + NewX2 + c];
 
+
+
 							Table[1][c] = t3 * FloatPtr[NewY2 + NewX1 + c] +
+
 								t2 * FloatPtr[NewY2 + NewX2 + c];
+
 						}
+
+
 
 						// Linearly interpolate between the table values.
+
 						t1 = y / (ILdouble)(Height + 1);  // Height+1 is the real height now.
+
 						t3 = (1.0 - t1);
+
 						Size = y * SclBps + x * Scaled->Bpp;
+
 						for (c = 0; c < Scaled->Bpp; c++) {
+
 							SFloatPtr[Size + c] =
+
 								(ILfloat)(t3 * Table[0][c] + t1 * Table[1][c]);
+
 						}
+
 					}
+
 				}
+
+
 
 				// Calculate the last row.
+
 				NewY1 = (ILuint)(Height / ScaleY) * ImgBps;
+
 				for (x = 0; x < Width; x++) {
+
 					NewX = Width / ScaleX;
+
 					t1 = x / (ILdouble)Width;
+
 					t4 = t1 * Width;
+
 					ft = (t4 - (ILuint)(t4)) * IL_PI;
+
 					f = (1.0 - cos(ft)) * .5;  // Cosine interpolation
+
 					NewX1 = (ILuint)(t1 * NewX) * Image->Bpp;
+
 					NewX2 = (ILuint)(t1 * NewX + 1) * Image->Bpp;
 
+
+
 					Size = Height * SclBps + x * Image->Bpp;
+
 					for (c = 0; c < Scaled->Bpp; c++) {
+
 						SFloatPtr[Size + c] = (ILfloat)((1.0 - f) * FloatPtr[NewY1 + NewX1 + c] +
+
 							f * FloatPtr[NewY1 + NewX2 + c]);
+
 					}
+
 				}
+
 			}
+
 			break;
 	}
 

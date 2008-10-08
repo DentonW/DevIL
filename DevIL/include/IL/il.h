@@ -28,9 +28,9 @@ extern "C" {
 //during conversion. It takes a little more time, but it is the correct
 //way of doing this. If you are sure your floats are always valid,
 //you can undefine this value...
-#define CLAMP_HALF		1
-#define CLAMP_FLOATS	1
-#define CLAMP_DOUBLES	1
+//#define CLAMP_HALF		1
+//#define CLAMP_FLOATS	1
+//#define CLAMP_DOUBLES	1
 
 #ifdef _WIN32_WCE
 	#define IL_NO_GIF

@@ -13,6 +13,7 @@
 #define INTERNAL_H
 #define _IL_BUILD_LIBRARY
 
+
 // Local headers
 #if defined(_WIN32) && !defined(HAVE_CONFIG_H)
 #define HAVE_CONFIG_H
