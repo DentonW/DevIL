@@ -75,7 +75,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib"
+				AdditionalDependencies="comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib"
 				OutputFile="../../lib/vc8/debug/DevIL.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
