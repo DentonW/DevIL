@@ -399,7 +399,8 @@ ILboolean ilSaveHdrL(ILvoid *Lump, ILuint Size)
 
 /* standard conversion from float pixels to rgbe pixels */
 /* note: you can remove the "inline"s if your compiler complains about it */
-static INLINE void 
+//static INLINE void 
+static void 
 float2rgbe(unsigned char rgbe[4], float red, float green, float blue)
 {
   float v;

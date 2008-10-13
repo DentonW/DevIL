@@ -14,6 +14,7 @@
 - Changed .jp2 loading so that file streams can now be loaded.
 - Changed limit/clamp in il.h to IL_LIMIT/IL_CLAMP.
 - Added .hdr saving.
+- Added Dutch/Spanish translations of error codes in ILU.
 
 1.7.2
 ---
