@@ -1,3 +1,4 @@
+ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS      = src-IL src-ILU src-ILUT include
 DIST_SUBDIRS = src-IL src-ILU src-ILUT include

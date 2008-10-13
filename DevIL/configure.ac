@@ -1,13 +1,18 @@
 dnl 
 dnl Autoconf script for DevIL Library
 dnl Written by Meloni Dario
+dnl modified by Matej Tyc, report bugs to <matej.tyc@gmail.com>
 dnl 
 
 dnl
 dnl configure.in initialization
 dnl
-AC_INIT
-AC_CONFIG_SRCDIR([README])
+AC_INIT([DevIL], 
+	1.7.2,
+	[matej.tyc@gmail.com])
+AC_CONFIG_SRCDIR([src-IL/src/il_main.c])
+AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_AUX_DIR([build-aux])
 
 dnl
 dnl Minimum Autoconf version
@@ -35,8 +40,8 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION($Revision: 1.34 $)
-AC_CONFIG_AUX_DIR(libtools)
+AC_REVISION($Revision: 1.35 $)
+# AC_CONFIG_AUX_DIR(libtools)
 AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
@@ -51,11 +56,6 @@ dnl AC_LIBTOOL_WIN32_DLL
 AC_PATH_XTRA
 
 
-AC_DEFUN([ADD_CFLAGS],
-	 [LIBIL_CFLAGS="$LIBIL_CFLAGS $1"
-          LIBILU_CFLAGS="$LIBILU_CFLAGS $1"
-          LIBILUT_CFLAGS="$LIBILUT_CFLAGS $1"
-          CFLAGS="$CFLAGS $1"])
 
 ADD_CFLAGS([$CFLAGS])
 
@@ -88,36 +88,6 @@ AM_DISABLE_STATIC
 AM_PROG_LIBTOOL
 dnl AM_MAINTAINER_MODE
 
-dnl
-dnl Check CPU Extensions
-dnl
-AC_DEFUN([TEST_EXT],
-	 [AC_ARG_ENABLE([$6],
-			[AC_HELP_STRING([--enable-$6],[Doesn't compile $1 support])],
-			[use_$1=$enable_$6],
-			[use_$1=test])
-         AC_MSG_CHECKING([$1])
-         AS_IF([test "$use_$1" = "yes"],
-               [AC_DEFINE([$4],,[$1 extension found])
-                AC_DEFINE([VECTORMEM],[],[Memory must be vector aligned])
-                ADD_CFLAGS([$2])
-                AC_MSG_RESULT([yes])
-                SUPPORTED_EXTENSION=$SUPPORTED_EXTENSION"$1 "],
-               [test "$use_$1" = "test"],
-               CFLAGS_TMP=$CFLAGS
-               CFLAGS=$CFLAGS" $2"
-               AC_COMPILE_IFELSE([
-      $5
-      int main() {$3;return 0;}],
-      [AC_DEFINE([$4],[],[$1 extension found])
-       AC_DEFINE([VECTORMEM],[],[Memory must be vector aligned])
-       ADD_CFLAGS([$2])
-       AC_MSG_RESULT(yes)
-       SUPPORTED_EXTENSION=$SUPPORTED_EXTENSION"$1 "],
-      [AC_MSG_RESULT(no)]
-      [CFLAGS=$CFLAGS_TMP]),
-AC_MSG_RESULT(disabled))])
-
 TEST_EXT([Altivec],
 	 [-faltivec -maltivec],
 	 [vector int vec;vec=vec_splat_u32(0);],
@@ -145,31 +115,6 @@ TEST_EXT([SSE3],
 	 [SSE3],
 	 [#include <pmmintrin.h>],
 	 [sse3])
-
-dnl
-dnl Check CPU Assembly
-dnl
-dnl add test to have only an ASM for compilation
-AC_DEFUN([TEST_ASM],
-	 [AC_ARG_ENABLE([$4],
-			[AC_HELP_STRING([--enable-$4],
-					[Compile with $4 support])],
-                        [use_$4=$enable_$4],[use_$4=test])
-          AC_MSG_CHECKING([$4])
-          AS_IF([test "$use_$4" = "yes"],
-                [SUPPORTED_EXTENSION=$SUPPORTED_EXTENSION"$2 "
-		 AC_DEFINE([$3],
-			   [],
-			   [$2 assembly found]) 
-		 AC_MSG_RESULT([yes])],
-                [test "$use_$4" = "no"],
-                [AC_MSG_RESULT(no)],
-		[AS_CASE([$host_cpu], 
-	                 [$1],
-			 [SUPPORTED_EXTENSION=$SUPPORTED_EXTENSION"$2 "
-		          AC_DEFINE([$3],,[$2 assembly found]) 
-		          AC_MSG_RESULT([yes])],
-	                 [AC_MSG_RESULT([no]) ]) ]) ])
 
 TEST_ASM([i[[3456]]86*],
 	 [X86_ASM],
@@ -277,24 +222,6 @@ AC_DEFINE([IL_USE_JPEGLIB_UNMODIFIED],
 	  [],
 	  [Use libjpeg without modification. always enabled.])
 
-dnl
-dnl Setup Libraries
-dnl
-AC_DEFUN([SET_LIB],
-	 [LIB$2=""
-          AC_ARG_WITH([$1],
-		      [AC_HELP_STRING([--with-$1=path],
-				      [Specify the lib$1 installation path])],
-	 [ADD_CFLAGS([-I$enable_$1dir/include])
-	 LIB$2="-L$enable_$1dir/lib"
-	 no_$1=no
-	 use_$1=yes ])
-         AS_IF([test ! "$no_$1" = "yes" && test "$use_$1" = "yes" && test -z "$3"],
-	       [LIB$2="$LIB$2 -l$1"],
-               [test ! "$no_$1" = "yes" && test "$use_$1" = "yes" && ! test -z "$3"],
-	       [LIB$2="$3"],
-	       [])
-        AC_SUBST(LIB$2) ])
 
 SET_LIB([jpeg],
 	[JPG])
@@ -343,26 +270,6 @@ AS_IF([test -z "$libpng_app"],
        no_png=no])
 dnl Just in case the library is not installed in the default header path
 
-dnl
-dnl Formats
-dnl
-AC_DEFUN([TEST_FORMAT],
-	 [AC_ARG_ENABLE([$1],
-			[AC_HELP_STRING([--disable-$1],
-					[Doesn't compile $1 support])],
-		        [use_$1="$enable_$1"],
-			[use_$1="yes"])
-
-AS_IF([test "$no_$1" = "yes"],
-      [AC_DEFINE([IL_NO_$2],
-		 [],
-		 [$2 support])],
-     [test "$use_$1" = "yes"],
-     [SUPPORTED_FORMATS=$SUPPORTED_FORMATS"$2 "],
-     [AC_DEFINE([IL_NO_$2],
-		[],
-		[$2 support]) ]) ])
-
 TEST_FORMAT([bmp], [BMP])
 TEST_FORMAT([dcx], [DCX])
 TEST_FORMAT([doom], [WAD])
@@ -398,35 +305,21 @@ AS_IF([test "$no_png" = "yes"],
 AC_SUBST([LIBPNG])
 AC_SUBST([LIBPNG_INCLUDE])
 
-dnl
-dnl ILUT APIs checking
-dnl
-AC_DEFUN([TEST_API],
-	 [AC_ARG_ENABLE([$1],
-			[AC_HELP_STRING([--disable-$1],
-					[Doesn't compile $1 support])],
-                        [use_$1=$enable_$1],
-			[use_$1=yes]) ])
-
-TEST_API(allegro)
-TEST_API(directx8)
-TEST_API(directx9)
-TEST_API(opengl)
-TEST_API(sdl)
-TEST_API(win32)
-TEST_API(x11)
-TEST_API(xshm)
+TEST_API([allegro])
+TEST_API([directx8])
+TEST_API([directx9])
+TEST_API([opengl])
+TEST_API([sdl])
+TEST_API([win32])
+TEST_API([x11])
+TEST_API([xshm])
 
 dnl
 dnl ILUT APIs library checking
 dnl
 
 dnl if AM_PATH_SDL is missing, replace it with a dummy test
-m4_ifndef([AM_PATH_SDL],
-	  [AC_DEFUN([AM_PATH_SDL],
-		    [AC_MSG_CHECKING([SDL $1])
-  	             AC_MSG_RESULT(missing macros)
-  	             $3]) ])
+dnl This is not going to be the case since the sdl.m4 is in m4 dir from now on :-)
 
 dnl SDL
 HSDL=""
@@ -461,9 +354,7 @@ AS_IF([test "$use_x11" = "yes"],
 	      AC_CHECK_HEADER([X11/extensions/XShm.h],
 			      [],
 			      [use_xshm=no],
-			      [[#ifdef HAVE_XLIB_H
-			        #include <X11/Xlib.h>
-				#endif]])
+			      [[#include <X11/Xlib.h>]])
 	      AS_IF([test "$use_xshm" = "yes"],
 		    [AC_DEFINE([ILUT_USE_XSHM],
 			       [],
@@ -487,13 +378,17 @@ AS_IF([test "$use_opengl" = "yes"],
                [LIBGL="-lopengl32 -lglu32"],
                [*-apple-darwin*],
                [LIBGL='-Wl,-framework -Wl,OpenGL'],
-               [AC_CHECK_LIB(GL,glLoadIdentity,[LIBGL="-lGL"])
-	        AC_CHECK_LIB(GLU,gluPerspective,[LIBGL="-lGLU"]) ])
-      AC_DEFINE([ILUT_USE_OPENGL],
-		[],
-		[Support OpenGL API])
-      SUPPORTED_API=$SUPPORTED_API"OpenGL "],
-     [LIBGL=""])
+               [AC_CHECK_LIB([GL],
+			     [glLoadIdentity],
+			     [LIBGL="-lGL"])
+	        AC_CHECK_LIB([GLU],
+			     [gluPerspective],
+			     [LIBGL="-lGLU"]) ])
+       AC_DEFINE([ILUT_USE_OPENGL],
+	         [],
+	         [Support OpenGL API])
+       SUPPORTED_API=$SUPPORTED_API"OpenGL "],
+      [LIBGL=""])
 AC_SUBST([LIBGL])
 
 dnl Allegro
@@ -507,7 +402,9 @@ AS_IF([test "$use_allegro" = "yes"],
 		     []) ])
 
 AS_IF([test "$allegro_config" = "yes"],
-      [AC_DEFINE(ILUT_USE_ALLEGRO,,[Support Allegro API])
+      [AC_DEFINE([ILUT_USE_ALLEGRO],
+		 [],
+		 [Support Allegro API])
        SUPPORTED_API=$SUPPORTED_API"Allegro "
        LIBALLEGRO=`allegro-config --libs`
        HALLEGRO=`allegro-config --cflags`])
@@ -518,14 +415,14 @@ AC_SUBST([HALLEGRO])
 dnl Win32
 AS_CASE([$host],
         [*mingw32*],
-        [LIBIL_CFLAGS=$LIBIL_CFLAGS" -mno-cygwin"
-         LIBILU_CFLAGS=$LIBILU_CFLAGS" -mno-cygwin"
-         LIBILUT_CFLAGS=$LIBILUT_CFLAGS" -mno-cygwin"
+        [LIBIL_CFLAGS="$LIBIL_CFLAGS -mno-cygwin"
+         LIBILU_CFLAGS="$LIBILU_CFLAGS -mno-cygwin"
+         LIBILUT_CFLAGS="$LIBILUT_CFLAGS -mno-cygwin"
          VERSIONINFO=""],
         [*cygwin*],
         [LIBILUT_WIN32LIBPATH="-L/usr/lib/w32api"
          VERSIONINFO=""],
-        [use_win32=no
+        [use_win32="no"
          VERSIONINFO="-version-info $DEVIL_LTVERSION"])
 
 AC_SUBST([VERSIONINFO])
