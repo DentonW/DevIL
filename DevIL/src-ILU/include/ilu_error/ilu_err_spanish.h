@@ -6,7 +6,7 @@
 //
 // Filename: src-ILU/include/ilu_err_spanish.h
 //
-// Description: Error functions in Spanish
+// Description: Error functions in Spanish, translated by Carlos Aragonés.
 //
 //-----------------------------------------------------------------------------
 
@@ -35,6 +35,19 @@ ILconst_string iluErrorStringsSpanish[IL_FILE_READ_ERROR - IL_INVALID_ENUM + 1] 
 	L"conversión incorrecta",
 	L"número de dimensiones incorrecto",
 	L"error de lectura en el fichero"
+};
+
+ILconst_string iluLibErrorStringsSpanish[IL_LIB_MNG_ERROR - IL_LIB_GIF_ERROR + 1] = {
+	L"error en la librería gif",  // the correct translation will be 'error en la biblioteca gif' but nobody in spain uses the word 'biblioteca' for translate the word 'library'. Almost all spanish programmers translates incorrectly library to 'librería'.
+	L"error en la librería jpeg",
+	L"error en la librería png",
+	L"error en la librería tiff",
+	L"error en la librería mng"
+};
+
+ILconst_string iluMiscErrorSpanish[2] = {
+	L"no error",
+	L"unknown error"
 };
 
 #endif//ILU_ERR_SPANISH_H

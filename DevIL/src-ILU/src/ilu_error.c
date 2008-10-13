@@ -12,6 +12,10 @@
 
 
 #include "ilu_internal.h"
+#ifdef _UNICODE
+	#include "ilu_error/ilu_err_dutch.h"
+	#include "ilu_error/ilu_err_spanish.h"
+#endif//_UNICODE
 
 #ifdef _UNICODE
 //#include <tchar.h>
