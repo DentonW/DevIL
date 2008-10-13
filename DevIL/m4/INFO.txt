@@ -1,0 +1,2 @@
+These files are macros needed by autotools to generate the configure script.
+DON'T MODIFY THEM BY HAND EXCEPT devil-definitions.m4, see this article to know why: http://www.linux.com/articles/114061
