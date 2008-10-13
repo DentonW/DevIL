@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="ILU"
 	ProjectGUID="{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -81,8 +80,6 @@
 				ModuleDefinitionFile=".\ilu.def"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\../../lib/debug/ilu-d.pdb"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				ImportLibrary=".\../../lib/vc8/debug/ilu.lib"
 				TargetMachine="1"
 			/>
@@ -105,6 +102,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -180,8 +180,6 @@
 				IgnoreDefaultLibraryNames="msvcrt.lib"
 				ModuleDefinitionFile=".\ilu.def"
 				ProgramDatabaseFile=".\../../lib/ILU.pdb"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				ImportLibrary=".\../../lib/vc8/ILU.lib"
 				TargetMachine="1"
 			/>
@@ -204,6 +202,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -588,6 +589,14 @@
 			<Filter
 				Name="Error Messages"
 				>
+				<File
+					RelativePath="..\include\ilu_error\ilu_err_dutch.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\ilu_error\ilu_err_spanish.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
