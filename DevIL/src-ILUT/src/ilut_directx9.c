@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Toolkit Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 12/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2008 by Denton Woods
+// Last modified: 12/25/2001
 //
 // Filename: src-ILUT/src/ilut_directx9.c
 //

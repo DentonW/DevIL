@@ -1,12 +1,12 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Toolkit Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 12/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2008 by Denton Woods
+// Last modified: 12/25/2001
 //
 // Filename: src-ILUT/src/ilut_directx.c
 //
-// Description: DirectX functions for textures
+// Description: DirectX 8 functions for textures
 //
 //-----------------------------------------------------------------------------
 
