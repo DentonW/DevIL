@@ -15,6 +15,7 @@
 - Changed limit/clamp in il.h to IL_LIMIT/IL_CLAMP.
 - Added .hdr saving.
 - Added Dutch/Spanish translations of error codes in ILU.
+- Added ilut_directxm.c (DirectX Mobile support) from Vincent Richomme.
 
 1.7.2
 ---

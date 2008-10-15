@@ -5,7 +5,6 @@
 	Name="ILUT"
 	ProjectGUID="{7D060DA4-F2FA-44CC-80BE-065024DD6CA9}"
 	RootNamespace="ILUT"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -84,8 +83,6 @@
 				ModuleDefinitionFile=".\ilut.def"
 				DelayLoadDLLs="opengl32.dll,glu32.dll,d3d8.dll,d3d9.dll,sdl.dll,alleg42.dll,wininet.dll"
 				ProgramDatabaseFile=".\../../lib/ILUT.pdb"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				ImportLibrary=".\../../lib/vc8/ILUT.lib"
 				TargetMachine="1"
 			/>
@@ -108,6 +105,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -183,8 +183,6 @@
 				DelayLoadDLLs="d3d8.dll,sdl.dll,alleg42.dll"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\../../lib/debug/ilut.pdb"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				ImportLibrary=".\../../lib/vc8/debug/ilut.lib"
 				TargetMachine="1"
 			/>
@@ -207,6 +205,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -253,6 +254,10 @@
 			</File>
 			<File
 				RelativePath="..\src\ilut_directx9.c"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ilut_directxm.c"
 				>
 			</File>
 			<File
