@@ -5,7 +5,6 @@
 	Name="IL"
 	ProjectGUID="{B46B180B-6079-4CE6-8647-A7D712774255}"
 	RootNamespace="IL"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -85,8 +84,6 @@
 				DelayLoadDLLs="ilmimf.dll half.dll"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\../../lib/vc8/debug/devil.pdb"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				ImportLibrary=".\../../lib/vc8/debug/devil.lib"
 				TargetMachine="1"
 			/>
@@ -109,6 +106,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -177,18 +177,16 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/NODEFAULTLIB:msvcrtd.lib"
-				AdditionalDependencies="comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib libcmt.lib libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib"
+				AdditionalDependencies="libcmt.lib comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib libcmt.lib libtiff.lib libpng.lib libjpeg.lib zlib.lib lcms.lib libjasper.lib"
 				OutputFile="../../lib/vc8/DevIL.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../projects/msvc/extlibs"
-				IgnoreDefaultLibraryNames=""
+				IgnoreDefaultLibraryNames="msvcrt.lib"
 				ModuleDefinitionFile=".\il.def"
 				DelayLoadDLLs="ilmimf.dll half.dll"
 				ProgramDatabaseFile=".\../../lib/vc8/DevIL.pdb"
 				OptimizeForWindows98="1"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				ImportLibrary=".\../../lib/vc8/DevIL.lib"
 				TargetMachine="1"
 			/>
@@ -211,6 +209,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
