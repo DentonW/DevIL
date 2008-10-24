@@ -1009,7 +1009,10 @@ ILboolean GetAlphaBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XP
 			if (x < Image->Width && y < Image->Height)
 	            Block[i++] = Data[Offset + x];
             else
-	            Block[i++] = Data[Offset];
+	            //Block[i++] = Data[Offset];
+				// 10-23-2008
+				// Bugfix from https://sourceforge.net/forum/message.php?msg_id=5486779
+				Block[i++] = YPos * Image->Width + XPos;
 		}
         Offset += Image->Width;
 	}

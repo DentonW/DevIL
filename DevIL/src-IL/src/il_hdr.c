@@ -413,7 +413,7 @@ float2rgbe(unsigned char rgbe[4], float red, float green, float blue)
     rgbe[0] = rgbe[1] = rgbe[2] = rgbe[3] = 0;
   }
   else {
-    v = frexp(v,&e) * 256.0/v;
+    v = (float)(frexp(v,&e) * 256.0/v);
     rgbe[0] = (unsigned char) (red * v);
     rgbe[1] = (unsigned char) (green * v);
     rgbe[2] = (unsigned char) (blue * v);

@@ -1637,7 +1637,7 @@ ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestTy
 	ILushort	*ShortPtr;
 	ILuint		*IntPtr;
 	ILfloat		*FloatPtr, tempFloat;
-	ILdouble	*DblPtr, tempDouble;
+	ILdouble	*DblPtr;
 	ILushort	*HalfPtr;
 
 	BpcSrc = ilGetBpcType(SrcType);

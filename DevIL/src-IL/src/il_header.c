@@ -64,10 +64,13 @@ ILboolean ilSaveCHeader(ILconst_string FileName, const char *InternalName)
 		TempImage = iCurImage;
 	}
 
-#ifndef _WIN32_WCE
+#ifndef _UNICODE
 	HeadFile = fopen(FileName, "wb");
 #else
-	HeadFile = _wfopen(FileName, L"wb");
+	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES))
+		HeadFile = fopen((char*)FileName, "wb");
+	else
+		HeadFile = _wfopen(FileName, L"wb");
 #endif//_WIN32_WCE
 
 	

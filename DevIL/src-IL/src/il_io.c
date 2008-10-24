@@ -66,7 +66,7 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 	// See Note A
 #if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
 	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
-		Temp = WideFromMultiByte(FileName);
+		Temp = WideFromMultiByte((char*)FileName);
 		FileName = Temp;
 	}
 	Ext = iGetExtension(FileName);
@@ -628,7 +628,7 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 	// See Note A
 #if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
 	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
-		Temp = WideFromMultiByte(FileName);
+		Temp = WideFromMultiByte((char*)FileName);
 		FileName = Temp;
 	}
 #endif//_UNICODE
@@ -1197,7 +1197,7 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 	// See Note A
 #if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
 	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
-		Temp = WideFromMultiByte(FileName);
+		Temp = WideFromMultiByte((char*)FileName);
 		Ext = iGetExtension(Temp);
 	}
 	else {
@@ -1745,7 +1745,7 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 	// See Note A
 #if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
 	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
-		Temp = WideFromMultiByte(FileName);
+		Temp = WideFromMultiByte((char*)FileName);
 		FileName = Temp;
 	}
 	Ext = iGetExtension(FileName);
