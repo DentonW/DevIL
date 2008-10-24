@@ -23,11 +23,12 @@
 #define MAGIC_HEADER2	0x4D4D
 
 
-
-#ifdef _WIN32
-	#if (defined(IL_USE_PRAGMA_LIBS))
-		#if defined(_MSC_VER) || defined(__BORLANDC__)
+#if defined(_WIN32) && defined(IL_USE_PRAGMA_LIBS)
+	#if defined(_MSC_VER) || defined(__BORLANDC__)
+		#ifndef _DEBUG
 			#pragma comment(lib, "libtiff.lib")
+		#else
+			#pragma comment(lib, "libtiff-d.lib")
 		#endif
 	#endif
 #endif

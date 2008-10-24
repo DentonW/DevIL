@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="libpng"
 	ProjectGUID="{0B1168FE-4042-4F17-8BD7-AF958EB9C2C7}"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -76,6 +77,8 @@
 				SuppressStartupBanner="true"
 				ModuleDefinitionFile="..\..\..\extlibs\LibPNG\projects\msvc\png32ms.def"
 				ProgramDatabaseFile=".\..\..\..\extlibs\lib/libpng.pdb"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				ImportLibrary=".\..\..\..\extlibs\lib/libpng.lib"
 				TargetMachine="1"
 			/>
@@ -98,9 +101,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"

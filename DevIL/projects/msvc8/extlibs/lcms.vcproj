@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="lcms"
 	ProjectGUID="{75EE92E6-DF8D-4FB1-89C0-B2BA687D1144}"
 	RootNamespace="lcms"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -156,6 +157,8 @@
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)/lcms.dll"
 				ModuleDefinitionFile="lcms.def"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				ImportLibrary="$(OutDir)/lcms_DLL.lib"
 			/>
 			<Tool
@@ -175,9 +178,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"

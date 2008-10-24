@@ -21,6 +21,18 @@
 #ifndef IL_NO_ICNS
 #include "il_icns.h"
 
+#ifndef IL_NO_JP2
+	#if defined(_WIN32) && defined(IL_USE_PRAGMA_LIBS)
+		#if defined(_MSC_VER) || defined(__BORLANDC__)
+			#ifndef _DEBUG
+				#pragma comment(lib, "libjasper.lib")
+			#else
+				#pragma comment(lib, "libjasper-d.lib")
+			#endif
+		#endif
+	#endif
+#endif//IL_NO_JP2
+
 //! Reads an icon file.
 ILboolean ilLoadIcns(ILconst_string FileName)
 {

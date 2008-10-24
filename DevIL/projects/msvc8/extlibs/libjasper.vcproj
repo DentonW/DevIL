@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="libjasper"
 	ProjectGUID="{71D05AD3-2DCA-4E36-A6ED-555BB6642D35}"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform

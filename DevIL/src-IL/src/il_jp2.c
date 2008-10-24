@@ -20,6 +20,17 @@
 #include <jasper/jasper.h>
 #include "il_jp2.h"
 
+#if defined(_WIN32) && defined(IL_USE_PRAGMA_LIBS)
+	#if defined(_MSC_VER) || defined(__BORLANDC__)
+		#ifndef _DEBUG
+			#pragma comment(lib, "libjasper.lib")
+		#else
+			#pragma comment(lib, "libjasper-d.lib")
+		#endif
+	#endif
+#endif
+
+
 //! Reads a Jpeg2000 file.
 ILboolean ilLoadJp2(ILconst_string FileName)
 {

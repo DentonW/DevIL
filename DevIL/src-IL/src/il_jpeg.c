@@ -47,13 +47,17 @@
 #include "il_manip.h"
 #include <setjmp.h>
 
-	#ifdef _WIN32
-		#if (defined(IL_USE_PRAGMA_LIBS))
-			#if defined(IL_USE_PRAGMA_LIBS) || defined(__BORLANDC__)
-				#pragma comment(lib, "libjpeg.lib")
-			#endif
+
+#if defined(_WIN32) && defined(IL_USE_PRAGMA_LIBS)
+	#if defined(_MSC_VER) || defined(__BORLANDC__)
+		#ifndef _DEBUG
+			#pragma comment(lib, "libjpeg.lib")
+		#else
+			#pragma comment(lib, "libjpeg-d.lib")
 		#endif
 	#endif
+#endif
+
 
 static ILboolean jpgErrorOccured = IL_FALSE;
 

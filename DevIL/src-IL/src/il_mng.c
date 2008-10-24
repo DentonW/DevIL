@@ -20,13 +20,18 @@
 //#define MNG_USE_SO
 #endif
 
-#ifdef _WIN32
-	#if (defined(IL_USE_PRAGMA_LIBS))
-		#if defined(_MSC_VER) || defined(__BORLANDC__)
+#if defined(_WIN32) && defined(IL_USE_PRAGMA_LIBS)
+	#if defined(_MSC_VER) || defined(__BORLANDC__)
+		#ifndef _DEBUG
 			#pragma comment(lib, "libmng.lib")
 			#pragma comment(lib, "lcms.lib")
 			#pragma comment(lib, "libjpeg.lib")
 			#pragma comment(lib, "zlib.lib")
+		#else
+			#pragma comment(lib, "libmng-d.lib")
+			#pragma comment(lib, "lcms-d.lib")
+			#pragma comment(lib, "libjpeg-d.lib")
+			#pragma comment(lib, "zlib-d.lib")
 		#endif
 	#endif
 #endif
