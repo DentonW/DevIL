@@ -22,7 +22,7 @@ AC_PREREQ(2.52)
 DEVIL_MAJOR=1
 DEVIL_MINOR=7
 DEVIL_REVISION=2
-DEVIL_VERSION=$DEVIL_MAJOR$DEVIL_MINOR$DEVIL_REVISION
+DEVIL_VERSION=${DEVIL_MAJOR}${DEVIL_MINOR}${DEVIL_REVISION}
 
 dnl
 dnl Note that the libtool version has nothing to do
@@ -33,6 +33,39 @@ dnl
 DEVIL_LTVERSION=1:0:0
 AC_SUBST(DEVIL_LTVERSION)
 
+ADD_CFLAGS([$CFLAGS])
+
+dnl
+dnl Test build options
+dnl
+AC_ARG_ENABLE([debug],
+	      [AS_HELP_STRING([--enable-debug],
+			      [Compile a debug version of the library])],
+              [],
+	      [enable_debug="no"])
+
+AC_ARG_ENABLE([release],
+	      [AS_HELP_STRING([--disable-release],
+			      [Compile a debug version of the library, default enabled if not building debug version])],
+              [],
+	      [enable_release="yes"
+	       test "x$enable_debug" = "xyes" && enable_release="no"])
+
+AC_ARG_ENABLE([asm],
+	      [AS_HELP_STRING([--disable-asm],
+			      [Use assembler routines if possible, default enable if not building debug version])],
+	      [],
+	      [enable_asm="yes"
+	       test "x$enable_debug" = "xyes" && enable_asm="no"])
+
+AS_IF([test "x$enable_release" = "xyes"],
+      [ADD_CFLAGS([-O3])],
+      [test "x$enable_debug" = "xyes"],
+      [ADD_CFLAGS([-DNOINLINE -Wall -g -O0])
+       AC_DEFINE([DEBUG],
+		 [],
+		 ["Enable debug code features"]) ])
+
 dnl
 dnl Basic conf
 dnl
@@ -40,12 +73,12 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION($Revision: 1.35 $)
+AC_REVISION([$Revision: 1.36 $])
 # AC_CONFIG_AUX_DIR(libtools)
-AC_PREFIX_DEFAULT(/usr/local)
+dnl AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
-AC_LANG([C++])
+dnl AC_LANG([C++])
 AC_LANG([C])
 AC_PROG_CC
 AC_PROG_CXX
@@ -55,17 +88,48 @@ AC_C_BIGENDIAN
 dnl AC_LIBTOOL_WIN32_DLL
 AC_PATH_XTRA
 
+AC_ARG_ENABLE([monolithic],
+	      [AS_HELP_STRING([--enable-monolithic],
+			      [Builds only one library instead of separate ones (IL, ILU, ILUT -> DevIL). Default set to 'disabled'])],
+              [],
+	      [enable_monolithic="no"])
+AM_CONDITIONAL([BUILD_MONOLITHIC],
+	       [test "x$enable_monolithic" = "xyes"])
 
+AC_ARG_ENABLE([IL],
+	      [AS_HELP_STRING([--enable-IL[[=yes/no]]],
+			      [Build IL part of DevIL. Default set to yes])],
+              [],
+	      [enable_IL="yes"])
+AM_CONDITIONAL([BUILD_IL],
+	       [test "x$enable_IL" = "xyes"])
 
-ADD_CFLAGS([$CFLAGS])
+AC_ARG_ENABLE([ILU],
+	      [AS_HELP_STRING([--enable-ILU[[=yes/no]]],
+			      [Build ILU part of DevIL. Default set to no])],
+              [],
+	      [enable_ILU="no"])
+AM_CONDITIONAL([BUILD_ILU],
+	       [test "x$enable_ILU" = "xyes"])
+
+AC_ARG_ENABLE([ILUT],
+	      [AS_HELP_STRING([--enable-ILUT[[=yes/no]]],
+			      [Build ILUT part of DevIL. Default set to no])],
+              [],
+	      [enable_ILUT="no"])
+AM_CONDITIONAL([BUILD_ILUT],
+	       [test "x$enable_ILUT" = "xyes"])
+
 
 dnl Test for restrict c/c++ keyword
 AC_MSG_CHECKING([restrict keyword])
 AC_COMPILE_IFELSE([[void foo(void * restrict test){}]],
-	          [AC_DEFINE(RESTRICT_KEYWORD,,restric keyword available)]
-	          [restrict_keyword=found]
-	          [AC_MSG_RESULT(yes)],
-		  [AC_MSG_RESULT(no)])
+	          [AC_DEFINE([RESTRICT_KEYWORD],
+			     [],
+			     [restric keyword available])
+	           restrict_keyword="found"]
+	          [AC_MSG_RESULT([yes])],
+		  [AC_MSG_RESULT([no])])
 
 AS_IF([test ! "$restrict_keyword" = "found"],
 dnl checking if the -std=gnu99 flag is required
@@ -73,16 +137,19 @@ dnl checking if the -std=gnu99 flag is required
        CFLAGS="$CFLAGS -std=gnu99"
        AC_MSG_CHECKING([restrict gnu99 keyword])
        AC_COMPILE_IFELSE([[void foo(void * restrict test){}]],
-	                 [AC_DEFINE(RESTRICT_KEYWORD,,restric keyword available)]
-	                 [AC_MSG_RESULT(yes)]
-	                 [CFLAGS="$TMP_CFLAGS"]
-                         [ADD_CFLAGS(-std=gnu99 -fgnu89-inline)],
-			 [AC_MSG_RESULT(no)]
-	                 [CFLAGS="$TMP_CFLAGS"]) ])
+	                 [AC_DEFINE([RESTRICT_KEYWORD],
+				    [],
+				    [restric keyword available])
+	                  AC_MSG_RESULT(yes)
+	                  CFLAGS="$TMP_CFLAGS"
+                          ADD_CFLAGS(-std=gnu99 -fgnu89-inline)],
+			 [AC_MSG_RESULT(no)
+	                  CFLAGS="$TMP_CFLAGS"]) ])
 
 dnl must add AC_CACHE_CHECK support where possible
 
-AM_INIT_AUTOMAKE("DevIL", $DEVIL_MAJOR.$DEVIL_MINOR.$DEVIL_REVISION)
+AM_INIT_AUTOMAKE(["DevIL"], 
+		 [${DEVIL_MAJOR}.${DEVIL_MINOR}.${DEVIL_REVISION}])
 AM_CONFIG_HEADER([include/IL/config.h])
 AM_DISABLE_STATIC
 AM_PROG_LIBTOOL
@@ -116,34 +183,19 @@ TEST_EXT([SSE3],
 	 [#include <pmmintrin.h>],
 	 [sse3])
 
-TEST_ASM([i[[3456]]86*],
-	 [X86_ASM],
-	 [GCC_X86_ASM],
-	 [x86])
-
-TEST_ASM([x86_64*],
-	 [X86_64_ASM],
-	 [GCC_X86_64_ASM],
-	 [x86_64])
-
-TEST_ASM([powerpc*],
-	 [PPC_ASM],
-	 [GCC_PCC_ASM],
-	 [ppc])
-
-dnl
-dnl Test release build options
-dnl
-AC_ARG_ENABLE([release],
-	      [AC_HELP_STRING([--disable-release],
-			      [Compile a debug version of the library])],
-              [build_release="$enable_release"],
-	      [build_release="yes"])
-
-AS_IF([test "$build_release" = "no"],
-      [ADD_CFLAGS([-DNOINLINE -Wall -g -O0])]
-      [AC_DEFINE(DEBUG,,"Enable debug code features")],
-      [ADD_CFLAGS(-O3)])
+AS_IF([test "x$enable_asm" = "xyes"],
+      [TEST_ASM([i[[3456]]86*],
+                [X86_ASM],
+	        [GCC_X86_ASM],
+                [x86])
+       TEST_ASM([x86_64*],
+                [X86_64_ASM],
+                [GCC_X86_64_ASM],
+                [x86_64])
+       TEST_ASM([powerpc*],
+                [PPC_ASM],
+                [GCC_PCC_ASM],
+                [ppc]) ])
 
 dnl
 dnl Test warning build options
@@ -185,15 +237,15 @@ dnl Libraries development checking
 dnl
 AC_CHECK_HEADER([jpeglib.h],
 		[],
-		[no_jpeg=yes])
+		[no_jpeg="yes"])
 
 AC_CHECK_HEADER([tiffio.h],
 		[],
-		[no_tiff=yes])
+		[no_tiff="yes"])
 
 AC_CHECK_HEADER([lcms/lcms.h],
 		[],
-		[no_lcms=yes])
+		[no_lcms="yes"])
 
 AC_CHECK_HEADER([lcms.h],
 		[lcms_nodirinclude=yes])
@@ -204,15 +256,15 @@ AC_CHECK_HEADER([libmng.h],
 
 AC_CHECK_HEADER([jasper/jasper.h], 
 		[], 
-		[no_jp2=yes])
+		[no_jp2="yes"])
 
 AC_CHECK_HEADER([zlib.h], 
-		[use_z=yes], 
-		[use_z=no])
+		[use_z="yes"], 
+		[use_z="no"])
 
 dnl Special code for LCMS
-AS_IF([test "$lcms_nodirinclude" = "yes"],
-      [no_lcms=no],
+AS_IF([test "x$lcms_nodirinclude" = "xyes"],
+      [no_lcms="no"],
       [AC_DEFINE([LCMS_NODIRINCLUDE],
 		 [],
 		 [LCMS include without lcms/ support]) ])
@@ -223,23 +275,19 @@ AC_DEFINE([IL_USE_JPEGLIB_UNMODIFIED],
 	  [Use libjpeg without modification. always enabled.])
 
 
-SET_LIB([jpeg],
-	[JPG])
+SET_LIB([jpeg])
 
-SET_LIB([tiff],
-	[TIFF])
+SET_LIB([tiff])
 
-SET_LIB([lcms],
-	[LCMS])
+SET_LIB([lcms])
 
-SET_LIB([mng],
-	[MNG])
+SET_LIB([mng])
 
-SET_LIB([jp2],
-	[JP2])
+SET_LIB([jp2])
 
-SET_LIB([z],
-	[Z])
+SET_LIB([png])
+
+SET_LIB([z])
 
 dnl libpng configuration
 AC_MSG_CHECKING([libpng])
@@ -249,12 +297,12 @@ AC_ARG_WITH([png],
 	    [AC_HELP_STRING([--with-pngdir=path],
 			    [Specify the libpng installation path])],
             [libpng_app="$withval/bin/libpng-config"
-            no_png=no])
+             no_png="no"])
 
 AS_IF([test ! "$with_png" = "no"],
       [AS_IF([test -z "$libpng_app"],
-	     [libpng_app=$(which libpng-config)],
-	     []) ])
+	     [libpng_app=$(which libpng-config)]) ])
+
 AS_IF([test ! -e "$libpng_app"],
       [libpng_app=""])
 
@@ -263,11 +311,11 @@ AS_IF([test -z "$libpng_app"],
 		 [],
 		 [PNG support])
        AC_MSG_RESULT([no])
-       no_png=yes],
+       no_png="yes"],
       [LIBPNG=`$libpng_app --ldflags`
        LIBPNG_INCLUDE=`$libpng_app --cflags`
        AC_MSG_RESULT([yes])
-       no_png=no])
+       no_png="no"])
 dnl Just in case the library is not installed in the default header path
 
 TEST_FORMAT([bmp], [BMP])
@@ -299,6 +347,13 @@ TEST_FORMAT([tiff], [TIF])
 TEST_FORMAT([xpm], [XPM])
 TEST_FORMAT([wal], [WAL])
 
+AC_DEFINE([IL_NO_EXR],
+	  [],
+	  [The EXR support is causing problems right now])
+AC_DEFINE([IL_NO_WDP],
+	  [],
+	  [The WDP support is causing problems as well])
+
 AS_IF([test "$no_png" = "yes"],
       [LIBPNG=""
        LIBPNG_INCLUDE=""])
@@ -328,6 +383,8 @@ AS_IF([test "$use_sdl" = "yes"],
       [AM_PATH_SDL(1.2.5,
                    [use_sdl="yes"],
 		   [use_sdl="no"]) ])
+AM_CONDITIONAL([USE_SDL],
+	       [test $use_sdl = "yes"])
 
 AS_IF([test "$use_sdl" = "yes"],
       [HSDL="$SDL_CFLAGS"
@@ -409,6 +466,9 @@ AS_IF([test "$allegro_config" = "yes"],
        LIBALLEGRO=`allegro-config --libs`
        HALLEGRO=`allegro-config --cflags`])
 
+AM_CONDITIONAL([USE_ALLEGRO],
+	       [test "$use_allegro" = "yes"])
+
 AC_SUBST([LIBALLEGRO])
 AC_SUBST([HALLEGRO])
 
@@ -486,7 +546,8 @@ dnl
 dnl Ouput files to generate
 dnl note: keep the list on one line separated by single spaces 
 dnl (otherwise MSYS compilation breaks)
-AC_CONFIG_FILES([Makefile  src-IL/Makefile  src-IL/src/Makefile  src-IL/include/Makefile  src-ILU/Makefile  src-ILU/src/Makefile  src-ILU/include/Makefile  src-ILUT/Makefile  src-ILUT/src/Makefile  src-ILUT/include/Makefile  include/Makefile  include/IL/Makefile]) 
+AC_CONFIG_FILES([Makefile lib/Makefile docs/Makefile]) 
+# src-IL/Makefile  src-IL/src/Makefile  src-IL/include/Makefile  src-ILU/Makefile  src-ILU/src/Makefile  src-ILU/include/Makefile  src-ILUT/Makefile  src-ILUT/src/Makefile  src-ILUT/include/Makefile  include/Makefile  include/IL/Makefile
 AC_OUTPUT
 
 echo
