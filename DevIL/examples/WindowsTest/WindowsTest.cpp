@@ -17,7 +17,7 @@
 #define IL_DEBUG
 #endif//_DEBUG
 
-#define _UNICODE
+//#define _UNICODE
 
 // Memory leak detection
 #ifdef _DEBUG 
@@ -130,8 +130,6 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 	ilInit();
 	iluInit();
 	ilutRenderer(ILUT_WIN32);
-	ilEnable(IL_UNICODE);
-	ilEnable(IL_UTF16_FILENAMES);
 
 	// Is there a file to load from the command-line?
 	if (__argc > 1) {

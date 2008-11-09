@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/24/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2008 by Denton Woods
+// Last modified: 11/07/2008
 //
 // Filename: src-IL/src/il_states.h
 //
@@ -40,9 +40,6 @@ typedef struct IL_STATES
 	ILenum		ilTypeMode;
 	// File mode states
 	ILboolean	ilOverWriteFiles;
-	// String states
-	ILboolean	ilUseUnicode;
-	ILboolean	ilUseUtf16Filenames;
 	// Palette states
 	ILboolean	ilAutoConvPal;
 	// Load fail states
@@ -82,17 +79,17 @@ typedef struct IL_STATES
 	// Format-specific strings
 	//
 
-	char		*ilTgaId;
-	char		*ilTgaAuthName;
-	char		*ilTgaAuthComment;
-	char		*ilPngAuthName;
-	char		*ilPngTitle;
-	char		*ilPngDescription;
-	char		*ilTifDescription;
-	char		*ilTifHostComputer;
-	char		*ilTifDocumentName;
-	char		*ilTifAuthName;
-	char		*ilCHeader;
+	ILstring	ilTgaId;
+	ILstring	ilTgaAuthName;
+	ILstring	ilTgaAuthComment;
+	ILstring	ilPngAuthName;
+	ILstring	ilPngTitle;
+	ILstring	ilPngDescription;
+	ILstring	ilTifDescription;
+	ILstring	ilTifHostComputer;
+	ILstring	ilTifDocumentName;
+	ILstring	ilTifAuthName;
+	ILstring	ilCHeader;
 
 
 

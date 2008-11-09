@@ -49,6 +49,8 @@ ILvoid ILAPIENTRY iluInit()
 	// Used mostly for rotations
 	//IL_PI = 4 * atan(1);		// precomputed value of pi
 	//IL_DEGCONV = IL_PI / 180;	// division is slow on some computers
+
+	iluSetLanguage(ILU_ENGLISH);
 	return;
 }
 

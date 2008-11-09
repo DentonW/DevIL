@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 08/24/2008 <--Y2K Compliant! =]
+// Last modified: 11/07/2008
 //
 // Filename: src-IL/src/il_states.c
 //
@@ -50,8 +50,6 @@ ILvoid ilDefaultStates()
 	ilStates[ilCurrentPos].ilUseKeyColour = IL_FALSE;
 	ilStates[ilCurrentPos].ilCompression = IL_COMPRESS_ZLIB;
 	ilStates[ilCurrentPos].ilInterlace = IL_FALSE;
-	ilStates[ilCurrentPos].ilUseUnicode = IL_FALSE;
-	ilStates[ilCurrentPos].ilUseUtf16Filenames = IL_FALSE;
 
 	ilStates[ilCurrentPos].ilTgaCreateStamp = IL_FALSE;
 	ilStates[ilCurrentPos].ilJpgQuality = 99;
@@ -141,22 +139,22 @@ ILstring ILAPIENTRY ilGetString(ILenum StringName)
 
 
 // Clips a string to a certain length and returns a new string.
-char *iClipString(char *String, ILuint MaxLen)
+ILstring iClipString(ILstring String, ILuint MaxLen)
 {
-	char	*Clipped;
+	ILstring Clipped;
 	ILuint	Length;
 
 	if (String == NULL)
 		return NULL;
 
-	Length = strlen(String);
+	Length = ilStrLen(String);
 
-	Clipped = (char*)ialloc(MaxLen + 1);  // Terminating NULL makes it +1.
+	Clipped = (ILstring)ialloc((MaxLen + 1) * sizeof(ILchar));  // Terminating NULL makes it +1.
 	if (Clipped == NULL) {
 		return NULL;
 	}
 
-	memcpy(Clipped, String, Length);
+	memcpy(Clipped, String, MaxLen * sizeof(ILchar));
 	Clipped[Length] = 0;
 
 	return Clipped;
@@ -164,7 +162,7 @@ char *iClipString(char *String, ILuint MaxLen)
 
 
 // Returns format-specific strings, truncated to MaxLen (not counting the terminating NULL).
-char *iGetString(ILenum StringName)
+ILconst_string iGetString(ILenum StringName)
 {
 	switch (StringName)
 	{
@@ -242,12 +240,6 @@ ILboolean ilAble(ILenum Mode, ILboolean Flag)
 		case IL_SAVE_INTERLACED:
 			ilStates[ilCurrentPos].ilInterlace = Flag;
 			break;
-		case IL_UNICODE:
-			ilStates[ilCurrentPos].ilUseUnicode = Flag;
-			break;
-		case IL_UTF16_FILENAMES:
-			ilStates[ilCurrentPos].ilUseUtf16Filenames = Flag;
-			break;
 
 		default:
 			ilSetError(IL_INVALID_ENUM);
@@ -279,10 +271,6 @@ ILboolean ILAPIENTRY ilIsEnabled(ILenum Mode)
 			return ilStates[ilCurrentPos].ilUseKeyColour;
 		case IL_SAVE_INTERLACED:
 			return ilStates[ilCurrentPos].ilInterlace;
-		case IL_UNICODE:
-			return ilStates[ilCurrentPos].ilUseUnicode;
-		case IL_UTF16_FILENAMES:
-			return ilStates[ilCurrentPos].ilUseUtf16Filenames;
 
 		default:
 			ilSetError(IL_INVALID_ENUM);

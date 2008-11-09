@@ -163,7 +163,7 @@ ILAPI HBITMAP	ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 			if (TempImage->Format != IL_COLOUR_INDEX) {
 				//generate greyscale palette
 				for (i = 0; i < 256; i++)
-					pal[i].rgbRed = pal[i].rgbGreen = pal[i].rgbBlue = i;
+					pal[i].rgbRed = pal[i].rgbGreen = pal[i].rgbBlue = (ILubyte)i;
 			}
 			else {
 				palImg = iConvertPal(&TempImage->Pal, IL_PAL_BGR32);
@@ -175,7 +175,7 @@ ILAPI HBITMAP	ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 					ilSetError(IL_INVALID_PARAM);
 					//generate greyscale palette
 					for (i = 0; i < 256; i++)
-						pal[i].rgbRed = pal[i].rgbGreen = pal[i].rgbBlue = i;
+						pal[i].rgbRed = pal[i].rgbGreen = pal[i].rgbBlue = (ILubyte)i;
 				}
 			}
 			info->bmiHeader.biBitCount = 8;
@@ -396,7 +396,7 @@ HPALETTE ILAPIENTRY ilutGetHPal()
 	}
 
 	LogPal->palVersion = 0x300;
-	LogPal->palNumEntries = NumEntries;
+	LogPal->palNumEntries = (WORD)NumEntries;
 
 	for (i = 0; i < NumEntries; i++) {
 		LogPal->palPalEntry[i].peRed   = ilutCurImage->Pal.Palette[i * 3];

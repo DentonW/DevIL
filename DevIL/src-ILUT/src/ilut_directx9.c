@@ -2,7 +2,7 @@
 //
 // ImageLib Utility Toolkit Sources
 // Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 12/25/2001
+// Last modified: 11/07/2008
 //
 // Filename: src-ILUT/src/ilut_directx9.c
 //
@@ -71,7 +71,7 @@ ILvoid CheckFormatsDX9(IDirect3DDevice9 *Device)
 
 
 #ifndef _WIN32_WCE
-ILboolean ILAPIENTRY ilutD3D9TexFromFile(IDirect3DDevice9 *Device, char *FileName, IDirect3DTexture9 **Texture)
+ILboolean ILAPIENTRY ilutD3D9TexFromFile(IDirect3DDevice9 *Device, ILconst_string FileName, IDirect3DTexture9 **Texture)
 {
 	iBindImageTemp();
 	if (!ilLoadImage(FileName))
@@ -85,9 +85,9 @@ ILboolean ILAPIENTRY ilutD3D9TexFromFile(IDirect3DDevice9 *Device, char *FileNam
 
 #ifndef _WIN32_WCE
 ILboolean ILAPIENTRY ilutD3D9CubeTexFromFile(IDirect3DDevice9 *Device,
-			char *FileName, IDirect3DCubeTexture9 **Texture) {
+			ILconst_string FileName, IDirect3DCubeTexture9 **Texture) {
 	iBindImageTemp();
-	if( !ilLoadImage(FileName) )
+	if (!ilLoadImage(FileName))
     	return IL_FALSE;
 
     *Texture = ilutD3D9CubeTexture(Device);
@@ -108,7 +108,7 @@ ILboolean ILAPIENTRY ilutD3D9CubeTexFromFileInMemory(IDirect3DDevice9 *Device,
  }
  
 ILboolean ILAPIENTRY ilutD3D9CubeTexFromResource(IDirect3DDevice9 *Device,
-		HMODULE SrcModule, char *SrcResource, IDirect3DCubeTexture9 **Texture) {
+		HMODULE SrcModule, ILconst_string SrcResource, IDirect3DCubeTexture9 **Texture) {
 	HRSRC   Resource;
     ILubyte *Data;
 
@@ -217,7 +217,7 @@ D3DCUBEMAP_FACES iToD3D9Cube(ILuint cube) {
 }
 
 #ifndef _WIN32_WCE
-ILboolean ILAPIENTRY ilutD3D9VolTexFromFile(IDirect3DDevice9 *Device, char *FileName, IDirect3DVolumeTexture9 **Texture) {
+ILboolean ILAPIENTRY ilutD3D9VolTexFromFile(IDirect3DDevice9 *Device, ILconst_string FileName, IDirect3DVolumeTexture9 **Texture) {
 	iBindImageTemp();
 	if (!ilLoadImage(FileName))
 		return IL_FALSE;
@@ -253,7 +253,7 @@ ILboolean ILAPIENTRY ilutD3D9VolTexFromFileInMemory(IDirect3DDevice9 *Device, IL
 }
 
 
-ILboolean ILAPIENTRY ilutD3D9TexFromResource(IDirect3DDevice9 *Device, HMODULE SrcModule, char *SrcResource, IDirect3DTexture9 **Texture)
+ILboolean ILAPIENTRY ilutD3D9TexFromResource(IDirect3DDevice9 *Device, HMODULE SrcModule, ILconst_string SrcResource, IDirect3DTexture9 **Texture)
 {
 	HRSRC	Resource;
 	ILubyte	*Data;
@@ -271,7 +271,7 @@ ILboolean ILAPIENTRY ilutD3D9TexFromResource(IDirect3DDevice9 *Device, HMODULE S
 }
 
 
-ILboolean ILAPIENTRY ilutD3D9VolTexFromResource(IDirect3DDevice9 *Device, HMODULE SrcModule, char *SrcResource, IDirect3DVolumeTexture9 **Texture)
+ILboolean ILAPIENTRY ilutD3D9VolTexFromResource(IDirect3DDevice9 *Device, HMODULE SrcModule, ILconst_string SrcResource, IDirect3DVolumeTexture9 **Texture)
 {
 	HRSRC	Resource;
 	ILubyte	*Data;
@@ -549,9 +549,13 @@ ILimage *MakeD3D9Compliant(IDirect3DDevice9 *Device, D3DFORMAT *DestFormat)
 	ILuint nConversionType, ilutFormat;
 	ILboolean bForceIntegerFormat = ilutGetBoolean(ILUT_FORCE_INTEGER_FORMAT);
 
+	Device;
+	ilutFormat = ilutCurImage->Format;
+	nConversionType = ilutCurImage->Type;
+
 	if (!ilutCurImage)
 		return NULL;
-	
+
 	switch (ilutCurImage->Type)
 	{
 	case IL_UNSIGNED_BYTE:

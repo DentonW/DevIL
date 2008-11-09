@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/28/2002 <--Y2K Compliant! =]
+// Copyright (C) 2000-2008 by Denton Woods
+// Last modified: 11/07/2008
 //
 // Filename: src-IL/src/il_io.c
 //
@@ -14,11 +14,6 @@
 #include "il_register.h"
 #include "il_pal.h"
 #include <string.h>
-
-
-// Note A: If DevIL is not compiled using _UNICODE, we can just pass FileName.
-//  If it is compiled with _UNICODE and IL_UNICODE/IL_UTF16_FILENAMES are not set,
-//  we have to convert the ANSI FileName to Unicode.
 
 
 // Returns a widened version of a string.
@@ -52,34 +47,14 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 	ILenum		Type;
 	ILstring	Ext;
 
-#if defined(_UNICODE)
-	wchar_t		*Temp = NULL;
-	if (FileName == NULL || wcslen(FileName) < 1) {
-#else
-	char		*Temp = NULL;
-	if (FileName == NULL || strlen((char*)FileName) < 1) {
-#endif//_UNICODE
+	if (FileName == NULL || ilStrLen(FileName) < 1) {
 		ilSetError(IL_INVALID_PARAM);
 		return IL_TYPE_UNKNOWN;
 	}
 
-	// See Note A
-#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
-	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
-		Temp = WideFromMultiByte((char*)FileName);
-		FileName = Temp;
-	}
 	Ext = iGetExtension(FileName);
-#elif (defined(_UNICODE) && !defined(IL_USE_UTF16_FILENAMES))
-	Temp = WideFromMultiByte(FileName);
-	Ext = iGetExtension(Temp);
-#else
-	Ext = iGetExtension(FileName);
-#endif//_UNICODE
-
 	//added 2003-08-31: fix sf bug 789535
 	if (Ext == NULL) {
-		ifree(Temp);
 		return IL_TYPE_UNKNOWN;
 	}
 
@@ -144,13 +119,6 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 		Type = IL_XPM;
 	else
 		Type = IL_TYPE_UNKNOWN;
-
-#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
-	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES))
-		ifree(Temp);
-#elif (defined(_UNICODE) && !defined(IL_USE_UTF16_FILENAMES))
-	ifree(Temp);
-#endif//_UNICODE
 
 	return Type;
 }
@@ -614,24 +582,11 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, ILvoid *Lump, ILuint Size)
 ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 {
 	ILboolean	bRet;
-#ifdef _UNICODE
-	wchar_t		*Temp = NULL;
-	if (FileName == NULL || wcslen(FileName) < 1) {
-#else
-	char *Temp = NULL;
-	if (FileName == NULL || strlen(FileName) < 1) {
-#endif//_UNICODE
+
+	if (FileName == NULL || ilStrLen(FileName) < 1) {
 		ilSetError(IL_INVALID_PARAM);
 		return IL_FALSE;
 	}
-
-	// See Note A
-#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
-	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
-		Temp = WideFromMultiByte((char*)FileName);
-		FileName = Temp;
-	}
-#endif//_UNICODE
 
 	switch (Type)
 	{
@@ -795,7 +750,7 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 		#ifndef IL_NO_TIF
 		case IL_TIF:
 			//#ifndef _UNICODE
-				bRet = ilLoadTiff(FileName);
+			bRet = ilLoadTiff(FileName);
 			//#else
 			//	wcstombs(AnsiName, FileName, 512);
 			//	//WideCharToMultiByte(CP_ACP, 0, FileName, -1, AnsiName, 512, NULL, NULL);
@@ -832,11 +787,6 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 			ilSetError(IL_INVALID_ENUM);
 			bRet = IL_FALSE;
 	}
-
-#ifdef _UNICODE
-	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES))
-		ifree(Temp);
-#endif//_UNICODE
 
 	return bRet;
 }
@@ -1176,40 +1126,18 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 	ILstring	Ext;
 	ILenum		Type;
 	ILboolean	bRet = IL_FALSE;
-#ifdef _UNICODE
-	wchar_t		*Temp = NULL;
-#endif//_UNICODE
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
-#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
-	if (FileName == NULL || wcslen(FileName) < 1) {
-#else
-	if (FileName == NULL || strlen((char*)FileName) < 1) {
-#endif//_UNICODE
+	if (FileName == NULL || ilStrLen(FileName) < 1) {
 		ilSetError(IL_INVALID_PARAM);
 		return IL_FALSE;
 	}
 
-	// See Note A
-#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
-	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
-		Temp = WideFromMultiByte((char*)FileName);
-		Ext = iGetExtension(Temp);
-	}
-	else {
-		Ext = iGetExtension(FileName);
-	}
-#elif (defined(_UNICODE) && !defined(IL_USE_UTF16_FILENAMES))
-	Temp = WideFromMultiByte(FileName);
-	Ext = iGetExtension(Temp);
-#else
 	Ext = iGetExtension(FileName);
-#endif//_UNICODE
-
 
 	// Try registered procedures first (so users can override default lib functions).
 	if (Ext) {
@@ -1414,11 +1342,9 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#endif
 
 		#ifndef IL_NO_WDP
-		if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
-			if (!iStrCmp(Ext, IL_TEXT("wdp")) || !iStrCmp(Ext, IL_TEXT("hdp")) ) {
-				bRet = ilLoadWdp(FileName);
-				goto finish;
-			}
+		if (!iStrCmp(Ext, IL_TEXT("wdp")) || !iStrCmp(Ext, IL_TEXT("hdp")) ) {
+			bRet = ilLoadWdp(FileName);
+			goto finish;
 		}
 		#endif
 
@@ -1430,11 +1356,9 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#endif
 
 		#ifndef IL_NO_EXR
-		if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
-			if (!iStrCmp(Ext, IL_TEXT("exr"))) {
-				bRet = ilLoadExr(FileName);
-				goto finish;
-			}
+		if (!iStrCmp(Ext, IL_TEXT("exr"))) {
+			bRet = ilLoadExr(FileName);
+			goto finish;
 		}
 		#endif
 	}
@@ -1448,14 +1372,6 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 	return ilLoad(Type, FileName);
 
 finish:
-
-#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
-	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES))
-		ifree(Temp);
-#elif (defined(_UNICODE) && !defined(IL_USE_UTF16_FILENAMES))
-	ifree(Temp);
-#endif//_UNICODE
-
 	return bRet;
 }
 
@@ -1474,7 +1390,7 @@ ILboolean ILAPIENTRY ilSave(ILenum Type, ILstring FileName)
 
 		#ifndef IL_NO_CHEAD
 		case IL_CHEAD:
-			return ilSaveCHeader(FileName, "IL_IMAGE");
+			return ilSaveCHeader(FileName, IL_TEXT("IL_IMAGE"));
 		#endif
 
 		#ifndef IL_NO_DDS
@@ -1726,13 +1642,8 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 {
 	ILstring Ext;
 	ILboolean	bRet = IL_FALSE;
-#if defined(_UNICODE)
-	wchar_t		*Temp = NULL;
 
-	if (FileName == NULL || wcslen(FileName) < 1) {
-#else
-	if (FileName == NULL || strlen((char*)FileName) < 1) {
-#endif//_UNICODE
+	if (FileName == NULL || ilStrLen(FileName) < 1) {
 		ilSetError(IL_INVALID_PARAM);
 		return IL_FALSE;
 	}
@@ -1742,20 +1653,7 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 		return IL_FALSE;
 	}
 
-	// See Note A
-#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
-	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
-		Temp = WideFromMultiByte((char*)FileName);
-		FileName = Temp;
-	}
 	Ext = iGetExtension(FileName);
-#elif (defined(_UNICODE) && !defined(IL_USE_UTF16_FILENAMES))
-	Temp = WideFromMultiByte(FileName);
-	Ext = iGetExtension(Temp);
-#else
-	Ext = iGetExtension(FileName);
-#endif//_UNICODE
-
 	if (Ext == NULL) {
 		ilSetError(IL_INVALID_PARAM);
 		return IL_FALSE;
@@ -1770,7 +1668,7 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 
 	#ifndef IL_NO_CHEAD
 	if (!iStrCmp(Ext, IL_TEXT("h"))) {
-		bRet = ilSaveCHeader(FileName, "IL_IMAGE");
+		bRet = ilSaveCHeader(FileName, IL_TEXT("IL_IMAGE"));
 		goto finish;
 	}
 	#endif
@@ -1875,12 +1773,5 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 	return IL_FALSE;
 
 finish:
-#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
-	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES))
-		ifree(Temp);
-#elif (defined(_UNICODE) && !defined(IL_USE_UTF16_FILENAMES))
-	ifree(Temp);
-#endif//_UNICODE
-
 	return bRet;
 }

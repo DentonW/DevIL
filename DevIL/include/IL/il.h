@@ -90,11 +90,13 @@ typedef void           ILvoid;
 	#endif
 	//if we use a define instead of a typedef,
 	//ILconst_string works as intended
+	#define ILchar wchar_t
 	#define ILstring wchar_t*
 	#define ILconst_string  wchar_t const *
 #else
 	//if we use a define instead of a typedef,
 	//ILconst_string works as intended
+	#define ILchar char
 	#define ILstring char*
 	#define ILconst_string char const *
 #endif //_UNICODE
@@ -261,12 +263,6 @@ typedef void           ILvoid;
 // File definitions
 #define IL_FILE_OVERWRITE	0x0620
 #define IL_FILE_MODE		0x0621
-
-
-// String handling
-#define IL_UNICODE			0x626
-#define IL_UTF16_FILENAMES	0x627
-#define IL_UTF8_FILENAMES	0x628
 
 
 // Palette definitions

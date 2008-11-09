@@ -18,12 +18,12 @@
 #define MAX_LINE_WIDTH 14
 
 //! Generates a C-style header file for the current image.
-ILboolean ilSaveCHeader(ILconst_string FileName, const char *InternalName)
+ILboolean ilSaveCHeader(ILconst_string FileName, ILconst_string InternalName)
 {
-	FILE	*HeadFile;
-	ILuint	i = 0, j;
-	ILimage	*TempImage;
-	const char *Name;
+	FILE			*HeadFile;
+	ILuint			i = 0, j;
+	ILimage			*TempImage;
+	ILconst_string	Name;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -35,11 +35,7 @@ ILboolean ilSaveCHeader(ILconst_string FileName, const char *InternalName)
 		Name = InternalName;
 
 	if (FileName == NULL || Name == NULL ||
-#ifndef _UNICODE
-		strlen(FileName) < 1 ||	strlen(Name) < 1) {
-#else
-		wcslen(FileName) < 1 || wcslen(FileName) < 1) {
-#endif//_UNICODE
+		ilStrLen(FileName) < 1 || ilStrLen(Name) < 1) {
 		ilSetError(IL_INVALID_VALUE);
 		return IL_FALSE;
 	}
@@ -67,13 +63,14 @@ ILboolean ilSaveCHeader(ILconst_string FileName, const char *InternalName)
 #ifndef _UNICODE
 	HeadFile = fopen(FileName, "wb");
 #else
-	if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES))
-		HeadFile = fopen((char*)FileName, "wb");
-	else
-		HeadFile = _wfopen(FileName, L"wb");
-#endif//_WIN32_WCE
+	#ifdef _WIN32
+		HeadFile = _wfopen(FileName, L"rb");
+	#else
+		HeadFile = fopen((char*)FileName, "rb");
+	#endif
 
-	
+#endif//_UNICODE
+
 	if (HeadFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
         return IL_FALSE;

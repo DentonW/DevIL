@@ -10,12 +10,13 @@
 - Added patch by SF user robin_charlton for Windows BMP support in ILUT.
 - Updated Cmake files.
 - Added preliminary Microsoft HD Photo support.
-- Changed DevIL to use Unicode internally.  Now IL_USE_UNICODE must be set to use Unicode strings.
+- Added better Unicode support.
 - Changed .jp2 loading so that file streams can now be loaded.
 - Changed limit/clamp in il.h to IL_LIMIT/IL_CLAMP.
 - Added .hdr saving.
-- Added Dutch/Spanish translations of error codes in ILU.
+- Added Dutch/Spanish/Arabic/Japanese translations of error codes in ILU.
 - Added ilut_directxm.c (DirectX Mobile support) from Vincent Richomme.
+- Fixed a possible buffer overrun in iClipString.
 
 1.7.2
 ---

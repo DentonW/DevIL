@@ -83,8 +83,10 @@ extern "C" {
 		#define _wcsicmp wcsncasecmp
 		#define _wfopen fopen
 	#endif
+	#define iStrCpy wcscpy
 #else
 	#define IL_TEXT(s) (s)
+	#define iStrCpy strcpy
 #endif
 
 #ifdef IL_INLINE_ASM
@@ -147,8 +149,8 @@ ILboolean	iCheckExtension(ILconst_string Arg, ILconst_string Ext);
 ILbyte*		iFgets(char *buffer, ILuint maxlen);
 ILboolean	iFileExists(ILconst_string FileName);
 ILstring	iGetExtension(ILconst_string FileName);
-char*		ilStrDup(const char *Str);
-ILuint		ilStrLen(const char *Str);
+ILstring	ilStrDup(ILconst_string Str);
+ILuint		ilStrLen(ILconst_string Str);
 // Miscellaneous functions
 ILvoid					ilDefaultStates(void);
 ILenum					iGetHint(ILenum Target);
@@ -173,7 +175,7 @@ ILboolean	ilFixImage(void);
 ILboolean	ilRemoveAlpha(void);
 ILboolean	ilSwapColours(void);
 // Miscellaneous functions
-char *iGetString(ILenum StringName);  // Internal version of ilGetString
+ILconst_string iGetString(ILenum StringName);  // Internal version of ilGetString
 // Library usage
 #if _MSC_VER && !_WIN32_WCE
 	#ifndef IL_NO_JPG
@@ -230,7 +232,7 @@ ILboolean ilLoadBmpL(const ILvoid *Lump, const ILuint Size);
 ILboolean ilSaveBmp(ILconst_string FileName);
 ILboolean ilSaveBmpF(ILHANDLE File);
 ILboolean ilSaveBmpL(ILvoid *Lump, ILuint Size);
-ILboolean ilSaveCHeader(ILconst_string FileName, const char *InternalName);
+ILboolean ilSaveCHeader(ILconst_string FileName, ILconst_string InternalName);
 ILboolean ilLoadCut(ILconst_string FileName);
 ILboolean ilLoadCutF(ILHANDLE File);
 ILboolean ilLoadCutL(const ILvoid *Lump, ILuint Size);

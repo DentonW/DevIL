@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 06/02/2007
+// Last modified: 11/07/2008
 //
 // Filename: src-IL/src/il_files.c
 //
@@ -93,11 +93,9 @@ ILHANDLE ILAPIENTRY iDefaultOpenR(ILconst_string FileName)
 #ifndef _UNICODE
 	return (ILHANDLE)fopen((char*)FileName, "rb");
 #else
-	// fopen in Windows 
-	#ifdef IL_USE_UTF16_FILENAMES
-		if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
-			return (ILHANDLE)fopen((char*)FileName, "rb");
-		}
+	// Windows has a different function, _wfopen, to open UTF16 files,
+	//  whereas Linux just uses fopen.
+	#ifdef _WIN32
 		return (ILHANDLE)_wfopen(FileName, L"rb");
 	#else
 		return (ILHANDLE)fopen((char*)FileName, "rb");
@@ -182,11 +180,9 @@ ILHANDLE ILAPIENTRY iDefaultOpenW(ILconst_string FileName)
 #ifndef _UNICODE
 	return (ILHANDLE)fopen((char*)FileName, "wb");
 #else
-	// fopen in Windows 
-	#ifdef IL_USE_UTF16_FILENAMES
-		if (ilIsDisabled(IL_UNICODE) || ilIsDisabled(IL_UTF16_FILENAMES)) {
-			return (ILHANDLE)fopen((char*)FileName, "wb");
-		}
+	// Windows has a different function, _wfopen, to open UTF16 files,
+	//  whereas Linux just uses fopen.
+	#ifdef _WIN32
 		return (ILHANDLE)_wfopen(FileName, L"wb");
 	#else
 		return (ILHANDLE)fopen((char*)FileName, "wb");

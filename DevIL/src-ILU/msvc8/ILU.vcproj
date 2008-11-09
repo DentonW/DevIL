@@ -590,11 +590,23 @@
 				Name="Error Messages"
 				>
 				<File
-					RelativePath="..\include\ilu_error\ilu_err_dutch.h"
+					RelativePath="..\include\ilu_error\ilu_err-arabic.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\ilu_error\ilu_err_spanish.h"
+					RelativePath="..\include\ilu_error\ilu_err-dutch.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\ilu_error\ilu_err-english.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\ilu_error\ilu_err-japanese.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\ilu_error\ilu_err-spanish.h"
 					>
 				</File>
 			</Filter>

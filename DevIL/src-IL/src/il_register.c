@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 10/20/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2008 by Denton Woods
+// Last modified: 11/07/2008
 //
 // Filename: src-IL/src/il_register.c
 //
@@ -30,11 +30,7 @@ ILboolean ILAPIENTRY ilRegisterLoad(ILconst_string Ext, IL_LOADPROC Load) {
 	if (TempNode != NULL) {
 		while (TempNode->Next != NULL) {
 			TempNode = TempNode->Next;
-#ifndef _UNICODE
-			if (!stricmp(TempNode->Ext, Ext)) {  // already registered
-#else
-			if (!wcsicmp(TempNode->Ext, Ext)) {
-#endif//_UNICODE
+			if (!iStrCmp(TempNode->Ext, Ext)) {  // already registered
 				return IL_TRUE;
 			}
 		}
@@ -52,11 +48,7 @@ ILboolean ILAPIENTRY ilRegisterLoad(ILconst_string Ext, IL_LOADPROC Load) {
 		TempNode->Next = NewNode;
 	}
 
-#ifndef _UNICODE
 	NewNode->Ext = ilStrDup(Ext);
-#else
-	NewNode->Ext = wcsdup(Ext);
-#endif//_UNICODE
 	NewNode->Load = Load;
 	NewNode->Next = NULL;
 
@@ -72,11 +64,7 @@ ILboolean ILAPIENTRY ilRegisterSave(ILconst_string Ext, IL_SAVEPROC Save)
 	if (TempNode != NULL) {
 		while (TempNode->Next != NULL) {
 			TempNode = TempNode->Next;
-#ifndef _UNICODE
-			if (!stricmp(TempNode->Ext, Ext)) {  // already registered
-#else
-			if (!_wcsicmp(TempNode->Ext, Ext)) {
-#endif//_UNICODE
+			if (!iStrCmp(TempNode->Ext, Ext)) {  // already registered
 				return IL_TRUE;
 			}
 		}
@@ -94,11 +82,7 @@ ILboolean ILAPIENTRY ilRegisterSave(ILconst_string Ext, IL_SAVEPROC Save)
 		TempNode->Next = NewNode;
 	}
 
-#ifndef _UNICODE
 	NewNode->Ext = ilStrDup(Ext);
-#else
-	NewNode->Ext = wcsdup(Ext);
-#endif//_UNICODE
 	NewNode->Save = Save;
 	NewNode->Next = NULL;
 
@@ -112,11 +96,7 @@ ILboolean ILAPIENTRY ilRemoveLoad(ILconst_string Ext)
 	iFormatL *TempNode = LoadProcs, *PrevNode = NULL;
 
 	while (TempNode != NULL) {
-#ifndef _UNICODE
-		if (!stricmp(Ext, TempNode->Ext)) {
-#else
-		if (_wcsicmp(Ext, TempNode->Ext)) {
-#endif//_UNICODE
+		if (!iStrCmp(Ext, TempNode->Ext)) {
 			if (PrevNode == NULL) {  // first node in the list
 				LoadProcs = TempNode->Next;
 				ifree((void*)TempNode->Ext);
@@ -145,11 +125,7 @@ ILboolean ILAPIENTRY ilRemoveSave(ILconst_string Ext)
 	iFormatS *TempNode = SaveProcs, *PrevNode = NULL;
 
 	while (TempNode != NULL) {
-#ifndef _UNICODE
-		if (!stricmp(Ext, TempNode->Ext)) {
-#else
-		if (_wcsicmp(Ext, TempNode->Ext)) {
-#endif//_UNICODE
+		if (!iStrCmp(Ext, TempNode->Ext)) {
 			if (PrevNode == NULL) {  // first node in the list
 				SaveProcs = TempNode->Next;
 				ifree((void*)TempNode->Ext);
@@ -206,11 +182,7 @@ ILboolean iRegisterLoad(ILconst_string FileName)
 		return IL_FALSE;
 
 	while (TempNode != NULL) {
-#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
-		if (_wcsicmp(Ext, TempNode->Ext)) {
-#else	
-		if (!stricmp(Ext, TempNode->Ext)) {
-#endif//_UNICODE
+		if (iStrCmp(Ext, TempNode->Ext)) {
 			Error = TempNode->Load(FileName);
 			if (Error == IL_NO_ERROR || Error == 0) {  // 0 and IL_NO_ERROR are both valid.
 				return IL_TRUE;
@@ -237,11 +209,7 @@ ILboolean iRegisterSave(ILconst_string FileName)
 		return IL_FALSE;
 
 	while (TempNode != NULL) {
-#if (defined(_UNICODE) && defined(IL_USE_UTF16_FILENAMES))
-		if (_wcsicmp(Ext, TempNode->Ext)) {
-#else
-		if (!stricmp(Ext, TempNode->Ext)) {
-#endif//_UNICODE
+		if (!iStrCmp(Ext, TempNode->Ext)) {
 			Error = TempNode->Save(FileName);
 			if (Error == IL_NO_ERROR || Error == 0) {  // 0 and IL_NO_ERROR are both valid.
 				return IL_TRUE;
