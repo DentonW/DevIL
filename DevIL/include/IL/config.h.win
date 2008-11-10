@@ -3,7 +3,7 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
-#define IL_USE_PRAGMA_LIBS  // 
+#define IL_USE_PRAGMA_LIBS  // Links to only the libraries that are requested.
 
 /* Supported images formats (il) */
 

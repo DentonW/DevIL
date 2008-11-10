@@ -17,7 +17,7 @@
 #define IL_DEBUG
 #endif//_DEBUG
 
-//#define _UNICODE
+#define _UNICODE
 
 // Memory leak detection
 #ifdef _DEBUG 

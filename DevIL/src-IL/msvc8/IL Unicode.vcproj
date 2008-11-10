@@ -79,7 +79,7 @@
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../projects/msvc/extlibs"
-				IgnoreDefaultLibraryNames="msvcrt.lib;msvcrtd.lib"
+				IgnoreDefaultLibraryNames="msvcrt.lib;msvcrtd.lib;libcmt.lib"
 				ModuleDefinitionFile=".\il.def"
 				DelayLoadDLLs="ilmimf.dll half.dll"
 				GenerateDebugInformation="true"
