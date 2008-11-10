@@ -1,8 +1,8 @@
-﻿//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 //
 // ImageLib Utility Sources
 // Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 11/08/2008
+// Last modified: 11/10/2008
 //
 // Filename: src-ILU/include/ilu_error/ilu_err-japanese.h
 //

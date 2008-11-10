@@ -44,6 +44,7 @@ iluSaturate4f
 iluScaleColours
 iluScale
 iluScaleAlpha
+iluSetLanguage
 iluSharpen
 iluSwapColours
 iluWave

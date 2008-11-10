@@ -86,8 +86,8 @@ BEGIN
             VALUE "OriginalFilename", "ILU.dll\0"
             VALUE "PrivateBuild", "Open Source\0"
             VALUE "ProductName", "Developer's Image Utilities Library\0"
-            VALUE "ProductVersion", "1.7.2\0"
-            VALUE "SpecialBuild", "eh?\0"
+            VALUE "ProductVersion", "1.7.2 Ansi\0"
+            VALUE "SpecialBuild", "Ansi\0"
         END
     END
     BLOCK "VarFileInfo"

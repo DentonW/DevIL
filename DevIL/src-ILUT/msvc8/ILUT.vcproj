@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="ILUT"
 	ProjectGUID="{7D060DA4-F2FA-44CC-80BE-065024DD6CA9}"
 	RootNamespace="ILUT"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -23,7 +22,7 @@
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="1"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -84,8 +83,6 @@
 				ModuleDefinitionFile=".\ilut.def"
 				DelayLoadDLLs="opengl32.dll,glu32.dll,d3d8.dll,d3d9.dll,sdl.dll,alleg42.dll,wininet.dll"
 				ProgramDatabaseFile=".\../../lib/ILUT.pdb"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				ImportLibrary=".\../../lib/vc8/ILUT.lib"
 				TargetMachine="1"
 			/>
@@ -110,6 +107,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine="copy $(TargetPath) c:\windows\system32"
 			/>
@@ -122,7 +122,7 @@
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="1"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -184,8 +184,6 @@
 				DelayLoadDLLs="d3d8.dll,sdl.dll,alleg42.dll"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\../../lib/debug/ilut.pdb"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				ImportLibrary=".\../../lib/vc8/debug/ilut.lib"
 				TargetMachine="1"
 			/>
@@ -208,6 +206,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
