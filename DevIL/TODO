@@ -18,7 +18,6 @@ Denton:
 - Fix Daniel's suggestions.
 - Possibly readd VC6 projects?
 - Enable descriptive error strings in IL.
-- Return UNICODE strings when needed.
 - Progressive saving of JPG.
 - Lib EXIF support
 - FITS support
@@ -31,7 +30,6 @@ Denton:
 - .iff support?
 - Respond to all forum requests.
 - Add BeOS support back in?
-- Fix Register functions for Unicode.
 - Look into bug when rescaling.
 - Figure out how to properly do 8-bit -> 16-bit conversions.
 - Create Dev-C++/MingW/Cygwin .a files for releases?

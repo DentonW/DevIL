@@ -3,8 +3,16 @@ How do I compile the 3 libraries ?
 
 You will need autoconf, automake and libtool.
 
-Just type ./autogen.sh and then make install. It should find
-automatically what can (or cannot) be built on your system.  Libtool, autoconf and
+Just type:
+autoreconf -i
+./configure --enable-ILU --enable-ILUT
+make
+sudo make install
+
+If you want configure to install in /usr instead of /usr/local, append
+--prefix=/usr to the ./configure line.
+
+It should find automatically what can (or cannot) be built on your system.  Libtool, autoconf and
 automake will need to be installed.  You may need to copy files from your libtool
 into the libtools directory and overwrite ltmain.sh if it will not compile with the
 included files.
@@ -31,7 +39,7 @@ Libraries needed to compile DevIL* :
 -----------------------------------
 
 They are all autodetected by the ./configure script. But if you want to include
-one of those format, you have just to install the corresponding lib :
+one of those formats, you have just to install the corresponding lib :
 
 (libs listed in libraries.txt)
 
