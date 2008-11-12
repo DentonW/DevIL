@@ -76,7 +76,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="libcmtd.lib comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib"
-				OutputFile="../../lib/debug/DevIL.dll"
+				OutputFile="../../lib/debug/unicode/DevIL.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../projects/msvc/extlibs"
@@ -87,7 +87,7 @@
 				ProgramDatabaseFile=".\../../lib/debug/devil.pdb"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
-				ImportLibrary=".\../../lib/debug/devil.lib"
+				ImportLibrary=".\../../lib/debug/unicode/devil.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -178,7 +178,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/NODEFAULTLIB:msvcrtd.lib"
 				AdditionalDependencies="libcmt.lib comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib"
-				OutputFile="../../lib/DevIL.dll"
+				OutputFile="../../lib/unicode/DevIL.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../projects/msvc/extlibs"
@@ -189,7 +189,7 @@
 				OptimizeForWindows98="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
-				ImportLibrary=".\../../lib/DevIL.lib"
+				ImportLibrary=".\../../lib/unicode/DevIL.lib"
 				TargetMachine="1"
 			/>
 			<Tool

@@ -75,7 +75,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="odbc32.lib odbccp32.lib"
-				OutputFile="../../lib/debug/ilu.dll"
+				OutputFile="../../lib/debug/unicode/ilu.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				IgnoreDefaultLibraryNames="msvcrt.lib; msvcrtd.lib"
@@ -84,7 +84,7 @@
 				ProgramDatabaseFile=".\../../lib/debug/ilu-d.pdb"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
-				ImportLibrary=".\../../lib/debug/ilu.lib"
+				ImportLibrary=".\../../lib/debug/unicode/ilu.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -174,7 +174,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="odbc32.lib odbccp32.lib devil.lib"
-				OutputFile=".\../../lib/ILU.dll"
+				OutputFile=".\../../lib/unicode/ILU.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../lib"
@@ -183,7 +183,7 @@
 				ProgramDatabaseFile=".\../../lib/ILU.pdb"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
-				ImportLibrary=".\../../lib/ILU.lib"
+				ImportLibrary=".\../../lib/unicode/ILU.lib"
 				TargetMachine="1"
 			/>
 			<Tool
