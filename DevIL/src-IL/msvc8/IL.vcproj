@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="IL"
 	ProjectGUID="{B46B180B-6079-4CE6-8647-A7D712774255}"
 	RootNamespace="IL"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -80,13 +79,11 @@
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../projects/msvc/extlibs"
-				IgnoreDefaultLibraryNames="msvcrt.lib;msvcrtd.lib"
+				IgnoreDefaultLibraryNames="msvcrt.lib;msvcrtd.lib;libcmt.lib"
 				ModuleDefinitionFile=".\il.def"
 				DelayLoadDLLs="ilmimf.dll half.dll"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\../../lib/debug/devil.pdb"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				ImportLibrary=".\../../lib/debug/devil.lib"
 				TargetMachine="1"
 			/>
@@ -109,6 +106,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -187,8 +187,6 @@
 				DelayLoadDLLs="ilmimf.dll half.dll"
 				ProgramDatabaseFile=".\../../lib/DevIL.pdb"
 				OptimizeForWindows98="1"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				ImportLibrary=".\../../lib/DevIL.lib"
 				TargetMachine="1"
 			/>
@@ -211,6 +209,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
