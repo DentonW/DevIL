@@ -17,7 +17,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\../../lib/vc8/debug"
+			OutputDirectory=".\../../lib/debug"
 			IntermediateDirectory="Debug"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
@@ -76,7 +76,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="libcmtd.lib comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib"
-				OutputFile="../../lib/vc8/debug/DevIL.dll"
+				OutputFile="../../lib/debug/DevIL.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../projects/msvc/extlibs"
@@ -84,10 +84,10 @@
 				ModuleDefinitionFile=".\il.def"
 				DelayLoadDLLs="ilmimf.dll half.dll"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\../../lib/vc8/debug/devil.pdb"
+				ProgramDatabaseFile=".\../../lib/debug/devil.pdb"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
-				ImportLibrary=".\../../lib/vc8/debug/devil.lib"
+				ImportLibrary=".\../../lib/debug/devil.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -178,18 +178,18 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/NODEFAULTLIB:msvcrtd.lib"
 				AdditionalDependencies="libcmt.lib comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib"
-				OutputFile="../../lib/vc8/DevIL.dll"
+				OutputFile="../../lib/DevIL.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../projects/msvc/extlibs"
 				IgnoreDefaultLibraryNames="msvcrt.lib"
 				ModuleDefinitionFile=".\il.def"
 				DelayLoadDLLs="ilmimf.dll half.dll"
-				ProgramDatabaseFile=".\../../lib/vc8/DevIL.pdb"
+				ProgramDatabaseFile=".\../../lib/DevIL.pdb"
 				OptimizeForWindows98="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
-				ImportLibrary=".\../../lib/vc8/DevIL.lib"
+				ImportLibrary=".\../../lib/DevIL.lib"
 				TargetMachine="1"
 			/>
 			<Tool

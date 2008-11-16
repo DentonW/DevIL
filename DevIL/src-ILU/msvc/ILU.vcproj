@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="ILU"
 	ProjectGUID="{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}"
 	>
@@ -15,7 +15,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\../../lib/vc8/debug"
+			OutputDirectory=".\../../lib/debug"
 			IntermediateDirectory="Debug"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
@@ -74,14 +74,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="odbc32.lib odbccp32.lib"
-				OutputFile="../../lib/vc8/debug/ilu.dll"
+				OutputFile="../../lib/debug/ilu.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				IgnoreDefaultLibraryNames="msvcrt.lib; msvcrtd.lib"
 				ModuleDefinitionFile=".\ilu.def"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\../../lib/debug/ilu-d.pdb"
-				ImportLibrary=".\../../lib/vc8/debug/ilu.lib"
+				ImportLibrary=".\../../lib/debug/ilu.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -174,14 +174,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="odbc32.lib odbccp32.lib devil.lib"
-				OutputFile=".\../../lib/vc8/ILU.dll"
+				OutputFile=".\../../lib/ILU.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../lib"
 				IgnoreDefaultLibraryNames="msvcrt.lib; msvcrtd.lib"
 				ModuleDefinitionFile=".\ilu.def"
 				ProgramDatabaseFile=".\../../lib/ILU.pdb"
-				ImportLibrary=".\../../lib/vc8/ILU.lib"
+				ImportLibrary=".\../../lib/ILU.lib"
 				TargetMachine="1"
 			/>
 			<Tool
