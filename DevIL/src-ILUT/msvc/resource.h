@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by ILUT.rc
+// Used by ILUT Unicode.rc
 //
 #define IDC_OPENILUT                    109
 #define IDI_ICON1                       155

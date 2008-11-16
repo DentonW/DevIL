@@ -586,6 +586,10 @@
 				RelativePath="..\include\ilu_states.h"
 				>
 			</File>
+			<File
+				RelativePath=".\resource.h"
+				>
+			</File>
 			<Filter
 				Name="Error Messages"
 				>

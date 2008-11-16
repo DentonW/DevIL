@@ -1,4 +1,4 @@
-//Microsoft Developer Studio generated resource script.
+// Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
 
@@ -30,7 +30,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // TEXTINCLUDE
 //
 
-2 TEXTINCLUDE MOVEABLE PURE 
+2 TEXTINCLUDE 
 BEGIN
     "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
     "#include ""windows.h""\r\n"
@@ -39,13 +39,13 @@ BEGIN
     "\0"
 END
 
-3 TEXTINCLUDE MOVEABLE PURE 
+3 TEXTINCLUDE 
 BEGIN
     "\r\n"
     "\0"
 END
 
-1 TEXTINCLUDE MOVEABLE PURE 
+1 TEXTINCLUDE 
 BEGIN
     "resource.h\0"
 END
@@ -53,15 +53,14 @@ END
 #endif    // APSTUDIO_INVOKED
 
 
-#ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
 //
 // Version
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,1,7,2
- PRODUCTVERSION 0,1,7,2
+ FILEVERSION 0,1,7,3
+ PRODUCTVERSION 0,1,7,3
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x29L
@@ -76,18 +75,18 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "Comments", "ILUT: A portable image library in development\0"
-            VALUE "CompanyName", "Abysmal Software\0"
-            VALUE "FileDescription", "ILUT: A portable image library in development\0"
-            VALUE "FileVersion", "1.7.2\0"
-            VALUE "InternalName", "ILUT\0"
-            VALUE "LegalCopyright", "Copyright © 2000-2008\0"
-            VALUE "LegalTrademarks", "Under LGPL License\0"
-            VALUE "OriginalFilename", "ILUT.dll\0"
-            VALUE "PrivateBuild", "Open Source\0"
-            VALUE "ProductName", "Developer's Image Utility Toolkit Library\0"
-            VALUE "ProductVersion", "1.7.2 Ansi\0"
-            VALUE "SpecialBuild", "Ansi\0"
+            VALUE "Comments", "ILUT: A portable image library in development"
+            VALUE "CompanyName", "Abysmal Software"
+            VALUE "FileDescription", "ILUT: A portable image library in development"
+            VALUE "FileVersion", "1.7.3"
+            VALUE "InternalName", "ILUT"
+            VALUE "LegalCopyright", "Copyright © 2000-2008"
+            VALUE "LegalTrademarks", "Under LGPL License"
+            VALUE "OriginalFilename", "ILUT.dll"
+            VALUE "PrivateBuild", "Open Source"
+            VALUE "ProductName", "Developer's Image Utility Toolkit Library"
+            VALUE "ProductVersion", "1.7.3 Ansi"
+            VALUE "SpecialBuild", "Ansi"
         END
     END
     BLOCK "VarFileInfo"
@@ -95,8 +94,6 @@ BEGIN
         VALUE "Translation", 0x409, 1200
     END
 END
-
-#endif    // !_MAC
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -106,16 +103,16 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_ICON1               ICON    DISCARDABLE     "resources\\IL Logo.ico"
+IDI_ICON1               ICON                    "resources\\IL Logo.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // String Table
 //
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
-    IDC_OPENILUT            "Developer's Image Utility Toolkit Library, Version 1.6.6"
+    IDC_OPENILUT            "Developer's Image Utility Toolkit Library, Version 1.7.3"
 END
 
 #endif    // English (U.S.) resources

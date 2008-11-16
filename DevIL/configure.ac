@@ -8,7 +8,7 @@ dnl
 dnl configure.in initialization
 dnl
 AC_INIT([DevIL], 
-	1.7.2,
+	1.7.3,
 	[matej.tyc@gmail.com])
 AC_CONFIG_SRCDIR([src-IL/src/il_main.c])
 AC_CONFIG_MACRO_DIR([m4])
@@ -21,7 +21,7 @@ AC_PREREQ(2.52)
 
 DEVIL_MAJOR=1
 DEVIL_MINOR=7
-DEVIL_REVISION=2
+DEVIL_REVISION=3
 DEVIL_VERSION=${DEVIL_MAJOR}${DEVIL_MINOR}${DEVIL_REVISION}
 
 dnl
@@ -73,7 +73,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION([$Revision: 1.36 $])
+AC_REVISION([$Revision: 1.37 $])
 # AC_CONFIG_AUX_DIR(libtools)
 dnl AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST

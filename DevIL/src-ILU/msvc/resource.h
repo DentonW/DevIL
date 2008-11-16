@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by ILU.rc
+// Used by ILU Unicode.rc
 //
 #define IDC_OPENILU                     109
 #define IDI_ICON1                       155
