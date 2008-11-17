@@ -1,12 +1,12 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods (this file by thakis)
-// Last modified: 12/06/2006
+// Copyright (C) 2000-2008 by Denton Woods (this file by thakis / Denton)
+// Last modified: 11/16/2008
 //
-// Filename: src-IL/src/il_bmp.c
+// Filename: src-IL/src/il_hdr.c
 //
-// Description: Reads a RADIANCE High Dynamic Range Image
+// Description: Reads/writes a RADIANCE High Dynamic Range Image
 //
 //-----------------------------------------------------------------------------
 

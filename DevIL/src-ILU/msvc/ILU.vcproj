@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="ILU"
 	ProjectGUID="{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -105,11 +106,8 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) c:\windows\system32"
+				CommandLine="copy $(TargetPath) %WINDIR%\system32"
 			/>
 		</Configuration>
 		<Configuration
@@ -205,11 +203,8 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) c:\windows\system32"
+				CommandLine="copy $(TargetPath) %WINDIR%\system32"
 			/>
 		</Configuration>
 	</Configurations>
