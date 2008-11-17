@@ -19,8 +19,8 @@
 
 //#include <d3dx9math.h>
 //#include <d3dx9tex.h>
-//pragma comment(lib, "d3d9.lib")
-//pragma comment(lib, "d3dx9.lib")
+#pragma comment(lib, "d3d9.lib")
+#pragma comment(lib, "d3dx9.lib")
 
 
 ILimage*	MakeD3D9Compliant(IDirect3DDevice9 *Device, D3DFORMAT *DestFormat);

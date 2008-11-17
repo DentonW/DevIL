@@ -60,8 +60,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,1,7,2
- PRODUCTVERSION 0,1,7,2
+ FILEVERSION 0,1,7,3
+ PRODUCTVERSION 0,1,7,3
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x29L
@@ -79,14 +79,14 @@ BEGIN
             VALUE "Comments", "ILU: A portable image library in development\0"
             VALUE "CompanyName", "Abysmal Software\0"
             VALUE "FileDescription", "ILU: A portable image library in development\0"
-            VALUE "FileVersion", "1.7.2\0"
+            VALUE "FileVersion", "1.7.3\0"
             VALUE "InternalName", "ILU\0"
             VALUE "LegalCopyright", "Copyright © 2000-2008\0"
             VALUE "LegalTrademarks", "Under LGPL License\0"
             VALUE "OriginalFilename", "ILU.dll\0"
             VALUE "PrivateBuild", "Open Source\0"
             VALUE "ProductName", "Developer's Image Utilities Library\0"
-            VALUE "ProductVersion", "1.7.2 Unicode\0"
+            VALUE "ProductVersion", "1.7.3 Unicode\0"
             VALUE "SpecialBuild", "Unicode\0"
         END
     END
@@ -115,7 +115,7 @@ IDI_ICON1               ICON    DISCARDABLE     "resources\\IL Logo.ico"
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDC_OPENILU             "Developer's Image Utilities Library, Version 1.7.2"
+    IDC_OPENILU             "Developer's Image Utilities Library, Version 1.7.3"
 END
 
 #endif    // English (U.S.) resources

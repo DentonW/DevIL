@@ -5,7 +5,6 @@
 	Name="IL"
 	ProjectGUID="{B46B180B-6079-4CE6-8647-A7D712774255}"
 	RootNamespace="IL"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -85,8 +84,6 @@
 				DelayLoadDLLs="ilmimf.dll half.dll"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\../../lib/vc8/debug/devil.pdb"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				ImportLibrary=".\../../lib/vc8/debug/devil.lib"
 				TargetMachine="1"
 			/>
@@ -111,8 +108,11 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) c:\windows\system32"
+				CommandLine="copy $(TargetPath) d:\windows\system32"
 			/>
 		</Configuration>
 		<Configuration
@@ -187,8 +187,6 @@
 				DelayLoadDLLs="ilmimf.dll half.dll"
 				ProgramDatabaseFile=".\../../lib/vc8/DevIL.pdb"
 				OptimizeForWindows98="1"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				ImportLibrary=".\../../lib/vc8/DevIL.lib"
 				TargetMachine="1"
 			/>
@@ -213,8 +211,11 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) c:\windows\system32"
+				CommandLine="copy $(TargetPath) d:\windows\system32"
 			/>
 		</Configuration>
 	</Configurations>

@@ -5,7 +5,6 @@
 	Name="ILUT"
 	ProjectGUID="{7D060DA4-F2FA-44CC-80BE-065024DD6CA9}"
 	RootNamespace="ILUT"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -75,7 +74,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="devil.lib ilu.lib odbc32.lib odbccp32.lib Gdi32.lib User32.lib Comdlg32.lib"
+				AdditionalDependencies="devil.lib ilu.lib Gdi32.lib User32.lib Comdlg32.lib"
 				OutputFile=".\../../lib/vc8/ILUT.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -84,8 +83,6 @@
 				ModuleDefinitionFile=".\ilut.def"
 				DelayLoadDLLs="opengl32.dll,glu32.dll,d3d8.dll,d3d9.dll,sdl.dll,alleg42.dll,wininet.dll"
 				ProgramDatabaseFile=".\../../lib/vc8/ILUT.pdb"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				ImportLibrary=".\../../lib/vc8/ILUT.lib"
 				TargetMachine="1"
 			/>
@@ -110,8 +107,11 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) c:\windows\system32"
+				CommandLine="copy $(TargetPath) d:\windows\system32"
 			/>
 		</Configuration>
 		<Configuration
@@ -174,8 +174,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="devil.lib ilu.lib delayimp.lib odbc32.lib odbccp32.lib Gdi32.lib User32.lib Comdlg32.lib"
-				OutputFile=".\../../lib/vc8/vc8/debug/ILUT.dll"
+				AdditionalDependencies="devil.lib ilu.lib delayimp.lib Gdi32.lib User32.lib Comdlg32.lib"
+				OutputFile=".\../../lib/vc8/debug/ILUT.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../lib/vc8"
@@ -184,9 +184,7 @@
 				DelayLoadDLLs="d3d8.dll,sdl.dll,alleg42.dll"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\../../lib/vc8/debug/ilut.pdb"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				ImportLibrary=".\../../lib/vc8/vc8/debug/ilut.lib"
+				ImportLibrary=".\../../lib/vc8/debug/ilut.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -210,8 +208,11 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) c:\windows\system32"
+				CommandLine="copy $(TargetPath) d:\windows\system32"
 			/>
 		</Configuration>
 	</Configurations>
