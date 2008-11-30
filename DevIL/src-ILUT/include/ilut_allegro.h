@@ -17,7 +17,7 @@
 #ifndef ILUT_ALLEG_H
 #define ILUT_ALLEG_H
 
-#include <allegro/allegro.h>
+#include <allegro.h>
 
 
 
