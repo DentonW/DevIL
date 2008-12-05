@@ -205,6 +205,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\ilut_directxm.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\ilut_internal.c"
 				>
 			</File>

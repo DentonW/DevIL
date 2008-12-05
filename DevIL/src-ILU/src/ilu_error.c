@@ -17,19 +17,21 @@
 #include "ilu_error/ilu_err-english.h"
 #include "ilu_error/ilu_err-japanese.h"
 #include "ilu_error/ilu_err-spanish.h"
+#include "ilu_error/ilu_err-german.h"
 
 
 ILconst_string *iluErrors;
 ILconst_string *iluLibErrors;
 ILconst_string *iluMiscErrors;
-#define ILU_NUM_LANGUAGES 5
+#define ILU_NUM_LANGUAGES 6
 
 ILconst_string *iluErrorStrings[ILU_NUM_LANGUAGES] = {
 	iluErrorStringsEnglish,
 	iluErrorStringsArabic,
 	iluErrorStringsDutch,
 	iluErrorStringsJapanese,
-	iluErrorStringsSpanish
+	iluErrorStringsSpanish,
+	iluErrorStringsGerman
 };
 
 ILconst_string *iluLibErrorStrings[ILU_NUM_LANGUAGES] = {
@@ -37,7 +39,8 @@ ILconst_string *iluLibErrorStrings[ILU_NUM_LANGUAGES] = {
 	iluLibErrorStringsArabic,
 	iluLibErrorStringsDutch,
 	iluLibErrorStringsJapanese,
-	iluLibErrorStringsSpanish
+	iluLibErrorStringsSpanish,
+	iluLibErrorStringsGerman
 };
 
 ILconst_string *iluMiscErrorStrings[ILU_NUM_LANGUAGES] = {
@@ -45,7 +48,8 @@ ILconst_string *iluMiscErrorStrings[ILU_NUM_LANGUAGES] = {
 	iluMiscErrorStringsArabic,
 	iluMiscErrorStringsDutch,
 	iluMiscErrorStringsJapanese,
-	iluMiscErrorStringsSpanish
+	iluMiscErrorStringsSpanish,
+	iluMiscErrorStringsGerman
 };
 
 
@@ -78,6 +82,7 @@ ILboolean ILAPIENTRY iluSetLanguage(ILenum Language)
 		case ILU_DUTCH:
 		case ILU_JAPANESE:
 		case ILU_SPANISH:
+		case ILU_GERMAN:
 			iluErrors = iluErrorStrings[Language - ILU_ENGLISH];
 			iluLibErrors = iluLibErrorStrings[Language - ILU_ENGLISH];
 			iluMiscErrors = iluMiscErrorStrings[Language - ILU_ENGLISH];
