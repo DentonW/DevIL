@@ -19,7 +19,7 @@
 #define HAVE_CONFIG_H
 #endif
 #ifdef HAVE_CONFIG_H
-	#include <IL/config.h>
+#include <config.h>
 #endif
 
 // Standard headers
@@ -406,7 +406,8 @@ ILboolean ilLoadXpmL(const ILvoid *Lump, ILuint Size);
 
 
 // OpenEXR is written in C++, so we have to wrap this to avoid linker errors.
-/*#ifndef IL_NO_EXR
+/*
+ * #ifndef IL_NO_EXR
 	#ifdef __cplusplus
 	extern "C" {
 	#endif
@@ -414,7 +415,8 @@ ILboolean ilLoadXpmL(const ILvoid *Lump, ILuint Size);
 	#ifdef __cplusplus
 	}
 	#endif
-#endif*/
+#endif
+*/
 
 ILboolean ilLoadExr(ILconst_string FileName);
 

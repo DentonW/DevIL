@@ -129,8 +129,8 @@
 
 
 
-
-#include "IL/config.h" 
+//this should remain private and hidden
+//#include "IL/config.h" 
  
 //////////////
 // Opengl

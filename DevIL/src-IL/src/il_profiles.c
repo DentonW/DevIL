@@ -20,7 +20,7 @@
 
 #ifndef _WIN32
 	#define NON_WINDOWS 1
-	#ifndef LCMS_NODIRINCLUDE
+	#ifdef LCMS_NODIRINCLUDE
 		#include <lcms.h>
 	#else
 		#include <lcms/lcms.h>

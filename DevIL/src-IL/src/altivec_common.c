@@ -8,7 +8,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <IL/config.h>
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif //HAVE_CONFIG_H
 
 #ifdef ALTIVEC_GCC
 #include "altivec_common.h"
