@@ -1,0 +1,6 @@
+Name: ILUT
+Description: Developer's Image Library - ILUT part (connection to higher level libraries)
+Version: @VERSION@
+Libs: -L${libdir} -lILUT 
+Libs.private: @LIBS@
+Cflags:

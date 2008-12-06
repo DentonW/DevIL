@@ -1,0 +1,6 @@
+Name: IL
+Description: Developer's Image Library - IL part (just image loading)
+Version: @VERSION@
+Libs: -L${libdir} -lIL 
+Libs.private: @LIBS@
+Cflags:
