@@ -1,0 +1,6 @@
+Name: DevIL
+Description: Developer's Image Library - monolithic build (not sure what may be included)
+Version: @VERSION@
+Libs: -L${libdir} -lDevIL
+Libs.private: @LIBS@
+Cflags:
