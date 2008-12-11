@@ -192,11 +192,11 @@ AC_DEFUN([DEVIL_CHECK_RESTRICT],
 
 AC_DEFUN([DEVIL_CHECK_RESTRICT_GNU99],
          [TMP_CFLAGS="$CFLAGS"
-          CFLAGS="$CFLAGS -std=gnu99"
+          CFLAGS="$CFLAGS -std=gnu99 -fgnu89-inline"
           AC_MSG_CHECKING([restrict gnu99 keyword])
           AC_COMPILE_IFELSE([[void foo(void * restrict test){}]],
 	                    [AC_DEFINE([RESTRICT_KEYWORD],
-	  			       [],
+	  			       [1],
 				       [restric keyword available])
 	                     AC_MSG_RESULT([yes])
 	                     CFLAGS="$TMP_CFLAGS"

@@ -16,7 +16,7 @@ AC_DEFUN([SETTLE_SDL],
           AM_CONDITIONAL([USE_SDL],
                          [test "x$use_sdl" = "xyes"]) ])
 
-AC_DEFUN([SETTLE_OPENGL],
+AC_DEFUN([SETTLE_OPENGL_OLD],
          [TEST_API(opengl)
 AS_IF([test "x$enable_opengl" = "xyes"],
 [AS_CASE(["$target"],
@@ -45,6 +45,19 @@ AS_IF([test "x$enable_opengl" = "xyes"],
 	                 [1],
 	                 [Define if system supports OpenGL API])
             SUPPORTED_API=$SUPPORTED_API"OpenGL "]) ])
+
+AC_DEFUN([SETTLE_OPENGL],
+         [TEST_API(opengl)
+          AS_IF([test "x$enable_opengl" = "xyes"],
+                [AX_CHECK_GL
+                 AX_CHECK_GLU
+                 AS_IF([test "x$no_gl" != "xyes" -a "x$no_glu" != "xyes"],
+                       [use_ogl="yes"
+		        ILUT_LIBS="$GLU_LIBS $GL_LIBS $ILUT_LIBS" 
+                        AC_DEFINE([ILUT_USE_OPENGL],
+	                          [1],
+	                          [Define if system supports OpenGL API])
+                        SUPPORTED_API=$SUPPORTED_API"OpenGL "]) ]) ])
 
 AC_DEFUN([SETTLE_ALLEGRO],
 [TEST_API([allegro])
