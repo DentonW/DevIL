@@ -12,9 +12,7 @@ AC_DEFUN([SETTLE_SDL],
 	                   [Support SDL API])
                  ILUT_CFLAGS="$SDL_CFLAGS $ILUT_CFLAGS"
                  ILUT_LIBS="$SDL_LIBS $ILUT_LIBS"
-                 SUPPORTED_API=$SUPPORTED_API"SDL "]) 
-          AM_CONDITIONAL([USE_SDL],
-                         [test "x$use_sdl" = "xyes"]) ])
+                 SUPPORTED_API="$SUPPORTED_API SDL"]) ])
 
 AC_DEFUN([SETTLE_OPENGL_OLD],
          [TEST_API(opengl)
@@ -44,7 +42,7 @@ AS_IF([test "x$enable_opengl" = "xyes"],
               [AC_DEFINE([ILUT_USE_OPENGL],
 	                 [1],
 	                 [Define if system supports OpenGL API])
-            SUPPORTED_API=$SUPPORTED_API"OpenGL "]) ])
+            SUPPORTED_API="$SUPPORTED_API OpenGL"]) ])
 
 AC_DEFUN([SETTLE_OPENGL],
          [TEST_API(opengl)
@@ -57,7 +55,7 @@ AC_DEFUN([SETTLE_OPENGL],
                         AC_DEFINE([ILUT_USE_OPENGL],
 	                          [1],
 	                          [Define if system supports OpenGL API])
-                        SUPPORTED_API=$SUPPORTED_API"OpenGL "]) ]) ])
+                        SUPPORTED_API="$SUPPORTED_API OpenGL"]) ]) ])
 
 AC_DEFUN([SETTLE_ALLEGRO],
 [TEST_API([allegro])
@@ -84,36 +82,33 @@ AS_IF([test "x$use_allegro" = "xyes"],
       [AC_DEFINE([ILUT_USE_ALLEGRO],
 		 [],
 		 [Support Allegro API])
-       SUPPORTED_API=$SUPPORTED_API"Allegro "]) 
-AM_CONDITIONAL([USE_ALLEGRO],
-	       [test "x$use_allegro" = "xyes"]) ])
+       SUPPORTED_API="$SUPPORTED_API Allegro"]) ])
+
+dnl 32-bit Windows support
+AC_DEFUN([SETTLE_W32],
+         [TEST_API([w32])
+          AC_CHECK_LIB([gdi32],
+		       [main],
+		       [ILUT_LIBS="-lgdi32 $ILUT_LIBS"
+                        SUPPORTED_API="$SUPPORTED_API w32"]) ])
 
 dnl DirectX 8
 AC_DEFUN([SETTLE_DX8],
-[AS_IF([test "x$enable_directx8" = "xyes"],
+[TEST_API([directx8])
+AS_IF([test "x$enable_directx8" = "xyes"],
       [AC_CHECK_HEADER([d3d8.h],
-		       [],
-		       [use_directx8=no]) ])
-
-AS_IF([test "x$have_directx8" = "xyes"],
-      [AC_DEFINE([ILUT_USE_DIRECTX8],
-		 [],
-		 [Support DirectX8 API])
-       SUPPORTED_API=$SUPPORTED_API"DirectX8 "],
-       []) ])
+		       [AC_DEFINE([ILUT_USE_DIRECTX8],,
+		                  [Support DirectX8 API]) 
+                        SUPPORTED_API="$SUPPORTED_API DirectX8"]) ]) ])
 
 dnl DirectX 9
 AC_DEFUN([SETTLE_DX9],
-[AS_IF([test "x$enable_directx9" = "yes"],
+[TEST_API([directx9])
+AS_IF([test "x$enable_directx9" = "xyes"],
       [AC_CHECK_HEADER([d3d9.h],
-		       [],
-		       [use_directx9=no]) ])
-
-AS_IF([test "x$use_directx9" = "yes"],
-      [AC_DEFINE([ILUT_USE_DIRECTX9],
-		 [],
-		 [Support DirectX9 API])
-       SUPPORTED_API=$SUPPORTED_API"DirectX9 "]) ])
+		       [AC_DEFINE([ILUT_USE_DIRECTX9],,
+		                  [Support DirectX9 API])
+                        SUPPORTED_API="$SUPPORTED_API DirectX9"]) ]) ])
 
 AC_DEFUN([SETTLE_X11],
 [TEST_API(x11)

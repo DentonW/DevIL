@@ -104,17 +104,18 @@ AC_DEFUN([TEST_FORMAT],
 			[AC_HELP_STRING([--enable-$1],
 					[Compile $1 support[[default=yes]]])],
 		        [],
-			[enable_$1="yes"])
+			[enable_$1="yes"]) 
+         AS_IF([test  "x${3+passed}" = "xpassed"],
+               [$3]) 
          AC_MSG_CHECKING([whether we would like to have support for $1 format])
-         AS_IF([test "x$enable_$1" = "xno"],
+         AS_IF([test "x$enable_$1" = "xno" -o "x$lib_test_result" = "xno"],
                [AC_MSG_RESULT([no])
                 AC_DEFINE([IL_NO_$2],
                           [],
                           [$1 support])],
                [AC_MSG_RESULT([yes]) 
-                SUPPORTED_FORMATS="$SUPPORTED_FORMATS $2"
-                AS_IF([test  "x${3+passed}" = "xpassed"],
-                      [$3]) ]) ])
+                SUPPORTED_FORMATS="$SUPPORTED_FORMATS $2"]) 
+         lib_test_result="" ])
 dnl
 dnl Check for libraries
 dnl
@@ -130,6 +131,7 @@ AC_DEFUN([DEVIL_IL_LIB],
                                          have_$2="yes"],
                                         [have_$2="no"])],
                           [have_$2="no"]) ])
+
 AC_DEFUN([SETTLE_LCMS],
 [AC_CHECK_LIB([lcms],
               [main],
@@ -145,29 +147,41 @@ AS_IF([test "x$lcms_nodirinclude" = "xyes"],
                  [1],
                  [LCMS include without lcms/ support]) ])
 AS_IF([test "x$have_lcms_lib" = "xyes" -a "x$have_lcms_h" = "xyes"],
-      [have_lcms="yes"]) ])
+      [have_lcms="yes"
+       lib_test_result="yes"],
+      [lib_test_result="no"]) ])
 
 AC_DEFUN([SETTLE_JPEG],
          [DEVIL_IL_LIB([jpeglib.h],
                        [jpeg]) 
           AC_DEFINE([IL_USE_JPEGLIB_UNMODIFIED],
                     [1],
-                    [Use libjpeg without modification. always enabled.]) ])
+                    [Use libjpeg without modification. always enabled.])
+          lib_test_result="$have_jpeg"])
 
 AC_DEFUN([SETTLE_JASPER],
          [DEVIL_IL_LIB([jasper/jasper.h],
-                       [jp2]) ])
+                       [jp2])
+          lib_test_result="$have_jp2" ])
 
 AC_DEFUN([SETTLE_MNG],
          [DEVIL_IL_LIB([libmng.h],
-                       [mng]) ])
+                       [mng])
+          lib_test_result="$have_mng" ])
+
 AC_DEFUN([SETTLE_PNG],
          [DEVIL_IL_LIB([png.h],
-                       [png12]) ])
+                       [png12]) 
+          AS_IF([test "x$have_png12" = "xno"],
+                [DEVIL_IL_LIB([png.h],
+                              [png]) 
+                 lib_test_result="$have_png"],
+                [lib_test_result="$have_png12"]) ])
 
 AC_DEFUN([SETTLE_TIFF],
          [DEVIL_IL_LIB([tiffio.h],
-                       [tiff]) ])
+                       [tiff])
+          lib_test_result="$have_tiff" ])
 
 dnl
 dnl ILUT APIs checking

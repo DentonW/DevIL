@@ -5,9 +5,12 @@ You will need autoconf, automake and libtool.
 
 Just type:
 autoreconf -i
-./configure --enable-ILU --enable-ILUT
+./configure <your options here> 
 make
 sudo make install
+
+If you want to use the ILU and ILUT parts of DevIL, you will want to run
+./configure --enable-ILU --enable-ILUT
 
 If you want configure to install in /usr instead of /usr/local, append
 --prefix=/usr to the ./configure line.
@@ -24,7 +27,6 @@ Enable/Disable:
 All features are basically enabled, and a test will be performed
 to verify if is possible to compile them in. If they are explicitly enabled
 or disabled no test will occour.
-
 
 Config.h and JasPer:
 -------------------

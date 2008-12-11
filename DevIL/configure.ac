@@ -68,10 +68,9 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION([$Revision: 1.38 $])
+AC_REVISION([$Revision: 1.39 $])
 dnl AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
-AC_CANONICAL_TARGET
 dnl AC_LANG([C++])
 AC_LANG([C])
 AC_PROG_CC
@@ -90,15 +89,15 @@ AM_CONDITIONAL([BUILD_MONOLITHIC],
 	       [test "x$enable_monolithic" = "xyes"])
 
 AC_ARG_ENABLE([IL],
-	      [AS_HELP_STRING([--enable-IL[[=yes/no]]],
-			      [Build IL part of DevIL. Default set to yes])],
+	      [AS_HELP_STRING([--with-IL[[=yes/no]]],
+	                      [Build IL part of DevIL. Default set to yes])],
               [],
 	      [enable_IL="yes"])
 AM_CONDITIONAL([BUILD_IL],
 	       [test "x$enable_IL" = "xyes"])
 
 AC_ARG_ENABLE([ILU],
-	      [AS_HELP_STRING([--enable-ILU[[=yes/no]]],
+	      [AS_HELP_STRING([--with-ILU[[=yes/no]]],
 			      [Build ILU part of DevIL. Default set to no])],
               [],
 	      [enable_ILU="no"])
@@ -106,7 +105,7 @@ AM_CONDITIONAL([BUILD_ILU],
 	       [test "x$enable_ILU" = "xyes"])
 
 AC_ARG_ENABLE([ILUT],
-	      [AS_HELP_STRING([--enable-ILUT[[=yes/no]]],
+	      [AS_HELP_STRING([--with-ILUT[[=yes/no]]],
 			      [Build ILUT part of DevIL. Default set to no])],
               [],
 	      [enable_ILUT="no"])
@@ -116,7 +115,7 @@ AM_CONDITIONAL([BUILD_ILUT],
 dnl Test for restrict c/c++ keyword
 DEVIL_CHECK_RESTRICT
 dnl checking if the -std=gnu99 flag is required
-AS_IF([test ! "$restrict_keyword" = "found"],
+AS_IF([test  "x$restrict_keyword" = "xfound"],
       [DEVIL_CHECK_RESTRICT_GNU99])
 
 dnl must add AC_CACHE_CHECK support where possible
@@ -205,9 +204,6 @@ AC_CHECK_HEADER([mm_malloc.h],
 dnl
 dnl Libraries development checking
 dnl
-AC_CHECK_HEADER([zlib.h], 
-		[use_z="yes"], 
-		[use_z="no"])
 
 AC_ARG_WITH([zlib],
             [AC_HELP_STRING([--with-zlib=[[yes/no]]],
@@ -215,10 +211,13 @@ AC_ARG_WITH([zlib],
 	    [],
             [enable_zlib="yes"])
 
-AS_IF([test "$enable_zlib" = "yes"],
-      [AC_CHECK_LIB([z],
-                    [main]) ])
-
+AS_IF([test "x$enable_zlib" = "xyes"],
+      [AC_CHECK_HEADER([zlib.h], 
+		       [use_z="yes"], 
+		       [use_z="no"]) 
+       AS_IF([test "$enable_zlib" = "yes"],
+             [AC_CHECK_LIB([z],
+                           [main]) ]) ])
 
 TEST_FORMAT([bmp], [BMP])
 TEST_FORMAT([dcx], [DCX])
@@ -237,7 +236,7 @@ TEST_FORMAT([pcx], [PCX])
 TEST_FORMAT([pcd], [PCD])
 TEST_FORMAT([pic], [PIC])
 TEST_FORMAT([pix], [PIX])
-TEST_FORMAT([png], [PNG], [SETTLE_TIFF])
+TEST_FORMAT([png], [PNG], [SETTLE_PNG])
 TEST_FORMAT([pnm], [PNM])
 TEST_FORMAT([psd], [PSD])
 TEST_FORMAT([psp], [PSP])
@@ -256,57 +255,38 @@ AC_DEFINE([IL_NO_WDP],
 	  [],
 	  [The WDP support is causing problems as well])
 
-TEST_API([win32])
-
 dnl
 dnl ILUT APIs library checking
 dnl
-
-dnl SDL
-SETTLE_SDL
-
-dnl X11
-SETTLE_X11
-
-dnl OpenGL
-SETTLE_OPENGL
-
-dnl Allegro
-SETTLE_ALLEGRO
+AS_IF([test "x$enable_ILUT" = "xyes"],
+      [SETTLE_SDL
+       SETTLE_X11
+       SETTLE_OPENGL
+       SETTLE_ALLEGRO
+       SETTLE_DX8
+       SETTLE_DX9
+       SETTLE_W32])
+ 
+dnl AM_CONDITIONAL([USE_SDL],
+dnl               [test "x$use_sdl" = "xyes"])
+ 
+dnl AM_CONDITIONAL([USE_ALLEGRO],
+dnl	       [test "x$use_allegro" = "xyes"])
 
 dnl Win32
 AS_CASE([$host],
         [*mingw32*],
         [LIBIL_CFLAGS="$LIBIL_CFLAGS -mno-cygwin"
          LIBILU_CFLAGS="$LIBILU_CFLAGS -mno-cygwin"
-         LIBILUT_CFLAGS="$LIBILUT_CFLAGS -mno-cygwin"
-         VERSIONINFO=""],
+         LIBILUT_CFLAGS="$LIBILUT_CFLAGS -mno-cygwin"],
         [*cygwin*],
-        [LIBILUT_WIN32LIBPATH="-L/usr/lib/w32api"
-         VERSIONINFO=""],
-        [use_win32="no"
-         VERSIONINFO="-version-info $DEVIL_LTVERSION"])
-
-dnl AC_SUBST([VERSIONINFO])
-AS_IF([test "$use_win32" = "no"],
-      [LIBGDI32=""],
-      [LIBGDI32="-lgdi32"])
-
-dnl AC_SUBST([LIBGDI32])
-
-dnl DirectX 8
-SETTLE_DX8
-
-dnl DirectX 9
-SETTLE_DX9
-
-dnl Mac OS X Specific test
-AS_CASE([$target],
-        [*-apple-darwin*],
+        [LIBILUT_WIN32LIBPATH="-L/usr/lib/w32api"],
+        [*darwin*],
 	[AC_DEFINE([MAX_OS_X],
 		   [],
-		   [Building on Mac OS X])],
-        [])
+		   [Building on Mac OS X]) ])
+
+dnl AC_SUBST([VERSIONINFO])
 
 dnl If we're on Windows we need the -no-undefined flag to get dlls
 WIN32_EXTRA_LDFLAGS=
@@ -335,19 +315,27 @@ AC_CONFIG_FILES([Makefile lib/Makefile docs/Makefile data/DevIL.pc data/IL.pc da
 # src-IL/Makefile  src-IL/src/Makefile  src-IL/include/Makefile  src-ILU/Makefile  src-ILU/src/Makefile  src-ILU/include/Makefile  src-ILUT/Makefile  src-ILUT/src/Makefile  src-ILUT/include/Makefile  include/Makefile  include/IL/Makefile
 AC_OUTPUT
 
-echo
-echo +----------------------------------------+
-echo \|     IL library  Supported formats      \|
-echo +----------------------------------------+-------+
-echo $SUPPORTED_FORMATS
-echo
-echo +----------------------------------------+
-echo \|      ILUT library  Supported APIs      \|
-echo +----------------------------------------+-------+
-echo $SUPPORTED_API
-echo
-echo +----------------------------------------+
-echo \|      Detected Machine Extensions       \|
-echo +----------------------------------------+-------+
-echo $SUPPORTED_EXTENSION
-echo
+AC_MSG_NOTICE([+----------------------------------------+])
+AS_IF([test "x$enable_IL" = "xyes"],
+      [AC_MSG_NOTICE([\|     IL library  Supported formats      \|])
+       AC_MSG_NOTICE([+----------------------------------------+-------+])
+       AC_MSG_NOTICE([$SUPPORTED_FORMATS]) ],
+       [AC_MSG_NOTICE([\|     IL disabled (huh?)     \|]) ])
+
+AC_MSG_NOTICE([+----------------------------------------+])
+AS_IF([test "x$enable_ILU" = "xyes"],
+      [AC_MSG_NOTICE([\|     ILU part enabled      \|]) ],
+      [AC_MSG_NOTICE([\|     ILU part disabled      \|]) ])
+
+AC_MSG_NOTICE([+----------------------------------------+])
+AS_IF([test "x$enable_ILUT" = "xyes"],
+      [AC_MSG_NOTICE([\|      ILUT library  Supported APIs      \|])
+      AC_MSG_NOTICE([+----------------------------------------+-------+])
+      AC_MSG_NOTICE([$SUPPORTED_API])],
+      [AC_MSG_NOTICE([\|     ILUT part disabled      \|]) ])
+
+AC_MSG_NOTICE([+----------------------------------------+])
+AC_MSG_NOTICE([\|      Detected Machine Extensions       \|])
+AC_MSG_NOTICE([+----------------------------------------+-------+])
+AC_MSG_NOTICE([$SUPPORTED_EXTENSION])
+AC_MSG_NOTICE([+----------------------------------------+])
