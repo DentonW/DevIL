@@ -513,8 +513,8 @@ ILAPI ILuint    ILAPIENTRY ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize, ILen
 ILAPI ILenum    ILAPIENTRY ilGetError(void);
 ILAPI ILint     ILAPIENTRY ilGetInteger(ILenum Mode);
 ILAPI ILvoid    ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param);
-ILAPI ILuint    ILAPIENTRY ilGetLumpPos(ILvoid);
-ILAPI ILubyte*  ILAPIENTRY ilGetPalette(ILvoid);
+ILAPI ILuint    ILAPIENTRY ilGetLumpPos(void);
+ILAPI ILubyte*  ILAPIENTRY ilGetPalette(void);
 ILAPI ILstring  ILAPIENTRY ilGetString(ILenum StringName);
 ILAPI ILvoid    ILAPIENTRY ilHint(ILenum Target, ILenum Mode);
 ILAPI ILvoid    ILAPIENTRY ilInit(void);
