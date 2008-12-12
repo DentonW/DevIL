@@ -11,16 +11,19 @@ ildir = $(includedir)/IL
 
 lib_LTLIBRARIES =
 il_HEADERS = 
+AM_LDFLAGS = -version-info @DEVIL_LTVERSION@
 
-AM_LDFLAGS = -version-info $(DEVIL_LTVERSION)
 if BUILD_MONOLITHIC
 lib_LTLIBRARIES += libDevIL.la
 libDevIL_la_SOURCES = 
 libDevIL_la_CPPFLAGS = 
 libDevIL_la_CFLAGS =
-libDevIL_la_LDFLAGS = 
+libDevIL_la_LDFLAGS = $(AM_LDFLAGS)
 endif 
 
+if WINDOWS_BUILD
+AM_LDFLAGS += -no-undefined
+endif #WINDOWS_BUILD
 
 if BUILD_IL
 
@@ -73,7 +76,7 @@ libIL_la_LDFLAGS = @IL_LIBS@
 libILU_la_CPPFLAGS = -I $(ilu_include) -I $(all_include)
 libILU_la_CFLAGS = $(CFLAGS) @ILU_CFLAGS@
 libILU_la_SOURCES = $(ilu_src)/ilu_alloc.c $(ilu_src)/ilu_internal.c $(ilu_src)/ilu_noise.c $(ilu_src)/ilu_scale.c $(ilu_src)/ilu_error.c $(ilu_src)/ilu_main.c $(ilu_src)/ilu_rotate.c $(ilu_src)/ilu_scaling.c $(ilu_src)/ilu_filter.c $(ilu_src)/ilu_manip.c $(ilu_src)/ilu_scale2d.c $(ilu_src)/ilu_states.c $(ilu_src)/ilu_filter_rcg.c $(ilu_src)/ilu_mipmap.c $(ilu_src)/ilu_scale3d.c $(ilu_src)/ilu_utilities.c $(ilu_src)/ilu_region.c
-libILU_la_SOURCES += $(ilu_include)/ilu_alloc.h $(ilu_include)/ilu_filter.h $(ilu_include)/ilu_internal.h $(ilu_include)/ilu_mipmap.h $(ilu_include)/ilu_region.h $(ilu_include)/ilu_states.h $(all_include)/IL/devil_internal_exports.h $(all_include)/IL/ilu_region.h $(ilu_include)/ilu_error/ilu_err-arabic.h $(ilu_include)/ilu_error/ilu_err-dutch.h $(ilu_include)/ilu_error/ilu_err-english.h $(ilu_include)/ilu_error/ilu_err-japanese.h $(ilu_include)/ilu_error/ilu_err-spanish.h $(ilu_include)/ilu_error/ilu_err_dutch.h $(ilu_include)/ilu_error/ilu_err_spanish.h
+libILU_la_SOURCES += $(ilu_include)/ilu_alloc.h $(ilu_include)/ilu_filter.h $(ilu_include)/ilu_internal.h $(ilu_include)/ilu_mipmap.h $(ilu_include)/ilu_region.h $(ilu_include)/ilu_states.h $(all_include)/IL/devil_internal_exports.h $(all_include)/IL/ilu_region.h $(ilu_include)/ilu_error/ilu_err-arabic.h $(ilu_include)/ilu_error/ilu_err-dutch.h $(ilu_include)/ilu_error/ilu_err-english.h $(ilu_include)/ilu_error/ilu_err-japanese.h $(ilu_include)/ilu_error/ilu_err-spanish.h 
 libILU_la_LDFLAGS = @ILU_LIBS@
 
 libILUT_la_CPPFLAGS = -I $(ilut_include) -I $(all_include)

@@ -105,7 +105,7 @@ AC_DEFUN([TEST_FORMAT],
 					[Compile $1 support[[default=yes]]])],
 		        [],
 			[enable_$1="yes"]) 
-         AS_IF([test  "x${3+passed}" = "xpassed"],
+         AS_IF([test $# -eq 3],
                [$3]) 
          AC_MSG_CHECKING([whether we would like to have support for $1 format])
          AS_IF([test "x$enable_$1" = "xno" -o "x$lib_test_result" = "xno"],
@@ -161,8 +161,12 @@ AC_DEFUN([SETTLE_JPEG],
 
 AC_DEFUN([SETTLE_JASPER],
          [DEVIL_IL_LIB([jasper/jasper.h],
-                       [jp2])
-          lib_test_result="$have_jp2" ])
+                       [jasper])
+          AS_IF([test "x$have_jasper" != "xyes"],
+                [DEVIL_IL_LIB([jasper/jasper.h],
+                              [jp2])
+                 lib_test_result="$have_jp2" ],
+                [lib_test_result="yes"]) ])
 
 AC_DEFUN([SETTLE_MNG],
          [DEVIL_IL_LIB([libmng.h],
