@@ -21,6 +21,7 @@ dnl Where to put various auxiliary files
 AC_CONFIG_AUX_DIR([build-aux])
 dnl Libtool init with message that we want to build DLLs
 LT_INIT([win32-dll])
+LT_PROG_RC
 dnl Automake init with all warnings reported
 AM_INIT_AUTOMAKE([-Wall])
 
@@ -77,20 +78,28 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION([$Revision: 1.40 $])
+AC_REVISION([$Revision: 1.41 $])
 dnl AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
 dnl AC_LANG([C++])
 AC_LANG([C])
-AC_PROG_CC
+AM_PROG_CC_C_O
 AC_PROG_CXX
 AC_PROG_MAKE_SET
 AC_C_BIGENDIAN
 AC_PATH_XTRA
 
 
+AC_ARG_WITH([examples],
+	    [AS_HELP_STRING([--with-examples[[=yes/no]]],
+			    [Whether to build and install examples as well. Default is without examples])],
+	    [],
+	    [with_examples="no"])
+AM_CONDITIONAL([BUILD_EXAMPLES],
+	       [test "x$with_examples" = "xyes"])
+
 AC_ARG_ENABLE([monolithic],
-	      [AS_HELP_STRING([--enable-monolithic],
+	      [AS_HELP_STRING([--enable-monolithic[[=yes/no]]],
 			      [Builds only one library instead of separate ones (IL, ILU, ILUT -> DevIL). Default set to 'disabled'])],
               [],
 	      [enable_monolithic="no"])
@@ -266,19 +275,37 @@ dnl
 dnl ILUT APIs library checking
 dnl
 AS_IF([test "x$enable_ILUT" = "xyes"],
-      [SETTLE_SDL
-       SETTLE_X11
-       SETTLE_OPENGL
-       SETTLE_ALLEGRO
+      [SETTLE_ALLEGRO
        SETTLE_DX8
        SETTLE_DX9
-       SETTLE_W32])
+       SETTLE_OPENGL
+       SETTLE_SDL
+       SETTLE_W32
+       SETTLE_X11])
  
-dnl AM_CONDITIONAL([USE_SDL],
-dnl               [test "x$use_sdl" = "xyes"])
- 
-dnl AM_CONDITIONAL([USE_ALLEGRO],
-dnl	       [test "x$use_allegro" = "xyes"])
+AM_CONDITIONAL([USE_ALLEGRO],
+	       [test "x$use_allegro" = "xyes"])
+
+AM_CONDITIONAL([USE_DIRECTX8],
+               [test "x$use_directx8" = "xyes"])
+
+AM_CONDITIONAL([USE_DIRECTX9],
+               [test "x$use_directx9" = "xyes"])
+
+AM_CONDITIONAL([USE_DIRECTX],
+               [test "x$use_directx8" = "xyes" -o "x$use_directx9" = "xyes"])
+
+AM_CONDITIONAL([USE_OPENGL],
+               [test "x$use_ogl" = "xyes"])
+
+AM_CONDITIONAL([USE_SDL],
+               [test "x$use_sdl" = "xyes"])
+
+AM_CONDITIONAL([USE_W32],
+               [test "x$use_w32" = "xyes"])
+
+AM_CONDITIONAL([USE_X11],
+               [test "x$use_x11" = "xyes"])
 
 dnl Win32
 AS_CASE([$host],
@@ -314,6 +341,7 @@ dnl note: keep the list on one line separated by single spaces
 dnl (otherwise MSYS compilation breaks)
 AC_CONFIG_FILES([Makefile 
 		 lib/Makefile 
+		 examples/Makefile
 		 docs/Makefile 
 		 data/DevIL.pc 
 		 data/IL.pc data/ILU.pc 
@@ -324,25 +352,25 @@ AC_OUTPUT
 dnl And a nice report in the end!
 AC_MSG_NOTICE([+----------------------------------------+])
 AS_IF([test "x$enable_IL" = "xyes"],
-      [AC_MSG_NOTICE([\|     IL library  Supported formats     \|])
+      [AC_MSG_NOTICE([\| IL library  Supported formats \|])
        AC_MSG_NOTICE([+----------------------------------------+-------+])
        AC_MSG_NOTICE([$SUPPORTED_FORMATS]) ],
-      [AC_MSG_NOTICE([\|     IL disabled (huh? good luck!)     \|]) ])
+      [AC_MSG_NOTICE([\| IL disabled (huh? good luck!) \|]) ])
 
 AC_MSG_NOTICE([+----------------------------------------+])
 AS_IF([test "x$enable_ILU" = "xyes"],
-      [AC_MSG_NOTICE([\|     ILU part enabled       \|]) ],
-      [AC_MSG_NOTICE([\|     ILU part disabled      \|]) ])
+      [AC_MSG_NOTICE([\|      ILU part enabled        \|]) ],
+      [AC_MSG_NOTICE([\|      ILU part disabled       \|]) ])
 
 AC_MSG_NOTICE([+----------------------------------------+])
 AS_IF([test "x$enable_ILUT" = "xyes"],
-      [AC_MSG_NOTICE([\|     ILUT library  Supported APIs      \|])
+      [AC_MSG_NOTICE([\| ILUT library  Supported APIs \|])
        AC_MSG_NOTICE([+----------------------------------------+-------+])
        AC_MSG_NOTICE([$SUPPORTED_API])],
-      [AC_MSG_NOTICE([\|     ILUT part disabled     \|]) ])
+      [AC_MSG_NOTICE([\|      ILUT part disabled     \|]) ])
 
 AC_MSG_NOTICE([+----------------------------------------+])
-AC_MSG_NOTICE([\|      Detected Machine Extensions       \|])
+       AC_MSG_NOTICE([\| Detected Machine Extensions \|])
 AC_MSG_NOTICE([+----------------------------------------+-------+])
 AC_MSG_NOTICE([$SUPPORTED_EXTENSION])
 AC_MSG_NOTICE([+----------------------------------------+])

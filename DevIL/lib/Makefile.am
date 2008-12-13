@@ -10,7 +10,7 @@ ilut_include = $(srcdir)/../src-ILUT/include
 ildir = $(includedir)/IL
 
 lib_LTLIBRARIES =
-il_HEADERS = 
+il_HEADERS =  $(includedir)/IL/devil_cpp_wrapper.hpp
 AM_LDFLAGS = -version-info @DEVIL_LTVERSION@
 
 if BUILD_MONOLITHIC
@@ -50,7 +50,7 @@ else #!BUILD_MONOLITHIC
 lib_LTLIBRARIES += libILU.la 
 endif #BUILD_MONOLITHIC
 
-il_HEADERS += $(all_include)/IL/ilu.h
+il_HEADERS += $(all_include)/IL/ilu.h $(all_include)/IL/ilu_region.h
 endif #BUILD_ILU
 
 if BUILD_ILUT
@@ -78,9 +78,36 @@ libILU_la_CFLAGS = $(CFLAGS) @ILU_CFLAGS@
 libILU_la_SOURCES = $(ilu_src)/ilu_alloc.c $(ilu_src)/ilu_internal.c $(ilu_src)/ilu_noise.c $(ilu_src)/ilu_scale.c $(ilu_src)/ilu_error.c $(ilu_src)/ilu_main.c $(ilu_src)/ilu_rotate.c $(ilu_src)/ilu_scaling.c $(ilu_src)/ilu_filter.c $(ilu_src)/ilu_manip.c $(ilu_src)/ilu_scale2d.c $(ilu_src)/ilu_states.c $(ilu_src)/ilu_filter_rcg.c $(ilu_src)/ilu_mipmap.c $(ilu_src)/ilu_scale3d.c $(ilu_src)/ilu_utilities.c $(ilu_src)/ilu_region.c
 libILU_la_SOURCES += $(ilu_include)/ilu_alloc.h $(ilu_include)/ilu_filter.h $(ilu_include)/ilu_internal.h $(ilu_include)/ilu_mipmap.h $(ilu_include)/ilu_region.h $(ilu_include)/ilu_states.h $(all_include)/IL/devil_internal_exports.h $(all_include)/IL/ilu_region.h $(ilu_include)/ilu_error/ilu_err-arabic.h $(ilu_include)/ilu_error/ilu_err-dutch.h $(ilu_include)/ilu_error/ilu_err-english.h $(ilu_include)/ilu_error/ilu_err-japanese.h $(ilu_include)/ilu_error/ilu_err-spanish.h 
 libILU_la_LDFLAGS = @ILU_LIBS@
+libILU_la_LIBADD = libIL.la
 
 libILUT_la_CPPFLAGS = -I $(ilut_include) -I $(all_include)
 libILUT_la_CFLAGS = $(CFLAGS) @ILUT_CFLAGS@
-libILUT_la_SOURCES = $(ilut_src)/ilut_allegro.c $(ilut_src)/ilut_main.c $(ilut_src)/ilut_sdlsurface.c $(ilut_src)/ilut_states.c $(ilut_src)/ilut_internal.c $(ilut_src)/ilut_opengl.c $(ilut_src)/ilut_win32.c $(ilut_src)/ilut_directx.c $(ilut_src)/ilut_directx9.c $(ilut_src)/ilut_x11.c
-libILUT_la_SOURCES += $(ilut_include)/ilut_allegro.h $(ilut_include)/ilut_internal.h $(ilut_include)/ilut_opengl.h $(ilut_include)/ilut_states.h $(all_include)/IL/devil_internal_exports.h
+libILUT_la_SOURCES = $(ilut_src)/ilut_main.c $(ilut_src)/ilut_states.c $(ilut_src)/ilut_internal.c  
+libILUT_la_SOURCES += $(ilut_include)/ilut_internal.h $(ilut_include)/ilut_states.h $(all_include)/IL/devil_internal_exports.h
 libILUT_la_LDFLAGS = @ILUT_LIBS@
+libILUT_la_LIBADD = libILU.la
+
+if USE_ALLEGRO
+libILUT_la_SOURCES += $(ilut_src)/ilut_allegro.c $(ilut_include)/ilut_allegro.h 
+endif #USE_ALLEG
+
+if USE_DIRECTX
+libILUT_la_SOURCES += $(ilut_src)/ilut_directx.c
+endif #USE_DIRECTX
+
+if USE_DIRECTX9
+libILUT_la_SOURCES += $(ilut_src)/ilut_directx9.c
+endif #USE_DIRECTX
+
+if USE_SDL
+libILUT_la_SOURCES += $(ilut_src)/ilut_sdlsurface.c 
+endif #USE_SDL
+
+if USE_OPENGL
+libILUT_la_SOURCES += $(ilut_include)/ilut_opengl.h $(ilut_src)/ilut_opengl.c $(ilut_src)/ilut_x11.c
+endif #USE_OPENGL
+
+if USE_W32
+libILUT_la_SOURCES += $(ilut_src)/ilut_win32.c  
+endif #USE_W32
+

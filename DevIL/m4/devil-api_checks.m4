@@ -49,9 +49,10 @@ AC_DEFUN([SETTLE_OPENGL],
           AS_IF([test "x$enable_opengl" = "xyes"],
                 [AX_CHECK_GL
                  AX_CHECK_GLU
-                 AS_IF([test "x$no_gl" != "xyes" -a "x$no_glu" != "xyes"],
+                 AX_CHECK_GLUT
+                 AS_IF([test "x$no_gl" != "xyes" -a "x$no_glu" != "xyes" -a "x$no_glut" != "xyes"],
                        [use_ogl="yes"
-		        ILUT_LIBS="$GLU_LIBS $GL_LIBS $ILUT_LIBS" 
+		        ILUT_LIBS="$GLUT_LIBS $GLU_LIBS $GL_LIBS $ILUT_LIBS" 
                         AC_DEFINE([ILUT_USE_OPENGL],
 	                          [1],
 	                          [Define if system supports OpenGL API])
@@ -87,10 +88,12 @@ AS_IF([test "x$use_allegro" = "xyes"],
 dnl 32-bit Windows support
 AC_DEFUN([SETTLE_W32],
          [TEST_API([w32])
-          AC_CHECK_LIB([gdi32],
-		       [main],
-		       [ILUT_LIBS="-lgdi32 $ILUT_LIBS"
-                        SUPPORTED_API="$SUPPORTED_API w32"]) ])
+          AS_IF([test "x$enable_w32" = "xyes"],
+                [AC_CHECK_LIB([gdi32],
+		              [main],
+		              [ILUT_LIBS="-lgdi32 $ILUT_LIBS"
+                               use_w32="yes"
+                               SUPPORTED_API="$SUPPORTED_API w32"]) ]) ])
 
 dnl DirectX 8
 AC_DEFUN([SETTLE_DX8],
@@ -99,6 +102,7 @@ AS_IF([test "x$enable_directx8" = "xyes"],
       [AC_CHECK_HEADER([d3d8.h],
 		       [AC_DEFINE([ILUT_USE_DIRECTX8],,
 		                  [Support DirectX8 API]) 
+                        use__directx8="yes"
                         SUPPORTED_API="$SUPPORTED_API DirectX8"]) ]) ])
 
 dnl DirectX 9
@@ -108,6 +112,7 @@ AS_IF([test "x$enable_directx9" = "xyes"],
       [AC_CHECK_HEADER([d3d9.h],
 		       [AC_DEFINE([ILUT_USE_DIRECTX9],,
 		                  [Support DirectX9 API])
+                        use__directx9="yes"
                         SUPPORTED_API="$SUPPORTED_API DirectX9"]) ]) ])
 
 AC_DEFUN([SETTLE_X11],
