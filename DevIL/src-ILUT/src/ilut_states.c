@@ -19,7 +19,7 @@
 
 
 const char *_ilutVendor		= "Abysmal Software";
-const char *_ilutVersion	= "Developer's Image Library Utility Toolkit (ILUT) 1.6.7 " __DATE__;
+const char *_ilutVersion	= "Developer's Image Library Utility Toolkit (ILUT) 1.7.3 " __DATE__;
 
 
 

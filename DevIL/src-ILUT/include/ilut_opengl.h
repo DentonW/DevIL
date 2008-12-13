@@ -33,14 +33,18 @@ ILboolean IsExtensionSupported(const char *extension);
 	#include <windows.h>
 	typedef void (ILAPIENTRY * ILGLCOMPRESSEDTEXIMAGE2DARBPROC) (GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *data);
 #elif linux
+
 	#include <GL/gl.h>
 	#include <GL/glx.h>  // patch #1504388. X86_64 Problems by Hans de Goede
+
 	typedef void (ILAPIENTRY * ILGLCOMPRESSEDTEXIMAGE2DARBPROC) (GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *data);
+
 #elif defined __APPLE__
        #include <mach-o/dyld.h>
        void* aglGetProcAddress (const GLubyte *name);
        typedef void (ILAPIENTRY *ILGLCOMPRESSEDTEXIMAGE2DARBPROC) (GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *data);
 #endif
+
 
 
 #endif //ILUT_USE_OPENGL

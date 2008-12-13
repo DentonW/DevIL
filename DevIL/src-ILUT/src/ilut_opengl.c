@@ -25,7 +25,6 @@ ILvoid iGLSetMaxH( ILuint Height ) {
 	return;
 }
 
-#include "ilut_internal.h"
 #ifdef ILUT_USE_OPENGL
 
 

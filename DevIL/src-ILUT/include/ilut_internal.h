@@ -20,6 +20,9 @@
 
 //#define	WIN32_LEAN_AND_MEAN
 
+#if defined(_WIN32) && !defined(HAVE_CONFIG_H)
+#define HAVE_CONFIG_H
+#endif
 #ifdef HAVE_CONFIG_H
 #include <IL/config.h>
 #endif
@@ -27,7 +30,7 @@
 #include <string.h>
 
 #ifdef _WIN32
-	#ifdef _MSC_VER
+#ifdef _MSC_VER
 		#if _MSC_VER > 1000
 			#pragma warning(disable: 4996)	// "The POSIX name for this item is deprecated." AND "This function or variable may be unsafe."
 		#endif // _MSC_VER > 1000
