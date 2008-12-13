@@ -2,6 +2,7 @@
 ---
 
 - Added German translations of error codes in ILU.
+- Added ilutGLSubTex back to ilut.h.
 
 
 1.7.3

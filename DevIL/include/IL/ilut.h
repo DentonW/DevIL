@@ -234,6 +234,7 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 	ILAPI ILboolean	ILAPIENTRY ilutGLScreen(void);
 	ILAPI ILboolean	ILAPIENTRY ilutGLScreenie(void);
 	ILAPI ILboolean	ILAPIENTRY ilutGLSaveImage(ILstring FileName, GLuint TexID);
+	ILAPI ILboolean ILAPIENTRY ilutGLSubTex(GLuint TexID, ILuint XOff, ILuint YOff);
 	ILAPI ILboolean	ILAPIENTRY ilutGLSetTex(GLuint TexID);
 	ILAPI ILboolean	ILAPIENTRY ilutGLTexImage(GLuint Level);
 	ILAPI ILboolean ILAPIENTRY ilutGLSubTex(GLuint TexID, ILuint XOff, ILuint YOff);
