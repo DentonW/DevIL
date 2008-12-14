@@ -30,16 +30,16 @@
 #endif
 
 static ILvoid ILAPIENTRY DefaultFreeFunc(const ILvoid * CONST_RESTRICT Ptr);
-static ILvoid* ILAPIENTRY DefaultAllocFunc(const ILuint Size);
+static ILvoid* ILAPIENTRY DefaultAllocFunc(const ILsizei Size);
 
 static mAlloc ialloc_ptr = DefaultAllocFunc;
 static mFree  ifree_ptr = DefaultFreeFunc;
 
 /*** Vector Allocation/Deallocation Function ***/
 #ifdef VECTORMEM
-ILvoid *vec_malloc(const ILuint size)
+ILvoid *vec_malloc(const ILsizei size)
 {
-	const ILuint _size =  size % 16 > 0 ? size + 16 - (size % 16) : size; // align size value
+	const ILsizei _size =  size % 16 > 0 ? size + 16 - (size % 16) : size; // align size value
 	
 #ifdef MM_MALLOC
 	return _mm_malloc(_size,16);
@@ -68,9 +68,9 @@ ILvoid *vec_malloc(const ILuint size)
 #endif //MM_MALLOC
 }
 
-ILvoid *ivec_align_buffer(ILvoid *buffer, const ILuint size)
+ILvoid *ivec_align_buffer(ILvoid *buffer, const ILsizei size)
 {
-	if( (size_t)buffer % 16 != 0 ) {
+	if( (ILsizei)buffer % 16 != 0 ) {
         void *aligned_buffer = vec_malloc( size );
         memcpy( aligned_buffer, buffer, size );
         ifree( buffer );
@@ -82,7 +82,7 @@ ILvoid *ivec_align_buffer(ILvoid *buffer, const ILuint size)
 
 
 /*** Allocation/Deallocation Function ***/
-ILvoid* ILAPIENTRY ialloc(const ILuint Size) {
+ILvoid* ILAPIENTRY ialloc(const ILsizei Size) {
 	ILvoid *Ptr = ialloc_ptr(Size);
 	if (Ptr == NULL)
 		ilSetError(IL_OUT_OF_MEMORY);
@@ -94,7 +94,7 @@ ILvoid ILAPIENTRY ifree(const ILvoid * CONST_RESTRICT Ptr) {
 	return;
 }
 
-ILvoid* ILAPIENTRY icalloc(const ILuint Size, const ILuint Num)
+ILvoid* ILAPIENTRY icalloc(const ILsizei Size, const ILsizei Num)
 {
     ILvoid *Ptr = ialloc(Size * Num);
     if (Ptr == NULL)
@@ -104,7 +104,7 @@ ILvoid* ILAPIENTRY icalloc(const ILuint Size, const ILuint Num)
 }
 
 /*** Default Allocation/Deallocation Function ***/
-static ILvoid* ILAPIENTRY DefaultAllocFunc(const ILuint Size)
+static ILvoid* ILAPIENTRY DefaultAllocFunc(const ILsizei Size)
 {
 #ifdef VECTORMEM
 	return (ILvoid*)vec_malloc(Size);

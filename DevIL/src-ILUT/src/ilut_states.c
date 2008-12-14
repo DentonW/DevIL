@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Toolkit Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/18/2002 <--Y2K Compliant! =]
+// Copyright (C) 2000-2008 by Denton Woods
+// Last modified: 12/14/2008
 //
 // Filename: src-ILUT/src/ilut_states.c
 //
@@ -19,7 +19,7 @@
 
 
 const char *_ilutVendor		= "Abysmal Software";
-const char *_ilutVersion	= "Developer's Image Library Utility Toolkit (ILUT) 1.7.3 " __DATE__;
+const char *_ilutVersion	= "Developer's Image Library Utility Toolkit (ILUT) 1.7.4 " __DATE__;
 
 
 
@@ -270,19 +270,19 @@ ILvoid ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param)
 			break;
 		case ILUT_GL_USE_S3TC:
 			if (Param == IL_TRUE || Param == IL_FALSE) {
-				ilutStates[ilutCurrentPos].ilutUseS3TC = Param;
+				ilutStates[ilutCurrentPos].ilutUseS3TC = (ILboolean)Param;
 				return;
 			}
 			break;
 		case ILUT_GL_GEN_S3TC:
 			if (Param == IL_TRUE || Param == IL_FALSE) {
-				ilutStates[ilutCurrentPos].ilutGenS3TC = Param;
+				ilutStates[ilutCurrentPos].ilutGenS3TC = (ILboolean)Param;
 				return;
 			}
 			break;
 		case ILUT_GL_AUTODETECT_TEXTURE_TARGET:
 			if (Param == IL_TRUE || Param == IL_FALSE) {
-				ilutStates[ilutCurrentPos].ilutAutodetectTextureTarget = Param;
+				ilutStates[ilutCurrentPos].ilutAutodetectTextureTarget = (ILboolean)Param;
 				return;
 			}
 			break;

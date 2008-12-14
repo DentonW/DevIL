@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 09/27/2008
+// Last modified: 12/14/2008
 //
 // Filename: IL/il.h
 //
@@ -74,7 +74,7 @@ typedef unsigned int   ILbitfield;
 typedef signed char    ILbyte;
 typedef signed short   ILshort;
 typedef int     	   ILint;
-typedef int            ILsizei;
+typedef size_t         ILsizei;
 typedef unsigned char  ILubyte;
 typedef unsigned short ILushort;
 typedef unsigned int   ILuint;
@@ -472,7 +472,7 @@ typedef ILint    (ILAPIENTRY *fTellWProc) (ILHANDLE);
 typedef ILint    (ILAPIENTRY *fWriteProc) (const void*, ILuint, ILuint, ILHANDLE);
 
 // Callback functions for allocation and deallocation
-typedef ILvoid* (ILAPIENTRY *mAlloc)(const ILuint);
+typedef ILvoid* (ILAPIENTRY *mAlloc)(const ILsizei);
 typedef ILvoid  (ILAPIENTRY *mFree) (const ILvoid* CONST_RESTRICT);
 
 // Registered format procedures

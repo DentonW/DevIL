@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 02/19/2002 <--Y2K Compliant! =]
+// Copyright (C) 2000-2008 by Denton Woods
+// Last modified: 12/14/2008
 //
 // Filename: src-IL/include/il_internal.h
 //
@@ -15,11 +15,11 @@
 
 
 // Local headers
-#if defined(_WIN32) && !defined(HAVE_CONFIG_H)
-#define HAVE_CONFIG_H
+#if (defined(_WIN32) || defined(_WIN64)) && !defined(HAVE_CONFIG_H)
+	#define HAVE_CONFIG_H
 #endif
 #ifdef HAVE_CONFIG_H
-#include <IL/config.h>
+	#include <IL/config.h>
 #endif
 
 // Standard headers
@@ -90,8 +90,14 @@ extern "C" {
 #endif
 
 #ifdef IL_INLINE_ASM
-	#ifdef _MSC_VER  // MSVC++ only
+	#if (defined (_MSC_VER) && defined(_WIN32))  // MSVC++ only
 		#define USE_WIN32_ASM
+	#endif
+
+	#ifdef _WIN64
+		#undef USE_WIN32_ASM
+	//@TODO: Windows 64 compiler cannot use inline ASM, so we need to
+	//  generate some MASM code at some point.
 	#endif
 #endif
 extern ILimage *iCurImage;
@@ -406,8 +412,7 @@ ILboolean ilLoadXpmL(const ILvoid *Lump, ILuint Size);
 
 
 // OpenEXR is written in C++, so we have to wrap this to avoid linker errors.
-/*
- * #ifndef IL_NO_EXR
+/*#ifndef IL_NO_EXR
 	#ifdef __cplusplus
 	extern "C" {
 	#endif
@@ -415,8 +420,7 @@ ILboolean ilLoadXpmL(const ILvoid *Lump, ILuint Size);
 	#ifdef __cplusplus
 	}
 	#endif
-#endif
-*/
+#endif*/
 
 ILboolean ilLoadExr(ILconst_string FileName);
 

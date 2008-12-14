@@ -3,6 +3,11 @@
 
 - Added German translations of error codes in ILU.
 - Added ilutGLSubTex back to ilut.h.
+- Added 64-bit Windows configurations to projects.
+- Fixed various 64-bit bugs.
+- Fixed dependency of ILUT on MSVCRT DLL.
+- Redefined ILsizei as size_t.
+- Changed allocation functions to ILsizei from ILuint.
 
 
 1.7.3

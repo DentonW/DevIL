@@ -17,7 +17,7 @@ ILboolean ilRleCompressLine(ILubyte *p, ILuint n, ILubyte bpp,
 	ILint		SameCount;		// number of identical adjacent pixels
 	ILint		RLEBufSize = 0; // count of number of bytes encoded
 	ILint		MaxRun;
-	const ILint bmp_pad_to_even = 1 - ((long)q - *DestWidth) % 2;
+	const ILint bmp_pad_to_even = 1 - ((size_t)q - *DestWidth) % 2;
 
 	switch( CompressMode ) {
 		case IL_TGACOMP:
@@ -82,7 +82,7 @@ ILboolean ilRleCompressLine(ILubyte *p, ILuint n, ILubyte bpp,
 			}
 		
 			if( CompressMode == IL_BMPCOMP ) {
-				if( (long)q % 2 == bmp_pad_to_even ) {
+				if( (size_t)q % 2 == bmp_pad_to_even ) {
 					*q++ = 0x00; // insert padding
 				}
 			}

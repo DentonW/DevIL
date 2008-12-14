@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Toolkit Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/28/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2008 by Denton Woods
+// Last modified: 12/14/2008
 //
 // Filename: src-ILUT/src/ilut_win32.c
 //
@@ -598,7 +598,7 @@ ILboolean ILAPIENTRY ilutGetWinClipboard()
 	PTSTR		pGlobal, data;
 	BITMAPFILEHEADER	*BmpHeader;
 	BITMAPINFOHEADER	*InfoHeader;
-	ILuint		Size;
+	SIZE_T		Size;
 
 	ilutCurImage = ilGetCurImage();
 	if (ilutCurImage == NULL) {
@@ -623,7 +623,8 @@ ILboolean ILAPIENTRY ilutGetWinClipboard()
 		//copy DIB to buffer because windows delivers it without the
 		//BITMAPFILEHEADER that DevIL needs to load the image
 		Size = GlobalSize(hGlobal);
-		data = (PTSTR)ialloc(Size + sizeof(BITMAPFILEHEADER));
+		//@TODO: Size should never be larger than an ILuint?
+		data = (PTSTR)ialloc((ILuint)Size + sizeof(BITMAPFILEHEADER));
 		pGlobal = (PTSTR)GlobalLock(hGlobal);
 		if (!pGlobal || !data) {
 			ifree(data);
@@ -638,7 +639,8 @@ ILboolean ILAPIENTRY ilutGetWinClipboard()
 		InfoHeader = (BITMAPINFOHEADER*)(data + sizeof(BITMAPFILEHEADER));
 		BmpHeader = (BITMAPFILEHEADER*)data;
 		BmpHeader->bfType = 'B' | ('M' << 8);
-		BmpHeader->bfSize = Size + sizeof(BITMAPFILEHEADER);
+		//@TODO: Again, could it ever be larger than an unsigned integer (DWORD)?
+		BmpHeader->bfSize = (DWORD)Size + sizeof(BITMAPFILEHEADER);
 		BmpHeader->bfReserved1 = BmpHeader->bfReserved2 = 0;
 		BmpHeader->bfOffBits = sizeof(BITMAPFILEHEADER) + InfoHeader->biSize + InfoHeader->biClrUsed*4;
 		if (InfoHeader->biCompression == BI_BITFIELDS)
