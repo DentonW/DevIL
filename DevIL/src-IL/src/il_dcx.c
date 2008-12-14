@@ -55,7 +55,7 @@ ILboolean ilIsValidDcxF(ILHANDLE File) {
 
 
 //! Checks if Lump is a valid .dcx lump.
-ILboolean ilIsValidDcxL(const ILvoid *Lump, ILuint Size) {
+ILboolean ilIsValidDcxL(const void *Lump, ILuint Size) {
 	iSetInputLump(Lump, Size);
 	return iIsValidDcx();
 }
@@ -168,7 +168,7 @@ ILboolean ilLoadDcxF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a .dcx
-ILboolean ilLoadDcxL(const ILvoid *Lump, ILuint Size) {
+ILboolean ilLoadDcxL(const void *Lump, ILuint Size) {
 	iSetInputLump(Lump, Size);
 	return iLoadDcxInternal();
 }

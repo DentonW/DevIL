@@ -5,7 +5,7 @@
 #include <IL/il.h>
 #include "il_manip.h"
 
-ILAPI ILvoid ILAPIENTRY iFlipBuffer(ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num)
+ILAPI void ILAPIENTRY iFlipBuffer(ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num)
 {
 	ILubyte *StartPtr, *EndPtr;
 	ILuint y, d;
@@ -163,7 +163,7 @@ ILboolean ILAPIENTRY iMirror() {
 
 // Should we add type to the parameter list?
 // Copies a 1d block of pixels to the buffer pointed to by Data.
-ILboolean ilCopyPixels1D(ILuint XOff, ILuint Width, ILvoid *Data)
+ILboolean ilCopyPixels1D(ILuint XOff, ILuint Width, void *Data)
 {
 	ILuint	x, c, NewBps, NewOff, PixBpp;
 	ILubyte	*Temp = (ILubyte*)Data, *TempData = iCurImage->Data;
@@ -200,7 +200,7 @@ ILboolean ilCopyPixels1D(ILuint XOff, ILuint Width, ILvoid *Data)
 
 
 // Copies a 2d block of pixels to the buffer pointed to by Data.
-ILboolean ilCopyPixels2D(ILuint XOff, ILuint YOff, ILuint Width, ILuint Height, ILvoid *Data)
+ILboolean ilCopyPixels2D(ILuint XOff, ILuint YOff, ILuint Width, ILuint Height, void *Data)
 {
 	ILuint	x, y, c, NewBps, DataBps, NewXOff, NewHeight, PixBpp;
 	ILubyte	*Temp = (ILubyte*)Data, *TempData = iCurImage->Data;
@@ -245,7 +245,7 @@ ILboolean ilCopyPixels2D(ILuint XOff, ILuint YOff, ILuint Width, ILuint Height, 
 
 
 // Copies a 3d block of pixels to the buffer pointed to by Data.
-ILboolean ilCopyPixels3D(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Width, ILuint Height, ILuint Depth, ILvoid *Data)
+ILboolean ilCopyPixels3D(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Width, ILuint Height, ILuint Depth, void *Data)
 {
 	ILuint	x, y, z, c, NewBps, DataBps, NewSizePlane, NewH, NewD, NewXOff, PixBpp;
 	ILubyte	*Temp = (ILubyte*)Data, *TempData = iCurImage->Data;
@@ -299,9 +299,9 @@ ILboolean ilCopyPixels3D(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Width, IL
 }
 
 
-ILuint ILAPIENTRY ilCopyPixels(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Width, ILuint Height, ILuint Depth, ILenum Format, ILenum Type, ILvoid *Data)
+ILuint ILAPIENTRY ilCopyPixels(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Width, ILuint Height, ILuint Depth, ILenum Format, ILenum Type, void *Data)
 {
-	ILvoid	*Converted = NULL;
+	void	*Converted = NULL;
 	ILubyte	*TempBuff = NULL;
 	ILuint	SrcSize, DestSize;
 
@@ -369,7 +369,7 @@ failed:
 }
 
 
-ILboolean ilSetPixels1D(ILint XOff, ILuint Width, ILvoid *Data)
+ILboolean ilSetPixels1D(ILint XOff, ILuint Width, void *Data)
 {
 	ILuint	c, SkipX = 0, PixBpp;
 	ILint	x, NewWidth;
@@ -414,7 +414,7 @@ ILboolean ilSetPixels1D(ILint XOff, ILuint Width, ILvoid *Data)
 }
 
 
-ILboolean ilSetPixels2D(ILint XOff, ILint YOff, ILuint Width, ILuint Height, ILvoid *Data)
+ILboolean ilSetPixels2D(ILint XOff, ILint YOff, ILuint Width, ILuint Height, void *Data)
 {
 	ILuint	c, SkipX = 0, SkipY = 0, NewBps, PixBpp;
 	ILint	x, y, NewWidth, NewHeight;
@@ -471,7 +471,7 @@ ILboolean ilSetPixels2D(ILint XOff, ILint YOff, ILuint Width, ILuint Height, ILv
 }
 
 
-ILboolean ilSetPixels3D(ILint XOff, ILint YOff, ILint ZOff, ILuint Width, ILuint Height, ILuint Depth, ILvoid *Data)
+ILboolean ilSetPixels3D(ILint XOff, ILint YOff, ILint ZOff, ILuint Width, ILuint Height, ILuint Depth, void *Data)
 {
 	ILuint	SkipX = 0, SkipY = 0, SkipZ = 0, c, NewBps, NewSizePlane, PixBpp;
 	ILint	x, y, z, NewW, NewH, NewD;
@@ -541,9 +541,9 @@ ILboolean ilSetPixels3D(ILint XOff, ILint YOff, ILint ZOff, ILuint Width, ILuint
 }
 
 
-ILvoid ILAPIENTRY ilSetPixels(ILint XOff, ILint YOff, ILint ZOff, ILuint Width, ILuint Height, ILuint Depth, ILenum Format, ILenum Type, ILvoid *Data)
+void ILAPIENTRY ilSetPixels(ILint XOff, ILint YOff, ILint ZOff, ILuint Width, ILuint Height, ILuint Depth, ILenum Format, ILenum Type, void *Data)
 {
-	ILvoid *Converted;
+	void *Converted;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -555,7 +555,7 @@ ILvoid ILAPIENTRY ilSetPixels(ILint XOff, ILint YOff, ILint ZOff, ILuint Width, 
 	}
 
 	if (Format == iCurImage->Format && Type == iCurImage->Type) {
-		Converted = (ILvoid*)Data;
+		Converted = (void*)Data;
 	}
 	else {
 		Converted = ilConvertBuffer(Width * Height * Depth * ilGetBppFormat(Format) * ilGetBpcType(Type), Format, iCurImage->Format, iCurImage->Type, Type, Data);
@@ -812,7 +812,7 @@ ILboolean ILAPIENTRY ilSetAlpha( ILdouble AlphaValue ) {
     return IL_TRUE;
 }
 
-ILvoid ILAPIENTRY ilModAlpha( ILdouble AlphaValue ) {
+void ILAPIENTRY ilModAlpha( ILdouble AlphaValue ) {
     ILuint AlphaOff = 0;
     ILboolean ret = IL_FALSE;
     ILuint i,j,Size;

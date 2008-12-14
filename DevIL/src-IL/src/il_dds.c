@@ -87,7 +87,7 @@ ILboolean ilIsValidDdsF(ILHANDLE File)
 
 
 //! Checks if Lump is a valid .dds lump.
-ILboolean ilIsValidDdsL(const ILvoid *Lump, ILuint Size)
+ILboolean ilIsValidDdsL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidDds();
@@ -208,7 +208,7 @@ ILboolean ilLoadDdsF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a .dds
-ILboolean ilLoadDdsL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadDdsL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadDdsInternal();
@@ -601,7 +601,7 @@ ILuint DecodePixelFormat()
 
 // The few volume textures that I have don't have consistent LinearSize
 //	entries, even though the DDS_LINEARSIZE flag is set.
-ILvoid AdjustVolumeTexture(DDSHEAD *Head)
+void AdjustVolumeTexture(DDSHEAD *Head)
 {
 	if (Head->Depth <= 1)
 		return;
@@ -1105,7 +1105,7 @@ mip_fail:
 	return IL_FALSE;
 }
 
-ILvoid ReadColors(const ILubyte* Data, Color8888* Out)
+void ReadColors(const ILubyte* Data, Color8888* Out)
 {
 	ILubyte r0, g0, b0, r1, g1, b1;
 
@@ -1126,7 +1126,7 @@ ILvoid ReadColors(const ILubyte* Data, Color8888* Out)
 	Out[1].b = b1 << 3;
 }
 
-ILvoid ReadColor(ILushort Data, Color8888* Out)
+void ReadColor(ILushort Data, Color8888* Out)
 {
 	ILubyte r, g, b;
 
@@ -2193,7 +2193,7 @@ ILboolean DecompressFloat()
 }
 
 
-ILvoid CorrectPreMult()
+void CorrectPreMult()
 {
 	ILuint i;
 
@@ -2294,7 +2294,7 @@ ILboolean DecompressARGB() {
 
 
 // @TODO:  Look at using the BSF/BSR operands for inline ASM here.
-ILvoid GetBitsFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight)
+void GetBitsFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight)
 {
 	ILuint Temp, i;
 
@@ -2339,7 +2339,7 @@ ILubyte* ILAPIENTRY ilGetDxtcData()
 	return iCurImage->DxtcData;
 }
 
-ILvoid ilFreeSurfaceDxtcData()
+void ilFreeSurfaceDxtcData()
 {
 	if (iCurImage != NULL && iCurImage->DxtcData != NULL) {
 		ifree(iCurImage->DxtcData);
@@ -2349,7 +2349,7 @@ ILvoid ilFreeSurfaceDxtcData()
 	}
 }
 
-ILvoid ilFreeImageDxtcData()
+void ilFreeImageDxtcData()
 {
 	ILint i, j;
 	ILuint ImgID = ilGetInteger(IL_CUR_IMAGE);
@@ -2456,7 +2456,7 @@ ILAPI ILboolean ILAPIENTRY ilDxtcDataToImage()
 ILAPI ILboolean ILAPIENTRY ilSurfaceToDxtcData(ILenum Format)
 {
 	ILuint Size;
-	ILvoid* Data;
+	void* Data;
 	ilFreeSurfaceDxtcData();
 
 	Size = ilGetDXTCData(NULL, 0, Format);
@@ -2580,7 +2580,7 @@ ILAPI ILboolean ILAPIENTRY ilTexImageDxtc(ILint w, ILint h, ILint d, ILenum DxtF
 
 /* ------------------------------------------------------------------- */
 
-ILvoid iFlipColorBlock(ILubyte *data)
+void iFlipColorBlock(ILubyte *data)
 {
     ILubyte tmp;
 
@@ -2593,7 +2593,7 @@ ILvoid iFlipColorBlock(ILubyte *data)
     data[6] = tmp;
 }
 
-ILvoid iFlipSimpleAlphaBlock(ILushort *data)
+void iFlipSimpleAlphaBlock(ILushort *data)
 {
 	ILushort tmp;
 
@@ -2606,7 +2606,7 @@ ILvoid iFlipSimpleAlphaBlock(ILushort *data)
 	data[2] = tmp;
 }
 
-ILvoid iComplexAlphaHelper(ILubyte* Data)
+void iComplexAlphaHelper(ILubyte* Data)
 {
 	ILushort tmp[2];
 
@@ -2620,7 +2620,7 @@ ILvoid iComplexAlphaHelper(ILubyte* Data)
 	Data[2] = tmp[0] >> 4;
 }
 
-ILvoid iFlipComplexAlphaBlock(ILubyte *Data)
+void iFlipComplexAlphaBlock(ILubyte *Data)
 {
 	ILubyte tmp[3];
 	Data += 2; //Skip 'palette'
@@ -2635,7 +2635,7 @@ ILvoid iFlipComplexAlphaBlock(ILubyte *Data)
 	iComplexAlphaHelper(Data + 3);
 }
 
-ILvoid iFlipDxt1(ILubyte* data, ILuint count)
+void iFlipDxt1(ILubyte* data, ILuint count)
 {
 	ILint i;
 
@@ -2645,7 +2645,7 @@ ILvoid iFlipDxt1(ILubyte* data, ILuint count)
 	}
 }
 
-ILvoid iFlipDxt3(ILubyte* data, ILuint count)
+void iFlipDxt3(ILubyte* data, ILuint count)
 {
 	ILint i;
 	for (i = 0; i < count; ++i) {
@@ -2655,7 +2655,7 @@ ILvoid iFlipDxt3(ILubyte* data, ILuint count)
 	}
 }
 
-ILvoid iFlipDxt5(ILubyte* data, ILuint count)
+void iFlipDxt5(ILubyte* data, ILuint count)
 {
 	ILint i;
 	for (i = 0; i < count; ++i) {
@@ -2665,7 +2665,7 @@ ILvoid iFlipDxt5(ILubyte* data, ILuint count)
 	}
 }
 
-ILvoid iFlip3dc(ILubyte* data, ILuint count)
+void iFlip3dc(ILubyte* data, ILuint count)
 {
 	ILint i;
 	for (i = 0; i < count; ++i) {
@@ -2676,13 +2676,13 @@ ILvoid iFlip3dc(ILubyte* data, ILuint count)
 }
 
 
-ILAPI ILvoid ILAPIENTRY ilFlipSurfaceDxtcData()
+ILAPI void ILAPIENTRY ilFlipSurfaceDxtcData()
 {
 	ILint x, y, z;
 	ILuint BlockSize, LineSize;
 	ILubyte *Temp, *Runner, *Top, *Bottom;
 	ILint numXBlocks, numYBlocks;
-        ILvoid (*FlipBlocks)(ILubyte* data, ILuint count);
+        void (*FlipBlocks)(ILubyte* data, ILuint count);
 
 	if (iCurImage == NULL || iCurImage->DxtcData == NULL) {
 		ilSetError(IL_INVALID_PARAM);
@@ -2756,7 +2756,7 @@ ILAPI ILvoid ILAPIENTRY ilFlipSurfaceDxtcData()
 
 /**********************************************************************/
 
-ILvoid iInvertDxt3Alpha(ILubyte *data)
+void iInvertDxt3Alpha(ILubyte *data)
 {
 	ILint i;
 
@@ -2777,7 +2777,7 @@ ILvoid iInvertDxt3Alpha(ILubyte *data)
 	}
 }
 
-ILvoid iInvertDxt5Alpha(ILubyte *data)
+void iInvertDxt5Alpha(ILubyte *data)
 {
 	ILubyte a0, a1;
 	ILint i, j;
@@ -2818,13 +2818,13 @@ ILvoid iInvertDxt5Alpha(ILubyte *data)
 	}
 }
 
-ILAPI ILvoid ILAPIENTRY ilInvertSurfaceDxtcDataAlpha()
+ILAPI void ILAPIENTRY ilInvertSurfaceDxtcDataAlpha()
 {
 	ILint i;
 	ILuint BlockSize;
 	ILubyte *Runner;
 	ILint numXBlocks, numYBlocks, numBlocks;
-	ILvoid (*InvertAlpha)(ILubyte* data);
+	void (*InvertAlpha)(ILubyte* data);
 
 	if (iCurImage == NULL || iCurImage->DxtcData == NULL) {
 		ilSetError(IL_INVALID_PARAM);

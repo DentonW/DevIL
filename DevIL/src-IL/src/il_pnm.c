@@ -73,7 +73,7 @@ ILboolean ilIsValidPnmF(ILHANDLE File)
 
 
 //! Checks if Lump is a valid .pnm lump.
-ILboolean ilIsValidPnmL(const ILvoid *Lump, ILuint Size)
+ILboolean ilIsValidPnmL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidPnm();
@@ -150,7 +150,7 @@ ILboolean ilLoadPnmF(ILHANDLE File)
 
 
 // Reads from a memory "lump"
-ILboolean ilLoadPnmL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadPnmL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadPnmInternal();
@@ -513,7 +513,7 @@ ILboolean ilSavePnmF(ILHANDLE File)
 
 
 //! Writes a Pnm to a memory "lump"
-ILboolean ilSavePnmL(ILvoid *Lump, ILuint Size)
+ILboolean ilSavePnmL(void *Lump, ILuint Size)
 {
 	FName = NULL;
 	iSetOutputLump(Lump, Size);
@@ -678,7 +678,7 @@ ILboolean iSavePnmInternal()
 
 
 // Converts a .pbm to something viewable.
-ILvoid PbmMaximize(ILimage *Image)
+void PbmMaximize(ILimage *Image)
 {
 	ILuint i = 0;
 	for (i = 0; i < Image->SizeOfPlane; i++)

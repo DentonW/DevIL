@@ -57,7 +57,7 @@ ILboolean ilIsValidHdrF(ILHANDLE File)
 
 
 //! Checks if Lump is a valid .hdr lump.
-ILboolean ilIsValidHdrL(const ILvoid *Lump, ILuint Size)
+ILboolean ilIsValidHdrL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidHdr();
@@ -181,7 +181,7 @@ ILboolean ilLoadHdrF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a .hdr
-ILboolean ilLoadHdrL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadHdrL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadHdrInternal();
@@ -257,7 +257,7 @@ ILboolean iLoadHdrInternal()
 	return ilFixImage();
 }
 
-ILvoid ReadScanline(ILubyte *scanline, ILuint w) {
+void ReadScanline(ILubyte *scanline, ILuint w) {
 	ILubyte *runner;
 	ILuint r, g, b, e, read, shift;
 
@@ -382,7 +382,7 @@ ILboolean ilSaveHdrF(ILHANDLE File)
 
 
 //! Writes a Hdr to a memory "lump"
-ILboolean ilSaveHdrL(ILvoid *Lump, ILuint Size)
+ILboolean ilSaveHdrL(void *Lump, ILuint Size)
 {
 	iSetOutputLump(Lump, Size);
 	return iSaveHdrInternal();

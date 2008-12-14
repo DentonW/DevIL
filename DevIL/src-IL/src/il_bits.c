@@ -118,7 +118,7 @@ ILint bseek(BITFILE *BitFile, ILuint Offset, ILuint Mode)
 
 
 // hehe, "bread".  It reads data into Buffer from the BITFILE, just like fread for FILE.
-ILint bread(ILvoid *Buffer, ILuint Size, ILuint Number, BITFILE *BitFile)
+ILint bread(void *Buffer, ILuint Size, ILuint Number, BITFILE *BitFile)
 {
 
 	//Note that this function is somewhat useless: In binary image
@@ -148,7 +148,7 @@ ILint bread(ILvoid *Buffer, ILuint Size, ILuint Number, BITFILE *BitFile)
 
 
 // Not implemented yet.
-/*ILint bwrite(ILvoid *Buffer, ILuint Size, ILuint Number, BITFILE *BitFile)
+/*ILint bwrite(void *Buffer, ILuint Size, ILuint Number, BITFILE *BitFile)
 {
 
 

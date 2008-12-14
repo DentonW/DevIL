@@ -15,8 +15,8 @@
 
 #include "ilut_internal.h"
 
-ILvoid iGLSetMaxW(ILuint Width);
-ILvoid iGLSetMaxH(ILuint Height);
+void iGLSetMaxW(ILuint Width);
+void iGLSetMaxH(ILuint Height);
 
 #ifndef min
 #define min(a, b)	(((a) < (b)) ? (a) : (b))

@@ -65,7 +65,7 @@ ILboolean ilLoadXpmF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains an .xpm
-ILboolean ilLoadXpmL( const ILvoid *Lump, ILuint Size) {
+ILboolean ilLoadXpmL( const void *Lump, ILuint Size) {
 	iSetInputLump(Lump, Size);
 	return iLoadXpmInternal();
 }

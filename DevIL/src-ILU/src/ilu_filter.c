@@ -991,7 +991,7 @@ ILboolean ILAPIENTRY iluGammaCorrect(ILfloat Gamma)
 //
 
 
-ILvoid iApplyMatrix(ILimage *Image, ILfloat Mat[4][4])
+void iApplyMatrix(ILimage *Image, ILfloat Mat[4][4])
 {
 	ILubyte	*Data = Image->Data;
 	ILuint	i;
@@ -1040,7 +1040,7 @@ ILvoid iApplyMatrix(ILimage *Image, ILfloat Mat[4][4])
 }
 
 
-ILvoid iIdentity(ILfloat *Matrix)
+void iIdentity(ILfloat *Matrix)
 {
     *Matrix++ = 1.0;    // row 1
     *Matrix++ = 0.0;
@@ -1164,7 +1164,7 @@ ILboolean ILAPIENTRY iluAlienify(void)
 
 
 
-ILvoid iIntExtImg(ILimage *Image1, ILimage *Image2, ILfloat a)
+void iIntExtImg(ILimage *Image1, ILimage *Image2, ILfloat a)
 {
 	ILuint	i;
 	ILint	d;

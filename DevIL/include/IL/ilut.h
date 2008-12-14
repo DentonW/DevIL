@@ -211,16 +211,16 @@ extern "C" {
 ILAPI ILboolean		ILAPIENTRY ilutDisable(ILenum Mode);
 ILAPI ILboolean		ILAPIENTRY ilutEnable(ILenum Mode);
 ILAPI ILboolean		ILAPIENTRY ilutGetBoolean(ILenum Mode);
-ILAPI ILvoid		ILAPIENTRY ilutGetBooleanv(ILenum Mode, ILboolean *Param);
+ILAPI void		ILAPIENTRY ilutGetBooleanv(ILenum Mode, ILboolean *Param);
 ILAPI ILint			ILAPIENTRY ilutGetInteger(ILenum Mode);
-ILAPI ILvoid		ILAPIENTRY ilutGetIntegerv(ILenum Mode, ILint *Param);
+ILAPI void		ILAPIENTRY ilutGetIntegerv(ILenum Mode, ILint *Param);
 ILAPI ILstring		ILAPIENTRY ilutGetString(ILenum StringName);
-ILAPI ILvoid		ILAPIENTRY ilutInit(void);
+ILAPI void		ILAPIENTRY ilutInit(void);
 ILAPI ILboolean		ILAPIENTRY ilutIsDisabled(ILenum Mode);
 ILAPI ILboolean		ILAPIENTRY ilutIsEnabled(ILenum Mode);
-ILAPI ILvoid		ILAPIENTRY ilutPopAttrib(void);
-ILAPI ILvoid		ILAPIENTRY ilutPushAttrib(ILuint Bits);
-ILAPI ILvoid		ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param);
+ILAPI void		ILAPIENTRY ilutPopAttrib(void);
+ILAPI void		ILAPIENTRY ilutPushAttrib(ILuint Bits);
+ILAPI void		ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param);
 
 ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 
@@ -275,8 +275,8 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 #ifdef ILUT_USE_WIN32
 	ILAPI HBITMAP	ILAPIENTRY ilutConvertToHBitmap(HDC hDC);
 	ILAPI HBITMAP	ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice);
-	ILAPI ILvoid	ILAPIENTRY ilutFreePaddedData(ILubyte *Data);
-	ILAPI ILvoid	ILAPIENTRY ilutGetBmpInfo(BITMAPINFO *Info);
+	ILAPI void	ILAPIENTRY ilutFreePaddedData(ILubyte *Data);
+	ILAPI void	ILAPIENTRY ilutGetBmpInfo(BITMAPINFO *Info);
 	ILAPI HPALETTE	ILAPIENTRY ilutGetHPal(void);
 	ILAPI ILubyte*	ILAPIENTRY ilutGetPaddedData(void);
 	ILAPI ILboolean	ILAPIENTRY ilutGetWinClipboard(void);
@@ -292,13 +292,13 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 
 // ImageLib Utility Toolkit's DirectX 8 Functions
 #ifdef ILUT_USE_DIRECTX8
-//	ILAPI ILvoid	ILAPIENTRY ilutD3D8MipFunc(ILuint NumLevels);
+//	ILAPI void	ILAPIENTRY ilutD3D8MipFunc(ILuint NumLevels);
 	ILAPI struct IDirect3DTexture8* ILAPIENTRY ilutD3D8Texture(struct IDirect3DDevice8 *Device);
 	ILAPI struct IDirect3DVolumeTexture8* ILAPIENTRY ilutD3D8VolumeTexture(struct IDirect3DDevice8 *Device);
 	ILAPI ILboolean	ILAPIENTRY ilutD3D8TexFromFile(struct IDirect3DDevice8 *Device, char *FileName, struct IDirect3DTexture8 **Texture);
 	ILAPI ILboolean	ILAPIENTRY ilutD3D8VolTexFromFile(struct IDirect3DDevice8 *Device, char *FileName, struct IDirect3DVolumeTexture8 **Texture);
-	ILAPI ILboolean	ILAPIENTRY ilutD3D8TexFromFileInMemory(struct IDirect3DDevice8 *Device, ILvoid *Lump, ILuint Size, struct IDirect3DTexture8 **Texture);
-	ILAPI ILboolean	ILAPIENTRY ilutD3D8VolTexFromFileInMemory(struct IDirect3DDevice8 *Device, ILvoid *Lump, ILuint Size, struct IDirect3DVolumeTexture8 **Texture);
+	ILAPI ILboolean	ILAPIENTRY ilutD3D8TexFromFileInMemory(struct IDirect3DDevice8 *Device, void *Lump, ILuint Size, struct IDirect3DTexture8 **Texture);
+	ILAPI ILboolean	ILAPIENTRY ilutD3D8VolTexFromFileInMemory(struct IDirect3DDevice8 *Device, void *Lump, ILuint Size, struct IDirect3DVolumeTexture8 **Texture);
 	ILAPI ILboolean	ILAPIENTRY ilutD3D8TexFromFileHandle(struct IDirect3DDevice8 *Device, ILHANDLE File, struct IDirect3DTexture8 **Texture);
 	ILAPI ILboolean	ILAPIENTRY ilutD3D8VolTexFromFileHandle(struct IDirect3DDevice8 *Device, ILHANDLE File, struct IDirect3DVolumeTexture8 **Texture);
 	// These two are not tested yet.
@@ -310,20 +310,20 @@ ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
 #ifdef ILUT_USE_DIRECTX9
 	#pragma warning(push)
 	#pragma warning(disable : 4115)  // Disables 'named type definition in parentheses' warning
-//	ILAPI ILvoid  ILAPIENTRY ilutD3D9MipFunc(ILuint NumLevels);
+//	ILAPI void  ILAPIENTRY ilutD3D9MipFunc(ILuint NumLevels);
 	ILAPI struct IDirect3DTexture9*       ILAPIENTRY ilutD3D9Texture       (struct IDirect3DDevice9* Device);
 	ILAPI struct IDirect3DVolumeTexture9* ILAPIENTRY ilutD3D9VolumeTexture (struct IDirect3DDevice9* Device);
     ILAPI struct IDirect3DCubeTexture9*       ILAPIENTRY ilutD3D9CubeTexture (struct IDirect3DDevice9* Device);
 
     ILAPI ILboolean ILAPIENTRY ilutD3D9CubeTexFromFile(struct IDirect3DDevice9 *Device, ILconst_string FileName, struct IDirect3DCubeTexture9 **Texture);
-    ILAPI ILboolean ILAPIENTRY ilutD3D9CubeTexFromFileInMemory(struct IDirect3DDevice9 *Device, ILvoid *Lump, ILuint Size, struct IDirect3DCubeTexture9 **Texture);
+    ILAPI ILboolean ILAPIENTRY ilutD3D9CubeTexFromFileInMemory(struct IDirect3DDevice9 *Device, void *Lump, ILuint Size, struct IDirect3DCubeTexture9 **Texture);
     ILAPI ILboolean ILAPIENTRY ilutD3D9CubeTexFromFileHandle(struct IDirect3DDevice9 *Device, ILHANDLE File, struct IDirect3DCubeTexture9 **Texture);
     ILAPI ILboolean ILAPIENTRY ilutD3D9CubeTexFromResource(struct IDirect3DDevice9 *Device, HMODULE SrcModule, ILconst_string SrcResource, struct IDirect3DCubeTexture9 **Texture);
 
 	ILAPI ILboolean	ILAPIENTRY ilutD3D9TexFromFile(struct IDirect3DDevice9 *Device, ILconst_string FileName, struct IDirect3DTexture9 **Texture);
 	ILAPI ILboolean	ILAPIENTRY ilutD3D9VolTexFromFile(struct IDirect3DDevice9 *Device, ILconst_string FileName, struct IDirect3DVolumeTexture9 **Texture);
-	ILAPI ILboolean	ILAPIENTRY ilutD3D9TexFromFileInMemory(struct IDirect3DDevice9 *Device, ILvoid *Lump, ILuint Size, struct IDirect3DTexture9 **Texture);
-	ILAPI ILboolean	ILAPIENTRY ilutD3D9VolTexFromFileInMemory(struct IDirect3DDevice9 *Device, ILvoid *Lump, ILuint Size, struct IDirect3DVolumeTexture9 **Texture);
+	ILAPI ILboolean	ILAPIENTRY ilutD3D9TexFromFileInMemory(struct IDirect3DDevice9 *Device, void *Lump, ILuint Size, struct IDirect3DTexture9 **Texture);
+	ILAPI ILboolean	ILAPIENTRY ilutD3D9VolTexFromFileInMemory(struct IDirect3DDevice9 *Device, void *Lump, ILuint Size, struct IDirect3DVolumeTexture9 **Texture);
 	ILAPI ILboolean	ILAPIENTRY ilutD3D9TexFromFileHandle(struct IDirect3DDevice9 *Device, ILHANDLE File, struct IDirect3DTexture9 **Texture);
 	ILAPI ILboolean	ILAPIENTRY ilutD3D9VolTexFromFileHandle(struct IDirect3DDevice9 *Device, ILHANDLE File, struct IDirect3DVolumeTexture9 **Texture);
 

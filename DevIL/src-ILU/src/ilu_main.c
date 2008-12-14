@@ -44,7 +44,7 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserve
 #endif
 #endif
 
-ILvoid ILAPIENTRY iluInit()
+void ILAPIENTRY iluInit()
 {
 	// Used mostly for rotations
 	//IL_PI = 4 * atan(1);		// precomputed value of pi

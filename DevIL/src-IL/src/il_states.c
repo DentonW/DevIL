@@ -36,7 +36,7 @@ char* _ilSaveExt		= "" IL_BMP_EXT IL_CHEAD_EXT IL_DDS_EXT IL_JPG_EXT
 
 
 //! Set all states to their defaults.
-ILvoid ilDefaultStates()
+void ilDefaultStates()
 {
 	ilStates[ilCurrentPos].ilOriginSet = IL_FALSE;
 	ilStates[ilCurrentPos].ilOriginMode = IL_ORIGIN_LOWER_LEFT;
@@ -288,7 +288,7 @@ ILboolean ILAPIENTRY ilIsDisabled(ILenum Mode)
 
 
 //! Sets Param equal to the current value of the Mode
-ILvoid ILAPIENTRY ilGetBooleanv(ILenum Mode, ILboolean *Param)
+void ILAPIENTRY ilGetBooleanv(ILenum Mode, ILboolean *Param)
 {
 	if (Param == NULL) {
 		ilSetError(IL_INVALID_PARAM);
@@ -356,7 +356,7 @@ ILuint iGetActiveNum(ILenum Type)
 
 
 //! Sets Param equal to the current value of the Mode
-ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param) {
+void ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param) {
 	if (Param == NULL) {
 		ilSetError(IL_INVALID_PARAM);
 		return;
@@ -475,7 +475,7 @@ ILvoid ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param) {
 
 //@TODO rename to ilGetImageIntegerv for 1.6.9 and make it public
 //! Sets Param equal to the current value of the Mode
-ILvoid ILAPIENTRY iGetIntegervImage(ILimage *Image, ILenum Mode, ILint *Param) {
+void ILAPIENTRY iGetIntegervImage(ILimage *Image, ILenum Mode, ILint *Param) {
     ILimage *SubImage;
     if (Image == NULL) {
         ilSetError(IL_ILLEGAL_OPERATION);
@@ -688,7 +688,7 @@ ILboolean ILAPIENTRY ilCompressFunc(ILenum Mode)
 
 
 //! Pushes the states indicated by Bits onto the state stack
-ILvoid ILAPIENTRY ilPushAttrib(ILuint Bits)
+void ILAPIENTRY ilPushAttrib(ILuint Bits)
 {
 	// Should we check here to see if ilCurrentPos is negative?
 
@@ -791,7 +791,7 @@ ILvoid ILAPIENTRY ilPushAttrib(ILuint Bits)
 // @TODO:  Find out how this affects strings!!!
 
 //! Pops the last entry off the state stack into the current states
-ILvoid ILAPIENTRY ilPopAttrib()
+void ILAPIENTRY ilPopAttrib()
 {
 	if (ilCurrentPos <= 0) {
 		ilCurrentPos = 0;
@@ -807,7 +807,7 @@ ILvoid ILAPIENTRY ilPopAttrib()
 
 
 //! Specifies implementation-dependent performance hints
-ILvoid ILAPIENTRY ilHint(ILenum Target, ILenum Mode)
+void ILAPIENTRY ilHint(ILenum Target, ILenum Mode)
 {
 	switch (Target)
 	{
@@ -872,7 +872,7 @@ ILenum iGetHint(ILenum Target)
 }
 
 
-ILvoid ILAPIENTRY ilSetString(ILenum Mode, const char *String)
+void ILAPIENTRY ilSetString(ILenum Mode, const char *String)
 {
 	if (String == NULL) {
 		ilSetError(IL_INVALID_PARAM);
@@ -951,7 +951,7 @@ ILvoid ILAPIENTRY ilSetString(ILenum Mode, const char *String)
 }
 
 
-ILvoid ILAPIENTRY ilSetInteger(ILenum Mode, ILint Param)
+void ILAPIENTRY ilSetInteger(ILenum Mode, ILint Param)
 {
 	switch (Mode)
 	{

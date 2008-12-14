@@ -19,7 +19,7 @@ ILpointf	*RegionPointsf = NULL;
 ILuint		PointNum = 0;
 ILubyte		*iRegionMask = NULL;
 
-ILvoid ILAPIENTRY iluRegionfv(ILpointf *Points, ILuint n)
+void ILAPIENTRY iluRegionfv(ILpointf *Points, ILuint n)
 {
 	if (Points == NULL || n == 0) {
 		ifree(RegionPointsi);
@@ -43,7 +43,7 @@ ILvoid ILAPIENTRY iluRegionfv(ILpointf *Points, ILuint n)
 }
 
 
-ILvoid ILAPIENTRY iluRegioniv(ILpointi *Points, ILuint n)
+void ILAPIENTRY iluRegioniv(ILpointi *Points, ILuint n)
 {
 	if (Points == NULL || n == 0) {
 		ifree(RegionPointsi);

@@ -36,7 +36,7 @@ ILstring ILAPIENTRY iluGetString(ILenum StringName)
 }
 
 
-ILvoid ILAPIENTRY iluGetIntegerv(ILenum Mode, ILint *Param)
+void ILAPIENTRY iluGetIntegerv(ILenum Mode, ILint *Param)
 {
 	switch (Mode)
 	{
@@ -67,7 +67,7 @@ ILint ILAPIENTRY iluGetInteger(ILenum Mode)
 ILenum iluFilter = ILU_NEAREST;
 ILenum iluPlacement = ILU_CENTER;
 
-ILvoid ILAPIENTRY iluImageParameter(ILenum PName, ILenum Param)
+void ILAPIENTRY iluImageParameter(ILenum PName, ILenum Param)
 {
 	switch (PName)
 	{

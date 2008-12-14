@@ -24,7 +24,7 @@ const char *_ilutVersion	= "Developer's Image Library Utility Toolkit (ILUT) 1.7
 
 
 // Set all states to their defaults
-ILvoid ilutDefaultStates()
+void ilutDefaultStates()
 {
 	ilutStates[ilutCurrentPos].ilutUsePalettes = IL_FALSE;
 	ilutStates[ilutCurrentPos].ilutForceIntegerFormat = IL_FALSE;
@@ -39,7 +39,7 @@ ILvoid ilutDefaultStates()
 }
 
 
-ILvoid ILAPIENTRY ilutD3D8MipFunc(ILuint NumLevels)
+void ILAPIENTRY ilutD3D8MipFunc(ILuint NumLevels)
 {
 	ilutStates[ilutCurrentPos].D3DMipLevels = NumLevels;
 	return;
@@ -149,7 +149,7 @@ ILboolean ILAPIENTRY ilutIsDisabled(ILenum Mode)
 }
 
 
-ILvoid ILAPIENTRY ilutGetBooleanv(ILenum Mode, ILboolean *Param)
+void ILAPIENTRY ilutGetBooleanv(ILenum Mode, ILboolean *Param)
 {
 	switch (Mode)
 	{
@@ -192,7 +192,7 @@ ILboolean ILAPIENTRY ilutGetBoolean(ILenum Mode)
 }
 
 
-ILvoid ILAPIENTRY ilutGetIntegerv(ILenum Mode, ILint *Param)
+void ILAPIENTRY ilutGetIntegerv(ILenum Mode, ILint *Param)
 {
 	switch (Mode)
 	{
@@ -248,7 +248,7 @@ ILint ILAPIENTRY ilutGetInteger(ILenum Mode)
 }
 
 
-ILvoid ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param)
+void ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param)
 {
 	switch (Mode)
 	{
@@ -318,7 +318,7 @@ ILvoid ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param)
 }
 
 
-ILvoid ILAPIENTRY ilutPushAttrib(ILuint Bits)
+void ILAPIENTRY ilutPushAttrib(ILuint Bits)
 {
 	// Should we check here to see if ilCurrentPos is negative?
 
@@ -345,7 +345,7 @@ ILvoid ILAPIENTRY ilutPushAttrib(ILuint Bits)
 }
 
 
-ILvoid ILAPIENTRY ilutPopAttrib()
+void ILAPIENTRY ilutPopAttrib()
 {
 	if (ilutCurrentPos <= 0) {
 		ilutCurrentPos = 0;

@@ -131,7 +131,7 @@ ILAPI ILuint ILAPIENTRY ilNextPower2(ILuint n) {
 	return power;
 }
 
-ILAPI ILvoid ILAPIENTRY iMemSwap( ILubyte *s1, ILubyte *s2, const ILuint size ) {
+ILAPI void ILAPIENTRY iMemSwap( ILubyte *s1, ILubyte *s2, const ILuint size ) {
 	const ILuint block_size = 4096;
 	const ILuint blocks = size/block_size;
 	ILuint i;

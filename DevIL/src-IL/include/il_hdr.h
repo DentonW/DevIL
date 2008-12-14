@@ -38,6 +38,6 @@ ILboolean ilLoadHdrF(ILHANDLE file);
 ILboolean iLoadHdrInternal();
 ILboolean iSaveHdrInternal();
 
-ILvoid ReadScanline(ILubyte *scanline, ILuint w);
+void ReadScanline(ILubyte *scanline, ILuint w);
 
 #endif//HDR_H

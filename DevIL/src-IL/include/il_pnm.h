@@ -40,7 +40,7 @@ ILimage		*ilReadAsciiPpm(PPMINFO *Info);
 ILimage		*ilReadBinaryPpm(PPMINFO *Info);
 ILimage		*ilReadBitPbm(PPMINFO *Info);
 ILboolean	iGetWord(ILboolean);
-ILvoid		PbmMaximize(ILimage *Image);
+void		PbmMaximize(ILimage *Image);
 
 
 #endif//PPMPGM_H

@@ -233,7 +233,7 @@ ILenum ILAPIENTRY ilDetermineTypeF(ILHANDLE File)
 }
 
 
-ILenum ilDetermineTypeL(const ILvoid *Lump, ILuint Size)
+ILenum ilDetermineTypeL(const void *Lump, ILuint Size)
 {
 	if (Lump == NULL)
 		return IL_TYPE_UNKNOWN;
@@ -494,7 +494,7 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 }
 
 
-ILboolean ILAPIENTRY ilIsValidL(ILenum Type, ILvoid *Lump, ILuint Size)
+ILboolean ILAPIENTRY ilIsValidL(ILenum Type, void *Lump, ILuint Size)
 {
 	if (Lump == NULL) {
 		ilSetError(IL_INVALID_PARAM);
@@ -958,7 +958,7 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 }
 
 
-ILboolean ILAPIENTRY ilLoadL(ILenum Type, const ILvoid *Lump, ILuint Size) {
+ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size) {
 	if (Lump == NULL || Size == 0) {
 		ilSetError(IL_INVALID_PARAM);
 		return IL_FALSE;
@@ -1548,7 +1548,7 @@ ILuint ILAPIENTRY ilSaveF(ILenum Type, ILHANDLE File)
 }
 
 
-ILuint ILAPIENTRY ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size)
+ILuint ILAPIENTRY ilSaveL(ILenum Type, void *Lump, ILuint Size)
 {
 	ILboolean Ret;
 

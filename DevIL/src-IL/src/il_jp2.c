@@ -83,14 +83,14 @@ ILboolean ilLoadJp2F(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a Jpeg2000 stream.
-ILboolean ilLoadJp2L(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadJp2L(const void *Lump, ILuint Size)
 {
 	return ilLoadJp2LInternal(Lump, Size, NULL);
 }
 
 
 //! This is separated so that it can be called for other file types, such as .icns.
-ILboolean ilLoadJp2LInternal(const ILvoid *Lump, ILuint Size, ILimage *Image)
+ILboolean ilLoadJp2LInternal(const void *Lump, ILuint Size, ILimage *Image)
 {
 	ILboolean		bRet;
 	jas_stream_t	*Stream;

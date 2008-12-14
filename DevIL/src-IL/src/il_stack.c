@@ -18,7 +18,7 @@
 #include "il_stack.h"
 
 //! Creates Num images and puts their index in Images - similar to glGenTextures().
-ILvoid ILAPIENTRY ilGenImages(ILsizei Num, ILuint *Images)
+void ILAPIENTRY ilGenImages(ILsizei Num, ILuint *Images)
 {
 	ILsizei	Index = 0;
 	iFree	*TempFree = FreeNames;
@@ -61,7 +61,7 @@ ILuint ILAPIENTRY ilGenImage() {
 }
 
 //! Makes Image the current active image - similar to glBindTexture().
-ILvoid ILAPIENTRY ilBindImage(ILuint Image)
+void ILAPIENTRY ilBindImage(ILuint Image)
 {
 	if (ImageStack == NULL || StackSize == 0) {
 		if (!iEnlargeStack()) {
@@ -92,7 +92,7 @@ ILvoid ILAPIENTRY ilBindImage(ILuint Image)
 
 
 //! Deletes Num images from the image stack - similar to glDeleteTextures().
-ILvoid ILAPIENTRY ilDeleteImages(ILsizei Num, const ILuint *Images)
+void ILAPIENTRY ilDeleteImages(ILsizei Num, const ILuint *Images)
 {
 	iFree	*Temp = FreeNames;
 	ILuint	Index = 0;
@@ -145,7 +145,7 @@ ILvoid ILAPIENTRY ilDeleteImages(ILsizei Num, const ILuint *Images)
 }
 
 
-ILvoid ILAPIENTRY ilDeleteImage(const ILuint Num) {
+void ILAPIENTRY ilDeleteImage(const ILuint Num) {
     ilDeleteImages(1,&Num);
 }
 
@@ -172,7 +172,7 @@ ILboolean ILAPIENTRY ilIsImage(ILuint Image)
 
 
 //! Closes Image and frees all memory associated with it.
-ILAPI ILvoid ILAPIENTRY ilCloseImage(ILimage *Image)
+ILAPI void ILAPIENTRY ilCloseImage(ILimage *Image)
 {
 	if (Image == NULL)
 		return;
@@ -248,7 +248,7 @@ ILAPI ILboolean ILAPIENTRY ilIsValidPal(ILpal *Palette)
 
 
 //! Closes Palette and frees all memory associated with it.
-ILAPI ILvoid ILAPIENTRY ilClosePal(ILpal *Palette)
+ILAPI void ILAPIENTRY ilClosePal(ILpal *Palette)
 {
 	if (Palette == NULL)
 		return;
@@ -437,7 +437,7 @@ ILAPI ILimage* ILAPIENTRY ilGetCurImage()
 
 
 // To be only used when the original image is going to be set back almost immediately.
-ILAPI ILvoid ILAPIENTRY ilSetCurImage(ILimage *Image)
+ILAPI void ILAPIENTRY ilSetCurImage(ILimage *Image)
 {
 	iCurImage = Image;
 	return;
@@ -445,7 +445,7 @@ ILAPI ILvoid ILAPIENTRY ilSetCurImage(ILimage *Image)
 
 
 // Completely replaces the current image and the version in the image stack.
-ILAPI ILvoid ILAPIENTRY ilReplaceCurImage(ILimage *Image)
+ILAPI void ILAPIENTRY ilReplaceCurImage(ILimage *Image)
 {
 	if (iCurImage) {
 		ilActiveImage(0);
@@ -459,9 +459,9 @@ ILAPI ILvoid ILAPIENTRY ilReplaceCurImage(ILimage *Image)
 
 
 // Like realloc but sets new memory to 0.
-ILvoid* ILAPIENTRY ilRecalloc(ILvoid *Ptr, ILuint OldSize, ILuint NewSize)
+void* ILAPIENTRY ilRecalloc(void *Ptr, ILuint OldSize, ILuint NewSize)
 {
-	ILvoid *Temp = ialloc(NewSize);
+	void *Temp = ialloc(NewSize);
 	ILuint CopySize = (OldSize < NewSize) ? OldSize : NewSize;
 
 	if (Temp != NULL) {
@@ -506,7 +506,7 @@ ILboolean iEnlargeStack()
 static ILboolean IsInit = IL_FALSE;
 
 // ONLY call at startup.
-ILvoid ILAPIENTRY ilInit()
+void ILAPIENTRY ilInit()
 {
 	// if it is already initialized skip initialization
 	if (IsInit == IL_TRUE ) 
@@ -532,7 +532,7 @@ ILvoid ILAPIENTRY ilInit()
 
 // Frees any extra memory in the stack.
 //	- Called on exit
-ILvoid ILAPIENTRY ilShutDown()
+void ILAPIENTRY ilShutDown()
 {
 	// if it is not initialized do not shutdown
 	iFree* TempFree = (iFree*)FreeNames;
@@ -569,7 +569,7 @@ ILvoid ILAPIENTRY ilShutDown()
 
 
 // Initializes the image stack's first entry (default image) -- ONLY CALL ONCE!
-ILvoid iSetImage0()
+void iSetImage0()
 {
 	if (ImageStack == NULL)
 		if (!iEnlargeStack())
@@ -587,7 +587,7 @@ ILvoid iSetImage0()
 }
 
 
-ILAPI ILvoid ILAPIENTRY iBindImageTemp()
+ILAPI void ILAPIENTRY iBindImageTemp()
 {
 	if (ImageStack == NULL || StackSize <= 1)
 		if (!iEnlargeStack())

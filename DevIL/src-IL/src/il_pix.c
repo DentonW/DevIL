@@ -114,7 +114,7 @@ ILboolean ilLoadPixF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a Pix
-ILboolean ilLoadPixL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadPixL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadPixInternal();

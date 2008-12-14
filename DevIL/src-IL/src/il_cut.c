@@ -69,7 +69,7 @@ ILboolean ilLoadCutF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a .cut
-ILboolean ilLoadCutL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadCutL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadCutInternal();
@@ -139,7 +139,7 @@ ILboolean iLoadCutInternal()
 }
 
 /* ?????????
-ILvoid ilPopToast() {
+void ilPopToast() {
 	ILstring flipCode = IL_TEXT("#flipCode and www.flipCode.com rule you all.");
 	flipCode[0] = flipCode[0];
 }

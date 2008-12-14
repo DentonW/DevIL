@@ -62,10 +62,10 @@
 static ILboolean jpgErrorOccured = IL_FALSE;
 
 // define a protype of ilLoadFromJpegStruct
-ILboolean ilLoadFromJpegStruct(ILvoid *_JpegInfo);
+ILboolean ilLoadFromJpegStruct(void *_JpegInfo);
 
 // Internal function used to get the .jpg header from the current file.
-ILvoid iGetJpgHead(ILubyte *Header)
+void iGetJpgHead(ILubyte *Header)
 {
 	Header[0] = igetc();
 	Header[1] = igetc();
@@ -136,7 +136,7 @@ ILboolean ilIsValidJpgF(ILHANDLE File)
 }
 
 
-ILboolean ilIsValidJpgL(const ILvoid *Lump, ILuint Size)
+ILboolean ilIsValidJpgL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidJpg();
@@ -193,7 +193,7 @@ ILboolean ilLoadJpegF(ILHANDLE File)
 
 
 // Reads from a memory "lump" containing a jpeg
-ILboolean ilLoadJpegL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadJpegL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadJpegInternal();
@@ -454,7 +454,7 @@ ILboolean ilSaveJpegF(ILHANDLE File)
 
 
 //! Writes a Jpeg to a memory "lump"
-ILboolean ilSaveJpegL(ILvoid *Lump, ILuint Size)
+ILboolean ilSaveJpegL(void *Lump, ILuint Size)
 {
 	iSetOutputLump(Lump, Size);
 	return iSaveJpegInternal();
@@ -586,14 +586,14 @@ ILboolean ilLoadJpeg(ILconst_string FileName)
 
 
 // Reads from a memory "lump" containing a jpeg
-ILboolean ilLoadJpegL(ILvoid *Lump, ILuint Size)
+ILboolean ilLoadJpegL(void *Lump, ILuint Size)
 {
 	return iLoadJpegInternal(NULL, Lump, Size);
 }
 
 
 // Internal function used to load the jpeg.
-ILboolean iLoadJpegInternal(ILstring FileName, ILvoid *Lump, ILuint Size)
+ILboolean iLoadJpegInternal(ILstring FileName, void *Lump, ILuint Size)
 {
     JPEG_CORE_PROPERTIES Image;
 
@@ -706,14 +706,14 @@ ILboolean ilSaveJpeg(ILconst_string FileName)
 
 
 //! Writes a Jpeg to a memory "lump"
-ILboolean ilSaveJpegL(ILvoid *Lump, ILuint Size)
+ILboolean ilSaveJpegL(void *Lump, ILuint Size)
 {
 	return iSaveJpegInternal(NULL, Lump, Size);
 }
 
 
 // Internal function used to save the Jpeg.
-ILboolean iSaveJpegInternal(ILstring FileName, ILvoid *Lump, ILuint Size)
+ILboolean iSaveJpegInternal(ILstring FileName, void *Lump, ILuint Size)
 {
 	JPEG_CORE_PROPERTIES	Image;
 	ILuint	Quality;
@@ -838,7 +838,7 @@ ILboolean iSaveJpegInternal(ILstring FileName, ILvoid *Lump, ILuint Size)
 // this function is called. The caller must call jpeg_finish_decompress because
 // the caller may still need decompressor after calling this for e.g. examining
 // saved markers.
-ILboolean ilLoadFromJpegStruct(ILvoid *_JpegInfo)
+ILboolean ilLoadFromJpegStruct(void *_JpegInfo)
 {
 #ifndef IL_NO_JPG
 #ifndef IL_USE_IJL
@@ -906,7 +906,7 @@ ILboolean ilLoadFromJpegStruct(ILvoid *_JpegInfo)
 // is also responsible for calling jpeg_finish_compress in case the
 // caller still needs to compressor for something.
 // 
-ILboolean ilSaveFromJpegStruct(ILvoid *_JpegInfo)
+ILboolean ilSaveFromJpegStruct(void *_JpegInfo)
 {
 #ifndef IL_NO_JPG
 #ifndef IL_USE_IJL

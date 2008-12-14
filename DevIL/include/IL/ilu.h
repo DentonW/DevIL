@@ -137,7 +137,7 @@ ILAPI ILuint         ILAPIENTRY iluColoursUsed(void);
 ILAPI ILboolean      ILAPIENTRY iluCompareImage(ILuint Comp);
 ILAPI ILboolean      ILAPIENTRY iluContrast(ILfloat Contrast);
 ILAPI ILboolean      ILAPIENTRY iluCrop(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Width, ILuint Height, ILuint Depth);
-ILAPI ILvoid         ILAPIENTRY iluDeleteImage(ILuint Id); // Deprecated
+ILAPI void           ILAPIENTRY iluDeleteImage(ILuint Id); // Deprecated
 ILAPI ILboolean      ILAPIENTRY iluEdgeDetectE(void);
 ILAPI ILboolean      ILAPIENTRY iluEdgeDetectP(void);
 ILAPI ILboolean      ILAPIENTRY iluEdgeDetectS(void);
@@ -150,20 +150,20 @@ ILAPI ILboolean      ILAPIENTRY iluConvolution(ILint *matrix, ILint scale, ILint
 ILAPI ILboolean      ILAPIENTRY iluFlipImage(void);
 ILAPI ILboolean      ILAPIENTRY iluGammaCorrect(ILfloat Gamma);
 ILAPI ILuint         ILAPIENTRY iluGenImage(void); // Deprecated
-ILAPI ILvoid         ILAPIENTRY iluGetImageInfo(ILinfo *Info);
+ILAPI void           ILAPIENTRY iluGetImageInfo(ILinfo *Info);
 ILAPI ILint          ILAPIENTRY iluGetInteger(ILenum Mode);
-ILAPI ILvoid         ILAPIENTRY iluGetIntegerv(ILenum Mode, ILint *Param);
+ILAPI void           ILAPIENTRY iluGetIntegerv(ILenum Mode, ILint *Param);
 ILAPI ILstring 		 ILAPIENTRY iluGetString(ILenum StringName);
-ILAPI ILvoid         ILAPIENTRY iluImageParameter(ILenum PName, ILenum Param);
-ILAPI ILvoid         ILAPIENTRY iluInit(void);
+ILAPI void           ILAPIENTRY iluImageParameter(ILenum PName, ILenum Param);
+ILAPI void           ILAPIENTRY iluInit(void);
 ILAPI ILboolean      ILAPIENTRY iluInvertAlpha(void);
 ILAPI ILuint         ILAPIENTRY iluLoadImage(ILconst_string FileName);
 ILAPI ILboolean      ILAPIENTRY iluMirror(void);
 ILAPI ILboolean      ILAPIENTRY iluNegative(void);
 ILAPI ILboolean      ILAPIENTRY iluNoisify(ILclampf Tolerance);
 ILAPI ILboolean      ILAPIENTRY iluPixelize(ILuint PixSize);
-ILAPI ILvoid         ILAPIENTRY iluRegionfv(ILpointf *Points, ILuint n);
-ILAPI ILvoid         ILAPIENTRY iluRegioniv(ILpointi *Points, ILuint n);
+ILAPI void           ILAPIENTRY iluRegionfv(ILpointf *Points, ILuint n);
+ILAPI void           ILAPIENTRY iluRegioniv(ILpointi *Points, ILuint n);
 ILAPI ILboolean      ILAPIENTRY iluReplaceColour(ILubyte Red, ILubyte Green, ILubyte Blue, ILfloat Tolerance);
 ILAPI ILboolean      ILAPIENTRY iluRotate(ILfloat Angle);
 ILAPI ILboolean      ILAPIENTRY iluRotate3D(ILfloat x, ILfloat y, ILfloat z, ILfloat Angle);

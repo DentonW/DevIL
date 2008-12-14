@@ -29,15 +29,15 @@
 #include <mm_malloc.h>
 #endif
 
-static ILvoid ILAPIENTRY DefaultFreeFunc(const ILvoid * CONST_RESTRICT Ptr);
-static ILvoid* ILAPIENTRY DefaultAllocFunc(const ILsizei Size);
+static void ILAPIENTRY DefaultFreeFunc(const void * CONST_RESTRICT Ptr);
+static void* ILAPIENTRY DefaultAllocFunc(const ILsizei Size);
 
 static mAlloc ialloc_ptr = DefaultAllocFunc;
 static mFree  ifree_ptr = DefaultFreeFunc;
 
 /*** Vector Allocation/Deallocation Function ***/
 #ifdef VECTORMEM
-ILvoid *vec_malloc(const ILsizei size)
+void *vec_malloc(const ILsizei size)
 {
 	const ILsizei _size =  size % 16 > 0 ? size + 16 - (size % 16) : size; // align size value
 	
@@ -68,7 +68,7 @@ ILvoid *vec_malloc(const ILsizei size)
 #endif //MM_MALLOC
 }
 
-ILvoid *ivec_align_buffer(ILvoid *buffer, const ILsizei size)
+void *ivec_align_buffer(void *buffer, const ILsizei size)
 {
 	if( (ILsizei)buffer % 16 != 0 ) {
         void *aligned_buffer = vec_malloc( size );
@@ -82,21 +82,21 @@ ILvoid *ivec_align_buffer(ILvoid *buffer, const ILsizei size)
 
 
 /*** Allocation/Deallocation Function ***/
-ILvoid* ILAPIENTRY ialloc(const ILsizei Size) {
-	ILvoid *Ptr = ialloc_ptr(Size);
+void* ILAPIENTRY ialloc(const ILsizei Size) {
+	void *Ptr = ialloc_ptr(Size);
 	if (Ptr == NULL)
 		ilSetError(IL_OUT_OF_MEMORY);
 	return Ptr;
 }
 
-ILvoid ILAPIENTRY ifree(const ILvoid * CONST_RESTRICT Ptr) {
+void ILAPIENTRY ifree(const void * CONST_RESTRICT Ptr) {
 	ifree_ptr(Ptr);
 	return;
 }
 
-ILvoid* ILAPIENTRY icalloc(const ILsizei Size, const ILsizei Num)
+void* ILAPIENTRY icalloc(const ILsizei Size, const ILsizei Num)
 {
-    ILvoid *Ptr = ialloc(Size * Num);
+    void *Ptr = ialloc(Size * Num);
     if (Ptr == NULL)
     	return Ptr;
     imemclear(Ptr, Size * Num);
@@ -104,21 +104,21 @@ ILvoid* ILAPIENTRY icalloc(const ILsizei Size, const ILsizei Num)
 }
 
 /*** Default Allocation/Deallocation Function ***/
-static ILvoid* ILAPIENTRY DefaultAllocFunc(const ILsizei Size)
+static void* ILAPIENTRY DefaultAllocFunc(const ILsizei Size)
 {
 #ifdef VECTORMEM
-	return (ILvoid*)vec_malloc(Size);
+	return (void*)vec_malloc(Size);
 #else
 	return malloc(Size);
 #endif //VECTORMEM
 }
 
-static ILvoid ILAPIENTRY DefaultFreeFunc(const ILvoid * CONST_RESTRICT ptr)
+static void ILAPIENTRY DefaultFreeFunc(const void * CONST_RESTRICT ptr)
 {
 	if (ptr)
 	{
 #ifdef MM_MALLOC
-	    _mm_free((ILvoid*)ptr);
+	    _mm_free((void*)ptr);
 #else
 #if defined(VECTORMEM) & !defined(POSIX_MEMALIGN) & !defined(VALLOC) & !defined(MEMALIGN) & !defined(MM_MALLOC)
 	    free(ptr - ((char*)ptr)[-1]);
@@ -130,13 +130,13 @@ static ILvoid ILAPIENTRY DefaultFreeFunc(const ILvoid * CONST_RESTRICT ptr)
 }
 
 /*** Manipulate Allocation/Deallocation Function ***/
-ILvoid ILAPIENTRY ilResetMemory()  // Deprecated
+void ILAPIENTRY ilResetMemory()  // Deprecated
 {
 	ialloc_ptr = DefaultAllocFunc;
 	ifree_ptr = DefaultFreeFunc;
 }
 
-ILvoid ILAPIENTRY ilSetMemory(mAlloc AllocFunc, mFree FreeFunc)
+void ILAPIENTRY ilSetMemory(mAlloc AllocFunc, mFree FreeFunc)
 {
 	ialloc_ptr = AllocFunc == NULL ? DefaultAllocFunc : AllocFunc;
 	ifree_ptr = FreeFunc == NULL ? DefaultFreeFunc : FreeFunc;

@@ -56,7 +56,7 @@ ILboolean ilIsValidLifF(ILHANDLE File)
 
 
 //! Checks if Lump is a valid Lif lump.
-ILboolean ilIsValidLifL(const ILvoid *Lump, ILuint Size)
+ILboolean ilIsValidLifL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidLif();
@@ -151,7 +151,7 @@ ILboolean ilLoadLifF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a .Lif
-ILboolean ilLoadLifL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadLifL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadLifInternal();

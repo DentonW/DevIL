@@ -68,7 +68,7 @@ ILboolean ilIsValidPsdF(ILHANDLE File)
 
 
 //! Checks if Lump is a valid Psd lump.
-ILboolean ilIsValidPsdL(const ILvoid *Lump, ILuint Size)
+ILboolean ilIsValidPsdL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidPsd();
@@ -162,7 +162,7 @@ ILboolean ilLoadPsdF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a Psd
-ILboolean ilLoadPsdL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadPsdL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadPsdInternal();
@@ -615,7 +615,7 @@ static ILuint ReadCompressedChannel(const ILuint ChanLen, ILuint Size, ILubyte* 
 }
 
 
-ILboolean PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed)
+ILboolean PsdGetData(PSDHEAD *Head, void *Buffer, ILboolean Compressed)
 {
 	ILuint		c, x, y, i, Size, ReadResult;
 	ILubyte		*Channel = NULL;
@@ -906,7 +906,7 @@ ILboolean ilSavePsdF(ILHANDLE File)
 
 
 //! Writes a Psd to a memory "lump"
-ILboolean ilSavePsdL(ILvoid *Lump, ILuint Size)
+ILboolean ilSavePsdL(void *Lump, ILuint Size)
 {
 	iSetOutputLump(Lump, Size);
 	return iSavePsdInternal();

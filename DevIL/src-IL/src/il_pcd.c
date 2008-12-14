@@ -55,14 +55,14 @@ ILboolean ilLoadPcdF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a .pcd file
-ILboolean ilLoadPcdL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadPcdL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadPcdInternal();
 }
 
 
-ILvoid YCbCr2RGB(ILubyte Y, ILubyte Cb, ILubyte Cr, ILubyte *r, ILubyte *g, ILubyte *b)
+void YCbCr2RGB(ILubyte Y, ILubyte Cb, ILubyte Cr, ILubyte *r, ILubyte *g, ILubyte *b)
 {
 	static const ILdouble c11 = 0.0054980*256;
 	static const ILdouble c12 = 0.0000000*256;

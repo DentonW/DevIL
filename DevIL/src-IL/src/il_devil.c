@@ -16,7 +16,7 @@
 #include <limits.h>
 #include "il_manip.h"
 
-ILAPI ILboolean ILAPIENTRY ilInitImage(ILimage *Image, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, ILvoid *Data)
+ILAPI ILboolean ILAPIENTRY ilInitImage(ILimage *Image, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, void *Data)
 {
 	ILubyte BpcType = ilGetBpcType(Type);
 	if (BpcType == 0) {
@@ -84,7 +84,7 @@ ILAPI ILimage* ILAPIENTRY ilNewImage(ILuint Width, ILuint Height, ILuint Depth, 
 	return Image;
 }
 
-ILAPI ILimage* ILAPIENTRY ilNewImageFull(ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, ILvoid *Data)
+ILAPI ILimage* ILAPIENTRY ilNewImageFull(ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, void *Data)
 {
 	ILimage *Image;
 
@@ -110,14 +110,14 @@ ILAPI ILimage* ILAPIENTRY ilNewImageFull(ILuint Width, ILuint Height, ILuint Dep
 
 
 //! Changes the current bound image to use these new dimensions (current data is destroyed).
-ILboolean ILAPIENTRY ilTexImage(ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, ILvoid *Data)
+ILboolean ILAPIENTRY ilTexImage(ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, void *Data)
 {
 	return ilTexImage_(iCurImage, Width, Height, Depth, Bpp, Format, Type, Data);
 }
 
 
 // Internal version of ilTexImage.
-ILAPI ILboolean ILAPIENTRY ilTexImage_(ILimage *Image, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, ILvoid *Data)
+ILAPI ILboolean ILAPIENTRY ilTexImage_(ILimage *Image, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, void *Data)
 {
 	if (Image == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -153,7 +153,7 @@ ILAPI ILboolean ILAPIENTRY ilTexImage_(ILimage *Image, ILuint Width, ILuint Heig
 
 
 //! Uploads Data of the same size to replace the current image's data.
-ILboolean ILAPIENTRY ilSetData(ILvoid *Data)
+ILboolean ILAPIENTRY ilSetData(void *Data)
 {
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -165,7 +165,7 @@ ILboolean ILAPIENTRY ilSetData(ILvoid *Data)
 
 
 // Internal version of ilTexSubImage.
-ILAPI ILboolean ILAPIENTRY ilTexSubImage_(ILimage *Image, ILvoid *Data)
+ILAPI ILboolean ILAPIENTRY ilTexSubImage_(ILimage *Image, void *Data)
 {
 	if (Image == NULL || Data == NULL) {
 		ilSetError(IL_INVALID_PARAM);
@@ -215,7 +215,7 @@ static ILfloat ClearBlue  = 0.90588f;
 static ILfloat ClearAlpha = 0.0f;
 static ILfloat ClearLum   = 1.0f;
 
-ILvoid ILAPIENTRY ilClearColour(ILclampf Red, ILclampf Green, ILclampf Blue, ILclampf Alpha)
+void ILAPIENTRY ilClearColour(ILclampf Red, ILclampf Green, ILclampf Blue, ILclampf Alpha)
 {
 	// Clamp to 0.0f - 1.0f.
 	ClearRed	= Red < 0.0f ? 0.0f : (Red > 1.0f ? 1.0f : Red);
@@ -235,7 +235,7 @@ ILvoid ILAPIENTRY ilClearColour(ILclampf Red, ILclampf Green, ILclampf Blue, ILc
 }
 
 
-ILAPI ILvoid ILAPIENTRY ilGetClear(ILvoid *Colours, ILenum Format, ILenum Type)
+ILAPI void ILAPIENTRY ilGetClear(void *Colours, ILenum Format, ILenum Type)
 {
 	ILubyte 	*BytePtr;
 	ILushort	*ShortPtr;

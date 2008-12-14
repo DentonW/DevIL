@@ -180,10 +180,10 @@ enum PixFormat
 #define CUBEMAP_SIDES 6
 
 // Internal functions
-ILboolean	iLoadDdsInternal(ILvoid);
+ILboolean	iLoadDdsInternal(void);
 ILboolean	iIsValidDds(void);
 ILboolean	iCheckDds(DDSHEAD *Head);
-ILvoid		AdjustVolumeTexture(DDSHEAD *Head);
+void		AdjustVolumeTexture(DDSHEAD *Head);
 ILboolean	ReadData(void);
 ILboolean	AllocImage(void);
 ILboolean	Decompress(void);
@@ -203,8 +203,8 @@ ILboolean	DecompressAti1n(void);
 ILboolean	DecompressRXGB(void);
 
 ILboolean	DecompressFloat(void);
-ILvoid		CorrectPreMult(void);
-ILvoid		GetBitsFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight);
+void		CorrectPreMult(void);
+void		GetBitsFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight);
 ILboolean	iSaveDdsInternal(void);
 ILboolean	WriteHeader(ILimage *Image, ILenum DXTCFormat, ILuint CubeFlags);
 ILushort	*CompressTo565(ILimage *Image);
@@ -215,18 +215,18 @@ ILboolean	GetBlock(ILushort *Block, ILushort *Data, ILimage *Image, ILuint XPos,
 ILboolean	GetAlphaBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XPos, ILuint YPos);
 
 ILboolean	Get3DcBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XPos, ILuint YPos, int channel);
-ILvoid		ShortToColor565(ILushort Pixel, Color565 *Colour);
-ILvoid		ShortToColor888(ILushort Pixel, Color888 *Colour);
+void		ShortToColor565(ILushort Pixel, Color565 *Colour);
+void		ShortToColor888(ILushort Pixel, Color888 *Colour);
 ILushort	Color565ToShort(Color565 *Colour);
 ILushort	Color888ToShort(Color888 *Colour);
 ILuint		GenBitMask(ILushort ex0, ILushort ex1, ILuint NumCols, ILushort *In, ILubyte *Alpha, Color888 *OutCol);
-ILvoid		GenAlphaBitMask(ILubyte a0, ILubyte a1, ILubyte *In, ILubyte *Mask, ILubyte *Out);
+void		GenAlphaBitMask(ILubyte a0, ILubyte a1, ILubyte *In, ILubyte *Mask, ILubyte *Out);
 ILuint		RMSAlpha(ILubyte *Orig, ILubyte *Test);
 ILuint		Distance(Color888 *c1, Color888 *c2);
-ILvoid		ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1);
-ILvoid		ChooseAlphaEndpoints(ILubyte *Block, ILubyte *a0, ILubyte *a1);
-ILvoid		CorrectEndDXT1(ILushort *ex0, ILushort *ex1, ILboolean HasAlpha);
-ILvoid		PreMult(ILushort *Data, ILubyte *Alpha);
+void		ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1);
+void		ChooseAlphaEndpoints(ILubyte *Block, ILubyte *a0, ILubyte *a1);
+void		CorrectEndDXT1(ILushort *ex0, ILushort *ex1, ILboolean HasAlpha);
+void		PreMult(ILushort *Data, ILubyte *Alpha);
 
 
 extern ILuint CubemapDirections[CUBEMAP_SIDES];

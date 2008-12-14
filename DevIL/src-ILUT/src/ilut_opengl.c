@@ -15,12 +15,12 @@
 
 static ILint MaxTexW = 256, MaxTexH = 256;  // maximum texture widths and heights
 
-ILvoid iGLSetMaxW( ILuint Width ) {
+void iGLSetMaxW( ILuint Width ) {
 	MaxTexW = Width;
 	return;
 }
 
-ILvoid iGLSetMaxH( ILuint Height ) {
+void iGLSetMaxH( ILuint Height ) {
 	MaxTexH = Height;
 	return;
 }

@@ -68,7 +68,7 @@ ILboolean ilLoadIcnsF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains an icon.
-ILboolean ilLoadIcnsL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadIcnsL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadIcnsInternal();

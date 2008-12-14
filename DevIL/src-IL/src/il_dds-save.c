@@ -53,7 +53,7 @@ ILboolean ilSaveDdsF(ILHANDLE File)
 
 
 //! Writes a Dds to a memory "lump"
-ILboolean ilSaveDdsL(ILvoid *Lump, ILuint Size)
+ILboolean ilSaveDdsL(void *Lump, ILuint Size)
 {
 	iSetOutputLump(Lump, Size);
 	return iSaveDdsInternal();
@@ -403,7 +403,7 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat, ILuint CubeFlags)
 #endif//IL_NO_DDS
 
 
-ILuint ILAPIENTRY ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize, ILenum DXTCFormat)
+ILuint ILAPIENTRY ilGetDXTCData(void *Buffer, ILuint BufferSize, ILenum DXTCFormat)
 {
 	ILubyte	*CurData = NULL;
 	ILuint	retVal;
@@ -1038,7 +1038,7 @@ ILboolean Get3DcBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XPos
 }
 
 
-ILvoid ShortToColor565(ILushort Pixel, Color565 *Colour)
+void ShortToColor565(ILushort Pixel, Color565 *Colour)
 {
 	Colour->nRed   = (Pixel & 0xF800) >> 11;
 	Colour->nGreen = (Pixel & 0x07E0) >> 5;
@@ -1047,7 +1047,7 @@ ILvoid ShortToColor565(ILushort Pixel, Color565 *Colour)
 }
 
 
-ILvoid ShortToColor888(ILushort Pixel, Color888 *Colour)
+void ShortToColor888(ILushort Pixel, Color888 *Colour)
 {
 	Colour->r = ((Pixel & 0xF800) >> 11) << 3;
 	Colour->g = ((Pixel & 0x07E0) >> 5)  << 2;
@@ -1131,7 +1131,7 @@ ILuint GenBitMask(ILushort ex0, ILushort ex1, ILuint NumCols, ILushort *In, ILub
 }
 
 
-ILvoid GenAlphaBitMask(ILubyte a0, ILubyte a1, ILubyte *In, ILubyte *Mask, ILubyte *Out)
+void GenAlphaBitMask(ILubyte a0, ILubyte a1, ILubyte *In, ILubyte *Mask, ILubyte *Out)
 {
 	ILubyte Alphas[8], M[16];
 	ILuint	i, j, Closest, Dist;
@@ -1218,7 +1218,7 @@ ILuint Distance(Color888 *c1, Color888 *c2) {
 
 #define Sum(c) ((c)->r + (c)->g + (c)->b)
 
-ILvoid ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1) {
+void ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1) {
 	ILuint		i;
 	Color888	Colours[16];
 	ILint		Lowest=0, Highest=0;
@@ -1238,7 +1238,7 @@ ILvoid ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1) {
 #undef Sum
 
 
-ILvoid ChooseAlphaEndpoints(ILubyte *Block, ILubyte *a0, ILubyte *a1) {
+void ChooseAlphaEndpoints(ILubyte *Block, ILubyte *a0, ILubyte *a1) {
 	ILuint	i, Lowest = 0xFF, Highest = 0;
 
 	for (i = 0; i < 16; i++) {
@@ -1253,7 +1253,7 @@ ILvoid ChooseAlphaEndpoints(ILubyte *Block, ILubyte *a0, ILubyte *a1) {
 }
 
 
-ILvoid CorrectEndDXT1(ILushort *ex0, ILushort *ex1, ILboolean HasAlpha)
+void CorrectEndDXT1(ILushort *ex0, ILushort *ex1, ILboolean HasAlpha)
 {
 	ILushort Temp;
 
@@ -1276,7 +1276,7 @@ ILvoid CorrectEndDXT1(ILushort *ex0, ILushort *ex1, ILboolean HasAlpha)
 }
 
 
-ILvoid PreMult(ILushort *Data, ILubyte *Alpha)
+void PreMult(ILushort *Data, ILubyte *Alpha)
 {
 	Color888	Colour;
 	ILuint		i;

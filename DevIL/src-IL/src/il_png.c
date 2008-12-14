@@ -44,7 +44,7 @@ ILboolean	iSavePngInternal(void);
 
 ILint		readpng_init(void);
 ILboolean	readpng_get_image(ILdouble display_exponent);
-ILvoid		readpng_cleanup(void);
+void		readpng_cleanup(void);
 
 png_structp png_ptr = NULL;
 png_infop   info_ptr = NULL;
@@ -90,7 +90,7 @@ ILboolean ilIsValidPngF(ILHANDLE File)
 }
 
 
-ILboolean ilIsValidPngL(const ILvoid *Lump, ILuint Size)
+ILboolean ilIsValidPngL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidPng();
@@ -144,7 +144,7 @@ ILboolean ilLoadPngF(ILHANDLE File)
 
 
 // Reads from a memory "lump"
-ILboolean ilLoadPngL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadPngL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadPngInternal();
@@ -178,7 +178,7 @@ ILboolean iLoadPngInternal()
 }
 
 
-static ILvoid png_read(png_structp png_ptr, png_bytep data, png_size_t length)
+static void png_read(png_structp png_ptr, png_bytep data, png_size_t length)
 {
 	(void)png_ptr;
 	iread(data, 1, length);
@@ -413,7 +413,7 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 }
 
 
-ILvoid readpng_cleanup()
+void readpng_cleanup()
 {
 	if (png_ptr && info_ptr) {
 		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
@@ -458,21 +458,21 @@ ILboolean ilSavePngF(ILHANDLE File)
 
 
 //! Writes a Png to a memory "lump"
-ILboolean ilSavePngL(ILvoid *Lump, ILuint Size)
+ILboolean ilSavePngL(void *Lump, ILuint Size)
 {
 	iSetOutputLump(Lump, Size);
 	return iSavePngInternal();
 }
 
 
-ILvoid png_write(png_structp png_ptr, png_bytep data, png_size_t length)
+void png_write(png_structp png_ptr, png_bytep data, png_size_t length)
 {
 	(void)png_ptr;
 	iwrite(data, 1, length);
 	return;
 }
 
-ILvoid flush_data(png_structp png_ptr)
+void flush_data(png_structp png_ptr)
 {
 	return;
 }

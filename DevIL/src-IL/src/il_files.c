@@ -21,8 +21,8 @@ ILboolean	ILAPIENTRY iEofFile(void);
 ILboolean	ILAPIENTRY iEofLump(void);
 ILint		ILAPIENTRY iGetcFile(void);
 ILint		ILAPIENTRY iGetcLump(void);
-ILuint		ILAPIENTRY iReadFile(ILvoid *Buffer, ILuint Size, ILuint Number);
-ILuint		ILAPIENTRY iReadLump(ILvoid *Buffer, const ILuint Size, const ILuint Number);
+ILuint		ILAPIENTRY iReadFile(void *Buffer, ILuint Size, ILuint Number);
+ILuint		ILAPIENTRY iReadLump(void *Buffer, const ILuint Size, const ILuint Number);
 ILuint		ILAPIENTRY iSeekRFile(ILint Offset, ILuint Mode);
 ILuint		ILAPIENTRY iSeekRLump(ILint Offset, ILuint Mode);
 ILuint		ILAPIENTRY iSeekWFile(ILint Offset, ILuint Mode);
@@ -33,11 +33,11 @@ ILuint		ILAPIENTRY iTellWFile(void);
 ILuint		ILAPIENTRY iTellWLump(void);
 ILint		ILAPIENTRY iPutcFile(ILubyte Char);
 ILint		ILAPIENTRY iPutcLump(ILubyte Char);
-ILint		ILAPIENTRY iWriteFile(const ILvoid *Buffer, ILuint Size, ILuint Number);
-ILint		ILAPIENTRY iWriteLump(const ILvoid *Buffer, ILuint Size, ILuint Number);
+ILint		ILAPIENTRY iWriteFile(const void *Buffer, ILuint Size, ILuint Number);
+ILint		ILAPIENTRY iWriteLump(const void *Buffer, ILuint Size, ILuint Number);
 ILHANDLE	FileRead = NULL, FileWrite = NULL;
-const ILvoid *ReadLump = NULL;
-ILvoid 		*WriteLump = NULL;
+const void *ReadLump = NULL;
+void 		*WriteLump = NULL;
 ILuint		ReadLumpPos = 0, ReadLumpSize = 0, ReadFileStart = 0, WriteFileStart = 0;
 ILuint		WriteLumpPos = 0, WriteLumpSize = 0;
 
@@ -46,7 +46,7 @@ fReadProc	ReadProcCopy;
 fSeekRProc	SeekProcCopy;
 fTellRProc	TellProcCopy;
 ILHANDLE	(ILAPIENTRY *iopenCopy)(ILstring);
-ILvoid		(ILAPIENTRY *icloseCopy)(ILHANDLE);
+void		(ILAPIENTRY *icloseCopy)(ILHANDLE);
 
 ILboolean	UseCache = IL_FALSE;
 ILubyte		*Cache = NULL;
@@ -55,7 +55,7 @@ ILuint		CacheSize, CachePos, CacheStartPos, CacheBytesRead;
 
 /*// Just preserves the current read functions and replaces
 //	the current read functions with the default read funcs.
-ILvoid ILAPIENTRY iPreserveReadFuncs()
+void ILAPIENTRY iPreserveReadFuncs()
 {
 	// Create backups
 	GetcProcCopy = GetcProc;
@@ -73,7 +73,7 @@ ILvoid ILAPIENTRY iPreserveReadFuncs()
 
 
 // Restores the read functions - must be used after iPreserveReadFuncs().
-ILvoid ILAPIENTRY iRestoreReadFuncs()
+void ILAPIENTRY iRestoreReadFuncs()
 {
 	GetcProc = GetcProcCopy;
 	ReadProc = ReadProcCopy;
@@ -104,7 +104,7 @@ ILHANDLE ILAPIENTRY iDefaultOpenR(ILconst_string FileName)
 }
 
 
-ILvoid ILAPIENTRY iDefaultCloseR(ILHANDLE Handle)
+void ILAPIENTRY iDefaultCloseR(ILHANDLE Handle)
 {
 	fclose((FILE*)Handle);
 	return;
@@ -145,7 +145,7 @@ ILint ILAPIENTRY iDefaultGetc(ILHANDLE Handle)
 }
 
 
-ILint ILAPIENTRY iDefaultRead(ILvoid *Buffer, ILuint Size, ILuint Number, ILHANDLE Handle)
+ILint ILAPIENTRY iDefaultRead(void *Buffer, ILuint Size, ILuint Number, ILHANDLE Handle)
 {
 	return fread(Buffer, Size, Number, (FILE*)Handle);
 }
@@ -191,7 +191,7 @@ ILHANDLE ILAPIENTRY iDefaultOpenW(ILconst_string FileName)
 }
 
 
-ILvoid ILAPIENTRY iDefaultCloseW(ILHANDLE Handle)
+void ILAPIENTRY iDefaultCloseW(ILHANDLE Handle)
 {
 	fclose((FILE*)Handle);
 	return;
@@ -204,13 +204,13 @@ ILint ILAPIENTRY iDefaultPutc(ILubyte Char, ILHANDLE Handle)
 }
 
 
-ILint ILAPIENTRY iDefaultWrite(const ILvoid *Buffer, ILuint Size, ILuint Number, ILHANDLE Handle)
+ILint ILAPIENTRY iDefaultWrite(const void *Buffer, ILuint Size, ILuint Number, ILHANDLE Handle)
 {
 	return fwrite(Buffer, Size, Number, (FILE*)Handle);
 }
 
 
-ILvoid ILAPIENTRY ilResetRead()
+void ILAPIENTRY ilResetRead()
 {
 	ilSetRead(iDefaultOpenR, iDefaultCloseR, iDefaultEof, iDefaultGetc, 
 				iDefaultRead, iDefaultRSeek, iDefaultRTell);
@@ -218,7 +218,7 @@ ILvoid ILAPIENTRY ilResetRead()
 }
 
 
-ILvoid ILAPIENTRY ilResetWrite()
+void ILAPIENTRY ilResetWrite()
 {
 	ilSetWrite(iDefaultOpenW, iDefaultCloseW, iDefaultPutc,
 				iDefaultWSeek, iDefaultWTell, iDefaultWrite);
@@ -227,7 +227,7 @@ ILvoid ILAPIENTRY ilResetWrite()
 
 
 //! Allows you to override the default file-reading functions.
-ILvoid ILAPIENTRY ilSetRead(fOpenRProc Open, fCloseRProc Close, fEofProc Eof, fGetcProc Getc, fReadProc Read, fSeekRProc Seek, fTellRProc Tell)
+void ILAPIENTRY ilSetRead(fOpenRProc Open, fCloseRProc Close, fEofProc Eof, fGetcProc Getc, fReadProc Read, fSeekRProc Seek, fTellRProc Tell)
 {
 	iopenr    = Open;
 	icloser   = Close;
@@ -242,7 +242,7 @@ ILvoid ILAPIENTRY ilSetRead(fOpenRProc Open, fCloseRProc Close, fEofProc Eof, fG
 
 
 //! Allows you to override the default file-writing functions.
-ILvoid ILAPIENTRY ilSetWrite(fOpenRProc Open, fCloseRProc Close, fPutcProc Putc, fSeekWProc Seek, fTellWProc Tell, fWriteProc Write)
+void ILAPIENTRY ilSetWrite(fOpenRProc Open, fCloseRProc Close, fPutcProc Putc, fSeekWProc Seek, fTellWProc Tell, fWriteProc Write)
 {
 	iopenw    = Open;
 	iclosew   = Close;
@@ -256,7 +256,7 @@ ILvoid ILAPIENTRY ilSetWrite(fOpenRProc Open, fCloseRProc Close, fPutcProc Putc,
 
 
 // Tells DevIL that we're reading from a file, not a lump
-ILvoid iSetInputFile(ILHANDLE File)
+void iSetInputFile(ILHANDLE File)
 {
 	ieof  = iEofFile;
 	igetc = iGetcFile;
@@ -269,7 +269,7 @@ ILvoid iSetInputFile(ILHANDLE File)
 
 
 // Tells DevIL that we're reading from a lump, not a file
-ILvoid iSetInputLump(const ILvoid *Lump, ILuint Size)
+void iSetInputLump(const void *Lump, ILuint Size)
 {
 	ieof  = iEofLump;
 	igetc = iGetcLump;
@@ -283,7 +283,7 @@ ILvoid iSetInputLump(const ILvoid *Lump, ILuint Size)
 
 
 // Tells DevIL that we're writing to a file, not a lump
-ILvoid iSetOutputFile(ILHANDLE File)
+void iSetOutputFile(ILHANDLE File)
 {
 	// Helps with ilGetLumpPos().
 	WriteLump = NULL;
@@ -299,7 +299,7 @@ ILvoid iSetOutputFile(ILHANDLE File)
 
 
 // Tells DevIL that we're writing to a lump, not a file
-ILvoid iSetOutputLump(ILvoid *Lump, ILuint Size)
+void iSetOutputLump(void *Lump, ILuint Size)
 {
 	iputc  = iPutcLump;
 	iseekw = iSeekWLump;
@@ -337,7 +337,7 @@ ILuint ILAPIENTRY ilprintf(const char *Line, ...)
 
 
 // To pad zeros where needed...
-ILvoid ipad(ILuint NumZeros)
+void ipad(ILuint NumZeros)
 {
 	ILuint i = 0;
 	for (; i < NumZeros; i++)
@@ -396,7 +396,7 @@ ILint ILAPIENTRY iGetcLump(void)
 }
 
 
-ILuint ILAPIENTRY iReadFile(ILvoid *Buffer, ILuint Size, ILuint Number)
+ILuint ILAPIENTRY iReadFile(void *Buffer, ILuint Size, ILuint Number)
 {
 	ILuint	TotalBytes = 0, BytesCopied;
 	ILuint	BuffSize = Size * Number;
@@ -447,7 +447,7 @@ ILuint ILAPIENTRY iReadFile(ILvoid *Buffer, ILuint Size, ILuint Number)
 }
 
 
-ILuint ILAPIENTRY iReadLump(ILvoid *Buffer, const ILuint Size, const ILuint Number)
+ILuint ILAPIENTRY iReadLump(void *Buffer, const ILuint Size, const ILuint Number)
 {
 	ILuint i, ByteSize = IL_MIN( Size*Number, ReadLumpSize-ReadLumpPos);
 
@@ -510,7 +510,7 @@ ILboolean iPreCache(ILuint Size)
 }
 
 
-ILvoid iUnCache()
+void iUnCache()
 {
 	//changed 2003-09-01:
 	//make iUnCache smart enough to return if
@@ -618,7 +618,7 @@ ILint ILAPIENTRY iPutcLump(ILubyte Char)
 }
 
 
-ILint ILAPIENTRY iWriteFile(const ILvoid *Buffer, ILuint Size, ILuint Number)
+ILint ILAPIENTRY iWriteFile(const void *Buffer, ILuint Size, ILuint Number)
 {
 	ILuint NumWritten;
 	NumWritten = WriteProc(Buffer, Size, Number, FileWrite);
@@ -630,7 +630,7 @@ ILint ILAPIENTRY iWriteFile(const ILvoid *Buffer, ILuint Size, ILuint Number)
 }
 
 
-ILint ILAPIENTRY iWriteLump(const ILvoid *Buffer, ILuint Size, ILuint Number)
+ILint ILAPIENTRY iWriteLump(const void *Buffer, ILuint Size, ILuint Number)
 {
 	ILuint SizeBytes = Size * Number;
 	ILuint i = 0;

@@ -67,7 +67,7 @@ ILboolean ilLoadDoomF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a Doom texture
-ILboolean ilLoadDoomL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadDoomL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadDoomInternal();
@@ -211,7 +211,7 @@ ILboolean ilLoadDoomFlatF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a Doom flat
-ILboolean ilLoadDoomFlatL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadDoomFlatL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadDoomFlatInternal();

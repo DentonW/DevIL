@@ -121,7 +121,7 @@ ILboolean ilIsValidTiffF(ILHANDLE File)
 /*----------------------------------------------------------------------------*/
 
 //! Checks if Lump is a valid Tiff lump.
-ILboolean ilIsValidTiffL(const ILvoid *Lump, ILuint Size)
+ILboolean ilIsValidTiffL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return ilisValidTiffFunc();
@@ -166,7 +166,7 @@ ILboolean ilLoadTiffF(ILHANDLE File)
 /*----------------------------------------------------------------------------*/
 
 //! Reads from a memory "lump" that contains a Tiff
-ILboolean ilLoadTiffL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadTiffL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadTiffInternal();
@@ -267,7 +267,7 @@ ILboolean iLoadTiffInternal()
 	uint32	 w, h, d, linesize, tilewidth, tilelength;
 	ILubyte  *pImageData;
 	ILuint	 i, ProfileLen, DirCount = 0;
-	ILvoid	 *Buffer;
+	void	 *Buffer;
 	ILimage  *Image, *TempImage;
 	ILushort si;
         ILfloat  x_position, x_resolution, y_position, y_resolution;
@@ -910,7 +910,7 @@ ILboolean ilSaveTiffF(ILHANDLE File)
 
 
 //! Writes a Tiff to a memory "lump"
-ILboolean ilSaveTiffL(const ILvoid *Lump, ILuint Size)
+ILboolean ilSaveTiffL(const void *Lump, ILuint Size)
 {
 /*
 

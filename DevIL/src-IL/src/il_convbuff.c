@@ -19,7 +19,7 @@
 #include <limits.h>
 
 
-ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestType, ILvoid *Buffer);
+void* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestType, void *Buffer);
 ILushort ILAPIENTRY ilFloatToHalf(ILuint i);
 ILuint   ILAPIENTRY ilHalfToFloat (ILushort y);
 ILfloat  ILAPIENTRY ilFloatToHalfOverflow();
@@ -30,7 +30,7 @@ ILfloat  ILAPIENTRY ilFloatToHalfOverflow();
 							return IL_FALSE; \
 						}
 
-ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, ILenum DestFormat, ILenum SrcType, ILenum DestType, ILvoid *Buffer) {
+ILAPI void* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, ILenum DestFormat, ILenum SrcType, ILenum DestType, void *Buffer) {
 	//static const	ILfloat LumFactor[3] = { 0.299f, 0.587f, 0.114f };  // Used for conversion to luminance
 	//static const	ILfloat LumFactor[3] = { 0.3086f, 0.6094f, 0.0820f };  // http://www.sgi.com/grafica/matrix/index.html
 	static const	ILfloat LumFactor[3] = { 0.212671f, 0.715160f, 0.072169f };  // http://www.inforamp.net/~poynton/ and libpng's libpng.txt
@@ -41,7 +41,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 	ILdouble	Resultd;
 	ILuint		NumPix;  // Really number of pixels * bpp.
 	ILuint		BpcDest;
-	ILvoid		*Data = NULL;
+	void		*Data = NULL;
 
 	if (SizeOfData == 0 || Buffer == NULL) {
 		ilSetError(IL_INVALID_PARAM);
@@ -1631,7 +1631,7 @@ ILAPI ILvoid* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, IL
 
 
 // Really shouldn't have to check for default, as in above ilConvertBuffer().
-ILvoid* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestType, ILvoid *Buffer) {
+void* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestType, void *Buffer) {
 	ILuint		BpcSrc, BpcDest, Size, i;
 	ILubyte		*NewData, *BytePtr;
 	ILushort	*ShortPtr;

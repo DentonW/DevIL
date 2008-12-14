@@ -56,12 +56,12 @@
 	#define BigDouble(d) iSwapDouble(d)
 #endif
 
-ILvoid   iSwapUShort(ILushort *s);
-ILvoid   iSwapShort(ILshort *s);
-ILvoid   iSwapUInt(ILuint *i);
-ILvoid   iSwapInt(ILint *i);
-ILvoid   iSwapFloat(ILfloat *f);
-ILvoid   iSwapDouble(ILdouble *d);
+void   iSwapUShort(ILushort *s);
+void   iSwapShort(ILshort *s);
+void   iSwapUInt(ILuint *i);
+void   iSwapInt(ILint *i);
+void   iSwapFloat(ILfloat *f);
+void   iSwapDouble(ILdouble *d);
 ILushort GetLittleUShort();
 ILshort  GetLittleShort();
 ILuint   GetLittleUInt();
@@ -94,7 +94,7 @@ ILubyte SaveBigDouble(ILdouble d);
 #endif
 
 #ifndef NOINLINE
-INLINE ILvoid iSwapUShort(ILushort *s)  {
+INLINE void iSwapUShort(ILushort *s)  {
 	#ifdef USE_WIN32_ASM
 		__asm {
 			mov ebx, s
@@ -113,11 +113,11 @@ INLINE ILvoid iSwapUShort(ILushort *s)  {
 	#endif //USE_WIN32_ASM
 }
 
-INLINE ILvoid iSwapShort(ILshort *s) {
+INLINE void iSwapShort(ILshort *s) {
 	iSwapUShort((ILushort*)s);
 }
 
-INLINE ILvoid iSwapUInt(ILuint *i) {
+INLINE void iSwapUInt(ILuint *i) {
 	#ifdef USE_WIN32_ASM
 		__asm {
 			mov ebx, i
@@ -135,15 +135,15 @@ INLINE ILvoid iSwapUInt(ILuint *i) {
 	#endif //USE_WIN32_ASM
 }
 
-INLINE ILvoid iSwapInt(ILint *i) {
+INLINE void iSwapInt(ILint *i) {
 	iSwapUInt((ILuint*)i);
 }
 
-INLINE ILvoid iSwapFloat(ILfloat *f) {
+INLINE void iSwapFloat(ILfloat *f) {
 	iSwapUInt((ILuint*)f);
 }
 
-INLINE ILvoid iSwapDouble(ILdouble *d) {
+INLINE void iSwapDouble(ILdouble *d) {
 	#ifdef GCC_X86_ASM
 	int *t = (int*)d;
 	asm("bswap %2    \n"
@@ -372,6 +372,6 @@ INLINE ILubyte SaveBigDouble(ILdouble d) {
 }
 #endif
 
-ILvoid		EndianSwapData(void *_Image);
+void		EndianSwapData(void *_Image);
 
 #endif//ENDIAN_H

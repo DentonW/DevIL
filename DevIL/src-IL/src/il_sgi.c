@@ -53,7 +53,7 @@ ILboolean ilIsValidSgiF(ILHANDLE File)
 /*----------------------------------------------------------------------------*/
 
 //! Checks if Lump is a valid .sgi lump.
-ILboolean ilIsValidSgiL(const ILvoid *Lump, ILuint Size)
+ILboolean ilIsValidSgiL(const void *Lump, ILuint Size)
 {
 	FName = NULL;
 	iSetInputLump(Lump, Size);
@@ -152,7 +152,7 @@ ILboolean ilLoadSgiF(ILHANDLE File)
 /*----------------------------------------------------------------------------*/
 
 /*! Reads from a memory "lump" that contains a SGI image */
-ILboolean ilLoadSgiL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadSgiL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadSgiInternal();
@@ -391,7 +391,7 @@ ILboolean iReadNonRleSgi(iSgiHeader *Head)
 
 /*----------------------------------------------------------------------------*/
 
-ILvoid sgiSwitchData(ILubyte *Data, ILuint SizeOfData)
+void sgiSwitchData(ILubyte *Data, ILuint SizeOfData)
 {	
 	ILubyte	Temp;
 	ILuint	i;
@@ -512,7 +512,7 @@ ILboolean ilSaveSgiF(ILHANDLE File)
 /*----------------------------------------------------------------------------*/
 
 //! Writes a SGI to a memory "lump"
-ILboolean ilSaveSgiL(ILvoid *Lump, ILuint Size)
+ILboolean ilSaveSgiL(void *Lump, ILuint Size)
 {
 	iSetOutputLump(Lump, Size);
 	return iSaveSgiInternal();

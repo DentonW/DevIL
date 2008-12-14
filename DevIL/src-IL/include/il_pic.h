@@ -37,7 +37,7 @@ typedef struct CHANNEL
 	ILubyte	Size;
 	ILubyte	Type;
 	ILubyte	Chan;
-	ILvoid	*Next;
+	void	*Next;
 } CHANNEL;
 #ifdef _MSC_VER
 #pragma pack(pop,  packed_struct)

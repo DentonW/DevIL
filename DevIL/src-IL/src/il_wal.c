@@ -67,7 +67,7 @@ ILboolean ilLoadWalF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a .wal file
-ILboolean ilLoadWalL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadWalL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadWalInternal();

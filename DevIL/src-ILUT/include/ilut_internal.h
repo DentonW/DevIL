@@ -54,7 +54,7 @@
 
 extern ILimage *ilutCurImage;
 
-ILvoid	ilutDefaultStates(void);
+void	ilutDefaultStates(void);
 
 /* These defition should be collected in just one file */
 #ifdef _WIN32_WCE

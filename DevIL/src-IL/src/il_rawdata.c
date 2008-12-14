@@ -60,7 +60,7 @@ ILboolean ILAPIENTRY ilLoadDataF(ILHANDLE File, ILuint Width, ILuint Height, ILu
 
 
 //! Reads from a raw data memory "lump"
-ILboolean ILAPIENTRY ilLoadDataL(ILvoid *Lump, ILuint Size, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp)
+ILboolean ILAPIENTRY ilLoadDataL(void *Lump, ILuint Size, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadDataInternal(Width, Height, Depth, Bpp);

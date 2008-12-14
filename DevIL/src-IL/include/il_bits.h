@@ -32,8 +32,8 @@ ILint		bclose(BITFILE *BitFile);
 BITFILE*	bfile(ILHANDLE File);
 ILint		btell(BITFILE *BitFile);
 ILint		bseek(BITFILE *BitFile, ILuint Offset, ILuint Mode);
-ILint		bread(ILvoid *Buffer, ILuint Size, ILuint Number, BITFILE *BitFile);
-//ILint		bwrite(ILvoid *Buffer, ILuint Size, ILuint Number, BITFILE *BitFile);
+ILint		bread(void *Buffer, ILuint Size, ILuint Number, BITFILE *BitFile);
+//ILint		bwrite(void *Buffer, ILuint Size, ILuint Number, BITFILE *BitFile);
 
 // Useful macros for manipulating bits
 #define SetBits(var, bits)		(var |= bits)

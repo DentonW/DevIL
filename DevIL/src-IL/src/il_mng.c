@@ -227,7 +227,7 @@ ILboolean ilLoadMngF(ILHANDLE File)
 
 
 // Reads from a memory "lump"
-ILboolean ilLoadMngL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadMngL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadMngInternal();
@@ -309,7 +309,7 @@ ILboolean ilSaveMngF(ILHANDLE File)
 
 
 //! Writes a Mng to a memory "lump"
-ILboolean ilSaveMngL(ILvoid *Lump, ILuint Size)
+ILboolean ilSaveMngL(void *Lump, ILuint Size)
 {
 	iSetOutputLump(Lump, Size);
 	return iSaveMngInternal();

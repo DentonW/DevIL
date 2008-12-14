@@ -279,7 +279,7 @@ ILubyte* ILAPIENTRY iGetPaddedData(ILimage *Image)
 
 
 
-ILvoid ILAPIENTRY ilutFreePaddedData(ILubyte *Data)
+void ILAPIENTRY ilutFreePaddedData(ILubyte *Data)
 {
 	ifree(Data);
 	return;
@@ -294,7 +294,7 @@ ILubyte* ILAPIENTRY ilutGetPaddedData()
 
 
 // @TODO:  Figure how to mess with multiple bpc's!
-ILvoid ILAPIENTRY ilutGetBmpInfo(BITMAPINFO *Info)
+void ILAPIENTRY ilutGetBmpInfo(BITMAPINFO *Info)
 {
 	ILuint NewBps, Padding;
 

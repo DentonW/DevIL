@@ -47,7 +47,7 @@ ILboolean ilutD3D9Init()
 }
 
 
-ILvoid CheckFormatsDX9(IDirect3DDevice9 *Device)
+void CheckFormatsDX9(IDirect3DDevice9 *Device)
 {
 	D3DDISPLAYMODE	DispMode;
 	HRESULT			hr;
@@ -97,7 +97,7 @@ ILboolean ILAPIENTRY ilutD3D9CubeTexFromFile(IDirect3DDevice9 *Device,
 
 #endif//_WIN32_WCE
 ILboolean ILAPIENTRY ilutD3D9CubeTexFromFileInMemory(IDirect3DDevice9 *Device,
-				ILvoid *Lump, ILuint Size, IDirect3DCubeTexture9 **Texture) {
+				void *Lump, ILuint Size, IDirect3DCubeTexture9 **Texture) {
 	iBindImageTemp();
     if( !ilLoadL(IL_TYPE_UNKNOWN, Lump, Size) )
     	return IL_FALSE;
@@ -229,7 +229,7 @@ ILboolean ILAPIENTRY ilutD3D9VolTexFromFile(IDirect3DDevice9 *Device, ILconst_st
 #endif//_WIN32_WCE
 
 
-ILboolean ILAPIENTRY ilutD3D9TexFromFileInMemory(IDirect3DDevice9 *Device, ILvoid *Lump, ILuint Size, IDirect3DTexture9 **Texture)
+ILboolean ILAPIENTRY ilutD3D9TexFromFileInMemory(IDirect3DDevice9 *Device, void *Lump, ILuint Size, IDirect3DTexture9 **Texture)
 {
 	iBindImageTemp();
 	if (!ilLoadL(IL_TYPE_UNKNOWN, Lump, Size))
@@ -241,7 +241,7 @@ ILboolean ILAPIENTRY ilutD3D9TexFromFileInMemory(IDirect3DDevice9 *Device, ILvoi
 }
 
 
-ILboolean ILAPIENTRY ilutD3D9VolTexFromFileInMemory(IDirect3DDevice9 *Device, ILvoid *Lump, ILuint Size, IDirect3DVolumeTexture9 **Texture)
+ILboolean ILAPIENTRY ilutD3D9VolTexFromFileInMemory(IDirect3DDevice9 *Device, void *Lump, ILuint Size, IDirect3DVolumeTexture9 **Texture)
 {
 	iBindImageTemp();
 	if (!ilLoadL(IL_TYPE_UNKNOWN, Lump, Size))

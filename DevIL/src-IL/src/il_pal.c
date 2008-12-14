@@ -859,7 +859,7 @@ ILboolean ILAPIENTRY ilConvertPal(ILenum DestFormat)
 
 
 // Sets the current palette.
-ILAPI ILvoid ILAPIENTRY ilSetPal(ILpal *Pal)
+ILAPI void ILAPIENTRY ilSetPal(ILpal *Pal)
 {
 	if (iCurImage->Pal.Palette && iCurImage->Pal.PalSize && iCurImage->Pal.PalType != IL_PAL_NONE) {
 		ifree(iCurImage->Pal.Palette);

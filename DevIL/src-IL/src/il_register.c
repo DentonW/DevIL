@@ -149,7 +149,7 @@ ILboolean ILAPIENTRY ilRemoveSave(ILconst_string Ext)
 
 
 // Automatically removes all registered formats.
-ILvoid ilRemoveRegistered()
+void ilRemoveRegistered()
 {
 	iFormatL *TempNodeL = LoadProcs;
 	iFormatS *TempNodeS = SaveProcs;
@@ -230,7 +230,7 @@ ILboolean iRegisterSave(ILconst_string FileName)
 // "Reporting" functions
 //
 
-ILvoid ILAPIENTRY ilRegisterOrigin(ILenum Origin)
+void ILAPIENTRY ilRegisterOrigin(ILenum Origin)
 {
 	switch (Origin)
 	{
@@ -245,7 +245,7 @@ ILvoid ILAPIENTRY ilRegisterOrigin(ILenum Origin)
 }
 
 
-ILvoid ILAPIENTRY ilRegisterFormat(ILenum Format)
+void ILAPIENTRY ilRegisterFormat(ILenum Format)
 {
 	switch (Format)
 	{
@@ -339,7 +339,7 @@ ILboolean ILAPIENTRY ilRegisterNumImages(ILuint Num)
 }
 
 
-ILvoid ILAPIENTRY ilRegisterType(ILenum Type)
+void ILAPIENTRY ilRegisterType(ILenum Type)
 {
 	switch (Type)
 	{
@@ -361,7 +361,7 @@ ILvoid ILAPIENTRY ilRegisterType(ILenum Type)
 }
 
 
-ILvoid ILAPIENTRY ilRegisterPal(ILvoid *Pal, ILuint Size, ILenum Type)
+void ILAPIENTRY ilRegisterPal(void *Pal, ILuint Size, ILenum Type)
 {
 	if (!iCurImage->Pal.Palette || !iCurImage->Pal.PalSize || iCurImage->Pal.PalType != IL_PAL_NONE) {
 		ifree(iCurImage->Pal.Palette);

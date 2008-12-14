@@ -55,7 +55,7 @@ ILboolean ilIsValidPcxF(ILHANDLE File) {
 
 
 //! Checks if Lump is a valid .pcx lump.
-ILboolean ilIsValidPcxL(const ILvoid *Lump, ILuint Size) {
+ILboolean ilIsValidPcxL(const void *Lump, ILuint Size) {
 	iSetInputLump(Lump, Size);
 	return iIsValidPcx();
 }
@@ -187,7 +187,7 @@ ILboolean ilLoadPcxF(ILHANDLE File) {
 
 
 //! Reads from a memory "lump" that contains a .pcx
-ILboolean ilLoadPcxL(const ILvoid *Lump, ILuint Size) {
+ILboolean ilLoadPcxL(const void *Lump, ILuint Size) {
 	iSetInputLump(Lump, Size);
 	return iLoadPcxInternal();
 }
@@ -520,7 +520,7 @@ ILboolean ilSavePcxF(ILHANDLE File) {
 
 
 //! Writes a .pcx to a memory "lump"
-ILboolean ilSavePcxL(ILvoid *Lump, ILuint Size) {
+ILboolean ilSavePcxL(void *Lump, ILuint Size) {
 	iSetOutputLump(Lump, Size);
 	return iSavePcxInternal();
 }

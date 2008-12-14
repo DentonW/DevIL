@@ -135,7 +135,7 @@ ILboolean Hist3d(ILubyte *Ir, ILubyte *Ig, ILubyte *Ib, ILint *vwt, ILint *vmr, 
 
 
 // Compute cumulative moments
-ILvoid M3d(ILint *vwt, ILint *vmr, ILint *vmg, ILint *vmb, ILfloat *m2)
+void M3d(ILint *vwt, ILint *vmr, ILint *vmg, ILint *vmb, ILfloat *m2)
 {
 	ILushort	ind1, ind2;
 	ILubyte		i, r, g, b;

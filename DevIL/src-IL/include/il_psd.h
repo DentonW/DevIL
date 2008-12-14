@@ -46,7 +46,7 @@ ILboolean	ReadIndexed(PSDHEAD *Head);
 ILboolean	ReadRGB(PSDHEAD *Head);
 ILboolean	ReadCMYK(PSDHEAD *Head);
 ILuint		*GetCompChanLen(PSDHEAD *Head);
-ILboolean	PsdGetData(PSDHEAD *Head, ILvoid *Buffer, ILboolean Compressed);
+ILboolean	PsdGetData(PSDHEAD *Head, void *Buffer, ILboolean Compressed);
 ILboolean	ParseResources(ILuint ResourceSize, ILubyte *Resources);
 ILboolean	GetSingleChannel(PSDHEAD *Head, ILubyte *Buffer, ILboolean Compressed);
 ILboolean	iSavePsdInternal(void);

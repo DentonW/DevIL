@@ -18,7 +18,7 @@
 #include "il_manip.h"
 #include "il_endian.h"
 #include <stdio.h>
-ILvoid GetShiftFromMask(const ILuint Mask, ILuint * CONST_RESTRICT ShiftLeft, ILuint * CONST_RESTRICT ShiftRight);
+void GetShiftFromMask(const ILuint Mask, ILuint * CONST_RESTRICT ShiftLeft, ILuint * CONST_RESTRICT ShiftRight);
 
 //! Checks if the file specified in FileName is a valid .bmp file.
 ILboolean ilIsValidBmp(ILconst_string CONST_RESTRICT FileName)
@@ -59,7 +59,7 @@ ILboolean ilIsValidBmpF(ILHANDLE File) {
 
 
 //! Checks if Lump is a valid .bmp lump.
-ILboolean ilIsValidBmpL(const ILvoid * Lump, const ILuint Size)
+ILboolean ilIsValidBmpL(const void * Lump, const ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidBmp();
@@ -199,7 +199,7 @@ ILboolean ilLoadBmpF(ILHANDLE File) {
 
 
 //! Reads from a memory "lump" that contains a .bmp
-ILboolean ilLoadBmpL(const ILvoid *Lump, const ILuint Size)
+ILboolean ilLoadBmpL(const void *Lump, const ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadBitmapInternal();
@@ -863,7 +863,7 @@ ILboolean ilSaveBmpF(ILHANDLE File) {
 
 
 //! Writes a .bmp to a memory "lump"
-ILboolean ilSaveBmpL(ILvoid *Lump, ILuint Size)
+ILboolean ilSaveBmpL(void *Lump, ILuint Size)
 {
 	iSetOutputLump(Lump, Size);
 	return iSaveBitmapInternal();

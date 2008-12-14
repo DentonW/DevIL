@@ -53,7 +53,7 @@ ILboolean ilLoadIconF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains an icon.
-ILboolean ilLoadIconL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadIconL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadIconInternal();
@@ -402,7 +402,7 @@ ILint color_type;
 
 ILint ico_readpng_init();
 ILboolean ico_readpng_get_image(ICOIMAGE *Icon, ILdouble display_exponent);
-ILvoid ico_readpng_cleanup();
+void ico_readpng_cleanup();
 #endif
 
 ILboolean iLoadIconPNG(ICOIMAGE *Icon)
@@ -427,7 +427,7 @@ ILboolean iLoadIconPNG(ICOIMAGE *Icon)
 }
 
 #ifndef IL_NO_PNG
-static ILvoid ico_png_read(png_structp png_ptr, png_bytep data, png_size_t length)
+static void ico_png_read(png_structp png_ptr, png_bytep data, png_size_t length)
 {
 	(void)png_ptr;
 	iread(data, 1, length);
@@ -666,7 +666,7 @@ ILboolean ico_readpng_get_image(ICOIMAGE *Icon, ILdouble display_exponent)
 }
 
 
-ILvoid ico_readpng_cleanup()
+void ico_readpng_cleanup()
 {
 	if (ico_png_ptr && ico_info_ptr) {
 		png_destroy_read_struct(&ico_png_ptr, &ico_info_ptr, NULL);

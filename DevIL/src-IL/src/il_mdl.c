@@ -54,7 +54,7 @@ ILboolean ilLoadMdlF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a .Mdl
-ILboolean ilLoadMdlL(const ILvoid *Lump, ILuint Size)
+ILboolean ilLoadMdlL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadMdlInternal();

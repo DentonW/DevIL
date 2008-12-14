@@ -35,11 +35,11 @@
 
 
 // Function definitions
-ILvoid	initnet(ILubyte *thepic, ILint len, ILint sample);
-ILvoid	unbiasnet();
-ILvoid	inxbuild();
+void	initnet(ILubyte *thepic, ILint len, ILint sample);
+void	unbiasnet();
+void	inxbuild();
 ILubyte	inxsearch(ILint b, ILint g, ILint r);
-ILvoid	learn();
+void	learn();
 
 // four primes near 500 - assume no image has a length so large
 // that it is divisible by all four primes
@@ -105,7 +105,7 @@ int netsizethink; // number of colors we want to reduce to, 2-256
 // Initialise network in range (0,0,0) to (255,255,255) and set parameters
 // -----------------------------------------------------------------------
 
-ILvoid initnet(ILubyte *thepic, ILint len, ILint sample)	
+void initnet(ILubyte *thepic, ILint len, ILint sample)	
 {
 	ILint i;
 	ILint *p;
@@ -127,7 +127,7 @@ ILvoid initnet(ILubyte *thepic, ILint len, ILint sample)
 // Unbias network to give byte values 0..255 and record position i to prepare for sort
 // -----------------------------------------------------------------------------------
 
-ILvoid unbiasnet()
+void unbiasnet()
 {
 	ILint i,j;
 
@@ -143,7 +143,7 @@ ILvoid unbiasnet()
 // Insertion sort of network and building of netindex[0..255] (to do after unbias)
 // -------------------------------------------------------------------------------
 
-ILvoid inxbuild()
+void inxbuild()
 {
 	ILint i,j,smallpos,smallval;
 	ILint *p,*q;
@@ -281,7 +281,7 @@ ILint contest(ILint b, ILint g, ILint r)
 // Move neuron i towards biased (b,g,r) by factor alpha
 // ----------------------------------------------------
 
-ILvoid altersingle(ILint alpha, ILint i, ILint b, ILint g, ILint r)
+void altersingle(ILint alpha, ILint i, ILint b, ILint g, ILint r)
 {
 	ILint *n;
 
@@ -298,7 +298,7 @@ ILvoid altersingle(ILint alpha, ILint i, ILint b, ILint g, ILint r)
 // Move adjacent neurons by precomputed alpha*(1-((i-j)^2/[r]^2)) in radpower[|i-j|]
 // ---------------------------------------------------------------------------------
 
-ILvoid alterneigh(ILint rad, ILint i, ILint b, ILint g, ILint r)
+void alterneigh(ILint rad, ILint i, ILint b, ILint g, ILint r)
 {
 	ILint j,k,lo,hi,a;
 	ILint *p, *q;
@@ -337,7 +337,7 @@ ILvoid alterneigh(ILint rad, ILint i, ILint b, ILint g, ILint r)
 // Main Learning Loop
 // ------------------
 
-ILvoid learn()
+void learn()
 {
 	ILint i,j,b,g,r;
 	ILint radius,rad,alpha,step,delta,samplepixels;
