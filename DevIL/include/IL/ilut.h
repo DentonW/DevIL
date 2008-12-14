@@ -211,18 +211,18 @@ extern "C" {
 ILAPI ILboolean		ILAPIENTRY ilutDisable(ILenum Mode);
 ILAPI ILboolean		ILAPIENTRY ilutEnable(ILenum Mode);
 ILAPI ILboolean		ILAPIENTRY ilutGetBoolean(ILenum Mode);
-ILAPI void		ILAPIENTRY ilutGetBooleanv(ILenum Mode, ILboolean *Param);
+ILAPI void          ILAPIENTRY ilutGetBooleanv(ILenum Mode, ILboolean *Param);
 ILAPI ILint			ILAPIENTRY ilutGetInteger(ILenum Mode);
-ILAPI void		ILAPIENTRY ilutGetIntegerv(ILenum Mode, ILint *Param);
-ILAPI ILstring		ILAPIENTRY ilutGetString(ILenum StringName);
-ILAPI void		ILAPIENTRY ilutInit(void);
-ILAPI ILboolean		ILAPIENTRY ilutIsDisabled(ILenum Mode);
-ILAPI ILboolean		ILAPIENTRY ilutIsEnabled(ILenum Mode);
-ILAPI void		ILAPIENTRY ilutPopAttrib(void);
-ILAPI void		ILAPIENTRY ilutPushAttrib(ILuint Bits);
-ILAPI void		ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param);
+ILAPI void          ILAPIENTRY ilutGetIntegerv(ILenum Mode, ILint *Param);
+ILAPI ILstring      ILAPIENTRY ilutGetString(ILenum StringName);
+ILAPI void          ILAPIENTRY ilutInit(void);
+ILAPI ILboolean     ILAPIENTRY ilutIsDisabled(ILenum Mode);
+ILAPI ILboolean     ILAPIENTRY ilutIsEnabled(ILenum Mode);
+ILAPI void          ILAPIENTRY ilutPopAttrib(void);
+ILAPI void          ILAPIENTRY ilutPushAttrib(ILuint Bits);
+ILAPI void          ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param);
 
-ILAPI ILboolean	ILAPIENTRY ilutRenderer(ILenum Renderer);
+ILAPI ILboolean     ILAPIENTRY ilutRenderer(ILenum Renderer);
 
 
 // ImageLib Utility Toolkit's OpenGL Functions
