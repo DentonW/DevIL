@@ -8,6 +8,7 @@
 - Fixed dependency of ILUT on MSVCRT DLL.
 - Redefined ILsizei as size_t.
 - Changed allocation functions to ILsizei from ILuint.
+- Removed ILvoid, since it is now illegal in GCC 4.2.
 
 
 1.7.3

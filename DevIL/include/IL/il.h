@@ -82,7 +82,6 @@ typedef float          ILfloat;
 typedef float          ILclampf;
 typedef double         ILdouble;
 typedef double         ILclampd;
-typedef void           ILvoid;
 #include <limits.h>
 #ifdef _UNICODE
 	#ifndef _WIN32_WCE
