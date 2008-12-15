@@ -1535,6 +1535,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\il_wdp.h"
+				>
+			</File>
+			<File
 				RelativePath=".\resource.h"
 				>
 			</File>

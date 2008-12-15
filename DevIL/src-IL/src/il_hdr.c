@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2008 by Denton Woods (this file by thakis / Denton)
-// Last modified: 11/16/2008
+// Last modified: 12/14/2008
 //
 // Filename: src-IL/src/il_hdr.c
 //
@@ -206,7 +206,7 @@ ILboolean iLoadHdrInternal()
 		return IL_FALSE;
 	}
 	if (!iCheckHdr(&Header)) {
-		//iseek(-(ILint)sizeof(BMPHEAD), IL_SEEK_CUR);
+		//iseek(-(ILint)sizeof(HDRHEAD), IL_SEEK_CUR);
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
 	}

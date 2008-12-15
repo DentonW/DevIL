@@ -25,8 +25,8 @@
 // Defines
 //-----------------------------------------------------------------------------
 
-#define ILUT_VERSION_1_7_3 1
-#define ILUT_VERSION       173
+#define ILUT_VERSION_1_7_4 1
+#define ILUT_VERSION       174
 
 
 // Attribute Bits

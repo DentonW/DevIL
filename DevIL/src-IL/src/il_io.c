@@ -1341,12 +1341,12 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		}
 		#endif
 
-		#ifndef IL_NO_WDP
+		//#ifndef IL_NO_WDP
 		if (!iStrCmp(Ext, IL_TEXT("wdp")) || !iStrCmp(Ext, IL_TEXT("hdp")) ) {
 			bRet = ilLoadWdp(FileName);
 			goto finish;
 		}
-		#endif
+		//#endif
 
 		#ifndef IL_NO_XPM
 		if (!iStrCmp(Ext, IL_TEXT("xpm"))) {

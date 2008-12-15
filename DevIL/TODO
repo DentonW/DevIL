@@ -35,6 +35,8 @@ Denton:
 - Create Dev-C++/MingW/Cygwin .a files for releases?
 - Added ilSetError error codes to il_files.c.
 - DirectX 10 support
+- Does ilIsValidTga generate an unncessary IL_INVALID_EXTENSION error?
+- Should probably check for errors in iGetWdpHead and etc...
 
 
 For 1.7.0

@@ -1656,6 +1656,10 @@
 				RelativePath="..\include\il_targa.h"
 				>
 			</File>
+			<File
+				RelativePath="..\include\il_wdp.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"

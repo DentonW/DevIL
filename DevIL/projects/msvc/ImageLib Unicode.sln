@@ -1,12 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowsTest", "..\..\examples\WindowsTest\WindowsTest-vc8.vcproj", "{22B03048-FD11-4D7F-88F5-C2628F8B6777}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B46B180B-6079-4CE6-8647-A7D712774255} = {B46B180B-6079-4CE6-8647-A7D712774255}
-		{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009} = {CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IL Unicode", "..\..\src-IL\msvc\IL Unicode.vcproj", "{B46B180B-6079-4CE6-8647-A7D712774255}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ILU Unicode", "..\..\src-ILU\msvc\ILU Unicode.vcproj", "{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}"
@@ -20,6 +14,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ILUT Unicode", "..\..\src-I
 		{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009} = {CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowsTest", "..\..\examples\windows_example\WindowsTest.vcproj", "{DEA982DD-5797-4D77-A33A-367D0395612B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B46B180B-6079-4CE6-8647-A7D712774255} = {B46B180B-6079-4CE6-8647-A7D712774255}
+		{1E0FF575-39C1-4A99-820F-8397E9D1351F} = {1E0FF575-39C1-4A99-820F-8397E9D1351F}
+		{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009} = {CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -27,12 +28,6 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{22B03048-FD11-4D7F-88F5-C2628F8B6777}.Debug|Win32.ActiveCfg = Debug|Win32
-		{22B03048-FD11-4D7F-88F5-C2628F8B6777}.Debug|Win32.Build.0 = Debug|Win32
-		{22B03048-FD11-4D7F-88F5-C2628F8B6777}.Dynamic|Win32.ActiveCfg = Dynamic|Win32
-		{22B03048-FD11-4D7F-88F5-C2628F8B6777}.Dynamic|Win32.Build.0 = Dynamic|Win32
-		{22B03048-FD11-4D7F-88F5-C2628F8B6777}.Release|Win32.ActiveCfg = Release|Win32
-		{22B03048-FD11-4D7F-88F5-C2628F8B6777}.Release|Win32.Build.0 = Release|Win32
 		{B46B180B-6079-4CE6-8647-A7D712774255}.Debug|Win32.ActiveCfg = Debug|Win32
 		{B46B180B-6079-4CE6-8647-A7D712774255}.Debug|Win32.Build.0 = Debug|Win32
 		{B46B180B-6079-4CE6-8647-A7D712774255}.Dynamic|Win32.ActiveCfg = Debug|Win32
@@ -51,6 +46,12 @@ Global
 		{1E0FF575-39C1-4A99-820F-8397E9D1351F}.Dynamic|Win32.Build.0 = Debug|Win32
 		{1E0FF575-39C1-4A99-820F-8397E9D1351F}.Release|Win32.ActiveCfg = Release|Win32
 		{1E0FF575-39C1-4A99-820F-8397E9D1351F}.Release|Win32.Build.0 = Release|Win32
+		{DEA982DD-5797-4D77-A33A-367D0395612B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DEA982DD-5797-4D77-A33A-367D0395612B}.Debug|Win32.Build.0 = Debug|Win32
+		{DEA982DD-5797-4D77-A33A-367D0395612B}.Dynamic|Win32.ActiveCfg = Debug|Win32
+		{DEA982DD-5797-4D77-A33A-367D0395612B}.Dynamic|Win32.Build.0 = Debug|Win32
+		{DEA982DD-5797-4D77-A33A-367D0395612B}.Release|Win32.ActiveCfg = Release|Win32
+		{DEA982DD-5797-4D77-A33A-367D0395612B}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

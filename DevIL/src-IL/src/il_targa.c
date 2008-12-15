@@ -344,8 +344,7 @@ ILboolean iReadUnmapTga(TARGAHEAD *Header)
 	else*/
 	Bpp = (ILubyte)(Header->Bpp >> 3);
 	
-	if (!ilTexImage(Header->Width, Header->Height, 1, Bpp, 0, IL_UNSIGNED_BYTE, NULL))
-	{
+	if (!ilTexImage(Header->Width, Header->Height, 1, Bpp, 0, IL_UNSIGNED_BYTE, NULL)) {
 		return IL_FALSE;
 	}
 	
