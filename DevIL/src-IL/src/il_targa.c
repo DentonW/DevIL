@@ -143,18 +143,14 @@ ILboolean ilLoadTarga(ILconst_string FileName)
 	ILHANDLE	TargaFile;
 	ILboolean	bTarga = IL_FALSE;
 	
-printf("Test1\n");
 	TargaFile = iopenr(FileName);
 	if (TargaFile == NULL) {
-printf("Test Fail\n");
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
 		return bTarga;
 	}
-printf("Test2\n");
 
 	bTarga = ilLoadTargaF(TargaFile);
 	icloser(TargaFile);
-printf("Test3\n");
 
 	return bTarga;
 }
