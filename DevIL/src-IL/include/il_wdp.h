@@ -16,6 +16,10 @@
 
 #include "il_internal.h"
 
+
+//
+// Structures
+//
 typedef struct WDPHEAD
 {
 	ILubyte		Encoding[2];
@@ -64,11 +68,22 @@ typedef struct WDPIMGPLANE
 	ILubyte		Mantissa;
 	ILubyte		Expbias;
 	ILubyte		Flags2;
+
+	ILubyte		NumChannels;
 } WDPIMGPLANE;
+
+typedef struct WDPDCQUANT
+{
+	ILubyte		ChMode;
+	ILubyte		DcQuant;
+	ILubyte		DcQuantY;
+	ILubyte		DcQuantUV;
+	ILubyte		DcQuantChan;
+} WDPDCQUANT;
 
 
 //
-// Image header
+// Image header defines
 //
 
 // Codec and sub-codec
@@ -119,7 +134,7 @@ typedef struct WDPIMGPLANE
 
 
 //
-// Image plane header
+// Image plane header defines
 //
 
 // First set of flags
@@ -127,13 +142,25 @@ typedef struct WDPIMGPLANE
 #define WDP_NO_SCALED		0x10
 #define WDP_BANDS_PRESENT	0x0F
 
+// Defines for n-channels
+#define WDP_NUM_CHANS		0xF0
+#define WDP_COLOR_INTERP	0x0F
+
 // Second set of flags
 #define WDP_DC_FRAME		0x80
-//#define WDP_DC_QUANTIZER
+
+// Channel modes
+#define WDP_CH_UNIFORM		0x00
+#define WDP_CH_SEPARATE		0x01
+#define WDP_CH_INDEPENDENT	0x02
 
 
+//
+// Internal functions
+//
 ILboolean iIsValidWdp();
 ILboolean iCheckWdp(WDPHEAD *Header);
 ILboolean iLoadWdpInternal();
+
 
 #endif//WDP_H

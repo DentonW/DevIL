@@ -160,7 +160,8 @@ ILboolean iLoadWdpInternal()
 	ILushort	NumEntries;
 	WDPIMGHEAD	ImgHead;
 	WDPIMGPLANE	ImgPlane;
-	ILuint		TempInt, i;
+	WDPDCQUANT	DcQuant;
+	ILuint		TempInt, TempInt1, i;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -279,9 +280,30 @@ ILboolean iLoadWdpInternal()
 
 			// Read the image plane header
 			ImgPlane.Flags1 = (ILubyte)igetc();
-			if (((ImgPlane.Flags1 & WDP_CLR_FMT)>>5 == WDP_YUV_444) || ((ImgPlane.Flags1 & WDP_CLR_FMT)>>5 == WDP_N_CHANNEL)) {
+			TempInt = (ImgPlane.Flags1 & WDP_CLR_FMT)>>5;
+			if ((TempInt == WDP_YUV_444) || (TempInt == WDP_N_CHANNEL)) {
+				//@TODO: Do anything with this for YUV_444?
 				ImgPlane.Color = (ILubyte)igetc();
 			}
+
+			if (TempInt == WDP_N_CHANNEL) {
+				ImgPlane.NumChannels = ((ImgPlane.Color & WDP_NUM_CHANS) >> 4) + 1;
+			}
+			else if (TempInt == WDP_Y_ONLY) {
+				ImgPlane.NumChannels = 1;
+			}
+			else if ((TempInt == WDP_YUV_420) || (TempInt == WDP_YUV_422) || (TempInt == WDP_YUV_444)) {
+				ImgPlane.NumChannels = 3;
+			}
+			else if ((TempInt == WDP_CMYK) || (TempInt == WDP_BAYER)) {
+				ImgPlane.NumChannels = 4;
+			}
+			else {  // The above if statements have all the possible values.
+				ilSetError(IL_ILLEGAL_FILE_VALUE);
+				return IL_FALSE;
+			}
+
+
 			//@TODO: Implement
 			//if ((ImgPlane.Flags1 & WDP_CLR_FMT)>>5 == WDP_YUV_444) {
 			//	ilSetError(IL_FORMAT_NOT_SUPPORTED);
@@ -294,7 +316,7 @@ ILboolean iLoadWdpInternal()
 				return IL_FALSE;
 			}
 
-			TempInt = ImgHead.Format & 0x0F;  // Bit-depth is the lower 4 bits.
+			TempInt = ImgHead.Format & WDP_BITDEPTH;
 			//@TODO: Implement
 			if (TempInt == WDP_BD_16 || TempInt == WDP_BD_16S || TempInt == WDP_BD_32 || TempInt == WDP_BD_32S) {
 				ImgPlane.ShiftBits = (ILubyte)igetc();
@@ -313,9 +335,50 @@ ILboolean iLoadWdpInternal()
 			ImgPlane.Flags2 = (ILubyte)igetc();
 			//@TODO: Implement
 			if (ImgPlane.Flags2 & WDP_DC_FRAME) {
+				if (ImgPlane.NumChannels == 1) {
+					DcQuant.ChMode = WDP_CH_UNIFORM;
+				}
+				else {
+					DcQuant.ChMode = (ImgPlane.Flags2 & 0x60) >> 5;
+				}
+
+				if (DcQuant.ChMode == WDP_CH_UNIFORM) {
+					TempInt = igetc();
+					DcQuant.DcQuant = ((ImgPlane.Flags2 & 0x1F) << 3) + ((TempInt & 0xE0) >> 5);
+				}
+				else if (DcQuant.ChMode == WDP_CH_SEPARATE) {
+					TempInt1 = igetc();
+					TempInt = igetc();
+					DcQuant.DcQuantY = ((ImgPlane.Flags2 & 0x1F) << 3) + ((TempInt1 & 0xE0) >> 5);
+					DcQuant.DcQuantUV = ((TempInt1 & 0x1F) << 3) + ((TempInt & 0xE0) >> 5);
+				}
+				//@TODO: Implement
+				else if (DcQuant.ChMode == WDP_CH_INDEPENDENT) {
+					ilSetError(IL_FORMAT_NOT_SUPPORTED);
+					return IL_FALSE;
+				}
+				else {  // Not a valid channel mode
+					ilSetError(IL_ILLEGAL_FILE_VALUE);
+					return IL_FALSE;
+				}
+			}
+			else {
 				ilSetError(IL_FORMAT_NOT_SUPPORTED);
 				return IL_FALSE;
 			}
+
+			// Bitstream is in spatial mode.
+			if ((ImgHead.Flags[0] & WDP_BITSTREAM_FMT) == 0) {
+
+
+			}
+			// Bitstream is in frequency mode.
+			//@TODO: Implement this.
+			else {
+				ilSetError(IL_FORMAT_NOT_SUPPORTED);
+				return IL_FALSE;
+			}
+
 
 
 			if (!ilTexImage(ImgHead.Width, ImgHead.Height, 1, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL)) {
