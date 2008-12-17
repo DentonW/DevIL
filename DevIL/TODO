@@ -37,6 +37,7 @@ Denton:
 - DirectX 10 support
 - Does ilIsValidTga generate an unncessary IL_INVALID_EXTENSION error?
 - Should probably check for errors in iGetWdpHead and etc...
+- Why is IL_HALF even used in ilut_directx9.c?
 
 
 For 1.7.0

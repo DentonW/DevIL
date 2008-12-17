@@ -79,17 +79,17 @@ typedef struct IL_STATES
 	// Format-specific strings
 	//
 
-	ILstring	ilTgaId;
-	ILstring	ilTgaAuthName;
-	ILstring	ilTgaAuthComment;
-	ILstring	ilPngAuthName;
-	ILstring	ilPngTitle;
-	ILstring	ilPngDescription;
-	ILstring	ilTifDescription;
-	ILstring	ilTifHostComputer;
-	ILstring	ilTifDocumentName;
-	ILstring	ilTifAuthName;
-	ILstring	ilCHeader;
+	char*		ilTgaId;
+	char*		ilTgaAuthName;
+	char*		ilTgaAuthComment;
+	char*		ilPngAuthName;
+	char*		ilPngTitle;
+	char*		ilPngDescription;
+	char*		ilTifDescription;
+	char*		ilTifHostComputer;
+	char*		ilTifDocumentName;
+	char*		ilTifAuthName;
+	char*		ilCHeader;
 
 
 

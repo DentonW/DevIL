@@ -77,12 +77,13 @@
 #define ILUT_VENDOR      IL_VENDOR
 
 // The different rendering api's...more to be added later?
-#define ILUT_OPENGL    0
-#define ILUT_ALLEGRO   1
-#define ILUT_WIN32     2
-#define ILUT_DIRECT3D8 3
-#define	ILUT_DIRECT3D9 4
-#define ILUT_X11       5
+#define ILUT_OPENGL     0
+#define ILUT_ALLEGRO    1
+#define ILUT_WIN32      2
+#define ILUT_DIRECT3D8  3
+#define	ILUT_DIRECT3D9  4
+#define ILUT_X11        5
+#define	ILUT_DIRECT3D10 6
 
 /*
 // Includes specific config
@@ -180,12 +181,19 @@
 #endif
 
 #ifdef ILUT_USE_DIRECTX8
-//	#include <d3d8.h>
+	#include <d3d8.h>
 #endif//ILUT_USE_DIRECTX9
 
 #ifdef ILUT_USE_DIRECTX9
-//	#include <d3d9.h>
+	#include <d3d9.h>
 #endif//ILUT_USE_DIRECTX9
+
+#ifdef ILUT_USE_DIRECTX10
+	#pragma warning(push)
+	#pragma warning(disable : 4201)  // Disables 'nonstandard extension used : nameless struct/union' warning
+	#include <d3d10.h>
+	#pragma warning(pop)
+#endif//ILUT_USE_DIRECTX10
 
 #ifdef ILUT_USE_X11
 	#include <X11/Xlib.h>
@@ -311,8 +319,8 @@ ILAPI ILboolean     ILAPIENTRY ilutRenderer(ILenum Renderer);
 	#pragma warning(push)
 	#pragma warning(disable : 4115)  // Disables 'named type definition in parentheses' warning
 //	ILAPI void  ILAPIENTRY ilutD3D9MipFunc(ILuint NumLevels);
-	ILAPI struct IDirect3DTexture9*       ILAPIENTRY ilutD3D9Texture       (struct IDirect3DDevice9* Device);
-	ILAPI struct IDirect3DVolumeTexture9* ILAPIENTRY ilutD3D9VolumeTexture (struct IDirect3DDevice9* Device);
+	ILAPI struct IDirect3DTexture9*       ILAPIENTRY ilutD3D9Texture         (struct IDirect3DDevice9* Device);
+	ILAPI struct IDirect3DVolumeTexture9* ILAPIENTRY ilutD3D9VolumeTexture   (struct IDirect3DDevice9* Device);
     ILAPI struct IDirect3DCubeTexture9*       ILAPIENTRY ilutD3D9CubeTexture (struct IDirect3DDevice9* Device);
 
     ILAPI ILboolean ILAPIENTRY ilutD3D9CubeTexFromFile(struct IDirect3DDevice9 *Device, ILconst_string FileName, struct IDirect3DCubeTexture9 **Texture);
@@ -327,12 +335,21 @@ ILAPI ILboolean     ILAPIENTRY ilutRenderer(ILenum Renderer);
 	ILAPI ILboolean	ILAPIENTRY ilutD3D9TexFromFileHandle(struct IDirect3DDevice9 *Device, ILHANDLE File, struct IDirect3DTexture9 **Texture);
 	ILAPI ILboolean	ILAPIENTRY ilutD3D9VolTexFromFileHandle(struct IDirect3DDevice9 *Device, ILHANDLE File, struct IDirect3DVolumeTexture9 **Texture);
 
-	// These two are not tested yet.
+	// These three are not tested yet.
 	ILAPI ILboolean ILAPIENTRY ilutD3D9TexFromResource(struct IDirect3DDevice9 *Device, HMODULE SrcModule, ILconst_string SrcResource, struct IDirect3DTexture9 **Texture);
 	ILAPI ILboolean ILAPIENTRY ilutD3D9VolTexFromResource(struct IDirect3DDevice9 *Device, HMODULE SrcModule, ILconst_string SrcResource, struct IDirect3DVolumeTexture9 **Texture);
 	ILAPI ILboolean ILAPIENTRY ilutD3D9LoadSurface(struct IDirect3DDevice9 *Device, struct IDirect3DSurface9 *Surface);
 	#pragma warning(pop)
 #endif//ILUT_USE_DIRECTX9
+
+#ifdef ILUT_USE_DIRECTX10
+	ILAPI ID3D10Texture2D* ILAPIENTRY ilutD3D10Texture(ID3D10Device *Device);
+	ILAPI ILboolean ILAPIENTRY ilutD3D10TexFromFile(ID3D10Device *Device, ILconst_string FileName, ID3D10Texture2D **Texture);
+	ILAPI ILboolean ILAPIENTRY ilutD3D10TexFromFileInMemory(ID3D10Device *Device, void *Lump, ILuint Size, ID3D10Texture2D **Texture);
+	ILAPI ILboolean ILAPIENTRY ilutD3D10TexFromResource(ID3D10Device *Device, HMODULE SrcModule, ILconst_string SrcResource, ID3D10Texture2D **Texture);
+	ILAPI ILboolean ILAPIENTRY ilutD3D10TexFromFileHandle(ID3D10Device *Device, ILHANDLE File, ID3D10Texture2D **Texture);
+#endif//ILUT_USE_DIRECTX10
+
 
 
 #ifdef ILUT_USE_X11

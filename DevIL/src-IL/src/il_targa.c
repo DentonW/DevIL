@@ -750,10 +750,10 @@ ILboolean iSaveTargaInternal()
 	// Write the extension area.
 	ExtOffset = itellw();
 	SaveLittleUShort(495);	// Number of bytes in the extension area (TGA 2.0 spec)
-	iwrite(AuthName, 1, ilStrLen(AuthName));
-	ipad(41 - ilStrLen(AuthName));
-	iwrite(AuthComment, 1, ilStrLen(AuthComment));
-	ipad(324 - ilStrLen(AuthComment));
+	iwrite(AuthName, 1, strlen(AuthName));
+	ipad(41 - strlen(AuthName));
+	iwrite(AuthComment, 1, strlen(AuthComment));
+	ipad(324 - strlen(AuthComment));
 	ifree(AuthName);
 	ifree(AuthComment);
 	

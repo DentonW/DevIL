@@ -18,12 +18,12 @@
 #define MAX_LINE_WIDTH 14
 
 //! Generates a C-style header file for the current image.
-ILboolean ilSaveCHeader(ILconst_string FileName, ILconst_string InternalName)
+ILboolean ilSaveCHeader(ILconst_string FileName, char *InternalName)
 {
-	FILE			*HeadFile;
-	ILuint			i = 0, j;
-	ILimage			*TempImage;
-	ILconst_string	Name;
+	FILE		*HeadFile;
+	ILuint		i = 0, j;
+	ILimage		*TempImage;
+	const char	*Name;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -35,7 +35,7 @@ ILboolean ilSaveCHeader(ILconst_string FileName, ILconst_string InternalName)
 		Name = InternalName;
 
 	if (FileName == NULL || Name == NULL ||
-		ilStrLen(FileName) < 1 || ilStrLen(Name) < 1) {
+		ilStrLen(FileName) < 1 || strlen(Name) < 1) {
 		ilSetError(IL_INVALID_VALUE);
 		return IL_FALSE;
 	}

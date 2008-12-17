@@ -204,6 +204,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\ilut_directx10.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\ilut_directx9.c"
 				>
 			</File>

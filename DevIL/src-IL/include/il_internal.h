@@ -181,7 +181,7 @@ ILboolean	ilFixImage(void);
 ILboolean	ilRemoveAlpha(void);
 ILboolean	ilSwapColours(void);
 // Miscellaneous functions
-ILconst_string iGetString(ILenum StringName);  // Internal version of ilGetString
+char*		iGetString(ILenum StringName);  // Internal version of ilGetString
 // Library usage
 #if _MSC_VER && !_WIN32_WCE
 	#ifndef IL_NO_JPG
@@ -238,7 +238,7 @@ ILboolean ilLoadBmpL(const void *Lump, const ILuint Size);
 ILboolean ilSaveBmp(ILconst_string FileName);
 ILboolean ilSaveBmpF(ILHANDLE File);
 ILboolean ilSaveBmpL(void *Lump, ILuint Size);
-ILboolean ilSaveCHeader(ILconst_string FileName, ILconst_string InternalName);
+ILboolean ilSaveCHeader(ILconst_string FileName, char *InternalName);
 ILboolean ilLoadCut(ILconst_string FileName);
 ILboolean ilLoadCutF(ILHANDLE File);
 ILboolean ilLoadCutL(const void *Lump, ILuint Size);

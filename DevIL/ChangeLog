@@ -9,7 +9,9 @@
 - Redefined ILsizei as size_t.
 - Changed allocation functions to ILsizei from ILuint.
 - Removed ILvoid, since it is now illegal in GCC 4.2.
-
+- Started rewriting Windows HD Photo support from scratch.
+- Started DirectX 10 code.
+- Changed ilSaveCHeader's second argument to char*. 
 
 1.7.3
 ---

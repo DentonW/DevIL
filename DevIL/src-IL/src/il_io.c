@@ -1390,7 +1390,7 @@ ILboolean ILAPIENTRY ilSave(ILenum Type, ILstring FileName)
 
 		#ifndef IL_NO_CHEAD
 		case IL_CHEAD:
-			return ilSaveCHeader(FileName, IL_TEXT("IL_IMAGE"));
+			return ilSaveCHeader(FileName, "IL_IMAGE");
 		#endif
 
 		#ifndef IL_NO_DDS
@@ -1668,7 +1668,7 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 
 	#ifndef IL_NO_CHEAD
 	if (!iStrCmp(Ext, IL_TEXT("h"))) {
-		bRet = ilSaveCHeader(FileName, IL_TEXT("IL_IMAGE"));
+		bRet = ilSaveCHeader(FileName, "IL_IMAGE");
 		goto finish;
 	}
 	#endif

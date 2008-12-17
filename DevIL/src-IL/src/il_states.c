@@ -139,22 +139,22 @@ ILstring ILAPIENTRY ilGetString(ILenum StringName)
 
 
 // Clips a string to a certain length and returns a new string.
-ILstring iClipString(ILstring String, ILuint MaxLen)
+char *iClipString(char *String, ILuint MaxLen)
 {
-	ILstring Clipped;
+	char	*Clipped;
 	ILuint	Length;
 
 	if (String == NULL)
 		return NULL;
 
-	Length = ilStrLen(String);
+	Length = strlen(String);  //ilStrLen(String);
 
-	Clipped = (ILstring)ialloc((MaxLen + 1) * sizeof(ILchar));  // Terminating NULL makes it +1.
+	Clipped = (char*)ialloc((MaxLen + 1) * sizeof(char) /*sizeof(ILchar)*/);  // Terminating NULL makes it +1.
 	if (Clipped == NULL) {
 		return NULL;
 	}
 
-	memcpy(Clipped, String, MaxLen * sizeof(ILchar));
+	memcpy(Clipped, String, MaxLen * sizeof(char) /*sizeof(ILchar)*/);
 	Clipped[Length] = 0;
 
 	return Clipped;
@@ -162,7 +162,7 @@ ILstring iClipString(ILstring String, ILuint MaxLen)
 
 
 // Returns format-specific strings, truncated to MaxLen (not counting the terminating NULL).
-ILconst_string iGetString(ILenum StringName)
+char *iGetString(ILenum StringName)
 {
 	switch (StringName)
 	{
@@ -768,20 +768,20 @@ void ILAPIENTRY ilPushAttrib(ILuint Bits)
 		if (ilStates[ilCurrentPos].ilCHeader)
 			ifree(ilStates[ilCurrentPos].ilCHeader);
 
-		ilStates[ilCurrentPos].ilTgaId = ilStrDup(ilStates[ilCurrentPos-1].ilTgaId);
-		ilStates[ilCurrentPos].ilTgaAuthName = ilStrDup(ilStates[ilCurrentPos-1].ilTgaAuthName);
-		ilStates[ilCurrentPos].ilTgaAuthComment = ilStrDup(ilStates[ilCurrentPos-1].ilTgaAuthComment);
-		ilStates[ilCurrentPos].ilPngAuthName = ilStrDup(ilStates[ilCurrentPos-1].ilPngAuthName);
-		ilStates[ilCurrentPos].ilPngTitle = ilStrDup(ilStates[ilCurrentPos-1].ilPngTitle);
-		ilStates[ilCurrentPos].ilPngDescription = ilStrDup(ilStates[ilCurrentPos-1].ilPngDescription);
+		ilStates[ilCurrentPos].ilTgaId = strdup(ilStates[ilCurrentPos-1].ilTgaId);
+		ilStates[ilCurrentPos].ilTgaAuthName = strdup(ilStates[ilCurrentPos-1].ilTgaAuthName);
+		ilStates[ilCurrentPos].ilTgaAuthComment = strdup(ilStates[ilCurrentPos-1].ilTgaAuthComment);
+		ilStates[ilCurrentPos].ilPngAuthName = strdup(ilStates[ilCurrentPos-1].ilPngAuthName);
+		ilStates[ilCurrentPos].ilPngTitle = strdup(ilStates[ilCurrentPos-1].ilPngTitle);
+		ilStates[ilCurrentPos].ilPngDescription = strdup(ilStates[ilCurrentPos-1].ilPngDescription);
 
 		//2003-09-01: added tif strings
-		ilStates[ilCurrentPos].ilTifDescription = ilStrDup(ilStates[ilCurrentPos-1].ilTifDescription);
-		ilStates[ilCurrentPos].ilTifHostComputer = ilStrDup(ilStates[ilCurrentPos-1].ilTifHostComputer);
-		ilStates[ilCurrentPos].ilTifDocumentName = ilStrDup(ilStates[ilCurrentPos-1].ilTifDocumentName);
-		ilStates[ilCurrentPos].ilTifAuthName = ilStrDup(ilStates[ilCurrentPos-1].ilTifAuthName);
+		ilStates[ilCurrentPos].ilTifDescription = strdup(ilStates[ilCurrentPos-1].ilTifDescription);
+		ilStates[ilCurrentPos].ilTifHostComputer = strdup(ilStates[ilCurrentPos-1].ilTifHostComputer);
+		ilStates[ilCurrentPos].ilTifDocumentName = strdup(ilStates[ilCurrentPos-1].ilTifDocumentName);
+		ilStates[ilCurrentPos].ilTifAuthName = strdup(ilStates[ilCurrentPos-1].ilTifAuthName);
 
-		ilStates[ilCurrentPos].ilCHeader = ilStrDup(ilStates[ilCurrentPos-1].ilCHeader);
+		ilStates[ilCurrentPos].ilCHeader = strdup(ilStates[ilCurrentPos-1].ilCHeader);
 	}
 
 	return;
@@ -884,60 +884,60 @@ void ILAPIENTRY ilSetString(ILenum Mode, const char *String)
 		case IL_TGA_ID_STRING:
 			if (ilStates[ilCurrentPos].ilTgaId)
 				ifree(ilStates[ilCurrentPos].ilTgaId);
-			ilStates[ilCurrentPos].ilTgaId = ilStrDup(String);
+			ilStates[ilCurrentPos].ilTgaId = strdup(String);
 			break;
 		case IL_TGA_AUTHNAME_STRING:
 			if (ilStates[ilCurrentPos].ilTgaAuthName)
 				ifree(ilStates[ilCurrentPos].ilTgaAuthName);
-			ilStates[ilCurrentPos].ilTgaAuthName = ilStrDup(String);
+			ilStates[ilCurrentPos].ilTgaAuthName = strdup(String);
 			break;
 		case IL_TGA_AUTHCOMMENT_STRING:
 			if (ilStates[ilCurrentPos].ilTgaAuthComment)
 				ifree(ilStates[ilCurrentPos].ilTgaAuthComment);
-			ilStates[ilCurrentPos].ilTgaAuthComment = ilStrDup(String);
+			ilStates[ilCurrentPos].ilTgaAuthComment = strdup(String);
 			break;
 		case IL_PNG_AUTHNAME_STRING:
 			if (ilStates[ilCurrentPos].ilPngAuthName)
 				ifree(ilStates[ilCurrentPos].ilPngAuthName);
-			ilStates[ilCurrentPos].ilPngAuthName = ilStrDup(String);
+			ilStates[ilCurrentPos].ilPngAuthName = strdup(String);
 			break;
 		case IL_PNG_TITLE_STRING:
 			if (ilStates[ilCurrentPos].ilPngTitle)
 				ifree(ilStates[ilCurrentPos].ilPngTitle);
-			ilStates[ilCurrentPos].ilPngTitle = ilStrDup(String);
+			ilStates[ilCurrentPos].ilPngTitle = strdup(String);
 			break;
 		case IL_PNG_DESCRIPTION_STRING:
 			if (ilStates[ilCurrentPos].ilPngDescription)
 				ifree(ilStates[ilCurrentPos].ilPngDescription);
-			ilStates[ilCurrentPos].ilPngDescription = ilStrDup(String);
+			ilStates[ilCurrentPos].ilPngDescription = strdup(String);
 			break;
 
 		//2003-09-01: added tif strings
 		case IL_TIF_DESCRIPTION_STRING:
 			if (ilStates[ilCurrentPos].ilTifDescription)
 				ifree(ilStates[ilCurrentPos].ilTifDescription);
-			ilStates[ilCurrentPos].ilTifDescription = ilStrDup(String);
+			ilStates[ilCurrentPos].ilTifDescription = strdup(String);
 			break;
 		case IL_TIF_HOSTCOMPUTER_STRING:
 			if (ilStates[ilCurrentPos].ilTifHostComputer)
 				ifree(ilStates[ilCurrentPos].ilTifHostComputer);
-			ilStates[ilCurrentPos].ilTifHostComputer = ilStrDup(String);
+			ilStates[ilCurrentPos].ilTifHostComputer = strdup(String);
 			break;
 		case IL_TIF_DOCUMENTNAME_STRING:
 						if (ilStates[ilCurrentPos].ilTifDocumentName)
 				ifree(ilStates[ilCurrentPos].ilTifDocumentName);
-			ilStates[ilCurrentPos].ilTifDocumentName = ilStrDup(String);
+			ilStates[ilCurrentPos].ilTifDocumentName = strdup(String);
 			break;
 		case IL_TIF_AUTHNAME_STRING:
 			if (ilStates[ilCurrentPos].ilTifAuthName)
 				ifree(ilStates[ilCurrentPos].ilTifAuthName);
-			ilStates[ilCurrentPos].ilTifAuthName = ilStrDup(String);
+			ilStates[ilCurrentPos].ilTifAuthName = strdup(String);
 			break;
 
 		case IL_CHEAD_HEADER_STRING:
 			if (ilStates[ilCurrentPos].ilCHeader)
 				ifree(ilStates[ilCurrentPos].ilCHeader);
-			ilStates[ilCurrentPos].ilCHeader = ilStrDup(String);
+			ilStates[ilCurrentPos].ilCHeader = strdup(String);
 			break;
 
 

@@ -87,6 +87,10 @@ void	ilutDefaultStates(void);
 	ILboolean ilutD3D9Init();
 #endif
 
+#ifdef ILUT_USE_DIRECTX10
+	ILboolean ilutD3D10Init();
+#endif
+
 #define CUBEMAP_SIDES 6
 #ifndef SAFE_RELEASE
 #define SAFE_RELEASE(p) {if((p)!=NULL){(p)->lpVtbl->Release(p);(p)=NULL;}}

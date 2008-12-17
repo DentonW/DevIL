@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 12/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2008 by Denton Woods
+// Last modified: 12/17/2008
 //
 // Filename: src-IL/src/il_stack.c
 //
@@ -593,7 +593,7 @@ ILAPI void ILAPIENTRY iBindImageTemp()
 		if (!iEnlargeStack())
 			return;
 
-	if (LastUsed <2 )
+	if (LastUsed < 2)
 		LastUsed = 2;
 	CurName = 1;
 	ParentImage = IL_TRUE;

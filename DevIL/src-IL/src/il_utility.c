@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2008 by Denton Woods
+// Last modified: 12/17/2008
 //
 // Filename: src-IL/src/il_utility.c
 //
@@ -15,7 +15,8 @@
 
 
 // Returns the bpp of any Format
-ILAPI ILubyte ILAPIENTRY ilGetBppFormat(ILenum Format) {
+ILAPI ILubyte ILAPIENTRY ilGetBppFormat(ILenum Format)
+{
 	switch (Format) {
 		case IL_COLOUR_INDEX:
 		case IL_LUMINANCE:
@@ -34,8 +35,10 @@ ILAPI ILubyte ILAPIENTRY ilGetBppFormat(ILenum Format) {
 
 
 // Returns the format of any bpp
-ILAPI ILenum ILAPIENTRY ilGetFormatBpp(ILubyte Bpp) {
-	switch (Bpp) {
+ILAPI ILenum ILAPIENTRY ilGetFormatBpp(ILubyte Bpp)
+{
+	switch (Bpp)
+	{
 		case 1:
 			return IL_LUMINANCE;
 		case 2:
@@ -50,8 +53,10 @@ ILAPI ILenum ILAPIENTRY ilGetFormatBpp(ILubyte Bpp) {
 
 
 // Returns the bpc of any Type
-ILAPI ILubyte ILAPIENTRY ilGetBpcType(ILenum Type) {
-	switch (Type) {
+ILAPI ILubyte ILAPIENTRY ilGetBpcType(ILenum Type)
+{
+	switch (Type)
+	{
 		case IL_BYTE:
 		case IL_UNSIGNED_BYTE:
 			return 1;
@@ -71,8 +76,10 @@ ILAPI ILubyte ILAPIENTRY ilGetBpcType(ILenum Type) {
 
 
 // Returns the type matching a bpc
-ILAPI ILenum ILAPIENTRY ilGetTypeBpc(ILubyte Bpc) {
-	switch (Bpc) {
+ILAPI ILenum ILAPIENTRY ilGetTypeBpc(ILubyte Bpc)
+{
+	switch (Bpc)
+	{
 		case 1:
 			return IL_UNSIGNED_BYTE;
 		case 2:
@@ -87,8 +94,10 @@ ILAPI ILenum ILAPIENTRY ilGetTypeBpc(ILubyte Bpc) {
 
 
 // Returns the bpp of any palette type (PalType)
-ILAPI ILubyte ILAPIENTRY ilGetBppPal(ILenum PalType) {
-	switch (PalType) {
+ILAPI ILubyte ILAPIENTRY ilGetBppPal(ILenum PalType)
+{
+	switch (PalType)
+	{
 		case IL_PAL_RGB24:
 		case IL_PAL_BGR24:
 			return 3;
@@ -102,8 +111,10 @@ ILAPI ILubyte ILAPIENTRY ilGetBppPal(ILenum PalType) {
 }
 
 // Returns the base format of a palette type (PalType)
-ILAPI ILenum ILAPIENTRY ilGetPalBaseType(ILenum PalType) {
-	switch (PalType) {
+ILAPI ILenum ILAPIENTRY ilGetPalBaseType(ILenum PalType)
+{
+	switch (PalType)
+	{
 		case IL_PAL_RGB24:
 			return IL_RGB;
 		case IL_PAL_RGB32:
@@ -123,7 +134,8 @@ ILAPI ILenum ILAPIENTRY ilGetPalBaseType(ILenum PalType) {
 
 
 // Returns the next power of 2 if Num isn't 2^n or returns Num if Num is 2^n
-ILAPI ILuint ILAPIENTRY ilNextPower2(ILuint n) {	
+ILAPI ILuint ILAPIENTRY ilNextPower2(ILuint n)
+{	
 	ILuint power = 1;
 	while( power < n ) {
 		power <<= 1;
@@ -131,7 +143,8 @@ ILAPI ILuint ILAPIENTRY ilNextPower2(ILuint n) {
 	return power;
 }
 
-ILAPI void ILAPIENTRY iMemSwap( ILubyte *s1, ILubyte *s2, const ILuint size ) {
+ILAPI void ILAPIENTRY iMemSwap(ILubyte *s1, ILubyte *s2, const ILuint size)
+{
 	const ILuint block_size = 4096;
 	const ILuint blocks = size/block_size;
 	ILuint i;
@@ -152,4 +165,5 @@ ILAPI void ILAPIENTRY iMemSwap( ILubyte *s1, ILubyte *s2, const ILuint size ) {
 		memcpy(s2,block,i);
 	}
 	ifree(block);
+	return;
 }
