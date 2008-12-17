@@ -20,8 +20,11 @@ AC_CONFIG_MACRO_DIR([m4])
 dnl Where to put various auxiliary files
 AC_CONFIG_AUX_DIR([build-aux])
 dnl Libtool init with message that we want to build DLLs
-LT_INIT([win32-dll])
-LT_PROG_RC
+dnl LT_INIT([win32-dll])
+dnl LT_PROG_RC
+dnl THE ABOVE IS LIBTOOL INIT IS THE GOOD ONE, BUT MAYBE TOO UP-TO-DATE
+AC_PROG_LIBTOOL
+AC_LIBTOOL_WIN32_DLL
 dnl Automake init with all warnings reported
 AM_INIT_AUTOMAKE([-Wall])
 
@@ -78,7 +81,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION([$Revision: 1.41 $])
+AC_REVISION([$Revision: 1.42 $])
 dnl AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
 dnl AC_LANG([C++])

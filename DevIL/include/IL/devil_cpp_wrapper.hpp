@@ -196,7 +196,7 @@ private:
 ilImage::ilImage()
 {
 	this->Id = 0;
-	//this->iStartUp();
+	this->iStartUp(); // This was commented out, but it needs to be somewhere...
 	this->iGenBind();
 	return;
 }
@@ -205,7 +205,8 @@ ilImage::ilImage()
 ilImage::ilImage(char *FileName)
 {
 	this->Id = 0;
-	//this->iStartUp();
+	this->iStartUp(); // This was commented out, but it needs to be somewhere...
+
 	this->iGenBind();
 	ilLoadImage(FileName);
 	return;

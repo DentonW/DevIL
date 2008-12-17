@@ -4,9 +4,11 @@ devildir = @datadir@/devil
 examplesdir = $(devildir)/examples
 
 if BUILD_MONOLITHIC
+#il_library = ../lib/libDevIL.la # just not needed now
 ilu_library = ../lib/libDevIL.la
 ilut_library = ../lib/libDevIL.la
 else #NOT BUILD_MONOLITHIC
+#il_library = ../lib/libIL.la # just not needed now
 ilu_library = ../lib/libILU.la
 ilut_library = ../lib/libILUT.la
 endif #BUILD_MONOLITHIC
@@ -15,6 +17,8 @@ EXTRA_DIST =
 examples_PROGRAMS =
 
 if BUILD_ILUT
+
+examples_PROGRAMS += ILUT_cpp_wrapper 
 
 if USE_ALLEGRO
 examples_PROGRAMS += ILUT_allegro
@@ -42,7 +46,7 @@ endif #BUILD_ILUT
 
 if BUILD_ILU
 
-examples_PROGRAMS += ILU_overwrite ILU_read ILU_simple
+examples_PROGRAMS += ILU_overwrite ILU_read ILU_simple 
 
 endif #BUILD_ILU
 
@@ -57,10 +61,13 @@ ILUT_sdl_LDFLAGS = $(ilut_library)
 ILUT_animation_SOURCES = animation_example/AnimTest.cpp animation_example/resource.h animation_example/AnimTest.rc
 #ILUT_animation_CFLAGS =
 ILUT_animation_LDFLAGS = $(ilut_library)
-EXTRA_DIST += animation_example/resources/OpenIL.ico
+EXTRA_DIST += animation_example/OpenIL.ico
 
 ILUT_d3d_SOURCES = direct3d_example/d3dtest.cpp
 ILUT_d3d_LDFLAGS = $(ilut_library)
+
+ILUT_cpp_wrapper_SOURCES = cpp_wrapper_example/il_wrap.cpp
+ILUT_cpp_wrapper_LDFLAGS = $(ilut_library) 
 
 ILU_overwrite_SOURCES = file_overwrite_example/iotest.c
 ILU_overwrite_LDFLAGS = $(ilu_library)
@@ -77,7 +84,7 @@ ILU_simple_LDFLAGS = $(ilu_library)
 ILUT_volume_SOURCES = volume_example/3dtest.h volume_example/3dtest.c
 ILUT_volume_LDFLAGS = $(ilut_library)
 
-ILUT_windows_SOURCES = windows_example/BatchConv.cpp windows_example/IL_windows.cpp windows_example/resource.h windows_example/IL_windows.rc
+ILUT_windows_SOURCES = windows_example/BatchConv.cpp windows_example/WindowsTest.cpp windows_example/WindowsTest.h windows_example/resource.h windows_example/WindowsTest.rc
 ILUT_windows_LDFLAGS =  $(ilut_library)
 EXTRA_DIST += windows_example/resources/OpenIL.ico
 
