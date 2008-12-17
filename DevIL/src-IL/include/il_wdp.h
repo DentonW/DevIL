@@ -81,6 +81,11 @@ typedef struct WDPDCQUANT
 	ILubyte		DcQuantChan;
 } WDPDCQUANT;
 
+typedef struct WDPTILE
+{
+	ILuint		StartCode;
+	ILubyte		HashAndType;
+} WDPTILE;
 
 //
 // Image header defines
@@ -154,13 +159,30 @@ typedef struct WDPDCQUANT
 #define WDP_CH_SEPARATE		0x01
 #define WDP_CH_INDEPENDENT	0x02
 
+// Tile types
+#define WDP_TILE_HASH		0xF8
+#define WDP_TILE_TYPE		0x03
+#define WDP_SPATIAL_TILE	0x00
+#define WDP_DC_TILE			0x01
+#define WDP_LOWPASS_TILE	0x02
+#define WDP_HIGHPASS_TILE	0x03
+#define WDP_FLEXBITS_TILE	0x04
+
+// Bands present
+#define WDP_SB_ALL			0x00
+#define WDP_SB_NO_FLEXBITS	0x01
+#define WDP_SB_NO_HIGHPASS	0x02
+#define WDP_SB_DC_ONLY		0x03
+#define WDP_SB_ISOLATED		0x04
+
 
 //
 // Internal functions
 //
-ILboolean iIsValidWdp();
-ILboolean iCheckWdp(WDPHEAD *Header);
-ILboolean iLoadWdpInternal();
+ILboolean	iIsValidWdp();
+ILboolean	iCheckWdp(WDPHEAD *Header);
+ILboolean	iLoadWdpInternal();
+ILuint		VLWESC();
 
 
 #endif//WDP_H

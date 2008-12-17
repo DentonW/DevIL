@@ -12,7 +12,7 @@
 
 
 #include "il_internal.h"
-#ifndef IL_NO_WDP
+//#ifndef IL_NO_WDP
 #include "il_wdp.h"
 
 
@@ -161,6 +161,7 @@ ILboolean iLoadWdpInternal()
 	WDPIMGHEAD	ImgHead;
 	WDPIMGPLANE	ImgPlane;
 	WDPDCQUANT	DcQuant;
+	WDPTILE		Tile;
 	ILuint		TempInt, TempInt1, i;
 
 	if (iCurImage == NULL) {
@@ -369,8 +370,25 @@ ILboolean iLoadWdpInternal()
 
 			// Bitstream is in spatial mode.
 			if ((ImgHead.Flags[0] & WDP_BITSTREAM_FMT) == 0) {
+//@TODO: Find out what exactly these are.
+				iseek(6, IL_SEEK_CUR);
+				Tile.StartCode = (igetc() << 16) + (igetc() << 8) + igetc();
+				UInt(&Tile.StartCode);
+				Tile.HashAndType = igetc();
 
+				if (Tile.StartCode != 1 && (Tile.HashAndType & WDP_TILE_TYPE) != WDP_FLEXBITS_TILE) {  // Invalid tile
+					ilSetError(IL_ILLEGAL_FILE_VALUE);
+					return IL_FALSE;
+				}
 
+				//@TODO: Implement
+				if (ImgHead.Flags[1] & WDP_TRIM_FLEXBITS) {
+					ilSetError(IL_FORMAT_NOT_SUPPORTED);
+					return IL_FALSE;
+				}
+
+				// Here's where TILE_SPATIAL goes.
+				//ImgPlane.Flags1 & WDP_BANDS_PRESENT  // No need to shift, since lower.
 			}
 			// Bitstream is in frequency mode.
 			//@TODO: Implement this.
@@ -398,4 +416,31 @@ ILboolean iLoadWdpInternal()
 	return IL_TRUE;
 }
 
-#endif//IL_NO_WDP
+
+ILuint VLWESC()
+{
+	ILubyte	First, Second;
+	ILuint	Value;
+
+	First = (ILubyte)igetc();
+	if (First < 0xfb) {
+		Second = (ILubyte)igetc();
+		Value = First * 256 + Second;
+	}
+	else if (First == 0x0fb) {
+		Value = GetBigUInt();
+	}
+    //else if (First == 0x0fc) {
+    //    EIGHT_BYTES
+    //    Value = EIGHT_BYTES
+    //}
+	else { // FIRST_BYTE == 0xfd||0xfe||0xff 
+		Value = 0; // Escape Mode
+	}
+
+	return Value;
+}
+
+
+
+//#endif//IL_NO_WDP

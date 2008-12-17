@@ -55,6 +55,7 @@ ilutGLSaveImage
 ilutGLScreen
 ilutGLScreenie
 ilutGLSetTex
+ilutGLSubTex
 ilutGLTexImage
 ilutPopAttrib
 ilutPushAttrib
