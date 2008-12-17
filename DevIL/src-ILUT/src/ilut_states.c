@@ -389,6 +389,11 @@ ILboolean ILAPIENTRY ilutRenderer(ILenum Renderer)
         	return ilutD3D9Init();
         #endif
 		
+		#ifdef ILUT_USE_DIRECTX10
+        case ILUT_DIRECT3D10:
+        	return ilutD3D10Init();
+        #endif
+
 		default:
 			ilSetError(ILUT_NOT_SUPPORTED);
 	}
