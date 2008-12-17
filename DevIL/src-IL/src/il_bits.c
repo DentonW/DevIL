@@ -147,6 +147,36 @@ ILint bread(void *Buffer, ILuint Size, ILuint Number, BITFILE *BitFile)
 }
 
 
+// Reads bits and puts the first bit in the file as the highest in the return value.
+ILuint breadVal(ILuint NumBits, BITFILE *BitFile)
+{
+	ILuint	BuffPos = 0;
+	ILuint	Buffer = 0;
+
+	// Only returning up to 32 bits at one time
+	if (NumBits > 32) {
+		ilSetError(IL_INTERNAL_ERROR);
+		return 0;
+	}
+
+	while (BuffPos < NumBits) {
+		Buffer <<= 1;
+		if (BitFile->ByteBitOff < 0 || BitFile->ByteBitOff > 7) {
+			BitFile->ByteBitOff = 7;
+			if (iread(&BitFile->Buff, 1, 1) != 1)  // Reached eof or error...
+				return BuffPos;
+		}
+
+		Buffer = Buffer + (ILubyte)!!(BitFile->Buff & (1 << BitFile->ByteBitOff));
+
+		BuffPos++;
+		BitFile->ByteBitOff--;
+	}
+
+	return BuffPos;
+}
+
+
 // Not implemented yet.
 /*ILint bwrite(void *Buffer, ILuint Size, ILuint Number, BITFILE *BitFile)
 {
