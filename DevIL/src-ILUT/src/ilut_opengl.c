@@ -580,7 +580,7 @@ ILboolean ILAPIENTRY ilutGLScreen()
 ILboolean ILAPIENTRY ilutGLScreenie()
 {
 	FILE		*File;
-	char		Buff[255];
+	ILchar		Buff[255];
 	ILuint		i, CurName;
 	ILboolean	ReturnVal = IL_TRUE;
 
@@ -588,8 +588,19 @@ ILboolean ILAPIENTRY ilutGLScreenie()
 
 	// Could go above 128 easily...
 	for (i = 0; i < 128; i++) {
+#ifndef _UNICODE
 		sprintf(Buff, "screen%d.tga", i);
 		File = fopen(Buff, "rb");
+#else
+		swprintf(Buff, 128, L"screen%d.tga", i);
+		// Windows has a different function, _wfopen, to open UTF16 files,
+		//  whereas Linux just uses fopen.
+		#ifdef _WIN32
+			File = _wfopen(Buff, L"rb");
+		#else
+			File = fopen((char*)Buff, "rb");
+		#endif
+#endif
 		if (!File)
 			break;
 		fclose(File);

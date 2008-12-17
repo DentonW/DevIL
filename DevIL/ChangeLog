@@ -11,7 +11,9 @@
 - Removed ILvoid, since it is now illegal in GCC 4.2.
 - Started rewriting Windows HD Photo support from scratch.
 - Started DirectX 10 code.
-- Changed ilSaveCHeader's second argument to char*. 
+- Changed ilSaveCHeader's second argument to char*.
+- Changed ilutGLScreenie to use Unicode if needed.
+- Fixed various Unicode problems with ilSetString.
 
 1.7.3
 ---
