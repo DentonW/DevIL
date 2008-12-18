@@ -58,6 +58,7 @@
 
 #undef ILUT_USE_DIRECTX8
 #define ILUT_USE_DIRECTX9
+//#define ILUT_USE_DIRECTX10
 #define ILUT_USE_OPENGL
 #undef ILUT_USE_SDL
 #define ILUT_USE_WIN32
@@ -115,7 +116,7 @@
 #define STDC_HEADERS 1
 
 /* Version number of package */
-//#define IL_VERSION "1.7.3"
+//#define IL_VERSION "1.7.4"
 
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */

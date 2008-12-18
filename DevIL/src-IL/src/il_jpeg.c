@@ -415,10 +415,6 @@ devil_jpeg_write_init(j_compress_ptr cinfo)
 	dest->pub.empty_output_buffer = empty_output_buffer;
 	dest->pub.term_destination = term_destination;
 
-	// Sets progressive saving here
-	if (ilGetBoolean(IL_JPG_PROGRESSIVE))
-		jpeg_simple_progression(cinfo);
-
 	return;
 }
 
@@ -542,7 +538,11 @@ ILboolean iSaveJpegInternal()
 	JpegInfo.write_JFIF_header = TRUE;
 //#endif//IL_USE_JPEGLIB_UNMODIFIED
 
+	// Set the quality output
 	jpeg_set_quality(&JpegInfo, iGetInt(IL_JPG_QUALITY), IL_TRUE);
+	// Sets progressive saving here
+	if (ilGetBoolean(IL_JPG_PROGRESSIVE))
+		jpeg_simple_progression(&JpegInfo);
 
 	jpeg_start_compress(&JpegInfo, IL_TRUE);
 

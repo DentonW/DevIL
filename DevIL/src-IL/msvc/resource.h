@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by IL Unicode.rc
+// Used by IL.rc
 //
 #define SW_HIDE                         0
 #define HIDE_WINDOW                     0
@@ -1479,8 +1479,8 @@
 #define SPVERSION_MASK                  0x0000FF00
 #define HTERROR                         -2
 #define IDC_STATIC                      -1
-#define PWR_FAIL                        -1
 #define UNICODE_NOCHAR                  0xFFFF
+#define PWR_FAIL                        -1
 #define HTTRANSPARENT                   -1
 
 // Next default values for new objects
