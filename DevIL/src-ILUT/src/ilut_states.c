@@ -18,8 +18,8 @@
 //#endif
 
 
-const char *_ilutVendor		= IL_TEXT("Abysmal Software");
-const char *_ilutVersion	= IL_TEXT("Developer's Image Library Utility Toolkit (ILUT) 1.7.4 " IL_TEXT(__DATE__);
+ILstring _ilutVendor	= IL_TEXT("Abysmal Software");
+ILstring _ilutVersion	= IL_TEXT("Developer's Image Library Utility Toolkit (ILUT) 1.7.4 " IL_TEXT(__DATE__));
 
 
 
