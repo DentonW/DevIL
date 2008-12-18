@@ -21,9 +21,6 @@
 extern "C" {
 #endif
 
-// Compiling Options
-#define IL_INLINE_ASM
-
 //this define controls if floats and doubles are clampled to [0..1]
 //during conversion. It takes a little more time, but it is the correct
 //way of doing this. If you are sure your floats are always valid,
