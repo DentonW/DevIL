@@ -81,7 +81,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION([$Revision: 1.42 $])
+AC_REVISION([$Revision: 1.43 $])
 dnl AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
 dnl AC_LANG([C++])
@@ -183,7 +183,11 @@ AS_IF([test "x$enable_asm" = "xyes"],
        TEST_ASM([powerpc*],
                 [PPC_ASM],
                 [GCC_PCC_ASM],
-                [ppc]) ])
+                [ppc]) 
+	AS_IF([test -n "$SUPPORTED_EXTENSION"],
+	      [AC_DEFINE([IL_INLINE_ASM],
+			 [1],
+			 [Define if you can support at least some ASM]) ]) ])
 
 dnl
 dnl Test warning build options
@@ -300,6 +304,9 @@ AM_CONDITIONAL([USE_DIRECTX],
 
 AM_CONDITIONAL([USE_OPENGL],
                [test "x$use_ogl" = "xyes"])
+
+AM_CONDITIONAL([HAVE_GLUT],
+	       [test "x$have_glut" = "xyes"])
 
 AM_CONDITIONAL([USE_SDL],
                [test "x$use_sdl" = "xyes"])

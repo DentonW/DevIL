@@ -50,9 +50,12 @@ AC_DEFUN([SETTLE_OPENGL],
                 [AX_CHECK_GL
                  AX_CHECK_GLU
                  AX_CHECK_GLUT
-                 AS_IF([test "x$no_gl" != "xyes" -a "x$no_glu" != "xyes" -a "x$no_glut" != "xyes"],
+                 AS_IF([test "x$no_gl" != "xyes" -a "x$no_glu" != "xyes"],
                        [use_ogl="yes"
-		        ILUT_LIBS="$GLUT_LIBS $GLU_LIBS $GL_LIBS $ILUT_LIBS" 
+		        ILUT_LIBS="$GLU_LIBS $GL_LIBS $ILUT_LIBS" 
+                        AS_IF([test "x$no_glut" != "xyes"],
+                              [have_glut="yes"
+                               ILUT_LIBS="$GLUT_LIBS  $ILUT_LIBS"])
                         AC_DEFINE([ILUT_USE_OPENGL],
 	                          [1],
 	                          [Define if system supports OpenGL API])

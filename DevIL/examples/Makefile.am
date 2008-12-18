@@ -36,17 +36,17 @@ if USE_W32
 examples_PROGRAMS += ILUT_animation
 endif #USE_W32
 
-if USE_OPENGL
+if HAVE_GLUT
 if USE_X11
 examples_PROGRAMS += ILUT_gl ILUT_volume
 endif #USE_X11
-endif #USE_OPENGL
+endif #HAVE_GLUT
 
 endif #BUILD_ILUT
 
 if BUILD_ILU
 
-examples_PROGRAMS += ILU_overwrite ILU_read ILU_simple 
+examples_PROGRAMS += ILU_override ILU_read ILU_simple 
 
 endif #BUILD_ILU
 
@@ -69,8 +69,8 @@ ILUT_d3d_LDFLAGS = $(ilut_library)
 ILUT_cpp_wrapper_SOURCES = cpp_wrapper_example/il_wrap.cpp
 ILUT_cpp_wrapper_LDFLAGS = $(ilut_library) 
 
-ILU_overwrite_SOURCES = file_overwrite_example/iotest.c
-ILU_overwrite_LDFLAGS = $(ilu_library)
+ILU_override_SOURCES = override_example/iotest.c
+ILU_override_LDFLAGS = $(ilu_library)
 
 ILUT_gl_SOURCES = opengl_example/gltest.c opengl_example/gltest.h
 ILUT_gl_LDFLAGS = $(ilut_library)
