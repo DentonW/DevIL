@@ -14,6 +14,7 @@
 - Changed ilutGLScreenie to use Unicode if needed.
 - Fixed various Unicode problems with ilSetString.
 - Added progressive saving of .jpg with IL_JPG_PROGRESSIVE flag.
+- Added more to the Fortran wrapper.
 
 1.7.3
 ---

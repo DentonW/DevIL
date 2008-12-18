@@ -18,7 +18,6 @@ Denton:
 - Fix Daniel's suggestions.
 - Possibly readd VC6 projects?
 - Enable descriptive error strings in IL.
-- Progressive saving of JPG.
 - Lib EXIF support
 - FITS support
 - APNG support
@@ -38,6 +37,8 @@ Denton:
 - Does ilIsValidTga generate an unncessary IL_INVALID_EXTENSION error?
 - Should probably check for errors in iGetWdpHead and etc...
 - Why is IL_HALF even used in ilut_directx9.c?
+- ilGetAlpha returns malloc'ed memory that cannot be freed by the caller.
+- Give estimates for buffer sizes for ilSaveL.
 
 
 For 1.7.0

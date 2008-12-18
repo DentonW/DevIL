@@ -101,14 +101,164 @@ void ilFConvertPal_(int *RetVal, int *DestFormat)
 void ilFCopyImage_(int *RetVal, int *Src)
 {
 	*RetVal = ilCopyImage(*Src);
+	return;
 }
 
 void ilFCopyPixels_(int *RetVal, int *XOff, int *YOff, int *ZOff, int *Width, int *Height, int *Depth, int *Format, int *Type, void *Data)
 {
 	*RetVal = ilCopyPixels(*XOff, *YOff, *ZOff, *Width, *Height, *Depth, *Format, *Type, Data);
+	return;
 }
 
 void ilFCreateSubImage_(int *RetVal, int *Type, int *Num)
 {
 	*RetVal = ilCreateSubImage(*Type, *Num);
+	return;
+}
+
+void ilFDefaultImage_(int *RetVal)
+{
+	*RetVal = ilDefaultImage();
+	return;
+}
+
+void ilFDeleteImage_(int *Num)
+{
+	ilDeleteImage(*Num);
+	return;
+}
+
+// Not sure how to do the arrays properly.
+//void ilFDeleteImages_(int *Num, int **Images)
+//{
+//	ilDeleteImages(*Num, *Images);
+//}
+
+void ilFDisable_(int *RetVal, int *Mode)
+{
+	*RetVal = ilDisable(*Mode);
+	return;
+}
+
+void ilFEnable_(int *RetVal, int *Mode)
+{
+	*RetVal = ilEnable(*Mode);
+	return;
+}
+
+void ilFFormatFunc_(int *RetVal, int *Mode)
+{
+	*RetVal = ilFormatFunc(*Mode);
+	return;
+}
+
+// Not sure how to do the arrays properly.
+//void ilFGenImages_(int *Num, int **Images)
+//{
+//	ilGenImages(*Num, *Images);
+//}
+
+void ilFGenImage_(int *RetVal)
+{
+	*RetVal = ilGenImage();
+	return;
+}
+
+//void ilFGetAlpha_(
+
+void ilFGetBoolean_(int *RetVal, int *Mode)
+{
+	*RetVal = ilGetBoolean(*Mode);
+	return;
+}
+
+void ilFGetBooleanv_(int *Mode, int *Param)
+{
+	ilGetBooleanv(*Mode, Param);
+	return;
+}
+
+void ilFGetData_(char *RetVal)
+{
+	RetVal = ilGetData();
+	return;
+}
+
+// ilGetDXTCData
+
+void ilFGetError_(int *RetVal)
+{
+	*RetVal = ilGetError();
+	return;
+}
+
+void ilFGetInteger_(int *RetVal, int *Mode)
+{
+	*RetVal = ilGetInteger(*Mode);
+	return;
+}
+
+void ilFGetIntegerv_(int *Mode, int *Param)
+{
+	ilGetIntegerv(*Mode, Param);
+	return;
+}
+
+void ilFGetLumpPos_(int *RetVal)
+{
+	*RetVal = ilGetLumpPos();
+	return;
+}
+
+void ilFGetPalette_(char *RetVal)
+{
+	RetVal = ilGetPalette();
+	return;
+}
+
+//ilGetString
+
+void ilFInit_()
+{
+	ilInit();
+	return;
+}
+
+void ilFShutDown_()
+{
+	ilShutDown();
+	return;
+}
+
+void ilFLoadImage_(int *RetVal, struct descriptor *Desc)
+{
+	char *Filename = malloc(Desc->length + 1);
+	strncpy(Filename, Desc->string_ptr, Desc->length);
+	Filename[Desc->length] = 0;  // Should really be NULL...getting a warning, though.
+	*RetVal = ilLoadImage(Filename);
+
+	free(Filename);
+	return;
+}
+
+void ilFSave_(int *RetVal, int *Type, struct descriptor *Desc)
+{
+	char *Filename = malloc(Desc->length + 1);
+	strncpy(Filename, Desc->string_ptr, Desc->length);
+	Filename[Desc->length] = 0;  // Should really be NULL...getting a warning, though.
+	*RetVal = ilSave(*Type, Filename);
+
+	free(Filename);
+	return;
+}
+
+void ilFSaveImage_(int *RetVal, struct descriptor *Desc)
+{
+	char *Filename = malloc(Desc->length + 1);
+	strncpy(Filename, Desc->string_ptr, Desc->length);
+	Filename[Desc->length] = 0;  // Should really be NULL...getting a warning, though.
+	*RetVal = ilSaveImage(Filename);
+
+	free(Filename);
+	return;
 }
