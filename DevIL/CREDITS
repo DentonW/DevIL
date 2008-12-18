@@ -225,7 +225,7 @@ Meloni Dario
 
 Erick Tryzelaar
 
-Matej Tyc for fixing configure.ac.
+Matej Tyc for completely redoing the Linux makefile system and rewriting the documentation.
 
 Matevz Tadel for fixing makefile for Scientific Linux.
 

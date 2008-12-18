@@ -8,7 +8,7 @@ Denton:
 - Add ilIsValid* for .icns and .jp2 (and more?)
 - Get MNG support working again.
 - Better static lib support in MSVC++ 8/9
-- Commenting out lines 729-731 in pngread.c of libpng will allow reading of certain malformed Vista PNG-compressed .ico files with extra data at the end of the stream.  An example can be found in test/in and was created using Microangelo.
+- Commenting out lines 729-731 in pngread.c of libpng (1.2.9?) will allow reading of certain malformed Vista PNG-compressed .ico files with extra data at the end of the stream.  An example can be found in test/in and was created using Microangelo.
 - Linking against debug OpenEXR in release DevIL will crash and vice-versa.
 - Add .hdr saving.
 - Add .ico/.icns saving.
@@ -34,7 +34,7 @@ Denton:
 - Figure out how to properly do 8-bit -> 16-bit conversions.
 - Create Dev-C++/MingW/Cygwin .a files for releases?
 - Added ilSetError error codes to il_files.c.
-- DirectX 10 support
+- Better DirectX 10 support
 - Does ilIsValidTga generate an unncessary IL_INVALID_EXTENSION error?
 - Should probably check for errors in iGetWdpHead and etc...
 - Why is IL_HALF even used in ilut_directx9.c?

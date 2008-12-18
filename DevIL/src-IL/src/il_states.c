@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 11/07/2008
+// Last modified: 12/17/2008
 //
 // Filename: src-IL/src/il_states.c
 //
@@ -58,6 +58,7 @@ void ilDefaultStates()
 	ilStates[ilCurrentPos].ilBmpRle = IL_FALSE;
 	ilStates[ilCurrentPos].ilSgiRle = IL_FALSE;
 	ilStates[ilCurrentPos].ilJpgFormat = IL_JFIF;
+	ilStates[ilCurrentPos].ilJpgProgressive = IL_FALSE;
 	ilStates[ilCurrentPos].ilDxtcFormat = IL_DXT1;
 	ilStates[ilCurrentPos].ilPcdPicNum = 2;
 	ilStates[ilCurrentPos].ilPngAlphaIndex = -1;
@@ -240,6 +241,8 @@ ILboolean ilAble(ILenum Mode, ILboolean Flag)
 		case IL_SAVE_INTERLACED:
 			ilStates[ilCurrentPos].ilInterlace = Flag;
 			break;
+		case IL_JPG_PROGRESSIVE:
+			ilStates[ilCurrentPos].ilJpgProgressive = Flag;
 
 		default:
 			ilSetError(IL_INVALID_ENUM);
@@ -271,6 +274,8 @@ ILboolean ILAPIENTRY ilIsEnabled(ILenum Mode)
 			return ilStates[ilCurrentPos].ilUseKeyColour;
 		case IL_SAVE_INTERLACED:
 			return ilStates[ilCurrentPos].ilInterlace;
+		case IL_JPG_PROGRESSIVE:
+			return ilStates[ilCurrentPos].ilJpgProgressive;
 
 		default:
 			ilSetError(IL_INVALID_ENUM);
@@ -465,6 +470,9 @@ void ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param) {
 		case IL_USE_KEY_COLOUR:
 			*Param = ilStates[ilCurrentPos].ilUseKeyColour;
 			break;
+		case IL_JPG_PROGRESSIVE:
+			*Param = ilStates[ilCurrentPos].ilJpgProgressive;
+			break;
 
 		default:
             iGetIntegervImage(iCurImage, Mode, Param);
@@ -567,8 +575,7 @@ void ILAPIENTRY iGetIntegervImage(ILimage *Image, ILenum Mode, ILint *Param) {
              *Param = ilGetBppPal(Image->Pal.PalType);
              break;
         case IL_PALETTE_NUM_COLS:
-             if (!Image->Pal.Palette || !Image->Pal.PalSize || Image->Pal.PalType ==
-IL_PAL_NONE)
+             if (!Image->Pal.Palette || !Image->Pal.PalSize || Image->Pal.PalType == IL_PAL_NONE)
                   *Param = 0;
              else
                   *Param = Image->Pal.PalSize / ilGetBppPal(Image->Pal.PalType);
@@ -940,12 +947,9 @@ void ILAPIENTRY ilSetString(ILenum Mode, const char *String)
 			ilStates[ilCurrentPos].ilCHeader = strdup(String);
 			break;
 
-
-
 		default:
 			ilSetError(IL_INVALID_ENUM);
 	}
-
 
 	return;
 }

@@ -1,6 +1,5 @@
 1.7.4
 ---
-
 - Added German translations of error codes in ILU.
 - Added ilutGLSubTex back to ilut.h.
 - Added 64-bit Windows configurations to projects.
@@ -14,10 +13,10 @@
 - Changed ilSaveCHeader's second argument to char*.
 - Changed ilutGLScreenie to use Unicode if needed.
 - Fixed various Unicode problems with ilSetString.
+- Added progressive saving of .jpg with IL_JPG_PROGRESSIVE flag.
 
 1.7.3
 ---
-
 - ilGenImage now returns ILuint instead of ILint.
 - Added pkgconfig devil.pc.
 - Applied bugfixes from Richard Sims (mainly .psd).

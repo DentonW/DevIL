@@ -2,7 +2,7 @@
 //
 // ImageLib Utility Toolkit Sources
 // Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 12/14/2008
+// Last modified: 12/17/2008
 //
 // Filename: src-ILUT/src/ilut_states.c
 //
@@ -18,8 +18,8 @@
 //#endif
 
 
-const char *_ilutVendor		= "Abysmal Software";
-const char *_ilutVersion	= "Developer's Image Library Utility Toolkit (ILUT) 1.7.4 " __DATE__;
+const char *_ilutVendor		= IL_TEXT("Abysmal Software");
+const char *_ilutVersion	= IL_TEXT("Developer's Image Library Utility Toolkit (ILUT) 1.7.4 " IL_TEXT(__DATE__);
 
 
 
