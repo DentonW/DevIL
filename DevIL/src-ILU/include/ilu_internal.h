@@ -34,7 +34,7 @@
 #define _ILU_BUILD_LIBRARY
 
 #ifdef HAVE_CONFIG_H
-#include <IL/config.h>
+#include <config.h>
 #endif
 
 #include <IL/ilu.h>

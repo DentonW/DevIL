@@ -24,7 +24,7 @@
 #define HAVE_CONFIG_H
 #endif
 #ifdef HAVE_CONFIG_H
-#include <IL/config.h>
+#include <config.h>
 #endif
 
 #include <string.h>
