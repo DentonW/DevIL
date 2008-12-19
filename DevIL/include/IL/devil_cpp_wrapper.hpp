@@ -27,21 +27,21 @@ public:
 	ILboolean	ActiveLayer(ILuint);
 	ILboolean	ActiveMipmap(ILuint);
 	ILboolean	Clear(void);
-	ILvoid		ClearColour(ILclampf, ILclampf, ILclampf, ILclampf);
+	void		ClearColour(ILclampf, ILclampf, ILclampf, ILclampf);
 	ILboolean	Convert(ILenum);
 	ILboolean	Copy(ILuint);
 	ILboolean	Default(void);
 	ILboolean	Flip(void);
 	ILboolean	SwapColours(void);
 	ILboolean	Resize(ILuint, ILuint, ILuint);
-	ILboolean	TexImage(ILuint, ILuint, ILuint, ILubyte, ILenum, ILenum, ILvoid*);
+	ILboolean	TexImage(ILuint, ILuint, ILuint, ILubyte, ILenum, ILenum, void*);
 	
 	// Image handling
-	ILvoid		Bind(void) const;
-	ILvoid		Bind(ILuint);
-	ILvoid		Close(void) { this->Delete(); }
-	ILvoid		Delete(void);
-	ILvoid		iGenBind();
+	void		Bind(void) const;
+	void		Bind(ILuint);
+	void		Close(void) { this->Delete(); }
+	void		Delete(void);
+	void		iGenBind();
 	ILenum		PaletteAlphaIndex();
 
 	// Image characteristics
@@ -72,7 +72,7 @@ protected:
 	ILuint		Id;
 
 private:
-	ILvoid		iStartUp();
+	void		iStartUp();
 };
 
 
@@ -101,7 +101,7 @@ public:
 class ilOgl
 {
 public:
-	static ILvoid		Init(void);
+	static void		Init(void);
 	static GLuint		BindTex(ilImage &);
 	static ILboolean	Upload(ilImage &, ILuint);
 	static GLuint		Mipmap(ilImage &);
@@ -115,7 +115,7 @@ public:
 class ilAlleg
 {
 public:
-	static ILvoid	Init(void);
+	static void	Init(void);
 	static BITMAP	*Convert(ilImage &);
 };
 #endif//ILUT_USE_ALLEGRO
@@ -125,10 +125,10 @@ public:
 class ilWin32
 {
 public:
-	static ILvoid		Init(void);
+	static void		Init(void);
 	static HBITMAP		Convert(ilImage &);
 	static ILboolean	GetClipboard(ilImage &);
-	static ILvoid		GetInfo(ilImage &, BITMAPINFO *Info);
+	static void		GetInfo(ilImage &, BITMAPINFO *Info);
 	static ILubyte		*GetPadData(ilImage &);
 	static HPALETTE		GetPal(ilImage &);
 	static ILboolean	GetResource(ilImage &, HINSTANCE hInst, ILint ID, char *ResourceType);
@@ -143,7 +143,7 @@ class ilValidate
 public:
 	static ILboolean	Valid(ILenum, char *);
 	static ILboolean	Valid(ILenum, FILE *);
-	static ILboolean	Valid(ILenum, ILvoid *, ILuint);
+	static ILboolean	Valid(ILenum, void *, ILuint);
 
 protected:
 
@@ -156,16 +156,16 @@ class ilState
 public:
 	static ILboolean		Disable(ILenum);
 	static ILboolean		Enable(ILenum);
-	static ILvoid			Get(ILenum, ILboolean &);
-	static ILvoid			Get(ILenum, ILint &);
+	static void			Get(ILenum, ILboolean &);
+	static void			Get(ILenum, ILint &);
 	static ILboolean		GetBool(ILenum);
 	static ILint			GetInt(ILenum);
 	static const char		*GetString(ILenum);
 	static ILboolean		IsDisabled(ILenum);
 	static ILboolean		IsEnabled(ILenum);
 	static ILboolean		Origin(ILenum);
-	static ILvoid			Pop(void);
-	static ILvoid			Push(ILuint);
+	static void			Pop(void);
+	static void			Push(ILuint);
 
 protected:
 
@@ -177,8 +177,8 @@ private:
 class ilError
 {
 public:
-	static ILvoid		Check(ILvoid (*Callback)(const char*));
-	static ILvoid		Check(ILvoid (*Callback)(ILenum));
+	static void		Check(void (*Callback)(const char*));
+	static void		Check(void (*Callback)(ILenum));
 	static ILenum		Get(void);
 	static const char	*String(void);
 	static const char	*String(ILenum);
@@ -304,7 +304,7 @@ ILboolean ilImage::Clear()
 }
 
 
-ILvoid ilImage::ClearColour(ILclampf Red, ILclampf Green, ILclampf Blue, ILclampf Alpha)
+void ilImage::ClearColour(ILclampf Red, ILclampf Green, ILclampf Blue, ILclampf Alpha)
 {
 	ilClearColour(Red, Green, Blue, Alpha);
 	return;
@@ -371,7 +371,7 @@ ILboolean ilImage::Resize(ILuint Width, ILuint Height, ILuint Depth)
 }
 
 
-ILboolean ilImage::TexImage(ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, ILvoid *Data)
+ILboolean ilImage::TexImage(ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, void *Data)
 {
 	if (this->Id) {
 		this->Bind();
@@ -385,7 +385,7 @@ ILboolean ilImage::TexImage(ILuint Width, ILuint Height, ILuint Depth, ILubyte B
 //
 // Image handling
 //
-ILvoid ilImage::Bind() const
+void ilImage::Bind() const
 {
 	if (this->Id)
 		ilBindImage(this->Id);
@@ -393,7 +393,7 @@ ILvoid ilImage::Bind() const
 }
 
 // Note:  Behaviour may be changed!
-ILvoid ilImage::Bind(ILuint Image)
+void ilImage::Bind(ILuint Image)
 {
 	if (this->Id == Image)
 		return;
@@ -404,7 +404,7 @@ ILvoid ilImage::Bind(ILuint Image)
 }
 
 
-ILvoid ilImage::Delete()
+void ilImage::Delete()
 {
 	if (this->Id == 0)
 		return;
@@ -557,7 +557,7 @@ ILubyte* ilImage::GetPalette()
 //
 // Private members
 //
-ILvoid ilImage::iStartUp()
+void ilImage::iStartUp()
 {
 	ilInit();
 	iluInit();
@@ -565,7 +565,7 @@ ILvoid ilImage::iStartUp()
 	return;
 }
 
-ILvoid ilImage::iGenBind()
+void ilImage::iGenBind()
 {
 	if (this->Id == 0) {
 		ilGenImages(1, &this->Id);
@@ -706,7 +706,7 @@ ILboolean ilFilters::Sharpen(ilImage &Image, ILfloat Factor, ILuint Iter)
 // ILOPENGL
 //
 #ifdef ILUT_USE_OPENGL
-ILvoid ilOgl::Init()
+void ilOgl::Init()
 {
 	ilutRenderer(ILUT_OPENGL);
 	return;
@@ -748,7 +748,7 @@ ILboolean ilOgl::Screenie()
 // ILALLEGRO
 //
 #ifdef ILUT_USE_ALLEGRO
-ILvoid ilAlleg::Init()
+void ilAlleg::Init()
 {
 	ilutRenderer(IL_ALLEGRO);
 	return;
@@ -765,7 +765,7 @@ BITMAP *ilAlleg::Convert(ilImage &Image, PALETTE Pal)
 // ILWIN32
 //
 #ifdef ILUT_USE_WIN32
-ILvoid ilWin32::Init()
+void ilWin32::Init()
 {
 	ilutRenderer(ILUT_WIN32);
 	return;
@@ -783,7 +783,7 @@ ILboolean ilWin32::GetClipboard(ilImage &Image)
 	return ilutGetWinClipboard();
 }
 
-ILvoid ilWin32::GetInfo(ilImage &Image, BITMAPINFO *Info)
+void ilWin32::GetInfo(ilImage &Image, BITMAPINFO *Info)
 {
 	Image.Bind();
 	ilutGetBmpInfo(Info);
@@ -834,7 +834,7 @@ ILboolean ilValidate::Valid(ILenum Type, FILE *File)
 	return ilIsValidF(Type, File);
 }
 
-ILboolean ilValidate::Valid(ILenum Type, ILvoid *Lump, ILuint Size)
+ILboolean ilValidate::Valid(ILenum Type, void *Lump, ILuint Size)
 {
 	return ilIsValidL(Type, Lump, Size);
 }
@@ -852,13 +852,13 @@ ILboolean ilState::Enable(ILenum State)
 	return ilEnable(State);
 }
 
-ILvoid ilState::Get(ILenum Mode, ILboolean &Param)
+void ilState::Get(ILenum Mode, ILboolean &Param)
 {
 	ilGetBooleanv(Mode, &Param);
 	return;
 }
 
-ILvoid ilState::Get(ILenum Mode, ILint &Param)
+void ilState::Get(ILenum Mode, ILint &Param)
 {
 	ilGetIntegerv(Mode, &Param);
 	return;
@@ -894,13 +894,13 @@ ILboolean ilState::Origin(ILenum Mode)
 	return ilOriginFunc(Mode);
 }
 
-ILvoid ilState::Pop()
+void ilState::Pop()
 {
 	ilPopAttrib();
 	return;
 }
 
-ILvoid ilState::Push(ILuint Bits = IL_ALL_ATTRIB_BITS)
+void ilState::Push(ILuint Bits = IL_ALL_ATTRIB_BITS)
 {
 	ilPushAttrib(Bits);
 	return;
@@ -909,7 +909,7 @@ ILvoid ilState::Push(ILuint Bits = IL_ALL_ATTRIB_BITS)
 //
 // ILERROR
 //
-ILvoid ilError::Check(ILvoid (*Callback)(const char*))
+void ilError::Check(void (*Callback)(const char*))
 {
 	static ILenum Error;
 
@@ -920,7 +920,7 @@ ILvoid ilError::Check(ILvoid (*Callback)(const char*))
 	return;
 }
 
-ILvoid ilError::Check(ILvoid (*Callback)(ILenum))
+void ilError::Check(void (*Callback)(ILenum))
 {
 	static ILenum Error;
 

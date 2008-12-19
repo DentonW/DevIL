@@ -10,6 +10,8 @@ endif #BUILD_EXAMPLES
 #DIST_SUBDIRS = src-IL src-ILU src-ILUT include
 EXTRA_DIST = README.unix README.win Libraries.txt CREDITS MSVC++.txt configure.bat README.macosx
 
+DISTCHECK_CONFIGURE_FLAGS = --enable-ILU --enable-ILUT --with-examples
+
 #dist-hook:
 # cp -Rf "cpp wrapper" $(distdir)
 # cp -Rf "examples" $(distdir)

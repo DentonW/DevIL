@@ -1,7 +1,8 @@
-AM_CPPFLAGS = -I ../include/
-
+all_include = $(srcdir)/../include
 devildir = @datadir@/devil
 examplesdir = $(devildir)/examples
+
+AM_CPPFLAGS = -I $(all_include)
 
 if BUILD_MONOLITHIC
 #il_library = ../lib/libDevIL.la # just not needed now

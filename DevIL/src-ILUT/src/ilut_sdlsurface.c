@@ -23,7 +23,7 @@
 int isBigEndian;
 int rmask, gmask, bmask, amask;
 
-ILvoid InitSDL()
+void InitSDL()
 {
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 	isBigEndian = 1;

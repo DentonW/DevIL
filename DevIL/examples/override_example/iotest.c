@@ -23,7 +23,7 @@ ILHANDLE ILAPIENTRY iOpenRead(const char *FileName)
 	return (ILHANDLE)fopen(FileName, "rb");
 }
 
-ILvoid ILAPIENTRY iCloseRead(ILHANDLE Handle)
+void ILAPIENTRY iCloseRead(ILHANDLE Handle)
 {
 	fclose((FILE*)Handle);
 	return;
@@ -34,7 +34,7 @@ ILHANDLE ILAPIENTRY iOpenWrite(const char *FileName)
 	return (ILHANDLE)fopen(FileName, "wb");
 }
 
-ILvoid ILAPIENTRY iCloseWrite(ILHANDLE Handle)
+void ILAPIENTRY iCloseWrite(ILHANDLE Handle)
 {
 	fclose((FILE*)Handle);
 	return;
@@ -55,12 +55,12 @@ ILint ILAPIENTRY iPutc(ILubyte Char, ILHANDLE Handle)
 	return fputc(Char, (FILE*)Handle);
 }
 
-ILint ILAPIENTRY iRead(ILvoid *Buffer, ILuint Size, ILuint Number, ILHANDLE Handle)
+ILint ILAPIENTRY iRead(void *Buffer, ILuint Size, ILuint Number, ILHANDLE Handle)
 {
 	return fread(Buffer, Size, Number, (FILE*)Handle);
 }
 
-ILint ILAPIENTRY iWrite(const ILvoid *Buffer, ILuint Size, ILuint Number, ILHANDLE Handle)
+ILint ILAPIENTRY iWrite(const void *Buffer, ILuint Size, ILuint Number, ILHANDLE Handle)
 {
 	return fwrite(Buffer, Size, Number, (FILE*)Handle);
 }
