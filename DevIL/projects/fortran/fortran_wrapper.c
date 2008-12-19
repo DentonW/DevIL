@@ -4,7 +4,7 @@
 
 // NOTE!
 //  The biggest problem about using DevIL from Fortran is the
-//  fact that Fortran does arrays in colum-major format.
+//  fact that Fortran does arrays in column-major format.
 //  This wrapper does no conversions between the two!
 //
 //  We are using DevIL return values as the first parameter.
