@@ -15,6 +15,8 @@
 - Fixed various Unicode problems with ilSetString.
 - Added progressive saving of .jpg with IL_JPG_PROGRESSIVE flag.
 - Added more to the Fortran wrapper.
+- Fixed TIF loading/saving (#define LZW_SUPPORT not enabled in libtiff).
+- Changed MSVC++ to use MSVCRT libraries again.
 
 1.7.3
 ---

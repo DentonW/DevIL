@@ -16,7 +16,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\..\..\..\extlibs\lib"
+			OutputDirectory=".\..\..\..\extlibs\lib\debug"
 			IntermediateDirectory="Debug\libjpeg"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
@@ -68,7 +68,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/$(ProjectName).lib"
+				OutputFile="$(OutDir)/libjpeg-d.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool

@@ -17,7 +17,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\..\..\..\extlibs\lib"
+			OutputDirectory=".\..\..\..\extlibs\lib\debug"
 			IntermediateDirectory="Debug\zlib"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
@@ -66,7 +66,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/$(ProjectName)_DBG.lib"
+				OutputFile="$(OutDir)/zlib-d.lib"
 				SuppressStartupBanner="true"
 				ModuleDefinitionFile=""
 			/>
