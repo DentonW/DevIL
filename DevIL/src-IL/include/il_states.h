@@ -46,6 +46,8 @@ typedef struct IL_STATES
 	ILboolean	ilDefaultOnFail;
 	// Key colour states
 	ILboolean	ilUseKeyColour;
+	// Alpha blend states
+	ILboolean	ilBlitBlend;
 	// Compression states
 	ILenum		ilCompression;
 	// Interlace states

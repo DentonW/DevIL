@@ -48,6 +48,7 @@ void ilDefaultStates()
 	ilStates[ilCurrentPos].ilAutoConvPal = IL_FALSE;
 	ilStates[ilCurrentPos].ilDefaultOnFail = IL_FALSE;
 	ilStates[ilCurrentPos].ilUseKeyColour = IL_FALSE;
+	ilStates[ilCurrentPos].ilBlitBlend = IL_TRUE;
 	ilStates[ilCurrentPos].ilCompression = IL_COMPRESS_ZLIB;
 	ilStates[ilCurrentPos].ilInterlace = IL_FALSE;
 
@@ -238,6 +239,9 @@ ILboolean ilAble(ILenum Mode, ILboolean Flag)
 		case IL_USE_KEY_COLOUR:
 			ilStates[ilCurrentPos].ilUseKeyColour = Flag;
 			break;
+		case IL_BLIT_BLEND:
+			ilStates[ilCurrentPos].ilBlitBlend = Flag;
+			break;
 		case IL_SAVE_INTERLACED:
 			ilStates[ilCurrentPos].ilInterlace = Flag;
 			break;
@@ -272,6 +276,8 @@ ILboolean ILAPIENTRY ilIsEnabled(ILenum Mode)
 			return ilStates[ilCurrentPos].ilDefaultOnFail;
 		case IL_USE_KEY_COLOUR:
 			return ilStates[ilCurrentPos].ilUseKeyColour;
+		case IL_BLIT_BLEND:
+			return ilStates[ilCurrentPos].ilBlitBlend;
 		case IL_SAVE_INTERLACED:
 			return ilStates[ilCurrentPos].ilInterlace;
 		case IL_JPG_PROGRESSIVE:
@@ -469,6 +475,9 @@ void ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param) {
 			break;
 		case IL_USE_KEY_COLOUR:
 			*Param = ilStates[ilCurrentPos].ilUseKeyColour;
+			break;
+		case IL_BLIT_BLEND:
+			*Param = ilStates[ilCurrentPos].ilBlitBlend;
 			break;
 		case IL_JPG_PROGRESSIVE:
 			*Param = ilStates[ilCurrentPos].ilJpgProgressive;

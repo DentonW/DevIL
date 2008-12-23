@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 12/17/2008
+// Last modified: 12/23/2008
 //
 // Filename: IL/il.h
 //
@@ -269,9 +269,10 @@ typedef double         ILclampd;
 #define IL_DEFAULT_ON_FAIL	0x0632
 
 
-// Key colour definitions
+// Key colour and alpha definitions
 #define IL_USE_KEY_COLOUR	0x0635
 #define IL_USE_KEY_COLOR	0x0635
+#define IL_BLIT_BLEND		0x0636
 
 
 // Interlace definitions

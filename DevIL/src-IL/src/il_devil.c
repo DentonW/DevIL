@@ -609,108 +609,15 @@ ILAPI ILboolean ILAPIENTRY ilClearImage_(ILimage *Image)
 //! Overlays the image found in Src on top of the current bound image at the coords specified.
 ILboolean ILAPIENTRY ilOverlayImage(ILuint Source, ILint XCoord, ILint YCoord, ILint ZCoord)
 {
-	ILuint		x, y, z, SrcIndex, DestIndex, ConvBps, ConvSizePlane;
-	ILint		c;
-	ILimage 	*Dest;//, *Src;
-	ILubyte 	*Converted;
-	ILuint		DestName = ilGetCurName();
-	ILfloat 	FrontPer, BackPer;
-	ILenum		DestOrigin, SrcOrigin;
-	ILuint		StartX, StartY, StartZ, AlphaOff;
-	ILubyte 	*SrcTemp = NULL;
-	ILboolean	DestFlipped = IL_FALSE;
-		
-		
-	if (DestName == 0 || iCurImage == NULL) {
-			ilSetError(IL_ILLEGAL_OPERATION);
-			return IL_FALSE;
-	}
-		
-	if (iCurImage->Origin == IL_ORIGIN_LOWER_LEFT) {  // Dest
-			DestFlipped = IL_TRUE;
-			ilFlipImage();
-	}
+	ILuint	Width, Height, Depth;
+	ILuint	Dest;
 	
-	Dest = iCurImage;
-	DestOrigin = iCurImage->Origin;
+	Dest = ilGetCurName();
 	ilBindImage(Source);
-	SrcOrigin = iCurImage->Origin;
-		
-	if (iCurImage->Origin == IL_ORIGIN_LOWER_LEFT) {
-			SrcTemp = iGetFlipped(iCurImage);
-			if (SrcTemp == NULL) {
-				ilBindImage(DestName);
-				if (DestFlipped)
-					ilFlipImage();
-				return IL_FALSE;
-			}
-	}
-	else {
-			SrcTemp = iCurImage->Data;
-	}
-		
-	if (Dest == NULL || iCurImage == NULL) {
-			ilSetError(IL_INVALID_PARAM);
-			return IL_FALSE;
-	}
-		
-	Converted = (ILubyte*)ilConvertBuffer(iCurImage->SizeOfData, iCurImage->Format, Dest->Format, iCurImage->Type, Dest->Type, SrcTemp);
-	if (Converted == NULL)
-			return IL_FALSE;
-		
-	ConvBps = Dest->Bpp * iCurImage->Width;
-	ConvSizePlane = ConvBps * iCurImage->Height;
-		
-	StartX = XCoord >= 0 ? 0 : -XCoord;
-	StartY = YCoord >= 0 ? 0 : -YCoord;
-	StartZ = ZCoord >= 0 ? 0 : -ZCoord;
-		
-	if (iCurImage->Format == IL_RGBA || iCurImage->Format == IL_BGRA || iCurImage->Format == IL_LUMINANCE_ALPHA) {
-			if (iCurImage->Format == IL_LUMINANCE_ALPHA)
-				AlphaOff = 1;
-			else
-				AlphaOff = 3;
-			
-			for (z = StartZ; z < iCurImage->Depth && (ILint)z + ZCoord < (ILint)Dest->Depth; z++) {
-				for (y = StartY; y < iCurImage->Height && (ILint)y + YCoord < (ILint)Dest->Height; y++) {
-					for (x = StartX; x < iCurImage->Width && (ILint)x + XCoord < (ILint)Dest->Width; x++) {
-						SrcIndex = z * ConvSizePlane + y * ConvBps + x * Dest->Bpp;
-						DestIndex = (z + ZCoord) * Dest->SizeOfPlane + (y + YCoord) * Dest->Bps + (x + XCoord) * Dest->Bpp;
-						FrontPer = iCurImage->Data[z * iCurImage->SizeOfPlane + y * iCurImage->Bps + x * iCurImage->Bpp + AlphaOff] / 255.0f;
-						BackPer = 1.0f - FrontPer;
-						for (c = 0; c < iCurImage->Bpp - 1; c++) {
-							Dest->Data[DestIndex + c] = (ILubyte)(Converted[SrcIndex + c] * FrontPer
-																  + Dest->Data[DestIndex + c] * BackPer);
-						}
-						// Keep the original alpha.
-						//Dest->Data[DestIndex + c + 1] = Dest->Data[DestIndex + c + 1];
-					}
-				}
-			}
-	}
-	else {
-			for (z = StartZ; z < iCurImage->Depth && z + ZCoord < Dest->Depth; z++) {
-				for (y = StartY; y < iCurImage->Height && y + YCoord < Dest->Height; y++) {
-					for (x = StartX; x < iCurImage->Width && x + XCoord < Dest->Width; x++) {
-						for (c = 0; c < iCurImage->Bpp; c++) {
-							Dest->Data[(z + ZCoord) * Dest->SizeOfPlane + (y + YCoord) * Dest->Bps + (x + XCoord) * Dest->Bpp + c] =
-							Converted[z * ConvSizePlane + y * ConvBps + x * Dest->Bpp + c];
-						}
-					}
-				}
-			}
-	}
-		
-	if (SrcTemp != iCurImage->Data)
-			ifree(SrcTemp);
-		
-	ilBindImage(DestName);
-	if (DestFlipped)
-			ilFlipImage();
-		
-	ifree(Converted);
-		
-	return IL_TRUE;
+	Width = iCurImage->Width;  Height = iCurImage->Height;  Depth = iCurImage->Depth;
+	ilBindImage(Dest);
+
+	return ilBlit(Source, XCoord, YCoord, ZCoord, 0, 0, 0, Width, Height, Depth);
 }
 
 //@NEXT DestX,DestY,DestZ must be set to ILuint
@@ -789,7 +696,6 @@ ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX,  ILint DestY,   ILint De
 	if (Depth  + DestZ > Dest->Depth)  Depth  = Dest->Depth  - DestZ;
 	
 	// non funziona con rgba
-	// In case of Alpha channelm the data is blended. Keeps the original alpha.
 	if( Src->Format == IL_RGBA || Src->Format == IL_BGRA || Src->Format == IL_LUMINANCE_ALPHA ) {
 		const ILuint bpp_without_alpha = Dest->Bpp - 1;
 		for( z = 0; z < Depth; z++ ) {
@@ -822,11 +728,20 @@ ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX,  ILint DestY,   ILint De
 							break;
 					}
 					Back = 1.0f - Front;
-					for (c = 0; c < bpp_without_alpha; c++)
-					{
-						Dest->Data[DestIndex + c] = 
-							(ILubyte)(Converted[SrcIndex + c] * Front
-										+ Dest->Data[DestIndex + c] * Back);
+					// In case of Alpha channel, the data is blended. Keeps the original alpha.
+					if (ilIsEnabled(IL_BLIT_BLEND)) {
+						for (c = 0; c < bpp_without_alpha; c++)
+						{
+							Dest->Data[DestIndex + c] = 
+								(ILubyte)(Converted[SrcIndex + c] * Front
+											+ Dest->Data[DestIndex + c] * Back);
+						}
+					}
+					else {
+						for (c = 0; c < Dest->Bpp; c++)
+						{
+							Dest->Data[DestIndex + c] = (ILubyte)(Converted[SrcIndex + c]);
+						}
 					}
 				}
 			}
