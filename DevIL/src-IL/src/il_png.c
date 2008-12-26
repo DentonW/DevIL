@@ -25,7 +25,7 @@
 	#warning DevIL was designed with libpng 1.2.0 or higher in mind.  Consider upgrading at www.libpng.org
 #endif
 
-#if defined(_WIN32) && defined(IL_USE_PRAGMA_LIBS)
+#if (defined(_WIN32) || defined(_WIN64)) && defined(IL_USE_PRAGMA_LIBS)
 	#if defined(_MSC_VER) || defined(__BORLANDC__)
 		#ifndef _DEBUG
 			#pragma comment(lib, "libpng.lib")

@@ -4,7 +4,6 @@
 	Version="8.00"
 	Name="WindowsTest"
 	ProjectGUID="{22B03048-FD11-4D7F-88F5-C2628F8B6777}"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -74,14 +73,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="devil.lib ilu.lib ilut.lib comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib"
+				AdditionalDependencies="comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib"
 				OutputFile=".\../bin/WindowsTest.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				ProgramDatabaseFile=".\../bin/WindowsTest.pdb"
 				SubSystem="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -103,6 +100,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -174,8 +174,6 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\../bin/debug/WindowsTest.pdb"
 				SubSystem="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -197,6 +195,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -266,8 +267,6 @@
 				SuppressStartupBanner="true"
 				ProgramDatabaseFile="../bin/debug/WindowsTest.pdb"
 				SubSystem="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -289,6 +288,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"

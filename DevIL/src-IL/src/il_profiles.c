@@ -18,7 +18,7 @@
 #undef  PACKAGE_NAME
 #endif
 
-#ifndef _WIN32
+#if (!defined(_WIN32) && !defined(_WIN64))
 	#define NON_WINDOWS 1
 	#ifdef LCMS_NODIRINCLUDE
 		#include <lcms.h>

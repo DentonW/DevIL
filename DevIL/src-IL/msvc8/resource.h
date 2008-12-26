@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by IL.rc
+// Used by IL Unicode.rc
 //
 #define SW_HIDE                         0
 #define HIDE_WINDOW                     0
@@ -979,7 +979,6 @@
 #define WVR_HREDRAW                     0x0100
 #define HDS_FILTERBAR                   0x0100
 #define TBSTYLE_TOOLTIPS                0x0100
-#define RBS_TOOLTIPS                    0x00000100
 #define TTS_USEVISUALSTYLE              0x100
 #define SBARS_SIZEGRIP                  0x0100
 #define TBS_TOOLTIPS                    0x0100
@@ -989,6 +988,7 @@
 #define TVS_EX_EXCLUSIONCHECKBOXES      0x0100
 #define TCS_BUTTONS                     0x0100
 #define MCS_NOSELCHANGEONNAV            0x0100
+#define RBS_TOOLTIPS                    0x0100
 #define WM_KEYUP                        0x0101
 #define WM_CHAR                         0x0102
 #define WM_DEADCHAR                     0x0103
@@ -1037,12 +1037,12 @@
 #define CF_PRIVATEFIRST                 0x0200
 #define HDS_FLAT                        0x0200
 #define TBSTYLE_WRAPABLE                0x0200
-#define RBS_VARHEIGHT                   0x00000200
 #define TBS_REVERSED                    0x0200
 #define LVS_EDITLABELS                  0x0200
 #define TVS_TRACKSELECT                 0x0200
 #define TVS_EX_DIMMEDCHECKBOXES         0x0200
 #define TCS_MULTILINE                   0x0200
+#define RBS_VARHEIGHT                   0x0200
 #define WM_LBUTTONDOWN                  0x0201
 #define WM_LBUTTONUP                    0x0202
 #define WM_LBUTTONDBLCLK                0x0203
@@ -1056,8 +1056,8 @@
 #define WM_XBUTTONDOWN                  0x020B
 #define WM_XBUTTONUP                    0x020C
 #define WM_XBUTTONDBLCLK                0x020D
+#define WM_MOUSELAST                    0x020D
 #define WM_MOUSEHWHEEL                  0x020E
-#define WM_MOUSELAST                    0x020E
 #define WM_PARENTNOTIFY                 0x0210
 #define WM_ENTERMENULOOP                0x0211
 #define WM_EXITMENULOOP                 0x0212
@@ -1145,7 +1145,6 @@
 #define WVR_VALIDRECTS                  0x0400
 #define HDS_CHECKBOXES                  0x0400
 #define TBSTYLE_ALTDRAG                 0x0400
-#define RBS_BANDBORDERS                 0x00000400
 #define TBS_DOWNISLEFT                  0x0400
 #define LVS_OWNERDRAWFIXED              0x0400
 #define TVS_SINGLEEXPAND                0x0400
@@ -1153,6 +1152,7 @@
 #define TCS_FIXEDWIDTH                  0x0400
 #define ctlFirst                        0x0400
 #define psh1                            0x0400
+#define RBS_BANDBORDERS                 0x0400
 #define _WIN32_IE_IE401                 0x0401
 #define psh2                            0x0401
 #define psh3                            0x0402
@@ -1312,6 +1312,7 @@
 #define _WIN32_IE_IE50                  0x0500
 #define _WIN32_WINNT_WINXP              0x0501
 #define _WIN32_IE_IE501                 0x0501
+#define WINVER                          0x0501
 #define _WIN32_WINNT_WS03               0x0502
 #define _WIN32_IE_IE55                  0x0550
 #define _WIN32_WINNT_WIN6               0x0600
@@ -1345,34 +1346,34 @@
 #define CS_SAVEBITS                     0x0800
 #define HDS_NOSIZING                    0x0800
 #define TBSTYLE_FLAT                    0x0800
-#define RBS_FIXEDORDER                  0x00000800
 #define SBARS_TOOLTIPS                  0x0800
 #define SBT_TOOLTIPS                    0x0800
 #define TBS_NOTIFYBEFOREMOVE            0x0800
 #define LVS_ALIGNLEFT                   0x0800
 #define TVS_INFOTIP                     0x0800
 #define TCS_RAGGEDRIGHT                 0x0800
+#define RBS_FIXEDORDER                  0x0800
 #define LVS_ALIGNMASK                   0x0c00
 #define CS_BYTEALIGNCLIENT              0x1000
 #define HDS_OVERFLOW                    0x1000
 #define TBSTYLE_LIST                    0x1000
-#define RBS_REGISTERDROP                0x00001000
 #define TBS_TRANSPARENTBKGND            0x1000
 #define LVS_OWNERDATA                   0x1000
 #define TVS_FULLROWSELECT               0x1000
 #define TCS_FOCUSONBUTTONDOWN           0x1000
+#define RBS_REGISTERDROP                0x1000
 #define CS_BYTEALIGNWINDOW              0x2000
 #define TBSTYLE_CUSTOMERASE             0x2000
-#define RBS_AUTOSIZE                    0x00002000
 #define LVS_NOSCROLL                    0x2000
 #define TVS_NOSCROLL                    0x2000
 #define TCS_OWNERDRAWFIXED              0x2000
+#define RBS_AUTOSIZE                    0x2000
 #define CS_GLOBALCLASS                  0x4000
 #define TBSTYLE_REGISTERDROP            0x4000
-#define RBS_VERTICALGRIPPER             0x00004000
 #define LVS_NOCOLUMNHEADER              0x4000
 #define TVS_NONEVENHEIGHT               0x4000
 #define TCS_TOOLTIPS                    0x4000
+#define RBS_VERTICALGRIPPER             0x4000
 #define IDH_NO_HELP                     28440
 #define IDH_MISSING_CONTEXT             28441
 #define IDH_GENERIC_HELP_BUTTON         28442
@@ -1450,10 +1451,10 @@
 #define WM_APP                          0x8000
 #define HELP_TCARD                      0x8000
 #define TBSTYLE_TRANSPARENT             0x8000
-#define RBS_DBLCLKTOGGLE                0x00008000
 #define LVS_NOSORTHEADER                0x8000
 #define TVS_NOHSCROLL                   0x8000
 #define TCS_FOCUSNEVER                  0x8000
+#define RBS_DBLCLKTOGGLE                0x8000
 #define IDC_OPENIL                      40000
 #define SC_SIZE                         0xF000
 #define SC_SEPARATOR                    0xF00F
@@ -1479,8 +1480,8 @@
 #define SPVERSION_MASK                  0x0000FF00
 #define HTERROR                         -2
 #define IDC_STATIC                      -1
-#define PWR_FAIL                        -1
 #define UNICODE_NOCHAR                  0xFFFF
+#define PWR_FAIL                        -1
 #define HTTRANSPARENT                   -1
 
 // Next default values for new objects

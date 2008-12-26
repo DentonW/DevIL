@@ -38,7 +38,7 @@
 
 //#pragma comment(lib, "sdl.lib")
 //#pragma comment(lib, "sdlmain.lib")
-#pragma comment(lib, "colorpicker.lib")
+//#pragma comment(lib, "colorpicker.lib")
 
 
 // Evil globals!
@@ -83,9 +83,9 @@ void ResizeWin(void);
 void CreateGDI(void);
 bool IsOpenable(TCHAR *FileName);
 
-extern "C"
-// Colour picker export
-__declspec( dllimport ) bool WINAPI FSColorPickerDoModal(unsigned int * currentColor, const bool currentColorIsDefault, unsigned int * originalColor, const bool originalColorIsDefault, const int initialExpansionState);
+//extern "C"
+//// Colour picker export
+//__declspec( dllimport ) bool WINAPI FSColorPickerDoModal(unsigned int * currentColor, const bool currentColorIsDefault, unsigned int * originalColor, const bool originalColorIsDefault, const int initialExpansionState);
 
 
 
@@ -463,7 +463,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					return (0L);
 
 				case ID_EFFECTSTOOLS_BACKGROUNDCOLOUR:
-					userClickedOK = FSColorPickerDoModal(&currentColor, true, &originalColor, true, 0);
+					//userClickedOK = FSColorPickerDoModal(&currentColor, true, &originalColor, true, 0);
+					userClickedOK = 0;
 
 					if (userClickedOK) {
 						Red = (ILfloat)((currentColor & 0xff0000) >> 16) / 255.0f;

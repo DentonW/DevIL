@@ -48,7 +48,7 @@
 #include <setjmp.h>
 
 
-#if defined(_WIN32) && defined(IL_USE_PRAGMA_LIBS)
+#if (defined(_WIN32) || defined(_WIN64)) && defined(IL_USE_PRAGMA_LIBS)
 	#if defined(_MSC_VER) || defined(__BORLANDC__)
 		#ifndef _DEBUG
 			#pragma comment(lib, "libjpeg.lib")
