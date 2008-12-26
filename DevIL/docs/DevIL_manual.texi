@@ -113,7 +113,7 @@ Setting up DevIL in DJGPP requires the following steps:
 	@end itemize
 @end enumerate
 
-To compile with DevIL in DJGPP, add @option{-lil} to your command line.  To also use ILU and ILUT, use @option{-lil} and @option{-lilut}, respectively.
+To compile with DevIL in DJGPP, add @option{-lil} to your command line.  To also use ILU and ILUT, use @option{-lilu} and @option{-lilut}, respectively.
 
 @section General GCC-based (Linux, Cygwin, Max OS X, etc.) Setup
 
@@ -430,41 +430,41 @@ DevIL supports loading and saving of a large number of image formats.  Table lis
 
 @multitable {Graphics Interchange Format} {*.tif, *.tiff, *.} {IL_DOOM_} {loading?} {saving?}
 	@headitem Format name	@tab Extension	@tab Il @code{#define} @tab Loading?	@tab Saving?
-	@item Windows bitmap	@tab *.bmp	@tab @code{IL_BMP}	@tab yes	@tab yes
-	@item C-style header	@tab *.h	@tab @code{IL_CHED}	@tab no	@tab yes
-	@item Dr. Halo Cut File	@tab *.cut	@tab @code{IL_CUT}	@tab yes	@tab no
-	@item ?	@tab ?	@tab @code{IL_DCX}	@tab yes	@tab no
-	@item DirectDraw surface	@tab *.dds	@tab @code{IL_DDS}	@tab yes	@tab yes
-	@item DOOM walls/flats	@tab *.lmp	@tab @code{IL_DOOM}, @code{IL_DOOM_FLAT}	@tab yes	@tab no
-	@item Graphics Interchange Format	@tab *.gif	@tab @code{IL_GIF}	@tab yes	@tab no
-	@item Icons	@tab *.ico, *.cur	@tab @code{IL_ICO}	@tab yes	@tab no
-	@item ?	@tab ?	@tab @code{IL_JNG}	@tab yes	@tab no
-	@item Jpeg	@tab *.jpg, *.jpe, *.jpeg	@tab @code{IL_JPG}	@tab yes	@tab no
-	@item Interlaced Bitmap	@tab *.lbm	@tab @code{IL_LBM}	@tab yes	@tab no
-	@item Homeworld File	@tab *.lif	@tab @code{IL_LIF}	@tab yes	@tab no
-	@item Half-Life Model	@tab *.mdl	@tab @code{IL_MDL}	@tab yes	@tab no
-	@item Mng Animation	@tab *.mng	@tab @code{IL_MNG}	@tab yes	@tab no
-	@item PhotoCD	@tab *.pcd	@tab @code{IL_PCD}	@tab yes	@tab no
-	@item ZSoft PCX	@tab *.pcx	@tab @code{IL_PCX}	@tab yes	@tab yes
-	@item PIC	@tab *.pic	@tab @code{IL_PIC}	@tab yes	@tab no
-	@item PIX	@tab *.pix	@tab @code{IL_PIX}	@tab yes	@tab no
-	@item Portable Network Graphics	@tab *.png	@tab @code{IL_PNG}	@tab yes	@tab yes
-	@item Pnm	@tab *.pbm, *.pgm, *.ppm, *.pnm	@tab @code{IL_PPM}	@tab yes	@tab yes
-	@item Adobe PhotoShop	@tab *.psd	@tab @code{IL_PSD}	@tab yes	@tab yes
-	@item PaintShop Pro?	@tab *.psp	@tab @code{IL_PSP}	@tab yes	@tab no
-	@item Pixar	@tab *.pxr	@tab @code{IL_PXR}	@tab yes	@tab no
+	@item Windows bitmap	@tab .bmp	@tab @code{IL_BMP}	@tab yes	@tab yes
+	@item C-style header	@tab .h	@tab @code{IL_CHED}	@tab no	@tab yes
+	@item Dr. Halo Cut File	@tab .cut	@tab @code{IL_CUT}	@tab yes	@tab no
+	@item ZSoft Multi-PCX	@tab .dcx	@tab @code{IL_DCX}	@tab yes	@tab no
+	@item DirectDraw surface	@tab .dds	@tab @code{IL_DDS}	@tab yes	@tab yes
+	@item DOOM walls/flats	@tab .lmp	@tab @code{IL_DOOM}, @code{IL_DOOM_FLAT}	@tab yes	@tab no
+	@item Graphics Interchange Format	@tab .gif	@tab @code{IL_GIF}	@tab yes	@tab no
+	@item Icons	@tab .ico, .cur	@tab @code{IL_ICO}	@tab yes	@tab no
+	@item Jpeg Network Graphics	@tab .jng	@tab @code{IL_JNG}	@tab yes	@tab no
+	@item Jpeg	@tab .jpg, .jpe, .jpeg	@tab @code{IL_JPG}	@tab yes	@tab no
+	@item Interlaced Bitmap	@tab .lbm	@tab @code{IL_LBM}	@tab yes	@tab no
+	@item Homeworld File	@tab .lif	@tab @code{IL_LIF}	@tab yes	@tab no
+	@item Half-Life Model	@tab .mdl	@tab @code{IL_MDL}	@tab yes	@tab no
+	@item Mng Animation	@tab .mng	@tab @code{IL_MNG}	@tab yes	@tab no
+	@item PhotoCD	@tab .pcd	@tab @code{IL_PCD}	@tab yes	@tab no
+	@item ZSoft PCX	@tab .pcx	@tab @code{IL_PCX}	@tab yes	@tab yes
+	@item PIC	@tab .pic	@tab @code{IL_PIC}	@tab yes	@tab no
+	@item PIX	@tab .pix	@tab @code{IL_PIX}	@tab yes	@tab no
+	@item Portable Network Graphics	@tab .png	@tab @code{IL_PNG}	@tab yes	@tab yes
+	@item Pnm	@tab .pbm, .pgm, .ppm, .pnm	@tab @code{IL_PPM}	@tab yes	@tab yes
+	@item Adobe PhotoShop	@tab .psd	@tab @code{IL_PSD}	@tab yes	@tab yes
+	@item PaintShop Pro	@tab .psp	@tab @code{IL_PSP}	@tab yes	@tab no
+	@item Pixar	@tab .pxr	@tab @code{IL_PXR}	@tab yes	@tab no
 	@item Raw data	@tab *	@tab @code{IL_RAW}	@tab yes	@tab yes
 	@item Silicon Graphics @tab .sgi, .bw, .rgb, .rgba	@tab @code{IL_SGI}	@tab yes	@tab yes
-	@item Targa	@tab *.tga	@tab @code{IL_TGA}	@tab yes	@tab yes
-	@item TIFF	@tab *.tif, *.tiff	@tab @code{IL_TIF}	@tab yes	@tab yes
-	@item Quake2 Texture	@tab *.wal	@tab @code{IL_WAL}	@tab yes	@tab no
-	@item X Pixel Map	@tab *.xpm	@tab @code{IL_XPM}	@tab yes	@tab yes
+	@item Targa	@tab .tga	@tab @code{IL_TGA}	@tab yes	@tab yes
+	@item TIFF	@tab .tif, .tiff	@tab @code{IL_TIF}	@tab yes	@tab yes
+	@item Quake2 Texture	@tab .wal	@tab @code{IL_WAL}	@tab yes	@tab no
+	@item X Pixel Map	@tab .xpm	@tab @code{IL_XPM}	@tab yes	@tab yes
 @end multitable
 
 @strong{Exception:} @code{IL_JPG} (IJL) type is not supported by @code{ilLoadF} nor by @code{ilSaveF}. @code{IL_JPG} (libjpeg) is supported by both.
 
 @node Sample program
-@appendix Samlple DevIL program
+@appendix Sample DevIL program
 
 If you are not used to this approach, you may be grateful for a short program demonstrating how to actually use DevIL for your benefit:
 
@@ -478,8 +478,7 @@ int @b{main}()
 @{
        @i{// first we initialize the library. Never ever forget that...}
        @b{ilInit}();
-       @i{//we do this because We want all images to be loaded in 
-consistent sense}
+       @i{//we do this because We want all images to be loaded in consistent sense}
        @b{ilEnable}(IL_ORIGIN_SET);
        @i{// In the next section, we load one image}
        ILunt handle;
@@ -499,7 +498,7 @@ consistent sense}
        @i{// now we don't need the loaded image - the data are already ours}
        @b{ilDeleteImages}(1, & handle);
 
-       @i{// We want to process the bloody image, right?}
+       @i{// We want to process the image, right?}
        @b{process_image}(data, w, h);
 
        @i{// And maybe we want to save that all...}
