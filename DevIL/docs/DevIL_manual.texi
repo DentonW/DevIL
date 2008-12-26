@@ -30,7 +30,8 @@ This is a manual describing IL part of DevIL -- handling images.
 * Introduction::     General intro
 * Basic usage::      How to write your first code
 * Image Management:: How to manage images :-)
-* Common #defines::  #defines you are likely to come accros when usin DevIL
+* Languages::        Translations into other languages
+* Common #defines::  #defines you are likely to come across when using DevIL
 * Sample program::   If you want to get going quickly
 * Index::            Complete index.
 @end menu
@@ -42,7 +43,7 @@ This is a manual describing IL part of DevIL -- handling images.
 
 Developer’s Image Library was previously called OpenIL, but due to trademark issues, OpenIL is now known as DevIL.
 
-DevIL is an open source programming library for programmers to incorporate in to their own programs.  DevIL loads and saves a large variety of images for use in a software developer’s program.  This library is capable of manipulating images in various ways and passing image information to display APIs, such as OpenGL and Direct3D.
+DevIL is an Open Source programming library for programmers to incorporate into their own programs.  DevIL loads and saves a large variety of images for use in a software developer’s program.  This library is capable of manipulating images in various ways and passing image information to display APIs, such as OpenGL and Direct3D.
 
 The purpose of this manual is to guide users in coding with the Developer’s Image Library.  This manual is for users proficient in C and with competent knowledge of the integrated development environment (IDE) or compiler they are using.
 
@@ -54,7 +55,7 @@ Several times throughout this document, the three different sub-libraries of Dev
 @chapter Library setup
 @section Microsoft Visual C++ setup
 
-DevIL setup for Windows is straightforward.  Unzip DevIL in an empty directory.  If using WinZip, check the “Use folder names” box before unzipping.  Use the -d command line option if using pkunzip.  Then double-click on the ImageLib.dsw file in the install directory to load the DevIL workspace in Microsoft Visual C++ (MSVC++).
+DevIL setup for Windows is straightforward.  Unzip DevIL in an empty directory.  If using WinZip, check the “Use folder names” box before unzipping.  Use the -d command line option if using pkunzip.  Then double-click on the ImageLib.sln file in the install directory to load the DevIL workspace in Microsoft Visual C++ (MSVC++).
 
 @subsection Directories
 
@@ -89,7 +90,7 @@ Microsoft Visual C++ 6.0 has a bug that prevents debugging of a project.  The bu
 
 DevIL takes advantage of the multithreaded standard LIBC DLLs.  To use file streams with DevIL, you must change the project settings of your project.  If you do not perform these steps, your program will crash whenever you attempt to use a DevIL file stream.
 
-Generally, DevIL is not thread safe. You should make sure that more threads in your application don't use DevIL at the same time.
+Generally, DevIL is not thread safe. You should make sure that threads in your application do not use DevIL at the same time.
 
 @enumerate
 	@item Navigate to the Project menu and choose Settings.
@@ -361,6 +362,24 @@ All error codes that can be returned by @code{ilGetError} are listed in Appendix
 
 @section Error Strings
 @code{iluErrorString} returns a human readable error string from any error that @code{ilGetError} can return.  This is useful for when you want to display what kind of error happened to the user.
+
+@subsection Languages
+The ILU error messages have been translated into multiple languages: Arabic, Dutch, German, Japanese and Spanish.  The default language is English.
+
+@subsection Selecting a Language
+@code{iluSetLanguage} will change the error string returned by @code{iluErrorString} to the language specified in its parameter.  The parameters allowed are enums:
+
+@itemize @minus
+	@item @code{ILU_ENGLISH}: The default - English
+	@item @code{ILU_ARABIC}: Arabic
+	@item @code{ILU_DUTCH}: Dutch
+	@item @code{ILU_GERMAN}: German
+	@item @code{ILU_JAPANESE}: Japanese
+	@item @code{ILU_SPANISH}: Spanish
+@end itemize
+
+Be aware that if the Unicode version of DevIL is not being used, some translations will not display properly.  An example is Arabic, which uses characters outside of the standard ASCII.
+
 
 @node Common #defines
 @appendix Common DevIL @code{#defines}
