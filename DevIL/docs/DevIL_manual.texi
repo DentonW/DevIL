@@ -55,7 +55,7 @@ Several times throughout this document, the three different sub-libraries of Dev
 @chapter Library setup
 @section Microsoft Visual C++ setup
 
-DevIL setup for Windows is straightforward.  Unzip DevIL in an empty directory.  If using WinZip, check the “Use folder names” box before unzipping.  Use the -d command line option if using pkunzip.  Then double-click on the ImageLib.sln file in the install directory to load the DevIL workspace in Microsoft Visual C++ (MSVC++).
+DevIL setup for Windows is straightforward.  Unzip DevIL in an empty directory.  If using WinZip, check the ``Use folder names'' box before unzipping.  Use the -d command line option if using pkunzip.  Then double-click on the ImageLib.sln file in the install directory to load the DevIL workspace in Microsoft Visual C++ (MSVC++).
 
 @subsection Directories
 
@@ -64,11 +64,11 @@ You will need to change some directory settings in MSVC++ to get DevIL working.
 @enumerate
 	@item Navigate to the Tools menu and select Options.
 	@item Click on the Directories tab.
-	@item Under Show directories for, select "Include files".
+	@item Under Show directories for, select ``Include files''.
 	@item Click the New button (to the left of the red 'X')
 	@item Type the directory DevIL is installed in, plus @file{\Include}.  For example, if you installed DevIL to E:\ImageLib, enter @file{E:\ImageLib\Include}.
 	@image{images/devil_msvc_include}
-	@item Under Show directories for, click on "Library files".
+	@item Under Show directories for, click on ``Library files''.
 	@item Click the New button (to the left of the red 'X').
 	@item Type the directory DevIL is installed in, plus @file{\Lib}.  For example, if you installed DevIL to E:\ImageLib, enter @file{E:\ImageLib\Lib}.
 	@image{images/devil_msvc_lib}
@@ -105,7 +105,7 @@ Generally, DevIL is not thread safe. You should make sure that threads in your a
 Setting up DevIL in DJGPP requires the following steps:
 
 @enumerate
-	@item Unzip DevIL in an empty directory.  If using WinZip, check the “Use folder names” box before unzipping.  Use the -d command line option if using pkunzip.
+	@item Unzip DevIL in an empty directory.  If using WinZip, check the ``Use folder names'' box before unzipping.  Use the -d command line option if using pkunzip.
 	@item Create a new subdirectory called ‘il' in your DJGPP include directory.
 	@item Copy the files to their respective places:
 	@itemize
@@ -206,7 +206,7 @@ ILboolean ilLoadL(ILenum Type, ILvoid *Lump, ILuint Size);
 Before loading the image, @code{ilLoadImage} must first determine the image format of the file.  @code{ilLoadImage} performs the following steps:
 
 @enumerate
-	@item Compares the filename's extension to any registered file handlers, allowing the registered file handlers to take precedence over the default DevIL file handlers.  If the extension matches a registered file handler, @code{ilLoadImage} passes control to the file handler and returns.  For more information on registering, refer to the section entitled “Registration”. 
+	@item Compares the filename's extension to any registered file handlers, allowing the registered file handlers to take precedence over the default DevIL file handlers.  If the extension matches a registered file handler, @code{ilLoadImage} passes control to the file handler and returns.  For more information on registering, refer to the section entitled ``Registration''. 
 	@item Compares the filename's extension to the extensions natively supported by DevIL.  If the extension matches a loading function's extension, @code{ilLoadImage} passes control to the file handler and returns.
 	@item Examines the file for a header and tries to match it with a known type of image header.  If a valid image header is found, @code{ilLoadImage} passes control to the appropriate file hander and returns.
 	@item Returns @code{IL_FALSE}.
@@ -222,10 +222,10 @@ If @code{IL_TYPE_UNKNOWN} is specified for Type, @code{ilLoad} behaves exactly l
 @subsection Loading from File Streams -- @code{ilLoadF}
 DevIL's file stream loading function is @code{ilLoadF}.  @code{ilLoadF} is exactly equivalent to @code{ilLoad}, but instead of accepting a const char pointer, @code{ilLoadF} accepts an ILHANDLE.  DevIL defines @code{ILHANDLE} as a void pointer via a typedef.  Under normal circumstances, File will be a @code{FILE} struct pointer defined in stdio.h.
 
-Refer to the section entitled “Registration” for instructions on how to use your own file handling functions and file handles.
+Refer to the section entitled ``Registration`` for instructions on how to use your own file handling functions and file handles.
 
 @subsection Loading from Memory Lumps -- @code{ilLoadL}
-DevIL's file handling is abstracted to allow loading images from memory called “lumps”.  @code{ilLoadL} handles loading from lumps.  You must specify a valid type as the first parameter and the lump as the second parameter.
+DevIL's file handling is abstracted to allow loading images from memory called ``lumps''.  @code{ilLoadL} handles loading from lumps.  You must specify a valid type as the first parameter and the lump as the second parameter.
 
 The third parameter that @code{ilLoadL} accepts is the total size of the lump.  DevIL uses this value to perform bounds checking on the input data.  Specify a value of zero for Size if you do not want @code{ilLoadL} to perform any bounds checking.
 
@@ -260,7 +260,7 @@ ILboolean ilTexImage(ILuint Width, ILuint Height, ILuint Depth, @*    ILubyte Bp
 	@item @code{Depth}: The depth of the image, if it is an image volume.  Most applications should specify 0 or 1 for this parameter.
 	@item @code{Bpp}: The bytes per pixel of the image data.  Do not confuse this with bits per pixel, which is also commonly used.  Common bytes per pixel values are 1, 3 and 4.
 	@item @code{Format}: The format of the image data. @xref{format #defines} for what you can pass.
-	@item @code{Type}: The type of image data.  Usually, this will be @code{IL_UNSIGNED_BYTE}, unless you want to utilize multiple bits per colour channel. @xref{type #defines} for acceptable type.
+	@item @code{Type}: The type of image data.  Usually, this will be @code{IL_UNSIGNED_BYTE}, unless you want to utilize multiple bytes per colour channel. @xref{type #defines} for acceptable type.
 	@item @code{Data}: Mainly for convenience, if you already have image data loaded and ready to put into the newly created image.  Specifying NULL for this parameter just results in the image having unpredictable image data.  You can specify image data later using @code{ilSetData} or @code{ilSetPixels}.
 @end itemize
 
@@ -268,7 +268,7 @@ ILboolean ilTexImage(ILuint Width, ILuint Height, ILuint Depth, @*    ILubyte Bp
 There are two ways to set image data: one is quick and dirty, while the other is more flexible but slower.  These two functions are @code{ilGetData} and @code{ilCopyPixels}.
 
 @example
-ILubyte * ilGetData(ILvoid);
+ILubyte *ilGetData(ILvoid);
 ILuint ilCopyPixels(ILuint XOff, ILuint YOff, ILuint ZOff, 
     ILuint Width, ILuint Height, ILuint Depth, ILenum Format, 
     ILenum Type, ILvoid * Data);
@@ -354,6 +354,27 @@ ilEnable(IL_BLIT_BLEND);  // Turns on blending
 All images have a certain set of characteristics:  origin of the image, format of the image, type of the image, and more.
 
 @section Origin
+Depending on the file format, data can start in the upper left or the lower left corner of the image.  By default, DevIL keeps the origin in the same place as the original image.  This can cause your image to be flipped vertically if the image you are loading has an origin other than what you expect.  To obtain the origin of the image, use @code{ilGetInteger}.
+@example
+ilGetInteger(IL_IMAGE_ORIGIN);
+@end example
+
+To force DevIL to use just one origin, you need to use the following code:
+@example
+ilEnable(IL_ORIGIN_SET);
+ilSetInteger(@emph{Origin});
+@end example
+@emph{Origin} is either @code{IL_ORIGIN_LOWER_LEFT} or @code{IL_ORIGIN_UPPER_LEFT}.  Finally, if you need to find out which origin mode is currently set, use:
+
+@example
+ilGetInteger(IL_ORIGIN_MODE);
+@end example
+
+
+@section Format
+
+
+
 
 @chapter Error Handling
 
@@ -381,7 +402,207 @@ The ILU error messages have been translated into multiple languages: Arabic, Dut
 Be aware that if the Unicode version of DevIL is not being used, some translations will not display properly.  An example is Arabic, which uses characters outside of the standard ASCII character set.
 
 
-@node DXTC notes
+
+@node Image Manipulation
+@chapter Image Manipulation
+
+ILU (Image Library Utilities) contains functions to manipulate any type of image in a variety of ways.  Some functions filter images, while others perform a wider variety of operations, such as scaling an image.  This section will give a comparison of the utility functions against the below figure.
+
+@center @image{images/manipulation/original,5cm}
+@center @emph{Original, unmodified image}
+
+@section Alienifying
+iluAlienify is a filter I created purely by accident, when I was attempting to write colour matrix code.  The effect iluAlienify gives to an image is a green and purple tint.  On images with humans in them, iluAlienify generally makes the people look green, hence the fabricated term ``alienify''.  iluAlienify does not accept any parameters.  The figure below illustrates this effect on the DevIL logo.
+
+@center @image{images/manipulation/alienified,5cm}
+@center @emph{``Alienified'' image}
+
+@section Blurring
+ILU has two blurring functions – @code{iluBlurAverage} and @code{iluBlurGaussian}.  Blurring can be used for a simple motion blur effect or something as sophisticated as concealing the identity of a person in an image.  Both of these functions use a convolution filter and multiple iterations to blur an image.  Gaussian blurs look more natural than averaging blurs, because the center pixel in the convolution filter ``weighs'' more.  For an in-depth description of convolution filters, see the excellent @emph{Elementary Digital Filtering} article at http://www.gamedev.net/reference/programming/features/edf/.
+
+@code{iluBlurAverage} and @code{iluBlurGaussian} are functionally equivalent.  Both functions accept a single parameter.  Call the desired function with the number of iterations of blurring you wish to be performed on the image.  Increase the number of iterations to increase the blurriness of an image.
+
+@center @image{images/manipulation/average-blur,5cm}
+@center @emph{Average blurred with 10 iterations applied}
+
+@center @image{images/manipulation/gauss-blur,5cm}
+@center @emph{Gaussian blurred with 10 iterations applied}
+
+@section Contrast
+ILU can apply more colour contrast to your image by brightening the lights and darkening the darks via @code{iluContrast}.  This effect can make a dull image livelier and ``stand out'' more.
+
+@code{iluContrast} accepts a single parameter describing the desired amount of contrast to modify the image by.  A value of 1.0 does not affect the image.  Values above 1.0 to 1.7 increase the amount of contrast in the image, with 1.7 increasing the contrast the most.  Values from 0.0 to 1.0 decrease the amount of contrast in the image.  Values outside of the 0.0 to 1.7 range will give undefined results.  -0.5 to 0.0 will actually create a negative of the image and increase the contrast.
+
+@center @image{images/manipulation/contrast-0.1,5cm}
+@center @emph{Contrast of 0.1}
+
+@center @image{images/manipulation/contrast-1.7,5cm}
+@center @emph{Contrast of 1.7}
+
+@section Equalization
+Sometimes it may be useful to equalize an image – that is, bring the extreme colour values to a median point.  @code{iluEqualize} darkens the bright colours and lightens the dark colours, reducing the contrast in an image or ``equalizing'' it.  The below figure shows the results of applying @code{iluEqualize} to the DevIL image.
+
+@center @image{images/manipulation/equalized,5cm}
+@center @emph{Equalized image}
+
+@section Gamma Correction
+@code{iluGammaCorrect} applies gamma correction to an image using an exponential curve.  The single parameter @code{iluGammaCorrect} accepts is the gamma correction factor you wish to use.  A gamma correction factor of 1.0 leaves the image unmodified.  Values in the range 0.0 - 1.0 darken the image.  0.0 leaves a totally black image.  Anything above 1.0 brightens the image, but values too large may saturate the image.
+
+@center @image{images/manipulation/gamma-0.5,5cm}
+@center @emph{Result of gamma correction of 0.5}
+
+@center @image{images/manipulation/gamma-2.0,5cm}
+@center @emph{Result of gamma correction of 2.0}
+
+@section Negativity
+@code{iluNegative} is a very basic function that inverts every pixel's colour in an image.  For example, pure white becomes pure black, and vice-versa.  The resulting colour of a pixel can be determined by this formula: new_colour = ~old_colour (where the tilde is the negation of the set of bits).  @code{iluNegative} does not accept any parameters and is reversible by calling it again.
+
+@center @image{images/manipulation/negative,5cm}
+@center @emph{@code{iluNegative} example}
+
+@section Noise
+ILU can add ``random'' noise to any image to make it appear noisy.  The function, @code{iluNoisify}, simply uses the standard libc @code{rand} function after initializing it with a seed to @code{srand}.  If your program depends on a different seed to @code{rand}, reset it after calling @code{iluNoisify}.  The seed ILU uses is the standard @code{time(NULL)} call.  Of course, the noise added to the image is not totally random, since no such thing exists, but there should be no repeating, except in extremely large images.
+
+@code{iluNoisify} accepts a single parameter – the tolerance to use.  This parameter is a clamped (float) value that should be in the range 0.0f - 1.0f.  Lower values indicate a lower tolerance, while higher values indicate the opposite.  The tolerance indicates just how much of a mono intensity that @code{iluNoisify} is allowed to apply to each pixel.  A ``random'' mono intensity is applied to each pixel so that you will not end up with totally new colours, just the same colours with a different luminance value.  Colours change by both negative and positive values, so some pixels may be darker, some may be lighter, and others will remain the same.
+
+@multitable {@image{images/manipulation/noise-0.5,5cm}} {  } {@image{images/manipulation/noise-1.0,5cm}}
+	@item @image{images/manipulation/noise-0.5,5cm}	@tab  @tab  @image{images/manipulation/noise-1.0,5cm}
+	@item @emph{Result of @code{iluNoisify} with a 0.50 tolerance}  @tab  @tab @emph{Result of @code{iluNoisify} with a 1.0 tolerance}
+@end multitable
+
+@section Pixelization
+@code{iluPixelize} creates pixelized images by averaging the colour values of blocks of pixels.  The single parameter passed to @code{iluPixelize} determines the size of these square blocks.  The result is a pixelized image.
+
+Call @code{iluPixelize} with values greater than 1 to pixelize the image.  The larger the values, the larger the pixel blocks will be.  A value of 1 will leave the image unchanged.  Values less than 1 generate an error.
+
+@center @image{images/manipulation/pixelize,5cm}
+@center @emph{Pixelization of 5 pixels across}
+
+@section Sharpening
+Sharpening sharply defines the outlines in an image.  @code{iluSharpen} performs this sharpening effect on an image.  @code{iluSharpen} accepts two parameters: the sharpening factor and the number of iterations to perform the sharpening effect.
+
+The sharpening factor must be in the range of 0.0 - 2.5.  A value of 1.0 for the sharpening factor will have no effect on the image.  Values in the range 1.0 - 2.5 will sharpen the image, with 2.5 having the most pronounced sharpening effect.  Values from 0.0 to 1.0 do a type of reverse sharpening, blurring the image.  Values outside of the 0.0 - 2.5 range produce undefined results.
+
+The number of iterations to perform will usually be 1, but to achieve more sharpening, increase the number of iterations.  This parameter is similar to the @emph{Iterations} parameter of the two blurring functions.  The time it takes to run this function is directly proportional to the number of iterations desired.
+
+@center @image{images/manipulation/sharpen,5cm}
+@center @emph{Sharpening of 2.5}
+
+
+@node Resizing Images
+@chapter Resizing Images
+
+@section Basic Scaling
+To resize images, use the @code{iluScale} function:
+@example
+ILboolean iluScale(ILuint Width, ILuint Height, ILuint Depth);
+@end example 
+The three parameters are relatively explanatory.  Any image can be resized to a new width, height and depth, provided that you have enough memory to hold the new image.  The new dimensions do not have to be the same as the original in any way.  Aspect ratios of the image do not even have to be the same.  The currently bound image is replaced entirely by the new scaled image.
+
+If you specify a dimension greater than the original dimension, the image enlarges in that direction.  Alternately, if you specify a dimension smaller than the original dimension, the image shrinks in that direction.
+
+@multitable {Original image} {  } {@image{images/manipulation/enlarged}} {  } {Shrunk image}
+	@item @image{images/manipulation/resize-original}	@tab  @tab  @image{images/manipulation/enlarged}  @tab  @tab  @image{images/manipulation/shrunk}
+	@item @emph{Original image}  @tab  @tab @emph{Enlarged image}  @tab  @tab @emph{Shrunk image}
+@end multitable
+
+@section Advanced Scaling
+ILU also allows you to specify which method you want to use to resize images.  As you can see in the middle figure above, the enlarged image is very pixelized.  The shrunk image is also blocky.  This is because a nearest filter was applied to the image in figure 5.1 to produce figures 5.2 and 5.3.
+
+ILU allows you to use different filters to produce better scaling results via @code{iluImageParameter}:
+@itemize @bullet
+	@item Nearest filter	- @code{ILU_NEAREST}
+	@item Linear filter	- @code{ILU_LINEAR}
+	@item Bilinear filter	- @code{ILU_BILINEAR}
+	@item Box filter	- @code{ILU_SCALE_BOX}
+	@item Triangle filter	- @code{ILU_SCALE_TRIANGLE}
+	@item Bell filter	- @code{ILU_SCALE_BELL}
+	@item B Spline filter	- @code{ILU_SCALE_BSPLINE}
+	@item Lanczos filter	- @code{ILU_SCALE_LANCZOS3}
+	@item Mitchell filter	- @code{ILU_SCALE_MITCHELL}
+@end itemize
+
+Just use the @code{ILU_FILTER} define as @emph{PName} in @code{iluImageParameter} with the appropriate filter define as @emph{Param}.
+
+@example
+ILvoid iluImageParameter(ILenum PName, ILenum Param);
+@end example
+
+@section Filter Comparisons
+The first three filters (nearest, linear and bilinear) require an increasing amount of time to resize an image, with nearest being the quickest and bilinear being the slowest of the three.  All the filters after bilinear are considered the “advanced” scaling functions and require much more time to complete, but they generally produce much nicer results.
+
+When minimizing an image, bilinear filtering should be sufficient, since it uses a four-pixel averaging scheme to create every destination pixel.  Minimized images do not generally have to use higher sampling schemes to achieve a reasonable image.
+
+Enlarging an image, though, depends quite heavily on how good the sampling scheme is.  ILU provides several filtering functions to let you choose which one best fits your needs: speed versus image quality.  Below is a comparison of the different types of filters when enlarging an image.
+
+@multitable {@image{images/lena/nearest}} {  } {@image{images/lena/nearest}} {  } {@image{images/lena/nearest}}
+	@item @image{images/lena/nearest} Nearest filter
+		@tab  @tab  @image{images/lena/linear} Linear filter
+		@tab  @tab  @image{images/lena/bilinear} Bilinear filter
+	@item @image{images/lena/box} Box filter
+		@tab  @tab  @image{images/lena/triangle} Triangle filter
+		@tab  @tab  @image{images/lena/bell} Bell filter
+	@item @image{images/lena/bspline} B spline filter
+		@tab  @tab  @image{images/lena/lanczos} Lanczos filter
+		@tab  @tab  @image{images/lena/mitchell} Mitchell filter
+@end multitable
+
+
+@node Sub-Images
+@chapter Sub-Images
+
+@section Mipmaps
+Mipmaps in DevIL are successive half-dimensioned power-of-2 images.  The dimensions do not have to be powers of 2 if you generate them manually, but DevIL's mipmap generation facilities assume power-of-2 images.
+
+@multitable {@image{images/mipmaps/128}} {@image{images/mipmaps/64}} {@image{images/mipmaps/32}} {@image{images/mipmaps/16}} {@image{images/mipmaps/8}} {@image{images/mipmaps/4}}  {@image{images/mipmaps/2}} {@image{images/mipmaps/1}}
+	@item  @image{images/mipmaps/128}
+		@tab  @image{images/mipmaps/64}
+		@tab  @image{images/mipmaps/32}
+		@tab  @image{images/mipmaps/16}
+		@tab  @image{images/mipmaps/8}
+		@tab  @image{images/mipmaps/4}
+		@tab  @image{images/mipmaps/2}
+		@tab  @image{images/mipmaps/1}
+@end multitable
+@center @emph{All mipmap levels down to 1x1}
+
+@subsection Mipmap Creation
+You generate mipmaps for any image using @code{iluBuildMipmaps}.  If the image already has mipmaps, the previous mipmaps are erased, and new mipmaps are generated.  Otherwise, @code{iluBuildMipmaps} generates mipmaps for the image.
+
+The mipmaps built are always powers of 2.  If the original image does not have power-of-2 dimensions, @code{iluBuildMipmaps} resizes the original image via @code{iluScale} to have power-of-2 dimensions.
+
+@subsection Mipmap Access
+Access mipmaps through the @code{iluActiveMipmap} function:
+@example
+ILboolean ilActiveMipmap(ILuint MipNum);
+@end example
+
+@code{iluActiveMipmap} sets the current image to the @emph{MipNum} mipmap level of the current image.  If there are no mipmaps present, then @code{iluActiveMipmap} returns @code{IL_FALSE}, else it returns @code{IL_TRUE}.  The base image is mipmap level 0, so specify 0 for @emph{MipNum} to return to the base image.  The only other method for setting the current image to the base image is to call @code{ilBindImage} again.
+
+@section Animations
+Animations are similar to mipmaps, but instead of being smaller successive images, the images are the same size but have different data.  The successive animation chains in DevIL can be used to create animations in your programs.  File formats that natively support animations are .gif and .mng.  You can also create your own sub-images as animations.
+
+@subsection Animation Chain Creation
+To be added...
+
+@subsection Animation Chain Access
+Access animations through the iluActiveImage function:
+@example
+ILboolean ilActiveImage(ILuint ImageNum);
+@end example
+
+@code{iluActiveImage} sets the current image to the @emph{ImageNum} animation frame of the current image.  If there are no animation frames present, then @code{iluActiveImage} returns @code{IL_FALSE}, else it returns @code{IL_TRUE}.  The base image is animation frame 0, so specify 0 for @emph{ImageNum} to return to the base image.  The only other method for setting the current image to the base image is to call @code{ilBindImage} again.
+
+@code{iluActiveImage} is functionally equivalent to @code{iluActiveMipmap}, except that it deals with animations and not mipmaps.
+
+@section Layers
+DevIL does not have a full layer implementation yet.
+
+@section Sub-Image Mixing
+An image can have both mipmaps and animations at the same time.  Every image in an animation chain can have its own set of mipmaps, though it is not necessary by any means.  If you ``activate'' an animation image in the base image's animation chain, the active image becomes the new ``base'' image.  Therefore, if you call @code{iluActiveMipmap} after @code{iluActiveImage}, a mipmap from the selected image in the animation chain is chosen.
+
+
+@node DXTC/S3TC Notes
 @chapter DXTC/S3TC Notes
 @section DDS Loading/Saving
 DevIL supports loading and saving of Microsoft .dds files.  DDS files can either be compressed or uncompressed.  If they are compressed, DDS files use DirectX Texture Compression (DXTC).  DXTC is also known as S3TC, since Microsoft licensed the compression technology from S3.
@@ -433,8 +654,8 @@ ilutEnable(ILUT_GL_GEN_S3TC);
 
 This can adversely affect your performance while loading textures, though, so use it with caution, especially if you are running a performance-critical application.
 
-@subsection Direct 3D DXTC Support
-ILUT's Direct 3D (D3D) support works exactly like the OpenGL support, except you use the @code{ILUT_D3D_USE_DXTC} and @code{ILUT_D3D_GEN_DXTC} defines instead of @code{ILUT_GL_USE_S3TC} and @code{ILUT_GL_GEN_S3TC}, respectively.
+@subsection Direct3D DXTC Support
+ILUT's Direct3D (D3D) support works exactly like the OpenGL support, except you use the @code{ILUT_D3D_USE_DXTC} and @code{ILUT_D3D_GEN_DXTC} defines instead of @code{ILUT_GL_USE_S3TC} and @code{ILUT_GL_GEN_S3TC}, respectively.
 
 
 @node Common #defines
@@ -516,8 +737,8 @@ Errors sometimes occur within DevIL.  To get the error code of the last error th
 
 DevIL supports loading and saving of a large number of image formats.  Table lists the formats DevIL supports sorted according to @code{#define}.
 
-@multitable {Graphics Interchange Format} {*.tif, *.tiff, *.} {IL_DOOM_} {loading?} {saving?}
-	@headitem Format name	@tab Extension	@tab Il @code{#define} @tab Loading?	@tab Saving?
+@multitable {Graphics Interchange Format} {.pbm, .pgm, .ppm, .pnm} {IL_DOOM_FLAT} {loading?} {saving?}
+	@headitem Format name	@tab Extension	@tab IL @code{#define} @tab Loading?	@tab Saving?
 	@item Windows bitmap	@tab .bmp	@tab @code{IL_BMP}	@tab yes	@tab yes
 	@item C-style header	@tab .h	@tab @code{IL_CHED}	@tab no	@tab yes
 	@item Dr. Halo Cut File	@tab .cut	@tab @code{IL_CUT}	@tab yes	@tab no
@@ -563,14 +784,13 @@ If you are not used to this approach, you may be grateful for a short program de
 @example
 @b{#include}@t{<IL/il.h>}
 @b{#include}@t{<stdlib.h>}       @i{// because of malloc() etc.}
-@b{#include}@t{<stdio.h>}       @i{// because of printf}
 
 int @b{main}()
 @{
        ILunt handle, w, h;
        @i{// First we initialize the library. Never forget that...}
        @b{ilInit}();
-       @i{// We do this because we want all images to be loaded in a consistent manner}
+       @i{// We want all images to be loaded in a consistent manner}
        @b{ilEnable}(IL_ORIGIN_SET);
        @i{// In the next section, we load one image}
        @b{ilGenImages}(1, & handle);
@@ -586,7 +806,7 @@ int @b{main}()
        void * data = @b{malloc}(memory_needed);
        @i{// finally get the image data}
        @b{ilCopyPixels}(0, 0, 0, w, h, 1, IL_RGB, IL_UNSIGNED_BYTE, data);
-       @i{// now we don't need the loaded image - the data are already ours}
+       @i{// now we don't need the loaded image - the data is already ours}
        @b{ilDeleteImages}(1, & handle);
 
        @i{// We want to process the image, right?}
@@ -605,7 +825,6 @@ int @b{main}()
        @b{free}(data);
        @b{return} 0;
 @}
-
 @end example
 
 @node Index
