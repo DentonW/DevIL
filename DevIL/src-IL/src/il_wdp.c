@@ -12,7 +12,7 @@
 
 
 #include "il_internal.h"
-//#ifndef IL_NO_WDP
+#ifndef IL_NO_WDP
 #include "il_wdp.h"
 
 
@@ -443,4 +443,4 @@ ILuint VLWESC()
 
 
 
-//#endif//IL_NO_WDP
+#endif//IL_NO_WDP
