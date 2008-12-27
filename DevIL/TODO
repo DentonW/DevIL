@@ -39,6 +39,7 @@ Denton:
 - Why is IL_HALF even used in ilut_directx9.c?
 - ilGetAlpha returns malloc'ed memory that cannot be freed by the caller.
 - Give estimates for buffer sizes for ilSaveL.
+- http://developer.nvidia.com/object/texture_tools.html - They have CUDA code to compress DXT.
 
 
 For 1.7.0

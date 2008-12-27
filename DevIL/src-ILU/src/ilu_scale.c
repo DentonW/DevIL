@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2008 by Denton Woods
+// Last modified: 12/27/2008
 //
 // Filename: src-ILU/src/ilu_scale.c
 //
@@ -49,8 +49,12 @@ ILboolean ILAPIENTRY iluScale(ILuint Width, ILuint Height, ILuint Depth)
 	if (iluCurImage->Width == Width && iluCurImage->Height == Height && iluCurImage->Depth == Depth)
 		return IL_TRUE;
 
+	// A parameter of 0 is not valid.  Let's just assume that the user wanted a value of 1 instead.
+	if (Width == 0)  Width = 1;
+	if (Height == 0) Height = 1;
+	if (Depth == 0)  Depth = 1;
 
-	if( (iluCurImage->Width<Width) || (iluCurImage->Height<Height) ) // only do special scale if there is some zoom?
+	if ((iluCurImage->Width<Width) || (iluCurImage->Height<Height)) // only do special scale if there is some zoom?
 	{
 		switch (iluFilter)
 		{

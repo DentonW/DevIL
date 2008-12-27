@@ -372,7 +372,7 @@ ilGetInteger(IL_ORIGIN_MODE);
 
 
 @section Format
-
+Format refers to the ordering of the bytes for each pixel.
 
 
 
