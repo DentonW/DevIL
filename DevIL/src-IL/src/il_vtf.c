@@ -130,6 +130,7 @@ ILboolean iCheckVtf(VTFHEAD *Header)
 		return IL_FALSE;
 	// May change in future version of the specifications.
 	//  80 is through version 7.2, and 96/104 are through 7.4.
+	//  This must be 16-byte aligned, but something is outputting headers with 104.
 	if ((Header->HeaderSize != 80) && (Header->HeaderSize != 96) && (Header->HeaderSize != 104))
 		return IL_FALSE;
 
