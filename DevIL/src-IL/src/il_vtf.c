@@ -206,8 +206,8 @@ ILboolean iLoadVtfInternal()
 	ILuint		Width, Height, Depth, SizeOfData;
 	ILenum		Format, Type;
 	ILint		i, j;
-	ILuint		Channels, Bpc;
-	ILubyte		*CompData = NULL;
+	ILuint		Channels, Bpc, k;
+	ILubyte		*CompData = NULL, SwapVal;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -261,6 +261,18 @@ ILboolean iLoadVtfInternal()
 			Format = IL_BGRA;
 			Type = IL_UNSIGNED_BYTE;
 			break;
+		case IMAGE_FORMAT_RGB888:
+			Channels = 3;
+			Bpc = 1;
+			Format = IL_RGB;
+			Type = IL_UNSIGNED_BYTE;
+			break;
+		case IMAGE_FORMAT_RGBA8888:
+			Channels = 4;
+			Bpc = 1;
+			Format = IL_RGBA;
+			Type = IL_UNSIGNED_BYTE;
+			break;
 		case IMAGE_FORMAT_RGBA16161616:  // 16-bit shorts
 			Channels = 4;
 			Bpc = 2;
@@ -272,6 +284,30 @@ ILboolean iLoadVtfInternal()
 			Bpc = 4;
 			Format = IL_RGBA;
 			Type = IL_FLOAT;
+			break;
+		case IMAGE_FORMAT_I8:  // 8-bit luminance data
+			Channels = 1;
+			Bpc = 1;
+			Format = IL_LUMINANCE;
+			Type = IL_UNSIGNED_BYTE;
+			break;
+		case IMAGE_FORMAT_IA88:  // 8-bit luminance and alpha data
+			Channels = 2;
+			Bpc = 1;
+			Format = IL_LUMINANCE_ALPHA;
+			Type = IL_UNSIGNED_BYTE;
+			break;
+		case IMAGE_FORMAT_ARGB8888:
+			Channels = 4;
+			Bpc = 1;
+			Format = IL_BGRA;
+			Type = IL_UNSIGNED_BYTE;
+			break;
+		case IMAGE_FORMAT_ABGR8888:
+			Channels = 4;
+			Bpc = 1;
+			Format = IL_RGBA;
+			Type = IL_UNSIGNED_BYTE;
 			break;
 
 		default:
@@ -358,15 +394,15 @@ ILboolean iLoadVtfInternal()
 			// Uncompressed BGR(A) data (24-bit and 32-bit)
 			case IMAGE_FORMAT_BGR888:
 			case IMAGE_FORMAT_BGRA8888:
-				// Just copy the data over - no compression.
-				if (iread(Image->Data, 1, Image->SizeOfData) != Image->SizeOfData)
-					bVtf = IL_FALSE;
-				else
-					bVtf = IL_TRUE;
-				break;
-
+			// Uncompressed RGB(A) data (24-bit and 32-bit)
+			case IMAGE_FORMAT_RGB888:
+			case IMAGE_FORMAT_RGBA8888:
 			// Uncompressed 16-bit shorts
 			case IMAGE_FORMAT_RGBA16161616:
+			// Luminance data only
+			case IMAGE_FORMAT_I8:
+			// Luminance and alpha data
+			case IMAGE_FORMAT_IA88:
 				// Just copy the data over - no compression.
 				if (iread(Image->Data, 1, Image->SizeOfData) != Image->SizeOfData)
 					bVtf = IL_FALSE;
@@ -383,6 +419,28 @@ ILboolean iLoadVtfInternal()
 					break;
 				}
 				bVtf = iConvFloat16ToFloat32((ILuint*)Image->Data, (ILushort*)CompData, SizeOfData / 2);
+				break;
+
+			// Uncompressed 32-bit ARGB and ABGR data.  DevIL does not handle this
+			//   internally, so we have to swap values.
+			case IMAGE_FORMAT_ARGB8888:
+			case IMAGE_FORMAT_ABGR8888:
+				if (iread(Image->Data, 1, Image->SizeOfData) != Image->SizeOfData) {
+					bVtf = IL_FALSE;
+					break;
+				}
+				else {
+					bVtf = IL_TRUE;
+				}
+				// Swap the data
+				for (k = 0; k < Image->SizeOfData; k += 4) {
+					SwapVal = Image->Data[k];
+					Image->Data[k]   = Image->Data[k+3];
+					Image->Data[k+3] = SwapVal;
+					SwapVal = Image->Data[k+1];
+					Image->Data[k+1] = Image->Data[k+2];
+					Image->Data[k+2] = SwapVal;
+				}
 				break;
 		}
 
