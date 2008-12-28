@@ -203,10 +203,11 @@ ILboolean iLoadVtfInternal()
 {
 	ILboolean	bVtf = IL_TRUE;
 	ILimage		*Image;
-	ILuint		Width, Height, Depth;
+	ILuint		Width, Height, Depth, SizeOfData;
 	ILenum		Format, Type;
 	ILint		i, j;
 	ILuint		Channels, Bpc;
+	ILubyte		*CompData = NULL;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -219,41 +220,58 @@ ILboolean iLoadVtfInternal()
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
 	}
-	
-	Width = Head.Width;
-	Height = Head.Height;
-	Depth = Head.Depth;
 
 	//@TODO: Take care of volume textures soon.
 	if (Head.Depth != 1) {
 		ilSetError(IL_FORMAT_NOT_SUPPORTED);
 		return IL_FALSE;
 	}
-
-	if (!ilTexImage(Head.LowResImageWidth, Head.LowResImageHeight, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL))
+	//@TODO: Take care of animation chains soon.
+	if (Head.Frames > 1) {
+		ilSetError(IL_FORMAT_NOT_SUPPORTED);
 		return IL_FALSE;
-	// The origin should be in the upper left.
-	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
+	}
 
 	// Read the low resolution image first.  This is just a thumbnail.
 	//  Just read it and discard it for right now.
-	if (!VtfDecompressDXT1(iCurImage))
-		return IL_FALSE;
+	//  The block size is 8, and the compression ratio is 6:1.
+	SizeOfData = max(Head.LowResImageWidth * Head.LowResImageHeight / 2, 8);
+	iseek(SizeOfData, IL_SEEK_CUR);
 
-	// Make this a helper function that set channels, bpc and format.
+	//@TODO: Make this a helper function that set channels, bpc and format.
 	switch (Head.HighResImageFormat)
 	{
 		case IMAGE_FORMAT_DXT1:
-			Channels = 4;
-			Bpc = 1;
-			Format = IL_RGBA;
-			Type = IL_UNSIGNED_BYTE;
-			break;
+		case IMAGE_FORMAT_DXT3:
 		case IMAGE_FORMAT_DXT5:
 			Channels = 4;
 			Bpc = 1;
 			Format = IL_RGBA;
 			Type = IL_UNSIGNED_BYTE;
+			break;
+		case IMAGE_FORMAT_BGR888:
+			Channels = 3;
+			Bpc = 1;
+			Format = IL_BGR;
+			Type = IL_UNSIGNED_BYTE;
+			break;
+		case IMAGE_FORMAT_BGRA8888:
+			Channels = 4;
+			Bpc = 1;
+			Format = IL_BGRA;
+			Type = IL_UNSIGNED_BYTE;
+			break;
+		case IMAGE_FORMAT_RGBA16161616:  // 16-bit shorts
+			Channels = 4;
+			Bpc = 2;
+			Format = IL_RGBA;
+			Type = IL_UNSIGNED_SHORT;
+			break;
+		case IMAGE_FORMAT_RGBA16161616F:  // 16-bit floats
+			Channels = 4;
+			Bpc = 4;
+			Format = IL_RGBA;
+			Type = IL_FLOAT;
 			break;
 
 		default:
@@ -261,7 +279,6 @@ ILboolean iLoadVtfInternal()
 			return IL_FALSE;
 	}
 
-//@TODO: Change...!
 	if (!ilTexImage(Head.Width, Head.Height, Head.Depth, Channels, Format, Type, NULL))
 		return IL_FALSE;
 	// The origin should be in the upper left.
@@ -293,17 +310,86 @@ ILboolean iLoadVtfInternal()
 
 		switch (Head.HighResImageFormat)
 		{
+			// DXT1 compression
 			case IMAGE_FORMAT_DXT1:
-				bVtf = VtfDecompressDXT1(Image);
-				if (bVtf == IL_FALSE)  //@TODO: Do we need to do any cleanup here?
-					return IL_FALSE;
+				// The block size is 8.
+				SizeOfData = max(Image->Width * Image->Height / 2, 8);
+				CompData = ialloc(SizeOfData);  // Gives a 6:1 compression ratio
+				iread(CompData, 1, SizeOfData);
+				if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
+					Image->DxtcSize = SizeOfData;
+					Image->DxtcData = CompData;
+					Image->DxtcFormat = IL_DXT5;
+					CompData = NULL;
+				}
+				bVtf = DecompressDXT1(Image, CompData);
 				break;
+
+			// DXT3 compression
+			case IMAGE_FORMAT_DXT3:
+				// The block size is 16.
+				SizeOfData = max(Image->Width * Image->Height, 16);
+				CompData = ialloc(SizeOfData);  // Gives a 4:1 compression ratio
+				iread(CompData, 1, SizeOfData);
+				if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
+					Image->DxtcSize = SizeOfData;
+					Image->DxtcData = CompData;
+					Image->DxtcFormat = IL_DXT3;
+					CompData = NULL;
+				}
+				bVtf = DecompressDXT3(Image, CompData);
+				break;
+
+			// DXT5 compression
 			case IMAGE_FORMAT_DXT5:
-				bVtf = VtfDecompressDXT5(Image);
-				if (bVtf == IL_FALSE)  //@TODO: Do we need to do any cleanup here?
-					return IL_FALSE;
+				// The block size is 16.
+				SizeOfData = max(Image->Width * Image->Height, 16);
+				CompData = ialloc(SizeOfData);  // Gives a 4:1 compression ratio
+				iread(CompData, 1, SizeOfData);
+				if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
+					Image->DxtcSize = SizeOfData;
+					Image->DxtcData = CompData;
+					Image->DxtcFormat = IL_DXT5;
+					CompData = NULL;
+				}
+				bVtf = DecompressDXT5(Image, CompData);
+				break;
+
+			// Uncompressed BGR(A) data (24-bit and 32-bit)
+			case IMAGE_FORMAT_BGR888:
+			case IMAGE_FORMAT_BGRA8888:
+				// Just copy the data over - no compression.
+				if (iread(Image->Data, 1, Image->SizeOfData) != Image->SizeOfData)
+					bVtf = IL_FALSE;
+				else
+					bVtf = IL_TRUE;
+				break;
+
+			// Uncompressed 16-bit shorts
+			case IMAGE_FORMAT_RGBA16161616:
+				// Just copy the data over - no compression.
+				if (iread(Image->Data, 1, Image->SizeOfData) != Image->SizeOfData)
+					bVtf = IL_FALSE;
+				else
+					bVtf = IL_TRUE;
+				break;
+
+			// Uncompressed 16-bit floats (must be converted to 32-bit)
+			case IMAGE_FORMAT_RGBA16161616F:
+				SizeOfData = Image->Width * Image->Height * Image->Depth * Image->Bpp * 2;
+				CompData = ialloc(SizeOfData);  // Not compressed data
+				if (iread(CompData, 1, SizeOfData) != SizeOfData) {
+					bVtf = IL_FALSE;
+					break;
+				}
+				bVtf = iConvFloat16ToFloat32((ILuint*)Image->Data, (ILushort*)CompData, SizeOfData / 2);
 				break;
 		}
+
+		ifree(CompData);
+		CompData = NULL;
+		if (bVtf == IL_FALSE)  //@TODO: Do we need to do any cleanup here?
+			return IL_FALSE;
 	}
 
 
@@ -315,203 +401,5 @@ ILboolean iLoadVtfInternal()
 	ilBindImage(ilGetCurName());  // Set to parent image first.
 	return ilFixImage();
 }
-
-
-//@TODO: Taken from il_dds.c.  Make the code more modular.
-ILboolean VtfDecompressDXT1(ILimage *Image)
-{
-	ILuint		x, y, z, i, j, k, Select;
-	Color8888	colours[4], *col;
-	ILushort	color_0, color_1;
-	ILuint		bitmask, Offset;
-
-	if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST)
-		// Precache a minimum of 64-bits (8 bytes).
-		//iPreCache(max(Image->Width * Image->Height * 4 / 6), 8);  // Gives 6:1 compression.
-		iPreCache(Image->Width * Image->Height * 4 / 6);  // Gives 6:1 compression.
-
-	colours[0].a = 0xFF;
-	colours[1].a = 0xFF;
-	colours[2].a = 0xFF;
-	//colours[3].a = 0xFF;
-	for (z = 0; z < Image->Depth; z++) {
-		for (y = 0; y < Image->Height; y += 4) {
-			for (x = 0; x < Image->Width; x += 4) {
-				color_0 = GetLittleUShort();
-				color_1 = GetLittleUShort();
-				DxtcReadColor(color_0, colours);
-				DxtcReadColor(color_1, colours + 1);
-				bitmask = GetLittleUInt();
-
-				if (color_0 > color_1) {
-					// Four-color block: derive the other two colors.
-					// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
-					// These 2-bit codes correspond to the 2-bit fields 
-					// stored in the 64-bit block.
-					colours[2].b = (2 * colours[0].b + colours[1].b + 1) / 3;
-					colours[2].g = (2 * colours[0].g + colours[1].g + 1) / 3;
-					colours[2].r = (2 * colours[0].r + colours[1].r + 1) / 3;
-					//colours[2].a = 0xFF;
-
-					colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
-					colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
-					colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
-					colours[3].a = 0xFF;
-				}
-				else { 
-					// Three-color block: derive the other color.
-					// 00 = color_0,  01 = color_1,  10 = color_2,
-					// 11 = transparent.
-					// These 2-bit codes correspond to the 2-bit fields 
-					// stored in the 64-bit block. 
-					colours[2].b = (colours[0].b + colours[1].b) / 2;
-					colours[2].g = (colours[0].g + colours[1].g) / 2;
-					colours[2].r = (colours[0].r + colours[1].r) / 2;
-					//colours[2].a = 0xFF;
-
-					colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
-					colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
-					colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
-					colours[3].a = 0x00;
-				}
-
-				for (j = 0, k = 0; j < 4; j++) {
-					for (i = 0; i < 4; i++, k++) {
-
-						Select = (bitmask & (0x03 << k*2)) >> k*2;
-						col = &colours[Select];
-
-						if (((x + i) < Image->Width) && ((y + j) < Image->Height)) {
-							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp;
-							Image->Data[Offset + 0] = col->r;
-							Image->Data[Offset + 1] = col->g;
-							Image->Data[Offset + 2] = col->b;
-							Image->Data[Offset + 3] = col->a;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	iUnCache();
-
-	return IL_TRUE;
-}
-
-
-ILboolean VtfDecompressDXT5(ILimage *Image)
-{
-	ILuint		x, y, z, i, j, k, Select;
-	Color8888	colours[4], *col;
-	ILuint		bitmask, Offset;
-	ILubyte		alphas[8], alphamask[6];
-	ILuint		bits;
-	ILubyte		Data[4];  //@TODO: Change
-
-	for (z = 0; z < Image->Depth; z++) {
-		for (y = 0; y < Image->Height; y += 4) {
-			for (x = 0; x < Image->Width; x += 4) {
-				if (y >= Image->Height || x >= Image->Width)
-					break;
-				alphas[0] = igetc();
-				alphas[1] = igetc();
-				iread(alphamask, 1, 6);
-
-				iread(Data, 1, 4);
-				DxtcReadColors(Data, colours);
-				bitmask = GetLittleUInt();
-
-				// Four-color block: derive the other two colors.    
-				// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
-				// These 2-bit codes correspond to the 2-bit fields 
-				// stored in the 64-bit block.
-				colours[2].b = (2 * colours[0].b + colours[1].b + 1) / 3;
-				colours[2].g = (2 * colours[0].g + colours[1].g + 1) / 3;
-				colours[2].r = (2 * colours[0].r + colours[1].r + 1) / 3;
-				//colours[2].a = 0xFF;
-
-				colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
-				colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
-				colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
-				//colours[3].a = 0xFF;
-
-				k = 0;
-				for (j = 0; j < 4; j++) {
-					for (i = 0; i < 4; i++, k++) {
-						Select = (bitmask & (0x03 << k*2)) >> k*2;
-						col = &colours[Select];
-
-						// only put pixels out < width or height
-						if (((x + i) < Image->Width) && ((y + j) < Image->Height)) {
-							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp;
-							Image->Data[Offset + 0] = col->r;
-							Image->Data[Offset + 1] = col->g;
-							Image->Data[Offset + 2] = col->b;
-						}
-					}
-				}
-
-				// 8-alpha or 6-alpha block?    
-				if (alphas[0] > alphas[1]) {    
-					// 8-alpha block:  derive the other six alphas.    
-					// Bit code 000 = alpha_0, 001 = alpha_1, others are interpolated.
-					alphas[2] = (6 * alphas[0] + 1 * alphas[1] + 3) / 7;	// bit code 010
-					alphas[3] = (5 * alphas[0] + 2 * alphas[1] + 3) / 7;	// bit code 011
-					alphas[4] = (4 * alphas[0] + 3 * alphas[1] + 3) / 7;	// bit code 100
-					alphas[5] = (3 * alphas[0] + 4 * alphas[1] + 3) / 7;	// bit code 101
-					alphas[6] = (2 * alphas[0] + 5 * alphas[1] + 3) / 7;	// bit code 110
-					alphas[7] = (1 * alphas[0] + 6 * alphas[1] + 3) / 7;	// bit code 111
-				}
-				else {
-					// 6-alpha block.
-					// Bit code 000 = alpha_0, 001 = alpha_1, others are interpolated.
-					alphas[2] = (4 * alphas[0] + 1 * alphas[1] + 2) / 5;	// Bit code 010
-					alphas[3] = (3 * alphas[0] + 2 * alphas[1] + 2) / 5;	// Bit code 011
-					alphas[4] = (2 * alphas[0] + 3 * alphas[1] + 2) / 5;	// Bit code 100
-					alphas[5] = (1 * alphas[0] + 4 * alphas[1] + 2) / 5;	// Bit code 101
-					alphas[6] = 0x00;										// Bit code 110
-					alphas[7] = 0xFF;										// Bit code 111
-				}
-
-				// Note: Have to separate the next two loops,
-				//	it operates on a 6-byte system.
-
-				// First three bytes
-				//bits = *((ILint*)alphamask);
-				bits = (alphamask[0]) | (alphamask[1] << 8) | (alphamask[2] << 16);
-				for (j = 0; j < 2; j++) {
-					for (i = 0; i < 4; i++) {
-						// only put pixels out < width or height
-						if (((x + i) < Image->Width) && ((y + j) < Image->Height)) {
-							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
-							Image->Data[Offset] = alphas[bits & 0x07];
-						}
-						bits >>= 3;
-					}
-				}
-
-				// Last three bytes
-				//bits = *((ILint*)&alphamask[3]);
-				bits = (alphamask[3]) | (alphamask[4] << 8) | (alphamask[5] << 16);
-				for (j = 2; j < 4; j++) {
-					for (i = 0; i < 4; i++) {
-						// only put pixels out < width or height
-						if (((x + i) < Image->Width) && ((y + j) < Image->Height)) {
-							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
-							Image->Data[Offset] = alphas[bits & 0x07];
-						}
-						bits >>= 3;
-					}
-				}
-			}
-		}
-	}
-
-	return IL_TRUE;
-}
-
-
-
 
 #endif//IL_NO_VTF

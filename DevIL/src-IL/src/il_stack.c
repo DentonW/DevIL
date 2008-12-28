@@ -284,12 +284,12 @@ ILboolean ILAPIENTRY ilActiveMipmap(ILuint Number)
     iTempImage = iCurImage;
 	iCurImage = iCurImage->Mipmaps;
 	for (Current = 1; Current < Number; Current++) {
-		iCurImage = iCurImage->Next;
 		if (iCurImage == NULL) {
 			ilSetError(IL_INTERNAL_ERROR);
 			iCurImage = iTempImage;
 			return IL_FALSE;
 		}
+		iCurImage = iCurImage->Next;
 	}
 
 	ParentImage = IL_FALSE;
@@ -317,12 +317,12 @@ ILboolean ILAPIENTRY ilActiveImage(ILuint Number)
 	iCurImage = iCurImage->Next;
 	Number--;  // Skip 0 (parent image)
 	for (Current = 0; Current < Number; Current++) {
-		iCurImage = iCurImage->Next;
 		if (iCurImage == NULL) {
 			ilSetError(IL_INTERNAL_ERROR);
 			iCurImage = iTempImage;
 			return IL_FALSE;
 		}
+		iCurImage = iCurImage->Next;
 	}
 
 	ParentImage = IL_FALSE;
@@ -350,12 +350,12 @@ ILboolean ILAPIENTRY ilActiveLayer(ILuint Number)
 	iCurImage = iCurImage->Layers;
 	//Number--;  // Skip 0 (parent image)
 	for (Current = 1; Current < Number; Current++) {
-		iCurImage = iCurImage->Layers;
 		if (iCurImage == NULL) {
 			ilSetError(IL_INTERNAL_ERROR);
 			iCurImage = iTempImage;
 			return IL_FALSE;
 		}
+		iCurImage = iCurImage->Layers;
 	}
 
 	ParentImage = IL_FALSE;

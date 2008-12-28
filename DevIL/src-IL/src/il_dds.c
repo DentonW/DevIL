@@ -31,7 +31,7 @@
 
 // Global variables
 static DDSHEAD	Head;				// Image header
-static ILubyte	*CompData = NULL;		// Compressed data
+static ILubyte	*CompData = NULL;	// Compressed data
 static ILuint	CompSize;			// Compressed size
 static ILuint	CompFormat;			// Compressed format
 static ILimage	*Image;
@@ -773,19 +773,19 @@ ILboolean Decompress()
 			return DecompressARGB();
 
 		case PF_DXT1:
-			return DecompressDXT1();
+			return DecompressDXT1(Image, CompData);
 
 		case PF_DXT2:
-			return DecompressDXT2();
+			return DecompressDXT2(Image, CompData);
 
 		case PF_DXT3:
-			return DecompressDXT3();
+			return DecompressDXT3(Image, CompData);
 
 		case PF_DXT4:
-			return DecompressDXT4();
+			return DecompressDXT4(Image, CompData);
 
 		case PF_DXT5:
-			return DecompressDXT5();
+			return DecompressDXT5(Image, CompData);
 
 		case PF_ATI1N:
 			return DecompressAti1n();
@@ -806,7 +806,7 @@ ILboolean Decompress()
 		case PF_R32F:
 		case PF_G32R32F:
 		case PF_A32B32G32R32F:
-			return DecompressFloat();
+			return DecompressFloat(CompFormat);
 
 		case PF_UNKNOWN:
 			return IL_FALSE;
@@ -998,25 +998,25 @@ void DxtcReadColor(ILushort Data, Color8888* Out)
 	Out->b = b << 3;
 }
 
-ILboolean DecompressDXT1()
+ILboolean DecompressDXT1(ILimage *lImage, ILubyte *lCompData)
 {
-	int			x, y, z, i, j, k, Select;
+	ILuint		x, y, z, i, j, k, Select;
 	ILubyte		*Temp;
 	Color8888	colours[4], *col;
 	ILushort	color_0, color_1;
 	ILuint		bitmask, Offset;
 
-	if (!CompData)
+	if (!lCompData)
 		return IL_FALSE;
 
-	Temp = CompData;
+	Temp = lCompData;
 	colours[0].a = 0xFF;
 	colours[1].a = 0xFF;
 	colours[2].a = 0xFF;
 	//colours[3].a = 0xFF;
-	for (z = 0; z < Depth; z++) {
-		for (y = 0; y < Height; y += 4) {
-			for (x = 0; x < Width; x += 4) {
+	for (z = 0; z < lImage->Depth; z++) {
+		for (y = 0; y < lImage->Height; y += 4) {
+			for (x = 0; x < lImage->Width; x += 4) {
 				color_0 = *((ILushort*)Temp);
 				UShort(&color_0);
 				color_1 = *((ILushort*)(Temp + 2));
@@ -1061,16 +1061,15 @@ ILboolean DecompressDXT1()
 
 				for (j = 0, k = 0; j < 4; j++) {
 					for (i = 0; i < 4; i++, k++) {
-
 						Select = (bitmask & (0x03 << k*2)) >> k*2;
 						col = &colours[Select];
 
-						if (((x + i) < Width) && ((y + j) < Height)) {
-							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp;
-							Image->Data[Offset + 0] = col->r;
-							Image->Data[Offset + 1] = col->g;
-							Image->Data[Offset + 2] = col->b;
-							Image->Data[Offset + 3] = col->a;
+						if (((x + i) < lImage->Width) && ((y + j) < lImage->Height)) {
+							Offset = z * lImage->SizeOfPlane + (y + j) * lImage->Bps + (x + i) * lImage->Bpp;
+							lImage->Data[Offset + 0] = col->r;
+							lImage->Data[Offset + 1] = col->g;
+							lImage->Data[Offset + 2] = col->b;
+							lImage->Data[Offset + 3] = col->a;
 						}
 					}
 				}
@@ -1082,11 +1081,11 @@ ILboolean DecompressDXT1()
 }
 
 
-ILboolean DecompressDXT2()
+ILboolean DecompressDXT2(ILimage *lImage, ILubyte *lCompData)
 {
 	// Can do color & alpha same as dxt3, but color is pre-multiplied 
 	//   so the result will be wrong unless corrected. 
-	if (!DecompressDXT3())
+	if (!DecompressDXT3(Image, CompData))
 		return IL_FALSE;
 	CorrectPreMult();
 
@@ -1094,23 +1093,23 @@ ILboolean DecompressDXT2()
 }
 
 
-ILboolean DecompressDXT3()
+ILboolean DecompressDXT3(ILimage *lImage, ILubyte *lCompData)
 {
-	int			x, y, z, i, j, k, Select;
+	ILuint		x, y, z, i, j, k, Select;
 	ILubyte		*Temp;
 	//Color565	*color_0, *color_1;
 	Color8888	colours[4], *col;
 	ILuint		bitmask, Offset;
 	ILushort	word;
-	ILubyte *alpha;
+	ILubyte		*alpha;
 
-	if (!CompData)
+	if (!lCompData)
 		return IL_FALSE;
 
-	Temp = CompData;
-	for (z = 0; z < Depth; z++) {
-		for (y = 0; y < Height; y += 4) {
-			for (x = 0; x < Width; x += 4) {
+	Temp = lCompData;
+	for (z = 0; z < lImage->Depth; z++) {
+		for (y = 0; y < lImage->Height; y += 4) {
+			for (x = 0; x < lImage->Width; x += 4) {
 				alpha = Temp;
 				Temp += 8;
 				DxtcReadColors(Temp, colours);
@@ -1135,15 +1134,14 @@ ILboolean DecompressDXT3()
 				k = 0;
 				for (j = 0; j < 4; j++) {
 					for (i = 0; i < 4; i++, k++) {
-
 						Select = (bitmask & (0x03 << k*2)) >> k*2;
 						col = &colours[Select];
 
-						if (((x + i) < Width) && ((y + j) < Height)) {
-							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp;
-							Image->Data[Offset + 0] = col->r;
-							Image->Data[Offset + 1] = col->g;
-							Image->Data[Offset + 2] = col->b;
+						if (((x + i) < lImage->Width) && ((y + j) < lImage->Height)) {
+							Offset = z * lImage->SizeOfPlane + (y + j) * lImage->Bps + (x + i) * lImage->Bpp;
+							lImage->Data[Offset + 0] = col->r;
+							lImage->Data[Offset + 1] = col->g;
+							lImage->Data[Offset + 2] = col->b;
 						}
 					}
 				}
@@ -1151,10 +1149,10 @@ ILboolean DecompressDXT3()
 				for (j = 0; j < 4; j++) {
 					word = alpha[2*j] + 256*alpha[2*j+1];
 					for (i = 0; i < 4; i++) {
-						if (((x + i) < Width) && ((y + j) < Height)) {
-							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
-							Image->Data[Offset] = word & 0x0F;
-							Image->Data[Offset] = Image->Data[Offset] | (Image->Data[Offset] << 4);
+						if (((x + i) < lImage->Width) && ((y + j) < lImage->Height)) {
+							Offset = z * lImage->SizeOfPlane + (y + j) * lImage->Bps + (x + i) * lImage->Bpp + 3;
+							lImage->Data[Offset] = word & 0x0F;
+							lImage->Data[Offset] = lImage->Data[Offset] | (lImage->Data[Offset] << 4);
 						}
 						word >>= 4;
 					}
@@ -1168,11 +1166,11 @@ ILboolean DecompressDXT3()
 }
 
 
-ILboolean DecompressDXT4()
+ILboolean DecompressDXT4(ILimage *lImage, ILubyte *lCompData)
 {
 	// Can do color & alpha same as dxt5, but color is pre-multiplied 
 	//   so the result will be wrong unless corrected. 
-	if (!DecompressDXT5())
+	if (!DecompressDXT5(Image, CompData))
 		return IL_FALSE;
 	CorrectPreMult();
 
@@ -1180,23 +1178,23 @@ ILboolean DecompressDXT4()
 }
 
 
-ILboolean DecompressDXT5()
+ILboolean DecompressDXT5(ILimage *lImage, ILubyte *lCompData)
 {
-	int			x, y, z, i, j, k, Select;
+	ILuint		x, y, z, i, j, k, Select;
 	ILubyte		*Temp; //, r0, g0, b0, r1, g1, b1;
 	Color8888	colours[4], *col;
 	ILuint		bitmask, Offset;
 	ILubyte		alphas[8], *alphamask;
 	ILuint		bits;
 
-	if (!CompData)
+	if (!lCompData)
 		return IL_FALSE;
 
-	Temp = CompData;
-	for (z = 0; z < Depth; z++) {
-		for (y = 0; y < Height; y += 4) {
-			for (x = 0; x < Width; x += 4) {
-				if (y >= Height || x >= Width)
+	Temp = lCompData;
+	for (z = 0; z < lImage->Depth; z++) {
+		for (y = 0; y < lImage->Height; y += 4) {
+			for (x = 0; x < lImage->Width; x += 4) {
+				if (y >= lImage->Height || x >= lImage->Width)
 					break;
 				alphas[0] = Temp[0];
 				alphas[1] = Temp[1];
@@ -1230,11 +1228,11 @@ ILboolean DecompressDXT5()
 						col = &colours[Select];
 
 						// only put pixels out < width or height
-						if (((x + i) < Width) && ((y + j) < Height)) {
-							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp;
-							Image->Data[Offset + 0] = col->r;
-							Image->Data[Offset + 1] = col->g;
-							Image->Data[Offset + 2] = col->b;
+						if (((x + i) < lImage->Width) && ((y + j) < lImage->Height)) {
+							Offset = z * lImage->SizeOfPlane + (y + j) * lImage->Bps + (x + i) * lImage->Bpp;
+							lImage->Data[Offset + 0] = col->r;
+							lImage->Data[Offset + 1] = col->g;
+							lImage->Data[Offset + 2] = col->b;
 						}
 					}
 				}
@@ -1270,9 +1268,9 @@ ILboolean DecompressDXT5()
 				for (j = 0; j < 2; j++) {
 					for (i = 0; i < 4; i++) {
 						// only put pixels out < width or height
-						if (((x + i) < Width) && ((y + j) < Height)) {
-							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
-							Image->Data[Offset] = alphas[bits & 0x07];
+						if (((x + i) < lImage->Width) && ((y + j) < lImage->Height)) {
+							Offset = z * lImage->SizeOfPlane + (y + j) * lImage->Bps + (x + i) * lImage->Bpp + 3;
+							lImage->Data[Offset] = alphas[bits & 0x07];
 						}
 						bits >>= 3;
 					}
@@ -1284,9 +1282,9 @@ ILboolean DecompressDXT5()
 				for (j = 2; j < 4; j++) {
 					for (i = 0; i < 4; i++) {
 						// only put pixels out < width or height
-						if (((x + i) < Width) && ((y + j) < Height)) {
-							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
-							Image->Data[Offset] = alphas[bits & 0x07];
+						if (((x + i) < lImage->Width) && ((y + j) < lImage->Height)) {
+							Offset = z * lImage->SizeOfPlane + (y + j) * lImage->Bps + (x + i) * lImage->Bpp + 3;
+							lImage->Data[Offset] = alphas[bits & 0x07];
 						}
 						bits >>= 3;
 					}
@@ -1299,7 +1297,7 @@ ILboolean DecompressDXT5()
 }
 
 
-ILboolean	Decompress3Dc()
+ILboolean Decompress3Dc()
 {
 	int			x, y, z, i, j, k, t1, t2;
 	ILubyte		*Temp, *Temp2;
@@ -1654,9 +1652,9 @@ ILboolean iConvFloat16ToFloat32(ILuint* dest, ILushort* src, ILuint size)
 }
 
 
-ILboolean DecompressFloat()
+ILboolean DecompressFloat(ILuint lCompFormat)
 {
-	switch(CompFormat)
+	switch (lCompFormat)
 	{
 		case PF_R32F:
 		case PF_G32R32F:

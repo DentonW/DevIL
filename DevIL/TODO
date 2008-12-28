@@ -45,6 +45,8 @@ Denton:
 - More checks for headers of unknown file types
 - Set CompSize in ReadData of il_dds.c for DDS_LINEARSIZE flag?
 - Get rid of check for precache.
+- Look at resize filters in VTFEdit.
+- Get rid of globals in il_dds.c.
 
 
 For 1.7.0

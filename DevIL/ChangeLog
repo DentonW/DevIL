@@ -5,6 +5,7 @@
 - Added .vtf support.
 - Fixed bug in file caching if the buffer was too small.
 - Fixed crash saving .tga files if no author name string present.
+- Fixed crash in ilActive* if a number too large is specified.
 
 1.7.4
 ---

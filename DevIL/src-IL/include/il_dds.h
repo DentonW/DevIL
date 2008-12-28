@@ -172,38 +172,33 @@ ILboolean	iLoadDdsInternal(void);
 ILboolean	iIsValidDds(void);
 ILboolean	iCheckDds(DDSHEAD *Head);
 void		AdjustVolumeTexture(DDSHEAD *Head);
-ILboolean	ReadData(void);
-ILboolean	AllocImage(void);
-ILboolean	Decompress(void);
-ILboolean	ReadMipmaps(void);
-ILuint		DecodePixelFormat(void);
+ILboolean	ReadData();
+ILboolean	AllocImage();
+ILboolean	Decompress();
+ILboolean	ReadMipmaps();
+ILuint		DecodePixelFormat();
 void		DxtcReadColor(ILushort Data, Color8888* Out);
 void		DxtcReadColors(const ILubyte* Data, Color8888* Out);
-ILboolean	DecompressARGB(void);
-ILboolean	DecompressDXT1(void);
-ILboolean	DecompressDXT2(void);
-ILboolean	DecompressDXT3(void);
-ILboolean	DecompressDXT4(void);
-ILboolean	DecompressDXT5(void);
-
-ILboolean	Decompress3Dc(void);
-
-ILboolean	DecompressAti1n(void);
-
-ILboolean	DecompressRXGB(void);
-
-ILboolean	DecompressFloat(void);
-void		CorrectPreMult(void);
+ILboolean	DecompressARGB();
+ILboolean	DecompressDXT1(ILimage *lImage, ILubyte *lCompData);
+ILboolean	DecompressDXT2(ILimage *lImage, ILubyte *lCompData);
+ILboolean	DecompressDXT3(ILimage *lImage, ILubyte *lCompData);
+ILboolean	DecompressDXT4(ILimage *lImage, ILubyte *lCompData);
+ILboolean	DecompressDXT5(ILimage *lImage, ILubyte *lCompData);
+ILboolean	Decompress3Dc();
+ILboolean	DecompressAti1n();
+ILboolean	DecompressRXGB();
+ILboolean	iConvFloat16ToFloat32(ILuint* dest, ILushort* src, ILuint size);
+ILboolean	DecompressFloat(ILuint lCompFormat);
+void		CorrectPreMult();
 void		GetBitsFromMask(ILuint Mask, ILuint *ShiftLeft, ILuint *ShiftRight);
 ILboolean	iSaveDdsInternal(void);
 ILboolean	WriteHeader(ILimage *Image, ILenum DXTCFormat, ILuint CubeFlags);
 ILushort	*CompressTo565(ILimage *Image);
-
 ILubyte		*CompressTo88(ILimage *Image);
 ILuint		Compress(ILimage *Image, ILenum DXTCFormat);
 ILboolean	GetBlock(ILushort *Block, ILushort *Data, ILimage *Image, ILuint XPos, ILuint YPos);
 ILboolean	GetAlphaBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XPos, ILuint YPos);
-
 ILboolean	Get3DcBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XPos, ILuint YPos, int channel);
 void		ShortToColor565(ILushort Pixel, Color565 *Colour);
 void		ShortToColor888(ILushort Pixel, Color888 *Colour);
