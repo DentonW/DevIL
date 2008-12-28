@@ -206,6 +206,7 @@ typedef double         ILclampd;
 #define IL_JP2			0x0441
 #define IL_EXR			0x0442
 #define IL_WDP			0x0443
+#define IL_VTF			0x0444
 
 
 #define IL_JASC_PAL     0x0475

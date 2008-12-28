@@ -1472,6 +1472,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\il_vtf.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\il_wal.c"
 				>
 				<FileConfiguration

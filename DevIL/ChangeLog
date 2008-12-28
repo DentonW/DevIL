@@ -1,6 +1,8 @@
 1.7.5
 ---
 - Added check in iluScale for parameters of 0, which would cause a crash.
+- Cleaned up the tons of extra lines in il_dds.c.
+- Added .vtf support.
 
 1.7.4
 ---

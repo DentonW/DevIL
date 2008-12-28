@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 02/21/2002 <--Y2K Compliant! =]
+// Copyright (C) 2000-2008 by Denton Woods
+// Last modified: 12/27/2008
 //
 // Filename: src-IL/include/il_dds.h
 //
@@ -150,29 +150,17 @@ enum PixFormat
 	PF_DXT3,
 	PF_DXT4,
 	PF_DXT5,
-
 	PF_3DC,
-
 	PF_ATI1N,
-
 	PF_LUMINANCE,
-
 	PF_LUMINANCE_ALPHA,
-
 	PF_RXGB, //Doom3 normal maps
-
 	PF_A16B16G16R16,
-
 	PF_R16F,
-
 	PF_G16R16F,
-
 	PF_A16B16G16R16F,
-
 	PF_R32F,
-
 	PF_G32R32F,
-
 	PF_A32B32G32R32F,
 	PF_UNKNOWN = 0xFF
 };
@@ -189,6 +177,8 @@ ILboolean	AllocImage(void);
 ILboolean	Decompress(void);
 ILboolean	ReadMipmaps(void);
 ILuint		DecodePixelFormat(void);
+void		DxtcReadColor(ILushort Data, Color8888* Out);
+void		DxtcReadColors(const ILubyte* Data, Color8888* Out);
 ILboolean	DecompressARGB(void);
 ILboolean	DecompressDXT1(void);
 ILboolean	DecompressDXT2(void);

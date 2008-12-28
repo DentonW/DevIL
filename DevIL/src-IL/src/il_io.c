@@ -111,6 +111,8 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 		Type = IL_SGI;
 	else if (!iStrCmp(Ext, IL_TEXT("tif")) || !iStrCmp(Ext, IL_TEXT("tiff")))
 		Type = IL_TIF;
+	else if (!iStrCmp(Ext, IL_TEXT("vtf")))
+		Type = IL_VTF;
 	else if (!iStrCmp(Ext, IL_TEXT("wal")))
 		Type = IL_WAL;
 	else if (!iStrCmp(Ext, IL_TEXT("wdp")) || !iStrCmp(Ext, IL_TEXT("hdp")))
@@ -759,6 +761,12 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 			break;
 		#endif
 
+		#ifndef IL_NO_VTF
+		case IL_WDP:
+			bRet = ilLoadVtf(FileName);
+			break;
+		#endif
+
 		#ifndef IL_NO_WAL
 		case IL_WAL:
 			bRet = ilLoadWal(FileName);
@@ -942,6 +950,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadTiffF(File);
 		#endif
 
+		#ifndef IL_NO_VTF
+		case IL_VTF:
+			return ilLoadVtfF(File);
+		#endif
+
 		#ifndef IL_NO_WAL
 		case IL_WAL:
 			return ilLoadWalF(File);
@@ -1102,6 +1115,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size) {
 		#ifndef IL_NO_TIF
 		case IL_TIF:
 			return ilLoadTiffL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_VTF
+		case IL_VTF:
+			return ilLoadVtfL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_WAL
@@ -1330,6 +1348,13 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#ifndef IL_NO_TIF
 		if (!iStrCmp(Ext, IL_TEXT("tif")) || !iStrCmp(Ext, IL_TEXT("tiff"))) {
 			bRet = ilLoadTiff(FileName);
+			goto finish;
+		}
+		#endif
+
+		#ifndef IL_NO_VTF
+		if (!iStrCmp(Ext, IL_TEXT("vtf"))) {
+			bRet = ilLoadVtf(FileName);
 			goto finish;
 		}
 		#endif

@@ -271,6 +271,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		L"Sgi Files (*.sgi)", L"*.bw;*.rgb;*.rgba;*.sgi",
 		L"Targa Files (*.tga, *.vda, *.icb, *.vst)", L"*.tga;*.vda;*.icb;*.vst",
 		L"Tiff Files (*.tif)", L"*.tif;*.tiff",
+		L"Valve Texture Files (*.vtf)", L"*.vtf",
 		L"Quake Wal Files (*.wal)", L"*.wal",
 		L"X PixelMap (*.xpm)", L"*.xpm",
 		L"ZSoft Pcx Files (*.pcx)", L"*.pcx",

@@ -42,6 +42,8 @@ Denton:
 - http://developer.nvidia.com/object/texture_tools.html - They have CUDA code to compress DXT.
 - .vtf support
 - Support for DX10 .dds files
+- More checks for headers of unknown file types
+- Set CompSize in ReadData of il_dds.c for DDS_LINEARSIZE flag?
 
 
 For 1.7.0

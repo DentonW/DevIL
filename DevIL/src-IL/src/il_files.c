@@ -515,7 +515,7 @@ void iUnCache()
 	//changed 2003-09-01:
 	//make iUnCache smart enough to return if
 	//no cache is used
-	if(!UseCache)
+	if (!UseCache)
 		return;
 
 	if (iread == iReadLump)
