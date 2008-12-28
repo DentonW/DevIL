@@ -149,7 +149,7 @@ char *iClipString(char *String, ILuint MaxLen)
 	if (String == NULL)
 		return NULL;
 
-	Length = strlen(String);  //ilStrLen(String);
+	Length = ilCharStrLen(String);  //ilStrLen(String);
 
 	Clipped = (char*)ialloc((MaxLen + 1) * sizeof(char) /*sizeof(ILchar)*/);  // Terminating NULL makes it +1.
 	if (Clipped == NULL) {

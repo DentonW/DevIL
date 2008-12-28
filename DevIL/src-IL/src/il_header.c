@@ -35,7 +35,7 @@ ILboolean ilSaveCHeader(ILconst_string FileName, char *InternalName)
 		Name = InternalName;
 
 	if (FileName == NULL || Name == NULL ||
-		ilStrLen(FileName) < 1 || strlen(Name) < 1) {
+		ilStrLen(FileName) < 1 || ilCharStrLen(Name) < 1) {
 		ilSetError(IL_INVALID_VALUE);
 		return IL_FALSE;
 	}

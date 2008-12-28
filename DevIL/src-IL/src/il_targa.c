@@ -604,7 +604,7 @@ ILboolean iSaveTargaInternal()
 		Compress = IL_FALSE;
 	
 	if (ID)
-		IDLen = (ILubyte)strlen(ID);
+		IDLen = (ILubyte)ilCharStrLen(ID);
 	
 	if (iCurImage->Pal.Palette && iCurImage->Pal.PalSize && iCurImage->Pal.PalType != IL_PAL_NONE)
 		UsePal = IL_TRUE;
@@ -750,10 +750,10 @@ ILboolean iSaveTargaInternal()
 	// Write the extension area.
 	ExtOffset = itellw();
 	SaveLittleUShort(495);	// Number of bytes in the extension area (TGA 2.0 spec)
-	iwrite(AuthName, 1, strlen(AuthName));
-	ipad(41 - strlen(AuthName));
-	iwrite(AuthComment, 1, strlen(AuthComment));
-	ipad(324 - strlen(AuthComment));
+	iwrite(AuthName, 1, ilCharStrLen(AuthName));
+	ipad(41 - ilCharStrLen(AuthName));
+	iwrite(AuthComment, 1, ilCharStrLen(AuthComment));
+	ipad(324 - ilCharStrLen(AuthComment));
 	ifree(AuthName);
 	ifree(AuthComment);
 	
@@ -776,8 +776,8 @@ ILboolean iSaveTargaInternal()
 		SaveLittleUShort(0);
 	}
 	
-	iwrite(idString, 1, strlen(idString));	// Software ID
-	for (i = 0; i < 41 - strlen(idString); i++) {
+	iwrite(idString, 1, ilCharStrLen(idString));	// Software ID
+	for (i = 0; i < 41 - ilCharStrLen(idString); i++) {
 		iputc(0);
 	}
 	SaveLittleUShort(IL_VERSION);  // Software version
@@ -794,7 +794,7 @@ ILboolean iSaveTargaInternal()
 	// Write the footer.
 	SaveLittleUInt(ExtOffset);	// No extension area
 	SaveLittleUInt(0);	// No developer directory
-	iwrite(Footer, 1, strlen(Footer));
+	iwrite(Footer, 1, ilCharStrLen(Footer));
 	
 	if (TempImage->Origin != IL_ORIGIN_LOWER_LEFT) {
 		ifree(TempData);
@@ -830,8 +830,8 @@ void iMakeString(char *Str)
 #endif
 	CurTime = localtime(&Time);
 	
-	strftime(TimeStr, 255 - strlen(PSG), "%#c (%z)", CurTime);
-	//strftime(TimeStr, 255 - strlen(PSG), "%C (%Z)", CurTime);
+	strftime(TimeStr, 255 - ilCharStrLen(PSG), "%#c (%z)", CurTime);
+	//strftime(TimeStr, 255 - ilCharStrLen(PSG), "%C (%Z)", CurTime);
 	sprintf(Str, "%s%s", PSG, TimeStr);
 	
 	return;

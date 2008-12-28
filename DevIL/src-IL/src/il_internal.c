@@ -82,6 +82,21 @@ ILuint ilStrLen(ILconst_string Str)
 }
 
 
+// Because MSVC++'s version is too stupid to check for NULL...
+//  Passing NULL to strlen will definitely cause a crash.
+ILuint ilCharStrLen(const char *Str)
+{
+	const char *eos = Str;
+
+	if (Str == NULL)
+		return 0;
+
+	while (*eos++);
+
+	return((int)(eos - Str - 1));
+}
+
+
 // Simple function to test if a filename has a given extension, disregarding case
 ILboolean iCheckExtension(ILconst_string Arg, ILconst_string Ext)
 {

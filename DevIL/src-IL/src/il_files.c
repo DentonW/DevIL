@@ -329,7 +329,7 @@ ILuint ILAPIENTRY ilprintf(const char *Line, ...)
 	vsprintf(Buffer, Line, VaLine);
 	va_end(VaLine);
 
-	i = strlen(Buffer);
+	i = ilCharStrLen(Buffer);
 	iwrite(Buffer, 1, i);
 
 	return i;
@@ -400,7 +400,7 @@ ILuint ILAPIENTRY iReadFile(void *Buffer, ILuint Size, ILuint Number)
 {
 	ILuint	TotalBytes = 0, BytesCopied;
 	ILuint	BuffSize = Size * Number;
-	ILuint NumRead;
+	ILuint	NumRead;
 
 	if (!UseCache) {
 		NumRead = ReadProc(Buffer, Size, Number, FileRead);
@@ -438,7 +438,10 @@ ILuint ILAPIENTRY iReadFile(void *Buffer, ILuint Size, ILuint Number)
 		}
 	}
 
-	CacheBytesRead += TotalBytes;
+	// DW: Changed on 12-27-2008.  Was causing the position to go too far if the
+	//     cache was smaller than the buffer.
+	//CacheBytesRead += TotalBytes;
+	CacheBytesRead = CachePos;
 	if (Size != 0)
 		TotalBytes /= Size;
 	if (TotalBytes != Number)

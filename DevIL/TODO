@@ -44,6 +44,7 @@ Denton:
 - Support for DX10 .dds files
 - More checks for headers of unknown file types
 - Set CompSize in ReadData of il_dds.c for DDS_LINEARSIZE flag?
+- Get rid of check for precache.
 
 
 For 1.7.0

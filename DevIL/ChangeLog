@@ -3,6 +3,8 @@
 - Added check in iluScale for parameters of 0, which would cause a crash.
 - Cleaned up the tons of extra lines in il_dds.c.
 - Added .vtf support.
+- Fixed bug in file caching if the buffer was too small.
+- Fixed crash saving .tga files if no author name string present.
 
 1.7.4
 ---

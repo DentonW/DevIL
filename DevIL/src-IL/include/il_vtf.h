@@ -123,6 +123,7 @@ ILboolean	iGetVtfHead(VTFHEAD *Header);
 ILboolean	iCheckVtf(VTFHEAD *Header);
 ILboolean	iLoadVtfInternal(void);
 ILboolean	VtfReadData(void);
-ILboolean	VtfDecompressDXT1(ILimage *Image, ILuint Width, ILuint Height, ILuint Depth);
+ILboolean	VtfDecompressDXT1(ILimage *Image);
+ILboolean	VtfDecompressDXT5(ILimage *Image);
 
 #endif//VTF_H

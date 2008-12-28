@@ -457,7 +457,7 @@ ILboolean XpmPredefCol(char *Buff, XpmPixel *Colour)
 	}
 
 	//check for grayXXX codes (added 20040218)
-	len = strlen(Buff);
+	len = ilCharStrLen(Buff);
 	if (len >= 4) {
 		if (Buff[0] == 'g' || Buff[0] == 'G'
 			|| Buff[1] == 'r' || Buff[1] == 'R'

@@ -20,7 +20,7 @@ ILboolean ilIsValidSgi(ILconst_string FileName)
 		return bSgi;
 	}
 
-	FName = (char*) FileName;
+	FName = (char*)FileName;
 
 	SgiFile = iopenr(FileName);
 	if (SgiFile == NULL) {
@@ -612,7 +612,7 @@ ILboolean iSaveSgiInternal()
 	SaveBigInt(0);  // Dummy value
 
 	if (FName) {
-		c = strlen(FName);
+		c = ilCharStrLen(FName);
 		c = c < 79 ? 79 : c;
 		iwrite(FName, 1, c);
 		c = 80 - c;

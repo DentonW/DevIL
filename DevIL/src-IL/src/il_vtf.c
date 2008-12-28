@@ -125,11 +125,12 @@ ILboolean iCheckVtf(VTFHEAD *Header)
 	// Are there other versions available yet?
 	if (Header->Version[0] != 7)
 		return IL_FALSE;
-	// We have 7.0 through 7.2 as of 12/27/2008.
-	if (Header->Version[1] > 2)
+	// We have 7.0 through 7.4 as of 12/27/2008.
+	if (Header->Version[1] > 4)
 		return IL_FALSE;
 	// May change in future version of the specifications.
-	if (Header->HeaderSize != 80)
+	//  80 is through version 7.2, and 96 is through 7.4.
+	if ((Header->HeaderSize != 80) && (Header->HeaderSize != 104))
 		return IL_FALSE;
 
 	// 0 is an invalid dimension
@@ -203,6 +204,7 @@ ILboolean iLoadVtfInternal()
 	ILboolean	bVtf = IL_TRUE;
 	ILimage		*Image;
 	ILuint		Width, Height, Depth;
+	ILenum		Format, Type;
 	ILint		i, j;
 	ILuint		Channels, Bpc;
 
@@ -233,15 +235,10 @@ ILboolean iLoadVtfInternal()
 	// The origin should be in the upper left.
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 
-	// Read the low resolution image first.  This is pretty much just a thumbnail.
+	// Read the low resolution image first.  This is just a thumbnail.
 	//  Just read it and discard it for right now.
-	if (!VtfDecompressDXT1(iCurImage, Head.LowResImageWidth, Head.LowResImageHeight, 1))
+	if (!VtfDecompressDXT1(iCurImage))
 		return IL_FALSE;
-
-	// Next comes the high resolution images.  The mipmaps are in order from smallest to largest in the file.
-	//  We want them the other way around.
-
-	Image = iCurImage;
 
 	// Make this a helper function that set channels, bpc and format.
 	switch (Head.HighResImageFormat)
@@ -249,24 +246,33 @@ ILboolean iLoadVtfInternal()
 		case IMAGE_FORMAT_DXT1:
 			Channels = 4;
 			Bpc = 1;
-
-
-
+			Format = IL_RGBA;
+			Type = IL_UNSIGNED_BYTE;
 			break;
+		case IMAGE_FORMAT_DXT5:
+			Channels = 4;
+			Bpc = 1;
+			Format = IL_RGBA;
+			Type = IL_UNSIGNED_BYTE;
+			break;
+
 		default:
 			ilSetError(IL_FORMAT_NOT_SUPPORTED);
 			return IL_FALSE;
 	}
 
 //@TODO: Change...!
-	if (!ilTexImage(Head.Width, Head.Height, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL))
+	if (!ilTexImage(Head.Width, Head.Height, Head.Depth, Channels, Format, Type, NULL))
 		return IL_FALSE;
 	// The origin should be in the upper left.
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
+	Image = iCurImage;
 
-
+	// Next comes the high resolution images.  The mipmaps are in order from smallest to largest in the file.
+	//  We want them the other way around.
 	Width = iCurImage->Width;  Height = iCurImage->Height;  Depth = iCurImage->Depth;
 	for (i = 0; i < Head.MipmapCount - 1; i++) {
+		// 1 is the smallest dimension possible.
 		Width = (Width >> 1) == 0 ? 1 : (Width >> 1);
 		Height = (Height >> 1) == 0 ? 1 : (Height >> 1);
 		Depth = (Depth >> 1) == 0 ? 1 : (Depth >> 1);
@@ -277,17 +283,30 @@ ILboolean iLoadVtfInternal()
 		Image->Origin = IL_ORIGIN_UPPER_LEFT;
 		Image = Image->Next;
 	}
-//	Image = iCurImage;
 
 	for (i = 0; i < Head.MipmapCount; i++) {
 		Image = iCurImage;
+		// We want to put the smallest mipmap at the end, but it is first in the file.
 		for (j = 1; j < Head.MipmapCount - i; j++) {
 			Image = Image->Next;  // Move down the linked list.
 		}
 
-		if (VtfDecompressDXT1(Image, Image->Width, Image->Height, Image->Depth) == IL_FALSE)  //@TODO: Do we need to do any cleanup here?
-			return IL_FALSE;
+		switch (Head.HighResImageFormat)
+		{
+			case IMAGE_FORMAT_DXT1:
+				bVtf = VtfDecompressDXT1(Image);
+				if (bVtf == IL_FALSE)  //@TODO: Do we need to do any cleanup here?
+					return IL_FALSE;
+				break;
+			case IMAGE_FORMAT_DXT5:
+				bVtf = VtfDecompressDXT5(Image);
+				if (bVtf == IL_FALSE)  //@TODO: Do we need to do any cleanup here?
+					return IL_FALSE;
+				break;
+		}
 	}
+
+
 
 //@TODO: Cannot be like this for animation chains!
 	iCurImage->Mipmaps = iCurImage->Next;
@@ -299,7 +318,7 @@ ILboolean iLoadVtfInternal()
 
 
 //@TODO: Taken from il_dds.c.  Make the code more modular.
-ILboolean VtfDecompressDXT1(ILimage *Image, ILuint Width, ILuint Height, ILuint Depth)
+ILboolean VtfDecompressDXT1(ILimage *Image)
 {
 	ILuint		x, y, z, i, j, k, Select;
 	Color8888	colours[4], *col;
@@ -307,15 +326,17 @@ ILboolean VtfDecompressDXT1(ILimage *Image, ILuint Width, ILuint Height, ILuint 
 	ILuint		bitmask, Offset;
 
 	if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST)
+		// Precache a minimum of 64-bits (8 bytes).
+		//iPreCache(max(Image->Width * Image->Height * 4 / 6), 8);  // Gives 6:1 compression.
 		iPreCache(Image->Width * Image->Height * 4 / 6);  // Gives 6:1 compression.
 
 	colours[0].a = 0xFF;
 	colours[1].a = 0xFF;
 	colours[2].a = 0xFF;
 	//colours[3].a = 0xFF;
-	for (z = 0; z < Depth; z++) {
-		for (y = 0; y < Height; y += 4) {
-			for (x = 0; x < Width; x += 4) {
+	for (z = 0; z < Image->Depth; z++) {
+		for (y = 0; y < Image->Height; y += 4) {
+			for (x = 0; x < Image->Width; x += 4) {
 				color_0 = GetLittleUShort();
 				color_1 = GetLittleUShort();
 				DxtcReadColor(color_0, colours);
@@ -360,7 +381,7 @@ ILboolean VtfDecompressDXT1(ILimage *Image, ILuint Width, ILuint Height, ILuint 
 						Select = (bitmask & (0x03 << k*2)) >> k*2;
 						col = &colours[Select];
 
-						if (((x + i) < Width) && ((y + j) < Height)) {
+						if (((x + i) < Image->Width) && ((y + j) < Image->Height)) {
 							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp;
 							Image->Data[Offset + 0] = col->r;
 							Image->Data[Offset + 1] = col->g;
@@ -377,5 +398,120 @@ ILboolean VtfDecompressDXT1(ILimage *Image, ILuint Width, ILuint Height, ILuint 
 
 	return IL_TRUE;
 }
+
+
+ILboolean VtfDecompressDXT5(ILimage *Image)
+{
+	ILuint		x, y, z, i, j, k, Select;
+	Color8888	colours[4], *col;
+	ILuint		bitmask, Offset;
+	ILubyte		alphas[8], alphamask[6];
+	ILuint		bits;
+	ILubyte		Data[4];  //@TODO: Change
+
+	for (z = 0; z < Image->Depth; z++) {
+		for (y = 0; y < Image->Height; y += 4) {
+			for (x = 0; x < Image->Width; x += 4) {
+				if (y >= Image->Height || x >= Image->Width)
+					break;
+				alphas[0] = igetc();
+				alphas[1] = igetc();
+				iread(alphamask, 1, 6);
+
+				iread(Data, 1, 4);
+				DxtcReadColors(Data, colours);
+				bitmask = GetLittleUInt();
+
+				// Four-color block: derive the other two colors.    
+				// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
+				// These 2-bit codes correspond to the 2-bit fields 
+				// stored in the 64-bit block.
+				colours[2].b = (2 * colours[0].b + colours[1].b + 1) / 3;
+				colours[2].g = (2 * colours[0].g + colours[1].g + 1) / 3;
+				colours[2].r = (2 * colours[0].r + colours[1].r + 1) / 3;
+				//colours[2].a = 0xFF;
+
+				colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
+				colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
+				colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
+				//colours[3].a = 0xFF;
+
+				k = 0;
+				for (j = 0; j < 4; j++) {
+					for (i = 0; i < 4; i++, k++) {
+						Select = (bitmask & (0x03 << k*2)) >> k*2;
+						col = &colours[Select];
+
+						// only put pixels out < width or height
+						if (((x + i) < Image->Width) && ((y + j) < Image->Height)) {
+							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp;
+							Image->Data[Offset + 0] = col->r;
+							Image->Data[Offset + 1] = col->g;
+							Image->Data[Offset + 2] = col->b;
+						}
+					}
+				}
+
+				// 8-alpha or 6-alpha block?    
+				if (alphas[0] > alphas[1]) {    
+					// 8-alpha block:  derive the other six alphas.    
+					// Bit code 000 = alpha_0, 001 = alpha_1, others are interpolated.
+					alphas[2] = (6 * alphas[0] + 1 * alphas[1] + 3) / 7;	// bit code 010
+					alphas[3] = (5 * alphas[0] + 2 * alphas[1] + 3) / 7;	// bit code 011
+					alphas[4] = (4 * alphas[0] + 3 * alphas[1] + 3) / 7;	// bit code 100
+					alphas[5] = (3 * alphas[0] + 4 * alphas[1] + 3) / 7;	// bit code 101
+					alphas[6] = (2 * alphas[0] + 5 * alphas[1] + 3) / 7;	// bit code 110
+					alphas[7] = (1 * alphas[0] + 6 * alphas[1] + 3) / 7;	// bit code 111
+				}
+				else {
+					// 6-alpha block.
+					// Bit code 000 = alpha_0, 001 = alpha_1, others are interpolated.
+					alphas[2] = (4 * alphas[0] + 1 * alphas[1] + 2) / 5;	// Bit code 010
+					alphas[3] = (3 * alphas[0] + 2 * alphas[1] + 2) / 5;	// Bit code 011
+					alphas[4] = (2 * alphas[0] + 3 * alphas[1] + 2) / 5;	// Bit code 100
+					alphas[5] = (1 * alphas[0] + 4 * alphas[1] + 2) / 5;	// Bit code 101
+					alphas[6] = 0x00;										// Bit code 110
+					alphas[7] = 0xFF;										// Bit code 111
+				}
+
+				// Note: Have to separate the next two loops,
+				//	it operates on a 6-byte system.
+
+				// First three bytes
+				//bits = *((ILint*)alphamask);
+				bits = (alphamask[0]) | (alphamask[1] << 8) | (alphamask[2] << 16);
+				for (j = 0; j < 2; j++) {
+					for (i = 0; i < 4; i++) {
+						// only put pixels out < width or height
+						if (((x + i) < Image->Width) && ((y + j) < Image->Height)) {
+							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
+							Image->Data[Offset] = alphas[bits & 0x07];
+						}
+						bits >>= 3;
+					}
+				}
+
+				// Last three bytes
+				//bits = *((ILint*)&alphamask[3]);
+				bits = (alphamask[3]) | (alphamask[4] << 8) | (alphamask[5] << 16);
+				for (j = 2; j < 4; j++) {
+					for (i = 0; i < 4; i++) {
+						// only put pixels out < width or height
+						if (((x + i) < Image->Width) && ((y + j) < Image->Height)) {
+							Offset = z * Image->SizeOfPlane + (y + j) * Image->Bps + (x + i) * Image->Bpp + 3;
+							Image->Data[Offset] = alphas[bits & 0x07];
+						}
+						bits >>= 3;
+					}
+				}
+			}
+		}
+	}
+
+	return IL_TRUE;
+}
+
+
+
 
 #endif//IL_NO_VTF

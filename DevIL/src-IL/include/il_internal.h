@@ -157,6 +157,7 @@ ILboolean	iFileExists(ILconst_string FileName);
 ILstring	iGetExtension(ILconst_string FileName);
 ILstring	ilStrDup(ILconst_string Str);
 ILuint		ilStrLen(ILconst_string Str);
+ILuint		ilCharStrLen(const char *Str);
 // Miscellaneous functions
 void					ilDefaultStates(void);
 ILenum					iGetHint(ILenum Target);
