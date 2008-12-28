@@ -129,8 +129,8 @@ ILboolean iCheckVtf(VTFHEAD *Header)
 	if (Header->Version[1] > 4)
 		return IL_FALSE;
 	// May change in future version of the specifications.
-	//  80 is through version 7.2, and 96 is through 7.4.
-	if ((Header->HeaderSize != 80) && (Header->HeaderSize != 104))
+	//  80 is through version 7.2, and 96/104 are through 7.4.
+	if ((Header->HeaderSize != 80) && (Header->HeaderSize != 96) && (Header->HeaderSize != 104))
 		return IL_FALSE;
 
 	// 0 is an invalid dimension
