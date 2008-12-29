@@ -109,6 +109,7 @@ typedef double         ILclampd;
 #define IL_BGRA             0x80E1
 #define IL_LUMINANCE        0x1909
 #define IL_LUMINANCE_ALPHA  0x190A
+#define IL_ALPHA			0x190B
 
 
 #define IL_BYTE           0x1400

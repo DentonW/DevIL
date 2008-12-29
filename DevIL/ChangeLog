@@ -6,6 +6,8 @@
 - Fixed bug in file caching if the buffer was too small.
 - Fixed crash saving .tga files if no author name string present.
 - Fixed crash in ilActive* if a number too large is specified.
+- Added support for alpha-only formats (IL_ALPHA).
+- Better conversion from lower bpp to higher bpp data.
 
 1.7.4
 ---

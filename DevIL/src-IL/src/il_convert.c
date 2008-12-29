@@ -24,6 +24,7 @@ ILimage *iConvertPalette(ILimage *Image, ILenum DestFormat)
 	ILfloat		Resultf;
 	ILubyte		*Temp = NULL;
 	ILboolean	Converted;
+	ILboolean	HasAlpha;
 
 	NewImage = (ILimage*)icalloc(1, sizeof(ILimage));  // Much better to have it all set to 0.
 	if (NewImage == NULL) {
@@ -115,6 +116,62 @@ ILimage *iConvertPalette(ILimage *Image, ILenum DestFormat)
 		else {
 			for (i = 0; i < Image->SizeOfData; i++) {
 				NewImage->Data[i] = Temp[Image->Data[i]];
+			}
+		}
+
+		ifree(Temp);
+
+		return NewImage;
+	}
+	else if (DestFormat == IL_ALPHA) {
+		if (NewImage->Pal.Palette)
+			ifree(NewImage->Pal.Palette);
+
+		switch (iCurImage->Pal.PalType)
+		{
+			// Opaque, so all the values are 0xFF.
+			case IL_PAL_RGB24:
+			case IL_PAL_RGB32:
+			case IL_PAL_BGR24:
+			case IL_PAL_BGR32:
+				HasAlpha = IL_FALSE;
+				break;
+
+			case IL_PAL_BGRA32:
+			case IL_PAL_RGBA32:
+				HasAlpha = IL_TRUE;
+				Temp = (ILubyte*)ialloc(1 * Image->Pal.PalSize / ilGetBppPal(Image->Pal.PalType));
+				if (Temp == NULL)
+					goto alloc_error;
+
+				Size = ilGetBppPal(Image->Pal.PalType);
+				for (i = 0, k = 0; i < Image->Pal.PalSize; i += Size, k += 1) {
+					Temp[k] = Image->Pal.Palette[i + 3];
+				}
+
+				break;
+		}
+
+		NewImage->Pal.Palette = NULL;
+		NewImage->Pal.PalSize = 0;
+		NewImage->Pal.PalType = IL_PAL_NONE;
+		NewImage->Format = DestFormat;
+		NewImage->Bpp = LumBpp;
+		NewImage->Bps = NewImage->Width * 1;  // Alpha is only one byte.
+		NewImage->SizeOfData = NewImage->SizeOfPlane = NewImage->Bps * NewImage->Height;
+		NewImage->Data = (ILubyte*)ialloc(NewImage->SizeOfData);
+		if (NewImage->Data == NULL)
+			goto alloc_error;
+
+		if (HasAlpha) {
+			for (i = 0; i < Image->SizeOfData; i++) {
+				NewImage->Data[i*2] = Temp[Image->Data[i] * 2];
+				NewImage->Data[i*2+1] = Temp[Image->Data[i] * 2 + 1];
+			}
+		}
+		else {  // No alpha, opaque.
+			for (i = 0; i < Image->SizeOfData; i++) {
+				NewImage->Data[i] = 0xFF;
 			}
 		}
 
@@ -414,9 +471,10 @@ ILboolean ilSwapColours()
 		case IL_BGRA:
 			iCurImage->Format = IL_RGBA;
 			break;
+		case IL_ALPHA:
 		case IL_LUMINANCE:
 		case IL_LUMINANCE_ALPHA:
-			return IL_TRUE;  // No need to do anything to luminance images.
+			return IL_TRUE;  // No need to do anything to luminance or alpha images.
 		case IL_COLOUR_INDEX:
 			switch (iCurImage->Pal.PalType)
 			{

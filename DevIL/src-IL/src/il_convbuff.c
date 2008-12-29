@@ -364,6 +364,12 @@ ILAPI void* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, ILen
 					}
 					break;
 
+				case IL_ALPHA:
+					NewData = (ILubyte*)ialloc(NumPix * BpcDest / 3);
+					CHECK_ALLOC();
+					memset(NewData, 0, NumPix * BpcDest);
+					break;
+
 				default:
 					ilSetError(IL_INVALID_CONVERSION);
 					if (Data != Buffer)
@@ -657,6 +663,44 @@ ILAPI void* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, ILen
 								}
 								((ILdouble*)(NewData))[i] = Resultd;
 								((ILdouble*)(NewData))[i+1] = ((ILdouble*)(Data))[i * 2 + 3];
+							}
+							break;
+					}
+					break;
+
+				case IL_ALPHA:
+					NewData = (ILubyte*)ialloc(NumPix * BpcDest / 4);
+					CHECK_ALLOC();
+					Size = NumPix / 4;
+					switch (DestType)
+					{
+						case IL_UNSIGNED_BYTE:
+						case IL_BYTE:
+							for (i = 0; i < Size; i++) {
+								NewData[i] = ((ILubyte*)(Data))[i * 4 + 3];
+							}
+							break;
+						case IL_UNSIGNED_SHORT:
+						case IL_SHORT:
+						case IL_HALF:
+							for (i = 0; i < Size; i++) {
+								((ILushort*)(NewData))[i] = ((ILushort*)(Data))[i * 4 + 3];
+							}
+							break;
+						case IL_UNSIGNED_INT:
+						case IL_INT:
+							for (i = 0; i < Size; i++) {
+								((ILuint*)(NewData))[i] = ((ILuint*)(Data))[i * 4 + 3];
+							}
+							break;
+						case IL_FLOAT:
+							for (i = 0; i < Size; i++) {
+								((ILfloat*)(NewData))[i] = ((ILfloat*)(Data))[i * 4 + 3];
+							}
+							break;
+						case IL_DOUBLE:
+							for (i = 0; i < Size; i++) {
+								((ILdouble*)(NewData))[i] = ((ILdouble*)(Data))[i * 4 + 3];
 							}
 							break;
 					}
@@ -965,6 +1009,12 @@ ILAPI void* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, ILen
 					}
 					break;
 
+				case IL_ALPHA:
+					NewData = (ILubyte*)ialloc(NumPix * BpcDest / 3);
+					CHECK_ALLOC();
+					memset(NewData, 0, NumPix * BpcDest / 3);
+					break;
+
 				default:
 					ilSetError(IL_INVALID_CONVERSION);
 					if (Data != Buffer)
@@ -1263,6 +1313,44 @@ ILAPI void* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, ILen
 					}
 					break;
 
+				case IL_ALPHA:
+					NewData = (ILubyte*)ialloc(NumPix * BpcDest / 4);
+					CHECK_ALLOC();
+					Size = NumPix / 4;
+					switch (DestType)
+					{
+						case IL_UNSIGNED_BYTE:
+						case IL_BYTE:
+							for (i = 0; i < Size; i++) {
+								NewData[i] = ((ILubyte*)(Data))[i * 4 + 3];
+							}
+							break;
+						case IL_UNSIGNED_SHORT:
+						case IL_SHORT:
+						case IL_HALF:
+							for (i = 0; i < Size; i++) {
+								((ILushort*)(NewData))[i] = ((ILushort*)(Data))[i * 4 + 3];
+							}
+							break;
+						case IL_UNSIGNED_INT:
+						case IL_INT:
+							for (i = 0; i < Size; i++) {
+								((ILuint*)(NewData))[i] = ((ILuint*)(Data))[i * 4 + 3];
+							}
+							break;
+						case IL_FLOAT:
+							for (i = 0; i < Size; i++) {
+								((ILfloat*)(NewData))[i] = ((ILfloat*)(Data))[i * 4 + 3];
+							}
+							break;
+						case IL_DOUBLE:
+							for (i = 0; i < Size; i++) {
+								((ILdouble*)(NewData))[i] = ((ILdouble*)(Data))[i * 4 + 3];
+							}
+							break;
+					}
+					break;
+
 				default:
 					ilSetError(IL_INVALID_CONVERSION);
 					if (Data != Buffer)
@@ -1270,6 +1358,7 @@ ILAPI void* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, ILen
 					return NULL;
 			}
 			break;
+
 
 		case IL_LUMINANCE:
 			switch (DestFormat)
@@ -1420,6 +1509,11 @@ ILAPI void* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, ILen
 					}
 					break;
 
+				case IL_ALPHA:
+					NewData = (ILubyte*)ialloc(NumPix * BpcDest);
+					CHECK_ALLOC();
+					memset(NewData, 0, NumPix * BpcDest);
+					break;
 
 				/*case IL_COLOUR_INDEX:
 					NewData = (ILubyte*)ialloc(iCurImage->SizeOfData);
@@ -1594,6 +1688,196 @@ ILAPI void* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, ILen
 					}
 					break;
 
+				case IL_ALPHA:
+					NewData = (ILubyte*)ialloc(NumPix * BpcDest / 2);
+					CHECK_ALLOC();
+					Size = NumPix / 2;
+					switch (DestType)
+					{
+						case IL_UNSIGNED_BYTE:
+						case IL_BYTE:
+							for (i = 0; i < Size; i++) {
+								NewData[i] = ((ILubyte*)(Data))[i * 2 + 3];
+							}
+							break;
+						case IL_UNSIGNED_SHORT:
+						case IL_SHORT:
+						case IL_HALF:
+							for (i = 0; i < Size; i++) {
+								((ILushort*)(NewData))[i] = ((ILushort*)(Data))[i * 2 + 3];
+							}
+							break;
+						case IL_UNSIGNED_INT:
+						case IL_INT:
+							for (i = 0; i < Size; i++) {
+								((ILuint*)(NewData))[i] = ((ILuint*)(Data))[i * 2 + 3];
+							}
+							break;
+						case IL_FLOAT:
+							for (i = 0; i < Size; i++) {
+								((ILfloat*)(NewData))[i] = ((ILfloat*)(Data))[i * 2 + 3];
+							}
+							break;
+						case IL_DOUBLE:
+							for (i = 0; i < Size; i++) {
+								((ILdouble*)(NewData))[i] = ((ILdouble*)(Data))[i * 2 + 3];
+							}
+							break;
+					}
+					break;
+
+				/*case IL_COLOUR_INDEX:
+					NewData = (ILubyte*)ialloc(iCurImage->SizeOfData);
+					NewImage->Pal.Palette = (ILubyte*)ialloc(768);
+					if (NewData == NULL || NewImage->Pal.Palette) {
+						ifree(NewImage);
+						return IL_FALSE;
+					}
+
+					// Fill the palette
+					for (i = 0; i < 256; i++) {
+						for (c = 0; c < 3; c++) {
+							NewImage->Pal.Palette[i * 3 + c] = (ILubyte)i;
+						}
+					}
+					// Copy the data
+					for (i = 0; i < iCurImage->SizeOfData; i++) {
+						NewData[i] = iCurImage->Data[i];
+					}
+					break;*/
+
+				default:
+					ilSetError(IL_INVALID_CONVERSION);
+					if (Data != Buffer)
+						ifree(Data);
+					return NULL;
+			}
+			break;
+
+
+		case IL_ALPHA:
+			switch (DestFormat)
+			{
+				case IL_RGB:
+				case IL_BGR:
+					NewData = (ILubyte*)ialloc(NumPix * BpcDest * 3);
+					CHECK_ALLOC();
+
+					switch (DestType)
+					{
+						case IL_UNSIGNED_BYTE:
+						case IL_BYTE:
+						case IL_UNSIGNED_SHORT:
+						case IL_SHORT:
+						case IL_HALF:
+						case IL_UNSIGNED_INT:
+						case IL_INT:
+						case IL_FLOAT:
+						case IL_DOUBLE:
+							memset(NewData, 0, NumPix * BpcDest * 3);  // Easy enough
+							break;
+						//@TODO: Do we need to a check for default: (error)?
+					}
+					break;
+
+				case IL_RGBA:
+				case IL_BGRA:
+					NewData = (ILubyte*)ialloc(NumPix * BpcDest * 4);
+					CHECK_ALLOC();
+
+					switch (DestType)
+					{
+						case IL_UNSIGNED_BYTE:
+						case IL_BYTE:
+							for (i = 0, j = 0; i < NumPix; i++, j += 4) {
+								for (c = 0; c < 3; c++) {
+									NewData[j + c] = 0;
+								}
+								NewData[j + 3] = ((ILubyte*)(Data))[i];  // Only value that matters
+							}
+							break;
+						case IL_UNSIGNED_SHORT:
+						case IL_SHORT:
+						case IL_HALF:
+							for (i = 0, j = 0; i < NumPix; i++, j += 4) {
+								for (c = 0; c < 3; c++) {
+									((ILushort*)(NewData))[j + c] = 0;
+								}
+								((ILushort*)(NewData))[j + 3] = ((ILushort*)(Data))[i];
+							}
+							break;
+						case IL_UNSIGNED_INT:
+						case IL_INT:
+							for (i = 0, j = 0; i < NumPix; i++, j += 4) {
+								for (c = 0; c < 3; c++) {
+									((ILuint*)(NewData))[j + c] = 0;
+								}
+								((ILuint*)(NewData))[j + 3] = ((ILuint*)(Data))[i];
+							}
+							break;
+						case IL_FLOAT:
+							for (i = 0, j = 0; i < NumPix; i++, j += 4) {
+								for (c = 0; c < 3; c++) {
+									((ILfloat*)(NewData))[j + c] = 0;
+								}
+								((ILfloat*)(NewData))[j + 3] = ((ILfloat*)(Data))[i];
+							}
+							break;
+						case IL_DOUBLE:
+							for (i = 0, j = 0; i < NumPix; i++, j += 4) {
+								for (c = 0; c < 3; c++) {
+									((ILdouble*)(NewData))[j + c] = 0;
+								}
+								((ILdouble*)(NewData))[j + 3] = ((ILdouble*)(Data))[i];
+							}
+							break;
+					}
+					break;
+
+				case IL_LUMINANCE_ALPHA:
+					NewData = (ILubyte*)ialloc(NumPix * BpcDest * 2);
+					CHECK_ALLOC();
+
+					switch (DestType)
+					{
+						case IL_UNSIGNED_BYTE:
+						case IL_BYTE:
+							for (i = 0; i < NumPix; i++) {
+								NewData[i * 2] = 0;
+								NewData[i * 2 + 1] = ((ILubyte*)(Data))[i];
+							}
+							break;
+						case IL_UNSIGNED_SHORT:
+						case IL_SHORT:
+						case IL_HALF:
+							for (i = 0; i < NumPix; i++) {
+								((ILushort*)(NewData))[i * 2] = 0;
+								((ILushort*)(NewData))[i * 2 + 1] = ((ILushort*)(Data))[i];
+							}
+							break;
+						case IL_UNSIGNED_INT:
+						case IL_INT:
+							for (i = 0; i < NumPix; i++) {
+								((ILuint*)(NewData))[i * 2] = 0;
+								((ILuint*)(NewData))[i * 2 + 1] = ((ILuint*)(Data))[i];
+							}
+							break;
+						case IL_FLOAT:
+							for (i = 0; i < NumPix; i++) {
+								((ILfloat*)(NewData))[i * 2] = 0;
+								((ILfloat*)(NewData))[i * 2 + 1] = ((ILfloat*)(Data))[i];
+							}
+							break;
+						case IL_DOUBLE:
+							for (i = 0; i < NumPix; i++) {
+								((ILdouble*)(NewData))[i * 2] = 0;
+								((ILdouble*)(NewData))[i * 2 + 1] = ((ILdouble*)(Data))[i];
+							}
+							break;
+					}
+					break;
+
+
 				/*case IL_COLOUR_INDEX:
 					NewData = (ILubyte*)ialloc(iCurImage->SizeOfData);
 					NewImage->Pal.Palette = (ILubyte*)ialloc(768);
@@ -1631,6 +1915,8 @@ ILAPI void* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, ILen
 
 
 // Really shouldn't have to check for default, as in above ilConvertBuffer().
+//  This now converts better from lower bpp to higher bpp.  For example, when
+//  converting from 8 bpp to 16 bpp, if the value is 0xEC, the new value is 0xECEC.
 void* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestType, void *Buffer) {
 	ILuint		BpcSrc, BpcDest, Size, i;
 	ILubyte		*NewData, *BytePtr;
@@ -1684,7 +1970,7 @@ void* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestType
 							tempFloat = IL_CLAMP(((ILfloat*)Buffer)[i]);
 							BytePtr[i] = (ILubyte)(tempFloat * UCHAR_MAX);
 						#else
-							BytePtr[i] = (ILubyte)( ((ILfloat*)Buffer)[i] * UCHAR_MAX);
+							BytePtr[i] = (ILubyte)(((ILfloat*)Buffer)[i] * UCHAR_MAX);
 						#endif
 					}
 					break;
@@ -1721,7 +2007,7 @@ void* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestType
 				case IL_UNSIGNED_BYTE:
 				case IL_BYTE:
 					for (i = 0; i < Size; i++) {
-						ShortPtr[i] = ((ILubyte*)Buffer)[i] << 8;
+						ShortPtr[i] = (((ILubyte*)Buffer)[i] << 8) | ((ILubyte*)Buffer)[i];
 					}
 					break;
 				case IL_UNSIGNED_INT:
@@ -1773,13 +2059,14 @@ void* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestType
 				case IL_UNSIGNED_BYTE:
 				case IL_BYTE:
 					for (i = 0; i < Size; i++) {
-						IntPtr[i] = ((ILubyte*)Buffer)[i] << 24;
+						IntPtr[i] = (((ILubyte*)Buffer)[i] << 24) | (((ILubyte*)Buffer)[i] << 16) | 
+							(((ILubyte*)Buffer)[i] << 8) | ((ILubyte*)Buffer)[i];
 					}
 					break;
 				case IL_UNSIGNED_SHORT:
 				case IL_SHORT:
 					for (i = 0; i < Size; i++) {
-						IntPtr[i] = ((ILushort*)Buffer)[i] << 16;
+						IntPtr[i] = (((ILushort*)Buffer)[i] << 16) | ((ILushort*)Buffer)[i];
 					}
 					break;
 				case IL_FLOAT:

@@ -250,6 +250,7 @@ ILboolean iLoadVtfInternal()
 			Type = IL_UNSIGNED_BYTE;
 			break;
 		case IMAGE_FORMAT_BGR888:
+		case IMAGE_FORMAT_BGR888_BLUESCREEN:
 			Channels = 3;
 			Bpc = 1;
 			Format = IL_BGR;
@@ -268,6 +269,7 @@ ILboolean iLoadVtfInternal()
 			Type = IL_UNSIGNED_BYTE;
 			break;
 		case IMAGE_FORMAT_RGB888:
+		case IMAGE_FORMAT_RGB888_BLUESCREEN:
 			Channels = 3;
 			Bpc = 1;
 			Format = IL_RGB;
@@ -301,6 +303,12 @@ ILboolean iLoadVtfInternal()
 			Channels = 2;
 			Bpc = 1;
 			Format = IL_LUMINANCE_ALPHA;
+			Type = IL_UNSIGNED_BYTE;
+			break;
+		case IMAGE_FORMAT_A8:  // 8-bit alpha data
+			Channels = 1;
+			Bpc = 1;
+			Format = IL_ALPHA;
 			Type = IL_UNSIGNED_BYTE;
 			break;
 		case IMAGE_FORMAT_ARGB8888:
@@ -435,6 +443,12 @@ ILboolean iLoadVtfInternal()
 			case IMAGE_FORMAT_I8:
 			// Luminance and alpha data
 			case IMAGE_FORMAT_IA88:
+			// Alpha data only
+			case IMAGE_FORMAT_A8:
+			// We will ignore the part about the bluescreen right now.
+			//   I could not find any information about it.
+			case IMAGE_FORMAT_RGB888_BLUESCREEN:
+			case IMAGE_FORMAT_BGR888_BLUESCREEN:
 				// Just copy the data over - no compression.
 				if (iread(Image->Data, 1, Image->SizeOfData) != Image->SizeOfData)
 					bVtf = IL_FALSE;
