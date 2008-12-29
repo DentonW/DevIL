@@ -40,7 +40,7 @@ typedef struct VTFHEAD
 	ILfloat		BumpmapScale;		// Bumpmap scale.
 	ILuint		HighResImageFormat;	// High resolution image format.
 	ILubyte		MipmapCount;		// Number of mipmaps.
-	ILuint		LowResImageFormat;	// Low resolution image format (always DXT1).
+	ILint		LowResImageFormat;	// Low resolution image format (always DXT1).
 	ILubyte		LowResImageWidth;	// Low resolution image width.
 	ILubyte		LowResImageHeight;	// Low resolution image height.
 	ILushort	Depth;				// Depth of the largest mipmap in pixels.
@@ -122,6 +122,7 @@ ILboolean	iIsValidVtf(void);
 ILboolean	iGetVtfHead(VTFHEAD *Header);
 ILboolean	iCheckVtf(VTFHEAD *Header);
 ILboolean	iLoadVtfInternal(void);
+ILboolean	VtfInitMipmaps(ILimage *BaseImage, VTFHEAD *Header);
 ILboolean	VtfReadData(void);
 ILboolean	VtfDecompressDXT1(ILimage *Image);
 ILboolean	VtfDecompressDXT5(ILimage *Image);

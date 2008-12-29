@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 02/19/2002 <--Y2K Compliant! =]
+// Copyright (C) 2000-2008 by Denton Woods
+// Last modified: 12/28/2008
 //
 // Filename: IL/devil_internal_exports.h
 //
@@ -55,7 +55,8 @@ typedef struct ILpal
 
 
 // The Fundamental Image struct
-typedef struct ILimage {
+typedef struct ILimage
+{
 	ILuint          Width;       // the image's width
 	ILuint          Height;      // the image's height
 	ILuint          Depth;       // the image's depth
