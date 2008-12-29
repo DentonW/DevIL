@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 08/19/2008
+// Last modified: 12/27/2008
 //
 // Filename: src-IL/src/il_bmp.c
 //
@@ -112,7 +112,8 @@ ILboolean iGetOS2Head(OS2_HEAD * const Header)
 
 
 // Internal function to get the header and check it.
-ILboolean iIsValidBmp() {
+ILboolean iIsValidBmp()
+{
 	BMPHEAD		Head;
 	OS2_HEAD	Os2Head;
 	ILboolean	IsValid;
@@ -131,7 +132,8 @@ ILboolean iIsValidBmp() {
 
 
 // Internal function used to check if the HEADER is a valid .bmp header.
-ILboolean iCheckBmp(const BMPHEAD * CONST_RESTRICT Header) {
+ILboolean iCheckBmp (const BMPHEAD * CONST_RESTRICT Header)
+{
 	//if ((Header->bfType != ('B'|('M'<<8))) || ((Header->biSize != 0x28) && (Header->biSize != 0x0C)))
 	if ((Header->bfType != ('B'|('M'<<8))) || (Header->biSize != 0x28))
 		return IL_FALSE;
@@ -151,7 +153,8 @@ ILboolean iCheckBmp(const BMPHEAD * CONST_RESTRICT Header) {
 }
 
 
-ILboolean iCheckOS2( const OS2_HEAD * CONST_RESTRICT Header) {
+ILboolean iCheckOS2 (const OS2_HEAD * CONST_RESTRICT Header)
+{
 	if ((Header->bfType != ('B'|('M'<<8))) || (Header->DataOff < 26) || (Header->cbFix < 12))
 		return IL_FALSE;
 	if (Header->cPlanes != 1)
@@ -185,7 +188,8 @@ ILboolean ilLoadBmp(ILconst_string FileName) {
 
 
 //! Reads an already-opened .bmp file
-ILboolean ilLoadBmpF(ILHANDLE File) {
+ILboolean ilLoadBmpF(ILHANDLE File)
+{
 	ILuint		FirstPos;
 	ILboolean	bRet;
 
@@ -207,7 +211,8 @@ ILboolean ilLoadBmpL(const void *Lump, const ILuint Size)
 
 
 // Internal function used to load the .bmp.
-ILboolean iLoadBitmapInternal() {
+ILboolean iLoadBitmapInternal()
+{
 	BMPHEAD		Header;
 	OS2_HEAD	Os2Head;
 	ILboolean	bBitmap;
@@ -263,7 +268,8 @@ ILboolean iLoadBitmapInternal() {
 
 // Reads an uncompressed .bmp
 //	One of the absolute ugliest functions I've ever written!
-ILboolean ilReadUncompBmp(BMPHEAD * Header) {
+ILboolean ilReadUncompBmp(BMPHEAD * Header)
+{
 	ILuint i, j, k, c, Read;
 	ILubyte Bpp, ByteData, PadSize, Padding[4];
 	ILuint rMask, gMask, bMask; //required for bitfields packing
@@ -423,7 +429,7 @@ ILboolean ilReadUncompBmp(BMPHEAD * Header) {
 			rShiftL = 3;
 			gShiftL = 3;
 			bShiftL = 3;
-			if(Header->biCompression == 3) //bitfields
+			if (Header->biCompression == 3) //bitfields
 			{
 				iseek(Header->bfDataOff - 12, IL_SEEK_SET); //seek to bitfield data
 				iread(&rMask, 4, 1);
@@ -443,6 +449,7 @@ ILboolean ilReadUncompBmp(BMPHEAD * Header) {
 			if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST)
 				iPreCache(iCurImage->Width * iCurImage->Height);
 
+			//@TODO: This may not be safe for Big Endian.
 			for (j = 0; j < iCurImage->Height; j++) {
 				for(i = 0; i < iCurImage->Width; i++, k += 3) {
 					if (iread(&Read16, 2, 1) != 1) {
@@ -461,13 +468,13 @@ ILboolean ilReadUncompBmp(BMPHEAD * Header) {
 
 		case 8:
 		case 24:
-            //for 8 and 24 bit, Bps is equal to the bmps bps
+            // For 8 and 24 bit, Bps is equal to the bmps bps
 			PadSize = (4 - (iCurImage->Bps % 4)) % 4;
 			if (PadSize == 0) {
 				if (iread(iCurImage->Data, 1, iCurImage->SizeOfPlane) != iCurImage->SizeOfPlane)
 					return IL_FALSE;
 			}
-			else {	// M$ requires lines to be padded if the widths aren't multiples of 4.
+			else {	// Microsoft requires lines to be padded if the widths aren't multiples of 4.
 				//changed 2003-09-01
 				if (iGetHint(IL_MEM_SPEED_HINT) == IL_FASTEST)
 					iPreCache(iCurImage->Width * iCurImage->Height);
@@ -498,7 +505,7 @@ ILboolean ilReadUncompBmp(BMPHEAD * Header) {
 			rShiftL = 0;
 			gShiftL = 0;
 			bShiftL = 0;
-			if(Header->biCompression == 3) //bitfields
+			if (Header->biCompression == 3) //bitfields
 			{
 				iseek(Header->bfDataOff - 12, IL_SEEK_SET); //seek to bitfield data
 				iread(&rMask, 4, 1);
@@ -541,7 +548,8 @@ ILboolean ilReadUncompBmp(BMPHEAD * Header) {
 }
 
 
-ILboolean ilReadRLE8Bmp(BMPHEAD *Header) {
+ILboolean ilReadRLE8Bmp(BMPHEAD *Header)
+{
 	ILubyte		Bytes[2];
    	size_t offset = 0, count, endOfLine = iCurImage->Width;
 
@@ -613,10 +621,12 @@ ILboolean ilReadRLE8Bmp(BMPHEAD *Header) {
 	return IL_TRUE;
 }
 
+
 //changed 2003-09-01
 //deleted ilReadRLE8Bmp() USE_POINTER version
 
-ILboolean ilReadRLE4Bmp(BMPHEAD *Header) {
+ILboolean ilReadRLE4Bmp(BMPHEAD *Header)
+{
 	ILubyte	Bytes[2];
 	ILuint	i;
     size_t offset, count, endOfLine;
@@ -707,6 +717,7 @@ ILboolean ilReadRLE4Bmp(BMPHEAD *Header) {
 
    return IL_TRUE;
 }
+
 
 //changed 2003-09-01
 //deleted ilReadRLE4Bmp() USE_POINTER version

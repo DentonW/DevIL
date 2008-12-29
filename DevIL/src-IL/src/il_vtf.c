@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 12/27/2008
+// Last modified: 12/28/2008
 //
 // Filename: src-IL/src/il_vtf.c
 //
@@ -20,7 +20,7 @@
 
 
 //@TODO: Get rid of these globals.
-static VTFHEAD	Head;
+//static VTFHEAD Head;
 
 
 //! Checks if the file specified in FileName is a valid VTF file.
@@ -104,6 +104,8 @@ ILboolean iGetVtfHead(VTFHEAD *Header)
 // Internal function to get the header and check it.
 ILboolean iIsValidVtf()
 {
+	VTFHEAD Head;
+
 	if (!iGetVtfHead(&Head))
 		return IL_FALSE;
 	iseek(-(ILint)sizeof(VTFHEAD), IL_SEEK_CUR);
@@ -208,7 +210,8 @@ ILboolean iLoadVtfInternal()
 	ILenum		Format, Type;
 	ILint		i, j;
 	ILuint		Channels, Bpc, k;
-	ILubyte		*CompData = NULL, SwapVal;
+	ILubyte		*CompData = NULL, SwapVal, *Data16Bit, *Temp;
+	VTFHEAD		Head;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -222,11 +225,6 @@ ILboolean iLoadVtfInternal()
 		return IL_FALSE;
 	}
 
-	//@TODO: Take care of volume textures soon.
-	if (Head.Depth != 1) {
-		ilSetError(IL_FORMAT_NOT_SUPPORTED);
-		return IL_FALSE;
-	}
 	//@TODO: Take care of animation chains soon.
 	if (Head.Frames > 1) {
 		ilSetError(IL_FORMAT_NOT_SUPPORTED);
@@ -242,7 +240,8 @@ ILboolean iLoadVtfInternal()
 	//@TODO: Make this a helper function that set channels, bpc and format.
 	switch (Head.HighResImageFormat)
 	{
-		case IMAGE_FORMAT_DXT1:
+		case IMAGE_FORMAT_DXT1:  //@TODO: Should we make DXT1 channels = 3?
+		case IMAGE_FORMAT_DXT1_ONEBITALPHA:
 		case IMAGE_FORMAT_DXT3:
 		case IMAGE_FORMAT_DXT5:
 			Channels = 4;
@@ -260,6 +259,12 @@ ILboolean iLoadVtfInternal()
 			Channels = 4;
 			Bpc = 1;
 			Format = IL_BGRA;
+			Type = IL_UNSIGNED_BYTE;
+			break;
+		case IMAGE_FORMAT_BGRX8888:
+			Channels = 3;
+			Bpc = 1;
+			Format = IL_BGR;
 			Type = IL_UNSIGNED_BYTE;
 			break;
 		case IMAGE_FORMAT_RGB888:
@@ -310,6 +315,31 @@ ILboolean iLoadVtfInternal()
 			Format = IL_RGBA;
 			Type = IL_UNSIGNED_BYTE;
 			break;
+		case IMAGE_FORMAT_RGB565:
+			Channels = 3;
+			Bpc = 1;
+			Format = IL_RGB;
+			Type = IL_UNSIGNED_BYTE;
+			break;
+		case IMAGE_FORMAT_BGR565:
+			Channels = 3;
+			Bpc = 1;
+			Format = IL_BGR;
+			Type = IL_UNSIGNED_BYTE;
+			break;
+		case IMAGE_FORMAT_BGRA5551:
+			Channels = 4;
+			Bpc = 1;
+			Format = IL_BGRA;
+			Type = IL_UNSIGNED_BYTE;
+			break;
+		case IMAGE_FORMAT_BGRX5551:  // Unused alpha channel
+			Channels = 3;
+			Bpc = 1;
+			Format = IL_BGR;
+			Type = IL_UNSIGNED_BYTE;
+			break;
+
 
 		default:
 			ilSetError(IL_FORMAT_NOT_SUPPORTED);
@@ -349,9 +379,10 @@ ILboolean iLoadVtfInternal()
 		{
 			// DXT1 compression
 			case IMAGE_FORMAT_DXT1:
+			case IMAGE_FORMAT_DXT1_ONEBITALPHA:
 				// The block size is 8.
-				SizeOfData = max(Image->Width * Image->Height / 2, 8);
-				CompData = ialloc(SizeOfData);  // Gives a 6:1 compression ratio
+				SizeOfData = max(Image->Width * Image->Height * Image->Depth / 2, 8);
+				CompData = ialloc(SizeOfData);  // Gives a 6:1 compression ratio (or 8:1 for DXT1 with alpha)
 				iread(CompData, 1, SizeOfData);
 				if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
 					Image->DxtcSize = SizeOfData;
@@ -365,7 +396,7 @@ ILboolean iLoadVtfInternal()
 			// DXT3 compression
 			case IMAGE_FORMAT_DXT3:
 				// The block size is 16.
-				SizeOfData = max(Image->Width * Image->Height, 16);
+				SizeOfData = max(Image->Width * Image->Height * Image->Depth, 16);
 				CompData = ialloc(SizeOfData);  // Gives a 4:1 compression ratio
 				iread(CompData, 1, SizeOfData);
 				if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
@@ -380,7 +411,7 @@ ILboolean iLoadVtfInternal()
 			// DXT5 compression
 			case IMAGE_FORMAT_DXT5:
 				// The block size is 16.
-				SizeOfData = max(Image->Width * Image->Height, 16);
+				SizeOfData = max(Image->Width * Image->Height * Image->Depth, 16);
 				CompData = ialloc(SizeOfData);  // Gives a 4:1 compression ratio
 				iread(CompData, 1, SizeOfData);
 				if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
@@ -409,6 +440,23 @@ ILboolean iLoadVtfInternal()
 					bVtf = IL_FALSE;
 				else
 					bVtf = IL_TRUE;
+				break;
+
+			// Uncompressed 24-bit data with an unused alpha channel (we discard it)
+			case IMAGE_FORMAT_BGRX8888:
+				SizeOfData = Image->Width * Image->Height * Image->Depth * 3;
+				Temp = CompData = ialloc(SizeOfData / 3 * 4);  // Not compressed data
+				if (iread(CompData, 1, SizeOfData / 3 * 4) != SizeOfData / 3 * 4) {
+					bVtf = IL_FALSE;
+					break;
+				}
+				for (k = 0; k < SizeOfData; k += 3) {
+					Image->Data[k]   = Temp[0];
+					Image->Data[k+1] = Temp[1];
+					Image->Data[k+2] = Temp[2];
+					Temp += 4;
+				}
+
 				break;
 
 			// Uncompressed 16-bit floats (must be converted to 32-bit)
@@ -441,6 +489,62 @@ ILboolean iLoadVtfInternal()
 					SwapVal = Image->Data[k+1];
 					Image->Data[k+1] = Image->Data[k+2];
 					Image->Data[k+2] = SwapVal;
+				}
+				break;
+
+			// Uncompressed 16-bit RGB and BGR data.  We have to expand this to 24-bit, since
+			//   DevIL does not handle this internally.
+			//   The data is in the file as: gggbbbbb rrrrrrggg
+			case IMAGE_FORMAT_RGB565:
+			case IMAGE_FORMAT_BGR565:
+				SizeOfData = Image->Width * Image->Height * Image->Depth * 2;
+				Data16Bit = CompData = ialloc(SizeOfData);  // Not compressed data
+				if (iread(CompData, 1, SizeOfData) != SizeOfData) {
+					bVtf = IL_FALSE;
+					break;
+				}
+				for (k = 0; k < Image->SizeOfData; k += 3) {
+					Image->Data[k]   =  (Data16Bit[0] & 0x1F) << 3;
+					Image->Data[k+1] = ((Data16Bit[1] & 0x07) << 5) | ((Data16Bit[0] & 0xE0) >> 3);
+					Image->Data[k+2] =   Data16Bit[1] & 0xF8;
+					Data16Bit += 2;
+				}
+				break;
+
+			// Uncompressed 16-bit BGRA data (1-bit alpha).  We have to expand this to 32-bit,
+			//   since DevIL does not handle this internally.
+			//   Something seems strange with this one, but this is how VTFEdit outputs.
+			//   The data is in the file as: gggbbbbb arrrrrgg
+			case IMAGE_FORMAT_BGRA5551:
+				SizeOfData = Image->Width * Image->Height * Image->Depth * 2;
+				Data16Bit = CompData = ialloc(SizeOfData);  // Not compressed data
+				if (iread(CompData, 1, SizeOfData) != SizeOfData) {
+					bVtf = IL_FALSE;
+					break;
+				}
+				for (k = 0; k < Image->SizeOfData; k += 4) {
+					Image->Data[k]   =  (Data16Bit[0] & 0x1F) << 3;
+					Image->Data[k+1] = ((Data16Bit[0] & 0xE0) >> 2) | ((Data16Bit[1] & 0x03) << 6);
+					Image->Data[k+2] =  (Data16Bit[1] & 0x7C) << 1;
+					// 1-bit alpha is either off or on.
+					Image->Data[k+3] = ((Data16Bit[0] & 0x80) == 0x80) ? 0xFF : 0x00;
+					Data16Bit += 2;
+				}
+				break;
+
+			// Same as above, but the alpha channel is unused.
+			case IMAGE_FORMAT_BGRX5551:
+				SizeOfData = Image->Width * Image->Height * Image->Depth * 2;
+				Data16Bit = CompData = ialloc(SizeOfData);  // Not compressed data
+				if (iread(CompData, 1, SizeOfData) != SizeOfData) {
+					bVtf = IL_FALSE;
+					break;
+				}
+				for (k = 0; k < Image->SizeOfData; k += 3) {
+					Image->Data[k]   =  (Data16Bit[0] & 0x1F) << 3;
+					Image->Data[k+1] = ((Data16Bit[0] & 0xE0) >> 2) | ((Data16Bit[1] & 0x03) << 6);
+					Image->Data[k+2] =  (Data16Bit[1] & 0x7C) << 1;
+					Data16Bit += 2;
 				}
 				break;
 		}

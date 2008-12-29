@@ -305,7 +305,7 @@ ILboolean iLoadDdsCubemapInternal()
 				}
 
 				ilBindImage(ilGetCurName()); // Set to parent image first.
-				ilActiveImage(i); //now Image == iCurImage...globals SUCK, fix this!!!
+				ilActiveImage(i); //@TODO: now Image == iCurImage...globals SUCK, fix this!!!
 			}
 
 			if (!ReadData())

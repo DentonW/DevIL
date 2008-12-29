@@ -47,6 +47,7 @@ Denton:
 - Get rid of check for precache.
 - Look at resize filters in VTFEdit.
 - Get rid of globals in il_dds.c.
+- il_bmp.c may not be safe for Big Endian for 16-bit data.
 
 
 For 1.7.0
