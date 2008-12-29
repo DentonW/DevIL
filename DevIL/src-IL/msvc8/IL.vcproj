@@ -86,7 +86,7 @@
 				ModuleDefinitionFile=".\il.def"
 				DelayLoadDLLs="ilmimf.dll half.dll"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\../../lib/vc8/debug/devil.pdb"
+				ProgramDatabaseFile=".\../../lib/vc8/x86/debug/devil.pdb"
 				ImportLibrary=".\../../lib/vc8/x86/debug/devil.lib"
 				TargetMachine="1"
 			/>
@@ -157,10 +157,10 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				PrecompiledHeaderFile=".\../src/obj/debug/IL.pch"
-				AssemblerListingLocation=".\../src/obj/debug/"
-				ObjectFile=".\../src/obj/debug/"
-				ProgramDataBaseFileName=".\../src/obj/debug/"
+				PrecompiledHeaderFile=".\../src/obj/x64/debug/IL.pch"
+				AssemblerListingLocation=".\../src/obj/x64/debug/"
+				ObjectFile=".\../src/obj/x64/debug/"
+				ProgramDataBaseFileName=".\../src/obj/x64/debug/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -217,7 +217,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) d:\windows\system32"
+				CommandLine="copy $(TargetPath) c:\windows\system32"
 			/>
 		</Configuration>
 		<Configuration
@@ -289,7 +289,7 @@
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile=".\il.def"
 				DelayLoadDLLs="ilmimf.dll half.dll"
-				ProgramDatabaseFile=".\../../lib/vc8/DevIL.pdb"
+				ProgramDatabaseFile=".\../../lib/vc8/x86/DevIL.pdb"
 				OptimizeForWindows98="1"
 				ImportLibrary=".\../../lib/vc8/x86/DevIL.lib"
 				TargetMachine="1"
@@ -362,10 +362,10 @@
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				PrecompiledHeaderFile=".\../src/obj/IL.pch"
-				AssemblerListingLocation=".\../src/obj/"
-				ObjectFile=".\../src/obj/"
-				ProgramDataBaseFileName=".\../src/obj/"
+				PrecompiledHeaderFile=".\../src/obj/x64/IL.pch"
+				AssemblerListingLocation=".\../src/obj/x64/"
+				ObjectFile=".\../src/obj/x64/"
+				ProgramDataBaseFileName=".\../src/obj/x64/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>
@@ -422,7 +422,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) d:\windows\system32"
+				CommandLine="copy $(TargetPath) c:\windows\system32"
 			/>
 		</Configuration>
 	</Configurations>
