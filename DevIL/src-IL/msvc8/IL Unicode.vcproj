@@ -2456,6 +2456,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\il_vtf.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\il_wal.c"
 				>
 				<FileConfiguration
@@ -2674,6 +2678,10 @@
 			</File>
 			<File
 				RelativePath="..\include\il_targa.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\il_vtf.h"
 				>
 			</File>
 			<File

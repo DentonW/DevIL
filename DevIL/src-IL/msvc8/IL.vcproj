@@ -115,7 +115,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) d:\windows\system32"
+				CommandLine="copy $(TargetPath) c:\windows\system32"
 			/>
 		</Configuration>
 		<Configuration
@@ -319,7 +319,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) d:\windows\system32"
+				CommandLine="copy $(TargetPath) c:\windows\system32"
 			/>
 		</Configuration>
 		<Configuration
@@ -2458,6 +2458,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\il_vtf.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\il_wal.c"
 				>
 				<FileConfiguration
@@ -2676,6 +2680,10 @@
 			</File>
 			<File
 				RelativePath="..\include\il_targa.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\il_vtf.h"
 				>
 			</File>
 			<File

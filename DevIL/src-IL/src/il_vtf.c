@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 12/28/2008
+// Last modified: 12/29/2008
 //
 // Filename: src-IL/src/il_vtf.c
 //
