@@ -206,10 +206,9 @@ ILboolean iLoadVtfInternal()
 {
 	ILboolean	bVtf = IL_TRUE;
 	ILimage		*Image, *BaseImage;
-	ILuint		Width, Height, Depth, SizeOfData;
 	ILenum		Format, Type;
-	ILint		i, j, Frame, Mipmap;
-	ILuint		Channels, Bpc, k;
+	ILint		Frame, Mipmap;
+	ILuint		SizeOfData, Channels, Bpc, k;
 	ILubyte		*CompData = NULL, SwapVal, *Data16Bit, *Temp;
 	VTFHEAD		Head;
 	ILuint		CurName;

@@ -1056,7 +1056,7 @@
 #define WM_XBUTTONDOWN                  0x020B
 #define WM_XBUTTONUP                    0x020C
 #define WM_XBUTTONDBLCLK                0x020D
-#define WM_MOUSELAST                    0x020D
+//#define WM_MOUSELAST                    0x020D
 #define WM_MOUSEHWHEEL                  0x020E
 #define WM_PARENTNOTIFY                 0x0210
 #define WM_ENTERMENULOOP                0x0211
@@ -1352,7 +1352,7 @@
 #define LVS_ALIGNLEFT                   0x0800
 #define TVS_INFOTIP                     0x0800
 #define TCS_RAGGEDRIGHT                 0x0800
-#define RBS_FIXEDORDER                  0x0800
+//#define RBS_FIXEDORDER                  0x0800
 #define LVS_ALIGNMASK                   0x0c00
 #define CS_BYTEALIGNCLIENT              0x1000
 #define HDS_OVERFLOW                    0x1000
@@ -1361,7 +1361,7 @@
 #define LVS_OWNERDATA                   0x1000
 #define TVS_FULLROWSELECT               0x1000
 #define TCS_FOCUSONBUTTONDOWN           0x1000
-#define RBS_REGISTERDROP                0x1000
+//#define RBS_REGISTERDROP                0x1000
 #define CS_BYTEALIGNWINDOW              0x2000
 #define TBSTYLE_CUSTOMERASE             0x2000
 #define LVS_NOSCROLL                    0x2000
@@ -1478,11 +1478,11 @@
 #define SC_CONTEXTHELP                  0xF180
 #define LVS_TYPESTYLEMASK               0xfc00
 #define SPVERSION_MASK                  0x0000FF00
-#define HTERROR                         -2
+//#define HTERROR                         -2
 #define IDC_STATIC                      -1
 #define UNICODE_NOCHAR                  0xFFFF
-#define PWR_FAIL                        -1
-#define HTTRANSPARENT                   -1
+//#define PWR_FAIL                        -1
+//#define HTTRANSPARENT                   -1
 
 // Next default values for new objects
 // 
