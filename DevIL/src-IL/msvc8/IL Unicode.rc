@@ -27,8 +27,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 
 1 VERSIONINFO
- FILEVERSION 0,1,7,4
- PRODUCTVERSION 0,1,7,4
+ FILEVERSION 0,1,7,5
+ PRODUCTVERSION 0,1,7,5
  FILEFLAGSMASK 0x0L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -46,14 +46,14 @@ BEGIN
             VALUE "Comments", "DevIL: A portable image library in development"
             VALUE "CompanyName", "Abysmal Software"
             VALUE "FileDescription", "DevIL: A portable image library in development"
-            VALUE "FileVersion", "1.7.4"
+            VALUE "FileVersion", "1.7.5"
             VALUE "InternalName", "Developer's Image Library (DevIL)"
             VALUE "LegalCopyright", "Copyright © 2000-2008"
             VALUE "LegalTrademarks", "Under LGPL License"
             VALUE "OriginalFilename", "DevIL.dll"
             VALUE "PrivateBuild", "Open Source"
             VALUE "ProductName", "Developer's Image Library (DevIL)"
-            VALUE "ProductVersion", "1.7.4 Unicode"
+            VALUE "ProductVersion", "1.7.5 Unicode"
             VALUE "SpecialBuild", "Unicode"
         END
     END
@@ -100,7 +100,7 @@ END
 
 STRINGTABLE 
 BEGIN
-    IDC_OPENIL              "Developer's Image Library, Version 1.7.4"
+    IDC_OPENIL              "Developer's Image Library, Version 1.7.5"
 END
 
 #endif    // English (U.S.) resources

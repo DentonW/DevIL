@@ -30,7 +30,6 @@ This is a manual describing IL part of DevIL -- handling images.
 * Introduction::     General intro
 * Basic usage::      How to write your first code
 * Image Management:: How to manage images :-)
-* Languages::        Translations into other languages
 * Common #defines::  #defines you are likely to come across when using DevIL
 * Sample program::   If you want to get going quickly
 * Index::            Complete index.
@@ -403,7 +402,7 @@ Be aware that if the Unicode version of DevIL is not being used, some translatio
 
 
 
-@node Image Manipulation
+@c @node Image Manipulation
 @chapter Image Manipulation
 
 ILU (Image Library Utilities) contains functions to manipulate any type of image in a variety of ways.  Some functions filter images, while others perform a wider variety of operations, such as scaling an image.  This section will give a comparison of the utility functions against the below figure.
@@ -489,7 +488,7 @@ The number of iterations to perform will usually be 1, but to achieve more sharp
 @center @emph{Sharpening of 2.5}
 
 
-@node Resizing Images
+@c @node Resizing Images
 @chapter Resizing Images
 
 @section Basic Scaling
@@ -548,7 +547,7 @@ Enlarging an image, though, depends quite heavily on how good the sampling schem
 @end multitable
 
 
-@node Sub-Images
+@c @node Sub-Images
 @chapter Sub-Images
 
 @section Mipmaps
@@ -602,7 +601,7 @@ DevIL does not have a full layer implementation yet.
 An image can have both mipmaps and animations at the same time.  Every image in an animation chain can have its own set of mipmaps, though it is not necessary by any means.  If you ``activate'' an animation image in the base image's animation chain, the active image becomes the new ``base'' image.  Therefore, if you call @code{iluActiveMipmap} after @code{iluActiveImage}, a mipmap from the selected image in the animation chain is chosen.
 
 
-@node DXTC/S3TC Notes
+@c @node DXTC/S3TC Notes
 @chapter DXTC/S3TC Notes
 @section DDS Loading/Saving
 DevIL supports loading and saving of Microsoft .dds files.  DDS files can either be compressed or uncompressed.  If they are compressed, DDS files use DirectX Texture Compression (DXTC).  DXTC is also known as S3TC, since Microsoft licensed the compression technology from S3.

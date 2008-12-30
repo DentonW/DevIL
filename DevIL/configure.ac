@@ -7,7 +7,7 @@ dnl
 dnl configure.in initialization
 dnl
 AC_INIT([DevIL], 
-	1.7.4,
+	1.7.5,
 	[bubla@users.sourceforge.net])
 dnl Minimum Autoconf version
 AC_PREREQ(2.52)
@@ -81,7 +81,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION([$Revision: 1.44 $])
+AC_REVISION([$Revision: 1.45 $])
 dnl AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
 dnl AC_LANG([C++])

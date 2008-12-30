@@ -46,7 +46,7 @@
 #endif
 
 char	*FileName;
-ILuint	Width, Height, Window;
+ILuint	Width, Height, window;
 
 
 
@@ -138,7 +138,7 @@ int main(int argc, char** argv)
 	glutInitWindowPosition (100, 100);
 	glutInitWindowSize     (Width, Height);
 	
-	Window = glutCreateWindow("Developer's Image Library (DevIL) Test");
+	window = glutCreateWindow("Developer's Image Library (DevIL) Test");
 
 	glutDisplayFunc  (DisplayFunc);
 	glutKeyboardFunc (KeyboardFunc);
@@ -207,7 +207,7 @@ void IdleFunc()
 void KeyboardFunc(unsigned char cChar, int nMouseX, int nMouseY)
 {
 	CleanUp();  // Clean up OpenGL.
-	glutDestroyWindow(Window);  // Destroy the window.
+	glutDestroyWindow(window);  // Destroy the window.
 #ifndef _WIN32
 	// Must use this with regular glut, since it never returns control to main().
 	exit(0);

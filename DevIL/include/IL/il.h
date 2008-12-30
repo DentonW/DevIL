@@ -142,8 +142,8 @@ typedef double         ILclampd;
 // IL-specific #define's
 //
 
-#define IL_VERSION_1_7_4 1
-#define IL_VERSION       174
+#define IL_VERSION_1_7_5 1
+#define IL_VERSION       175
 
 
 // Attribute Bits

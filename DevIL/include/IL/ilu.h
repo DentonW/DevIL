@@ -33,8 +33,8 @@ extern "C" {
 #endif
 
 
-#define ILU_VERSION_1_7_4 1
-#define ILU_VERSION       174
+#define ILU_VERSION_1_7_5 1
+#define ILU_VERSION       175
 
 
 #define ILU_FILTER         0x2600
