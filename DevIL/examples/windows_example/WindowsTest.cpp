@@ -534,7 +534,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						return (0L);
 
 					Di.cbSize = sizeof(DOCINFO);
-					Di.lpszDocName = "DevIL Printing Test";
+					Di.lpszDocName = L"DevIL Printing Test";
 					Di.lpszOutput = NULL;
 					Di.lpszDatatype = NULL;
 					Di.fwType = 0;

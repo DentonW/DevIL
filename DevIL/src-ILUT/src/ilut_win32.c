@@ -79,6 +79,7 @@ ILAPI HBITMAP	ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 
 	hBitmap = CreateCompatibleBitmap(hDC, ilutCurImage->Width, ilutCurImage->Height);
 	if(hBitmap == NULL) {
+		//ilNewImage
 		ilSetError(IL_UNKNOWN_ERROR);
 		return NULL;
 	}
@@ -693,7 +694,7 @@ ILboolean ILAPIENTRY ilutWinPrint(ILuint XPos, ILuint YPos, ILuint Width, ILuint
 		return IL_FALSE;
 	}
 
-	// Needs error checking!
+	//@TODO: Needs error checking!
 	hMemDC = CreateCompatibleDC(hDC);
 	Bitmap = ilutConvertToHBitmap(hDC);
 	hReplaced = (HBITMAP)SelectObject(hMemDC, Bitmap);

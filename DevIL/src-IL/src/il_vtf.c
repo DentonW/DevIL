@@ -208,7 +208,7 @@ ILboolean iLoadVtfInternal()
 	ILimage		*Image, *BaseImage;
 	ILenum		Format, Type;
 	ILint		Frame, Mipmap;
-	ILuint		SizeOfData, Channels, Bpc, k;
+	ILuint		SizeOfData, Channels, k;
 	ILubyte		*CompData = NULL, SwapVal, *Data16Bit, *Temp;
 	VTFHEAD		Head;
 	ILuint		CurName;
@@ -250,105 +250,88 @@ ILboolean iLoadVtfInternal()
 		case IMAGE_FORMAT_DXT3:
 		case IMAGE_FORMAT_DXT5:
 			Channels = 4;
-			Bpc = 1;
 			Format = IL_RGBA;
 			Type = IL_UNSIGNED_BYTE;
 			break;
 		case IMAGE_FORMAT_BGR888:
 		case IMAGE_FORMAT_BGR888_BLUESCREEN:
 			Channels = 3;
-			Bpc = 1;
 			Format = IL_BGR;
 			Type = IL_UNSIGNED_BYTE;
 			break;
 		case IMAGE_FORMAT_BGRA8888:
 			Channels = 4;
-			Bpc = 1;
 			Format = IL_BGRA;
 			Type = IL_UNSIGNED_BYTE;
 			break;
 		case IMAGE_FORMAT_BGRX8888:
 			Channels = 3;
-			Bpc = 1;
 			Format = IL_BGR;
 			Type = IL_UNSIGNED_BYTE;
 			break;
 		case IMAGE_FORMAT_RGB888:
 		case IMAGE_FORMAT_RGB888_BLUESCREEN:
 			Channels = 3;
-			Bpc = 1;
 			Format = IL_RGB;
 			Type = IL_UNSIGNED_BYTE;
 			break;
 		case IMAGE_FORMAT_RGBA8888:
 			Channels = 4;
-			Bpc = 1;
 			Format = IL_RGBA;
 			Type = IL_UNSIGNED_BYTE;
 			break;
 		case IMAGE_FORMAT_RGBA16161616:  // 16-bit shorts
 			Channels = 4;
-			Bpc = 2;
 			Format = IL_RGBA;
 			Type = IL_UNSIGNED_SHORT;
 			break;
 		case IMAGE_FORMAT_RGBA16161616F:  // 16-bit floats
 			Channels = 4;
-			Bpc = 4;
 			Format = IL_RGBA;
 			Type = IL_FLOAT;
 			break;
 		case IMAGE_FORMAT_I8:  // 8-bit luminance data
 			Channels = 1;
-			Bpc = 1;
 			Format = IL_LUMINANCE;
 			Type = IL_UNSIGNED_BYTE;
 			break;
 		case IMAGE_FORMAT_IA88:  // 8-bit luminance and alpha data
 			Channels = 2;
-			Bpc = 1;
 			Format = IL_LUMINANCE_ALPHA;
 			Type = IL_UNSIGNED_BYTE;
 			break;
 		case IMAGE_FORMAT_A8:  // 8-bit alpha data
 			Channels = 1;
-			Bpc = 1;
 			Format = IL_ALPHA;
 			Type = IL_UNSIGNED_BYTE;
 			break;
 		case IMAGE_FORMAT_ARGB8888:
 			Channels = 4;
-			Bpc = 1;
 			Format = IL_BGRA;
 			Type = IL_UNSIGNED_BYTE;
 			break;
 		case IMAGE_FORMAT_ABGR8888:
 			Channels = 4;
-			Bpc = 1;
 			Format = IL_RGBA;
 			Type = IL_UNSIGNED_BYTE;
 			break;
 		case IMAGE_FORMAT_RGB565:
 			Channels = 3;
-			Bpc = 1;
 			Format = IL_RGB;
 			Type = IL_UNSIGNED_BYTE;
 			break;
 		case IMAGE_FORMAT_BGR565:
 			Channels = 3;
-			Bpc = 1;
 			Format = IL_BGR;
 			Type = IL_UNSIGNED_BYTE;
 			break;
 		case IMAGE_FORMAT_BGRA5551:
 			Channels = 4;
-			Bpc = 1;
 			Format = IL_BGRA;
 			Type = IL_UNSIGNED_BYTE;
 			break;
 		case IMAGE_FORMAT_BGRX5551:  // Unused alpha channel
 			Channels = 3;
-			Bpc = 1;
 			Format = IL_BGR;
 			Type = IL_UNSIGNED_BYTE;
 			break;
@@ -368,14 +351,10 @@ ILboolean iLoadVtfInternal()
 	// Create our animation chain
 	BaseImage = Image = iCurImage;  // Top-level image
 	for (Frame = 1; Frame < Head.Frames; Frame++) {
-		Image->Next = ilNewImage(Head.Width, Head.Height, Head.Depth, Channels, Bpc);
+		Image->Next = ilNewImageFull(Head.Width, Head.Height, Head.Depth, Channels, Format, Type, NULL);
 		if (Image->Next == NULL)
 			return IL_FALSE;
 		Image = Image->Next;
-
-		// ilNewImage does not set these.
-		Image->Format = Format;
-		Image->Type = Type;
 		// The origin should be in the upper left.
 		Image->Origin = IL_ORIGIN_UPPER_LEFT;
 
@@ -387,28 +366,6 @@ ILboolean iLoadVtfInternal()
 	for (Mipmap = Head.MipmapCount - 1; Mipmap >= 0; Mipmap--) {
 		// Frames are in the normal order.
 		for (Frame = 0; Frame < Head.Frames; Frame++) {
-
-		//// Next comes the high resolution images.  The mipmaps are in order from smallest to largest in the file.
-		////  We want them the other way around.
-		//Width = BaseImage->Width;  Height = BaseImage->Height;  Depth = BaseImage->Depth;
-		//for (i = 0; i < Head.MipmapCount - 1; i++) {
-		//	// 1 is the smallest dimension possible.
-		//	Width = (Width >> 1) == 0 ? 1 : (Width >> 1);
-		//	Height = (Height >> 1) == 0 ? 1 : (Height >> 1);
-		//	Depth = (Depth >> 1) == 0 ? 1 : (Depth >> 1);
-
-		//	Image->Next = ilNewImage(Width, Height, Depth, Channels, Bpc);
-		//	if (Image->Next == NULL)  //@TODO: Do we need to do any cleanup here?
-		//		return IL_FALSE;
-
-		//	// ilNewImage does not set these.
-		//	Image->Format = Format;
-		//	Image->Type = Type;
-		//	// The origin should be in the upper left.
-		//	Image->Origin = IL_ORIGIN_UPPER_LEFT;
-		//	Image = Image->Next;
-		//}
-
 			//@TODO: Would probably be quicker to do the linked list traversal manually here.
 			ilBindImage(CurName);
 			ilActiveImage(Frame);

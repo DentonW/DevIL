@@ -40,7 +40,6 @@ Denton:
 - ilGetAlpha returns malloc'ed memory that cannot be freed by the caller.
 - Give estimates for buffer sizes for ilSaveL.
 - http://developer.nvidia.com/object/texture_tools.html - They have CUDA code to compress DXT.
-- .vtf support
 - Support for DX10 .dds files
 - More checks for headers of unknown file types
 - Set CompSize in ReadData of il_dds.c for DDS_LINEARSIZE flag?
@@ -50,6 +49,12 @@ Denton:
 - il_bmp.c may not be safe for Big Endian for 16-bit data.
 - cubemap.hdr.vtf does not load.
 - Better quality DDS saving (as an option).
+- VTF BGRA4444
+- Printing not working from Windows test.
+- Upload cubemaps directly to OpenGL/D3D.
+- Add flag for determining whether DDS data is outdated.
+- Add function to create cubemaps?
+- Freebasic support
 
 
 For 1.7.0

@@ -1,3 +1,7 @@
+1.7.6
+---
+
+
 1.7.5
 ---
 - Added check in iluScale for parameters of 0, which would cause a crash.

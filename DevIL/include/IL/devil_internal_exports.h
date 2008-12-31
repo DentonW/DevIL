@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 12/28/2008
+// Last modified: 12/30/2008
 //
 // Filename: IL/devil_internal_exports.h
 //
@@ -99,9 +99,9 @@ ILAPI void* ILAPIENTRY ivec_align_buffer(void *buffer, const ILuint size);
 
 // Internal library functions in IL
 ILAPI ILimage* ILAPIENTRY ilGetCurImage(void);
-ILAPI void   ILAPIENTRY ilSetCurImage(ILimage *Image);
-ILAPI void   ILAPIENTRY ilSetError(ILenum Error);
-ILAPI void   ILAPIENTRY ilSetPal(ILpal *Pal);
+ILAPI void     ILAPIENTRY ilSetCurImage(ILimage *Image);
+ILAPI void     ILAPIENTRY ilSetError(ILenum Error);
+ILAPI void     ILAPIENTRY ilSetPal(ILpal *Pal);
 
 //
 // Utility functions
@@ -114,20 +114,20 @@ ILAPI ILubyte ILAPIENTRY ilGetBppPal(ILenum PalType);
 ILAPI ILenum  ILAPIENTRY ilGetPalBaseType(ILenum PalType);
 ILAPI ILuint  ILAPIENTRY ilNextPower2(ILuint Num);
 ILAPI ILenum  ILAPIENTRY ilTypeFromExt(ILconst_string FileName);
-ILAPI void  ILAPIENTRY ilReplaceCurImage(ILimage *Image);
-ILAPI void  ILAPIENTRY iMemSwap( ILubyte *, ILubyte *, const ILuint );
+ILAPI void    ILAPIENTRY ilReplaceCurImage(ILimage *Image);
+ILAPI void    ILAPIENTRY iMemSwap(ILubyte *, ILubyte *, const ILuint);
 
 //
 // Image functions
 //
-ILAPI void    ILAPIENTRY iBindImageTemp  (void);
+ILAPI void	    ILAPIENTRY iBindImageTemp  (void);
 ILAPI ILboolean ILAPIENTRY ilClearImage_   (ILimage *Image);
-ILAPI void    ILAPIENTRY ilCloseImage    (ILimage *Image);
-ILAPI void    ILAPIENTRY ilClosePal      (ILpal *Palette);
+ILAPI void      ILAPIENTRY ilCloseImage    (ILimage *Image);
+ILAPI void      ILAPIENTRY ilClosePal      (ILpal *Palette);
 ILAPI ILpal*    ILAPIENTRY iCopyPal        (void);
 ILAPI ILboolean ILAPIENTRY ilCopyImageAttr (ILimage *Dest, ILimage *Src);
 ILAPI ILimage*  ILAPIENTRY ilCopyImage_    (ILimage *Src);
-ILAPI void    ILAPIENTRY ilGetClear      (void *Colours, ILenum Format, ILenum Type);
+ILAPI void      ILAPIENTRY ilGetClear      (void *Colours, ILenum Format, ILenum Type);
 ILAPI ILuint    ILAPIENTRY ilGetCurName    (void);
 ILAPI ILboolean ILAPIENTRY ilIsValidPal    (ILpal *Palette);
 ILAPI ILimage*  ILAPIENTRY ilNewImage      (ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILubyte Bpc);
@@ -136,14 +136,14 @@ ILAPI ILboolean ILAPIENTRY ilInitImage     (ILimage *Image, ILuint Width, ILuint
 ILAPI ILboolean ILAPIENTRY ilResizeImage   (ILimage *Image, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILubyte Bpc);
 ILAPI ILboolean ILAPIENTRY ilTexImage_     (ILimage *Image, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, void *Data);
 ILAPI ILboolean ILAPIENTRY ilTexSubImage_  (ILimage *Image, void *Data);
-ILAPI void*   ILAPIENTRY ilConvertBuffer (ILuint SizeOfData, ILenum SrcFormat, ILenum DestFormat, ILenum SrcType, ILenum DestType, void *Buffer);
+ILAPI void*     ILAPIENTRY ilConvertBuffer (ILuint SizeOfData, ILenum SrcFormat, ILenum DestFormat, ILenum SrcType, ILenum DestType, void *Buffer);
 ILAPI ILimage*  ILAPIENTRY iConvertImage   (ILimage *Image, ILenum DestFormat, ILenum DestType);
 ILAPI ILpal*    ILAPIENTRY iConvertPal     (ILpal *Pal, ILenum DestFormat);
 ILAPI ILubyte*  ILAPIENTRY iGetFlipped     (ILimage *Image);
 ILAPI ILboolean	ILAPIENTRY iMirror();
-ILAPI void    ILAPIENTRY iFlipBuffer( ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num );
-ILubyte *iFlipNewBuffer( ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num );
-ILAPI void ILAPIENTRY iGetIntegervImage(ILimage *Image, ILenum Mode, ILint *Param);
+ILAPI void      ILAPIENTRY iFlipBuffer( ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num );
+ILubyte* iFlipNewBuffer( ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num );
+ILAPI void      ILAPIENTRY iGetIntegervImage(ILimage *Image, ILenum Mode, ILint *Param);
 
 // Internal library functions in ILU
 ILAPI ILimage* ILAPIENTRY iluRotate_(ILimage *Image, ILfloat Angle);

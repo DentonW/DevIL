@@ -16,6 +16,7 @@
 #include <limits.h>
 #include "il_manip.h"
 
+
 ILAPI ILboolean ILAPIENTRY ilInitImage(ILimage *Image, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, void *Data)
 {
 	ILubyte BpcType = ilGetBpcType(Type);
@@ -84,6 +85,8 @@ ILAPI ILimage* ILAPIENTRY ilNewImage(ILuint Width, ILuint Height, ILuint Depth, 
 	return Image;
 }
 
+
+// Same as above but allows specification of Format and Type
 ILAPI ILimage* ILAPIENTRY ilNewImageFull(ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, void *Data)
 {
 	ILimage *Image;
@@ -97,7 +100,7 @@ ILAPI ILimage* ILAPIENTRY ilNewImageFull(ILuint Width, ILuint Height, ILuint Dep
 		return NULL;
 	}
 
-	if (!ilInitImage (Image, Width, Height, Depth, Bpp, Format, Type, Data)) {
+	if (!ilInitImage(Image, Width, Height, Depth, Bpp, Format, Type, Data)) {
 		if (Image->Data != NULL) {
 			ifree(Image->Data);
 		}
@@ -695,12 +698,12 @@ ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX,  ILint DestY,   ILint De
 	if (Height + DestY > Dest->Height) Height = Dest->Height - DestY;
 	if (Depth  + DestZ > Dest->Depth)  Depth  = Dest->Depth  - DestZ;
 	
-	// non funziona con rgba
-	if( Src->Format == IL_RGBA || Src->Format == IL_BGRA || Src->Format == IL_LUMINANCE_ALPHA ) {
+	//@TODO: non funziona con rgba
+	if (Src->Format == IL_RGBA || Src->Format == IL_BGRA || Src->Format == IL_LUMINANCE_ALPHA) {
 		const ILuint bpp_without_alpha = Dest->Bpp - 1;
-		for( z = 0; z < Depth; z++ ) {
-			for( y = 0; y < Height; y++ ) {
-				for( x = 0; x < Width; x++ ) {
+		for (z = 0; z < Depth; z++) {
+			for (y = 0; y < Height; y++) {
+				for (x = 0; x < Width; x++) {
 					const ILuint  SrcIndex  = (z+SrcZ)*ConvSizePlane + (y+SrcY)*ConvBps + (x+SrcX)*Dest->Bpp;
 					const ILuint  DestIndex = (z+DestZ)*Dest->SizeOfPlane + (y+DestY)*Dest->Bps + (x+DestX)*Dest->Bpp;
 					const ILuint  AlphaIdx = SrcIndex + bpp_without_alpha;
@@ -803,6 +806,7 @@ ILboolean iCopySubImage(ILimage *Dest, ILimage *Src)
 	
 	return IL_TRUE;
 }
+
 
 ILboolean iCopySubImages(ILimage *Dest, ILimage *Src)
 {
