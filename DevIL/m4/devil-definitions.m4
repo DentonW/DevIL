@@ -1,9 +1,10 @@
 
 AC_DEFUN([ADD_CFLAGS],
-	 [LIBIL_CFLAGS="$LIBIL_CFLAGS $1"
-          LIBILU_CFLAGS="$LIBILU_CFLAGS $1"
-          LIBILUT_CFLAGS="$LIBILUT_CFLAGS $1"
-          CFLAGS="$CFLAGS $1"])
+	 [GENERAL_CFLAGS="$GENERAL_CFLAGS $1"])
+dnl          IL_CFLAGS="$IL_CFLAGS $1"])
+dnl          ILU_CFLAGS="$ILU_CFLAGS $1"
+dnl          ILUT_CFLAGS="$ILUT_CFLAGS $1"])
+dnl IL_CFLAGS are present everywhere
 
 dnl
 dnl Check CPU Extensions
@@ -18,17 +19,17 @@ AC_DEFUN([TEST_EXT],
          AC_MSG_CHECKING([$1])
          AS_IF([test "$use_$1" = "yes"],
                [AC_DEFINE([$4],
-                          [],
+                          [1],
                           [$1 extension found])
                 AC_DEFINE([VECTORMEM],
-                          [],
+                          [1],
                           [Memory must be vector aligned])
                 ADD_CFLAGS([$2])
                 AC_MSG_RESULT([yes])
                 SUPPORTED_EXTENSION=$SUPPORTED_EXTENSION"$1 "],
                [test "$use_$1" = "test" -a "x$enable_asm" = "xyes"],
                [CFLAGS_TMP=$CFLAGS
-                CFLAGS=$CFLAGS" $2"
+                CFLAGS="$CFLAGS $2"
                 AC_COMPILE_IFELSE([$5
                                    int main() 
                                    {$3;return 0;}],
@@ -41,8 +42,8 @@ AC_DEFUN([TEST_EXT],
                                    ADD_CFLAGS([$2])
                                    AC_MSG_RESULT([yes])
                                    SUPPORTED_EXTENSION=$SUPPORTED_EXTENSION"$1 "],
-                                  [AC_MSG_RESULT([no])
-                                   CFLAGS=$CFLAGS_TMP])],
+                                  [AC_MSG_RESULT([no]) ])
+                CFLAGS="$CFLAGS_TMP"],
                [AC_MSG_RESULT(disabled)]) ])
 
 dnl
@@ -150,6 +151,15 @@ AS_IF([test "x$have_lcms_lib" = "xyes" -a "x$have_lcms_h" = "xyes"],
       [have_lcms="yes"
        lib_test_result="yes"],
       [lib_test_result="no"]) ])
+
+AC_DEFUN([SETTLE_OPENEXR],
+         [PKG_CHECK_MODULES([OPENEXR], 
+                            [OpenEXR],
+                            [have_openexr="yes"],
+                            [have_openexr="no"])
+          IL_LIBS="$OPENEXR_LIBS $IL_LIBS"
+          IL_CFLAGS="$OPENEXR_CFLAGS $IL_CFLAGS"
+          lib_test_result="$have_openexr"])
 
 AC_DEFUN([SETTLE_JPEG],
          [DEVIL_IL_LIB([jpeglib.h],

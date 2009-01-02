@@ -1,10 +1,12 @@
 dnl 
 dnl Autoconf script for DevIL Library
-dnl Written by Meloni Dario
-dnl modified by Matěj Týč
+dnl Originally written by Meloni Dario
+dnl rewritten by Matěj Týč
+dnl
 
 dnl
-dnl configure.in initialization
+dnl configure.ac initialization
+dnl we use some macros that are in m4 directory
 dnl
 AC_INIT([DevIL], 
 	1.7.5,
@@ -22,7 +24,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 dnl Libtool init with message that we want to build DLLs
 dnl LT_INIT([win32-dll])
 dnl LT_PROG_RC
-dnl THE ABOVE IS LIBTOOL INIT IS THE GOOD ONE, BUT MAYBE TOO UP-TO-DATE
+dnl THE ABOVE IS LIBTOOL INIT IS THE GOOD ONE, BUT MAYBE TOO UP-TO-DATE FOR MOST PEOPLE
 AC_PROG_LIBTOOL
 AC_LIBTOOL_WIN32_DLL
 dnl Automake init with all warnings reported
@@ -42,7 +44,6 @@ dnl
 DEVIL_LTVERSION=1:1:0
 AC_SUBST([DEVIL_LTVERSION])
 
-ADD_CFLAGS([$CFLAGS])
 
 dnl
 dnl Test build options
@@ -68,9 +69,10 @@ AC_ARG_ENABLE([asm],
 	       test "x$enable_debug" = "xyes" && enable_asm="no"])
 
 AS_IF([test "x$enable_release" = "xyes"],
-      [ADD_CFLAGS([-O3])],
+      [AS_IF([test "x$CFLAGS" = "x"],
+	     [CFLAGS="-O3"]) ],
       [test "x$enable_debug" = "xyes"],
-      [ADD_CFLAGS([-DNOINLINE -Wall -g -O0])
+      [CFLAGS="$CFLAGS -DNOINLINE -Wall -g -O0"
        AC_DEFINE([DEBUG],
 		 [],
 		 ["Enable debug code features"]) ])
@@ -81,8 +83,9 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION([$Revision: 1.45 $])
+AC_REVISION([$Revision: 1.46 $])
 dnl AC_PREFIX_DEFAULT(/usr/local)
+AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
 dnl AC_LANG([C++])
 AC_LANG([C])
@@ -90,9 +93,11 @@ AM_PROG_CC_C_O
 AC_PROG_CXX
 AC_PROG_MAKE_SET
 AC_C_BIGENDIAN
-AC_PATH_XTRA
 
+dnl checks for X are to be done later...
+dnl AC_PATH_XTRA
 
+dnl Settling whether the user will want to build examples or not
 AC_ARG_WITH([examples],
 	    [AS_HELP_STRING([--with-examples[[=yes/no]]],
 			    [Whether to build and install examples as well. Default is without examples])],
@@ -101,6 +106,7 @@ AC_ARG_WITH([examples],
 AM_CONDITIONAL([BUILD_EXAMPLES],
 	       [test "x$with_examples" = "xyes"])
 
+dnl Do we want monolithic library (DevIL instead of IL, ILU, ILUT). Useful probably only on Windows... Discouraged.
 AC_ARG_ENABLE([monolithic],
 	      [AS_HELP_STRING([--enable-monolithic[[=yes/no]]],
 			      [Builds only one library instead of separate ones (IL, ILU, ILUT -> DevIL). Default set to 'disabled'])],
@@ -109,6 +115,7 @@ AC_ARG_ENABLE([monolithic],
 AM_CONDITIONAL([BUILD_MONOLITHIC],
 	       [test "x$enable_monolithic" = "xyes"])
 
+dnl Whether to build IL. You have to anyway :-)
 AC_ARG_ENABLE([IL],
 	      [AS_HELP_STRING([--with-IL[[=yes/no]]],
 	                      [Build IL part of DevIL. Default set to yes])],
@@ -117,6 +124,7 @@ AC_ARG_ENABLE([IL],
 AM_CONDITIONAL([BUILD_IL],
 	       [test "x$enable_IL" = "xyes"])
 
+dnl Whether to build ILU...
 AC_ARG_ENABLE([ILU],
 	      [AS_HELP_STRING([--with-ILU[[=yes/no]]],
 			      [Build ILU part of DevIL. Default set to no])],
@@ -125,6 +133,7 @@ AC_ARG_ENABLE([ILU],
 AM_CONDITIONAL([BUILD_ILU],
 	       [test "x$enable_ILU" = "xyes"])
 
+dnl Whether to build ILUT...
 AC_ARG_ENABLE([ILUT],
 	      [AS_HELP_STRING([--with-ILUT[[=yes/no]]],
 			      [Build ILUT part of DevIL. Default set to no])],
@@ -135,6 +144,7 @@ AM_CONDITIONAL([BUILD_ILUT],
 
 dnl Test for restrict c/c++ keyword
 DEVIL_CHECK_RESTRICT
+
 dnl checking if the -std=gnu99 flag is required
 AS_IF([test  "x$restrict_keyword" = "xfound"],
       [DEVIL_CHECK_RESTRICT_GNU99])
@@ -143,6 +153,7 @@ dnl must add AC_CACHE_CHECK support where possible
 
 dnl AM_MAINTAINER_MODE
 
+dnl Now the phase of testing of extensions...
 TEST_EXT([Altivec],
 	 [-faltivec -maltivec],
 	 [vector int vec;vec=vec_splat_u32(0);],
@@ -171,6 +182,7 @@ TEST_EXT([SSE3],
 	 [#include <pmmintrin.h>],
 	 [sse3])
 
+dnl Do we want to use ASM routines?
 AS_IF([test "x$enable_asm" = "xyes"],
       [TEST_ASM([i[[3456]]86*],
                 [X86_ASM],
@@ -227,7 +239,6 @@ AC_CHECK_HEADER([mm_malloc.h],
 dnl
 dnl Libraries development checking
 dnl
-
 AC_ARG_WITH([zlib],
             [AC_HELP_STRING([--with-zlib=[[yes/no]]],
                             [Do wou want to use zlib?])],
@@ -241,17 +252,21 @@ AS_IF([test "x$enable_zlib" = "xyes"],
        AS_IF([test "$enable_zlib" = "yes"],
              [AC_CHECK_LIB([z],
                            [main]) ]) ])
+dnl 
+dnl Ask here whether the user wants to support a format, optionally do some tests whether it can be supported
+dnl
 
 TEST_FORMAT([bmp], [BMP])
 TEST_FORMAT([dcx], [DCX])
 TEST_FORMAT([doom],[WAD])
+TEST_FORMAT([exr], [EXR], [SETTLE_OPENEXR])
 TEST_FORMAT([gif], [GIF])
 TEST_FORMAT([hdr], [HDR])
 TEST_FORMAT([icns],[ICNS])
 TEST_FORMAT([icon],[ICON])
 TEST_FORMAT([jpeg],[JPG], [SETTLE_JPEG])
 TEST_FORMAT([jp2], [JP2], [SETTLE_JASPER])
-TEST_FORMAT([lcms],[LCMS], [SETTLE_LCMS])
+TEST_FORMAT([lcms],[LCMS],[SETTLE_LCMS])
 TEST_FORMAT([lif], [LIF])
 TEST_FORMAT([mdl], [MDL])
 TEST_FORMAT([mng], [MNG], [SETTLE_MNG])
@@ -270,13 +285,15 @@ TEST_FORMAT([tga], [TGA])
 TEST_FORMAT([tiff],[TIF], [SETTLE_TIFF])
 TEST_FORMAT([xpm], [XPM])
 TEST_FORMAT([wal], [WAL])
+TEST_FORMAT([wdp], [WDP])
 
-AC_DEFINE([IL_NO_EXR],
-	  [],
-	  [The EXR support is causing problems right now])
-AC_DEFINE([IL_NO_WDP],
-	  [],
-	  [The WDP support is causing problems as well])
+dnl These formats make problems
+dnl AC_DEFINE([IL_NO_EXR],
+dnl	  [],
+dnl	  [The EXR support is causing problems right now])
+dnl AC_DEFINE([IL_NO_WDP],
+dnl	  [],
+dnl	  [The WDP support is causing problems as well])
 
 dnl
 dnl ILUT APIs library checking
@@ -290,8 +307,24 @@ AS_IF([test "x$enable_ILUT" = "xyes"],
        SETTLE_W32
        SETTLE_X11])
  
-AM_CONDITIONAL([USE_ALLEGRO],
+dnl
+dnl AM_COND_IF([condition],[do-if-true]) has to be kept in sync with examples/Makefile.am
+dnl The AM_COND_IF seems to be too new at the moment, let's wait a little bit till things settle...
+dnl
+
+dnl AM_COND_IF([BUILD_ILU],
+AS_IF([test "x$enable_ILU" = "xyes"],
+	   [EXAMPLES_TO_BUILD="$EXAMPLES_TO_BUILD ILU_override ILU_read ILU_simple"])
+
+dnl AM_COND_IF([BUILD_ILUT],
+AS_IF([test "x$enable_ILUT" = "xyes"],
+	   [EXAMPLES_TO_BUILD="$EXAMPLES_TO_BUILD ILUT_cpp_wrapper"])
+
+AM_CONDITIONAL([USE_ALLEGRO], 
 	       [test "x$use_allegro" = "xyes"])
+dnl AM_COND_IF([USE_ALLEGRO],
+AS_IF([test "x$use_allegro" = "xyes"],
+	   [EXAMPLES_TO_BUILD="$EXAMPLES_TO_BUILD ILUT_allegro"])
 
 AM_CONDITIONAL([USE_DIRECTX8],
                [test "x$use_directx8" = "xyes"])
@@ -301,6 +334,9 @@ AM_CONDITIONAL([USE_DIRECTX9],
 
 AM_CONDITIONAL([USE_DIRECTX],
                [test "x$use_directx8" = "xyes" -o "x$use_directx9" = "xyes"])
+dnl AM_COND_IF([USE_DIRECTX],
+AS_IF([test "x$use_directx8" = "xyes" -o "x$use_directx9" = "xyes"],
+	   [EXAMPLES_TO_BUILD="$EXAMPLES_TO_BUILD ILUT_d3d ILUT_windows"])
 
 AM_CONDITIONAL([USE_OPENGL],
                [test "x$use_ogl" = "xyes"])
@@ -310,19 +346,26 @@ AM_CONDITIONAL([HAVE_GLUT],
 
 AM_CONDITIONAL([USE_SDL],
                [test "x$use_sdl" = "xyes"])
+dnl AM_COND_IF([USE_SDL],
+AS_IF([test "x$use_sdl" = "xyes"],
+	   [EXAMPLES_TO_BUILD="$EXAMPLES_TO_BUILD ILUT_sdl"])
 
 AM_CONDITIONAL([USE_W32],
                [test "x$use_w32" = "xyes"])
+dnl AM_COND_IF([USE_W32],
+AS_IF([test "x$use_w32" = "xyes"],
+	   [EXAMPLES_TO_BUILD="$EXAMPLES_TO_BUILD ILUT_animation"])
 
 AM_CONDITIONAL([USE_X11],
                [test "x$use_x11" = "xyes"])
+#this is instedad AM_COND_IF([USE_OPENGL && USE_X11])
+AS_IF([test "x$have_glut" = "xyes" -a "x$use_x11" = "xyes"],
+      [EXAMPLES_TO_BUILD="$EXAMPLES_TO_BUILD ILUT_gl ILUT_volume"])
 
 dnl Win32
 AS_CASE([$host],
         [*mingw32*],
-        [LIBIL_CFLAGS="$LIBIL_CFLAGS -mno-cygwin"
-         LIBILU_CFLAGS="$LIBILU_CFLAGS -mno-cygwin"
-         LIBILUT_CFLAGS="$LIBILUT_CFLAGS -mno-cygwin"
+        [ADD_CFLAGS([-mno-cygwin])
 	 PLATFORM="MINGW32"],
         [*cygwin*],
         [LIBILUT_WIN32LIBPATH="-L/usr/lib/w32api"
@@ -337,6 +380,7 @@ AM_CONDITIONAL([WINDOWS_BUILD],
 	       [test "x$PLATFORM" = "xMINGW32" -o "x$PLATFORM" = "xCYGWIN"])
 
 dnl Final substitution
+AC_SUBST([GENERAL_CFLAGS])
 AC_SUBST([IL_CFLAGS])
 AC_SUBST([IL_LIBS])
 AC_SUBST([ILU_CFLAGS])
@@ -355,7 +399,8 @@ AC_CONFIG_FILES([Makefile
 		 docs/Makefile 
 		 data/DevIL.pc 
 		 data/IL.pc data/ILU.pc 
-		 data/ILUT.pc]) 
+		 data/ILUT.pc])
+dnl		 projects/Makefile]) 
 # src-IL/Makefile  src-IL/src/Makefile  src-IL/include/Makefile  src-ILU/Makefile  src-ILU/src/Makefile  src-ILU/include/Makefile  src-ILUT/Makefile  src-ILUT/src/Makefile  src-ILUT/include/Makefile  include/Makefile  include/IL/Makefile
 AC_OUTPUT
 
@@ -370,17 +415,32 @@ AS_IF([test "x$enable_IL" = "xyes"],
 AC_MSG_NOTICE([+----------------------------------------+])
 AS_IF([test "x$enable_ILU" = "xyes"],
       [AC_MSG_NOTICE([\|      ILU part enabled        \|]) ],
-      [AC_MSG_NOTICE([\|      ILU part disabled       \|]) ])
+      [AC_MSG_NOTICE([\|      ILU part disabled       \|]) 
+       AC_MSG_NOTICE([+----------------------------------------+-------+])
+       AC_MSG_NOTICE([Pass --enable-ILU option to the configure script if you want to build ILU]) ])
 
 AC_MSG_NOTICE([+----------------------------------------+])
 AS_IF([test "x$enable_ILUT" = "xyes"],
       [AC_MSG_NOTICE([\| ILUT library  Supported APIs \|])
        AC_MSG_NOTICE([+----------------------------------------+-------+])
        AC_MSG_NOTICE([$SUPPORTED_API])],
-      [AC_MSG_NOTICE([\|      ILUT part disabled     \|]) ])
+      [AC_MSG_NOTICE([\|      ILUT part disabled      \|])
+       AC_MSG_NOTICE([+----------------------------------------+-------+])
+       AC_MSG_NOTICE([Pass --enable-ILUT option to the configure script if you want to build ILUT]) ])
 
 AC_MSG_NOTICE([+----------------------------------------+])
-       AC_MSG_NOTICE([\| Detected Machine Extensions \|])
+       AC_MSG_NOTICE([\| Detected Machine Extensions  \|])
 AC_MSG_NOTICE([+----------------------------------------+-------+])
 AC_MSG_NOTICE([$SUPPORTED_EXTENSION])
+
+AC_MSG_NOTICE([+----------------------------------------+])
+AS_IF([test "x$with_examples" = "xyes"],
+      [AC_MSG_NOTICE([\|      Building examples       \|]) 
+       AC_MSG_NOTICE([+----------------------------------------+-------+])
+       AC_MSG_NOTICE([$EXAMPLES_TO_BUILD])
+       AS_IF([test "x$build" != "x$host"],
+             [AC_MSG_NOTICE([Note: You may get some errors when cross-compiling when using Allegro and/or SDL. So if you are cross-compiling and getting these errors, just pass --disable-allegro or --disable-sdl to the configure script.]) ]) ],
+      [AC_MSG_NOTICE([\|  Not building any examples   \|]) 
+       AC_MSG_NOTICE([+----------------------------------------+-------+])
+       AC_MSG_NOTICE([Pass --with-examples option to the configure script if you want to build examples.]) ])
 AC_MSG_NOTICE([+----------------------------------------+])

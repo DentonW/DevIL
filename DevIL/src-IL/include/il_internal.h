@@ -15,10 +15,12 @@
 
 
 // Local headers
-#if (defined(_WIN32) || defined(_WIN64)) && !defined(HAVE_CONFIG_H)
+/*#if (defined(_WIN32) || defined(_WIN64)) && !defined(HAVE_CONFIG_H)
 	#define HAVE_CONFIG_H
-#endif
-#ifdef HAVE_CONFIG_H
+#endif*/
+#ifdef HAVE_CONFIG_H //if we use autotools, we have HAVE_CONFIG_H defined and we have to look for it like that
+#include <config.h>
+#else // if we don't use autotools, we have to point to (possibly different) config.h than in the opposite case
 #include <IL/config.h>
 #endif
 

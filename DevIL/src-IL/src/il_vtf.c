@@ -18,6 +18,14 @@
 #include "il_vtf.h"
 #include "il_dds.h"
 
+// the max and min functions are not present, at least not on unixes
+#ifndef max
+	#define max( a, b ) ( ((a) > (b)) ? (a) : (b) )
+#endif
+
+#ifndef min
+	#define min( a, b ) ( ((a) < (b)) ? (a) : (b) )
+#endif
 
 //@TODO: Get rid of these globals.
 //static VTFHEAD Head;

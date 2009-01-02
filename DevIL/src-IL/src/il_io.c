@@ -762,7 +762,7 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 		#endif
 
 		#ifndef IL_NO_VTF
-		case IL_WDP:
+		case IL_VTF:
 			bRet = ilLoadVtf(FileName);
 			break;
 		#endif

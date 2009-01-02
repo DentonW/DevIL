@@ -1,6 +1,18 @@
 1.7.6
 ---
 
+2009-01-02 Matěj Týč <bubla@sf.net>
+	* src-{IL,ILU,ILUT}/src/*_internal.c: Hopefully resolved the
+	HAVE_CONFIG_H thing once for all :-)
+	* src-IL/src/il_exr.cpp: Undefined OPENEXR_DLL if we are not on
+	Windows (=> when HAVE_CONFIG_H is not defined)
+	* src-IL/src/il_io.c:765: Fixed a typo
+	* src-IL/src/il_vtf.c: Added min and max macros to the beginning
+	* docs/Devil_manual.texi: Corrected typos and missing @code and other
+	formatting stuff, corrected image names and incorrect usage of @xref
+	etc. that prevented compilation
+	* build setup (Makefile.am and configure.ac): Added support for
+	compilation of EXR and WDP formats + various other tweaks.
 
 1.7.5
 ---

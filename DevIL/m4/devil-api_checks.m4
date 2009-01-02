@@ -1,5 +1,8 @@
 
-
+dnl
+dnl Checks for SDL presence, adds cflags to ILUT_CFLAGS and libs to ILUT_LIBS
+dnl also sets use_sdl variable
+dnl
 AC_DEFUN([SETTLE_SDL],
          [TEST_API([sdl])
           AS_IF([test "x$enable_sdl" = "xyes"],
@@ -14,36 +17,11 @@ AC_DEFUN([SETTLE_SDL],
                  ILUT_LIBS="$SDL_LIBS $ILUT_LIBS"
                  SUPPORTED_API="$SUPPORTED_API SDL"]) ])
 
-AC_DEFUN([SETTLE_OPENGL_OLD],
-         [TEST_API(opengl)
-AS_IF([test "x$enable_opengl" = "xyes"],
-[AS_CASE(["$target"],
-                  [*-*-cygwin* | *-*-mingw32*],
-                  [AC_CHECK_LIB([opengl32],
-                                [main],
-                                [use_ogl="yes"
-                                 ILUT_LIBS="-lopengl32 $ILUT_LIBS"])
-                   AC_CHECK_LIB([glu32],
-                                [main],
-                                [use_glu="yes"
-                                 ILUT_LIBS="-lglu32 $ILUT_LIBS"])],
-                  [LIBGL="-lopengl32 -lglu32"],
-                  [*-apple-darwin*],
-                  [LIBGL='-Wl,-framework -Wl,OpenGL'],
-                  [AC_CHECK_LIB([GL],
-	                        [glLoadIdentity],
-			        [use_ogl="yes"
-			         ILUT_LIBS="-lGL $ILUT_LIBS"])
-                   AC_CHECK_LIB([GLU],
-                                [gluPerspective],
-                                [use_glu="yes"
-			         ILUT_LIBS="-lGLU $ILUT_LIBS"]) ]) ])
-   	AS_IF([test "x$use_ogl" = "xyes" -a "x$use_glu" = "xyes" ],
-              [AC_DEFINE([ILUT_USE_OPENGL],
-	                 [1],
-	                 [Define if system supports OpenGL API])
-            SUPPORTED_API="$SUPPORTED_API OpenGL"]) ])
-
+dnl
+dnl Checks for OpenGL implementations, external macros from Autoconf macro archives used
+dnl Checks for GL, GLU (needed for DevIL) and for GLUT (one of the examples uses this)
+dnl sets use_ogl and have_glut variables
+dnl
 AC_DEFUN([SETTLE_OPENGL],
          [TEST_API(opengl)
           AS_IF([test "x$enable_opengl" = "xyes"],
@@ -61,6 +39,11 @@ AC_DEFUN([SETTLE_OPENGL],
 	                          [Define if system supports OpenGL API])
                         SUPPORTED_API="$SUPPORTED_API OpenGL"]) ]) ])
 
+dnl
+dnl The check for Allegro game programming library.
+dnl The part before "official" AM_PATH_ALLEGRO is for unofficial autotools builds
+dnl sets use_allegro variable
+dnl
 AC_DEFUN([SETTLE_ALLEGRO],
 [TEST_API([allegro])
 AS_IF([test "x$enable_allegro" = "xyes"],
@@ -88,7 +71,11 @@ AS_IF([test "x$use_allegro" = "xyes"],
 		 [Support Allegro API])
        SUPPORTED_API="$SUPPORTED_API Allegro"]) ])
 
+dnl
 dnl 32-bit Windows support
+dnl checks for gdi32 lib presence
+dnl sets use_w32 variable
+dnl
 AC_DEFUN([SETTLE_W32],
          [TEST_API([w32])
           AS_IF([test "x$enable_w32" = "xyes"],
@@ -98,60 +85,65 @@ AC_DEFUN([SETTLE_W32],
                                use_w32="yes"
                                SUPPORTED_API="$SUPPORTED_API w32"]) ]) ])
 
-dnl DirectX 8
+dnl
+dnl check for DirectX 8
+dnl sets use_directx8 variable
+dnl
 AC_DEFUN([SETTLE_DX8],
 [TEST_API([directx8])
 AS_IF([test "x$enable_directx8" = "xyes"],
       [AC_CHECK_HEADER([d3d8.h],
 		       [AC_DEFINE([ILUT_USE_DIRECTX8],,
 		                  [Support DirectX8 API]) 
-                        use__directx8="yes"
+                        use_directx8="yes"
                         SUPPORTED_API="$SUPPORTED_API DirectX8"]) ]) ])
 
+dnl
 dnl DirectX 9
+dnl sets use_directx9 variable
+dnl
 AC_DEFUN([SETTLE_DX9],
 [TEST_API([directx9])
 AS_IF([test "x$enable_directx9" = "xyes"],
       [AC_CHECK_HEADER([d3d9.h],
 		       [AC_DEFINE([ILUT_USE_DIRECTX9],,
 		                  [Support DirectX9 API])
-                        use__directx9="yes"
+                        use_directx9="yes"
                         SUPPORTED_API="$SUPPORTED_API DirectX9"]) ]) ])
-
+dnl
+dnl Checks for X11 developement stuff and for XShm
+dnl sets use_x11 and use_xshm vars
+dnl
 AC_DEFUN([SETTLE_X11],
-[TEST_API(x11)
-TEST_API(shm)
-AS_IF([test "x$enable_x11" = "xyes"],
-      [AC_CHECK_HEADER([X11/Xlib.h],
-		       [use_x11="yes"],
-		       [use_x11="no"]) 
-       AC_CHECK_LIB([X11],
-                    [main],
-                    [use_x11="yes"
-                     ILUT_LIBS="-lX11 $ILUT_LIBS"],
-                    [use_x11="no"]) ])
-AS_IF([test "x$enable_shm" = "xyes"],
-      [AC_CHECK_HEADER([X11/extensions/XShm.h],
-		       [use_xshm="yes"],
-		       [use_xshm="no"],
-		       [[#include <X11/Xlib.h>]]) 
-       AC_CHECK_LIB([Xext],
-                    [main],
-                    [use_shm="yes"
-                     ILUT_LIBS="-lXext $ILUT_LIBS"],
-                    [use_shm="no"]) ])
+         [TEST_API(x11)
+          TEST_API(shm)
+          AS_IF([test "x$enable_x11" = "xyes"],
+                [AC_CHECK_HEADER([X11/Xlib.h],
+	 	                 [use_x11="yes"],
+		                 [use_x11="no"]) 
+                 AC_CHECK_LIB([X11],
+                              [main],
+                              [dnl The use_x11 var is either "yes" already, or we don't want "no" to be overwritten
+                               ILUT_LIBS="-lX11 $ILUT_LIBS"],
+                              [use_x11="no"]) ])
+                 AS_IF([test "x$enable_shm" = "xyes"],
+                       [AC_CHECK_HEADER([X11/extensions/XShm.h],
+		                        [use_xshm="yes"],
+		                        [use_xshm="no"],
+		                        [[#include <X11/Xlib.h>]]) 
+                 AC_CHECK_LIB([Xext],
+                              [main],
+                              [use_shm="yes"
+                               ILUT_LIBS="-lXext $ILUT_LIBS"],
+                              [use_shm="no"]) ])
 
-AS_IF([test "x$use_x11" != "xno"],
-	     [AC_DEFINE([ILUT_USE_X11],
-			[],
-			[Support X11 API])
-              SUPPORTED_API=$SUPPORTED_API"X11 "]) 
-dnl              AS_CASE([$target],
-dnl		      [*apple-darwin*],
-dnl		      [LIBX11="$LIBX11 -L/usr/X11R6/lib"])
-AS_IF([test "$use_xshm" = "yes"],
-		    [AC_DEFINE([ILUT_USE_XSHM],
-			       [],
-			       [Support X11 XShm extension])
-		     SUPPORTED_API=$SUPPORTED_API"XShm "]) ])
-
+                 AS_IF([test "x$use_x11" != "xno"],
+	               [AC_DEFINE([ILUT_USE_X11],
+			          [1],
+			          [Support X11 API])
+                 SUPPORTED_API="$SUPPORTED_API X11"]) 
+                 AS_IF([test "$use_xshm" = "yes"],
+		       [AC_DEFINE([ILUT_USE_XSHM],
+			          [],
+			          [Support X11 XShm extension])
+		 SUPPORTED_API="$SUPPORTED_API XShm"]) ])
