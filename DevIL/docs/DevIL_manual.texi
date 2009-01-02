@@ -120,13 +120,39 @@ To compile with DevIL in DJGPP, add @option{-lil} to your command line.  To also
 Setting up DevIL in this environment requires the following steps:
 
 @enumerate
-@file{}	@item Unzip DevIL in an empty directory, by typing @command{gzip –d gzipname} followed by @command{tar –xvf tarname}, where @file{gzipname} and @file{tarname} are @file{DevIL-x.x.x.tar.gz} and @file{DevIL-x.x.x.tar}.
+	@item Unzip DevIL in an empty directory, by typing @command{gzip –d gzipname} followed by @command{tar –xvf tarname}, where @file{gzipname} and @file{tarname} are @file{DevIL-x.x.x.tar.gz} and @file{DevIL-x.x.x.tar}.
 	@item Unzip should automatically use the directory structure present in the DevIL zip file.
 	@item To use the precompiled libraries, copy @file{libIL.so}, @file{libILU.so} and @file{libILUT.so} to a place specified in your library path, or use the full path to the libraries when compiling.
 	@item To compile the library yourself:
-Type @command{./configure}, you get a long text.
+Type @command{./configure}, you get a long text with results of various tests.
 Then, type @command{make} followed by  @command{make install}.
 @end enumerate
+
+In order to link to DevIL, you may use autotools with @code{libtool}, which means to link either with @file{libIL.la} or @file{libILU.la} or with @file{libILUT.la} depending what level of functionality you require. You may decide to use a monolithic build of the library and you then link with @file{libDevIL.la}.
+The best way is to have this code in your @file{configure.ac} file:
+@example
+...
+@i{dnl Check for libtool (older macro for this is AC_PROG_LIBTOOL)}
+LT_INIT
+...
+@i{# Check for libs we need for our program now}
+@i{dnl Check that we have the header}
+AC_CHECK_HEADER([IL/il.h])
+@i{dnl Check for the IL part on DevIL on unix-like systems}
+AC_CHECK_LIB([IL], [ilInit], [LIBS_WE_NEED="-lIL $LIBS_WE_NEED"])
+@i{dnl Check that DevIL library exists (good for Windows)}
+AC_CHECK_LIB([DevIL], [main], [LIBS_WE_NEED="-lDevIL $LIBS_WE_NEED"])
+...
+@i{dnl Now export the variable that contains libraries}
+@i{dnl  so we can use it in makefiles}
+AC_SUBST([LIBS_WE_NEED])
+...
+@end example
+
+
+If you use an IDE or if you don't like autotools (which is a big mistake, by the way :-), then you may use @file{pkg-config}. This is not recommended if you intend to use DevIL in a cross-platform programs. You can get libraries you need to link to by running @command{pkg-config IL --libs}. Again, you decide whether you need IL, ILU or ILUT. Or you may have to run @command{pkg-config DevIL --libs} if you have just the monolithic library.
+
+If you are a happy IDE user, you have to write this commands in the backquotes like @command{`pkg-config ILUT --libs`} into some text boxes that allow you to specify additional LDFLAGS.
 
 @node Basic usage
 @chapter Basic usage
@@ -402,18 +428,18 @@ Be aware that if the Unicode version of DevIL is not being used, some translatio
 
 
 
-@c @node Image Manipulation
+@node Image Manipulation
 @chapter Image Manipulation
 
 ILU (Image Library Utilities) contains functions to manipulate any type of image in a variety of ways.  Some functions filter images, while others perform a wider variety of operations, such as scaling an image.  This section will give a comparison of the utility functions against the below figure.
 
-@center @image{images/manipulation/original,5cm}
+@center @image{images/sample_original,5cm}
 @center @emph{Original, unmodified image}
 
 @section Alienifying
-iluAlienify is a filter I created purely by accident, when I was attempting to write colour matrix code.  The effect iluAlienify gives to an image is a green and purple tint.  On images with humans in them, iluAlienify generally makes the people look green, hence the fabricated term ``alienify''.  iluAlienify does not accept any parameters.  The figure below illustrates this effect on the DevIL logo.
+iluAlienify is a filter I created purely by accident, when I was attempting to write colour matrix code.  The effect @code{iluAlienify} gives to an image is a green and purple tint.  On images with humans in them, @code{iluAlienify} generally makes the people look green, hence the fabricated term ``alienify''.  @code{iluAlienify} does not accept any parameters.  The figure below illustrates this effect on the DevIL logo.
 
-@center @image{images/manipulation/alienified,5cm}
+@center @image{images/sample_alienified,5cm}
 @center @emph{``Alienified'' image}
 
 @section Blurring
@@ -421,10 +447,10 @@ ILU has two blurring functions – @code{iluBlurAverage} and @code{iluBlurGaussi
 
 @code{iluBlurAverage} and @code{iluBlurGaussian} are functionally equivalent.  Both functions accept a single parameter.  Call the desired function with the number of iterations of blurring you wish to be performed on the image.  Increase the number of iterations to increase the blurriness of an image.
 
-@center @image{images/manipulation/average-blur,5cm}
+@center @image{images/sample_blur_average,5cm}
 @center @emph{Average blurred with 10 iterations applied}
 
-@center @image{images/manipulation/gauss-blur,5cm}
+@center @image{images/sample_blur_gauss,5cm}
 @center @emph{Gaussian blurred with 10 iterations applied}
 
 @section Contrast
@@ -432,50 +458,50 @@ ILU can apply more colour contrast to your image by brightening the lights and d
 
 @code{iluContrast} accepts a single parameter describing the desired amount of contrast to modify the image by.  A value of 1.0 does not affect the image.  Values above 1.0 to 1.7 increase the amount of contrast in the image, with 1.7 increasing the contrast the most.  Values from 0.0 to 1.0 decrease the amount of contrast in the image.  Values outside of the 0.0 to 1.7 range will give undefined results.  -0.5 to 0.0 will actually create a negative of the image and increase the contrast.
 
-@center @image{images/manipulation/contrast-0.1,5cm}
+@center @image{images/sample_contrast_02,5cm}
 @center @emph{Contrast of 0.1}
 
-@center @image{images/manipulation/contrast-1.7,5cm}
+@center @image{images/sample_contrast_16,5cm}
 @center @emph{Contrast of 1.7}
 
 @section Equalization
 Sometimes it may be useful to equalize an image – that is, bring the extreme colour values to a median point.  @code{iluEqualize} darkens the bright colours and lightens the dark colours, reducing the contrast in an image or ``equalizing'' it.  The below figure shows the results of applying @code{iluEqualize} to the DevIL image.
 
-@center @image{images/manipulation/equalized,5cm}
+@center @image{images/sample_equalized,5cm}
 @center @emph{Equalized image}
 
 @section Gamma Correction
 @code{iluGammaCorrect} applies gamma correction to an image using an exponential curve.  The single parameter @code{iluGammaCorrect} accepts is the gamma correction factor you wish to use.  A gamma correction factor of 1.0 leaves the image unmodified.  Values in the range 0.0 - 1.0 darken the image.  0.0 leaves a totally black image.  Anything above 1.0 brightens the image, but values too large may saturate the image.
 
-@center @image{images/manipulation/gamma-0.5,5cm}
-@center @emph{Result of gamma correction of 0.5}
+@c @center @image{images/sample_gamma_05,5cm}
+@c @center @emph{Result of gamma correction of 0.5}
 
-@center @image{images/manipulation/gamma-2.0,5cm}
-@center @emph{Result of gamma correction of 2.0}
+@c @center @image{images/sample_gamma_20,5cm}
+@c @center @emph{Result of gamma correction of 2.0}
 
 @section Negativity
 @code{iluNegative} is a very basic function that inverts every pixel's colour in an image.  For example, pure white becomes pure black, and vice-versa.  The resulting colour of a pixel can be determined by this formula: new_colour = ~old_colour (where the tilde is the negation of the set of bits).  @code{iluNegative} does not accept any parameters and is reversible by calling it again.
 
-@center @image{images/manipulation/negative,5cm}
-@center @emph{@code{iluNegative} example}
+@c @center @image{images/sample_negative,5cm}
+@c @center @emph{@code{iluNegative} example}
 
 @section Noise
 ILU can add ``random'' noise to any image to make it appear noisy.  The function, @code{iluNoisify}, simply uses the standard libc @code{rand} function after initializing it with a seed to @code{srand}.  If your program depends on a different seed to @code{rand}, reset it after calling @code{iluNoisify}.  The seed ILU uses is the standard @code{time(NULL)} call.  Of course, the noise added to the image is not totally random, since no such thing exists, but there should be no repeating, except in extremely large images.
 
 @code{iluNoisify} accepts a single parameter – the tolerance to use.  This parameter is a clamped (float) value that should be in the range 0.0f - 1.0f.  Lower values indicate a lower tolerance, while higher values indicate the opposite.  The tolerance indicates just how much of a mono intensity that @code{iluNoisify} is allowed to apply to each pixel.  A ``random'' mono intensity is applied to each pixel so that you will not end up with totally new colours, just the same colours with a different luminance value.  Colours change by both negative and positive values, so some pixels may be darker, some may be lighter, and others will remain the same.
 
-@multitable {@image{images/manipulation/noise-0.5,5cm}} {  } {@image{images/manipulation/noise-1.0,5cm}}
-	@item @image{images/manipulation/noise-0.5,5cm}	@tab  @tab  @image{images/manipulation/noise-1.0,5cm}
-	@item @emph{Result of @code{iluNoisify} with a 0.50 tolerance}  @tab  @tab @emph{Result of @code{iluNoisify} with a 1.0 tolerance}
-@end multitable
+@c @multitable {@image{images/manipulation/noise-0.5,5cm}} {  } {@image{images/manipulation/noise-1.0,5cm}}
+@c 	@item @image{images/manipulation/noise-0.5,5cm}	@tab  @tab  @image{images/manipulation/noise-1.0,5cm}
+@c 	@item @emph{Result of @code{iluNoisify} with a 0.50 tolerance}  @tab  @tab @emph{Result of @code{iluNoisify} with a 1.0 tolerance}
+@c @end multitable
 
 @section Pixelization
 @code{iluPixelize} creates pixelized images by averaging the colour values of blocks of pixels.  The single parameter passed to @code{iluPixelize} determines the size of these square blocks.  The result is a pixelized image.
 
 Call @code{iluPixelize} with values greater than 1 to pixelize the image.  The larger the values, the larger the pixel blocks will be.  A value of 1 will leave the image unchanged.  Values less than 1 generate an error.
 
-@center @image{images/manipulation/pixelize,5cm}
-@center @emph{Pixelization of 5 pixels across}
+@c @center @image{images/manipulation/pixelize,5cm}
+@c @center @emph{Pixelization of 5 pixels across}
 
 @section Sharpening
 Sharpening sharply defines the outlines in an image.  @code{iluSharpen} performs this sharpening effect on an image.  @code{iluSharpen} accepts two parameters: the sharpening factor and the number of iterations to perform the sharpening effect.
@@ -484,8 +510,8 @@ The sharpening factor must be in the range of 0.0 - 2.5.  A value of 1.0 for the
 
 The number of iterations to perform will usually be 1, but to achieve more sharpening, increase the number of iterations.  This parameter is similar to the @emph{Iterations} parameter of the two blurring functions.  The time it takes to run this function is directly proportional to the number of iterations desired.
 
-@center @image{images/manipulation/sharpen,5cm}
-@center @emph{Sharpening of 2.5}
+@c @center @image{images/manipulation/sharpen,5cm}
+@c @center @emph{Sharpening of 2.5}
 
 
 @c @node Resizing Images
@@ -500,10 +526,10 @@ The three parameters are relatively explanatory.  Any image can be resized to a 
 
 If you specify a dimension greater than the original dimension, the image enlarges in that direction.  Alternately, if you specify a dimension smaller than the original dimension, the image shrinks in that direction.
 
-@multitable {Original image} {  } {@image{images/manipulation/enlarged}} {  } {Shrunk image}
-	@item @image{images/manipulation/resize-original}	@tab  @tab  @image{images/manipulation/enlarged}  @tab  @tab  @image{images/manipulation/shrunk}
-	@item @emph{Original image}  @tab  @tab @emph{Enlarged image}  @tab  @tab @emph{Shrunk image}
-@end multitable
+@c @multitable {Original image} {  } {@image{images/manipulation/enlarged}} {  } {Shrunk image}
+@c 	@item @image{images/manipulation/resize-original}	@tab  @tab  @image{images/manipulation/enlarged}  @c @tab  @tab  @image{images/manipulation/shrunk}
+@c 	@item @emph{Original image}  @tab  @tab @emph{Enlarged image}  @tab  @tab @emph{Shrunk image}
+@c @end multitable
 
 @section Advanced Scaling
 ILU also allows you to specify which method you want to use to resize images.  As you can see in the middle figure above, the enlarged image is very pixelized.  The shrunk image is also blocky.  This is because a nearest filter was applied to the image in figure 5.1 to produce figures 5.2 and 5.3.
@@ -534,17 +560,17 @@ When minimizing an image, bilinear filtering should be sufficient, since it uses
 
 Enlarging an image, though, depends quite heavily on how good the sampling scheme is.  ILU provides several filtering functions to let you choose which one best fits your needs: speed versus image quality.  Below is a comparison of the different types of filters when enlarging an image.
 
-@multitable {@image{images/lena/nearest}} {  } {@image{images/lena/nearest}} {  } {@image{images/lena/nearest}}
-	@item @image{images/lena/nearest} Nearest filter
-		@tab  @tab  @image{images/lena/linear} Linear filter
-		@tab  @tab  @image{images/lena/bilinear} Bilinear filter
-	@item @image{images/lena/box} Box filter
-		@tab  @tab  @image{images/lena/triangle} Triangle filter
-		@tab  @tab  @image{images/lena/bell} Bell filter
-	@item @image{images/lena/bspline} B spline filter
-		@tab  @tab  @image{images/lena/lanczos} Lanczos filter
-		@tab  @tab  @image{images/lena/mitchell} Mitchell filter
-@end multitable
+@c @multitable {@image{images/lena/nearest}} {  } {@image{images/lena/nearest}} {  } {@image{images/lena/nearest}}
+@c 	@item @image{images/lena/nearest} Nearest filter
+@c 		@tab  @tab  @image{images/lena/linear} Linear filter
+@c 		@tab  @tab  @image{images/lena/bilinear} Bilinear filter
+@c 	@item @image{images/lena/box} Box filter
+@c 		@tab  @tab  @image{images/lena/triangle} Triangle filter
+@c 		@tab  @tab  @image{images/lena/bell} Bell filter
+@c 	@item @image{images/lena/bspline} B spline filter
+@c 		@tab  @tab  @image{images/lena/lanczos} Lanczos filter
+@c 		@tab  @tab  @image{images/lena/mitchell} Mitchell filter
+@c @end multitable
 
 
 @c @node Sub-Images
@@ -553,16 +579,16 @@ Enlarging an image, though, depends quite heavily on how good the sampling schem
 @section Mipmaps
 Mipmaps in DevIL are successive half-dimensioned power-of-2 images.  The dimensions do not have to be powers of 2 if you generate them manually, but DevIL's mipmap generation facilities assume power-of-2 images.
 
-@multitable {@image{images/mipmaps/128}} {@image{images/mipmaps/64}} {@image{images/mipmaps/32}} {@image{images/mipmaps/16}} {@image{images/mipmaps/8}} {@image{images/mipmaps/4}}  {@image{images/mipmaps/2}} {@image{images/mipmaps/1}}
-	@item  @image{images/mipmaps/128}
-		@tab  @image{images/mipmaps/64}
-		@tab  @image{images/mipmaps/32}
-		@tab  @image{images/mipmaps/16}
-		@tab  @image{images/mipmaps/8}
-		@tab  @image{images/mipmaps/4}
-		@tab  @image{images/mipmaps/2}
-		@tab  @image{images/mipmaps/1}
-@end multitable
+@c @multitable {@image{images/mipmaps/128}} {@image{images/mipmaps/64}} {@image{images/mipmaps/32}} {@image{images/mipmaps/16}} {@image{images/mipmaps/8}} {@image{images/mipmaps/4}}  {@image{images/mipmaps/2}} {@image{images/mipmaps/1}}
+@c 	@item  @image{images/mipmaps/128}
+@c 		@tab  @image{images/mipmaps/64}
+@c 	@c 	@tab  @image{images/mipmaps/32}
+@c 		@tab  @image{images/mipmaps/16}
+@c 		@tab  @image{images/mipmaps/8}
+@c 		@tab  @image{images/mipmaps/4}
+@c 		@tab  @image{images/mipmaps/2}
+@c 		@tab  @image{images/mipmaps/1}
+@c @end multitable
 @center @emph{All mipmap levels down to 1x1}
 
 @subsection Mipmap Creation
@@ -585,7 +611,7 @@ Animations are similar to mipmaps, but instead of being smaller successive image
 To be added...
 
 @subsection Animation Chain Access
-Access animations through the iluActiveImage function:
+Access animations through the @code{iluActiveImage} function:
 @example
 ILboolean ilActiveImage(ILuint ImageNum);
 @end example
@@ -607,7 +633,7 @@ An image can have both mipmaps and animations at the same time.  Every image in 
 DevIL supports loading and saving of Microsoft .dds files.  DDS files can either be compressed or uncompressed.  If they are compressed, DDS files use DirectX Texture Compression (DXTC).  DXTC is also known as S3TC, since Microsoft licensed the compression technology from S3.
 
 @subsection Keeping DXTC Data
-When loading, DevIL uncompresses the DXTC.  If you call ilEnable with the IL_KEEP_DXTC_DATA parameter, DevIL will keep an uncompressed copy of the DXTC data along with the image.  Functions that deal with DXTC data can use this data without having to recompress the uncompressed data, making these functions operate faster.  The only drawback is the use of more memory.
+When loading, DevIL uncompresses the DXTC.  If you call @code{ilEnable} with the IL_KEEP_DXTC_DATA parameter, DevIL will keep an uncompressed copy of the DXTC data along with the image.  Functions that deal with DXTC data can use this data without having to recompress the uncompressed data, making these functions operate faster.  The only drawback is the use of more memory.
 
 @subsection Controlling Saving
 DevIL's DXTC support consists of three different compression formats: DXT1, DXT3 and DXT5.  DXT2 and DXT4 use premultiplied alpha, which not even OpenGL supports.  DevIL loads DXT2 and DXT4 textures but immediately converts them to formats that do not use premultiplied alpha.  To set what format to save DDS files in, use this line:
@@ -639,13 +665,13 @@ ilEnable(IL_ORIGIN_SET);
 ilSetInteger(IL_ORIGIN_MODE, IL_ORIGIN_UPPER_LEFT);
 @end example
 
-To enable the OpenGL S3TC support, use the ilutEnable function with the @code{ILUT_GL_USE_S3TC} parameter:
+To enable the OpenGL S3TC support, use the @code{ilutEnable} function with the @code{ILUT_GL_USE_S3TC} parameter:
 
 @example
 ilutEnable(ILUT_GL_USE_S3TC);
 @end example
 
-Setting this parameter means that ILUT will only use DXTC data from images that are already compressed with DXTC (e.g. DDS files).  To force ILUT to compress any image it sends to OpenGL, use ilutEnable again:
+Setting this parameter means that ILUT will only use DXTC data from images that are already compressed with DXTC (e.g. DDS files).  To force ILUT to compress any image it sends to OpenGL, use @code{ilutEnable} again:
 
 @example
 ilutEnable(ILUT_GL_GEN_S3TC);
@@ -735,8 +761,8 @@ Errors sometimes occur within DevIL.  To get the error code of the last error th
 @appendix Supported File Formats
 
 DevIL supports loading and saving of a large number of image formats.  Table lists the formats DevIL supports sorted according to @code{#define}.
-
-@multitable {Graphics Interchange Format} {.pbm, .pgm, .ppm, .pnm} {IL_DOOM_FLAT} {loading?} {saving?}
+@c The page should fit into margins since somebody may want to print it...
+@multitable {Graphics Interchange Format} {.pbm, .pgm, } {IL_DOOM_FLAT} {loading?} {saving?}
 	@headitem Format name	@tab Extension	@tab IL @code{#define} @tab Loading?	@tab Saving?
 	@item Windows bitmap	@tab .bmp	@tab @code{IL_BMP}	@tab yes	@tab yes
 	@item C-style header	@tab .h	@tab @code{IL_CHED}	@tab no	@tab yes
