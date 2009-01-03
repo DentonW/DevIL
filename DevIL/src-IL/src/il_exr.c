@@ -16,6 +16,7 @@
 #include "il_internal.h"
 #ifndef IL_NO_EXR
 #include "il_exr.h"
+#include <zlib.h>
 
 
 //! Checks if the file specified in FileName is a valid EXR file.
@@ -179,26 +180,33 @@ ILboolean iExrReadString(char *String, ILuint Length)
 // Internal function used to load the EXR.
 ILboolean iLoadExrInternal()
 {
-	EXRHEAD	Header;
-	ILubyte	Attribute[32], AttType[32], ChanOrder[4], ChanName[32];
-	ILuint	AttSize, i, Pos;
-	ILint	NumChannels = -1, PixType = -1;
-	ILuint	PLinear, XSampling, YSampling;
+	EXRHEAD		Header;
+	ILubyte		Attribute[32], AttType[32], ChanOrder[4], ChanName[32];
+	ILuint		AttSize, i, Pos;
+	ILint		NumChannels = -1, PixType = -1, Compression = -1;
+	ILuint		PLinear, XSampling, YSampling, Width = 0, Height = 0, XMin, XMax;
+	ILboolean	Tiled;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 	
-	if (!iGetExrHead(&Head))
+	if (!iGetExrHead(&Header))
 		return IL_FALSE;
-	if (!iCheckExr(&Head)) {
+	if (!iCheckExr(&Header)) {
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
 	}
 
-	// Read in the "header", which consists of a list of attributes.
+	// Check whether tiling is used.
+	Tiled = (Header.Version == 0x202) ? IL_TRUE : IL_FALSE;
+	if (Tiled) {  //@TODO: Support tiled files.
+		ilSetError(IL_FORMAT_NOT_SUPPORTED);
+		return IL_FALSE;
+	}
 
+	// Read in the "header", which consists of a list of attributes.
 	while (!ieof()) {
 		// Each attribute name is 1 to 31 characters (NULL-terminated)
 		if (!iExrReadString(Attribute, 32))
@@ -207,15 +215,19 @@ ILboolean iLoadExrInternal()
 		if (Attribute[0] == 0)  // Signals end of attribute list.
 			break;
 
+		// Each of the if statements below uses these.
+		if (!iExrReadString(AttType, 32))  // Read the attribute type (up to 31 bytes plus NULL).
+			return IL_FALSE;
+		AttSize = GetLittleUInt();  // Get the attribute size.
+		if (AttSize == 0) {
+			ilSetError(IL_INVALID_FILE_HEADER);
+			return IL_FALSE;
+		}
+
+		Pos = itell();  // Keep track of the position before the attribute is read.
+
 		if (!strncmp(Attributes, "channels", strlen("channels")) {
-			if (!iExrReadString(AttType, 32))  // Read the attribute type (up to 31 bytes plus NULL).
-				return IL_FALSE;
 			if (strncmp(AttType, "chlist", strlen("chlist")) {  // Only can be "chlist" for "channels".
-				ilSetError(IL_INVALID_FILE_HEADER);
-				return IL_FALSE;
-			}
-			AttSize = GetLittleUInt();  // Read the size of the attribute.
-			if (AttSize == 0) {
 				ilSetError(IL_INVALID_FILE_HEADER);
 				return IL_FALSE;
 			}
@@ -236,6 +248,9 @@ ILboolean iLoadExrInternal()
 
 				if (!iExrReadString(ChanName, 32))  // Channels are named separately.
 					return IL_FALSE;
+
+				if (ChanName[0] == 0)  // Ending the channel list
+					break;
 
 				// R, G, B are stored in the first byte, and that's it.  Anything else is invalid for our use.
 				//@TODO: Make this not so!
@@ -272,16 +287,68 @@ ILboolean iLoadExrInternal()
 				AttSize += (strlen(ChanName) + 1 + 16);
 			}
 		}
-		else {  // We do not care about this attribute right now.
-			if (!iExrReadString(AttType, 32))  // Not sure on what is a maximum for these.
+
+		else if (!strncmp(Attributes, "dataWindow", strlen("dataWindow")) {
+			if (strncmp(AttType, "box2i", strlen("box2i")) {  // Only can be "box2i" for "dataWindow".
+				ilSetError(IL_INVALID_FILE_HEADER);
 				return IL_FALSE;
-			AttSize = GetLittleUInt();  // Get the attribute size.
+			}
+
+			XMin = GetLittleUInt();
+			YMin = GetLittleUInt();
+			Width = GetLittleUInt();
+			Height = GetLittleUInt();
+
+			// XMin and YMin are normally 0, but they can be > 0 (but < Width/Height).
+			if (XMin >= Width || YMin >= Height) {
+				ilSetError(IL_INVALID_FILE_HEADER);
+				return IL_FALSE;
+			}
+			Width = Width - XMin;    // Again, XMin/YMin should normally be 0,
+			Height = Height - YMin;  //  but we will not assume.
+		}
+
+		else if (!strncmp(Attributes, "compression", strlen("compression")) {
+			if (strncmp(AttType, "compression", strlen("compression")) {  // Only can be "compression" for "compression".
+				ilSetError(IL_INVALID_FILE_HEADER);
+				return IL_FALSE;
+			}
+
+			if (Compression == -1)  // Has not bee ninitialized
+				Compression = igetc();
+			else {
+				if (Compression != igetc()) {  //@TODO: Cannot deal with multiple compression formats.
+					ilSetError(IL_FORMAT_NOT_SUPPORTED);
+					return IL_FALSE;
+				}
+			}
+		}
+
+		else {  // We do not care about this attribute right now.
 			iseek(AttSize, IL_SEEK_CUR);  // Just skip it for now (AttSize bytes).
+		}
+
+		if (itell() - Pos != AttSize) {  // The attribute size given does not match with the data.
+			ilSetError(IL_INVALID_FILE_HEADER);
+			return IL_FALSE;
 		}
 	}
 
-	
+	if (Width == 0 || Height == 0 || NumChannels == -1) {  // These need to be initialized.
+		ilSetError(IL_INVALID_FILE_HEADER);
+		return IL_FALSE;
+	}
 
+
+	switch (Compression)
+	{
+		case EXR_NO_COMPRESSION:
+			break;
+
+		default:  // Unknown or unsupported compression format
+			ilSetError(IL_FORMAT_NOT_SUPPORTED);
+			return IL_FALSE;
+	}
 
 
 

@@ -32,6 +32,15 @@ typedef struct EXRHEAD
 	ILuint		Version;			// Treated as two bitfields
 } IL_PACKSTRUCT EXRHEAD;
 
+//@TODO: Should I just do this as an enum?
+#define EXR_NO_COMPRESSION = 0
+#define EXR_RLE_COMPRESSION = 1
+#define EXR_ZIPS_COMPRESSION = 2
+#define EXR_ZIP_COMPRESSION = 3
+#define EXR_PIZ_COMPRESSION = 4
+#define EXR_PXR24_COMPRESSION = 5
+#define EXR_B44_COMPRESSION = 6
+#define EXR_B44A_COMPRESSION = 7
 
 ILboolean iLoadExrInternal();
 
