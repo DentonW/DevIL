@@ -2,11 +2,11 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 12/29/2008
+// Last modified: 01/03/2008
 //
 // Filename: src-IL/src/il_vtf.c
 //
-// Description: Reads from and writes to a Valve Texture Format (.vtf) file.
+// Description: Reads from a Valve Texture Format (.vtf) file.
 //                These are used in Valve's Source games.  VTF specs available
 //                from http://developer.valvesoftware.com/wiki/VTF.
 //
@@ -188,7 +188,8 @@ ILboolean ilLoadVtf(ILconst_string FileName)
 
 
 //! Reads an already-opened VTF file
-ILboolean ilLoadVtfF(ILHANDLE File) {
+ILboolean ilLoadVtfF(ILHANDLE File)
+{
 	ILuint		FirstPos;
 	ILboolean	bRet;
 	

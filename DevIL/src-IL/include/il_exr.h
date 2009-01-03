@@ -16,16 +16,23 @@
 
 #include "il_internal.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+//#ifdef __cplusplus
+//extern "C" {
+//#endif
+//
+//ILboolean ilLoadExr(ILconst_string FileName);
+//
+//#ifdef __cplusplus
+//}
+//#endif
 
-ILboolean ilLoadExr(ILconst_string FileName);
+typedef struct EXRHEAD
+{
+	ILuint		MagicNumber;		// File signature (0x76, 0x2f, 0x31, 0x01)
+	ILuint		Version;			// Treated as two bitfields
+} IL_PACKSTRUCT EXRHEAD;
 
-#ifdef __cplusplus
-}
-#endif
 
-ILboolean iLoadExrInternal(ILconst_string FileName);
+ILboolean iLoadExrInternal();
 
 #endif//EXR_H

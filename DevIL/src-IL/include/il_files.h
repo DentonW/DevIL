@@ -52,7 +52,7 @@ __FILES_EXTERN ILHANDLE		(ILAPIENTRY *iopenr)(ILconst_string);
 __FILES_EXTERN void			(ILAPIENTRY *icloser)(ILHANDLE);
 __FILES_EXTERN ILint		(ILAPIENTRY *igetc)(void);
 __FILES_EXTERN ILuint		(ILAPIENTRY *iread)(void *Buffer, ILuint Size, ILuint Number);
-__FILES_EXTERN ILuint		(ILAPIENTRY *iseek)(ILint Offset, ILuint Mode);
+__FILES_EXTERN ILint		(ILAPIENTRY *iseek)(ILint Offset, ILuint Mode);
 __FILES_EXTERN ILuint		(ILAPIENTRY *itell)(void);
 
 __FILES_EXTERN void			iSetOutputFile(ILHANDLE File);
@@ -60,7 +60,7 @@ __FILES_EXTERN void			iSetOutputLump(void *Lump, ILuint Size);
 __FILES_EXTERN void			(ILAPIENTRY *iclosew)(ILHANDLE);
 __FILES_EXTERN ILHANDLE		(ILAPIENTRY *iopenw)(ILconst_string);
 __FILES_EXTERN ILint		(ILAPIENTRY *iputc)(ILubyte Char);
-__FILES_EXTERN ILuint		(ILAPIENTRY *iseekw)(ILint Offset, ILuint Mode);
+__FILES_EXTERN ILint		(ILAPIENTRY *iseekw)(ILint Offset, ILuint Mode);
 __FILES_EXTERN ILuint		(ILAPIENTRY *itellw)(void);
 __FILES_EXTERN ILint		(ILAPIENTRY *iwrite)(const void *Buffer, ILuint Size, ILuint Number);
  
