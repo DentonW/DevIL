@@ -114,7 +114,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) c:\windows\system32"
+				CommandLine="copy $(TargetPath) %SYSTEMROOT%\system32"
 			/>
 		</Configuration>
 		<Configuration
@@ -285,7 +285,7 @@
 				AdditionalLibraryDirectories="../../lib/vc8"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile=".\ilut.def"
-				DelayLoadDLLs="d3d8.dll,sdl.dll,alleg42.dll"
+				DelayLoadDLLs="opengl32.dll,glu32.dll,d3d8.dll,d3d9.dll,d3d10.dll,sdl.dll,alleg42.dll,wininet.dll"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\../../lib/vc8/debug/ilut.pdb"
 				ImportLibrary=".\../../lib/vc8/x86/debug/ilut.lib"
@@ -316,7 +316,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) c:\windows\system32"
+				CommandLine="copy $(TargetPath) %SYSTEMROOT%\system32"
 			/>
 		</Configuration>
 		<Configuration
@@ -387,7 +387,7 @@
 				ManifestFile="$(IntDir)\$(TargetFileName).intermediate.manifest"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile=".\ilut.def"
-				DelayLoadDLLs="d3d8.dll,sdl.dll,alleg42.dll"
+				DelayLoadDLLs="opengl32.dll,glu32.dll,d3d8.dll,d3d9.dll,d3d10.dll,sdl.dll,alleg42.dll,wininet.dll"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\../../lib/vc8/x64/debug/ilut.pdb"
 				ImportLibrary=".\../../lib/vc8/x64/debug/ilut.lib"
@@ -476,6 +476,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\ilut_directx10.c"
+				>
 			</File>
 			<File
 				RelativePath="..\src\ilut_directx9.c"

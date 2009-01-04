@@ -191,6 +191,8 @@
 #ifdef ILUT_USE_DIRECTX10
 	#pragma warning(push)
 	#pragma warning(disable : 4201)  // Disables 'nonstandard extension used : nameless struct/union' warning
+	#include <rpcsal.h>
+	#include <sal.h>
 	#include <d3d10.h>
 	#pragma warning(pop)
 #endif//ILUT_USE_DIRECTX10

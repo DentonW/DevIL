@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 08/29/2008
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 01/04/2009
 //
 // Filename: src-IL/src/il_exr.cpp
 //

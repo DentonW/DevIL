@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 11/07/2008
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 01/04/2009
 //
 // Filename: src-IL/src/il_files.c
 //
@@ -23,10 +23,10 @@ ILint		ILAPIENTRY iGetcFile(void);
 ILint		ILAPIENTRY iGetcLump(void);
 ILuint		ILAPIENTRY iReadFile(void *Buffer, ILuint Size, ILuint Number);
 ILuint		ILAPIENTRY iReadLump(void *Buffer, const ILuint Size, const ILuint Number);
-ILuint		ILAPIENTRY iSeekRFile(ILint Offset, ILuint Mode);
-ILuint		ILAPIENTRY iSeekRLump(ILint Offset, ILuint Mode);
-ILuint		ILAPIENTRY iSeekWFile(ILint Offset, ILuint Mode);
-ILuint		ILAPIENTRY iSeekWLump(ILint Offset, ILuint Mode);
+ILint		ILAPIENTRY iSeekRFile(ILint Offset, ILuint Mode);
+ILint		ILAPIENTRY iSeekRLump(ILint Offset, ILuint Mode);
+ILint		ILAPIENTRY iSeekWFile(ILint Offset, ILuint Mode);
+ILint		ILAPIENTRY iSeekWLump(ILint Offset, ILuint Mode);
 ILuint		ILAPIENTRY iTellRFile(void);
 ILuint		ILAPIENTRY iTellRLump(void);
 ILuint		ILAPIENTRY iTellWFile(void);
@@ -538,7 +538,7 @@ void iUnCache()
 }
 
 
-ILuint ILAPIENTRY iSeekRFile(ILint Offset, ILuint Mode)
+ILint ILAPIENTRY iSeekRFile(ILint Offset, ILuint Mode)
 {
 	if (Mode == IL_SEEK_SET)
 		Offset += ReadFileStart;  // This allows us to use IL_SEEK_SET in the middle of a file.
@@ -547,7 +547,7 @@ ILuint ILAPIENTRY iSeekRFile(ILint Offset, ILuint Mode)
 
 
 // Returns 1 on error, 0 on success
-ILuint ILAPIENTRY iSeekRLump(ILint Offset, ILuint Mode)
+ILint ILAPIENTRY iSeekRLump(ILint Offset, ILuint Mode)
 {
 	switch (Mode)
 	{
@@ -656,7 +656,7 @@ ILint ILAPIENTRY iWriteLump(const void *Buffer, ILuint Size, ILuint Number)
 }
 
 
-ILuint ILAPIENTRY iSeekWFile(ILint Offset, ILuint Mode)
+ILint ILAPIENTRY iSeekWFile(ILint Offset, ILuint Mode)
 {
 	if (Mode == IL_SEEK_SET)
 		Offset += WriteFileStart;  // This allows us to use IL_SEEK_SET in the middle of a file.
@@ -665,7 +665,7 @@ ILuint ILAPIENTRY iSeekWFile(ILint Offset, ILuint Mode)
 
 
 // Returns 1 on error, 0 on success
-ILuint ILAPIENTRY iSeekWLump(ILint Offset, ILuint Mode)
+ILint ILAPIENTRY iSeekWLump(ILint Offset, ILuint Mode)
 {
 	switch (Mode)
 	{
