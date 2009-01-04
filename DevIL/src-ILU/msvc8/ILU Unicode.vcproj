@@ -419,7 +419,7 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\msvc\ilu.def"
+				RelativePath=".\ilu.def"
 				>
 			</File>
 			<File

@@ -428,7 +428,7 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\msvc\ilut.def"
+				RelativePath=".\ilut.def"
 				>
 			</File>
 			<File

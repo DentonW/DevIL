@@ -6,6 +6,7 @@ iluBlurAvg
 iluBlurGaussian
 iluBuildMipmaps
 iluColoursUsed
+iluConvolution
 iluCompareImage
 iluContrast
 iluCrop
@@ -42,6 +43,8 @@ iluSaturate1f
 iluSaturate4f
 iluScaleColours
 iluScale
+iluScaleAlpha
+iluSetLanguage
 iluSharpen
 iluSwapColours
 iluWave

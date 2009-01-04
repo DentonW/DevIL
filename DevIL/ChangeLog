@@ -3,6 +3,7 @@
 - Readded .exr code.
 - Redefined clamping values in il.h.
 - Added 64-bit integer types.
+- Fixed bug in iRegisterLoad (https://sourceforge.net/forum/message.php?msg_id=5973761).
 
 2009-01-02 Matěj Týč <bubla@sf.net>
 	* src-{IL,ILU,ILUT}/src/*_internal.c: Hopefully resolved the
