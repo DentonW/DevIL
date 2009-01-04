@@ -79,6 +79,16 @@ typedef float          ILfloat;
 typedef float          ILclampf;
 typedef double         ILdouble;
 typedef double         ILclampd;
+
+#ifdef _MSC_VER
+typedef __int64          ILint64;
+typedef unsigned __int64 ILuint64;
+#else
+typedef long long int          ILint64;
+typedef long long unsigned int ILuint64;
+#endif
+
+
 #include <limits.h>
 #ifdef _UNICODE
 	#ifndef _WIN32_WCE
