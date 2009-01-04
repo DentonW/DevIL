@@ -241,6 +241,7 @@ typedef double         ILclampd;
 #define IL_LIB_TIFF_ERROR 0x05E4
 #define IL_LIB_MNG_ERROR  0x05E5
 #define IL_LIB_JP2_ERROR  0x05E6
+#define IL_LIB_EXR_ERROR  0x05E7
 #define IL_UNKNOWN_ERROR  0x05FF
 
 

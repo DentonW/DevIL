@@ -37,12 +37,14 @@ ILconst_string iluErrorStringsDutch[IL_FILE_READ_ERROR - IL_INVALID_ENUM + 1] = 
 	IL_TEXT("Leesfout in bestand")
 };
 
-ILconst_string iluLibErrorStringsDutch[IL_LIB_MNG_ERROR - IL_LIB_GIF_ERROR + 1] = {
+ILconst_string iluLibErrorStringsDutch[IL_LIB_EXR_ERROR - IL_LIB_GIF_ERROR + 1] = {
 	IL_TEXT("fout in gif bibliotheek"),
 	IL_TEXT("fout in jpeg bibliotheek"),
 	IL_TEXT("fout in png bibliotheek"),
 	IL_TEXT("fout in tiff bibliotheek"),
-	IL_TEXT("fout in mng bibliotheek")
+	IL_TEXT("fout in mng bibliotheek"),
+	IL_TEXT("fout in jp2 bibliotheek"),
+	IL_TEXT("fout in exr bibliotheek")
 };
 
 ILconst_string iluMiscErrorStringsDutch[2] = {

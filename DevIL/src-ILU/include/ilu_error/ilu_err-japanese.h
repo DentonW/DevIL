@@ -37,12 +37,14 @@ ILconst_string iluErrorStringsJapanese[IL_FILE_READ_ERROR - IL_INVALID_ENUM + 1]
 	IL_TEXT("ファイル読み込みエラー") //"file read error"
 };
 
-ILconst_string iluLibErrorStringsJapanese[IL_LIB_MNG_ERROR - IL_LIB_GIF_ERROR + 1] = {
+ILconst_string iluLibErrorStringsJapanese[IL_LIB_EXR_ERROR - IL_LIB_GIF_ERROR + 1] = {
 	IL_TEXT("gifライブラリエラー"), //"gif library error"),
 	IL_TEXT("jpegライブラリエラー"), //"jpeg library error"),
 	IL_TEXT("pngライブラリエラー"), //"png library error"),
 	IL_TEXT("tiffライブラリエラー"), //"tiff library error"),
-	IL_TEXT("mngライブラリエラー") //"mng library error"
+	IL_TEXT("mngライブラリエラー"), //"mng library error"
+	IL_TEXT("jp2ライブラリエラー"), //"jp2 library error"
+	IL_TEXT("exrライブラリエラー") //"exr library error"
 };
 
 ILconst_string iluMiscErrorStringsJapanese[2] = {

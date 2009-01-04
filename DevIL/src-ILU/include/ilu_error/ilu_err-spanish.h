@@ -37,12 +37,14 @@ ILconst_string iluErrorStringsSpanish[IL_FILE_READ_ERROR - IL_INVALID_ENUM + 1] 
 	IL_TEXT("error de lectura en el fichero")
 };
 
-ILconst_string iluLibErrorStringsSpanish[IL_LIB_MNG_ERROR - IL_LIB_GIF_ERROR + 1] = {
+ILconst_string iluLibErrorStringsSpanish[IL_LIB_EXR_ERROR - IL_LIB_GIF_ERROR + 1] = {
 	IL_TEXT("error en la librería gif"),  // the correct translation will be 'error en la biblioteca gif', but nobody in spain uses the word 'biblioteca' for the translation the word 'library'. Almost all Spanish programmers translate 'library' incorrectly to 'librería'.
 	IL_TEXT("error en la librería jpeg"),
 	IL_TEXT("error en la librería png"),
 	IL_TEXT("error en la librería tiff"),
-	IL_TEXT("error en la librería mng")
+	IL_TEXT("error en la librería mng"),
+	IL_TEXT("error en la librería jp2"),
+	IL_TEXT("error en la librería exr"),
 };
 
 ILconst_string iluMiscErrorStringsSpanish[2] = {

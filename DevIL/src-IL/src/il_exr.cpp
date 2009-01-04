@@ -6,7 +6,7 @@
 //
 // Filename: src-IL/src/il_exr.cpp
 //
-// Description: Reads from an OpenEXR (.exr) file.
+// Description: Reads from an OpenEXR (.exr) file using the OpenEXR library.
 //
 //-----------------------------------------------------------------------------
 
@@ -14,7 +14,7 @@
 #include "il_internal.h"
 #ifndef IL_NO_EXR
 
-#ifndef HAVE_CONFIG_H //we are probably on a Windows box 
+#ifndef HAVE_CONFIG_H // We are probably on a Windows box .
 //#define OPENEXR_DLL
 #define HALF_EXPORTS
 #endif //HAVE_CONFIG_H
@@ -42,18 +42,89 @@
 #endif
 
 
-// @TODO: Determine how to load from file streams and lumps.
-//   Probably need to overload RgbaInputFile.
+// Nothing to do here in the constructor.
+ilIStream::ilIStream() : Imf::IStream("N/A")
+{
+	return;
+}
+
+
+bool ilIStream::read(char c[], int n)
+{
+	if (iread(c, 1, n) != n)
+		return false;
+	return true;
+}
+
+
+//@TODO: Make this work with 64-bit values.
+Imf::Int64 ilIStream::tellg()
+{
+	Imf::Int64 Pos;
+
+	// itell only returns a 32-bit value!
+	Pos = itell();
+
+	return Pos;
+}
+
+
+// Note that there is no return value here, even though there probably should be.
+//@TODO: Make this work with 64-bit values.
+void ilIStream::seekg(Imf::Int64 Pos)
+{
+	// iseek only uses a 32-bit value!
+	iseek((ILint)Pos, IL_SEEK_SET);  // I am assuming this is seeking from the beginning.
+	return;
+}
+
+
+void ilIStream::clear()
+{
+	return;
+}
+
 
 //! Reads an .exr file.
 ILboolean ilLoadExr(ILconst_string FileName)
 {
-	ILboolean bRet;
-	bRet = iLoadExrInternal(FileName);
+	ILHANDLE	ExrFile;
+	ILboolean	bExr = IL_FALSE;
+	
+	ExrFile = iopenr(FileName);
+	if (ExrFile == NULL) {
+		ilSetError(IL_COULD_NOT_OPEN_FILE);
+		return bExr;
+	}
+
+	bExr = ilLoadExrF(ExrFile);
+	icloser(ExrFile);
+
+	return bExr;
+}
+
+
+//! Reads an already-opened .exr file
+ILboolean ilLoadExrF(ILHANDLE File)
+{
+	ILuint		FirstPos;
+	ILboolean	bRet;
+	
+	iSetInputFile(File);
+	FirstPos = itell();
+	bRet = iLoadExrInternal();
+	iseek(FirstPos, IL_SEEK_SET);
 
 	return bRet;
 }
 
+
+//! Reads from a memory "lump" that contains an .exr
+ILboolean ilLoadExrL(const void *Lump, ILuint Size)
+{
+	iSetInputLump(Lump, Size);
+	return iLoadExrInternal();
+}
 
 
 using namespace Imath;
@@ -61,16 +132,16 @@ using namespace Imf;
 using namespace std;
 
 
-ILboolean iLoadExrInternal(ILconst_string FileName)
+ILboolean iLoadExrInternal()
 {
 	Array<Rgba> pixels;
-	Box2i displayWindow, dataWindow;
+	Box2i dataWindow;
 	float pixelAspectRatio;
-    RgbaInputFile in ((const char*)FileName);  // @TODO: This will completely fail with Unicode.
+	ILfloat *FloatData;
 
-	//RgbaInputFile in("E:/DevIL/extlibs/OpenEXR/openexr-images-1.5.0/ScanLines/Tree.exr");
+	ilIStream File;
+	RgbaInputFile in(File);
 
-	displayWindow = in.displayWindow();
     dataWindow = in.dataWindow();
     pixelAspectRatio = in.pixelAspectRatio();
 
@@ -93,7 +164,8 @@ ILboolean iLoadExrInternal(ILconst_string FileName)
 	// If some of the pixels in the file cannot be read,
 	// print an error message, and return a partial image
 	// to the caller.
-
+		ilSetError(IL_LIB_EXR_ERROR);  // Could I use something a bit more descriptive based on e?
+		e;  // Prevent the compiler from yelling at us about this being unused.
 		return IL_FALSE;
     }
 
@@ -101,12 +173,15 @@ ILboolean iLoadExrInternal(ILconst_string FileName)
 	//if (ilTexImage(dw, dh, 1, 4, IL_RGBA, IL_UNSIGNED_SHORT, NULL) == IL_FALSE)
 	if (ilTexImage(dw, dh, 1, 4, IL_RGBA, IL_FLOAT, NULL) == IL_FALSE)
 		return IL_FALSE;
-	
+
+	// Determine where the origin is in the original file.
 	if (in.lineOrder() == INCREASING_Y)
 		iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 	else
 		iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
 
+	// Better to access FloatData instead of recasting everytime.
+	FloatData = (ILfloat*)iCurImage->Data;
 
 	for (int i = 0; i < dw * dh; i++)
 	{
@@ -122,13 +197,15 @@ ILboolean iLoadExrInternal(ILconst_string FileName)
 		//((ILshort*)(iCurImage->Data))[i * 4 + 2] = pixels[i].b.bits();
 		//((ILshort*)(iCurImage->Data))[i * 4 + 3] = pixels[i].a.bits();
 
-		// This seems to give the best results, but the images can be saturated quite a bit.
-		((ILfloat*)(iCurImage->Data))[i * 4 + 0] = pixels[i].r;
-		((ILfloat*)(iCurImage->Data))[i * 4 + 1] = pixels[i].g;
-		((ILfloat*)(iCurImage->Data))[i * 4 + 2] = pixels[i].b;
-		((ILfloat*)(iCurImage->Data))[i * 4 + 3] = pixels[i].a;
-
+		// This gives the best results, since no data is lost.
+		FloatData[i * 4]     = pixels[i].r;
+		FloatData[i * 4 + 1] = pixels[i].g;
+		FloatData[i * 4 + 2] = pixels[i].b;
+		FloatData[i * 4 + 3] = pixels[i].a;
 	}
+
+	// Converts the image to predefined type, format and/or origin.
+	ilFixImage();
 
 	return IL_TRUE;
 }

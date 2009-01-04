@@ -37,12 +37,14 @@ ILconst_string iluErrorStringsEnglish[IL_FILE_READ_ERROR - IL_INVALID_ENUM + 1] 
 	IL_TEXT("file read error")
 };
 
-ILconst_string iluLibErrorStringsEnglish[IL_LIB_MNG_ERROR - IL_LIB_GIF_ERROR + 1] = {
+ILconst_string iluLibErrorStringsEnglish[IL_LIB_EXR_ERROR - IL_LIB_GIF_ERROR + 1] = {
 	IL_TEXT("gif library error"),
 	IL_TEXT("jpeg library error"),
 	IL_TEXT("png library error"),
 	IL_TEXT("tiff library error"),
-	IL_TEXT("mng library error")
+	IL_TEXT("mng library error"),
+	IL_TEXT("jp2 library error"),
+	IL_TEXT("exr library error")
 };
 
 ILconst_string iluMiscErrorStringsEnglish[2] = {

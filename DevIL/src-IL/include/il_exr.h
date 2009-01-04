@@ -15,16 +15,12 @@
 #define EXR_H
 
 #include "il_internal.h"
+#include <ImfIO.h>
 
-//#ifdef __cplusplus
-//extern "C" {
-//#endif
-//
-//ILboolean ilLoadExr(ILconst_string FileName);
-//
-//#ifdef __cplusplus
-//}
-//#endif
+
+//using namespace Imf;  // Using this leads to errors with Microsoft's IStream.
+						//   So it is better to just specify the namespace explicitly.
+
 
 typedef struct EXRHEAD
 {
@@ -46,9 +42,33 @@ typedef struct EXRHEAD
 #define EXR_B44_COMPRESSION   6
 #define EXR_B44A_COMPRESSION  7
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 ILboolean iIsValidExr();
 ILboolean iCheckExr(EXRHEAD *Header);
-ILboolean iLoadExrInternal(ILconst_string FileName);
-ILboolean ExrGetFormatType(ILuint *Format, ILuint *Type, ILubyte *ChanOrder);
+ILboolean iLoadExrInternal();
+
+#ifdef __cplusplus
+}
+#endif
+
+class ilIStream : public Imf::IStream
+{
+	public:
+		ilIStream(/*ILHANDLE Handle*/);
+		virtual bool	read (char c[/*n*/], int n);
+		// I don't think I need this one, since we are taking care of the file handles ourselves.
+		//virtual char *	readMemoryMapped (int n);
+		virtual Imf::Int64	tellg ();
+		virtual void	seekg (Imf::Int64 Pos);
+		virtual void	clear ();
+
+	protected:
+
+	private:
+};
 
 #endif//EXR_H

@@ -65,7 +65,7 @@ ILconst_string ILAPIENTRY iluErrorString(ILenum Error)
 	if (Error >= IL_INVALID_ENUM && Error <= IL_FILE_READ_ERROR) {
 		return (ILstring)iluErrors[Error - IL_INVALID_ENUM];
 	}
-	if (Error >= IL_LIB_GIF_ERROR && Error <= IL_LIB_MNG_ERROR) {
+	if (Error >= IL_LIB_GIF_ERROR && Error <= IL_LIB_EXR_ERROR) {
 		return (ILstring)iluLibErrors[Error - IL_LIB_GIF_ERROR];
 	}
 

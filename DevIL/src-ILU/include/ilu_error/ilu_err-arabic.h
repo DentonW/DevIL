@@ -37,12 +37,14 @@ ILconst_string iluErrorStringsArabic[IL_FILE_READ_ERROR - IL_INVALID_ENUM + 1] =
 	IL_TEXT("حدث خطأ أثناء قراءة الملف")
 };
 
-ILconst_string iluLibErrorStringsArabic[IL_LIB_MNG_ERROR - IL_LIB_GIF_ERROR + 1] = {
+ILconst_string iluLibErrorStringsArabic[IL_LIB_EXR_ERROR - IL_LIB_GIF_ERROR + 1] = {
 	IL_TEXT("خطأ في مكتبة gif"),
 	IL_TEXT("خطأ في مكتبة jpeg"),
 	IL_TEXT("خطأ في مكتبة png"),
 	IL_TEXT("خطأ في مكتبة tiff"),
-	IL_TEXT("خطأ في مكتبة mng")
+	IL_TEXT("خطأ في مكتبة mng"),
+	IL_TEXT("خطأ في مكتبة jp2"),
+	IL_TEXT("خطأ في مكتبة exr")
 };
 
 ILconst_string iluMiscErrorStringsArabic[2] = {

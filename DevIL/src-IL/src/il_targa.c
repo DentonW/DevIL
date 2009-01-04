@@ -157,7 +157,8 @@ ILboolean ilLoadTarga(ILconst_string FileName)
 
 
 //! Reads an already-opened Targa file
-ILboolean ilLoadTargaF(ILHANDLE File) {
+ILboolean ilLoadTargaF(ILHANDLE File)
+{
 	ILuint		FirstPos;
 	ILboolean	bRet;
 	

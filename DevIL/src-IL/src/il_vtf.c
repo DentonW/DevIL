@@ -18,7 +18,7 @@
 #include "il_vtf.h"
 #include "il_dds.h"
 
-// the max and min functions are not present, at least not on unixes
+// the max and min functions are not present, at least not on Unixes
 #ifndef max
 	#define max( a, b ) ( ((a) > (b)) ? (a) : (b) )
 #endif
