@@ -55,11 +55,10 @@ Denton:
 - Add flag for determining whether DDS data is outdated.
 - Add function to create cubemaps?
 - Freebasic support
-- Native EXR support
 - Native WDP support
 - Check into TGA files having origins other than the common two.
 - Check for any external library pointers that are assumed to be 32-bit.
-- Use fseek 64-bit?
+- Use fseek/ftell 64-bit?
 
 
 For 1.7.0

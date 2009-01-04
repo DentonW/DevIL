@@ -182,7 +182,7 @@ ILboolean iRegisterLoad(ILconst_string FileName)
 		return IL_FALSE;
 
 	while (TempNode != NULL) {
-		if (iStrCmp(Ext, TempNode->Ext)) {
+		if (!iStrCmp(Ext, TempNode->Ext)) {
 			Error = TempNode->Load(FileName);
 			if (Error == IL_NO_ERROR || Error == 0) {  // 0 and IL_NO_ERROR are both valid.
 				return IL_TRUE;
