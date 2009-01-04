@@ -15,7 +15,7 @@
 #ifndef IL_NO_EXR
 
 #ifndef HAVE_CONFIG_H //we are probably on a Windows box 
-#define OPENEXR_DLL
+//#define OPENEXR_DLL
 #define HALF_EXPORTS
 #endif //HAVE_CONFIG_H
 
@@ -28,6 +28,18 @@
 //#include <ImfTiledInputFile.h>
 //#include <ImfPreviewImage.h>
 //#include <ImfChannelList.h>
+
+
+
+#if (defined(_WIN32) || defined(_WIN64)) && defined(IL_USE_PRAGMA_LIBS)
+	#if defined(_MSC_VER) || defined(__BORLANDC__)
+		#ifndef _DEBUG
+			#pragma comment(lib, "openexr.lib")
+		#else
+			#pragma comment(lib, "openexr-d.lib")
+		#endif
+	#endif
+#endif
 
 
 // @TODO: Determine how to load from file streams and lumps.
@@ -56,7 +68,9 @@ ILboolean iLoadExrInternal(ILconst_string FileName)
 	float pixelAspectRatio;
     RgbaInputFile in ((const char*)FileName);  // @TODO: This will completely fail with Unicode.
 
-    displayWindow = in.displayWindow();
+	//RgbaInputFile in("E:/DevIL/extlibs/OpenEXR/openexr-images-1.5.0/ScanLines/Tree.exr");
+
+	displayWindow = in.displayWindow();
     dataWindow = in.dataWindow();
     pixelAspectRatio = in.pixelAspectRatio();
 

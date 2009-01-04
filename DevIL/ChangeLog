@@ -1,5 +1,7 @@
 1.7.6
 ---
+- Readded .exr code.
+- Redefined clamping values in il.h.
 
 2009-01-02 Matěj Týč <bubla@sf.net>
 	* src-{IL,ILU,ILUT}/src/*_internal.c: Hopefully resolved the

@@ -964,7 +964,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\il_exr.c"
+				RelativePath="..\src\il_exr.cpp"
 				>
 			</File>
 			<File

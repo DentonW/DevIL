@@ -1917,13 +1917,14 @@ ILAPI void* ILAPIENTRY ilConvertBuffer(ILuint SizeOfData, ILenum SrcFormat, ILen
 // Really shouldn't have to check for default, as in above ilConvertBuffer().
 //  This now converts better from lower bpp to higher bpp.  For example, when
 //  converting from 8 bpp to 16 bpp, if the value is 0xEC, the new value is 0xECEC.
-void* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestType, void *Buffer) {
+void* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestType, void *Buffer)
+{
 	ILuint		BpcSrc, BpcDest, Size, i;
 	ILubyte		*NewData, *BytePtr;
 	ILushort	*ShortPtr;
 	ILuint		*IntPtr;
 	ILfloat		*FloatPtr, tempFloat;
-	ILdouble	*DblPtr;
+	ILdouble	*DblPtr, tempDouble;
 	ILushort	*HalfPtr;
 
 	BpcSrc = ilGetBpcType(SrcType);
@@ -1981,8 +1982,8 @@ void* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestType
 							tempFloat = IL_CLAMP(tempFloat);					
 							BytePtr[i] = (ILubyte)(tempFloat * UCHAR_MAX);
 						#else
-						*((ILuint*)&tempFloat) = ilHalfToFloat(((ILushort*)Buffer)[i]);
-						BytePtr[i] = (ILubyte)(tempFloat * UCHAR_MAX);
+							*((ILuint*)&tempFloat) = ilHalfToFloat(((ILushort*)Buffer)[i]);
+							BytePtr[i] = (ILubyte)(tempFloat * UCHAR_MAX);
 						#endif
 					}
 					break;

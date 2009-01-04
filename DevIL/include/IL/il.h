@@ -25,9 +25,9 @@ extern "C" {
 //during conversion. It takes a little more time, but it is the correct
 //way of doing this. If you are sure your floats are always valid,
 //you can undefine this value...
-//#define CLAMP_HALF		1
-//#define CLAMP_FLOATS	1
-//#define CLAMP_DOUBLES	1
+#define CLAMP_HALF		1
+#define CLAMP_FLOATS	1
+#define CLAMP_DOUBLES	1
 
 #ifdef _WIN32_WCE
 	#define IL_NO_GIF
@@ -564,7 +564,7 @@ ILAPI void      ILAPIENTRY ilSetRead(fOpenRProc, fCloseRProc, fEofProc, fGetcPro
 ILAPI void      ILAPIENTRY ilSetString(ILenum Mode, const char *String);
 ILAPI void      ILAPIENTRY ilSetWrite(fOpenWProc, fCloseWProc, fPutcProc, fSeekWProc, fTellWProc, fWriteProc);
 ILAPI void      ILAPIENTRY ilShutDown(void);
-ILAPI ILboolean ILAPIENTRY ilTexImage(ILuint Width, ILuint Height, ILuint Depth, ILubyte numChannels, ILenum Format, ILenum Type, void *Data);
+ILAPI ILboolean ILAPIENTRY ilTexImage(ILuint Width, ILuint Height, ILuint Depth, ILubyte NumChannels, ILenum Format, ILenum Type, void *Data);
 ILAPI ILenum    ILAPIENTRY ilTypeFromExt(ILconst_string FileName);
 ILAPI ILboolean ILAPIENTRY ilTypeFunc(ILenum Mode);
 ILAPI ILboolean ILAPIENTRY ilLoadData(ILconst_string FileName, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp);

@@ -93,7 +93,7 @@ ILboolean iIsValidExr()
 ILboolean iCheckExr(EXRHEAD *Header)
 {
 	// The file magic number (signature) is 0x76, 0x2f, 0x31, 0x01
-	if (Header->MagicNumber != 0x762F3101)
+	if (Header->MagicNumber != 0x01312F76)
 		return IL_FALSE;
 	// The only valid version so far is version 2.  The upper value has
 	//  to do with tiling.
@@ -182,10 +182,13 @@ ILboolean iLoadExrInternal()
 {
 	EXRHEAD		Header;
 	ILubyte		Attribute[32], AttType[32], ChanOrder[4], ChanName[32];
-	ILuint		AttSize, i, Pos;
+	ILuint		AttSize, i, j, c, Pos;
 	ILint		NumChannels = -1, PixType = -1, Compression = -1;
-	ILuint		PLinear, XSampling, YSampling, Width = 0, Height = 0, XMin, XMax;
+	ILuint		PLinear, XSampling, YSampling, Width = 0, Height = 0, XMin, YMin;
 	ILboolean	Tiled;
+	ILuint		*LineOffsets;  //@TODO: Change this to something guaranteed to be 64-bit and compatible across platforms.
+	ILint		ChanOffset[4] = {-1,-1,-1,-1};
+	ILenum		Format, Type;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -226,15 +229,22 @@ ILboolean iLoadExrInternal()
 
 		Pos = itell();  // Keep track of the position before the attribute is read.
 
-		if (!strncmp(Attributes, "channels", strlen("channels")) {
-			if (strncmp(AttType, "chlist", strlen("chlist")) {  // Only can be "chlist" for "channels".
+		if (!strncmp(Attribute, "channels", strlen("channels"))) {
+			if (strncmp(AttType, "chlist", strlen("chlist"))) {  // Only can be "chlist" for "channels".
 				ilSetError(IL_INVALID_FILE_HEADER);
 				return IL_FALSE;
 			}
 
 			Pos = itell();  // Need to make sure that the attribute size is correct.
 
-			for (i = 0; i < AttSize; ) {  // Increased inside the loop.
+			//@TODO: Should this be AttSize-2?
+			for (i = 0; i <= AttSize-1; ) {  // Increased inside the loop.
+				if (!iExrReadString(ChanName, 32))  // Channels are named separately.
+					return IL_FALSE;
+
+				if (ChanName[0] == 0)  // Ending the channel list
+					break;
+
 				// Add to the number of channels found.
 				if (NumChannels == -1)
 					NumChannels = 1;
@@ -246,15 +256,9 @@ ILboolean iLoadExrInternal()
 					return IL_FALSE;
 				}
 
-				if (!iExrReadString(ChanName, 32))  // Channels are named separately.
-					return IL_FALSE;
-
-				if (ChanName[0] == 0)  // Ending the channel list
-					break;
-
 				// R, G, B are stored in the first byte, and that's it.  Anything else is invalid for our use.
 				//@TODO: Make this not so!
-				if (ChanName[0] == 'R' || ChanName[0] == 'G' || ChanName[0] == 'B') {
+				if (ChanName[0] == 'R' || ChanName[0] == 'G' || ChanName[0] == 'B' || ChanName[0] == 'A') {
 					// ChanOrder is where we're going to keep this "truncated" information.
 					ChanOrder[NumChannels-1] = ChanName[0];
 				}
@@ -284,12 +288,12 @@ ILboolean iLoadExrInternal()
 				XSampling = GetLittleUInt();  // No information in the specs
 				YSampling = GetLittleUInt();  // Same as above
 
-				AttSize += (strlen(ChanName) + 1 + 16);
+				i += (strlen(ChanName) + 1 + 16);  // +1 for the NULL character
 			}
 		}
 
-		else if (!strncmp(Attributes, "dataWindow", strlen("dataWindow")) {
-			if (strncmp(AttType, "box2i", strlen("box2i")) {  // Only can be "box2i" for "dataWindow".
+		else if (!strncmp(Attribute, "dataWindow", strlen("dataWindow"))) {
+			if (strncmp(AttType, "box2i", strlen("box2i"))) {  // Only can be "box2i" for "dataWindow".
 				ilSetError(IL_INVALID_FILE_HEADER);
 				return IL_FALSE;
 			}
@@ -308,13 +312,13 @@ ILboolean iLoadExrInternal()
 			Height = Height - YMin;  //  but we will not assume.
 		}
 
-		else if (!strncmp(Attributes, "compression", strlen("compression")) {
-			if (strncmp(AttType, "compression", strlen("compression")) {  // Only can be "compression" for "compression".
+		else if (!strncmp(Attribute, "compression", strlen("compression"))) {
+			if (strncmp(AttType, "compression", strlen("compression"))) {  // Only can be "compression" for "compression".
 				ilSetError(IL_INVALID_FILE_HEADER);
 				return IL_FALSE;
 			}
 
-			if (Compression == -1)  // Has not bee ninitialized
+			if (Compression == -1)  // Has not been initialized
 				Compression = igetc();
 			else {
 				if (Compression != igetc()) {  //@TODO: Cannot deal with multiple compression formats.
@@ -350,14 +354,82 @@ ILboolean iLoadExrInternal()
 			return IL_FALSE;
 	}
 
+	if (!ExrGetFormatType(&Format, &Type, ChanOrder))
+		return IL_FALSE;
+
+	// This format only supports depths of 1.
+	ilTexImage(Width, Height, 1, 3, Format, Type, NULL);  //@TODO: NumChannels will not always be 3.
+
+	LineOffsets = ialloc(iCurImage->Height * sizeof(ILuint));  // Should always be sizeof(ILuint) == 4
+	if (LineOffsets == NULL)
+		return IL_FALSE;
+
+	// Read the line offset table
+	for (i = 0; i < iCurImage->Height; i++) {
+		//@TODO: The line offset table has 64-bit integers, but I am truncating them to 32-bits.
+		LineOffsets[i] = GetLittleUInt();
+		iseek(4, IL_SEEK_CUR);  // Dropping the higher 4 bytes right now.
+		if (LineOffsets[i] >= iCurImage->Height) {
+			ilSetError(IL_INVALID_FILE_HEADER);
+			ifree(LineOffsets);
+			return IL_FALSE;
+		}
+	}
+
+	// Initialize any missing channels to 0.
+	memset(iCurImage->Data, 0, iCurImage->SizeOfData);
 
 
+	for (i = 0; i < iCurImage->Height; i++) {
+		iseek(LineOffsets[i], IL_SEEK_SET);
+		for (c = 0; c < iCurImage->Bpp; c++) {
+			if (ChanOffset[c] != -1) {  // Channel not initialized.
+				for (j = 0; j < iCurImage->Width; j++) {
+					iCurImage->Data[i * iCurImage->Bps + j * iCurImage->Bpp + ChanOffset[c]] = GetLittleUInt();  //@TODO: Not even close to having all data formats possible.
+				}
+			}
+		}			
+	}
+
+
+
+
+
+	ifree(LineOffsets);
 
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;  // Correct?
-
 	ilFixImage();
 
 	return IL_TRUE;
 }
+
+
+ILboolean ExrGetFormatType(ILuint *Format, ILuint *Type, ILubyte *ChanOrder)
+{
+	switch (*Type)
+	{
+		case EXR_UINT:
+			*Type = IL_UNSIGNED_INT;
+			break;
+
+		case EXR_HALF:
+			*Type = IL_HALF;
+			break;
+
+		case EXR_FLOAT:
+			*Type = IL_FLOAT;
+			break;
+
+		default:
+			ilSetError(IL_FORMAT_NOT_SUPPORTED);
+			return IL_FALSE;
+	}
+
+	//@TODO: Do other formats.
+	*Format = IL_RGB;
+
+	return IL_TRUE;
+}
+
 
 #endif//IL_NO_EXR

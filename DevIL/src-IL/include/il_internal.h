@@ -266,6 +266,12 @@ ILboolean ilLoadDoomL(const void *Lump, ILuint Size);
 ILboolean ilLoadDoomFlat(ILconst_string FileName);
 ILboolean ilLoadDoomFlatF(ILHANDLE File);
 ILboolean ilLoadDoomFlatL(const void *Lump, ILuint Size);
+ILboolean ilIsValidExr(ILconst_string FileName);
+ILboolean ilIsValidExrF(ILHANDLE File);
+ILboolean ilIsValidExrL(const void *Lump, ILuint Size);
+ILboolean ilLoadExr(ILconst_string FileName);
+ILboolean ilLoadExrF(ILHANDLE File);
+ILboolean ilLoadExrL(const void *Lump, ILuint Size);
 ILboolean ilIsValidGif(ILconst_string FileName);
 ILboolean ilIsValidGifF(ILHANDLE File);
 ILboolean ilIsValidGifL(const void *Lump, ILuint Size);
@@ -436,7 +442,7 @@ ILboolean ilLoadXpmL(const void *Lump, ILuint Size);
 	#endif
 #endif*/
 
-ILboolean ilLoadExr(ILconst_string FileName);
+//ILboolean ilLoadExr(ILconst_string FileName);
 
 
 #ifdef __cplusplus
