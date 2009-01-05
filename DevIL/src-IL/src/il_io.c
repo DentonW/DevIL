@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 11/07/2008
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 01/04/2009
 //
 // Filename: src-IL/src/il_io.c
 //
@@ -115,6 +115,8 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 		Type = IL_VTF;
 	else if (!iStrCmp(Ext, IL_TEXT("wal")))
 		Type = IL_WAL;
+	else if (!iStrCmp(Ext, IL_TEXT("wbmp")))
+		Type = IL_WBMP;
 	else if (!iStrCmp(Ext, IL_TEXT("wdp")) || !iStrCmp(Ext, IL_TEXT("hdp")))
 		Type = IL_WDP;
 	else if (!iStrCmp(Ext, IL_TEXT("xpm")))
@@ -773,6 +775,12 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 			break;
 		#endif
 
+		#ifndef IL_NO_WBMP
+		case IL_WBMP:
+			bRet = ilLoadWbmp(FileName);
+			break;
+		#endif
+
 		#ifndef IL_NO_XPM
 		case IL_XPM:
 			bRet = ilLoadXpm(FileName);
@@ -848,16 +856,6 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadBmpF(File);
 		#endif
 
-		#ifndef IL_NO_GIF
-		case IL_GIF:
-			return ilLoadGifF(File);
-		#endif
-
-		#ifndef IL_NO_HDR
-		case IL_HDR:
-			return ilLoadHdrF(File);
-		#endif
-
 		#ifndef IL_NO_CUT
 		case IL_CUT:
 			return ilLoadCutF(File);
@@ -868,6 +866,21 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadDoomF(File);
 		case IL_DOOM_FLAT:
 			return ilLoadDoomFlatF(File);
+		#endif
+
+		#ifndef IL_NO_EXR
+		case IL_EXR:
+			return ilLoadExrF(File);
+		#endif
+
+		#ifndef IL_NO_GIF
+		case IL_GIF:
+			return ilLoadGifF(File);
+		#endif
+
+		#ifndef IL_NO_HDR
+		case IL_HDR:
+			return ilLoadHdrF(File);
 		#endif
 
 		#ifndef IL_NO_ICO
@@ -960,6 +973,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadWalF(File);
 		#endif
 
+		#ifndef IL_NO_WBMP
+		case IL_WBMP:
+			return ilLoadWbmpF(File);
+		#endif
+
 		#ifndef IL_NO_XPM
 		case IL_XPM:
 			return ilLoadXpmF(File);
@@ -971,7 +989,8 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 }
 
 
-ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size) {
+ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size)
+{
 	if (Lump == NULL || Size == 0) {
 		ilSetError(IL_INVALID_PARAM);
 		return IL_FALSE;
@@ -1015,16 +1034,6 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size) {
 			return ilLoadBmpL(Lump, Size);
 		#endif
 
-		#ifndef IL_NO_GIF
-		case IL_GIF:
-			return ilLoadGifL(Lump, Size);
-		#endif
-
-		#ifndef IL_NO_HDR
-		case IL_HDR:
-			return ilLoadHdrL(Lump, Size);
-		#endif
-
 		#ifndef IL_NO_CUT
 		case IL_CUT:
 			return ilLoadCutL(Lump, Size);
@@ -1035,6 +1044,21 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size) {
 			return ilLoadDoomL(Lump, Size);
 		case IL_DOOM_FLAT:
 			return ilLoadDoomFlatL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_EXR
+		case IL_EXR:
+			return ilLoadExrL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_GIF
+		case IL_GIF:
+			return ilLoadGifL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_HDR
+		case IL_HDR:
+			return ilLoadHdrL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_ICO
@@ -1127,6 +1151,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size) {
 			return ilLoadWalL(Lump, Size);
 		#endif
 
+		#ifndef IL_NO_WBMP
+		case IL_WBMP:
+			return ilLoadWbmpL(Lump, Size);
+		#endif
+
 		#ifndef IL_NO_XPM
 		case IL_XPM:
 			return ilLoadXpmL(Lump, Size);
@@ -1202,6 +1231,13 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#ifndef IL_NO_BMP
 		if (!iStrCmp(Ext, IL_TEXT("bmp")) || !iStrCmp(Ext, IL_TEXT("dib"))) {
 			bRet = ilLoadBmp(FileName);
+			goto finish;
+		}
+		#endif
+
+		#ifndef IL_NO_EXR
+		if (!iStrCmp(Ext, IL_TEXT("exr"))) {
+			bRet = ilLoadExr(FileName);
 			goto finish;
 		}
 		#endif
@@ -1366,6 +1402,13 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		}
 		#endif
 
+		#ifndef IL_NO_WBMP
+		if (!iStrCmp(Ext, IL_TEXT("wbmp"))) {
+			bRet = ilLoadWbmp(FileName);
+			goto finish;
+		}
+		#endif
+
 		#ifndef IL_NO_WDP
 		if (!iStrCmp(Ext, IL_TEXT("wdp")) || !iStrCmp(Ext, IL_TEXT("hdp")) ) {
 			bRet = ilLoadWdp(FileName);
@@ -1376,13 +1419,6 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#ifndef IL_NO_XPM
 		if (!iStrCmp(Ext, IL_TEXT("xpm"))) {
 			bRet = ilLoadXpm(FileName);
-			goto finish;
-		}
-		#endif
-
-		#ifndef IL_NO_EXR
-		if (!iStrCmp(Ext, IL_TEXT("exr"))) {
-			bRet = ilLoadExr(FileName);
 			goto finish;
 		}
 		#endif
@@ -1473,6 +1509,11 @@ ILboolean ILAPIENTRY ilSave(ILenum Type, ILstring FileName)
 			return ilSaveTiff(FileName);
 		#endif
 
+		#ifndef IL_NO_WBMP
+		case IL_WBMP:
+			return ilSaveWbmp(FileName);
+		#endif
+
 		case IL_JASC_PAL:
 			return ilSaveJascPal(FileName);
 	}
@@ -1555,6 +1596,12 @@ ILuint ILAPIENTRY ilSaveF(ILenum Type, ILHANDLE File)
 			break;
 		#endif
 
+		#ifndef IL_NO_WBMP
+		case IL_WBMP:
+			Ret = ilSaveWbmpF(File);
+			break;
+		#endif
+
 		/*#ifndef IL_NO_TIF
 		case IL_TIF:
 			Ret = ilSaveTiffF(File);
@@ -1602,7 +1649,6 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, void *Lump, ILuint Size)
 			break;
 		#endif
 
-
 		#ifndef IL_NO_PNG
 		case IL_PNG:
 			Ret = ilSavePngL(Lump, Size);
@@ -1638,10 +1684,18 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, void *Lump, ILuint Size)
 			Ret = ilSaveTargaL(Lump, Size);
 			break;
 		#endif
-		
+
+		#ifndef IL_NO_DDS
 		case IL_DDS:
 			Ret = ilSaveDdsL(Lump, Size);
 			break;
+		#endif
+
+		#ifndef IL_NO_WBMP
+		case IL_WBMP:
+			Ret = ilSaveWbmpL(Lump, Size);
+			break;
+		#endif
 
 		/*#ifndef IL_NO_TIF
 		case IL_TIF:
@@ -1712,7 +1766,7 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 	}
 	#endif
 
-#ifndef IL_NO_JPG
+	#ifndef IL_NO_JPG
 	if (!iStrCmp(Ext, IL_TEXT("jpg")) || !iStrCmp(Ext, IL_TEXT("jpeg")) || !iStrCmp(Ext, IL_TEXT("jpe"))) {
 		bRet = ilSaveJpeg(FileName);
 		goto finish;
@@ -1780,6 +1834,13 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 	#ifndef IL_NO_TIF
 	if (!iStrCmp(Ext, IL_TEXT("tif")) || !iStrCmp(Ext, IL_TEXT("tiff"))) {
 		bRet = ilSaveTiff(FileName);
+		goto finish;
+	}
+	#endif
+
+	#ifndef IL_NO_WBMP
+	if (!iStrCmp(Ext, IL_TEXT("wbmp"))) {
+		bRet = ilSaveWbmp(FileName);
 		goto finish;
 	}
 	#endif

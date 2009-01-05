@@ -399,7 +399,7 @@ void ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param) {
 		case IL_ORIGIN_MODE:
 			*Param = ilStates[ilCurrentPos].ilOriginMode;
 			break;
-		case IL_MAX_QUANT_INDEXS:
+		case IL_MAX_QUANT_INDICES:
 			*Param = ilStates[ilCurrentPos].ilQuantMaxIndexs;
 			break;
 		case IL_NEU_QUANT_SAMPLE:
@@ -978,7 +978,7 @@ void ILAPIENTRY ilSetInteger(ILenum Mode, ILint Param)
 				return;
 			}
 			break;
-		case IL_MAX_QUANT_INDEXS:
+		case IL_MAX_QUANT_INDICES:
 			if (Param >= 2 && Param <= 256) {
 				ilStates[ilCurrentPos].ilQuantMaxIndexs = Param;
 				return;

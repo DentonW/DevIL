@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 12/14/2008
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 01/04/2009
 //
 // Filename: src-IL/src/il_targa.c
 //
@@ -576,9 +576,9 @@ ILboolean ilSaveTargaL(void *Lump, ILuint Size)
 // Internal function used to save the Targa.
 ILboolean iSaveTargaInternal()
 {
-	const char		*ID = iGetString(IL_TGA_ID_STRING);
-	const char		*AuthName = iGetString(IL_TGA_AUTHNAME_STRING);
-	const char		*AuthComment = iGetString(IL_TGA_AUTHCOMMENT_STRING);
+	const char	*ID = iGetString(IL_TGA_ID_STRING);
+	const char	*AuthName = iGetString(IL_TGA_AUTHNAME_STRING);
+	const char	*AuthComment = iGetString(IL_TGA_AUTHCOMMENT_STRING);
 	ILubyte 	IDLen = 0, UsePal, Type, PalEntSize;
 	ILshort 	ColMapStart = 0, PalSize;
 	ILubyte		Temp;
@@ -593,7 +593,7 @@ ILboolean iSaveTargaInternal()
 	char		*idString = "Developer's Image Library (DevIL)";
 	ILuint		Day, Month, Year, Hour, Minute, Second;
 	char		*TempData;
-	
+
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
@@ -614,7 +614,7 @@ ILboolean iSaveTargaInternal()
 	
 	iwrite(&IDLen, sizeof(ILubyte), 1);
 	iwrite(&UsePal, sizeof(ILubyte), 1);
-	
+
 	Format = iCurImage->Format;
 	switch (Format) {
 		case IL_COLOUR_INDEX:

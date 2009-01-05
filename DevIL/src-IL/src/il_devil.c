@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 08/17/2008
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 01/04/2009
 //
 // Filename: src-IL/src/il_devil.c
 //
@@ -25,7 +25,7 @@ ILAPI ILboolean ILAPIENTRY ilInitImage(ILimage *Image, ILuint Width, ILuint Heig
 		return IL_FALSE;
 	}
 
-	memset (Image, 0, sizeof(ILimage));
+	memset(Image, 0, sizeof(ILimage));
 
 	////
 	if( Width  == 0 ) Width = 1;
@@ -145,7 +145,7 @@ ILAPI ILboolean ILAPIENTRY ilTexImage_(ILimage *Image, ILuint Width, ILuint Heig
 
 	////
 
-	// Also check against format?
+	//@TODO: Also check against format?
 	/*if (Width == 0 || Height == 0 || Depth == 0 || Bpp == 0) {
 		ilSetError(IL_INVALID_PARAM);
 	return IL_FALSE;

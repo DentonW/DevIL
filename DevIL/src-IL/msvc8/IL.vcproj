@@ -2505,6 +2505,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\src\il_wbmp.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\il_wdp.c"
 					>
 				</File>

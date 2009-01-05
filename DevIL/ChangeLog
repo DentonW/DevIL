@@ -1,11 +1,15 @@
 1.7.6
 ---
-- Readded .exr code.
+- Readded EXR code.
 - Redefined clamping values in il.h.
 - Added 64-bit integer types.
 - Fixed bug in iRegisterLoad (https://sourceforge.net/forum/message.php?msg_id=5973761).
 - Changed seek functions in il_files.c to return ILint.
 - Added rpcsal.h and sal.h #includes to ilut.h for DX10.
+- Added IL_MAX_QUANT_INDICES to use instead of IL_MAX_QUANT_INDEXS (mispelled).
+- Added WBMP support (loading and saving).
+- EXR files can now be loaded as file streams and lumps.
+- Changed iNeuQuant to take number of colors in palette.
 
 2009-01-02 Matěj Týč <bubla@sf.net>
 	* src-{IL,ILU,ILUT}/src/*_internal.c: Hopefully resolved the

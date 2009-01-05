@@ -21,7 +21,7 @@
 //
 // ImageLib Sources
 // by Denton Woods
-// Last modified: 02/02/2002 <--Y2K Compliant! =]
+// Last modified: 01/04/2009
 //
 // Filename: src-IL/src/il_quantizer.c
 //
@@ -418,7 +418,7 @@ ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols)
 	ILimage	*TempImage = NULL, *NewImage = NULL;
 	ILubyte	*Ir = NULL, *Ig = NULL, *Ib = NULL;
 
-	ILint num_alloced_colors; // number of colors we allocated space for in palette, as NumCols but eill not be less than 256
+	ILint num_alloced_colors; // number of colors we allocated space for in palette, as NumCols but will not be less than 256
 
 	num_alloced_colors=NumCols;
 	if(num_alloced_colors<256) { num_alloced_colors=256; }

@@ -59,6 +59,10 @@ Denton:
 - Check into TGA files having origins other than the common two.
 - Check for any external library pointers that are assumed to be 32-bit.
 - Use fseek/ftell 64-bit?
+- TIFF with JPEG encoding
+- Reorder loading/saving in il_io.c
+- TIFF saving to file streams and lumps
+- NTSC function
 
 
 For 1.7.0

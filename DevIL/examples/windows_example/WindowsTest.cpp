@@ -181,7 +181,7 @@ void CreateGDI()
 	DeleteObject(SelectObject(hMemDC, hBitmap));
 	ilBindImage(CurName);
 	if (CurImg)
-		ilActiveImage(CurImg);ilBindImage(Undos[0]);
+		ilActiveImage(CurImg);//ilBindImage(Undos[0]);
 	if (CurMip)
 		ilActiveMipmap(CurMip);
 	ilDeleteImages(1, &CopyName);
@@ -632,6 +632,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						return (0L);
 
 					ilEnable(IL_FILE_OVERWRITE);
+					ilBindImage(Undos[0]);  //@TODO: Do better here...
 					ilSaveImage(SaveFileName);
 
 					wsprintf(CurFileName, L"%s", SaveFileName);

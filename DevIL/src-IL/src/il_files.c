@@ -94,7 +94,7 @@ ILHANDLE ILAPIENTRY iDefaultOpenR(ILconst_string FileName)
 	return (ILHANDLE)fopen((char*)FileName, "rb");
 #else
 	// Windows has a different function, _wfopen, to open UTF16 files,
-	//  whereas Linux just uses fopen.
+	//  whereas Linux just uses fopen for its UTF8 files.
 	#ifdef _WIN32
 		return (ILHANDLE)_wfopen(FileName, L"rb");
 	#else
@@ -599,7 +599,7 @@ ILHANDLE ILAPIENTRY iGetFile(void)
 
 
 const ILubyte* ILAPIENTRY iGetLump(void) {
-	return (ILubyte *)ReadLump;
+	return (ILubyte*)ReadLump;
 }
 
 

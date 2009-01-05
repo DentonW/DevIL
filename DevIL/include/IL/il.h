@@ -218,6 +218,7 @@ typedef long long unsigned int ILuint64;
 #define IL_EXR			0x0442
 #define IL_WDP			0x0443
 #define IL_VTF			0x0444
+#define IL_WBMP			0x0445
 
 
 #define IL_JASC_PAL     0x0475
@@ -299,6 +300,7 @@ typedef long long unsigned int ILuint64;
 #define IL_NEU_QUANT         0x0642
 #define IL_NEU_QUANT_SAMPLE  0x0643
 #define IL_MAX_QUANT_INDEXS  0x0644 //XIX : ILint : Maximum number of colors to reduce to, default of 256. and has a range of 2-256
+#define IL_MAX_QUANT_INDICES 0x0644 // Redefined, since the above #define is misspelled
 
 
 // Hints

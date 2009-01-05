@@ -270,7 +270,7 @@ alloc_error:
 // In il_quantizer.c
 ILimage *iQuantizeImage(ILimage *Image, ILuint NumCols);
 // In il_neuquant.c
-ILimage *iNeuQuant(ILimage *Image);
+ILimage *iNeuQuant(ILimage *Image, ILuint NumCols);
 
 // Converts an image from one format to another
 ILAPI ILimage* ILAPIENTRY iConvertImage(ILimage *Image, ILenum DestFormat, ILenum DestType)
@@ -320,9 +320,9 @@ ILAPI ILimage* ILAPIENTRY iConvertImage(ILimage *Image, ILenum DestFormat, ILenu
 	}
 	else if (DestFormat == IL_COLOUR_INDEX && Image->Format != IL_LUMINANCE) {
 		if (iGetInt(IL_QUANTIZATION_MODE) == IL_NEU_QUANT)
-			return iNeuQuant(Image);
+			return iNeuQuant(Image, iGetInt(IL_MAX_QUANT_INDICES));
 		else // Assume IL_WU_QUANT otherwise.
-			return iQuantizeImage(Image, iGetInt(IL_MAX_QUANT_INDEXS));
+			return iQuantizeImage(Image, iGetInt(IL_MAX_QUANT_INDICES));
 	}
 	else {
 		NewImage = (ILimage*)icalloc(1, sizeof(ILimage));  // Much better to have it all set to 0.

@@ -20,12 +20,12 @@
 
 #include <D3DX9.h>
 
-#include "dxstdafx.h"
+//#include "dxstdafx.h"
 
-#include "D3DApp.h"
-#include "D3DFile.h"
-#include "D3DFont.h"
-#include "D3DUtil.h"
+//#include "D3DApp.h"
+//#include "D3DFile.h"
+//#include "D3DFont.h"
+//#include "D3DUtil.h"
 
 #ifdef  _DEBUG
 #define IL_DEBUG

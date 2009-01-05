@@ -23,7 +23,7 @@
 //
 // ImageLib Sources
 // by Denton Woods
-// Last modified: 02/02/2002 <--Y2K Compliant! =]
+// Last modified: 01/04/2009
 //
 // Filename: src-IL/src/il_neuquant.c
 //
@@ -396,12 +396,12 @@ void learn()
 }
 
 
-ILimage *iNeuQuant(ILimage *Image)
+ILimage *iNeuQuant(ILimage *Image, ILuint NumCols)
 {
 	ILimage	*TempImage, *NewImage;
 	ILuint	sample, i, j;
 
-	netsizethink=iGetInt(IL_MAX_QUANT_INDEXS);
+	netsizethink=NumCols;
 
 	NewImage = iCurImage;
 	iCurImage = Image;

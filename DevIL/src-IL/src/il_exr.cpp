@@ -204,7 +204,7 @@ ILboolean iLoadExrInternal()
 		FloatData[i * 4 + 3] = pixels[i].a;
 	}
 
-	// Converts the image to predefined type, format and/or origin.
+	// Converts the image to predefined type, format and/or origin if needed.
 	ilFixImage();
 
 	return IL_TRUE;

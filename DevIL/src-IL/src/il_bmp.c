@@ -953,6 +953,10 @@ ILboolean iSaveBitmapInternal() {
 
 	if (TempImage->Origin != IL_ORIGIN_LOWER_LEFT) {
 		TempData = iGetFlipped(TempImage);
+		if (TempData == NULL) {
+			ilCloseImage(TempImage);
+			return IL_FALSE;
+		}
 	} else {
 		TempData = TempImage->Data;
 	}
