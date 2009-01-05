@@ -60,125 +60,65 @@ ILboolean ilSaveDdsL(void *Lump, ILuint Size)
 }
 
 
-
-
-
 //! Checks if an image is a cubemap
-
 ILuint GetCubemapInfo(ILimage* image, ILint* faces)
-
 {
-
 	ILint	indices[] = { -1, -1, -1,  -1, -1, -1 }, i;
-
 	ILimage*	img;
-
 	ILuint	ret = 0, srcMipmapCount, srcImagesCount, mipmapCount;
 
-
-
 	if (image == NULL)
-
 		return 0;
 
-
-    iGetIntegervImage(image, IL_NUM_IMAGES, (ILint*) &srcImagesCount );
-
+	iGetIntegervImage(image, IL_NUM_IMAGES, (ILint*) &srcImagesCount );
 	if (srcImagesCount != 5) //write only complete cubemaps (TODO?)
-
 		return 0;
-
-
 
 	img = image;
 	iGetIntegervImage(image, IL_NUM_MIPMAPS, (ILint*) &srcMipmapCount );
-
 	mipmapCount = srcMipmapCount;
 
 	for (i = 0; i < 6; ++i) {
-
 		switch(img->CubeFlags)
-
 		{
-
 			case DDS_CUBEMAP_POSITIVEX:
-
 				indices[i] = 0;
-
 				break;
-
 			case DDS_CUBEMAP_NEGATIVEX:
-
 				indices[i] = 1;
-
 				break;
-
 			case DDS_CUBEMAP_POSITIVEY:
-
 				indices[i] = 2;
-
 				break;
-
 			case DDS_CUBEMAP_NEGATIVEY:
-
 				indices[i] = 3;
-
 				break;
-
 			case DDS_CUBEMAP_POSITIVEZ:
-
 				indices[i] = 4;
-
 				break;
-
 			case DDS_CUBEMAP_NEGATIVEZ:
-
 				indices[i] = 5;
-
 				break;
-
 		}
-
         iGetIntegervImage(img, IL_NUM_MIPMAPS, (ILint*) &srcMipmapCount );
-
 		if (srcMipmapCount != mipmapCount)
-
 			return 0; //equal # of mipmaps required
 
-
-
 		ret |= img->CubeFlags;
-
 		img = img->Next;
-
 	}
 
-
-
 	for (i = 0; i < 6; ++i)
-
 		if (indices[i] == -1)
-
 			return 0; //one face not found
 
-
-
 	if (ret != 0) //should always be true
-
 		ret |= DDS_CUBEMAP;
 
-
-
-
-
 	for (i =0; i < 6; ++i)
-
 		faces[indices[i]] = i;
 
-
-
 	return ret;
-
 }
 
 
@@ -188,38 +128,26 @@ ILboolean iSaveDdsInternal()
 	ILenum	DXTCFormat;
 	ILuint	counter, numMipMaps, image, numFaces, i;
 	ILubyte	*CurData = NULL;
-
 	ILint	CubeTable[6] = { 0 };
-
 	ILuint	CubeFlags;
 
 	CubeFlags = GetCubemapInfo(iCurImage, CubeTable);
 
-
 	image = ilGetInteger(IL_CUR_IMAGE);
 	DXTCFormat = iGetInt(IL_DXTC_FORMAT);
 	WriteHeader(iCurImage, DXTCFormat, CubeFlags);
-	
 
 	if (CubeFlags != 0)
-
 		numFaces = ilGetInteger(IL_NUM_IMAGES); //should always be 5 for now
-
 	else
-
 		numFaces = 0;
 
-
 	numMipMaps = ilGetInteger(IL_NUM_MIPMAPS); //this assumes all faces have same # of mipmaps
-
-
 
 	for (i = 0; i <= numFaces; ++i) {
 		for (counter = 0; counter <= numMipMaps; counter++) {
 			ilBindImage(image);
-
 			ilActiveImage(CubeTable[i]);
-
 			ilActiveMipmap(counter);
 
 			if (iCurImage->Origin != IL_ORIGIN_UPPER_LEFT) {
@@ -250,17 +178,13 @@ ILboolean iSaveDdsInternal()
 ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat, ILuint CubeFlags)
 {
 	ILuint i, FourCC, Flags1 = 0, Flags2 = 0, ddsCaps1 = 0,
-
-		LinearSize, BlockSize, ddsCaps2 = 0;
+	LinearSize, BlockSize, ddsCaps2 = 0;
 
 	Flags1 |= DDS_LINEARSIZE | DDS_MIPMAPCOUNT 
 			| DDS_WIDTH | DDS_HEIGHT | DDS_CAPS | DDS_PIXELFORMAT;
 	Flags2 |= DDS_FOURCC;
 
-
-
 	if (Image->Depth > 1)
-
 		Flags1 |= DDS_DEPTH;
 
 	// @TODO:  Fix the pre-multiplied alpha problem.
@@ -286,14 +210,9 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat, ILuint CubeFlags)
 		case IL_DXT5:
 			FourCC = IL_MAKEFOURCC('D','X','T','5');
 			break;
-
 		case IL_ATI1N:
-
 			FourCC = IL_MAKEFOURCC('A', 'T', 'I', '1');
-
 			break;
-
-
 		case IL_3DC:
 			FourCC = IL_MAKEFOURCC('A','T','I','2');
 			break;
@@ -313,55 +232,34 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat, ILuint CubeFlags)
 	SaveLittleUInt(Image->Width);
 
 	if (DXTCFormat == IL_DXT1 || DXTCFormat == IL_ATI1N) {
-
 		BlockSize = 8;
 	}
 	else {
-
 		BlockSize = 16;
 	}
-
 	LinearSize = (((Image->Width + 3)/4) * ((Image->Height + 3)/4)) * BlockSize * Image->Depth;
 
-
-
 	/*
-
 	// doing this is actually wrong, linear size is only size of one cube face
-
 	if (CubeFlags != 0) {
-
 		ILint numFaces = 0;
-
 		for (i = 0; i < 6; ++i)
-
 			if (CubeFlags & CubemapDirections[i])
-
 				++numFaces;
 
-
-
 		LinearSize *= numFaces;
-
 	}
-
 	*/
-
-
-
 
 	SaveLittleUInt(LinearSize);	// LinearSize (TODO: change this when uncompressed formats are supported)
 
 	if (Image->Depth > 1) {
 		SaveLittleUInt(Image->Depth);			// Depth
-
 		ddsCaps2 |= DDS_VOLUME;
-
 	}
-
 	else
-
 		SaveLittleUInt(0);						// Depth
+
 	SaveLittleUInt(ilGetInteger(IL_NUM_MIPMAPS) + 1);  // MipMapCount
 	SaveLittleUInt(0);			// AlphaBitDepth
 
@@ -383,11 +281,8 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat, ILuint CubeFlags)
 	if (ilGetInteger(IL_NUM_MIPMAPS) > 0)
 		ddsCaps1 |= DDS_MIPMAP | DDS_COMPLEX;
 	if (CubeFlags != 0) {
-
 		ddsCaps1 |= DDS_COMPLEX;
-
 		ddsCaps2 |= CubeFlags;
-
 	}
 
 	SaveLittleUInt(ddsCaps1);	// ddsCaps1
@@ -411,9 +306,7 @@ ILuint ILAPIENTRY ilGetDXTCData(void *Buffer, ILuint BufferSize, ILenum DXTCForm
 	ILint BlockNum;
 
 	if (Buffer == NULL) {  // Return the number that will be written with a subsequent call.
-		
 		BlockNum = ((iCurImage->Width + 3)/4) * ((iCurImage->Height + 3)/4)
-
 					* iCurImage->Depth;
 
 
@@ -710,10 +603,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 		if (Data3Dc == NULL)
 			return 0;
 
-
 		Runner8 = Data3Dc;
-
-
 
 		for (z = 0; z < Image->Depth; z++) {
 			for (y = 0; y < Image->Height; y += 4) {
@@ -735,78 +625,43 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 					Count += 16;
 				}
 			}
-
 			Runner8 += Image->Width * Image->Height * 2;
-
 		}
-
 		ifree(Data3Dc);
 	}
 
-	else if(DXTCFormat == IL_ATI1N)
-
+	else if (DXTCFormat == IL_ATI1N)
 	{
-
 		ILimage		*TempImage;
 
-
-
 		if (Image->Bpp != 1) {
-
 			TempImage = iConvertImage(iCurImage, IL_LUMINANCE, IL_UNSIGNED_BYTE);
-
 			if (TempImage == NULL)
-
 				return 0;
-
 		}
-
 		else {
-
 			TempImage = Image;
-
 		}
-
-
 
 		Runner8 = TempImage->Data;
 
-
-
 		for (z = 0; z < Image->Depth; z++) {
-
 			for (y = 0; y < Image->Height; y += 4) {
-
 				for (x = 0; x < Image->Width; x += 4) {
-
 					GetAlphaBlock(AlphaBlock, Runner8, Image, x, y);
-
 					ChooseAlphaEndpoints(AlphaBlock, &a0, &a1);
-
 					GenAlphaBitMask(a0, a1, AlphaBlock, AlphaBitMask, NULL);
-
 					iputc(a0);
-
 					iputc(a1);
-
 					iwrite(AlphaBitMask, 1, 6);
-
 					Count += 8;
-
 				}
-
 			}
-
 			Runner8 += Image->Width * Image->Height;
-
 		}
 
-
-
 		if (TempImage != Image)
-
 			ilCloseImage(TempImage);
-
 	}
 	else
 	{
@@ -832,16 +687,12 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 			}
 		}
 
-
-
 		Runner8 = Alpha;
-
 		Runner16 = Data;
 
 		switch (DXTCFormat)
 		{
 			case IL_DXT1:
-
 				for (z = 0; z < Image->Depth; z++) {
 					for (y = 0; y < Image->Height; y += 4) {
 						for (x = 0; x < Image->Width; x += 4) {
@@ -868,12 +719,8 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 						}
 					}
 
-
-
 					Runner16 += Image->Width * Image->Height;
-
 					Runner8 += Image->Width * Image->Height;
-
 				}
 				break;
 
@@ -919,18 +766,13 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 						}
 					}
 
-
-
 					Runner16 += Image->Width * Image->Height;
-
 					Runner8 += Image->Width * Image->Height;
-
 				}
 				break;
 
 			case IL_RXGB:
 			case IL_DXT5:
-
 				for (z = 0; z < Image->Depth; z++) {
 					for (y = 0; y < Image->Height; y += 4) {
 						for (x = 0; x < Image->Width; x += 4) {
@@ -963,12 +805,8 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 						}
 					}
 
-
-
 					Runner16 += Image->Width * Image->Height;
-
 					Runner8 += Image->Width * Image->Height;
-
 				}
 				break;
 		}
@@ -1238,7 +1076,8 @@ void ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1) {
 #undef Sum
 
 
-void ChooseAlphaEndpoints(ILubyte *Block, ILubyte *a0, ILubyte *a1) {
+void ChooseAlphaEndpoints(ILubyte *Block, ILubyte *a0, ILubyte *a1)
+{
 	ILuint	i, Lowest = 0xFF, Highest = 0;
 
 	for (i = 0; i < 16; i++) {
