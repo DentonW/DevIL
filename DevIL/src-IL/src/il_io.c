@@ -1602,11 +1602,11 @@ ILuint ILAPIENTRY ilSaveF(ILenum Type, ILHANDLE File)
 			break;
 		#endif
 
-		/*#ifndef IL_NO_TIF
+		#ifndef IL_NO_TIF
 		case IL_TIF:
 			Ret = ilSaveTiffF(File);
 			break;
-		#endif*/
+		#endif
 
 		default:
 			ilSetError(IL_INVALID_ENUM);
@@ -1697,11 +1697,11 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, void *Lump, ILuint Size)
 			break;
 		#endif
 
-		/*#ifndef IL_NO_TIF
+		#ifndef IL_NO_TIF
 		case IL_TIF:
 			Ret = ilSaveTiffL(Lump, Size);
 			break;
-		#endif*/
+		#endif
 
 		default:
 			ilSetError(IL_INVALID_ENUM);
@@ -1841,6 +1841,13 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 	#ifndef IL_NO_WBMP
 	if (!iStrCmp(Ext, IL_TEXT("wbmp"))) {
 		bRet = ilSaveWbmp(FileName);
+		goto finish;
+	}
+	#endif
+
+	#ifndef IL_NO_MNG
+	if (!iStrCmp(Ext, IL_TEXT("mng"))) {
+		bRet = ilSaveMng(FileName);
 		goto finish;
 	}
 	#endif

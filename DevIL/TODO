@@ -63,6 +63,10 @@ Denton:
 - Reorder loading/saving in il_io.c
 - TIFF saving to file streams and lumps
 - NTSC function
+- CUDA DXTn compression (via nVidia library)
+- Thread safe version
+- Change some calls (such as in il_tiff.c) to ilGetString to non-Unicode.
+- MNG saving
 
 
 For 1.7.0

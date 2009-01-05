@@ -10,6 +10,7 @@
 - Added WBMP support (loading and saving).
 - EXR files can now be loaded as file streams and lumps.
 - Changed iNeuQuant to take number of colors in palette.
+- Compiled MNG support back in.
 
 2009-01-02 Matěj Týč <bubla@sf.net>
 	* src-{IL,ILU,ILUT}/src/*_internal.c: Hopefully resolved the

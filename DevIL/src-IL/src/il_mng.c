@@ -319,36 +319,41 @@ ILboolean ilSaveMngL(void *Lump, ILuint Size)
 // Internal function used to save the Mng.
 ILboolean iSaveMngInternal()
 {
-	/*mng_handle mng;
+	//mng_handle mng;
 
-	if (iCurImage == NULL) {
-		ilSetError(IL_ILLEGAL_OPERATION);
-		return IL_FALSE;
-	}
+	ilSetError(IL_INVALID_EXTENSION);
+	return IL_FALSE;
 
-	mng = mng_initialize(MNG_NULL, mymngalloc, mymngfree, MNG_NULL);
-	if (mng == MNG_NULL) {
-		ilSetError(IL_LIB_MNG_ERROR);
-		return IL_FALSE;
-	}
+	//if (iCurImage == NULL) {
+	//	ilSetError(IL_ILLEGAL_OPERATION);
+	//	return IL_FALSE;
+	//}
 
+	//mng = mng_initialize(MNG_NULL, mymngalloc, mymngfree, MNG_NULL);
+	//if (mng == MNG_NULL) {
+	//	ilSetError(IL_LIB_MNG_ERROR);
+	//	return IL_FALSE;
+	//}
 
-	mng_setcb_openstream(mng, mymngopenstreamwrite);
-	mng_setcb_closestream(mng, mymngclosestream);
-	mng_setcb_writedata(mng, mymngwritedata);
+	//mng_setcb_openstream(mng, mymngopenstreamwrite);
+	//mng_setcb_closestream(mng, mymngclosestream);
+	//mng_setcb_writedata(mng, mymngwritedata);
 
-	// Write File:
-   	mng_create(mng);
+	//// Write File:
+ //  	mng_create(mng);
 
-	// Just a single Frame (save a normal PNG):
-	//WritePNG( mng, 0, 1 );
+	//// Check return value.
+	//mng_putchunk_mhdr(mng, iCurImage->Width, iCurImage->Height, 1000, 3, 1, 3, 0x0047);
+	//mng_putchunk_basi(mng, iCurImage->Width, iCurImage->Height, 8, MNG_COLORTYPE_RGB, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF, 1);
+	//mng_putchunk_iend(mng);
+	//mng_putimgdata_ihdr(mng, iCurImage->Width, iCurImage->Height, MNG_COLORTYPE_RGB, 8, 0, 0, 0, 0, mymnggetcanvasline);
 
-	// Now write file:
-	mng_write(mng);
+	//// Now write file:
+	//mng_write(mng);
 
-	mng_cleanup(&mng);*/
+	//mng_cleanup(&mng);
 
-	return IL_TRUE;
+	//return IL_TRUE;
 }
 
 #endif//IL_NO_MNG

@@ -40,8 +40,6 @@
 static ILboolean iLoadTiffInternal(void);
 static char*     iMakeString(void);
 static TIFF*     iTIFFOpen(char *Mode);
-//static ILboolean iSaveTiffInternal();
-
 static ILboolean iSaveTiffInternal(ILconst_string Filename);
 
 /*----------------------------------------------------------------------------*/
@@ -740,9 +738,6 @@ static tsize_t
 _tiffFileWriteProc(thandle_t fd, tdata_t pData, tsize_t tSize)
 {
 	fd;
-	/*TIFFWarning("TIFFMemFile", "_tiffFileWriteProc() Not implemented");
-	return(0);
-	*/
 	return iwrite(pData, 1, tSize);
 }
 
@@ -762,7 +757,6 @@ _tiffFileSeekProc(thandle_t fd, toff_t tOff, int whence)
 
 /*----------------------------------------------------------------------------*/
 
-#if 0
 static toff_t
 _tiffFileSeekProcW(thandle_t fd, toff_t tOff, int whence)
 {
@@ -773,7 +767,7 @@ _tiffFileSeekProcW(thandle_t fd, toff_t tOff, int whence)
 	iseekw(tOff, whence);
 	return tOff;
 }
-#endif
+
 /*----------------------------------------------------------------------------*/
 
 static int
@@ -801,7 +795,6 @@ _tiffFileSizeProc(thandle_t fd)
 
 /*----------------------------------------------------------------------------*/
 
-#if 0
 static toff_t
 _tiffFileSizeProcW(thandle_t fd)
 {
@@ -813,7 +806,7 @@ _tiffFileSizeProcW(thandle_t fd)
 
 	return Size;
 }
-#endif
+
 /*----------------------------------------------------------------------------*/
 
 #ifdef __BORLANDC__
@@ -843,7 +836,7 @@ _tiffDummyUnmapProc(thandle_t fd, tdata_t base, toff_t size)
 TIFF *iTIFFOpen(char *Mode)
 {
 	TIFF *tif;
-#if 0
+
 	if (Mode[0] == 'w')
 		tif = TIFFClientOpen("TIFFMemFile", Mode,
 							NULL,
@@ -852,7 +845,6 @@ TIFF *iTIFFOpen(char *Mode)
 							_tiffFileSizeProcW, _tiffDummyMapProc,
 							_tiffDummyUnmapProc);
 	else
-#endif
 		tif = TIFFClientOpen("TIFFMemFile", Mode,
 							NULL,
 							_tiffFileReadProc, _tiffFileWriteProc,
@@ -869,7 +861,7 @@ TIFF *iTIFFOpen(char *Mode)
 //! Writes a Tiff file
 ILboolean ilSaveTiff(ILconst_string FileName)
 {
-	//ILHANDLE	TiffFile;
+	/*ILHANDLE	TiffFile;
 	ILboolean	bTiff = IL_FALSE;
 
 	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
@@ -878,47 +870,36 @@ ILboolean ilSaveTiff(ILconst_string FileName)
 			return IL_FALSE;
 		}
 	}
-/*
+
 	TiffFile = iopenw(FileName);
 	if (TiffFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
 		return bTiff;
 	}
-*/
-	//bTiff = ilSaveTiffF(TiffFile);
-	bTiff = iSaveTiffInternal(FileName);
 
-/*
+	bTiff = ilSaveTiffF(TiffFile);
 	iclosew(TiffFile);
-*/
-	return bTiff;
+
+	return bTiff;*/
+
+	return iSaveTiffInternal(FileName);
 }
 
 
 //! Writes a Tiff to an already-opened file
 ILboolean ilSaveTiffF(ILHANDLE File)
 {
-	File;
-/*
-	iSetOutputFile(File);
-	return iSaveTiffInternal();
-
-*/
-	//ilSetError(IL_FILE_READ_ERROR);
+	/*iSetOutputFile(File);
+	return iSaveTiffInternal();*/
 	return IL_FALSE;
 }
 
 
 //! Writes a Tiff to a memory "lump"
-ILboolean ilSaveTiffL(const void *Lump, ILuint Size)
+ILboolean ilSaveTiffL(void *Lump, ILuint Size)
 {
-/*
-
-	iSetOutputLump(Lump, Size);
-	return iSaveTiffInternal();
-
-*/
-	//ilSetError(IL_FILE_READ_ERROR);
+	/*iSetOutputLump(Lump, Size);
+	return iSaveTiffInternal();*/
 	return IL_FALSE;
 }
 
@@ -926,8 +907,6 @@ ILboolean ilSaveTiffL(const void *Lump, ILuint Size)
 // @TODO:  Accept palettes!
 
 // Internal function used to save the Tiff.
-//ILboolean iSaveTiffInternal()
-
 ILboolean iSaveTiffInternal(ILconst_string Filename)
 {
 	ILenum	Format;
@@ -977,7 +956,8 @@ ILboolean iSaveTiffInternal(ILconst_string Filename)
 	#else
 		File = TIFFOpenW(Filename, "w");
 	#endif
-	
+
+	//File = iTIFFOpen("w");
 	if (File == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
 		return IL_FALSE;
@@ -991,7 +971,7 @@ ILboolean iSaveTiffInternal(ILconst_string Filename)
 	TIFFSetField(File, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
 	TIFFSetField(File, TIFFTAG_BITSPERSAMPLE, TempImage->Bpc << 3);
 	TIFFSetField(File, TIFFTAG_SAMPLESPERPIXEL, TempImage->Bpp);
-	if(TempImage->Bpp == 4) //TODO: LUMINANCE, LUMINANCE_ALPHA
+	if (TempImage->Bpp == 4) //TODO: LUMINANCE, LUMINANCE_ALPHA
 		TIFFSetField(File, TIFFTAG_MATTEING, 1);
 	TIFFSetField(File, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
 	TIFFSetField(File, TIFFTAG_ROWSPERSTRIP, 1);
@@ -1025,26 +1005,20 @@ ILboolean iSaveTiffInternal(ILconst_string Filename)
 		ifree(str);
 	}
 
-	//The date time string is not formatted correctly,
-	//so leave it out for now
-	//(from http://www.awaresystems.be/imaging/tiff/tifftags/datetime.html :
-	//The format is: "YYYY:MM:DD HH:MM:SS", with hours like those on
-	//a 24-hour clock, and one space character between the date and the
-	//time. The length of the string, including the terminating NUL, is
-	//20 bytes.)
-	//TIFFSetField(File, TIFFTAG_DATETIME, iMakeString());
+	// Set the date and time string.
+	TIFFSetField(File, TIFFTAG_DATETIME, iMakeString());
 
 	// 24/4/2003
-	// Orientation flag is not always supported ( Photoshop, ...), orient the image data 
+	// Orientation flag is not always supported (Photoshop, ...), orient the image data 
 	// and set it always to normal view
-	TIFFSetField(File, TIFFTAG_ORIENTATION,ORIENTATION_TOPLEFT );
-	if( TempImage->Origin != IL_ORIGIN_UPPER_LEFT ) {
+	TIFFSetField(File, TIFFTAG_ORIENTATION,ORIENTATION_TOPLEFT);
+	if (TempImage->Origin != IL_ORIGIN_UPPER_LEFT) {
 		ILubyte* Data = iGetFlipped(TempImage);
 		OldData = TempImage->Data;
 		TempImage->Data = Data;
 	}
 	else
-	OldData = TempImage->Data;
+		OldData = TempImage->Data;
 
 	/*
 	 TIFFSetField(File, TIFFTAG_ORIENTATION,
@@ -1076,7 +1050,7 @@ ILboolean iSaveTiffInternal(ILconst_string Filename)
  		ilSwapColours();
 
 	if (TempImage->Data != OldData) {
-		ifree( TempImage->Data );
+		ifree(TempImage->Data);
 		TempImage->Data = OldData;
 	}
 
@@ -1090,13 +1064,18 @@ ILboolean iSaveTiffInternal(ILconst_string Filename)
 
 /*----------------------------------------------------------------------------*/
 // Makes a neat date string for the date field.
+// From http://www.awaresystems.be/imaging/tiff/tifftags/datetime.html :
+// The format is: "YYYY:MM:DD HH:MM:SS", with hours like those on
+// a 24-hour clock, and one space character between the date and the
+// time. The length of the string, including the terminating NUL, is
+// 20 bytes.)
 char *iMakeString()
 {
-	static char TimeStr[255];
+	static char TimeStr[20];
 	time_t		Time;
 	struct tm	*CurTime;
 
-	imemclear(TimeStr, 255);
+	imemclear(TimeStr, 20);
 
 	time(&Time);
 #ifdef _WIN32
@@ -1104,8 +1083,8 @@ char *iMakeString()
 #endif
 	CurTime = localtime(&Time);
 
-	strftime(TimeStr, 255, "%s (%z)", CurTime); // "%#c (%z)"	// %s was %c
-
+	strftime(TimeStr, 20, "%Y:%m:%d %H:%M:%S", CurTime);
+	
 	return TimeStr;
 }
 
