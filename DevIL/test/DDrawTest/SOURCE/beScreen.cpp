@@ -189,9 +189,9 @@ WORD GetMaskPos( DWORD dwMask )
 		wPos++;
 	}
 
-
     return wPos;
 }
+
 
 void beScreen::InitializeMask()
 {

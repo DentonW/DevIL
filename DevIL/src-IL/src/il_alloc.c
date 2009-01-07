@@ -59,7 +59,7 @@ void *vec_malloc(const ILsizei size)
 	int diff;
 	ptr = malloc(_size+16+1);
 	diff= ((-(int)ptr - 1)&15) + 1;
-	ptr += diff;
+	ptr = (void*)(((char*)ptr)+diff);
 	((char*)ptr)[-1]= diff;
 	return ptr;
 #endif //MEMALIGN
@@ -121,7 +121,7 @@ static void ILAPIENTRY DefaultFreeFunc(const void * CONST_RESTRICT ptr)
 	    _mm_free((void*)ptr);
 #else
 #if defined(VECTORMEM) & !defined(POSIX_MEMALIGN) & !defined(VALLOC) & !defined(MEMALIGN) & !defined(MM_MALLOC)
-	    free(ptr - ((char*)ptr)[-1]);
+	    free(((char*)Ptr) - ((char*)Ptr)[-1]);
 #else	    
 	    free((void*)ptr);
 #endif //OTHERS...

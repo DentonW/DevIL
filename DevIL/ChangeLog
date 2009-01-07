@@ -24,6 +24,13 @@
 	etc. that prevented compilation
 	* build setup (Makefile.am and configure.ac): Added support for
 	compilation of EXR and WDP formats + various other tweaks.
+	
+2009-01-07 Denton Woods <doomwiz@users.sf.net>
+	* Added il_sun.c (Sun Raster file support)
+	* ilut_opengl.c (ilutGLInit): Changed Linux ilGLCompressed2D pointer casting
+	to coincide with the old SVN version.
+	* il_tiff.c / il_alloc.c: Fixed a few pointer casts that were fixed in SVN.
+	* test/DDrawTest: Fixed extra whitespace in all files in this project.
 
 1.7.5
 ---

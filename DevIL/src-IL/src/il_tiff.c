@@ -388,7 +388,7 @@ ILboolean iLoadTiffInternal()
 				Image->Format = IL_COLOUR_INDEX;
 				Image->Pal.PalSize = (count)*3;
 				Image->Pal.PalType = IL_PAL_RGB24;
-				Image->Pal.Palette = ialloc(Image->Pal.PalSize);
+				Image->Pal.Palette = (ILubyte*)ialloc(Image->Pal.PalSize);
 				entry = Image->Pal.Palette;
 				for (j = 0; j < count; ++j) {
 					entry[0] = (ILubyte)(red[j] >> 8);
@@ -402,7 +402,7 @@ ILboolean iLoadTiffInternal()
 			TIFFGetField(tif, TIFFTAG_ROWSPERSTRIP, &rowsperstrip);
 			stripsize = TIFFStripSize(tif);
 
-			strip = ialloc(stripsize);
+			strip = (ILubyte*)ialloc(stripsize);
 
 			if (bitspersample == 8 || bitspersample == 16) {
 				ILubyte *dat = Image->Data;
@@ -525,7 +525,7 @@ ILboolean iLoadTiffInternal()
 			TIFFGetField(tif, TIFFTAG_ROWSPERSTRIP, &rowsperstrip);
 			stripsize = TIFFStripSize(tif);
 
-			strip = ialloc(stripsize);
+			strip = (ILubyte*)ialloc(stripsize);
 
 			dat = Image->Data;
 			for (y = 0; y < h; y += rowsperstrip) {

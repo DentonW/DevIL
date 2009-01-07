@@ -28,7 +28,7 @@ beScreenParams				InitDisplayStruct;
 #define MIN_W		205  // Accomodate the menu bar.
 #define	MAX_W		400
 #define	MAX_H		300
-#define	TITLE		"OpenIL Direct Draw Test"
+#define	TITLE		"DevIL Direct Draw Test"
 
 ILuint	NumUndosAllowed = 4, UndoSize = 0;
 ILuint	Undos[11] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -67,7 +67,6 @@ long FAR PASCAL WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		"Jpeg Files (*.jpe, *.jpg, *.jpeg)", "*.jpe;*.jpg;*.jpeg",
 		"Microsoft Bitmap Files (*.bmp)", "*.bmp",
 		"Microsoft Icon Files (*.ico)", "*.ico",
-		"OpenIL Files (*.oil)", "*.oil",
 		"Portable AnyMap Files (*.pbm, *.pgm, *.pnm, *.ppm)", "*.pbm;*.pgm;*.pnm;*.ppm",
 		"Portable Network Graphics Files (*.png)", "*.png",
 		"Sgi Files (*.sgi)", "*.bw;*.rgb;*.rgba;*.sgi",
@@ -82,7 +81,6 @@ long FAR PASCAL WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		"C-Style Header (*.h)", "*.h",
 		"Jpeg Files (*.jpe, *.jpg, *.jpeg)", "*.jpe;*.jpg;*.jpeg",
 		"Microsoft Bitmap Files (*.bmp)", "*.bmp",
-		"OpenIL Files (*.oil)", "*.oil",
 		"Portable AnyMap Files (*.pbm, *.pgm, *.ppm)", "*.pbm;*.pgm;*.ppm",
 		"Portable Network Graphics Files (*.png)", "*.png",
 		"Sgi Files (*.sgi)", "*.bw;*.rgb;*.rgba;*.sgi",
@@ -339,12 +337,10 @@ long FAR PASCAL WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 							Width < MIN_W ? MIN_W + BORDER_W : Width + BORDER_W,
 							Height + MENU_H, SWP_SHOWWINDOW);
 
-
 						InvalidateRect(hWnd, NULL, FALSE);
 					}
 					return (0L);
 			}
-
 
 			if (++UndoSize > NumUndosAllowed) {
 				if (NumUndosAllowed > 0) {
@@ -363,7 +359,6 @@ long FAR PASCAL WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 
 
-			
 			switch (LOWORD(wParam))
 			{
 				case ID_CONVERT_RGB:
