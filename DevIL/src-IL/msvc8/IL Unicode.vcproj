@@ -84,7 +84,7 @@
 				AdditionalLibraryDirectories=""
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile=".\il.def"
-				DelayLoadDLLs=""
+				DelayLoadDLLs="nvtt.dll"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\../../lib/vc8/x86/debug/devil.pdb"
 				ImportLibrary=".\../../lib/vc8/unicode/x86/debug/devil.lib"
@@ -1899,6 +1899,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\src\il_nvidia.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\src\il_pal.c"
 					>
 					<FileConfiguration
@@ -2377,6 +2381,10 @@
 							PreprocessorDefinitions=""
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\src\il_sun.c"
+					>
 				</File>
 				<File
 					RelativePath="..\src\il_targa.c"

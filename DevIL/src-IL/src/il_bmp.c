@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 12/27/2008
+// Last modified: 01/06/2009
 //
 // Filename: src-IL/src/il_bmp.c
 //
@@ -260,7 +260,8 @@ ILboolean iLoadBitmapInternal()
 			return IL_FALSE;
 	}
 
-	ilFixImage();
+	if (!ilFixImage())
+		return IL_FALSE;
 
 	return bBitmap;
 }

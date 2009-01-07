@@ -67,6 +67,10 @@ Denton:
 - Thread safe version
 - Change some calls (such as in il_tiff.c) to ilGetString to non-Unicode.
 - MNG saving
+- Use glTexImage3D and update OpenGL calls.
+- New Faces member in ilImage?
+- Possibly make palettes always 768 (or 1024) bytes so that it is not possible to access outside by bad data?
+- Check return on all ilFixImage calls.
 
 
 For 1.7.0

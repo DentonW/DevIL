@@ -109,6 +109,8 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 	else if (!iStrCmp(Ext, IL_TEXT("sgi")) || !iStrCmp(Ext, IL_TEXT("bw")) ||
 		!iStrCmp(Ext, IL_TEXT("rgb")) || !iStrCmp(Ext, IL_TEXT("rgba")))
 		Type = IL_SGI;
+	else if (!iStrCmp(Ext, IL_TEXT("sun")))
+		Type = IL_SUN;
 	else if (!iStrCmp(Ext, IL_TEXT("tif")) || !iStrCmp(Ext, IL_TEXT("tiff")))
 		Type = IL_TIF;
 	else if (!iStrCmp(Ext, IL_TEXT("vtf")))
@@ -751,6 +753,12 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 			break;
 		#endif
 
+		#ifndef IL_NO_SUN
+		case IL_SUN:
+			bRet = ilLoadSun(FileName);
+			break;
+		#endif
+
 		#ifndef IL_NO_TIF
 		case IL_TIF:
 			//#ifndef _UNICODE
@@ -958,6 +966,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadSgiF(File);
 		#endif
 
+		#ifndef IL_NO_SUN
+		case IL_SUN:
+			return ilLoadSunF(File);
+		#endif
+
 		#ifndef IL_NO_TIF
 		case IL_TIF:
 			return ilLoadTiffF(File);
@@ -1134,6 +1147,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size)
 		#ifndef IL_NO_SGI
 		case IL_SGI:
 			return ilLoadSgiL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_SUN
+		case IL_SUN:
+			return ilLoadSunL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_TIF
@@ -1377,6 +1395,13 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		if (!iStrCmp(Ext, IL_TEXT("sgi")) || !iStrCmp(Ext, IL_TEXT("bw")) ||
 			!iStrCmp(Ext, IL_TEXT("rgb")) || !iStrCmp(Ext, IL_TEXT("rgba"))) {
 			bRet = ilLoadSgi(FileName);
+			goto finish;
+		}
+		#endif
+
+		#ifndef IL_NO_SUN
+		if (!iStrCmp(Ext, IL_TEXT("sun")) || !iStrCmp(Ext, IL_TEXT("ras"))) {
+			bRet = ilLoadSun(FileName);
 			goto finish;
 		}
 		#endif

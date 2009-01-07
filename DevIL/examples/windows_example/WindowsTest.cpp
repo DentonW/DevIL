@@ -88,6 +88,8 @@ bool IsOpenable(TCHAR *FileName);
 //__declspec( dllimport ) bool WINAPI FSColorPickerDoModal(unsigned int * currentColor, const bool currentColorIsDefault, unsigned int * originalColor, const bool originalColorIsDefault, const int initialExpansionState);
 
 
+ILAPI ILubyte* ILAPIENTRY ilnVidiaCompressDXT1(ILubyte *Data, ILuint Width, ILuint Height);
+
 
 int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -583,6 +585,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					//elapsed = cur_elapsed - last_elapsed;
 					//last_elapsed = cur_elapsed;
 					elapsed = 0;
+
+					ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+					ilnVidiaCompressDXT1(ilGetData(), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT));
 
 					ilutRenderer(ILUT_WIN32);
 					ResizeWin();

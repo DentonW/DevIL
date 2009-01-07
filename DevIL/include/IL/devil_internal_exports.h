@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 12/30/2008
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 01/06/2009
 //
 // Filename: IL/devil_internal_exports.h
 //
@@ -141,8 +141,8 @@ ILAPI ILimage*  ILAPIENTRY iConvertImage   (ILimage *Image, ILenum DestFormat, I
 ILAPI ILpal*    ILAPIENTRY iConvertPal     (ILpal *Pal, ILenum DestFormat);
 ILAPI ILubyte*  ILAPIENTRY iGetFlipped     (ILimage *Image);
 ILAPI ILboolean	ILAPIENTRY iMirror();
-ILAPI void      ILAPIENTRY iFlipBuffer( ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num );
-ILubyte* iFlipNewBuffer( ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num );
+ILAPI void      ILAPIENTRY iFlipBuffer(ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num);
+ILubyte*				   iFlipNewBuffer(ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num);
 ILAPI void      ILAPIENTRY iGetIntegervImage(ILimage *Image, ILenum Mode, ILint *Param);
 
 // Internal library functions in ILU

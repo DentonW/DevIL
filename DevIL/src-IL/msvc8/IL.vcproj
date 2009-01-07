@@ -2381,6 +2381,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\src\il_sun.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\il_targa.c"
 					>
 					<FileConfiguration

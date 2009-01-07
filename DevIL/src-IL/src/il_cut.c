@@ -133,9 +133,7 @@ ILboolean iLoadCutInternal()
 	iCurImage->Pal.PalSize = SharedPal.PalSize;
 	iCurImage->Pal.PalType = SharedPal.PalType;*/
 
-	ilFixImage();
-
-	return IL_TRUE;
+	return ilFixImage();
 }
 
 /* ?????????

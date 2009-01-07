@@ -309,11 +309,9 @@ ILuint ILAPIENTRY ilGetDXTCData(void *Buffer, ILuint BufferSize, ILenum DXTCForm
 		BlockNum = ((iCurImage->Width + 3)/4) * ((iCurImage->Height + 3)/4)
 					* iCurImage->Depth;
 
-
 		switch (DXTCFormat)
 		{
 			case IL_DXT1:
-
 			case IL_ATI1N:
 				return BlockNum * 8;
 			case IL_DXT3:
@@ -342,6 +340,7 @@ ILuint ILAPIENTRY ilGetDXTCData(void *Buffer, ILuint BufferSize, ILenum DXTCForm
 		ifree(CurData);
 	}
 
+	//@TODO: Is this the best way to do this?
 	iSetOutputLump(Buffer, BufferSize);
 	retVal = Compress(iCurImage, DXTCFormat);
 
@@ -744,7 +743,6 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 				break;*/
 
 			case IL_DXT3:
-
 				for (z = 0; z < Image->Depth; z++) {
 					for (y = 0; y < Image->Height; y += 4) {
 						for (x = 0; x < Image->Width; x += 4) {
