@@ -2,7 +2,7 @@
 //
 // DevIL Source Example
 // Copyright (C) 2000-2002 by Denton Woods
-// Last modified:  4/22/2002 <--Y2K Compliant! =]
+// Last modified:  4/22/2002
 //
 // Filename: examples/Simple Example/simple.c
 //
