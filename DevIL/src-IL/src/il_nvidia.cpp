@@ -49,16 +49,15 @@ struct ilOutputHandler : public nvtt::OutputHandler
 		switch (DxtType)
 		{
 			case IL_DXT1:
+			case IL_DXT1A:
 				size = Width * Height / 2;
 				break;
-			case IL_DXT2:
 			case IL_DXT3:
-			case IL_DXT4:
 			case IL_DXT5:
 				size = Width * Height;
 				break;
 
-			default:
+			default:  // NVTT does not accept DXT2 or DXT4.
 				// Should error somehow...
 				break;
 		}
@@ -83,7 +82,7 @@ struct ilOutputHandler : public nvtt::OutputHandler
 };
 
 
-ILAPI ILubyte* ILAPIENTRY ilnVidiaCompressDXT1(ILubyte *Data, ILuint Width, ILuint Height)
+ILAPI ILubyte* ILAPIENTRY ilnVidiaCompressDXT(ILubyte *Data, ILuint Width, ILuint Height, ILenum DxtType)
 {
 	InputOptions inputOptions;
 	inputOptions.setTextureLayout(TextureType_2D, Width, Height);
@@ -91,12 +90,29 @@ ILAPI ILubyte* ILAPIENTRY ilnVidiaCompressDXT1(ILubyte *Data, ILuint Width, ILui
 	inputOptions.setMipmapGeneration(false, -1);  //@TODO: Use this in certain cases.
 
 	OutputOptions outputOptions;
-	ilOutputHandler outputHandler(Width, Height, IL_DXT1);
+	ilOutputHandler outputHandler(Width, Height, DxtType);
 	outputOptions.setOutputHeader(false);
 	outputOptions.setOutputHandler(&outputHandler);
 
 	CompressionOptions compressionOptions;
-	compressionOptions.setFormat(Format_DXT1);
+	switch (DxtType)
+	{
+		case IL_DXT1:
+			compressionOptions.setFormat(Format_DXT1);
+			break;
+		case IL_DXT1A:
+			compressionOptions.setFormat(Format_DXT1a);
+			break;
+		case IL_DXT3:
+			compressionOptions.setFormat(Format_DXT1);
+			break;
+		case IL_DXT5:
+			compressionOptions.setFormat(Format_DXT5);
+			break;
+		default:  // Does not support DXT2 or DXT4.
+			ilSetError(IL_INVALID_PARAM);
+			break;
+	}
 
 	Compressor compressor;
 	compressor.process(inputOptions, compressionOptions, outputOptions);

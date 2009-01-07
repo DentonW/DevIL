@@ -36,8 +36,12 @@
 	* il_psd.c (PsdGetData): Fixed bug #2219350 (16-bit luminance images not loading properly).
 	* il_manip.c: Cleared up some minor formatting issues.
 	* il_png.c (iSavePngInternal): Fixed bug #1680577 (some metadata not written correctly).
-	* il_nvidia.c (ilnVidiaCompressDXT1): Disabled mipmap generation and added code to
+	* il_nvidia.cpp (ilnVidiaCompressDXT1): Disabled mipmap generation and added code to
 	ilOutputHandler constructor to determine the proper size of the buffer.
+	* il.h: Added IL_DXT1A define for nVidia Texture Tools.
+	* il_nvidia.cpp: Added DXT1a, DXT3 and DXT5 support.  Renamed ilnVidiaCompressDXT to
+	ilnVidiaCompressDXT and added the DxtType parameter.
+	
 
 1.7.5
 ---

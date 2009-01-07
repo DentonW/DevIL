@@ -365,6 +365,7 @@ typedef long long unsigned int ILuint64;
 #define IL_3DC              0x070E
 #define IL_RXGB             0x070F
 #define IL_ATI1N            0x0710
+#define IL_DXT1A            0x0711  // Normally the same as IL_DXT1, except for nVidia Texture Tools.
 
 // Cube map definitions
 #define IL_CUBEMAP_POSITIVEX 0x00000400
