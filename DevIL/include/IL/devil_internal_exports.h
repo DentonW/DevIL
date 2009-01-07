@@ -25,7 +25,7 @@
 #ifndef INLINE
 #if defined(__GNUC__)
 	#define INLINE extern inline
-#elif defined(_MSC_VER)
+#elif defined(_MSC_VER)  //@TODO: Get this working in MSVC++.
 	#define NOINLINE
 	#define INLINE
 	//#define INLINE  __inline

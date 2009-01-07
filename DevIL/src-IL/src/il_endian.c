@@ -14,7 +14,8 @@
 
 #include "il_endian.h"
 
-void EndianSwapData(void *_Image) {
+void EndianSwapData(void *_Image)
+{
 	ILuint		i;
 	ILubyte		*temp, *s, *d;
 	ILushort	*ShortS, *ShortD;
