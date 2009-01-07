@@ -39,9 +39,29 @@ using namespace nvtt;
 
 struct ilOutputHandler : public nvtt::OutputHandler
 {
-	ilOutputHandler(ILuint Width, ILuint Height)
+	ilOutputHandler(ILuint Width, ILuint Height, ILenum DxtType)
 	{
-		ILuint size = Width * Height * 2;
+		ILuint size;
+
+		Width = Width + (4 - (Width % 4)) % 4;    // Operates on 4x4 blocks,
+		Height = Height + (4 - (Height % 4)) % 4; //  so gives extra room.
+		
+		switch (DxtType)
+		{
+			case IL_DXT1:
+				size = Width * Height / 2;
+				break;
+			case IL_DXT2:
+			case IL_DXT3:
+			case IL_DXT4:
+			case IL_DXT5:
+				size = Width * Height;
+				break;
+
+			default:
+				// Should error somehow...
+				break;
+		}
 		NewData = (ILubyte*)ialloc(size);
 		if (NewData == NULL)
 			return;
@@ -68,9 +88,10 @@ ILAPI ILubyte* ILAPIENTRY ilnVidiaCompressDXT1(ILubyte *Data, ILuint Width, ILui
 	InputOptions inputOptions;
 	inputOptions.setTextureLayout(TextureType_2D, Width, Height);
 	inputOptions.setMipmapData(Data, Width, Height);
+	inputOptions.setMipmapGeneration(false, -1);  //@TODO: Use this in certain cases.
 
 	OutputOptions outputOptions;
-	ilOutputHandler outputHandler(Width, Height);
+	ilOutputHandler outputHandler(Width, Height, IL_DXT1);
 	outputOptions.setOutputHeader(false);
 	outputOptions.setOutputHandler(&outputHandler);
 
