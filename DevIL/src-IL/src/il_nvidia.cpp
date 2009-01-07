@@ -18,7 +18,7 @@
 
 //#define IL_NO_DXTC_NVIDIA
 
-#ifndef IL_NO_DXTC_NVIDIA
+#ifdef IL_USE_DXTC_NVIDIA
 #include <nvtt/nvtt.h>
 #include <nvimage/nvimage.h>
 //#include <new>
