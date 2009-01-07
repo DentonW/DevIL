@@ -35,6 +35,7 @@
 	* ilut_win32.c (ilutConvertSliceToBitmap): Fixed bug #1775036 (definition of buff).
 	* il_psd.c (PsdGetData): Fixed bug #2219350 (16-bit luminance images not loading properly).
 	* il_manip.c: Cleared up some minor formatting issues.
+	* il_png.c (iSavePngInternal): Fixed bug #1680577 (some metadata not written correctly).
 
 1.7.5
 ---
