@@ -367,7 +367,8 @@ ILuint iGetActiveNum(ILenum Type)
 
 
 //! Sets Param equal to the current value of the Mode
-void ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param) {
+void ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
+{
 	if (Param == NULL) {
 		ilSetError(IL_INVALID_PARAM);
 		return;
@@ -492,7 +493,8 @@ void ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param) {
 
 //@TODO rename to ilGetImageIntegerv for 1.6.9 and make it public
 //! Sets Param equal to the current value of the Mode
-void ILAPIENTRY iGetIntegervImage(ILimage *Image, ILenum Mode, ILint *Param) {
+void ILAPIENTRY iGetIntegervImage(ILimage *Image, ILenum Mode, ILint *Param)
+{
     ILimage *SubImage;
     if (Image == NULL) {
         ilSetError(IL_ILLEGAL_OPERATION);
