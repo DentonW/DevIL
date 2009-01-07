@@ -14,9 +14,11 @@
 
 #include "il_internal.h"
 #ifndef IL_NO_SUN
+#include "il_bits.h"
 
 ILboolean	iLoadSunInternal(void);
 ILboolean	iIsValidSun(void);
+ILuint		iSunGetRle(ILubyte *Data, ILuint Length);
 
 typedef struct SUNHEAD
 {
@@ -121,12 +123,15 @@ ILboolean iCheckSun(SUNHEAD *Header)
 	// These are the only valid depths that I know of.
 	if (Header->Depth != 1 && Header->Depth != 8 && Header->Depth != 24 && Header->Depth != 32)
 		return IL_FALSE;
-	if (Header->Type > IL_SUN_STANDARD && Header->Type != IL_SUN_RGB)  //@TODO: Support further types.
+	if (Header->Type > IL_SUN_RGB)  //@TODO: Support further types.
 		return IL_FALSE;
 	if (Header->ColorMapType > IL_SUN_RGB_MAP)  //@TODO: Find out more about raw map.
 		return IL_FALSE;
 	// Color map cannot be 0 if there is a map indicated.
 	if (Header->ColorMapType > IL_SUN_NO_MAP && Header->ColorMapLength == 0)
+		return IL_FALSE;
+	//@TODO: These wouldn't make sense.  Are they valid somehow?  Find out...
+	if ((Header->Depth == 1 || Header->Depth == 32) && Header->Type == IL_SUN_BYTE_ENC)
 		return IL_FALSE;
 
 	return IL_TRUE;
@@ -194,7 +199,9 @@ ILboolean ilLoadSunL(const void *Lump, ILuint Size)
 ILboolean iLoadSunInternal(void)
 {
 	SUNHEAD	Header;
-	ILuint	i, j, Padding, Offset;
+	BITFILE	*File;
+	ILuint	i, j, Padding, Offset, BytesRead;
+	ILubyte	PaddingData[16];
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -209,6 +216,46 @@ ILboolean iLoadSunInternal(void)
 
 	switch (Header.Depth)
 	{
+		case 1:  //@TODO: Find a file to test this on.
+			File = bfile(iGetFile());
+			if (File == NULL)
+				return IL_FALSE;
+
+			if (!ilTexImage(Header.Width, Header.Height, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL))
+				return IL_FALSE;
+			if (Header.ColorMapLength != 0) {
+				// Data should be an index into the color map, but the color map should only be RGB (6 bytes, 2 entries).
+				if (Header.ColorMapLength != 6) {
+					ilSetError(IL_INVALID_FILE_HEADER);
+					return IL_FALSE;
+				}
+			}
+			iCurImage->Pal.Palette = (ILubyte*)ialloc(6);  // Just need 2 entries in the color map.
+			if (Header.ColorMapLength == 0) {  // Create the color map
+				iCurImage->Pal.Palette[0] = 0x00;  // Entry for black
+				iCurImage->Pal.Palette[1] = 0x00;
+				iCurImage->Pal.Palette[2] = 0x00;
+				iCurImage->Pal.Palette[3] = 0xFF;  // Entry for white
+				iCurImage->Pal.Palette[4] = 0xFF;
+				iCurImage->Pal.Palette[5] = 0xFF;
+			}
+			else {
+				iread(iCurImage->Pal.Palette, 1, 6);  // Read in the color map.
+			}
+			iCurImage->Pal.PalSize = 6;
+			iCurImage->Pal.PalType = IL_PAL_RGB24;
+
+			Padding = (16 - (iCurImage->Width % 16)) % 16;  // Has to be aligned on a 16-bit boundary.  The rest is padding.
+
+			// Reads the bits
+			for (i = 0; i < iCurImage->Height; i++) {
+				bread(&iCurImage->Data[iCurImage->Width * i], 1, iCurImage->Width, File);
+				//bseek(File, BitPadding, IL_SEEK_CUR);  //@TODO: This function does not work correctly.
+				bread(PaddingData, 1, Padding, File);  // Skip padding bits.
+			}
+			break;
+
+
 		case 8:
 			if (Header.ColorMapType == IL_SUN_NO_MAP) {  // Greyscale image
 				if (!ilTexImage(Header.Width, Header.Height, 1, 1, IL_LUMINANCE, IL_UNSIGNED_BYTE, NULL))
@@ -229,13 +276,21 @@ ILboolean iLoadSunInternal(void)
 				iCurImage->Pal.PalType = IL_PAL_RGB24;
 			}
 
-			Padding = (2 - (iCurImage->Bps % 2)) % 2;  // Must be padded on a 16-bit boundary (2 bytes)
-			for (i = 0; i < Header.Height; i++) {
-				iread(iCurImage->Data + i * Header.Width, 1, iCurImage->Bps);
-				if (Padding)  // Only possible for padding to be 0 or 1.
-					igetc();
+			if (Header.Type != IL_SUN_BYTE_ENC) {  // Regular uncompressed image data
+				Padding = (2 - (iCurImage->Bps % 2)) % 2;  // Must be padded on a 16-bit boundary (2 bytes)
+				for (i = 0; i < Header.Height; i++) {
+					iread(iCurImage->Data + i * Header.Width, 1, iCurImage->Bps);
+					if (Padding)  // Only possible for padding to be 0 or 1.
+						igetc();
+				}
 			}
-
+			else {  // RLE image data
+				for (i = 0; i < iCurImage->Height; i++) {
+					BytesRead = iSunGetRle(iCurImage->Data + iCurImage->Bps * i, iCurImage->Bps);
+					if (BytesRead % 2)  // Each scanline must be aligned on a 2-byte boundary.
+						igetc();  // Skip padding
+				}
+			}
 			break;
 
 		case 24:
@@ -251,12 +306,22 @@ ILboolean iLoadSunInternal(void)
 					return IL_FALSE;
 			}
 
-			Padding = (2 - (iCurImage->Bps % 2)) % 2;  // Must be padded on a 16-bit boundary (2 bytes)
-			for (i = 0; i < Header.Height; i++) {
-				iread(iCurImage->Data + i * Header.Width * 3, 1, iCurImage->Bps);
-				if (Padding)  // Only possible for padding to be 0 or 1.
-					igetc();
+			if (Header.Type != IL_SUN_BYTE_ENC) {  // Regular uncompressed image data
+				Padding = (2 - (iCurImage->Bps % 2)) % 2;  // Must be padded on a 16-bit boundary (2 bytes)
+				for (i = 0; i < Header.Height; i++) {
+					iread(iCurImage->Data + i * Header.Width * 3, 1, iCurImage->Bps);
+					if (Padding)  // Only possible for padding to be 0 or 1.
+						igetc();
+				}
 			}
+			else {  // RLE image data
+				for (i = 0; i < iCurImage->Height; i++) {
+					BytesRead = iSunGetRle(iCurImage->Data + iCurImage->Bps * i, iCurImage->Bps);
+					if (BytesRead % 2)  // Each scanline must be aligned on a 2-byte boundary.
+						igetc();  // Skip padding
+				}
+			}
+
 			break;
 
 		case 32:
@@ -291,6 +356,41 @@ ILboolean iLoadSunInternal(void)
 
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 	return ilFixImage();
+}
+
+
+ILuint iSunGetRle(ILubyte *Data, ILuint Length)
+{
+	ILuint	i = 0, j;
+	ILubyte	Flag, Value;
+	ILuint	Count;
+
+	for (i = 0; i < Length; ) {
+		Flag = igetc();
+		if (Flag == 0x80) {  // Run follows (or 1 byte of 0x80)
+			Count = igetc();
+			if (Count == 0) {  // 1 pixel of value (0x80)
+				*Data = 0x80;
+				Data++;
+				i++;
+			}
+			else {  // Here we have a run.
+				Value = igetc();
+				Count++;  // Should really be Count+1
+				for (j = 0; j < Count && i + j < Length; j++, Data++) {
+					*Data = Value;
+				}
+				i += Count;
+			}
+		}
+		else {  // 1 byte of this value (cannot be 0x80)
+			*Data = Flag;
+			Data++;
+			i++;
+		}
+	}
+
+	return i;
 }
 
 
