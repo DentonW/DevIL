@@ -31,6 +31,10 @@
 	to coincide with the old SVN version.
 	* il_tiff.c / il_alloc.c: Fixed a few pointer casts that were fixed in SVN.
 	* test/DDrawTest: Fixed extra whitespace in all files in this project.
+	* il_endian.h (iSwapUShort/iSwapUInt): Fixed bug #2023453 (inline GCC asm).
+	* ilut_win32.c (ilutConvertSliceToBitmap): Fixed bug #1775036 (definition of buff).
+	* il_psd.c (PsdGetData): Fixed bug #2219350 (16-bit luminance images not loading properly).
+	* il_manip.c: Cleared up some minor formatting issues.
 
 1.7.5
 ---

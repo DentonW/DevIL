@@ -1,3 +1,15 @@
+//-----------------------------------------------------------------------------
+//
+// ImageLib Sources
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 01/07/2009
+//
+// Filename: src-IL/src/il_psd.c
+//
+// Description: Reads and writes Photoshop (.psd) files.
+//
+//-----------------------------------------------------------------------------
+
 
 // Information about the .psd format was taken from Adobe's PhotoShop SDK at
 //  http://partners.adobe.com/asn/developer/gapsdk/PhotoshopSDK.html
@@ -617,10 +629,22 @@ static ILuint ReadCompressedChannel(const ILuint ChanLen, ILuint Size, ILubyte* 
 
 ILboolean PsdGetData(PSDHEAD *Head, void *Buffer, ILboolean Compressed)
 {
-	ILuint		c, x, y, i, Size, ReadResult;
+	ILuint		c, x, y, i, Size, ReadResult, NumChan;
 	ILubyte		*Channel = NULL;
 	ILushort	*ShortPtr;
 	ILuint		*ChanLen = NULL;
+
+	// Added 01-07-2009: This is needed to correctly load greyscale and
+	//  paletted images.
+	switch (Head->Mode)
+	{
+		case 1:
+		case 2:
+			NumChan = 1;
+			break;
+		default:
+			NumChan = 3;
+	}
 
 	Channel = (ILubyte*)ialloc(Head->Width * Head->Height * iCurImage->Bpc);
 	if (Channel == NULL) {
@@ -637,7 +661,7 @@ ILboolean PsdGetData(PSDHEAD *Head, void *Buffer, ILboolean Compressed)
 
 	if (!Compressed) {
 		if (iCurImage->Bpc == 1) {
-			for (c = 0; c < 3; c++) {
+			for (c = 0; c < NumChan; c++) {
 				i = 0;
 				if (iread(Channel, Head->Width * Head->Height, 1) != 1) {
 					ifree(Channel);
@@ -650,6 +674,7 @@ ILboolean PsdGetData(PSDHEAD *Head, void *Buffer, ILboolean Compressed)
 				}
 			}
 			// Accumulate any remaining channels into a single alpha channel
+			//@TODO: This needs to be changed for greyscale images.
 			for (; c < Head->Channels; c++) {
 				i = 0;
 				if (iread(Channel, Head->Width * Head->Height, 1) != 1) {
@@ -666,7 +691,7 @@ ILboolean PsdGetData(PSDHEAD *Head, void *Buffer, ILboolean Compressed)
 			}
 		}
 		else {  // iCurImage->Bpc == 2
-			for (c = 0; c < 3; c++) {
+			for (c = 0; c < NumChan; c++) {
 				i = 0;
 				if (iread(Channel, Head->Width * Head->Height * 2, 1) != 1) {
 					ifree(Channel);
@@ -684,6 +709,7 @@ ILboolean PsdGetData(PSDHEAD *Head, void *Buffer, ILboolean Compressed)
 				iCurImage->Bps *= 2;
 			}
 			// Accumulate any remaining channels into a single alpha channel
+			//@TODO: This needs to be changed for greyscale images.
 			for (; c < Head->Channels; c++) {
 				i = 0;
 				if (iread(Channel, Head->Width * Head->Height * 2, 1) != 1) {
@@ -706,7 +732,7 @@ ILboolean PsdGetData(PSDHEAD *Head, void *Buffer, ILboolean Compressed)
 		ChanLen = GetCompChanLen(Head);
 
 		Size = Head->Width * Head->Height;
-		for (c = 0; c < 3; c++) {
+		for (c = 0; c < NumChan; c++) {
 			ReadResult = ReadCompressedChannel(ChanLen[c], Size, Channel);
 			if (ReadResult == READ_COMPRESSED_ERROR_FILE_CORRUPT)
 				goto file_corrupt;
@@ -722,6 +748,7 @@ ILboolean PsdGetData(PSDHEAD *Head, void *Buffer, ILboolean Compressed)
 		}
 
 		// Initialize the alpha channel to solid
+		//@TODO: This needs to be changed for greyscale images.
 		if (Head->Channels >= 4) {
 			for (y = 0; y < Head->Height * iCurImage->Bps; y += iCurImage->Bps) {
 				for (x = 0; x < iCurImage->Bps; x += iCurImage->Bpp) {

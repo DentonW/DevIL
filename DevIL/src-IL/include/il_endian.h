@@ -105,8 +105,8 @@ INLINE void iSwapUShort(ILushort *s)  {
 	#else
 	#ifdef GCC_X86_ASM
 		asm("ror $8,%0"
-			: 
-			: "r"  (*s) );
+			: "r"  (*s)
+			: "0" (*s));
 	#else
 		*s = ((*s)>>8) | ((*s)<<8);
 	#endif //GCC_X86_ASM
@@ -128,7 +128,7 @@ INLINE void iSwapUInt(ILuint *i) {
 	#else
 	#ifdef GCC_X86_ASM
 			asm("bswap  %0;"
-				: "=r" (*i) );
+				: "=r" (*i) : "0" (*i) );
 	#else
 		*i = ((*i)>>24) | (((*i)>>8) & 0xff00) | (((*i)<<8) & 0xff0000) | ((*i)<<24);
 	#endif //GCC_X86_ASM

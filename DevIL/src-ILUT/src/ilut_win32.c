@@ -44,7 +44,7 @@ ILAPI HBITMAP	ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 	ILboolean	alloc_buffer;
 
 	//reserve space for palette in every case...
-	ILubyte		*buff[sizeof(BITMAPINFOHEADER) + 256*sizeof(RGBQUAD)];
+	ILubyte		buff[sizeof(BITMAPINFOHEADER) + 256*sizeof(RGBQUAD)];
 	BITMAPINFO	*info = (BITMAPINFO*)buff;
 	RGBQUAD		*pal = info->bmiColors;
 

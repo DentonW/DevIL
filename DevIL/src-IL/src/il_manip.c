@@ -558,7 +558,7 @@ void ILAPIENTRY ilSetPixels(ILint XOff, ILint YOff, ILint ZOff, ILuint Width, IL
 		Converted = (void*)Data;
 	}
 	else {
-		Converted = ilConvertBuffer(Width * Height * Depth * ilGetBppFormat(Format) * ilGetBpcType(Type), Format, iCurImage->Format, iCurImage->Type, Type, Data);
+		Converted = ilConvertBuffer(Width * Height * Depth * ilGetBppFormat(Format) * ilGetBpcType(Type), Format, iCurImage->Format, Type, iCurImage->Type, Data);
 		if (!Converted)
 			return;
 	}
@@ -585,7 +585,7 @@ void ILAPIENTRY ilSetPixels(ILint XOff, ILint YOff, ILint ZOff, ILuint Width, IL
 
 
 
-//	Ripped from Platinum (DooMWiz's sources)
+//	Ripped from Platinum (Denton's sources)
 //	This could very well easily be changed to a 128x128 image instead...needed?
 
 //! Creates an ugly 64x64 black and yellow checkerboard image.
@@ -744,15 +744,15 @@ ILboolean ILAPIENTRY ilSetAlpha( ILdouble AlphaValue ) {
     ILimage  *image = iCurImage;
 	ILuint AlphaOff;
     
-    if( image == NULL ) 
-	{
+    if (image == NULL) {
         ilSetError(IL_ILLEGAL_OPERATION);
         return IL_FALSE;
     }
     
     AlphaValue = IL_CLAMP(AlphaValue);
     
-    switch( image->Format ) {
+    switch (image->Format)
+	{
             case IL_RGB:
                 ret = ilConvertImage(IL_RGBA,image->Type);
             case IL_RGBA:
@@ -773,46 +773,48 @@ ILboolean ILAPIENTRY ilSetAlpha( ILdouble AlphaValue ) {
                 AlphaOff = 4;
                 break;
     }
-    if( ret == IL_FALSE ) {
+    if (ret == IL_FALSE) {
     	return IL_FALSE;
     	// error has been set by ilConvertImage
     }
 	Size = image->Width * image->Height * image->Depth * image->Bpp;
 	
-    switch( iCurImage->Type ) {
+    switch (iCurImage->Type)
+	{
         case IL_BYTE: 
-        case IL_UNSIGNED_BYTE: {
+		case IL_UNSIGNED_BYTE: {
         	const ILbyte alpha = (ILubyte)(AlphaValue * IL_MAX_UNSIGNED_BYTE + .5);
-            for( i = AlphaOff-1; i < Size; i += AlphaOff)
+            for (i = AlphaOff-1; i < Size; i += AlphaOff)
                 image->Data[i] = alpha;
-            break; }
+			break; }
         case IL_SHORT:
-        case IL_UNSIGNED_SHORT: {
+		case IL_UNSIGNED_SHORT: {
             const ILushort alpha = (ILushort)(AlphaValue * IL_MAX_UNSIGNED_SHORT + .5);
             for( i = AlphaOff-1; i < Size; i += AlphaOff)
                 ((ILushort*)image->Data)[i] = alpha;
-            break; }
+			break; }
         case IL_INT: 
-        case IL_UNSIGNED_INT: {
+		case IL_UNSIGNED_INT: {
             const ILushort alpha = (ILushort)(AlphaValue * IL_MAX_UNSIGNED_INT + .5);
-            for( i = AlphaOff-1; i < Size; i += AlphaOff)
+            for (i = AlphaOff-1; i < Size; i += AlphaOff)
                 ((ILushort*)image->Data)[i] = alpha;
-            break; }
-        case IL_FLOAT: {
+			break; }
+		case IL_FLOAT: {
             const ILfloat alpha = (ILfloat)AlphaValue;
-            for( i = AlphaOff-1; i < Size; i += AlphaOff )
+            for (i = AlphaOff-1; i < Size; i += AlphaOff)
                 ((ILfloat*)image->Data)[i] = alpha;
-            break; }
-        case IL_DOUBLE: {
+			break; }
+		case IL_DOUBLE: {
             const ILdouble alpha  = AlphaValue;
-            for( i = AlphaOff-1; i < Size; i += AlphaOff )
+            for (i = AlphaOff-1; i < Size; i += AlphaOff)
                 ((ILdouble*)image->Data)[i] = alpha;
-            break; }
+			break; }
     }
     return IL_TRUE;
 }
 
-void ILAPIENTRY ilModAlpha( ILdouble AlphaValue ) {
+void ILAPIENTRY ilModAlpha(ILdouble AlphaValue)
+{
     ILuint AlphaOff = 0;
     ILboolean ret = IL_FALSE;
     ILuint i,j,Size;
@@ -826,12 +828,13 @@ void ILAPIENTRY ilModAlpha( ILdouble AlphaValue ) {
     } Alpha;
 
     
-    if( iCurImage == NULL ) {
+    if (iCurImage == NULL) {
         ilSetError(IL_ILLEGAL_OPERATION);
         return;
     }
     
-    switch( iCurImage->Format ) {
+    switch (iCurImage->Format)
+	{
             case IL_RGB:
                 ret = ilConvertImage(IL_RGBA,iCurImage->Type);
                 AlphaOff = 4;
@@ -851,9 +854,11 @@ void ILAPIENTRY ilModAlpha( ILdouble AlphaValue ) {
     }    
     Size = iCurImage->Width * iCurImage->Height * iCurImage->Depth * iCurImage->Bpp;
     
-    if( !ret ) return;
+    if (!ret)
+		return;
 
-    switch (iCurImage->Type) {
+    switch (iCurImage->Type)
+	{
         case IL_BYTE:
         case IL_UNSIGNED_BYTE:
             Alpha.alpha_byte = (ILubyte)(AlphaValue * 0x000000FF + .5);
@@ -883,4 +888,6 @@ void ILAPIENTRY ilModAlpha( ILdouble AlphaValue ) {
                 ((ILdouble*)iCurImage->Data)[i] = Alpha.alpha_double;
             break;
     }
+
+	return;
 }

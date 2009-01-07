@@ -1044,6 +1044,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\il_nvidia.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\il_profiles.c"
 				>
 				<FileConfiguration
@@ -1897,10 +1901,6 @@
 							PreprocessorDefinitions=""
 						/>
 					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\src\il_nvidia.cpp"
-					>
 				</File>
 				<File
 					RelativePath="..\src\il_pal.c"
