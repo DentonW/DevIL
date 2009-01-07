@@ -6,6 +6,7 @@
 #include "../header/Render2DCore.h"
 #include "resource.h"
 #include <math.h>
+#define ILUT_USE_WIN32
 #include <il/ilut.h>
 
 

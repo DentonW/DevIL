@@ -25,7 +25,7 @@
 	* build setup (Makefile.am and configure.ac): Added support for
 	compilation of EXR and WDP formats + various other tweaks.
 	
-2009-01-07 Denton Woods <doomwiz@users.sf.net>
+2009-01-06/07 Denton Woods <doomwiz@users.sf.net>
 	* Added il_sun.c (Sun Raster file support)
 	* ilut_opengl.c (ilutGLInit): Changed Linux ilGLCompressed2D pointer casting
 	to coincide with the old SVN version.
