@@ -6,10 +6,7 @@ Denton:
 - iGetString may not work properly with Unicode strings.
 - Linux Unicode support is partially broken.
 - Add ilIsValid* for .icns and .jp2 (and more?)
-- Get MNG support working again.
 - Commenting out lines 729-731 in pngread.c of libpng (1.2.9?) will allow reading of certain malformed Vista PNG-compressed .ico files with extra data at the end of the stream.  An example can be found in test/in and was created using Microangelo.
-- Linking against debug OpenEXR in release DevIL will crash and vice-versa.
-- Add .hdr saving.
 - Add .ico/.icns saving.
 - Write own .exr routines.
 - Add .exr saving.
@@ -56,7 +53,6 @@ Denton:
 - Add function to create cubemaps?
 - Freebasic support
 - Native WDP support
-- Check into TGA files having origins other than the common two.
 - Check for any external library pointers that are assumed to be 32-bit.
 - Use fseek/ftell 64-bit?
 - TIFF with JPEG encoding
@@ -71,6 +67,8 @@ Denton:
 - New Faces member in ilImage?
 - Possibly make palettes always 768 (or 1024) bytes so that it is not possible to access outside by bad data?
 - Check return on all ilFixImage calls.
+- Implement saving of more formats.
+- Check for 64-bit problems (try compiling WindowsTest in XP x64).
 
 
 For 1.7.0

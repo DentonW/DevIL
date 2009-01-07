@@ -28,9 +28,9 @@ ILAPI ILboolean ILAPIENTRY ilInitImage(ILimage *Image, ILuint Width, ILuint Heig
 	memset(Image, 0, sizeof(ILimage));
 
 	////
-	if( Width  == 0 ) Width = 1;
-	if( Height == 0 ) Height = 1;
-	if( Depth  == 0 ) Depth = 1;
+	if (Width  == 0) Width = 1;
+	if (Height == 0) Height = 1;
+	if (Depth  == 0) Depth = 1;
 	Image->Width	   = Width;
 	Image->Height	   = Height;
 	Image->Depth	   = Depth;

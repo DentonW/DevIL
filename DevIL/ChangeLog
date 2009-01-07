@@ -41,6 +41,7 @@
 	* il.h: Added IL_DXT1A define for nVidia Texture Tools.
 	* il_nvidia.cpp: Added DXT1a, DXT3 and DXT5 support.  Renamed ilnVidiaCompressDXT to
 	ilnVidiaCompressDXT and added the DxtType parameter.
+	* il_internal.c: Cleaned up extra whitespace toward end.
 	
 
 1.7.5
