@@ -20,21 +20,16 @@
 
 #ifdef IL_USE_DXTC_NVIDIA
 #include <nvtt/nvtt.h>
-#include <nvimage/nvimage.h>
-//#include <new>
-#include "E:/DevIL/extlibs/nvidia-texture-tools/src/nvcore/Memory.h"
+#include <nvcore/Memory.h>
 
 using namespace nvtt;
-using namespace std;
 
 #if defined(_WIN32) && defined(IL_USE_PRAGMA_LIBS)
 	#if defined(_MSC_VER) || defined(__BORLANDC__)
 		#ifndef _DEBUG
-			//#pragma comment(lib, "nvimage.lib")
 			#pragma comment(lib, "nvcore.lib")
 			#pragma comment(lib, "nvtt.lib")
 		#else
-			//#pragma comment(lib, "nvimage-d.lib")
 			#pragma comment(lib, "nvcore-d.lib")
 			#pragma comment(lib, "nvtt-d.lib")
 		#endif
