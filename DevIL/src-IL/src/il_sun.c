@@ -51,7 +51,10 @@ ILboolean ilIsValidSun(ILconst_string FileName)
 	ILHANDLE	SunFile;
 	ILboolean	bSun = IL_FALSE;
 	
-	if (!iCheckExtension(FileName, IL_TEXT("sun"))) {
+	if (!iCheckExtension(FileName, IL_TEXT("sun")) && !iCheckExtension(FileName, IL_TEXT("ras")) &&
+		!iCheckExtension(FileName, IL_TEXT("im1")) && !iCheckExtension(FileName, IL_TEXT("im8")) &&
+		!iCheckExtension(FileName, IL_TEXT("im24")) && !iCheckExtension(FileName, IL_TEXT("im32")) &&
+		!iCheckExtension(FileName, IL_TEXT("rs"))) {  // Lots of names possible...
 		ilSetError(IL_INVALID_EXTENSION);
 		return bSun;
 	}
@@ -191,7 +194,7 @@ ILboolean ilLoadSunL(const void *Lump, ILuint Size)
 ILboolean iLoadSunInternal(void)
 {
 	SUNHEAD	Header;
-	ILuint	i, Padding;
+	ILuint	i, j, Padding, Offset;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -236,6 +239,9 @@ ILboolean iLoadSunInternal(void)
 			break;
 
 		case 24:
+			if (Header.ColorMapLength > 0)  // Ignore any possible colormaps.
+				iseek(Header.ColorMapLength, IL_SEEK_CUR);
+
 			if (Header.Type == IL_SUN_RGB) {
 				if (!ilTexImage(Header.Width, Header.Height, 1, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL))
 					return IL_FALSE;
@@ -245,13 +251,36 @@ ILboolean iLoadSunInternal(void)
 					return IL_FALSE;
 			}
 
-			if (!ilTexImage(Header.Width, Header.Height, 1, 3, IL_BGR, IL_UNSIGNED_BYTE, NULL))
-				return IL_FALSE;
 			Padding = (2 - (iCurImage->Bps % 2)) % 2;  // Must be padded on a 16-bit boundary (2 bytes)
 			for (i = 0; i < Header.Height; i++) {
 				iread(iCurImage->Data + i * Header.Width * 3, 1, iCurImage->Bps);
 				if (Padding)  // Only possible for padding to be 0 or 1.
 					igetc();
+			}
+			break;
+
+		case 32:
+			if (Header.ColorMapLength > 0)  // Ignore any possible colormaps.
+				iseek(Header.ColorMapLength, IL_SEEK_CUR);
+
+			if (Header.Type == IL_SUN_RGB) {
+				if (!ilTexImage(Header.Width, Header.Height, 1, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL))
+					return IL_FALSE;
+			}
+			else {
+				if (!ilTexImage(Header.Width, Header.Height, 1, 3, IL_BGR, IL_UNSIGNED_BYTE, NULL))
+					return IL_FALSE;
+			}
+
+			// There is no padding at the end of each scanline.
+			Offset = 0;
+			for (i = 0; i < Header.Height; i++) {
+				for (j = 0; j < Header.Width; j++) {
+					igetc();  // There is a pad byte before each pixel.
+					iCurImage->Data[Offset]   = igetc();
+					iCurImage->Data[Offset+1] = igetc();
+					iCurImage->Data[Offset+2] = igetc();
+				}
 			}
 			break;
 

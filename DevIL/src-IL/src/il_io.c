@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 01/04/2009
+// Last modified: 01/06/2009
 //
 // Filename: src-IL/src/il_io.c
 //
@@ -109,7 +109,10 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 	else if (!iStrCmp(Ext, IL_TEXT("sgi")) || !iStrCmp(Ext, IL_TEXT("bw")) ||
 		!iStrCmp(Ext, IL_TEXT("rgb")) || !iStrCmp(Ext, IL_TEXT("rgba")))
 		Type = IL_SGI;
-	else if (!iStrCmp(Ext, IL_TEXT("sun")))
+	else if (!iStrCmp(Ext, IL_TEXT("sun")) || !iStrCmp(Ext, IL_TEXT("ras")) ||
+			 !iStrCmp(Ext, IL_TEXT("rs")) || !iStrCmp(Ext, IL_TEXT("im1")) ||
+			 !iStrCmp(Ext, IL_TEXT("im8")) || !iStrCmp(Ext, IL_TEXT("im24")) ||
+			 !iStrCmp(Ext, IL_TEXT("im32")))
 		Type = IL_SUN;
 	else if (!iStrCmp(Ext, IL_TEXT("tif")) || !iStrCmp(Ext, IL_TEXT("tiff")))
 		Type = IL_TIF;
@@ -1400,7 +1403,10 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#endif
 
 		#ifndef IL_NO_SUN
-		if (!iStrCmp(Ext, IL_TEXT("sun")) || !iStrCmp(Ext, IL_TEXT("ras"))) {
+		if (!iStrCmp(Ext, IL_TEXT("sun")) || !iStrCmp(Ext, IL_TEXT("ras")) ||
+			!iStrCmp(Ext, IL_TEXT("rs")) || !iStrCmp(Ext, IL_TEXT("im1")) ||
+			!iStrCmp(Ext, IL_TEXT("im8")) || !iStrCmp(Ext, IL_TEXT("im24")) ||
+			!iStrCmp(Ext, IL_TEXT("im32"))) {
 			bRet = ilLoadSun(FileName);
 			goto finish;
 		}
