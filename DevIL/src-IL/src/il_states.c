@@ -516,11 +516,11 @@ void ILAPIENTRY iGetIntegervImage(ILimage *Image, ILenum Mode, ILint *Param)
             break;
             ////
         case IL_IMAGE_BITS_PER_PIXEL:
-            //changed 20040610 to channel count (Bpp) times Byte per channel
+            //changed 20040610 to channel count (Bpp) times Bytes per channel
             *Param = (Image->Bpp << 3)*Image->Bpc;
             break;
         case IL_IMAGE_BYTES_PER_PIXEL:
-            //changed 20040610 to channel count (Bpp) times Byte per channel
+            //changed 20040610 to channel count (Bpp) times Bytes per channel
             *Param = Image->Bpp*Image->Bpc;
             break;
         case IL_IMAGE_BPC:
