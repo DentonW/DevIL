@@ -45,6 +45,7 @@
 	
 2009-01-08 Denton Woods <doomwiz@users.sf.net>
 	* opengl_example/gltest.c (main): Added iluInit/ilutInit calls.
+	* ilut_opengl.c (ilutGLFormat): Added IL_ALPHA support.
 	
 
 1.7.5

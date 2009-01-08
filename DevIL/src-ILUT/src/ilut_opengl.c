@@ -15,12 +15,14 @@
 
 static ILint MaxTexW = 256, MaxTexH = 256;  // maximum texture widths and heights
 
-void iGLSetMaxW( ILuint Width ) {
+void iGLSetMaxW(ILuint Width)
+{
 	MaxTexW = Width;
 	return;
 }
 
-void iGLSetMaxH( ILuint Height ) {
+void iGLSetMaxH(ILuint Height)
+{
 	MaxTexH = Height;
 	return;
 }
@@ -666,10 +668,10 @@ ILenum ilutGLFormat(ILenum Format, ILubyte Bpp)
 			return GL_RGBA8;
 		}
 	}
-
-	// A small hack to allow GL_ALPHA as a parameter for this function
-	if (Format == GL_ALPHA && ilutIsEnabled(ILUT_OPENGL_CONV)) {
-		return GL_ALPHA;
+	else if (Format == IL_ALPHA) {
+		if (ilutIsEnabled(ILUT_OPENGL_CONV)) {
+			return GL_ALPHA;
+		}
 	}
 
 	return Bpp;
