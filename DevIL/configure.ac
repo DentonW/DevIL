@@ -83,7 +83,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION([$Revision: 1.46 $])
+AC_REVISION([$Revision: 1.47 $])
 dnl AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
@@ -116,29 +116,31 @@ AM_CONDITIONAL([BUILD_MONOLITHIC],
 	       [test "x$enable_monolithic" = "xyes"])
 
 dnl Whether to build IL. You have to anyway :-)
-AC_ARG_ENABLE([IL],
-	      [AS_HELP_STRING([--with-IL[[=yes/no]]],
-	                      [Build IL part of DevIL. Default set to yes])],
-              [],
-	      [enable_IL="yes"])
+dnl AC_ARG_ENABLE([IL],
+dnl	      [AS_HELP_STRING([--enable-IL[[=yes/no]]],
+dnl	                      [Build IL part of DevIL. You  that. Default set to yes])],
+dnl              [],
+dnl	      [enable_IL="yes"])
+enable_IL="yes"
 AM_CONDITIONAL([BUILD_IL],
 	       [test "x$enable_IL" = "xyes"])
 
 dnl Whether to build ILU...
 AC_ARG_ENABLE([ILU],
-	      [AS_HELP_STRING([--with-ILU[[=yes/no]]],
+	      [AS_HELP_STRING([--enable-ILU[[=yes/no]]],
 			      [Build ILU part of DevIL. Default set to no])],
               [],
 	      [enable_ILU="no"])
-AM_CONDITIONAL([BUILD_ILU],
-	       [test "x$enable_ILU" = "xyes"])
 
 dnl Whether to build ILUT...
 AC_ARG_ENABLE([ILUT],
-	      [AS_HELP_STRING([--with-ILUT[[=yes/no]]],
-			      [Build ILUT part of DevIL. Default set to no])],
+	      [AS_HELP_STRING([--enable-ILUT[[=yes/no]]],
+			      [Build ILUT part of DevIL. Default set to no. ILU will be built along whether you wan it or not since ILUT depends upon it.])],
               [],
 	      [enable_ILUT="no"])
+dnl We have to build ILU if we want ILUT as well...
+AM_CONDITIONAL([BUILD_ILU],
+	       [test "x$enable_ILU" = "xyes" -o "x$enable_ILUT" = "xyes"])
 AM_CONDITIONAL([BUILD_ILUT],
 	       [test "x$enable_ILUT" = "xyes"])
 
@@ -287,14 +289,6 @@ TEST_FORMAT([xpm], [XPM])
 TEST_FORMAT([wal], [WAL])
 TEST_FORMAT([wdp], [WDP])
 
-dnl These formats make problems
-dnl AC_DEFINE([IL_NO_EXR],
-dnl	  [],
-dnl	  [The EXR support is causing problems right now])
-dnl AC_DEFINE([IL_NO_WDP],
-dnl	  [],
-dnl	  [The WDP support is causing problems as well])
-
 dnl
 dnl ILUT APIs library checking
 dnl
@@ -405,42 +399,8 @@ dnl		 projects/Makefile])
 AC_OUTPUT
 
 dnl And a nice report in the end!
-AC_MSG_NOTICE([+----------------------------------------+])
-AS_IF([test "x$enable_IL" = "xyes"],
-      [AC_MSG_NOTICE([\| IL library  Supported formats \|])
-       AC_MSG_NOTICE([+----------------------------------------+-------+])
-       AC_MSG_NOTICE([$SUPPORTED_FORMATS]) ],
-      [AC_MSG_NOTICE([\| IL disabled (huh? good luck!) \|]) ])
-
-AC_MSG_NOTICE([+----------------------------------------+])
-AS_IF([test "x$enable_ILU" = "xyes"],
-      [AC_MSG_NOTICE([\|      ILU part enabled        \|]) ],
-      [AC_MSG_NOTICE([\|      ILU part disabled       \|]) 
-       AC_MSG_NOTICE([+----------------------------------------+-------+])
-       AC_MSG_NOTICE([Pass --enable-ILU option to the configure script if you want to build ILU]) ])
-
-AC_MSG_NOTICE([+----------------------------------------+])
-AS_IF([test "x$enable_ILUT" = "xyes"],
-      [AC_MSG_NOTICE([\| ILUT library  Supported APIs \|])
-       AC_MSG_NOTICE([+----------------------------------------+-------+])
-       AC_MSG_NOTICE([$SUPPORTED_API])],
-      [AC_MSG_NOTICE([\|      ILUT part disabled      \|])
-       AC_MSG_NOTICE([+----------------------------------------+-------+])
-       AC_MSG_NOTICE([Pass --enable-ILUT option to the configure script if you want to build ILUT]) ])
-
-AC_MSG_NOTICE([+----------------------------------------+])
-       AC_MSG_NOTICE([\| Detected Machine Extensions  \|])
-AC_MSG_NOTICE([+----------------------------------------+-------+])
-AC_MSG_NOTICE([$SUPPORTED_EXTENSION])
-
-AC_MSG_NOTICE([+----------------------------------------+])
-AS_IF([test "x$with_examples" = "xyes"],
-      [AC_MSG_NOTICE([\|      Building examples       \|]) 
-       AC_MSG_NOTICE([+----------------------------------------+-------+])
-       AC_MSG_NOTICE([$EXAMPLES_TO_BUILD])
-       AS_IF([test "x$build" != "x$host"],
-             [AC_MSG_NOTICE([Note: You may get some errors when cross-compiling when using Allegro and/or SDL. So if you are cross-compiling and getting these errors, just pass --disable-allegro or --disable-sdl to the configure script.]) ]) ],
-      [AC_MSG_NOTICE([\|  Not building any examples   \|]) 
-       AC_MSG_NOTICE([+----------------------------------------+-------+])
-       AC_MSG_NOTICE([Pass --with-examples option to the configure script if you want to build examples.]) ])
-AC_MSG_NOTICE([+----------------------------------------+])
+IL_REPORT
+ILU_REPORT
+ILUT_REPORT
+EXTENSIONS_REPORT
+EXAMPLES_REPORT

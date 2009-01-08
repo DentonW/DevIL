@@ -70,6 +70,11 @@ Denton:
 - Implement saving of more formats.
 - Check for 64-bit problems (try compiling WindowsTest in XP x64).
 
+Matej:
+- Make a test suite
+- Make a simple command-line ILU frontend (iller)
+- Make DevIL parts that require external libraries modular
+- Make the library include files correct (fix the config.h problem)
 
 For 1.7.0
 - fixed OpenGL Loading (breaks old code which inverted the images)
