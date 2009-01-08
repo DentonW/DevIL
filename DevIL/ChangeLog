@@ -43,6 +43,9 @@
 	ilnVidiaCompressDXT and added the DxtType parameter.
 	* il_internal.c: Cleaned up extra whitespace toward end.
 	
+2009-01-08 Denton Woods <doomwiz@users.sf.net>
+	* opengl_example/gltest.c (main): Added iluInit/ilutInit calls.
+	
 
 1.7.5
 ---

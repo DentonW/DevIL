@@ -23,6 +23,7 @@
 #define IL_DEBUG
 #endif//_DEBUG
 
+#define ILUT_USE_OPENGL
 #include <IL/il.h>
 #include <IL/ilu.h>
 #include <IL/ilut.h>
@@ -92,6 +93,8 @@ int main(int argc, char** argv)
 
 	// Needed to initialize DevIL.
 	ilInit ();
+	iluInit();
+	ilutInit();
 
 	// GL cannot use palettes anyway, so convert early.
 	ilEnable (IL_CONV_PAL);
@@ -181,10 +184,15 @@ void DisplayFunc()
 	glBindTexture (GL_TEXTURE_2D, TexID);
 	
 	glBegin (GL_QUADS);
-	glTexCoord2f (0.0f, 0.0f); glVertex3i (0,     0,      0);
+	/*glTexCoord2f (0.0f, 0.0f); glVertex3i (0,     0,      0);
 	glTexCoord2f (1.0f, 0.0f); glVertex3i (Width, 0,      0);
 	glTexCoord2f (1.0f, 1.0f); glVertex3i (Width, Height, 0);
-	glTexCoord2f (0.0f, 1.0f); glVertex3i (0,     Height, 0);
+	glTexCoord2f (0.0f, 1.0f); glVertex3i (0,     Height, 0);*/
+
+	glTexCoord2f (0.0f, 1.0f); glVertex3i (0,     0,      0);
+	glTexCoord2f (1.0f, 1.0f); glVertex3i (Width, 0,      0);
+	glTexCoord2f (1.0f, 0.0f); glVertex3i (Width, Height, 0);
+	glTexCoord2f (0.0f, 0.0f); glVertex3i (0,     Height, 0);
 	glEnd();
 
 	glutSwapBuffers();  // We use double buffering, so swap the buffers.
