@@ -47,6 +47,9 @@
 	* opengl_example/gltest.c (main): Added iluInit/ilutInit calls.
 	* ilut_opengl.c (ilutGLFormat): Added IL_ALPHA support.
 	* il_bmp.c: Minor formatting issues fixed.
+	* il.h: Added IL_NVIDIA_COMPRESS #define.
+	* il_states.h: Added ilUseNVidiaDXT to IL_STATES.
+	* il_state.c: Added IL_NVIDIA_COMPRESS support.
 	
 	
 

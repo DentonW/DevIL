@@ -314,6 +314,10 @@ typedef long long unsigned int ILuint64;
 #define IL_COMPRESSION_HINT 0x0668
 
 
+// Compression
+#define IL_NVIDIA_COMPRESS	0x0670
+
+
 // Subimage types
 #define IL_SUB_NEXT   0x0680
 #define IL_SUB_MIPMAP 0x0681
@@ -547,6 +551,7 @@ ILAPI ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName);
 ILAPI ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size);
 ILAPI ILboolean ILAPIENTRY ilLoadPal(ILconst_string FileName);
 ILAPI void      ILAPIENTRY ilModAlpha(ILdouble AlphaValue);
+ILAPI ILubyte*	ILAPIENTRY ilNVidiaCompressDXT(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILenum DxtType);
 ILAPI ILboolean ILAPIENTRY ilOriginFunc(ILenum Mode);
 ILAPI ILboolean ILAPIENTRY ilOverlayImage(ILuint Source, ILint XCoord, ILint YCoord, ILint ZCoord);
 ILAPI void      ILAPIENTRY ilPopAttrib(void);

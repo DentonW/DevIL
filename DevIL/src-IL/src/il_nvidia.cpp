@@ -82,8 +82,16 @@ struct ilOutputHandler : public nvtt::OutputHandler
 };
 
 
-ILAPI ILubyte* ILAPIENTRY ilnVidiaCompressDXT(ILubyte *Data, ILuint Width, ILuint Height, ILenum DxtType)
+//! Compresses data to a DXT format using nVidia's Texture Tools library.
+//  The data must be in unsigned byte RGBA format.  The alpha channel will be ignored if DxtType is IL_DXT1.
+ILAPI ILubyte* ILAPIENTRY ilNVidiaCompressDXT(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILenum DxtType)
 {
+	// The nVidia Texture Tools library does not support volume textures yet.
+	if (Depth != 1) {
+		ilSetError(IL_INVALID_PARAM);
+		return NULL;
+	}
+
 	InputOptions inputOptions;
 	inputOptions.setTextureLayout(TextureType_2D, Width, Height);
 	inputOptions.setMipmapData(Data, Width, Height);
@@ -93,6 +101,9 @@ ILAPI ILubyte* ILAPIENTRY ilnVidiaCompressDXT(ILubyte *Data, ILuint Width, ILuin
 	ilOutputHandler outputHandler(Width, Height, DxtType);
 	outputOptions.setOutputHeader(false);
 	outputOptions.setOutputHandler(&outputHandler);
+
+	if (outputHandler.NewData == NULL)
+		return NULL;
 
 	CompressionOptions compressionOptions;
 	switch (DxtType)

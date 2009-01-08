@@ -83,6 +83,7 @@ void ilDefaultStates()
 	ilStates[ilCurrentPos].ilQuantMaxIndexs = 256;
 
 	ilStates[ilCurrentPos].ilKeepDxtcData = IL_FALSE;
+	ilStates[ilCurrentPos].ilUseNVidiaDXT = IL_FALSE;
 
 
 
@@ -247,6 +248,10 @@ ILboolean ilAble(ILenum Mode, ILboolean Flag)
 			break;
 		case IL_JPG_PROGRESSIVE:
 			ilStates[ilCurrentPos].ilJpgProgressive = Flag;
+			break;
+		case IL_NVIDIA_COMPRESS:
+			ilStates[ilCurrentPos].ilUseNVidiaDXT = Flag;
+			break;
 
 		default:
 			ilSetError(IL_INVALID_ENUM);
@@ -282,6 +287,8 @@ ILboolean ILAPIENTRY ilIsEnabled(ILenum Mode)
 			return ilStates[ilCurrentPos].ilInterlace;
 		case IL_JPG_PROGRESSIVE:
 			return ilStates[ilCurrentPos].ilJpgProgressive;
+		case IL_NVIDIA_COMPRESS:
+			return ilStates[ilCurrentPos].ilUseNVidiaDXT;
 
 		default:
 			ilSetError(IL_INVALID_ENUM);
@@ -482,6 +489,9 @@ void ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 			break;
 		case IL_JPG_PROGRESSIVE:
 			*Param = ilStates[ilCurrentPos].ilJpgProgressive;
+			break;
+		case IL_NVIDIA_COMPRESS:
+			*Param = ilStates[ilCurrentPos].ilUseNVidiaDXT;
 			break;
 
 		default:
@@ -694,7 +704,7 @@ ILboolean ILAPIENTRY ilCompressFunc(ILenum Mode)
 		case IL_COMPRESS_NONE:
 		case IL_COMPRESS_RLE:
 		//case IL_COMPRESS_LZO:
-			case IL_COMPRESS_ZLIB:
+		case IL_COMPRESS_ZLIB:
 			ilStates[ilCurrentPos].ilCompression = Mode;
 			break;
 		default:

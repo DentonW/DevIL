@@ -88,7 +88,7 @@ bool IsOpenable(TCHAR *FileName);
 //__declspec( dllimport ) bool WINAPI FSColorPickerDoModal(unsigned int * currentColor, const bool currentColorIsDefault, unsigned int * originalColor, const bool originalColorIsDefault, const int initialExpansionState);
 
 
-ILAPI ILubyte* ILAPIENTRY ilnVidiaCompressDXT(ILubyte *Data, ILuint Width, ILuint Height, ILenum DxtType);
+ILAPI ILubyte* ILAPIENTRY ilNVidiaCompressDXT(ILubyte *Data, ILuint Width, ILuint Height, ILenum DxtType);
 
 
 int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -587,7 +587,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					elapsed = 0;
 
 					ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-					ilnVidiaCompressDXT(ilGetData(), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), IL_DXT5);
+					free(ilNVidiaCompressDXT(ilGetData(), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 1, IL_DXT5));
 
 					ilutRenderer(ILUT_WIN32);
 					ResizeWin();
