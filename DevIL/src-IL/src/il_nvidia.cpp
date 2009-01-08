@@ -37,9 +37,9 @@ using namespace nvtt;
 #endif
 
 
-struct ilOutputHandler : public nvtt::OutputHandler
+struct ilOutputHandlerMem : public nvtt::OutputHandler
 {
-	ilOutputHandler(ILuint Width, ILuint Height, ILenum DxtType)
+	ilOutputHandlerMem(ILuint Width, ILuint Height, ILenum DxtType)
 	{
 		ILuint size;
 
@@ -98,7 +98,7 @@ ILAPI ILubyte* ILAPIENTRY ilNVidiaCompressDXT(ILubyte *Data, ILuint Width, ILuin
 	inputOptions.setMipmapGeneration(false, -1);  //@TODO: Use this in certain cases.
 
 	OutputOptions outputOptions;
-	ilOutputHandler outputHandler(Width, Height, DxtType);
+	ilOutputHandlerMem outputHandler(Width, Height, DxtType);
 	outputOptions.setOutputHeader(false);
 	outputOptions.setOutputHandler(&outputHandler);
 
@@ -129,6 +129,86 @@ ILAPI ILubyte* ILAPIENTRY ilNVidiaCompressDXT(ILubyte *Data, ILuint Width, ILuin
 	compressor.process(inputOptions, compressionOptions, outputOptions);
 
 	return outputHandler.NewData;
+}
+
+
+
+//
+//
+// The following is just a repeat of above, but it works generically on file streams or lumps.
+//  @TODO: Merge these two together.
+//
+//
+
+
+struct ilOutputHandlerFile : public nvtt::OutputHandler
+{
+	ilOutputHandlerFile(ILuint Width, ILuint Height, ILenum DxtType)
+	{
+		return;
+	}
+
+	virtual void beginImage(int size, int width, int height, int depth, int face, int miplevel)
+	{
+		// ignore.
+	}
+	virtual bool writeData(const void *data, int size)
+	{
+		if (iwrite(data, 1, size) == size)
+			return true;
+		return false;
+	}
+
+};
+
+
+//! Compresses data to a DXT format using nVidia's Texture Tools library.
+//  This version is supposed to be completely internal to DevIL.
+//  The data must be in unsigned byte RGBA format.  The alpha channel will be ignored if DxtType is IL_DXT1.
+ILuint ilNVidiaCompressDXTFile(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILenum DxtType)
+{
+	ILuint FilePos = itellw();
+
+	// The nVidia Texture Tools library does not support volume textures yet.
+	if (Depth != 1) {
+		ilSetError(IL_INVALID_PARAM);
+		return 0;
+	}
+
+	InputOptions inputOptions;
+	inputOptions.setTextureLayout(TextureType_2D, Width, Height);
+	inputOptions.setMipmapData(Data, Width, Height);
+	inputOptions.setMipmapGeneration(false, -1);  //@TODO: Use this in certain cases.
+
+	OutputOptions outputOptions;
+	ilOutputHandlerFile outputHandler(Width, Height, DxtType);
+	outputOptions.setOutputHeader(false);
+	outputOptions.setOutputHandler(&outputHandler);
+
+	CompressionOptions compressionOptions;
+	switch (DxtType)
+	{
+		case IL_DXT1:
+			compressionOptions.setFormat(Format_DXT1);
+			break;
+		case IL_DXT1A:
+			compressionOptions.setFormat(Format_DXT1a);
+			break;
+		case IL_DXT3:
+			compressionOptions.setFormat(Format_DXT1);
+			break;
+		case IL_DXT5:
+			compressionOptions.setFormat(Format_DXT5);
+			break;
+		default:  // Does not support DXT2 or DXT4.
+			ilSetError(IL_INVALID_PARAM);
+			break;
+	}
+
+	Compressor compressor;
+	compressor.process(inputOptions, compressionOptions, outputOptions);
+
+	return itellw() - FilePos;  // Return the number of characters written.
 }
 
 

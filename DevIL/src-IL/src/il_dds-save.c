@@ -70,12 +70,12 @@ ILuint GetCubemapInfo(ILimage* image, ILint* faces)
 	if (image == NULL)
 		return 0;
 
-	iGetIntegervImage(image, IL_NUM_IMAGES, (ILint*) &srcImagesCount );
+	iGetIntegervImage(image, IL_NUM_IMAGES, (ILint*) &srcImagesCount);
 	if (srcImagesCount != 5) //write only complete cubemaps (TODO?)
 		return 0;
 
 	img = image;
-	iGetIntegervImage(image, IL_NUM_MIPMAPS, (ILint*) &srcMipmapCount );
+	iGetIntegervImage(image, IL_NUM_MIPMAPS, (ILint*) &srcMipmapCount);
 	mipmapCount = srcMipmapCount;
 
 	for (i = 0; i < 6; ++i) {
@@ -100,7 +100,7 @@ ILuint GetCubemapInfo(ILimage* image, ILint* faces)
 				indices[i] = 5;
 				break;
 		}
-        iGetIntegervImage(img, IL_NUM_MIPMAPS, (ILint*) &srcMipmapCount );
+        iGetIntegervImage(img, IL_NUM_MIPMAPS, (ILint*) &srcMipmapCount);
 		if (srcMipmapCount != mipmapCount)
 			return 0; //equal # of mipmaps required
 
@@ -196,6 +196,7 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat, ILuint CubeFlags)
 	switch (DXTCFormat)
 	{
 		case IL_DXT1:
+		case IL_DXT1A:
 			FourCC = IL_MAKEFOURCC('D','X','T','1');
 			break;
 		case IL_DXT2:
@@ -231,7 +232,7 @@ ILboolean WriteHeader(ILimage *Image, ILenum DXTCFormat, ILuint CubeFlags)
 	SaveLittleUInt(Image->Height);
 	SaveLittleUInt(Image->Width);
 
-	if (DXTCFormat == IL_DXT1 || DXTCFormat == IL_ATI1N) {
+	if (DXTCFormat == IL_DXT1 || DXTCFormat == IL_DXT1A || DXTCFormat == IL_ATI1N) {
 		BlockSize = 8;
 	}
 	else {
@@ -312,6 +313,7 @@ ILuint ILAPIENTRY ilGetDXTCData(void *Buffer, ILuint BufferSize, ILenum DXTCForm
 		switch (DXTCFormat)
 		{
 			case IL_DXT1:
+			case IL_DXT1A:
 			case IL_ATI1N:
 				return BlockNum * 8;
 			case IL_DXT3:
@@ -595,7 +597,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 	ILubyte		*Alpha, AlphaBlock[16], AlphaBitMask[6], /*AlphaOut[16],*/ a0, a1;
 	ILboolean	HasAlpha;
 	ILuint		Count = 0;
-	ILubyte		*Data3Dc, *Runner8;
+	ILubyte		*Data3Dc, *Runner8, *ByteData;
 
 	if (DXTCFormat == IL_3DC) {
 		Data3Dc = CompressTo88(Image);
@@ -631,7 +633,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 
 	else if (DXTCFormat == IL_ATI1N)
 	{
-		ILimage		*TempImage;
+		ILimage *TempImage;
 
 		if (Image->Bpp != 1) {
 			TempImage = iConvertImage(iCurImage, IL_LUMINANCE, IL_UNSIGNED_BYTE);
@@ -664,6 +666,27 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 	}
 	else
 	{
+#ifdef IL_USE_DXTC_NVIDIA
+		if (ilIsEnabled(IL_NVIDIA_COMPRESS) && Image->Depth == 1) {  // See if we need to use the nVidia Texture Tools library.
+			if (DXTCFormat == IL_DXT1 || DXTCFormat == IL_DXT1A || DXTCFormat == IL_DXT3 || DXTCFormat == IL_DXT5) {
+				// NVTT needs data as RGBA 32-bit.
+				if (Image->Format != IL_BGRA || Image->Type != IL_UNSIGNED_BYTE) {  // No need to convert if already this format/type.
+					ByteData = ilConvertBuffer(Image->SizeOfData, Image->Format, IL_BGRA, Image->Type, IL_UNSIGNED_BYTE, Image->Data);
+					if (ByteData == NULL)
+						return 0;
+				}
+				else
+					ByteData = Image->Data;
+
+				if (!ilNVidiaCompressDXTFile(ByteData, Image->Width, Image->Height, 1, DXTCFormat))
+					return 0;
+
+				if (ByteData != Image->Data)
+					ifree(ByteData);
+			}
+		}
+#endif
+
 		if (DXTCFormat != IL_RXGB) {
 			Data = CompressTo565(Image);
 			if (Data == NULL)
@@ -692,6 +715,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 		switch (DXTCFormat)
 		{
 			case IL_DXT1:
+			case IL_DXT1A:
 				for (z = 0; z < Image->Depth; z++) {
 					for (y = 0; y < Image->Height; y += 4) {
 						for (x = 0; x < Image->Width; x += 4) {
@@ -813,7 +837,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 		ifree(Alpha);
 	} //else no 3dc
 
-	return Count;
+	return Count;  // Returns 0 if no compression was done.
 }
 
 

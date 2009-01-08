@@ -50,6 +50,8 @@
 	* il.h: Added IL_NVIDIA_COMPRESS #define.
 	* il_states.h: Added ilUseNVidiaDXT to IL_STATES.
 	* il_state.c: Added IL_NVIDIA_COMPRESS support.
+	* il_dds-save.c (Compress): Changed to use NVTT if needed.
+	* il_nvidia.cpp: Added ilNVidiaCompressDXTFile and Depth parameter to ilNVidiaCompressDXT.
 	
 	
 

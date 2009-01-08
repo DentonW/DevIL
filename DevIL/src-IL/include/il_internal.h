@@ -176,6 +176,8 @@ ILAPI void ILAPIENTRY	ilSetCurImage(ILimage *Image);
 ILboolean	ilRleCompressLine(ILubyte *ScanLine, ILuint Width, ILubyte Bpp, ILubyte *Dest, ILuint *DestWidth, ILenum CompressMode);
 ILuint		ilRleCompress(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILubyte *Dest, ILenum CompressMode, ILuint *ScanTable);
 void		iSetImage0(void);
+// DXTC compression
+ILuint		ilNVidiaCompressDXTFile(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILenum DxtType);
 // Conversion functions
 ILboolean	ilAddAlpha(void);
 ILboolean	ilAddAlphaKey(ILimage *Image);
