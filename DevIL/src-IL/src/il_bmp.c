@@ -868,7 +868,8 @@ ILboolean ilSaveBmp(const ILstring FileName)
 
 
 //! Writes a .bmp to an already-opened file
-ILboolean ilSaveBmpF(ILHANDLE File) {
+ILboolean ilSaveBmpF(ILHANDLE File)
+{
 	iSetOutputFile(File);
 	return iSaveBitmapInternal();
 }
