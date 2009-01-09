@@ -34,7 +34,7 @@ ILboolean ilutWin32Init()
 }
 
 
-ILAPI HBITMAP	ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
+ILAPI HBITMAP ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 {
 	ILubyte		*Data, *DataBackup;
 	HBITMAP		hBitmap;
@@ -101,21 +101,27 @@ ILAPI HBITMAP	ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 	pad = (4 - TempImage->Bps%4)%4;
 	alloc_buffer = (ILboolean)!(pad == 0 && TempImage->Format != IL_RGB
 		&& TempImage->Format != IL_RGBA && TempImage->Format != IL_LUMINANCE_ALPHA);
-	if(!alloc_buffer) {
+	if (!alloc_buffer) {
 		Data = TempImage->Data;
 	}
 	else {
-		if (TempImage->Format == IL_RGBA) {//strip alpha during byte swapping for faster upload to gdi
-			//recalculate pad because it changes when bpp change
-			pad = (4 - (3*TempImage->Width)%4)%4;
-			Data = (ILubyte*)ialloc((TempImage->Width + pad)*TempImage->Height*3);
+		ILsizei DataSize = 0;
+		if (TempImage->Format == IL_RGBA) {  // Strip alpha during byte swapping for faster upload to GDI.
+			// Recalculate pad, because it changes when bpp changes.
+			pad = (4 - (3 * TempImage->Width) % 4) % 4;
+			DataSize = (TempImage->Width + pad) * TempImage->Height * 3;
 		}
-		//strip alpha channel from grayscale image
-		else if(TempImage->Format == IL_LUMINANCE_ALPHA)
-			Data = (ILubyte*)ialloc((TempImage->Width + pad)*TempImage->Height);
-		else
-			Data = (ILubyte*)ialloc((TempImage->Width + pad)*TempImage->Height*TempImage->Bpp);
+		// Strip alpha channel from grayscale image.
+		else if (TempImage->Format == IL_LUMINANCE_ALPHA) {
+			// Added 01-09-2009: Recalculate pad.
+			pad = (4 - TempImage->Width % 4) % 4;
+			DataSize = (TempImage->Width + pad) * TempImage->Height;
+		}
+		else {
+			DataSize = (TempImage->Width + pad) * TempImage->Height * TempImage->Bpp;
+		}
 
+		Data = (ILubyte*)ialloc(DataSize);
 		if (Data == NULL) {
 			ilSetCurImage(ilutCurImage);
 			ilCloseImage(TempImage);

@@ -68,4 +68,7 @@
 	* il_jpeg.c:987: Commented out pragma warning at the end.
 	* il_mng.c: Added #pragma warning at the top to get rid of redefinition warning when compiling.
 	* il_nvidia.cpp (ilNVidiaCompressDXT): Added check for Data being NULL.
-	
+	* ilut_win32.c (ilutConvertSliceToHBitmap): Fixed bug #2496509 - added line 117 and
+	added DataSize member.
+	* il_hdr.c (iGetHdrHead): Fixed bug #2496518 - Added check for count.  Changed
+	sscanf to use %2s format specifier to prevent buffer overruns in x and y.
