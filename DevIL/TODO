@@ -69,6 +69,7 @@ Denton:
 - Check return on all ilFixImage calls.
 - Implement saving of more formats.
 - Check for 64-bit problems (try compiling WindowsTest in XP x64).
+- Update OpenGL calls.
 
 Matej:
 - Make a test suite
