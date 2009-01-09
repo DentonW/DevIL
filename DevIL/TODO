@@ -69,7 +69,6 @@ Denton:
 - Check return on all ilFixImage calls.
 - Implement saving of more formats.
 - Check for 64-bit problems (try compiling WindowsTest in XP x64).
-- Update OpenGL calls.
 - It looks like PhotoCD support was disabled.  Why?
 - Request compressed texture data in ilutGLSetTex2D?
 - Get il_vtf.c to do less memory allocation.  Just use the precache function.
