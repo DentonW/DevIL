@@ -74,4 +74,4 @@
 	sscanf to use %2s format specifier to prevent buffer overruns in x and y.
 	* il_pnm.c (iGetWord): Fixed bug mentioned in #2496518 - igetc was moved back
 	into the while loop.  Added a check for WordPos to prevent buffer overflow.
-	
+	Restructured the while loop to work properly.
