@@ -13,7 +13,7 @@
 
 #include "ilut_opengl.h"
 
-static ILint MaxTexW = 256, MaxTexH = 256;  // maximum texture widths and heights
+static ILint MaxTexW = 256, MaxTexH = 256, MaxTexD = 1;  // maximum texture widths, heights and depths
 
 void iGLSetMaxW(ILuint Width)
 {
@@ -24,6 +24,12 @@ void iGLSetMaxW(ILuint Width)
 void iGLSetMaxH(ILuint Height)
 {
 	MaxTexH = Height;
+	return;
+}
+
+void iGLSetMaxD(ILuint Depth)
+{
+	MaxTexD = Depth;
 	return;
 }
 
@@ -91,11 +97,19 @@ void *aglGetProcAddress( const GLubyte *name ) {
 #define ILGL_CLAMP_TO_EDGE					0x812F
 #define ILGL_TEXTURE_WRAP_R					0x8072
 
+// Not defined in OpenGL 1.1 headers.
+#define ILGL_TEXTURE_DEPTH					0x8071
+#define ILGL_TEXTURE_3D						0x806F
+#define ILGL_MAX_3D_TEXTURE_SIZE			0x8073
+
 
 static ILboolean HasCubemapHardware = IL_FALSE;
 static ILboolean HasNonPowerOfTwoHardware = IL_FALSE;
 #if defined(_MSC_VER) || defined(linux) || defined(__APPLE__)
-	ILGLCOMPRESSEDTEXIMAGE2DARBPROC ilGLCompressed2D = NULL;
+	ILGLTEXIMAGE3DARBPROC			ilGLTexImage3D = NULL;
+	ILGLTEXSUBIMAGE3DARBPROC		ilGLTexSubImage3D = NULL;
+	ILGLCOMPRESSEDTEXIMAGE2DARBPROC	ilGLCompressed2D = NULL;
+	ILGLCOMPRESSEDTEXIMAGE3DARBPROC	ilGLCompressed3D = NULL;
 #endif
 
 
@@ -103,12 +117,6 @@ static ILboolean HasNonPowerOfTwoHardware = IL_FALSE;
 //	Call this after OpenGL has initialized.
 ILboolean ilutGLInit()
 {
-	// Use PROXY_TEXTURE_2D with glTexImage2D() to test more accurately...
-	glGetIntegerv(GL_MAX_TEXTURE_SIZE, (GLint*)&MaxTexW);
-	glGetIntegerv(GL_MAX_TEXTURE_SIZE, (GLint*)&MaxTexH);
-	if (MaxTexW == 0 || MaxTexH == 0)
-		MaxTexW = MaxTexH = 256;  // Trying this because of the VooDoo series of cards...
-
 	// Should we really be setting all this ourselves?  Seems too much like a glu(t) approach...
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -123,24 +131,53 @@ ILboolean ilutGLInit()
 	glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
-#ifdef _MSC_VER
-	if (IsExtensionSupported("GL_ARB_texture_compression") &&
-		IsExtensionSupported("GL_EXT_texture_compression_s3tc")) {
-			ilGLCompressed2D = (ILGLCOMPRESSEDTEXIMAGE2DARBPROC)
-				wglGetProcAddress("glCompressedTexImage2DARB");
-	}
-#elif linux
-	if (IsExtensionSupported("GL_ARB_texture_compression") &&
-		IsExtensionSupported("GL_EXT_texture_compression_s3tc")) {
-			ilGLCompressed2D = (ILGLCOMPRESSEDTEXIMAGE2DARBPROC)
-				glXGetProcAddressARB((const GLubyte*)"glCompressedTexImage2DARB");
-	}
-#elif defined(__APPLE__)
-	if( IsExtensionSupported("GL_ARB_texture_compression") &&
-        	IsExtensionSupported("GL_EXT_texture_compression_s3tc")) {
+//#ifndef GL_VERSION_1_3
+	#ifdef _MSC_VER
+		if (IsExtensionSupported("GL_ARB_texture_compression") &&
+			IsExtensionSupported("GL_EXT_texture_compression_s3tc")) {
+				ilGLCompressed2D = (ILGLCOMPRESSEDTEXIMAGE2DARBPROC)wglGetProcAddress("glCompressedTexImage2DARB");
+		}
+		if (IsExtensionSupported("GL_EXT_texture3D")) {
+			ilGLTexImage3D = (ILGLTEXIMAGE3DARBPROC)wglGetProcAddress("glTexImage3D");
+			ilGLTexImage3D = (ILGLTEXIMAGE3DARBPROC)wglGetProcAddress("glTexSubImage3D");
+		}
+		if (IsExtensionSupported("GL_ARB_texture_compression") &&
+			IsExtensionSupported("GL_EXT_texture_compression_s3tc") &&
+			IsExtensionSupported("GL_EXT_texture3D")) {
+				ilGLCompressed3D = (ILGLCOMPRESSEDTEXIMAGE3DARBPROC)wglGetProcAddress("glCompressedTexImage3DARB");
+		}
+	#elif linux
+		if (IsExtensionSupported("GL_ARB_texture_compression") &&
+			IsExtensionSupported("GL_EXT_texture_compression_s3tc")) {
+				ilGLCompressed2D = (ILGLCOMPRESSEDTEXIMAGE2DARBPROC)
+					glXGetProcAddressARB((const GLubyte*)"glCompressedTexImage2DARB");
+		}
+		if (IsExtensionSupported("GL_EXT_texture3D")) {
+			ilGLTexImage3D = (ILGLTEXIMAGE3DARBPROC)glXGetProcAddressARB((const GLubyte*)"glTexImage3D");
+		}
+		if (IsExtensionSupported("GL_ARB_texture_compression") &&
+			IsExtensionSupported("GL_EXT_texture_compression_s3tc") &&
+			IsExtensionSupported("GL_EXT_texture3D")) {
+				ilGLCompressed3D = (ILGLCOMPRESSEDTEXIMAGE3DARBPROC)glXGetProcAddressARB((const GLubyte*)"glCompressedTexImage3DARB");
+		}
+	#elif defined(__APPLE__)
+		// Mac OS X headers are OpenGL 1.4 compliant already.
 		ilGLCompressed2D = glCompressedTexImage2DARB;//(ILGLCOMPRESSEDTEXIMAGE2DARBPROC)aglGetProcAddress((const GLubyte *)"glCompressedTexImage2DARB");
+		ilGLTexImage3D = glTexImage3D;
+		ilGLCompressed3D = glCompressedTexImage3DARB;
+	#endif
+//#else
+//#endif//GL_VERSION_1_3
+
+	// Use PROXY_TEXTURE_2D/3D with glTexImage2D/3D() to test more accurately...
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE, (GLint*)&MaxTexW);
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE, (GLint*)&MaxTexH);
+	if (ilGLTexImage3D != NULL)
+		glGetIntegerv(ILGL_MAX_3D_TEXTURE_SIZE, (GLint*)&MaxTexD);
+	if (MaxTexW == 0 || MaxTexH == 0 || MaxTexD == 0) {
+		MaxTexW = MaxTexH = 256;  // Trying this because of the VooDoo series of cards.
+		MaxTexD = 1;
 	}
-#endif
 
 	if (IsExtensionSupported("GL_ARB_texture_cube_map"))
 		HasCubemapHardware = IL_TRUE;
@@ -275,7 +312,7 @@ ILboolean ILAPIENTRY ilutGLTexImage_(GLuint Level, GLuint Target, ILimage *Image
 	}
 #endif//_MSC_VER
 
-	ImageCopy = MakeGLCompliant(Image);
+	ImageCopy = MakeGLCompliant2D(Image);
 	if (ImageCopy == NULL)
 		return IL_FALSE;
 
@@ -377,7 +414,7 @@ ILboolean ILAPIENTRY ilutGLBuildMipmaps()
 		return IL_FALSE;
 	}
 
-	Image = MakeGLCompliant(ilutCurImage);
+	Image = MakeGLCompliant2D(ilutCurImage);
 	if (Image == NULL)
 		return IL_FALSE;
 
@@ -393,6 +430,12 @@ ILboolean ILAPIENTRY ilutGLBuildMipmaps()
 
 ILboolean ILAPIENTRY ilutGLSubTex(GLuint TexID, ILuint XOff, ILuint YOff)
 {
+	return ilutGLSubTex2D(TexID, XOff, YOff);
+}
+
+
+ILboolean ILAPIENTRY ilutGLSubTex2D(GLuint TexID, ILuint XOff, ILuint YOff)
+{
 	ILimage	*Image;
 	ILint Width, Height;
 
@@ -402,7 +445,7 @@ ILboolean ILAPIENTRY ilutGLSubTex(GLuint TexID, ILuint XOff, ILuint YOff)
 		return IL_FALSE;
 	}
 
-	Image = MakeGLCompliant(ilutCurImage);
+	Image = MakeGLCompliant2D(ilutCurImage);
 	if (Image == NULL)
 		return IL_FALSE;
 
@@ -431,8 +474,54 @@ ILboolean ILAPIENTRY ilutGLSubTex(GLuint TexID, ILuint XOff, ILuint YOff)
 }
 
 
+ILboolean ILAPIENTRY ilutGLSubTex3D(GLuint TexID, ILuint XOff, ILuint YOff, ILuint ZOff)
+{
+	ILimage	*Image;
+	ILint Width, Height, Depth;
 
-ILimage* MakeGLCompliant(ILimage *Src)
+	if (ilGLTexSubImage3D == NULL) {
+		ilSetError(ILUT_ILLEGAL_OPERATION);  // Set a different error?
+		return IL_FALSE;
+	}
+
+	ilutCurImage = ilGetCurImage();
+	if (ilutCurImage == NULL) {
+		ilSetError(ILUT_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	Image = MakeGLCompliant3D(ilutCurImage);
+	if (Image == NULL)
+		return IL_FALSE;
+
+	glBindTexture(ILGL_TEXTURE_3D, TexID);
+
+	glGetTexLevelParameteriv(ILGL_TEXTURE_3D, 0, GL_TEXTURE_WIDTH,  (GLint*)&Width);
+	glGetTexLevelParameteriv(ILGL_TEXTURE_3D, 0, GL_TEXTURE_HEIGHT, (GLint*)&Height);
+	glGetTexLevelParameteriv(ILGL_TEXTURE_3D, 0, ILGL_TEXTURE_DEPTH, (GLint*)&Depth);
+
+	if (Image->Width + XOff > (ILuint)Width || Image->Height + YOff > (ILuint)Height
+		|| Image->Depth + ZOff > (ILuint)Depth) {
+		ilSetError(ILUT_BAD_DIMENSIONS);
+		return IL_FALSE;
+	}
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+	glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+	glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+	glPixelStorei(GL_UNPACK_SWAP_BYTES, IL_FALSE);
+	ilGLTexSubImage3D(ILGL_TEXTURE_3D, 0, XOff, YOff, ZOff, Image->Width, Image->Height, Image->Depth, 
+			Image->Format, Image->Type, Image->Data);
+
+	if (Image != ilutCurImage)
+		ilCloseImage(Image);
+
+	return IL_TRUE;
+}
+
+
+ILimage* MakeGLCompliant2D(ILimage *Src)
 {
 	ILimage		*Dest = Src, *Temp;
 	ILboolean	Created = IL_FALSE;
@@ -489,6 +578,87 @@ ILimage* MakeGLCompliant(ILimage *Src)
 				iluScale_(Dest, min((ILuint)MaxTexW, Dest->Width), min((ILuint)MaxTexH, Dest->Height), 1)
 			 :	iluScale_(Dest, min((ILuint)MaxTexW, (ILint)ilNextPower2(Dest->Width)),
 			 		min(MaxTexH, (ILint)ilNextPower2(Dest->Height)), 1);
+			iluImageParameter(ILU_FILTER, Filter);
+		}
+
+		ilCloseImage(Dest);
+		if (!Temp) {
+			return NULL;
+		}
+		Dest = Temp;
+	}
+
+	if (Dest->Origin != IL_ORIGIN_LOWER_LEFT) {
+		Flipped = iGetFlipped(Dest);
+		ifree(Dest->Data);
+		Dest->Data = Flipped;
+		Dest->Origin = IL_ORIGIN_LOWER_LEFT;
+	}
+
+	return Dest;
+}
+
+
+ILimage* MakeGLCompliant3D(ILimage *Src)
+{
+	ILimage		*Dest = Src, *Temp;
+	ILboolean	Created = IL_FALSE;
+	ILenum		Filter;
+	ILubyte		*Flipped;
+	ILboolean   need_resize = IL_FALSE;
+	
+	if (Src->Pal.Palette != NULL && Src->Pal.PalSize != 0 && Src->Pal.PalType != IL_PAL_NONE) {
+		//ilSetCurImage(Src);
+		Dest = iConvertImage(Src, ilGetPalBaseType(Src->Pal.PalType), IL_UNSIGNED_BYTE);
+		//Dest = iConvertImage(IL_BGR);
+		//ilSetCurImage(ilutCurImage);
+		if (Dest == NULL)
+			return NULL;
+
+		Created = IL_TRUE;
+
+		// Change here!
+
+
+		// Set Dest's palette stuff here
+		Dest->Pal.PalType = IL_PAL_NONE;
+	}
+
+	if (HasNonPowerOfTwoHardware == IL_FALSE && 
+		  (Src->Width  != ilNextPower2(Src->Width)  ||
+		   Src->Height != ilNextPower2(Src->Height) ||
+		   Src->Depth  != ilNextPower2(Src->Depth) )) {
+				need_resize = IL_TRUE;
+			}
+
+	if ((ILint)Src->Width > MaxTexW || (ILint)Src->Height > MaxTexH || (ILint)Src->Depth > MaxTexD)
+		need_resize = IL_TRUE;
+
+	if (need_resize == IL_TRUE) {
+		if (!Created) {
+			Dest = ilCopyImage_(Src);
+			if (Dest == NULL) {
+				return NULL;
+			}
+			Created = IL_TRUE;
+		}
+
+		Filter = iluGetInteger(ILU_FILTER);
+		if (Src->Format == IL_COLOUR_INDEX) {
+			iluImageParameter(ILU_FILTER, ILU_NEAREST);
+			Temp = HasNonPowerOfTwoHardware == IL_TRUE ? 
+				iluScale_(Dest, min((ILuint)MaxTexW, Dest->Width), min((ILuint)MaxTexH, Dest->Height), min((ILuint)MaxTexD, Dest->Depth))
+			  : iluScale_(Dest, min((ILuint)MaxTexW, ilNextPower2(Dest->Width)),
+			  		min((ILuint)MaxTexH, ilNextPower2(Dest->Height)),
+					min((ILuint)MaxTexD, ilNextPower2(Dest->Height)));
+			iluImageParameter(ILU_FILTER, Filter);
+		} else {
+			iluImageParameter(ILU_FILTER, ILU_BILINEAR);
+			Temp = HasNonPowerOfTwoHardware == IL_TRUE ?
+				iluScale_(Dest, min((ILuint)MaxTexW, Dest->Width), min((ILuint)MaxTexH, Dest->Height), min((ILuint)MaxTexD, Dest->Depth))
+			 :	iluScale_(Dest, min((ILuint)MaxTexW, (ILint)ilNextPower2(Dest->Width)),
+			 		min(MaxTexH, (ILint)ilNextPower2(Dest->Height)),
+					min(MaxTexD, (ILint)ilNextPower2(Dest->Depth)));
 			iluImageParameter(ILU_FILTER, Filter);
 		}
 
@@ -569,7 +739,8 @@ ILboolean ILAPIENTRY ilutGLScreen()
 
 	glGetIntegerv(GL_VIEWPORT, (GLint*)ViewPort);
 
-	ilTexImage(ViewPort[2], ViewPort[3], 1, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL);
+	if (!ilTexImage(ViewPort[2], ViewPort[3], 1, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL))
+		return IL_FALSE;  // Error already set.
 	ilutCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
 
 	glReadPixels(0, 0, ViewPort[2], ViewPort[3], GL_RGB, GL_UNSIGNED_BYTE, ilutCurImage->Data);
@@ -628,7 +799,14 @@ ILboolean ILAPIENTRY ilutGLScreenie()
 #endif//_WIN32_WCE
 
 
+//! Deprecated - use ilutGLSetTex2D instead.
 ILboolean ILAPIENTRY ilutGLSetTex(GLuint TexID)
+{
+	return ilutGLSetTex2D(TexID);
+}
+
+
+ILboolean ILAPIENTRY ilutGLSetTex2D(GLuint TexID)
 {
 	ILubyte *Data;
 	ILuint Width, Height;
@@ -654,6 +832,41 @@ ILboolean ILAPIENTRY ilutGLSetTex(GLuint TexID)
 	ifree(Data);
 	return IL_TRUE;
 }
+
+
+ILboolean ILAPIENTRY ilutGLSetTex3D(GLuint TexID)
+{
+	ILubyte *Data;
+	ILuint Width, Height, Depth;
+
+	if (ilGLTexImage3D == NULL) {
+		ilSetError(ILUT_ILLEGAL_OPERATION);  // Set a different error?
+		return IL_FALSE;
+	}
+
+	glBindTexture(ILGL_TEXTURE_3D, TexID);
+
+	glGetTexLevelParameteriv(ILGL_TEXTURE_3D, 0, GL_TEXTURE_WIDTH,  (GLint*)&Width);
+	glGetTexLevelParameteriv(ILGL_TEXTURE_3D, 0, GL_TEXTURE_HEIGHT, (GLint*)&Height);
+	glGetTexLevelParameteriv(ILGL_TEXTURE_3D, 0, ILGL_TEXTURE_DEPTH, (GLint*)&Depth);
+
+	Data = (ILubyte*)ialloc(Width * Height * Depth * 4);
+	if (Data == NULL) {
+		return IL_FALSE;
+	}
+
+	glGetTexImage(ILGL_TEXTURE_3D, 0, IL_BGRA, GL_UNSIGNED_BYTE, Data);
+
+	if (!ilTexImage(Width, Height, Depth, 4, IL_BGRA, IL_UNSIGNED_BYTE, Data)) {
+		ifree(Data);
+		return IL_FALSE;
+	}
+	ilutCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
+
+	ifree(Data);
+	return IL_TRUE;
+}
+
 
 
 ILenum ilutGLFormat(ILenum Format, ILubyte Bpp)

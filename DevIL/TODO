@@ -70,6 +70,8 @@ Denton:
 - Implement saving of more formats.
 - Check for 64-bit problems (try compiling WindowsTest in XP x64).
 - Update OpenGL calls.
+- It looks like PhotoCD support was disabled.  Why?
+- Request compressed texture data in ilutGLSetTex2D?
 
 Matej:
 - Make a test suite

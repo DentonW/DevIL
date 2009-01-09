@@ -244,10 +244,15 @@ ILAPI ILboolean     ILAPIENTRY ilutRenderer(ILenum Renderer);
 	ILAPI ILboolean	ILAPIENTRY ilutGLScreen(void);
 	ILAPI ILboolean	ILAPIENTRY ilutGLScreenie(void);
 	ILAPI ILboolean	ILAPIENTRY ilutGLSaveImage(ILstring FileName, GLuint TexID);
-	ILAPI ILboolean ILAPIENTRY ilutGLSubTex(GLuint TexID, ILuint XOff, ILuint YOff);
-	ILAPI ILboolean	ILAPIENTRY ilutGLSetTex(GLuint TexID);
+	ILAPI ILboolean ILAPIENTRY ilutGLSubTex2D(GLuint TexID, ILuint XOff, ILuint YOff);
+	ILAPI ILboolean ILAPIENTRY ilutGLSubTex3D(GLuint TexID, ILuint XOff, ILuint YOff, ILuint ZOff);
+	ILAPI ILboolean	ILAPIENTRY ilutGLSetTex2D(GLuint TexID);
+	ILAPI ILboolean	ILAPIENTRY ilutGLSetTex3D(GLuint TexID);
 	ILAPI ILboolean	ILAPIENTRY ilutGLTexImage(GLuint Level);
 	ILAPI ILboolean ILAPIENTRY ilutGLSubTex(GLuint TexID, ILuint XOff, ILuint YOff);
+
+	ILAPI ILboolean	ILAPIENTRY ilutGLSetTex(GLuint TexID);  // Deprecated - use ilutGLSetTex2D.
+	ILAPI ILboolean ILAPIENTRY ilutGLSubTex(GLuint TexID, ILuint XOff, ILuint YOff);  // Use ilutGLSubTex2D.
 #endif//ILUT_USE_OPENGL
 
 

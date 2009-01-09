@@ -48,3 +48,11 @@
 	the future.
 	* configure.ac, m4/devil-reports.m4: Put the report stage of the
 	configure script to a separate m4 file.
+
+2009-01-09 Denton Woods <doomwiz@users.sf.net>
+	* ilut_opengl.h: Moved ILGLCOMPRESSEDTEXIMAGE2DARBPROC typedef out of #ifdefs.
+	* ilut_opengl.c: Added ilutGLSetTex2D and ilutGLSetTex3D.  Changed ilutGLSetTex to
+	just call ilutGLSetTex2D.  Did the same thing for ilutGLSubTex.  Added checks for 
+	volume image extensions.  Renamed MakeGLCompliant to MakeGLCompliant2D.  Added
+	MakeGLCompliant3D.
+	* ilut_opengl.c (ilutGLScreen): Added check for ilTexImage failing.

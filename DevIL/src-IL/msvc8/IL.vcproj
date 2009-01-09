@@ -2783,6 +2783,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\NEWS"
+				>
+			</File>
+			<File
 				RelativePath="..\..\README.unix"
 				>
 			</File>
