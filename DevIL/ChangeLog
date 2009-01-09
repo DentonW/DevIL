@@ -56,3 +56,5 @@
 	volume image extensions.  Renamed MakeGLCompliant to MakeGLCompliant2D.  Added
 	MakeGLCompliant3D.
 	* ilut_opengl.c (ilutGLScreen): Added check for ilTexImage failing.
+	* il_vtf.c (iLoadVtfInternal): Added BGRA4444 support.
+	* il_alloc.c: Cleaned up formatting some.

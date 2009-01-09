@@ -72,6 +72,7 @@ Denton:
 - Update OpenGL calls.
 - It looks like PhotoCD support was disabled.  Why?
 - Request compressed texture data in ilutGLSetTex2D?
+- Get il_vtf.c to do less memory allocation.  Just use the precache function.
 
 Matej:
 - Make a test suite

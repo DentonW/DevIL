@@ -82,14 +82,16 @@ void *ivec_align_buffer(void *buffer, const ILsizei size)
 
 
 /*** Allocation/Deallocation Function ***/
-void* ILAPIENTRY ialloc(const ILsizei Size) {
+void* ILAPIENTRY ialloc(const ILsizei Size)
+{
 	void *Ptr = ialloc_ptr(Size);
 	if (Ptr == NULL)
 		ilSetError(IL_OUT_OF_MEMORY);
 	return Ptr;
 }
 
-void ILAPIENTRY ifree(const void * CONST_RESTRICT Ptr) {
+void ILAPIENTRY ifree(const void * CONST_RESTRICT Ptr)
+{
 	ifree_ptr(Ptr);
 	return;
 }

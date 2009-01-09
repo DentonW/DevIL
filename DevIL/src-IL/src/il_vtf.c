@@ -344,6 +344,11 @@ ILboolean iLoadVtfInternal()
 			Format = IL_BGR;
 			Type = IL_UNSIGNED_BYTE;
 			break;
+		case IMAGE_FORMAT_BGRA4444:
+			Channels = 4;
+			Format = IL_BGRA;
+			Type = IL_UNSIGNED_BYTE;
+			break;
 
 		default:
 			ilSetError(IL_FORMAT_NOT_SUPPORTED);
@@ -557,6 +562,24 @@ ILboolean iLoadVtfInternal()
 						Image->Data[k+1] = ((Data16Bit[0] & 0xE0) >> 2) | ((Data16Bit[1] & 0x03) << 6);
 						Image->Data[k+2] =  (Data16Bit[1] & 0x7C) << 1;
 						Data16Bit += 2;
+					}
+					break;
+
+				// Data is reduced to a 4-bits per channel format.
+				case IMAGE_FORMAT_BGRA4444:
+					SizeOfData = Image->Width * Image->Height * Image->Depth * 4;
+					Temp = CompData = ialloc(SizeOfData / 2);  // Not compressed data
+					if (iread(CompData, 1, SizeOfData / 2) != SizeOfData / 2) {
+						bVtf = IL_FALSE;
+						break;
+					}
+					for (k = 0; k < SizeOfData; k += 4) {
+						// We double the data here.
+						Image->Data[k]   = (Temp[0] & 0x0F) << 4 | (Temp[0] & 0x0F);
+						Image->Data[k+1] = (Temp[0] & 0xF0) >> 4 | (Temp[0] & 0xF0);
+						Image->Data[k+2] = (Temp[1] & 0x0F) << 4 | (Temp[1] & 0x0F);
+						Image->Data[k+3] = (Temp[1] & 0xF0) >> 4 | (Temp[1] & 0xF0);
+						Temp += 2;
 					}
 					break;
 			}
