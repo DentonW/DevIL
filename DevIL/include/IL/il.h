@@ -397,6 +397,7 @@ typedef long long unsigned int ILuint64;
 #define IL_PALETTE_BPP           0x0DEE
 #define IL_PALETTE_NUM_COLS      0x0DEF
 #define IL_PALETTE_BASE_TYPE     0x0DF0
+#define IL_NUM_FACES             0x0DE1
 #define IL_NUM_IMAGES            0x0DF1
 #define IL_NUM_MIPMAPS           0x0DF2
 #define IL_NUM_LAYERS            0x0DF3
@@ -500,6 +501,7 @@ typedef ILenum (ILAPIENTRY *IL_SAVEPROC)(ILconst_string);
 
 
 // ImageLib Functions
+ILAPI ILboolean ILAPIENTRY ilActiveFace(ILuint Number);
 ILAPI ILboolean ILAPIENTRY ilActiveImage(ILuint Number);
 ILAPI ILboolean ILAPIENTRY ilActiveLayer(ILuint Number);
 ILAPI ILboolean ILAPIENTRY ilActiveMipmap(ILuint Number);

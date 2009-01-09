@@ -57,8 +57,15 @@
 	MakeGLCompliant3D.
 	* ilut_opengl.c (ilutGLScreen): Added check for ilTexImage failing.
 	* il_vtf.c (iLoadVtfInternal): Added BGRA4444 support.
-	* il_alloc.c: Cleaned up formatting some.
+	* il_alloc.c / ilu_scale.c: Cleaned up formatting some.
 	* devil_internal_exports.h: Added Faces member to ILimage.
-	* il_devil.c (iCopySubImages): Added Faces support.
+	* il_devil.c (iCopySubImages): Added support for faces.
 	* il_register.c: Added ilRegisterNumFaces.
+	* il_convert.c (ilFixImage): Added support for faces.
+	* il_stack.c: Added ilActiveFace.
+	* ilut_directx9:63,779: Added ILboolean typecast.
+	* ilut_win32:102: Added ILboolean typecast.
+	* il_jpeg.c:987: Commented out pragma warning at the end.
+	* il_mng.c: Added #pragma warning at the top to get rid of redefinition warning when compiling.
+	* il_nvidia.cpp (ilNVidiaCompressDXT): Added check for Data being NULL.
 	

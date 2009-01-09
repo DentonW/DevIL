@@ -60,7 +60,7 @@ void CheckFormatsDX9(IDirect3DDevice9 *Device)
 	for (i = 0; i < ILUT_TEXTUREFORMAT_D3D9_COUNT; i++) {
 		hr = IDirect3D9_CheckDeviceFormat(TestD3D9, D3DADAPTER_DEFAULT,
 			D3DDEVTYPE_HAL, DispMode.Format, 0, D3DRTYPE_TEXTURE, FormatsDX9[i]);
-		FormatsDX9supported[i] = SUCCEEDED(hr);
+		FormatsDX9supported[i] = (ILboolean)SUCCEEDED(hr);
 	}
 
 	IDirect3D9_Release(TestD3D9);
@@ -776,7 +776,7 @@ ILAPI ILboolean ILAPIENTRY ilutD3D9LoadSurface(IDirect3DDevice9 *Device, IDirect
 
 	IDirect3DSurface9_GetDesc(Surface, &d3dsd);
 
-	bHasAlpha = (d3dsd.Format == D3DFMT_A8R8G8B8 || d3dsd.Format == D3DFMT_A1R5G5B5);
+	bHasAlpha = (ILboolean)(d3dsd.Format == D3DFMT_A8R8G8B8 || d3dsd.Format == D3DFMT_A1R5G5B5);
 
 	if (bHasAlpha) {
 		if (!ilTexImage(d3dsd.Width, d3dsd.Height, 1, 4, IL_BGRA, IL_UNSIGNED_BYTE, NULL)) {

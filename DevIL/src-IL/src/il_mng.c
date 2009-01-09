@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 01/09/2009
 //
 // Filename: src-IL/src/il_mng.c
 //
@@ -36,7 +36,18 @@
 	#endif
 #endif
 
+
+#if defined(_MSC_VER)
+	#pragma warning(push)
+	#pragma warning(disable : 4142)  // Redefinition in jmorecfg.h
+#endif
+
 #include <libmng.h>
+
+#if defined(_MSC_VER)
+	#pragma warning(pop)
+#endif
+
 
 //---------------------------------------------------------------------------------------------
 // memory allocation; data must be zeroed

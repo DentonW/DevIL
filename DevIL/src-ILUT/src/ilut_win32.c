@@ -99,7 +99,7 @@ ILAPI HBITMAP	ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 	info->bmiHeader.biClrImportant = 0;
 
 	pad = (4 - TempImage->Bps%4)%4;
-	alloc_buffer = !(pad == 0 && TempImage->Format != IL_RGB
+	alloc_buffer = (ILboolean)!(pad == 0 && TempImage->Format != IL_RGB
 		&& TempImage->Format != IL_RGBA && TempImage->Format != IL_LUMINANCE_ALPHA);
 	if(!alloc_buffer) {
 		Data = TempImage->Data;

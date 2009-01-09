@@ -86,6 +86,11 @@ struct ilOutputHandlerMem : public nvtt::OutputHandler
 //  The data must be in unsigned byte RGBA format.  The alpha channel will be ignored if DxtType is IL_DXT1.
 ILAPI ILubyte* ILAPIENTRY ilNVidiaCompressDXT(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILenum DxtType)
 {
+	if (Data == NULL) {  // We cannot operate on a null pointer.
+		ilSetError(IL_INVALID_PARAM);
+		return NULL;
+	}
+
 	// The nVidia Texture Tools library does not support volume textures yet.
 	if (Depth != 1) {
 		ilSetError(IL_INVALID_PARAM);

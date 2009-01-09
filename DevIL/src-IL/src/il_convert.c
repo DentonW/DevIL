@@ -1068,36 +1068,49 @@ be loaded anyway. Thanks to Chris Lux for pointing this out.
 
 ILboolean ilFixImage()
 {
+	ILuint NumFaces,  f;
 	ILuint NumImages, i;
 	ILuint NumMipmaps,j;
 	ILuint NumLayers, k;
 
-	NumImages  = ilGetInteger(IL_NUM_IMAGES);
+	NumImages = ilGetInteger(IL_NUM_IMAGES);
 	for (i = 0; i <= NumImages; i++) {
 		ilBindImage(ilGetCurName());  // Set to parent image first.
 		if (!ilActiveImage(i))
 			return IL_FALSE;
 
-		NumLayers = ilGetInteger(IL_NUM_LAYERS);
-		for (k = 0; k <= NumLayers; k++) {
+		NumFaces = ilGetInteger(IL_NUM_FACES);
+		for (f = 0; f <= NumFaces; f++) {
 			ilBindImage(ilGetCurName());  // Set to parent image first.
 			if (!ilActiveImage(i))
 				return IL_FALSE;
-			if (!ilActiveLayer(k))
+			if (!ilActiveFace(f))
 				return IL_FALSE;
 
-			NumMipmaps = ilGetInteger(IL_NUM_MIPMAPS);
-
-			for (j = 0; j <= NumMipmaps; j++) {
-				ilBindImage(ilGetCurName());	// Set to parent image first.
+			NumLayers = ilGetInteger(IL_NUM_LAYERS);
+			for (k = 0; k <= NumLayers; k++) {
+				ilBindImage(ilGetCurName());  // Set to parent image first.
 				if (!ilActiveImage(i))
+					return IL_FALSE;
+				if (!ilActiveFace(f))
 					return IL_FALSE;
 				if (!ilActiveLayer(k))
 					return IL_FALSE;
-				if (!ilActiveMipmap(j))
-					return IL_FALSE;
-				if (!ilFixCur())
-					return IL_FALSE;
+
+				NumMipmaps = ilGetInteger(IL_NUM_MIPMAPS);
+				for (j = 0; j <= NumMipmaps; j++) {
+					ilBindImage(ilGetCurName());	// Set to parent image first.
+					if (!ilActiveImage(i))
+						return IL_FALSE;
+					if (!ilActiveFace(f))
+						return IL_FALSE;
+					if (!ilActiveLayer(k))
+						return IL_FALSE;
+					if (!ilActiveMipmap(j))
+						return IL_FALSE;
+					if (!ilFixCur())
+						return IL_FALSE;
+				}
 			}
 		}
 	}

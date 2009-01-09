@@ -984,7 +984,7 @@ ILboolean ilSaveFromJpegStruct(void *_JpegInfo)
 
 #if defined(_MSC_VER)
 	#pragma warning(pop)
-	#pragma warning(disable : 4756)  // Disables 'named type definition in parentheses' warning
+	//#pragma warning(disable : 4756)  // Disables 'named type definition in parentheses' warning
 #endif
 
 #endif//IL_NO_JPG

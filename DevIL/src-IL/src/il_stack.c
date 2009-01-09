@@ -331,6 +331,40 @@ ILboolean ILAPIENTRY ilActiveImage(ILuint Number)
 }
 
 
+//! Used for setting the current face if it is a cubemap.
+ILboolean ILAPIENTRY ilActiveFace(ILuint Number)
+{
+	ILuint Current;
+    ILimage *iTempImage;
+
+	if (iCurImage == NULL) {
+		ilSetError(IL_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	if (Number == 0) {
+		return IL_TRUE;
+	}
+
+    iTempImage = iCurImage;
+	iCurImage = iCurImage->Faces;
+	//Number--;  // Skip 0 (parent image)
+	for (Current = 1; Current < Number; Current++) {
+		if (iCurImage == NULL) {
+			ilSetError(IL_INTERNAL_ERROR);
+			iCurImage = iTempImage;
+			return IL_FALSE;
+		}
+		iCurImage = iCurImage->Faces;
+	}
+
+	ParentImage = IL_FALSE;
+
+	return IL_TRUE;
+}
+
+
+
 //! Used for setting the current layer if layers exist.
 ILboolean ILAPIENTRY ilActiveLayer(ILuint Number)
 {
