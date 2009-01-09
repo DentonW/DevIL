@@ -21,7 +21,7 @@
 #include "il_bits.h"
 
 // According to the ppm specs, it's 70, but PSP
-//  likes to output longer lines...
+//  likes to output longer lines.
 #define MAX_BUFFER 180  
 static ILbyte LineBuffer[MAX_BUFFER];
 static ILbyte SmallBuff[MAX_BUFFER];
@@ -428,10 +428,10 @@ ILboolean iGetWord(ILboolean final)
 		return IL_FALSE;
 
 	while (Looping) {
-	    Current = igetc();
-		while (Current != IL_EOF && Current != '\n' && Current != '#' && Current != ' ') {
-			if (Current == IL_EOF)
+		while ((Current = igetc()) != IL_EOF && Current != '\n' && Current != '#' && Current != ' ') {
+			if (WordPos >= MAX_BUFFER)  // We have hit the maximum line length.
 				return IL_FALSE;
+
 			if (!isalnum(Current)) {
 				if (Started) {
 					Looping = IL_FALSE;
@@ -445,6 +445,8 @@ ILboolean iGetWord(ILboolean final)
 			if (final == IL_TRUE)
 		        break;
 		}
+		if (Current == IL_EOF)
+			return IL_FALSE;
 		SmallBuff[WordPos] = 0; // 08-17-2008 - was NULL, changed to avoid warning
 
 		if (!Looping)
