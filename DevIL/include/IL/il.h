@@ -559,6 +559,7 @@ ILAPI void      ILAPIENTRY ilPushAttrib(ILuint Bits);
 ILAPI void      ILAPIENTRY ilRegisterFormat(ILenum Format);
 ILAPI ILboolean ILAPIENTRY ilRegisterLoad(ILconst_string Ext, IL_LOADPROC Load);
 ILAPI ILboolean ILAPIENTRY ilRegisterMipNum(ILuint Num);
+ILAPI ILboolean ILAPIENTRY ilRegisterNumFaces(ILuint Num);
 ILAPI ILboolean ILAPIENTRY ilRegisterNumImages(ILuint Num);
 ILAPI void      ILAPIENTRY ilRegisterOrigin(ILenum Origin);
 ILAPI void      ILAPIENTRY ilRegisterPal(void *Pal, ILuint Size, ILenum Type);

@@ -58,3 +58,7 @@
 	* ilut_opengl.c (ilutGLScreen): Added check for ilTexImage failing.
 	* il_vtf.c (iLoadVtfInternal): Added BGRA4444 support.
 	* il_alloc.c: Cleaned up formatting some.
+	* devil_internal_exports.h: Added Faces member to ILimage.
+	* il_devil.c (iCopySubImages): Added Faces support.
+	* il_register.c: Added ilRegisterNumFaces.
+	

@@ -136,6 +136,7 @@ ILAPI ILboolean ILAPIENTRY ilTexImage_(ILimage *Image, ILuint Width, ILuint Heig
 
 	ilCloseImage(Image->Mipmaps);
 	ilCloseImage(Image->Next);
+	ilCloseImage(Image->Faces);
 	ilCloseImage(Image->Layers);
 
 	if (Image->AnimList) ifree(Image->AnimList);
@@ -810,6 +811,15 @@ ILboolean iCopySubImage(ILimage *Dest, ILimage *Src)
 
 ILboolean iCopySubImages(ILimage *Dest, ILimage *Src)
 {
+	if (Src->Faces) {
+		Dest->Faces = (ILimage*)icalloc(1, sizeof(ILimage));
+		if (!Dest->Faces) {
+			return IL_FALSE;
+		}
+		if (!iCopySubImage(Dest->Faces, Src->Faces))
+			return IL_FALSE;
+	}
+	
 	if (Src->Layers) {
 		Dest->Layers = (ILimage*)icalloc(1, sizeof(ILimage));
 		if (!Dest->Layers) {
@@ -818,7 +828,7 @@ ILboolean iCopySubImages(ILimage *Dest, ILimage *Src)
 		if (!iCopySubImage(Dest->Layers, Src->Layers))
 			return IL_FALSE;
 	}
-	
+
 	if (Src->Mipmaps) {
 		Dest->Mipmaps = (ILimage*)icalloc(1, sizeof(ILimage));
 		if (!Dest->Mipmaps) {
@@ -827,7 +837,7 @@ ILboolean iCopySubImages(ILimage *Dest, ILimage *Src)
 		if (!iCopySubImage(Dest->Mipmaps, Src->Mipmaps))
 			return IL_FALSE;
 	}
-	
+
 	if (Src->Next) {
 		Dest->Next = (ILimage*)icalloc(1, sizeof(ILimage));
 		if (!Dest->Next) {
@@ -836,7 +846,7 @@ ILboolean iCopySubImages(ILimage *Dest, ILimage *Src)
 		if (!iCopySubImage(Dest->Next, Src->Next))
 			return IL_FALSE;
 	}
-	
+
 	return IL_TRUE;
 }
 
@@ -852,6 +862,10 @@ ILAPI ILboolean ILAPIENTRY ilCopyImageAttr(ILimage *Dest, ILimage *Src)
 	if (Dest->Pal.Palette && Dest->Pal.PalSize && Dest->Pal.PalType != IL_PAL_NONE) {
 		ifree(Dest->Pal.Palette);
 		Dest->Pal.Palette = NULL;
+	}
+	if (Dest->Faces) {
+		ilCloseImage(Dest->Faces);
+		Dest->Faces = NULL;
 	}
 	if (Dest->Layers) {
 		ilCloseImage(Dest->Layers);

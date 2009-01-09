@@ -265,6 +265,43 @@ void ILAPIENTRY ilRegisterFormat(ILenum Format)
 }
 
 
+ILboolean ILAPIENTRY ilRegisterNumFaces(ILuint Num)
+{
+	ILimage *Next, *Prev;
+
+	ilBindImage(ilGetCurName());  // Make sure the current image is actually bound.
+	ilCloseImage(iCurImage->Faces);  // Close any current mipmaps.
+
+	iCurImage->Faces = NULL;
+	if (Num == 0)  // Just gets rid of all the mipmaps.
+		return IL_TRUE;
+
+	iCurImage->Faces = ilNewImage(1, 1, 1, 1, 1);
+	if (iCurImage->Faces == NULL)
+		return IL_FALSE;
+	Next = iCurImage->Faces;
+	Num--;
+
+	while (Num) {
+		Next->Faces = ilNewImage(1, 1, 1, 1, 1);
+		if (Next->Faces == NULL) {
+			// Clean up before we error out.
+			Prev = iCurImage->Faces;
+			while (Prev) {
+				Next = Prev->Faces;
+				ilCloseImage(Prev);
+				Prev = Next;
+			}
+			return IL_FALSE;
+		}
+		Next = Next->Faces;
+		Num--;
+	}
+
+	return IL_TRUE;
+}
+
+
 ILboolean ILAPIENTRY ilRegisterMipNum(ILuint Num)
 {
 	ILimage *Next, *Prev;

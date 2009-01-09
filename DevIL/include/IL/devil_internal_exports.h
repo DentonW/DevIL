@@ -74,6 +74,7 @@ typedef struct ILimage
 	ILenum          CubeFlags;   // cube map flags for sides present in chain
 	struct ILimage* Mipmaps;     // mipmapped versions of this image terminated by a NULL - usu. NULL
 	struct ILimage* Next;        // next image in the chain - usu. NULL
+	struct ILimage* Faces;       // next cubemap face in the chain - usu. NULL
 	struct ILimage* Layers;      // subsequent layers in the chain - usu. NULL
 //	ILuint          NumNext;     // number of images following this one (0 when not parent). These are calculated on request
 //	ILuint	        NumMips;     // number of mipmaps (0 when not parent)
