@@ -3,7 +3,14 @@ AC_DEFUN([IL_REPORT],
 AS_IF([test "x$enable_IL" = "xyes"],
       [AC_MSG_NOTICE([\| IL library  Supported formats \|])
        AC_MSG_NOTICE([+----------------------------------------+-------+])
-       AC_MSG_NOTICE([$SUPPORTED_FORMATS]) ],
+       AC_MSG_NOTICE([$SUPPORTED_FORMATS]) 
+       AC_MSG_NOTICE([+----------------------------------------+])
+       AC_MSG_NOTICE([\| IL library External libraries \|]) 
+       AC_MSG_NOTICE([+----------------------------------------+-------+])
+       AC_MSG_NOTICE([Required libs: $IL_LIBS_REQUIRED])
+       AS_IF([test "x$enable_modules" = "xyes"],
+             [AC_MSG_NOTICE([+----------------------------------------+-------+])
+              AC_MSG_NOTICE([Optional libs: $IL_LIBS_OPTIONAL]) ]) ],
       [AC_MSG_NOTICE([\| IL disabled (huh? good luck!) \|]) ]) ])
 
 AC_DEFUN([ILU_REPORT],

@@ -117,6 +117,21 @@ AC_DEFUN([TEST_FORMAT],
                [AC_MSG_RESULT([yes]) 
                 SUPPORTED_FORMATS="$SUPPORTED_FORMATS $2"]) 
          lib_test_result="" ])
+
+dnl
+dnl Adds a library to human-readable list of dependencies
+dnl
+dnl Usage:
+dnl MAYBE_OPTIONAL_DEPENDENCY(<library part prefix>, <library name>)
+dnl for example:
+dnl MAYBE_OPTIONAL_DEPENDENCY([IL], [libjpeg])
+dnl MAYBE_OPTIONAL_DEPENDENCY([ILUT], [allegro])
+dnl
+AC_DEFUN([MAYBE_OPTIONAL_DEPENDENCY],
+         [AS_IF([test "x$enable_modules" = "xyes"],
+                [$1_LIBS_OPTIONAL="${$1_LIBS_OPTIONAL} $2"],
+                [$1_LIBS_REQUIRED="${$1_LIBS_REQUIRED} $2"]) ])
+
 dnl
 dnl Check for libraries
 dnl
@@ -149,6 +164,7 @@ AS_IF([test "x$lcms_nodirinclude" = "xyes"],
                  [LCMS include without lcms/ support]) ])
 AS_IF([test "x$have_lcms_lib" = "xyes" -a "x$have_lcms_h" = "xyes"],
       [have_lcms="yes"
+       IL_LIBS_REQUIRED="$IL_LIBS_REQUIRED lcms"
        lib_test_result="yes"],
       [lib_test_result="no"]) ])
 
@@ -157,6 +173,8 @@ AC_DEFUN([SETTLE_OPENEXR],
                             [OpenEXR],
                             [have_openexr="yes"],
                             [have_openexr="no"])
+          MAYBE_OPTIONAL_DEPENDENCY([IL],
+                                    [OpenEXR])
           IL_LIBS="$OPENEXR_LIBS $IL_LIBS"
           IL_CFLAGS="$OPENEXR_CFLAGS $IL_CFLAGS"
           lib_test_result="$have_openexr"])
@@ -167,7 +185,10 @@ AC_DEFUN([SETTLE_JPEG],
           AC_DEFINE([IL_USE_JPEGLIB_UNMODIFIED],
                     [1],
                     [Use libjpeg without modification. always enabled.])
-          lib_test_result="$have_jpeg"])
+          lib_test_result="$have_jpeg"
+          AS_IF([test "x$lib_test_result" = "xyes"],
+                [MAYBE_OPTIONAL_DEPENDENCY([IL],
+                                           [libjpeg]) ]) ]) 
 
 AC_DEFUN([SETTLE_JASPER],
          [DEVIL_IL_LIB([jasper/jasper.h],
@@ -176,12 +197,18 @@ AC_DEFUN([SETTLE_JASPER],
                 [DEVIL_IL_LIB([jasper/jasper.h],
                               [jp2])
                  lib_test_result="$have_jp2" ],
-                [lib_test_result="yes"]) ])
+                [lib_test_result="yes"]) 
+          AS_IF([test "x$lib_test_result" = "xyes"],
+                [MAYBE_OPTIONAL_DEPENDENCY([IL],
+                                           [JasPer]) ]) ])
 
 AC_DEFUN([SETTLE_MNG],
          [DEVIL_IL_LIB([libmng.h],
                        [mng])
-          lib_test_result="$have_mng" ])
+          lib_test_result="$have_mng" 
+          AS_IF([test "x$lib_test_result" = "xyes"],
+                [MAYBE_OPTIONAL_DEPENDENCY([IL],
+                                           [libmng]) ]) ]) 
 
 AC_DEFUN([SETTLE_PNG],
          [DEVIL_IL_LIB([png.h],
@@ -190,12 +217,18 @@ AC_DEFUN([SETTLE_PNG],
                 [DEVIL_IL_LIB([png.h],
                               [png]) 
                  lib_test_result="$have_png"],
-                [lib_test_result="$have_png12"]) ])
+                [lib_test_result="$have_png12"]) 
+          AS_IF([test "x$lib_test_result" = "xyes"],
+                [MAYBE_OPTIONAL_DEPENDENCY([IL],
+                                           [libpng]) ]) ]) 
 
 AC_DEFUN([SETTLE_TIFF],
          [DEVIL_IL_LIB([tiffio.h],
                        [tiff])
-          lib_test_result="$have_tiff" ])
+          lib_test_result="$have_tiff" 
+          AS_IF([test "x$lib_test_result" = "xyes"],
+                [MAYBE_OPTIONAL_DEPENDENCY([IL],
+                                           [libtiff]) ]) ]) 
 
 dnl
 dnl ILUT APIs checking

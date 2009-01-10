@@ -17,7 +17,7 @@
 	to coincide with the old SVN version.
 	* il_tiff.c / il_alloc.c: Fixed a few pointer casts that were fixed in SVN.
 	* test/DDrawTest: Fixed extra whitespace in all files in this project.
-	* il_endian.h (iSwapUShort/iSwapUInt): Fixed bug #2023453 (inline GCC asm).
+	* il_endian.h (iGwapUShort/iSwapUInt): Fixed bug #2023453 (inline GCC asm).
 	* ilut_win32.c (ilutConvertSliceToBitmap): Fixed bug #1775036 (definition of buff).
 	* il_psd.c (PsdGetData): Fixed bug #2219350 (16-bit luminance images not loading properly).
 	* il_manip.c: Cleared up some minor formatting issues.
@@ -79,3 +79,14 @@
 	* il_gif.c (GifGetData): Added DataPtr and changed line 636 to use Data instead of Image->Data.
 	* il_gif.c (iGetPalette / GetImages): Changed to better deal with local palettes.
 	
+2009-01-10 Matěj Týč <bubla@sf.net>
+	* m4/devil-definitions.m4, m4/devil-reports.m4: Added a report saying
+	what libraries were linked with DevIL (should be helpful to packagers
+	who need to know DevIL dependencies)
+	* il_endian.h (iGwapUShort/iSwapUInt): Finished fixing bug #2023453
+	(inline GCC asm, there was a typo left)
+	* src_IL/src/il_tiff.c (ilSaveTiff): Fixed a typo that was causing
+	confilicting declarations error
+	* configure.ac:264: Added IL_NO_WBMP since the Wbmp loading functions
+	that are referenced, but not implemented, caused linking errors
+

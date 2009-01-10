@@ -83,7 +83,7 @@ dnl
 SUPPORTED_FORMATS=""
 SUPPORTED_API=""
 SUPPORTED_EXTENSION=""
-AC_REVISION([$Revision: 1.47 $])
+AC_REVISION([$Revision: 1.48 $])
 dnl AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
@@ -288,6 +288,10 @@ TEST_FORMAT([tiff],[TIF], [SETTLE_TIFF])
 TEST_FORMAT([xpm], [XPM])
 TEST_FORMAT([wal], [WAL])
 TEST_FORMAT([wdp], [WDP])
+
+AC_DEFINE([IL_NO_WBMP],
+	  [1],
+	  [WBMP loading is not implemented  yet])
 
 dnl
 dnl ILUT APIs library checking
