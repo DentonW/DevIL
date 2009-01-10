@@ -75,3 +75,7 @@
 	* il_pnm.c (iGetWord): Fixed bug mentioned in #2496518 - igetc was moved back
 	into the while loop.  Added a check for WordPos to prevent buffer overflow.
 	Restructured the while loop to work properly.
+	* il_convert.c (iConvertPalette): Changed references of iCurImage to Image.
+	* il_gif.c (GifGetData): Added DataPtr and changed line 636 to use Data instead of Image->Data.
+	* il_gif.c (iGetPalette / GetImages): Changed to better deal with local palettes.
+	

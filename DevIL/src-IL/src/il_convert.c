@@ -33,7 +33,7 @@ ILimage *iConvertPalette(ILimage *Image, ILenum DestFormat)
 
 	ilCopyImageAttr(NewImage, Image);
 
-	if (!iCurImage->Pal.Palette || !iCurImage->Pal.PalSize || iCurImage->Pal.PalType == IL_PAL_NONE || iCurImage->Bpp != 1) {
+	if (!Image->Pal.Palette || !Image->Pal.PalSize || Image->Pal.PalType == IL_PAL_NONE || Image->Bpp != 1) {
 		ilCloseImage(NewImage);
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return NULL;
@@ -295,7 +295,7 @@ ILAPI ILimage* ILAPIENTRY iConvertImage(ILimage *Image, ILenum DestFormat, ILenu
 		NewImage = iConvertPalette(Image, DestFormat);
 
 		//added test 2003-09-01
-		if(NewImage == NULL)
+		if (NewImage == NULL)
 			return NULL;
 
 		if (DestType == NewImage->Type)

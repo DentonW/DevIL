@@ -73,6 +73,7 @@ Denton:
 - Get il_vtf.c to do less memory allocation.  Just use the precache function.
 - Should iluScale act on faces and mipmaps?
 - Change how mipmaps are stored (do not use Next pointer in ILimage).
+- In il_gif.c, make sure subimages with offsets will not lead to an overflow.
 
 Matej:
 - Make a test suite

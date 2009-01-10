@@ -57,7 +57,8 @@ HBRUSH BackBrush;
 #define TITLE		L"DevIL Windows Test"
 ILuint	NumUndosAllowed = 4, UndoSize = 0;
 ILuint	Undos[11] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-ILuint	Width, Height, Depth, CurImage;  // Main image
+ILuint	Width, Height, Depth;  // Main image
+ILint	CurImage;
 TCHAR	CurFileName[2048];
 
 ILint	XOff, YOff;
@@ -378,6 +379,30 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			if (wParam == VK_ESCAPE)
 				PostQuitMessage(0);
 
+			// View the next image in the animation chain.
+			if (wParam == VK_RIGHT) {
+				ilBindImage(Undos[0]);  // @TODO: Implement undos better with this.
+				CurImage++;
+				if (CurImage > ilGetInteger(IL_NUM_IMAGES))
+					CurImage = 0;  // Go back to the beginning of the animation.
+				ilActiveImage(CurImage);
+				ilutRenderer(ILUT_WIN32);
+				ResizeWin();
+				CreateGDI();
+			}
+
+			// View the previous image in the animation chain.
+			if (wParam == VK_LEFT) {
+				ilBindImage(Undos[0]);  // @TODO: Implement undos better with this.
+				CurImage--;
+				if (CurImage < 0)
+					CurImage = 0;
+				ilActiveImage(CurImage);
+				ilutRenderer(ILUT_WIN32);
+				ResizeWin();
+				CreateGDI();
+			}
+
 			InvalidateRect(hWnd, NULL, FALSE);
 			break;
 
@@ -579,7 +604,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					ilBindImage(Undos[0]);
 
 					//last_elapsed = SDL_GetTicks();
-					ilLoadImage(OpenFileName);
+					if (!ilLoadImage(OpenFileName))
+						return (0L);
 					CurImage = 0;
 					//cur_elapsed = SDL_GetTicks();
 					//elapsed = cur_elapsed - last_elapsed;

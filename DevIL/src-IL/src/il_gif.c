@@ -169,7 +169,7 @@ ILboolean iLoadGifInternal()
 
 	// Check for a global colour map.
 	if (Header.ColourInfo & (1 << 7)) {
-		if (!iGetPalette(Header.ColourInfo, &GlobalPal)) {
+		if (!iGetPalette(Header.ColourInfo, &GlobalPal, IL_FALSE, NULL)) {
 			return IL_FALSE;
 		}
 	}
@@ -188,18 +188,39 @@ ILboolean iLoadGifInternal()
 }
 
 
-ILboolean iGetPalette(ILubyte Info, ILpal *Pal)
+ILboolean iGetPalette(ILubyte Info, ILpal *Pal, ILboolean UsePrevPal, ILimage *PrevImage)
 {
+	ILuint PalSize, PalOffset = 0;
+
+	// If we have a local palette and have to use the previous frame as well,
+	//  we have to copy the palette from the previous frame, in addition
+	//  to the data, which we copy in GetImages.
 
 	// The ld(palettes bpp - 1) is stored in the lower
-
 	// 3 bits of Info (weird gif format ... :) )
-	Pal->PalSize = (1 << ((Info & 0x7) + 1)) * 3;
+	PalSize = (1 << ((Info & 0x7) + 1)) * 3;
+	if (UsePrevPal) {
+		if (PrevImage == NULL) {  // Cannot use the previous palette if it does not exist.
+			ilSetError(IL_ILLEGAL_FILE_VALUE);
+			return IL_FALSE;
+		}
+		PalSize = PalSize + PrevImage->Pal.PalSize;
+		PalOffset = PrevImage->Pal.PalSize;
+	}
+	if (PalSize > 256 * 3) {
+		ilSetError(IL_ILLEGAL_FILE_VALUE);
+		return IL_FALSE;
+	}
+	Pal->PalSize = PalSize;
+
 	Pal->PalType = IL_PAL_RGB24;
-	Pal->Palette = (ILubyte*)ialloc(Pal->PalSize);
+	//Pal->Palette = (ILubyte*)ialloc(Pal->PalSize);
+	Pal->Palette = (ILubyte*)ialloc(256 * 3);
 	if (Pal->Palette == NULL)
 		return IL_FALSE;
-	if (iread(Pal->Palette, 1, Pal->PalSize) != Pal->PalSize) {
+	if (UsePrevPal)
+		memcpy(Pal->Palette, PrevImage->Pal.Palette, PrevImage->Pal.PalSize);  // Copy the old palette over.
+	if (iread(Pal->Palette + PalOffset, 1, Pal->PalSize) != Pal->PalSize) {  // Read the new palette.
 		ifree(Pal->Palette);
 		Pal->Palette = NULL;
 		return IL_FALSE;
@@ -214,9 +235,10 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 	IMAGEDESC	ImageDesc, OldImageDesc;
 	GFXCONTROL	Gfx;
 	ILboolean	BaseImage = IL_TRUE;
-	ILimage		*Image = iCurImage, *TempImage = NULL;
+	ILimage		*Image = iCurImage, *TempImage = NULL, *PrevImage = NULL;
 	ILuint		NumImages = 0, i;
 	ILint		input;
+	ILuint		PalOffset;
 
 	OldImageDesc.ImageInfo = 0; // to initialize the data with an harmless value 
 	Gfx.Used = IL_TRUE;
@@ -276,6 +298,7 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 					goto error_clean;
 			}
 
+			PrevImage = Image;
 			Image = Image->Next;
 			Image->Format = IL_COLOUR_INDEX;
 			Image->Origin = IL_ORIGIN_UPPER_LEFT;
@@ -289,10 +312,16 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 
 		Image->OffX = ImageDesc.OffX;
 		Image->OffY = ImageDesc.OffY;
+		PalOffset = 0;
 
 		// Check to see if the image has its own palette.
 		if (ImageDesc.ImageInfo & (1 << 7)) {
-			if (!iGetPalette(ImageDesc.ImageInfo, &Image->Pal)) {
+			ILboolean UsePrevPal = IL_FALSE;
+			if (DisposalMethod == 1 && NumImages != 0) {  // Cannot be the first image for this.
+				PalOffset = PrevImage->Pal.PalSize;
+				UsePrevPal = IL_TRUE;
+			}
+			if (!iGetPalette(ImageDesc.ImageInfo, &Image->Pal, UsePrevPal, PrevImage)) {
 				goto error_clean;
 			}
 		} else {
@@ -302,7 +331,8 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead)
 		}
 
 		if (!GifGetData(Image, Image->Data + ImageDesc.OffX + ImageDesc.OffY*Image->Width, Image->SizeOfData,
-				ImageDesc.Width, ImageDesc.Height, Image->Width, &Gfx)) {
+				ImageDesc.Width, ImageDesc.Height, Image->Width, PalOffset, &Gfx)) {
+			memset(Image->Data, 0, Image->SizeOfData);  //@TODO: Remove this.  For debugging purposes right now.
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
 			goto error_clean;
 		}
@@ -508,13 +538,14 @@ static void cleanUpGifLoadState()
 
 }
 
-ILboolean GifGetData(ILimage *Image, ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Height, ILuint Stride, GFXCONTROL *Gfx)
+ILboolean GifGetData(ILimage *Image, ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Height, ILuint Stride, ILuint PalOffset, GFXCONTROL *Gfx)
 {
 	ILubyte	*sp;
 	ILint	code, fc, oc;
 	ILubyte	DisposalMethod = 0;
 	ILint	c, size;
 	ILuint	i = 0, Read = 0, j = 0;
+	ILubyte	*DataPtr = Data;
 
 	if (!Gfx->Used)
 		DisposalMethod = (Gfx->Packed & 0x1C) >> 2;
@@ -559,11 +590,11 @@ ILboolean GifGetData(ILimage *Image, ILubyte *Data, ILuint ImageSize, ILuint Wid
 			if (DisposalMethod == 1 && !Gfx->Used && Gfx->Transparent == c && (Gfx->Packed & 0x1) != 0)
 				i++;
 			else if (i < Width)
-				Data[i++] = c;
+				DataPtr[i++] = c + PalOffset;
 
 			if (i == Width)
 			{
-				Data += Stride;
+				DataPtr += Stride;
 				i = 0;
 				Read += 1;
                 ++j;
@@ -624,14 +655,15 @@ ILboolean GifGetData(ILimage *Image, ILubyte *Data, ILuint ImageSize, ILuint Wid
 				if (DisposalMethod == 1 && !Gfx->Used && Gfx->Transparent == *sp && (Gfx->Packed & 0x1) != 0)
 					i++;
 				else if (i < Width)
-					Data[i++] = *sp;
+					DataPtr[i++] = *sp + PalOffset;
 
 				if (i == Width)
 				{
 					i = 0;
 					Read += 1;
                     j = (j+1) % Height;
-                    Data = Image->Data + j*Stride;
+					// Needs to start from Data, not Image->Data.
+					DataPtr = Data + j * Stride;
 				}
 			}
 		}
