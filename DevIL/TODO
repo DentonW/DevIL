@@ -74,6 +74,8 @@ Denton:
 - Should iluScale act on faces and mipmaps?
 - Change how mipmaps are stored (do not use Next pointer in ILimage).
 - In il_gif.c, make sure subimages with offsets will not lead to an overflow.
+- Check ASCII PPM code for the ability to read data that wraps around to multiple lines.
+
 
 Matej:
 - Make a test suite
