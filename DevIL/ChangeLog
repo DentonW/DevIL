@@ -90,3 +90,10 @@
 	* configure.ac:264: Added IL_NO_WBMP since the Wbmp loading functions
 	that are referenced, but not implemented, caused linking errors
 
+2009-01-11 Denton Woods <doomwiz@users.sf.net>
+	* MSVC9 Unicode projects: Updated to work better in 64-bit Windows.
+	* il_vtf.c: Removed commented lines 238-242.
+	* Created application to copy DLL files to the System32 directory.
+	
+2009-01-12 Denton Woods <doomwiz@users.sf.net>
+	* ilut_directx9.c: Cleared up formatting some.
