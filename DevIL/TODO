@@ -3,78 +3,129 @@ DevIL TODO:
 -----------
 
 Denton:
+
+Easier:
 - iGetString may not work properly with Unicode strings.
-- Linux Unicode support is partially broken.
 - Add ilIsValid* for .icns and .jp2 (and more?)
+- Fix Daniel's suggestions.
+- Added ilSetError error codes to il_files.c.
+- Get rid of check for precache.
+- NTSC function
+
+
+More involved:
 - Commenting out lines 729-731 in pngread.c of libpng (1.2.9?) will allow reading of certain malformed Vista PNG-compressed .ico files with extra data at the end of the stream.  An example can be found in test/in and was created using Microangelo.
 - Add .ico/.icns saving.
-- Write own .exr routines.
 - Add .exr saving.
 - Add .jp2 saving.
-- Fix Daniel's suggestions.
 - Readd CMAKE support
-- Possibly readd VC6 projects?
 - Better static lib support in MSVC++ 8/9
-- Enable descriptive error strings in IL.
 - Lib EXIF support
 - FITS support
 - APNG support
-- D language support - There exists a program to convert C headers to D.
 - Fortran support
+- D language support - There exists a program to convert C headers to D.
 - JP2 and EXR loading from file streams.
-- Librsvg
-- .iff support?
-- Respond to all forum requests.
-- Add BeOS support back in?
+- .iff support
 - Look into bug when rescaling.
-- Figure out how to properly do 8-bit -> 16-bit conversions.
-- Create Dev-C++/MingW/Cygwin .a files for releases?
-- Added ilSetError error codes to il_files.c.
 - Better DirectX 10 support
-- Does ilIsValidTga generate an unncessary IL_INVALID_EXTENSION error?
 - Should probably check for errors in iGetWdpHead and etc...
-- Why is IL_HALF even used in ilut_directx9.c?
 - ilGetAlpha returns malloc'ed memory that cannot be freed by the caller.
-- Give estimates for buffer sizes for ilSaveL.
-- http://developer.nvidia.com/object/texture_tools.html - They have CUDA code to compress DXT.
 - Support for DX10 .dds files
 - More checks for headers of unknown file types
 - Set CompSize in ReadData of il_dds.c for DDS_LINEARSIZE flag?
-- Get rid of check for precache.
+- It looks like PhotoCD support was disabled.  Why?
 - Look at resize filters in VTFEdit.
 - Get rid of globals in il_dds.c.
-- il_bmp.c may not be safe for Big Endian for 16-bit data.
-- cubemap.hdr.vtf does not load.
-- Better quality DDS saving (as an option).
-- VTF BGRA4444
-- Printing not working from Windows test.
-- Upload cubemaps directly to OpenGL/D3D.
-- Add flag for determining whether DDS data is outdated.
-- Add function to create cubemaps?
-- Freebasic support
-- Native WDP support
-- Check for any external library pointers that are assumed to be 32-bit.
-- Use fseek/ftell 64-bit?
 - TIFF with JPEG encoding
-- Reorder loading/saving in il_io.c
-- TIFF saving to file streams and lumps
-- NTSC function
-- Thread safe version
-- Change some calls (such as in il_tiff.c) to ilGetString to non-Unicode.
-- MNG saving
+- Bicubic scaling
 - Use glTexImage3D and update OpenGL calls.
-- New Faces member in ilImage?
-- Possibly make palettes always 768 (or 1024) bytes so that it is not possible to access outside by bad data?
-- Check return on all ilFixImage calls.
-- Implement saving of more formats.
-- Check for 64-bit problems (try compiling WindowsTest in XP x64).
-- It looks like PhotoCD support was disabled.  Why?
-- Request compressed texture data in ilutGLSetTex2D?
+- Freebasic support
+- Reorder loading/saving in il_io.c
 - Get il_vtf.c to do less memory allocation.  Just use the precache function.
-- Should iluScale act on faces and mipmaps?
-- Change how mipmaps are stored (do not use Next pointer in ILimage).
 - In il_gif.c, make sure subimages with offsets will not lead to an overflow.
+- il_bmp.c may not be safe for Big Endian for 16-bit data.
+- Change how mipmaps are stored (do not use Next pointer in ILimage).
 - Check ASCII PPM code for the ability to read data that wraps around to multiple lines.
+- cubemap.hdr.vtf does not load.
+- Check return on all ilFixImage calls.
+- Printing not working from Windows test.
+- Better quality DDS saving (as an option).
+- Add function to create cubemaps
+- Request compressed texture data in ilutGLSetTex2D?
+- Upload cubemaps directly to OpenGL/D3D.
+- Change some calls (such as in il_tiff.c) to ilGetString to non-Unicode.
+- Look at .cgm support.
+- libsquish support for better quality DXTC.
+- Check saving of Luminance (8 bpp/1 Bpp) BMP
+- Check compatibility with all the files in the BMP Suite.
+- IL_COLOUR_INDEX:  must be implemented in iluReplaceColour(ILubyte Red, ILubyte Green, ILubyte Blue, ILfloat Tolerance);
+- iluEqualize must be implemented for various Bpc
+- Update the state stack in IL.  Right now, it only saves part of the states when you push/pop.
+
+
+Lots of work:
+- Linux Unicode support is partially broken.
+- Write own .exr routines.
+- Native WDP support
+- Enable descriptive error strings in IL.
+- Librsvg
+- Give estimates for buffer sizes for ilSaveL.
+- MNG saving
+- Thread safe version
+- Add flag for determining whether DDS data is outdated.
+- TIFF saving to file streams and lumps
+- Use fseek/ftell 64-bit?
+- Check for any external library pointers that are assumed to be 32-bit.
+- Possibly make palettes always 768 (or 1024) bytes so that it is not possible to access outside by bad data?
+- Add padding options, so that each line could be DWORD-padded, for instance.
+- Add dithering.
+- Work on making DevIL more stable.  There's probably a few places where I don't check the return value of ilNewImage, for instance.
+- Add support for callbacks so that users can create progress meters for loading and saving in their applications.  We could extend this idea further and allow cancellation of loading/saving images.
+- global use of restricted pointers where available (for now only il_bmp.{c,h} uses it)
+- iluScaleColours is BUGGED, doesn't handle the image with the correct type! more Bpc (except luminance and paletted one)
+- Add a real Layer facility.
+- IL_LUMINANCE_ALPHA support must be tested in ilApplyPal();
+- ilApplyPal should work on any type of image, not only IL_BYTE or IL_UNSIGNED_BYTE
+- Look at adding FreeType support to ILU.
+- Work on the signed/unsigned conversions a bit more (IL_BYTE versus IL_UNSIGNED_BYTE, etc.).  A good link for defining signed formats is http://www.sgi.com/software/opengl/advanced98/notes/node31.html .
+- Add TWAIN support.
+- Add clipboard and printing support in Linux.
+- Finish support for regions in ILU.
+- Add support for regions in IL.  This could be used to save only a specific portion of an image.
+- Add support for user-defined filters (possibly of a user-defined size).
+- Add more filters.  Some sites to look at are http://www.jasonwaltman.com/thesis/introduction.html http://www.dai.ed.ac.uk/CVonline/transf.htm http://www.fortunecity.com/lavendar/kane/39/ffpg.htm and http://www.opengl.org/developers/documentation/Version1.2/1.2specs/convolution_border_modes.txt .  The last link describes ways to handle borders for the convolution filters.  It might be worthwhile to allow these kinds of options.
+- Possibly add support for other colour spaces besides RGB (CMYK, YUV, etc.)
+- Implement a scripting "language" with LUA for ILU.  This way, people can generate scripts to run a certain set of filters on all images.
+- Look at other rescaling algorithms:
+http://java.sun.com/products/java-media/jai/forDevelopers/jai1_0guide/Geom-image-manip.doc.html
+http://java.sun.com/products/java-media/jai/forDevelopers/jai1_0guide/Geom-image-manip.doc.html#55431
+http://www.npac.syr.edu/projects/nasa/MILOJE/final/node36.html
+http://www.ultranet.com/~aramini/design.html
+- ilKeyColor ilAddKey...
+- Find a way to make the filters (especially the convolution filters) work in three dimensions.
+- Make better versions of the DevIL ports of the NeHe tutorials.  Several of the tutorials don't call ilInit, for instance.
+
+
+Questions:
+- Possibly readd VC6 projects?
+- Add BeOS support back in?
+- Create Dev-C++/MingW/Cygwin .a files for releases?
+- Does ilIsValidTga generate an unncessary IL_INVALID_EXTENSION error?
+- Why is IL_HALF even used in ilut_directx9.c?
+- Should iluScale act on faces and mipmaps?
+- Fix problems loading .dds files on Big Endian machines (still a problem or not?)
+
+
+From old TODO:
+For 1.7.0
+- fixed OpenGL Loading (breaks old code which inverted the images)
+- iluReplaceColour should have a color to describe which color to set.
+- ilBindImage must return a result. It may fail!
+- ilInit() call iSetImage0 and ilBindTemp. This shouldn't happen and image names must start from 0
+- Rename iGetIntegervImage to ilGetImageIntegerv and make it public
+
+
 
 
 Matej:
@@ -83,50 +134,3 @@ Matej:
 - Make DevIL parts that require external libraries modular
 - Make the library include files correct (fix the config.h problem)
 
-For 1.7.0
-- fixed OpenGL Loading (breaks old code which inverted the images)
-- iluReplaceColour should have a color to describe which color to set.
-- ilBindImage must return a result. It may fail!
-- ilInit() call iSetImage0 and ilBindTemp. This shouldn't happen and image names must start from 0
-- Rename iGetIntegervImage to ilGetImageIntegerv and make it public
-
-Features to be added
-- global use of restricted pointers where available (for now only il_bmp.{c,h} uses it)
-- Add a real Layer facility.
-- iluScaleColours is BUGGED, doesn't handle the image with the correct type! more Bpc (except luminance and paletted one)
-- IL_LUMINANCE_ALPHA support must be tested in ilApplyPal();
-- ilApplyPal should work on any type of image, not only IL_BYTE or IL_UNSIGNED_BYTE
-- IL_COLOUR_INDEX:  must be implemented in iluReplaceColour(ILubyte Red, ILubyte Green, ILubyte Blue, ILfloat Tolerance);
-- Check saving of Luminance (8 bpp/1 Bpp) BMP
-- ilKeyColor ilAddKey...
-- iluRotate3D
-- iluEqualize must be implemented for various Bpc
-- Add more filters.  Some sites to look at are http://www.jasonwaltman.com/thesis/introduction.html http://www.dai.ed.ac.uk/CVonline/transf.htm http://www.fortunecity.com/lavendar/kane/39/ffpg.htm and http://www.opengl.org/developers/documentation/Version1.2/1.2specs/convolution_border_modes.txt .  The last link describes ways to handle borders for the convolution filters.  It might be worthwhile to allow these kinds of options.
-- Add support for callbacks so that users can create progress meters for loading and saving in their applications.  We could extend this idea further and allow cancellation of loading/saving images.
-- Add an IL_BITMAP format.  This would be great for WBMP files.  The problem is that bit manipulation can be extremely tedious, even with macros.
-- Make better versions of the DevIL ports of the NeHe tutorials.  Several of the tutorials don't call ilInit, for instance.
-- Add support for volume texture compression (VTC).
-- Find a way to make the filters (especially the convolution filters) work in three dimensions.
-- Finish support for regions in ILU.
-- Add support for regions in IL.  This could be used to save only a specific portion of an image.
-- Add support for user-defined filters (possibly of a user-defined size).
-- Update the state stack in IL.  Right now, it only saves part of the states when you push/pop.
-- Check compatibility with all the files in the BMP Suite.
-- Work on making DevIL more stable.  There's probably a few places where I don't check the return value of ilNewImage, for instance.
-- Add dithering.
-- Look at .cgm support.
-- Add padding options, so that each line could be DWORD-padded, for instance.
-- Work on better .tif loading and saving.  DevIL needs to use lower-level libtiff functions to accomplish this.
-- Find a better algorithm for generating DXTC textures.
-- Fix problems loading .dds files on Big Endian machines.
-- Work on the signed/unsigned conversions a bit more (IL_BYTE versus IL_UNSIGNED_BYTE, etc.).  A good link for defining signed formats is http://www.sgi.com/software/opengl/advanced98/notes/node31.html .
-- Possibly add support for other colour spaces besides RGB (CMYK, YUV, etc.)
-- Look at adding FreeType support to ILU.
-- Implement a scripting "language" with LUA for ILU.  This way, people can generate scripts to run a certain set of filters on all images.
-- Add clipboard and printing support in Linux.
-- Add TWAIN support.
-- Look at other rescaling algorithms:
-http://java.sun.com/products/java-media/jai/forDevelopers/jai1_0guide/Geom-image-manip.doc.html
-http://java.sun.com/products/java-media/jai/forDevelopers/jai1_0guide/Geom-image-manip.doc.html#55431
-http://www.npac.syr.edu/projects/nasa/MILOJE/final/node36.html
-http://www.ultranet.com/~aramini/design.html
