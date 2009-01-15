@@ -11,10 +11,6 @@
 //-----------------------------------------------------------------------------
 
 
-// @TODO:  Look in jas_stream.c of JasPer and make own version of
-//  jas_stream_fopen that will return a jas_stream_t and
-//  work on file streams instead of just a filename.
-
 #include "il_internal.h"
 #ifndef IL_NO_JP2
 #include <jasper/jasper.h>
@@ -120,7 +116,7 @@ ILboolean iLoadJp2Internal(jas_stream_t	*Stream, ILimage *Image)
 {
 	jas_image_t		*Jp2Image = NULL;
 	jas_matrix_t	*origdata;
-	ILuint			x, y, c;
+	ILuint			x, y, c, Error;
 	ILimage			*TempImage;
 
 	// Decode image
@@ -131,6 +127,15 @@ ILboolean iLoadJp2Internal(jas_stream_t	*Stream, ILimage *Image)
 		jas_stream_close(Stream);
 		return IL_FALSE;
 	}
+
+	// JasPer likes to buffer a lot, so it may try buffering past the end
+	//  of the file.  iread naturally sets IL_FILE_READ_ERROR if it tries
+	//  reading past the end of the file, but this actually is not an error.
+	Error = ilGetError();
+	// Put the error back if it is not IL_FILE_READ_ERROR.
+	if (Error != IL_FILE_READ_ERROR)
+		ilSetError(Error);
+
 
 	// We're not supporting anything other than 8 bits/component yet.
 	if (jas_image_cmptprec(Jp2Image, 0) != 8)
@@ -402,5 +407,269 @@ static void jas_stream_destroy(jas_stream_t *stream)
 	}
 	jas_free(stream);
 }
+
+
+
+
+jas_stream_t *iJp2WriteStream()
+{
+	jas_stream_t *stream;
+	jas_stream_memobj_t *obj;
+
+	if (!(stream = jas_stream_create())) {
+		return 0;
+	}
+
+	/* A stream associated with a memory buffer is always opened
+	for both reading and writing in binary mode. */
+	stream->openmode_ = JAS_STREAM_WRITE | JAS_STREAM_BINARY;
+
+	/* We use buffering whether it is from memory or a file. */
+	jas_stream_initbuf(stream, JAS_STREAM_FULLBUF, 0, 0);
+
+	/* Select the operations for a memory stream. */
+	stream->ops_ = &jas_stream_devilops;
+
+	/* Allocate memory for the underlying memory stream object. */
+	if (!(obj = jas_malloc(sizeof(jas_stream_memobj_t)))) {
+		jas_stream_destroy(stream);
+		return 0;
+	}
+	stream->obj_ = (void *) obj;
+
+	/* Initialize a few important members of the memory stream object. */
+	obj->myalloc_ = 0;
+	obj->buf_ = 0;
+	
+	return stream;
+}
+
+
+
+//! Writes a Jp2 file
+ILboolean ilSaveJp2(ILconst_string FileName)
+{
+	ILHANDLE	Jp2File;
+	ILboolean	bJp2 = IL_FALSE;
+	
+	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
+		if (iFileExists(FileName)) {
+			ilSetError(IL_FILE_ALREADY_EXISTS);
+			return IL_FALSE;
+		}
+	}
+	
+	Jp2File = iopenw(FileName);
+	if (Jp2File == NULL) {
+		ilSetError(IL_COULD_NOT_OPEN_FILE);
+		return bJp2;
+	}
+	
+	bJp2 = ilSaveJp2F(Jp2File);
+	iclosew(Jp2File);
+	
+	return bJp2;
+}
+
+
+//! Writes a Jp2 to an already-opened file
+ILboolean ilSaveJp2F(ILHANDLE File)
+{
+	iSetOutputFile(File);
+	if (jas_init())
+	{
+		ilSetError(IL_LIB_JP2_ERROR);
+		return IL_FALSE;
+	}
+
+	return iSaveJp2Internal();
+}
+
+
+//! Writes a Jp2 to a memory "lump"
+ILboolean ilSaveJp2L(void *Lump, ILuint Size)
+{
+	iSetOutputLump(Lump, Size);
+	if (jas_init())
+	{
+		ilSetError(IL_LIB_JP2_ERROR);
+		return IL_FALSE;
+	}
+
+	return iSaveJp2Internal();
+}
+
+
+
+// Function from OpenSceneGraph (originally called getdata in their sources):
+//  http://openscenegraph.sourcearchive.com/documentation/2.2.0/ReaderWriterJP2_8cpp-source.html
+ILint Jp2ConvertData(jas_stream_t *in, jas_image_t *image)
+{
+	int ret;
+	int numcmpts;
+	int cmptno;
+	jas_matrix_t *data[4];
+	int x;
+	int y;
+	int width, height;
+
+	width = jas_image_cmptwidth(image, 0);
+	height = jas_image_cmptheight(image, 0);
+	numcmpts = jas_image_numcmpts(image);
+
+	ret = -1;
+
+	data[0] = 0;
+	data[1] = 0;
+	data[2] = 0;
+	data[3] = 0;
+	for (cmptno = 0; cmptno < numcmpts; ++cmptno) {
+		if (!(data[cmptno] = jas_matrix_create(1, width))) {
+			goto done;
+		}
+	}
+ 
+	for (y = height - 1; y >= 0; --y)
+	//        for (y = 0; y < height; ++y)
+	{
+		for (x = 0; x < width; ++x)
+		{
+			for (cmptno = 0; cmptno < numcmpts; ++cmptno)
+			{
+				/* The sample data is unsigned. */
+				int c;
+				if ((c = jas_stream_getc(in)) == EOF) {
+					return -1;
+				}
+				jas_matrix_set(data[cmptno], 0, x, c);
+			}
+		}
+		for (cmptno = 0; cmptno < numcmpts; ++cmptno) {
+			if (jas_image_writecmpt(image, cmptno, 0, y, width, 1,
+				data[cmptno])) {
+				goto done;
+			}
+		}
+	}
+
+	jas_stream_flush(in);
+	ret = 0;
+
+	done:
+
+	for (cmptno = 0; cmptno < numcmpts; ++cmptno) {
+		if (data[cmptno]) {
+			jas_matrix_destroy(data[cmptno]);
+		}
+	}
+
+	return ret;
+}
+
+
+// Internal function used to save the Jp2.
+// Since the JasPer documentation is extremely incomplete, I had to look at how OpenSceneGraph uses it:
+//  http://openscenegraph.sourcearchive.com/documentation/2.2.0/ReaderWriterJP2_8cpp-source.html
+
+//@TODO: Do we need to worry about images with depths > 1?
+ILboolean iSaveJp2Internal()
+{
+	jas_image_t *Jp2Image;
+	jas_image_cmptparm_t cmptparm[4];
+	jas_stream_t *Mem, *Stream;
+	ILuint	NumChans, i;
+	ILenum	NewFormat, NewType = IL_UNSIGNED_BYTE;
+	ILimage	*TempImage = iCurImage;
+
+	if (iCurImage->Type != IL_UNSIGNED_BYTE) {  //@TODO: Support greater than 1 bpc.
+		NewType = IL_UNSIGNED_BYTE;
+	}
+	//@TODO: Do luminance/luminance-alpha/alpha separately.
+	switch (iCurImage->Format)
+	{
+		case IL_COLOUR_INDEX:  // Assuming the color palette does not have an alpha value.
+								//@TODO: Check for this in the future.
+		case IL_LUMINANCE:
+		case IL_RGB:
+		case IL_BGR:
+			NewFormat = IL_RGB;
+			NumChans = 3;
+			break;
+		case IL_LUMINANCE_ALPHA:
+		case IL_ALPHA:
+		case IL_RGBA:
+		case IL_BGRA:
+			NewFormat = IL_RGBA;
+			NumChans = 4;
+			break;
+	}
+
+	if (NewType != iCurImage->Type || NewFormat != iCurImage->Format) {
+		TempImage = iConvertImage(iCurImage, iCurImage->Format, IL_UNSIGNED_BYTE);
+		if (TempImage == NULL)
+			return IL_FALSE;
+	}
+
+	for (i = 0; i < NumChans; i++) {
+		cmptparm[i].width = iCurImage->Width;
+		cmptparm[i].height = iCurImage->Height;
+		cmptparm[i].hstep = 1;
+		cmptparm[i].vstep = 1;
+		cmptparm[i].tlx = 0;
+		cmptparm[i].tly = 0;
+		cmptparm[i].prec = 8;
+		cmptparm[i].sgnd = 0;  // Unsigned data
+	}
+
+	Jp2Image = jas_image_create(NumChans, cmptparm, JAS_CLRSPC_UNKNOWN);  // Try also JAS_CLRSPC_SRGB and JAS_CLRSPC_SGRAY
+	if (Jp2Image == NULL) {
+		ilSetError(IL_LIB_JP2_ERROR);
+		return IL_FALSE;
+	}
+
+	jas_image_setclrspc(Jp2Image, JAS_CLRSPC_SRGB);
+	jas_image_setcmpttype(Jp2Image, 0, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_R));
+	jas_image_setcmpttype(Jp2Image, 1, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_G));
+	jas_image_setcmpttype(Jp2Image, 2, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_B));
+
+	if (NumChans == 4)  // Alpha channel
+		jas_image_setcmpttype(Jp2Image, 3, JAS_IMAGE_CT_COLOR(JAS_IMAGE_CT_OPACITY));
+
+	Mem = jas_stream_memopen((char*)TempImage->Data, TempImage->SizeOfData);
+	if (Mem == NULL) {
+		jas_image_destroy(Jp2Image);
+		ilSetError(IL_LIB_JP2_ERROR);
+		return IL_FALSE;
+	}
+	Stream = iJp2WriteStream();
+	if (Stream == NULL) {
+		jas_stream_close(Mem);
+		jas_image_destroy(Jp2Image);
+		ilSetError(IL_LIB_JP2_ERROR);
+		return IL_FALSE;
+	}
+	//out = jas_stream_memopen(0, 0);
+
+	Jp2ConvertData(Mem, Jp2Image);
+
+	if (jas_image_encode(Jp2Image, Stream, jas_image_strtofmt("jp2"), NULL)) {  //@TODO: Do we want to use any options?
+		ilSetError(IL_LIB_JP2_ERROR);
+		return IL_FALSE;
+	}
+	jas_stream_flush(Stream);
+
+	// Close the memory and output streams.
+	jas_stream_close(Mem);
+	jas_stream_close(Stream);
+	// Destroy the JasPer image.
+	jas_image_destroy(Jp2Image);
+
+	// Destroy our temporary image if we used one.
+	if (TempImage != iCurImage)
+		ilCloseImage(TempImage);
+
+	return IL_TRUE;
+}
+
 
 #endif//IL_NO_JP2

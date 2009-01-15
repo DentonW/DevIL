@@ -104,3 +104,9 @@
 	* il_dds-save.c: Added line 688.
 	* il_states.c: Added lines for libsquish support.
 	* il_dds-save.c (Compress): Added libsquish compression.
+	* il_io.c (ilDetermineTypeF/L and ilIsValid/F/L): Added VTF and SUN.
+	* il_io.c (ilIsValidF/L): Added TIF
+	* il_jp2.c:131-137:Added these lines to take care of erroneous error generated
+	by JasPer's buffering.
+	* il_jp2.c: Added functions to save JPEG 2000 images.
+	

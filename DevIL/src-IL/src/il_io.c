@@ -226,9 +226,19 @@ ILenum ILAPIENTRY ilDetermineTypeF(ILHANDLE File)
 		return IL_SGI;
 	#endif
 
+	#ifndef IL_NO_SUN
+	if (ilIsValidSunF(File))
+		return IL_SUN;
+	#endif
+
 	#ifndef IL_NO_TIF
 	if (ilIsValidTiffF(File))
 		return IL_TIF;
+	#endif
+
+	#ifndef IL_NO_VTF
+	if (ilIsValidVtfF(File))
+		return IL_VTF;
 	#endif
 
 	//moved tga to end of list because it has no magic number
@@ -312,9 +322,19 @@ ILenum ilDetermineTypeL(const void *Lump, ILuint Size)
 		return IL_SGI;
 	#endif
 
+	#ifndef IL_NO_SUN
+	if (ilIsValidSunL(Lump, Size))
+		return IL_SUN;
+	#endif
+
 	#ifndef IL_NO_TIF
 	if (ilIsValidTiffL(Lump, Size))
 		return IL_TIF;
+	#endif
+
+	#ifndef IL_NO_VTF
+	if (ilIsValidVtfL(Lump, Size))
+		return IL_SUN;
 	#endif
 
 	//moved tga to end of list because it has no magic number
@@ -407,9 +427,19 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, ILstring FileName)
 			return ilIsValidSgi(FileName);
 		#endif
 
+		#ifndef IL_NO_SUN
+		case IL_SUN:
+			return ilIsValidSun(FileName);
+		#endif
+
 		#ifndef IL_NO_TIF
 		case IL_TIF:
 			return ilIsValidTiff(FileName);
+		#endif
+
+		#ifndef IL_NO_VTF
+		case IL_VTF:
+			return ilIsValidVtf(FileName);
 		#endif
 	}
 
@@ -496,6 +526,21 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 		case IL_SGI:
 			return ilIsValidSgiF(File);
 		#endif
+
+		#ifndef IL_NO_SUN
+		case IL_SUN:
+			return ilIsValidSunF(File);
+		#endif
+
+		#ifndef IL_NO_TIF
+		case IL_TIF:
+			return ilIsValidTiffF(File);
+		#endif
+
+		#ifndef IL_NO_VTF
+		case IL_VTF:
+			return ilIsValidVtfF(File);
+		#endif
 	}
 
 	ilSetError(IL_INVALID_ENUM);
@@ -580,6 +625,21 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, void *Lump, ILuint Size)
 		#ifndef IL_NO_SGI
 		case IL_SGI:
 			return ilIsValidSgiL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_SUN
+		case IL_SUN:
+			return ilIsValidSunL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_TIF
+		case IL_TIF:
+			return ilIsValidTiffL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_VTF
+		case IL_VTF:
+			return ilIsValidVtfL(Lump, Size);
 		#endif
 	}
 
@@ -1495,6 +1555,11 @@ ILboolean ILAPIENTRY ilSave(ILenum Type, ILstring FileName)
 			return ilSaveHdr(FileName);
 		#endif
 
+		#ifndef IL_NO_JP2
+		case IL_JP2:
+			return ilSaveJp2(FileName);
+		#endif
+
 		#ifndef IL_NO_JPG
 		case IL_JPG:
 			return ilSaveJpeg(FileName);
@@ -1580,6 +1645,12 @@ ILuint ILAPIENTRY ilSaveF(ILenum Type, ILHANDLE File)
 		#ifndef IL_NO_HDR
 		case IL_HDR:
 			Ret = ilSaveHdrF(File);
+			break;
+		#endif
+
+		#ifndef IL_NO_JP2
+		case IL_JP2:
+			Ret = ilSaveJp2F(File);
 			break;
 		#endif
 
@@ -1671,6 +1742,12 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, void *Lump, ILuint Size)
 		#ifndef IL_NO_HDR
 		case IL_HDR:
 			Ret = ilSaveHdrL(Lump, Size);
+			break;
+		#endif
+
+		#ifndef IL_NO_JP2
+		case IL_JP2:
+			Ret = ilSaveJp2L(Lump, Size);
 			break;
 		#endif
 
@@ -1793,6 +1870,13 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 	#ifndef IL_NO_HDR
 	if (!iStrCmp(Ext, IL_TEXT("hdr"))) {
 		bRet = ilSaveHdr(FileName);
+		goto finish;
+	}
+	#endif
+
+	#ifndef IL_NO_JP2
+	if (!iStrCmp(Ext, IL_TEXT("jp2"))) {
+		bRet = ilSaveJp2(FileName);
 		goto finish;
 	}
 	#endif

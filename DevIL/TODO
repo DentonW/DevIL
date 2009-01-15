@@ -60,7 +60,7 @@ More involved:
 - IL_COLOUR_INDEX:  must be implemented in iluReplaceColour(ILubyte Red, ILubyte Green, ILubyte Blue, ILfloat Tolerance);
 - iluEqualize must be implemented for various Bpc
 - Update the state stack in IL.  Right now, it only saves part of the states when you push/pop.
-- Reimplement DXT2/DXT4 saving.
+- Redo Compress in il_dds-save.c.
 
 
 Lots of work:
@@ -114,6 +114,7 @@ Questions:
 - Why is IL_HALF even used in ilut_directx9.c?
 - Should iluScale act on faces and mipmaps?
 - Fix problems loading .dds files on Big Endian machines (still a problem or not?)
+- Reimplement DXT2/DXT4 saving?
 
 
 From old TODO:
