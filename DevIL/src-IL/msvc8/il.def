@@ -8,6 +8,7 @@ ilApplyProfile
 ilApplyPal
 ilBindImage
 ilBlit
+ilClampNTSC
 ilClearColour
 ilClearImage
 ilCloneCurImage
@@ -20,7 +21,6 @@ ilCreateSubImage
 ilDefaultImage
 ilDeleteImage
 ilDeleteImages
-
 ilDetermineType ; added 2003-09-17
 ilDetermineTypeF
 ilDisable

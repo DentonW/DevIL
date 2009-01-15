@@ -509,6 +509,7 @@ ILAPI ILboolean ILAPIENTRY ilApplyPal(ILconst_string FileName);
 ILAPI ILboolean ILAPIENTRY ilApplyProfile(ILstring InProfile, ILstring OutProfile);
 ILAPI void		ILAPIENTRY ilBindImage(ILuint Image);
 ILAPI ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX, ILint DestY, ILint DestZ, ILuint SrcX, ILuint SrcY, ILuint SrcZ, ILuint Width, ILuint Height, ILuint Depth);
+ILAPI ILboolean ILAPIENTRY ilClampNTSC(void);
 ILAPI void		ILAPIENTRY ilClearColour(ILclampf Red, ILclampf Green, ILclampf Blue, ILclampf Alpha);
 ILAPI ILboolean ILAPIENTRY ilClearImage(void);
 ILAPI ILuint    ILAPIENTRY ilCloneCurImage(void);

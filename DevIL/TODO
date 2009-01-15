@@ -62,6 +62,7 @@ More involved:
 - IL_COLOUR_INDEX:  must be implemented in iluReplaceColour(ILubyte Red, ILubyte Green, ILubyte Blue, ILfloat Tolerance);
 - iluEqualize must be implemented for various Bpc
 - Update the state stack in IL.  Right now, it only saves part of the states when you push/pop.
+- Reimplement DXT2/DXT4 saving.
 
 
 Lots of work:

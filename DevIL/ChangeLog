@@ -97,3 +97,6 @@
 	
 2009-01-12 Denton Woods <doomwiz@users.sf.net>
 	* ilut_directx9.c: Cleared up formatting some.
+
+2009-01-15 Denton Woods <doomwiz@users.sf.net>
+	* il_manip.c / il.h: Added ilClampNTSC function.

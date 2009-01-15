@@ -615,7 +615,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
 					ilEnable(IL_NVIDIA_COMPRESS);
 					ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
-					free(ilNVidiaCompressDXT(ilGetData(), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 1, IL_DXT5));
+					//free(ilNVidiaCompressDXT(ilGetData(), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 1, IL_DXT5));
 
 					ilutRenderer(ILUT_WIN32);
 					ResizeWin();

@@ -237,6 +237,8 @@ Vincent Richomme for DirectX Mobile support
 
 Antibyte for DDS save bugfix
 
+Stefan Cornelius, Secunia Research, for finding some buffer overflow vulnerabilities.
+
 
 
 Translations:

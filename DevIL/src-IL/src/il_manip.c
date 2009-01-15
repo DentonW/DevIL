@@ -891,3 +891,34 @@ void ILAPIENTRY ilModAlpha(ILdouble AlphaValue)
 
 	return;
 }
+
+
+//! Clamps data values of unsigned bytes from 16 to 235 for display on an
+//   NTSC television.  Reasoning for this is given at
+//   http://msdn.microsoft.com/en-us/library/bb174608.aspx.
+ILboolean ILAPIENTRY ilClampNTSC(void)
+{
+	ILuint x, y, z, c;
+	ILuint Offset = 0;
+
+    if (iCurImage == NULL) {
+        ilSetError(IL_ILLEGAL_OPERATION);
+        return IL_FALSE;
+    }
+
+	if (iCurImage->Type != IL_UNSIGNED_BYTE)  // Should we set an error here?
+		return IL_FALSE;
+
+	for (z = 0; z < iCurImage->Depth; z++) {
+		for (y = 0; y < iCurImage->Height; y++) {
+			for (x = 0; x < iCurImage->Width; x++) {
+				for (c = 0; c < iCurImage->Bpp; c++) {
+					iCurImage->Data[Offset + c] = IL_LIMIT(iCurImage->Data[Offset + c], 16, 235);
+				}
+			Offset += iCurImage->Bpp;
+			}
+		}
+	}
+
+	return IL_TRUE;
+}
