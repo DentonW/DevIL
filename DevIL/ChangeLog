@@ -86,7 +86,7 @@
 	* il_endian.h (iGwapUShort/iSwapUInt): Finished fixing bug #2023453
 	(inline GCC asm, there was a typo left)
 	* src_IL/src/il_tiff.c (ilSaveTiff): Fixed a typo that was causing
-	confilicting declarations error
+	conflicting declarations error
 	* configure.ac:264: Added IL_NO_WBMP since the Wbmp loading functions
 	that are referenced, but not implemented, caused linking errors
 
@@ -97,6 +97,9 @@
 	
 2009-01-12 Denton Woods <doomwiz@users.sf.net>
 	* ilut_directx9.c: Cleared up formatting some.
+
+2009-01-13 Denton Woods <doomwiz@users.sf.net>
+	* Converted source repository to SVN from CVS.
 
 2009-01-15 Denton Woods <doomwiz@users.sf.net>
 	* il_manip.c / il.h: Added ilClampNTSC function.
@@ -109,4 +112,6 @@
 	* il_jp2.c:131-137:Added these lines to take care of erroneous error generated
 	by JasPer's buffering.
 	* il_jp2.c: Added functions to save JPEG 2000 images.
+	* il_utility.c (ilGetBppFormat): Added IL_ALPHA.
+	* il_jp2.c (iLoadJp2Internal): Added 1 and 2 channel format loading.
 	

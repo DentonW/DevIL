@@ -147,6 +147,31 @@ ILboolean iLoadJp2Internal(jas_stream_t	*Stream, ILimage *Image)
 
 	switch (jas_image_numcmpts(Jp2Image))
 	{
+		//@TODO: Can we do alpha data?  jas_image_cmpttype always returns 0 for this case.
+		case 1:  // Assuming this is luminance data.
+			if (Image == NULL) {
+				ilTexImage(jas_image_width(Jp2Image), jas_image_height(Jp2Image), 1, 1, IL_LUMINANCE, IL_UNSIGNED_BYTE, NULL);
+				TempImage = iCurImage;
+			}
+			else {
+				ifree(Image->Data);  // @TODO: Not really the most efficient way to do this...
+				ilInitImage(Image, jas_image_width(Jp2Image), jas_image_height(Jp2Image), 1, 1, IL_LUMINANCE, IL_UNSIGNED_BYTE, NULL);
+				TempImage = Image;
+			}
+			break;
+
+		case 2:  // Assuming this is luminance-alpha data.
+			if (Image == NULL) {
+				ilTexImage(jas_image_width(Jp2Image), jas_image_height(Jp2Image), 1, 2, IL_LUMINANCE_ALPHA, IL_UNSIGNED_BYTE, NULL);
+				TempImage = iCurImage;
+			}
+			else {
+				ifree(Image->Data);  // @TODO: Not really the most efficient way to do this...
+				ilInitImage(Image, jas_image_width(Jp2Image), jas_image_height(Jp2Image), 1, 2, IL_LUMINANCE_ALPHA, IL_UNSIGNED_BYTE, NULL);
+				TempImage = Image;
+			}
+			break;
+
 		case 3:
 			if (Image == NULL) {
 				ilTexImage(jas_image_width(Jp2Image), jas_image_height(Jp2Image), 1, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL);
@@ -587,16 +612,25 @@ ILboolean iSaveJp2Internal()
 	//@TODO: Do luminance/luminance-alpha/alpha separately.
 	switch (iCurImage->Format)
 	{
+		case IL_LUMINANCE:
+			NewFormat = IL_LUMINANCE;
+			NumChans = 1;
+			break;
+		case IL_ALPHA:
+			NewFormat = IL_ALPHA;
+			NumChans = 1;
+			break;
+		case IL_LUMINANCE_ALPHA:
+			NewFormat = IL_LUMINANCE_ALPHA;
+			NumChans = 2;
+			break;
 		case IL_COLOUR_INDEX:  // Assuming the color palette does not have an alpha value.
 								//@TODO: Check for this in the future.
-		case IL_LUMINANCE:
 		case IL_RGB:
 		case IL_BGR:
 			NewFormat = IL_RGB;
 			NumChans = 3;
 			break;
-		case IL_LUMINANCE_ALPHA:
-		case IL_ALPHA:
 		case IL_RGBA:
 		case IL_BGRA:
 			NewFormat = IL_RGBA;
@@ -627,13 +661,34 @@ ILboolean iSaveJp2Internal()
 		return IL_FALSE;
 	}
 
-	jas_image_setclrspc(Jp2Image, JAS_CLRSPC_SRGB);
-	jas_image_setcmpttype(Jp2Image, 0, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_R));
-	jas_image_setcmpttype(Jp2Image, 1, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_G));
-	jas_image_setcmpttype(Jp2Image, 2, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_B));
-
-	if (NumChans == 4)  // Alpha channel
-		jas_image_setcmpttype(Jp2Image, 3, JAS_IMAGE_CT_COLOR(JAS_IMAGE_CT_OPACITY));
+	switch(NumChans)
+	{
+		case 1:
+			jas_image_setclrspc(Jp2Image, JAS_CLRSPC_SGRAY);
+			if (NewFormat == IL_LUMINANCE)
+				jas_image_setcmpttype(Jp2Image, 0, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_GRAY_Y));
+			else // IL_ALPHA
+				jas_image_setcmpttype(Jp2Image, 0, JAS_IMAGE_CT_COLOR(JAS_IMAGE_CT_OPACITY));
+			break;
+		case 2:
+			jas_image_setclrspc(Jp2Image, JAS_CLRSPC_SGRAY);
+			jas_image_setcmpttype(Jp2Image, 0, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_GRAY_Y));
+			jas_image_setcmpttype(Jp2Image, 1, JAS_IMAGE_CT_COLOR(JAS_IMAGE_CT_OPACITY));
+			break;
+		case 3:
+			jas_image_setclrspc(Jp2Image, JAS_CLRSPC_SRGB);
+			jas_image_setcmpttype(Jp2Image, 0, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_R));
+			jas_image_setcmpttype(Jp2Image, 1, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_G));
+			jas_image_setcmpttype(Jp2Image, 2, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_B));
+			break;
+		case 4:
+			jas_image_setclrspc(Jp2Image, JAS_CLRSPC_SRGB);
+			jas_image_setcmpttype(Jp2Image, 0, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_R));
+			jas_image_setcmpttype(Jp2Image, 1, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_G));
+			jas_image_setcmpttype(Jp2Image, 2, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_B));
+			jas_image_setcmpttype(Jp2Image, 3, JAS_IMAGE_CT_COLOR(JAS_IMAGE_CT_OPACITY));
+			break;
+	}
 
 	Mem = jas_stream_memopen((char*)TempImage->Data, TempImage->SizeOfData);
 	if (Mem == NULL) {
