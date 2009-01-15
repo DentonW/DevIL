@@ -1,9 +1,19 @@
 //-----------------------------------------------------------------------------
-
+//
+// ImageLib Sources
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 01/15/2009
+//
+// Filename: src-IL/src/il_manip.c
+//
 // Description: Image manipulation
+//
+//-----------------------------------------------------------------------------
+
 #include "il_internal.h"
 #include <IL/il.h>
 #include "il_manip.h"
+
 
 ILAPI void ILAPIENTRY iFlipBuffer(ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num)
 {

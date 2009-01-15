@@ -55,7 +55,6 @@ More involved:
 - Upload cubemaps directly to OpenGL/D3D.
 - Change some calls (such as in il_tiff.c) to ilGetString to non-Unicode.
 - Look at .cgm support.
-- libsquish support for better quality DXTC.
 - Check saving of Luminance (8 bpp/1 Bpp) BMP
 - Check compatibility with all the files in the BMP Suite.
 - IL_COLOUR_INDEX:  must be implemented in iluReplaceColour(ILubyte Red, ILubyte Green, ILubyte Blue, ILfloat Tolerance);

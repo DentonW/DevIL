@@ -33,7 +33,8 @@
 
 //! Compresses data to a DXT format using libsquish.
 //  The data must be in unsigned byte RGBA format.  The alpha channel will be ignored if DxtType is IL_DXT1.
-ILAPI ILubyte* ILAPIENTRY ilSquishCompressDXT(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILenum DxtType)
+//  DxtSize is used to return the size in bytes of the DXTC data returned.
+ILAPI ILubyte* ILAPIENTRY ilSquishCompressDXT(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILenum DxtFormat, ILuint *DxtSize)
 {
 	ILuint	Size;  //@TODO: Support larger than 32-bit data?
 	ILint	Flags;
@@ -50,7 +51,7 @@ ILAPI ILubyte* ILAPIENTRY ilSquishCompressDXT(ILubyte *Data, ILuint Width, ILuin
 		return NULL;
 	}
 
-	switch (DxtType)
+	switch (DxtFormat)
 	{
 		case IL_DXT1:  // Should these two be
 		case IL_DXT1A: //  any different?
@@ -74,6 +75,7 @@ ILAPI ILubyte* ILAPIENTRY ilSquishCompressDXT(ILubyte *Data, ILuint Width, ILuin
 
 	squish::CompressImage(Data, Width, Height, DxtcData, Flags);
 
+	*DxtSize = Size;
 	return DxtcData;
 }
 

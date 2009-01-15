@@ -20,7 +20,8 @@
 #ifndef IL_NO_DDS
 
 //! Writes a Dds file
-ILboolean ilSaveDds(ILconst_string FileName) {
+ILboolean ilSaveDds(ILconst_string FileName)
+{
 	ILHANDLE	DdsFile;
 	ILboolean	bDds = IL_FALSE;
 
@@ -593,11 +594,11 @@ void CompressToRXGB(ILimage *Image, ILushort** xgb, ILubyte** r)
 ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 {
 	ILushort	*Data, Block[16], ex0, ex1, *Runner16, t0, t1;
-	ILuint		x, y, z, i, BitMask;//, Rms1, Rms2;
+	ILuint		x, y, z, i, BitMask, DXTCSize;//, Rms1, Rms2;
 	ILubyte		*Alpha, AlphaBlock[16], AlphaBitMask[6], /*AlphaOut[16],*/ a0, a1;
 	ILboolean	HasAlpha;
 	ILuint		Count = 0;
-	ILubyte		*Data3Dc, *Runner8, *ByteData;
+	ILubyte		*Data3Dc, *Runner8, *ByteData, *BlockData;
 
 	if (DXTCFormat == IL_3DC) {
 		Data3Dc = CompressTo88(Image);
@@ -666,6 +667,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 	}
 	else
 	{
+		// We want to try nVidia compression first, because it is the fastest.
 #ifdef IL_USE_DXTC_NVIDIA
 		if (ilIsEnabled(IL_NVIDIA_COMPRESS) && Image->Depth == 1) {  // See if we need to use the nVidia Texture Tools library.
 			if (DXTCFormat == IL_DXT1 || DXTCFormat == IL_DXT1A || DXTCFormat == IL_DXT3 || DXTCFormat == IL_DXT5) {
@@ -678,14 +680,51 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 				else
 					ByteData = Image->Data;
 
+				// Here's where all the compression and writing goes on.
 				if (!ilNVidiaCompressDXTFile(ByteData, Image->Width, Image->Height, 1, DXTCFormat))
 					return 0;
 
 				if (ByteData != Image->Data)
 					ifree(ByteData);
+
+				return Image->Width * Image->Height * 4;  // Either compresses all or none.
 			}
 		}
-#endif
+#endif//IL_USE_DXTC_NVIDIA
+
+		// libsquish generates better quality output than DevIL does, so we try it next.
+#ifdef IL_USE_DXTC_SQUISH
+		if (ilIsEnabled(IL_SQUISH_COMPRESS) && Image->Depth == 1) {  // See if we need to use the nVidia Texture Tools library.
+			if (DXTCFormat == IL_DXT1 || DXTCFormat == IL_DXT1A || DXTCFormat == IL_DXT3 || DXTCFormat == IL_DXT5) {
+				// NVTT needs data as RGBA 32-bit.
+				if (Image->Format != IL_BGRA || Image->Type != IL_UNSIGNED_BYTE) {  // No need to convert if already this format/type.
+					ByteData = ilConvertBuffer(Image->SizeOfData, Image->Format, IL_BGRA, Image->Type, IL_UNSIGNED_BYTE, Image->Data);
+					if (ByteData == NULL)
+						return 0;
+				}
+				else
+					ByteData = Image->Data;
+
+				// Get compressed data here.
+				BlockData = ilSquishCompressDXT(ByteData, Image->Width, Image->Height, 1, DXTCFormat, &DXTCSize);
+				if (BlockData == NULL)
+					return 0;
+
+				if (iwrite(BlockData, 1, DXTCSize) != DXTCSize) {
+					if (ByteData != Image->Data)
+						ifree(ByteData);
+					ifree(BlockData);
+					return 0;
+				}
+
+				if (ByteData != Image->Data)
+					ifree(ByteData);
+				ifree(BlockData);
+
+				return Image->Width * Image->Height * 4;  // Either compresses all or none.
+			}
+		}
+#endif//IL_USE_DXTC_SQUISH
 
 		if (DXTCFormat != IL_RXGB) {
 			Data = CompressTo565(Image);

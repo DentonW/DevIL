@@ -100,5 +100,7 @@
 
 2009-01-15 Denton Woods <doomwiz@users.sf.net>
 	* il_manip.c / il.h: Added ilClampNTSC function.
-	* il_squish.cpp: Added
-	
+	* il_squish.cpp: Added file.
+	* il_dds-save.c: Added line 688.
+	* il_states.c: Added lines for libsquish support.
+	* il_dds-save.c (Compress): Added libsquish compression.

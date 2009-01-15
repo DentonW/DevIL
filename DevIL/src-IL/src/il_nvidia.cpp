@@ -40,8 +40,6 @@ struct ilOutputHandlerMem : public nvtt::OutputHandler
 {
 	ilOutputHandlerMem(ILuint Width, ILuint Height, ILenum DxtType)
 	{
-		ILuint size;
-
 		Width = Width + (4 - (Width % 4)) % 4;    // Operates on 4x4 blocks,
 		Height = Height + (4 - (Height % 4)) % 4; //  so gives extra room.
 		
@@ -49,18 +47,18 @@ struct ilOutputHandlerMem : public nvtt::OutputHandler
 		{
 			case IL_DXT1:
 			case IL_DXT1A:
-				size = Width * Height / 2;
+				Size = Width * Height / 2;
 				break;
 			case IL_DXT3:
 			case IL_DXT5:
-				size = Width * Height;
+				Size = Width * Height;
 				break;
 
 			default:  // NVTT does not accept DXT2 or DXT4.
 				// Should error somehow...
 				break;
 		}
-		NewData = (ILubyte*)ialloc(size);
+		NewData = (ILubyte*)ialloc(Size);
 		if (NewData == NULL)
 			return;
 		Temp = NewData;
@@ -77,13 +75,15 @@ struct ilOutputHandlerMem : public nvtt::OutputHandler
 		return true;
 	}
 
-	ILubyte *NewData, *Temp;
+	ILubyte	*NewData, *Temp;
+	ILuint	Size;
 };
 
 
 //! Compresses data to a DXT format using nVidia's Texture Tools library.
 //  The data must be in unsigned byte RGBA format.  The alpha channel will be ignored if DxtType is IL_DXT1.
-ILAPI ILubyte* ILAPIENTRY ilNVidiaCompressDXT(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILenum DxtType)
+//  DxtSize is used to return the size in bytes of the DXTC data returned.
+ILAPI ILubyte* ILAPIENTRY ilNVidiaCompressDXT(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILenum DxtFormat, ILuint *DxtSize)
 {
 	if (Data == NULL) {  // We cannot operate on a null pointer.
 		ilSetError(IL_INVALID_PARAM);
@@ -102,7 +102,7 @@ ILAPI ILubyte* ILAPIENTRY ilNVidiaCompressDXT(ILubyte *Data, ILuint Width, ILuin
 	inputOptions.setMipmapGeneration(false, -1);  //@TODO: Use this in certain cases.
 
 	OutputOptions outputOptions;
-	ilOutputHandlerMem outputHandler(Width, Height, DxtType);
+	ilOutputHandlerMem outputHandler(Width, Height, DxtFormat);
 	outputOptions.setOutputHeader(false);
 	outputOptions.setOutputHandler(&outputHandler);
 
@@ -110,7 +110,7 @@ ILAPI ILubyte* ILAPIENTRY ilNVidiaCompressDXT(ILubyte *Data, ILuint Width, ILuin
 		return NULL;
 
 	CompressionOptions compressionOptions;
-	switch (DxtType)
+	switch (DxtFormat)
 	{
 		case IL_DXT1:
 			compressionOptions.setFormat(Format_DXT1);
@@ -132,6 +132,7 @@ ILAPI ILubyte* ILAPIENTRY ilNVidiaCompressDXT(ILubyte *Data, ILuint Width, ILuin
 	Compressor compressor;
 	compressor.process(inputOptions, compressionOptions, outputOptions);
 
+	*DxtSize = outputHandler.Size;
 	return outputHandler.NewData;
 }
 
@@ -169,7 +170,7 @@ struct ilOutputHandlerFile : public nvtt::OutputHandler
 //! Compresses data to a DXT format using nVidia's Texture Tools library.
 //  This version is supposed to be completely internal to DevIL.
 //  The data must be in unsigned byte RGBA format.  The alpha channel will be ignored if DxtType is IL_DXT1.
-ILuint ilNVidiaCompressDXTFile(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILenum DxtType)
+ILuint ilNVidiaCompressDXTFile(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILenum DxtFormat)
 {
 	ILuint FilePos = itellw();
 
@@ -185,12 +186,12 @@ ILuint ilNVidiaCompressDXTFile(ILubyte *Data, ILuint Width, ILuint Height, ILuin
 	inputOptions.setMipmapGeneration(false, -1);  //@TODO: Use this in certain cases.
 
 	OutputOptions outputOptions;
-	ilOutputHandlerFile outputHandler(Width, Height, DxtType);
+	ilOutputHandlerFile outputHandler(Width, Height, DxtFormat);
 	outputOptions.setOutputHeader(false);
 	outputOptions.setOutputHandler(&outputHandler);
 
 	CompressionOptions compressionOptions;
-	switch (DxtType)
+	switch (DxtFormat)
 	{
 		case IL_DXT1:
 			compressionOptions.setFormat(Format_DXT1);

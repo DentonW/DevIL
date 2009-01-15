@@ -84,6 +84,7 @@ void ilDefaultStates()
 
 	ilStates[ilCurrentPos].ilKeepDxtcData = IL_FALSE;
 	ilStates[ilCurrentPos].ilUseNVidiaDXT = IL_FALSE;
+	ilStates[ilCurrentPos].ilUseSquishDXT = IL_FALSE;
 
 
 
@@ -252,6 +253,9 @@ ILboolean ilAble(ILenum Mode, ILboolean Flag)
 		case IL_NVIDIA_COMPRESS:
 			ilStates[ilCurrentPos].ilUseNVidiaDXT = Flag;
 			break;
+		case IL_SQUISH_COMPRESS:
+			ilStates[ilCurrentPos].ilUseSquishDXT = Flag;
+			break;
 
 		default:
 			ilSetError(IL_INVALID_ENUM);
@@ -289,6 +293,8 @@ ILboolean ILAPIENTRY ilIsEnabled(ILenum Mode)
 			return ilStates[ilCurrentPos].ilJpgProgressive;
 		case IL_NVIDIA_COMPRESS:
 			return ilStates[ilCurrentPos].ilUseNVidiaDXT;
+		case IL_SQUISH_COMPRESS:
+			return ilStates[ilCurrentPos].ilUseSquishDXT;
 
 		default:
 			ilSetError(IL_INVALID_ENUM);
@@ -492,6 +498,9 @@ void ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 			break;
 		case IL_NVIDIA_COMPRESS:
 			*Param = ilStates[ilCurrentPos].ilUseNVidiaDXT;
+			break;
+		case IL_SQUISH_COMPRESS:
+			*Param = ilStates[ilCurrentPos].ilUseSquishDXT;
 			break;
 
 		default:
