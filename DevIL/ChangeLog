@@ -124,3 +124,10 @@
 	* il_dds-save.c (CompressTo565): Changed 24-bit to 16-bit code based on Charles Bloom's rant.
 	* il_dds.c (DxtcReadColor/DxtcReadColors): Changed conversion to copy high bits to lowest bits as well.
 	
+2009-01-15 Matěj Týč <bubla@sf.net>
+	* il_io.h, include/IL/il.h, il_states.h: Changed some normal strings to constant
+	strings (in ilSave, ilIsValid and ilGetString)
+	* configure.ac, lib/Makefile.am: Added wbmp compilation support
+	* il_jp2.c, il_wbmp.c: Fixed a typo that prevented compilation 
+	* include/IL/devil_cpp_wrapper.hpp: Added a hopefully harmless solution for
+	the initialization of devil.

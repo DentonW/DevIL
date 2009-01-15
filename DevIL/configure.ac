@@ -289,10 +289,6 @@ TEST_FORMAT([xpm], [XPM])
 TEST_FORMAT([wal], [WAL])
 TEST_FORMAT([wdp], [WDP])
 
-AC_DEFINE([IL_NO_WBMP],
-	  [1],
-	  [WBMP loading is not implemented  yet])
-
 dnl
 dnl ILUT APIs library checking
 dnl

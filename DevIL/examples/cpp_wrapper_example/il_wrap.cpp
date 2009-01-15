@@ -12,7 +12,7 @@ int main(int argc, char **argv)
 
 	ilImage Image(argv[1]);
 
-	cout << Image.Width() << ' ' << Image.Height() << ' ' << (ILuint)Image.Bpp() << endl;
+	cout << Image.Width() << 'x' << Image.Height() << '@' << (ILuint)Image.Bpp() << endl;
 
 	ilEnable(IL_FILE_OVERWRITE);
 

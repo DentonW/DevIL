@@ -370,7 +370,7 @@ ILenum ilDetermineTypeL(const void *Lump, ILuint Size)
 }
 
 
-ILboolean ILAPIENTRY ilIsValid(ILenum Type, ILstring FileName)
+ILboolean ILAPIENTRY ilIsValid(ILenum Type, ILconst_string FileName)
 {
 	if (FileName == NULL) {
 		ilSetError(IL_INVALID_PARAM);
@@ -1579,7 +1579,7 @@ finish:
 }
 
 
-ILboolean ILAPIENTRY ilSave(ILenum Type, ILstring FileName)
+ILboolean ILAPIENTRY ilSave(ILenum Type, ILconst_string FileName)
 {
 	switch (Type)
 	{

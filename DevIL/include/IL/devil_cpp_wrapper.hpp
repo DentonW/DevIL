@@ -72,9 +72,19 @@ protected:
 	ILuint		Id;
 
 private:
-	void		iStartUp();
+	static int		ilStartUp();
+	static ILboolean	ilStartedUp;
 };
 
+// ensure that init is called exactly once
+int ilImage::ilStartUp()
+{
+	ilInit();
+	iluInit();
+	//ilutInit();
+	return true;
+}
+ILboolean ilImage::ilStartedUp = ilStartUp();
 
 class ilFilters
 {
@@ -196,7 +206,7 @@ private:
 ilImage::ilImage()
 {
 	this->Id = 0;
-	this->iStartUp(); // This was commented out, but it needs to be somewhere...
+	//this->iStartUp(); // This was commented out, but it needs to be somewhere...
 	this->iGenBind();
 	return;
 }
@@ -205,8 +215,7 @@ ilImage::ilImage()
 ilImage::ilImage(char *FileName)
 {
 	this->Id = 0;
-	this->iStartUp(); // This was commented out, but it needs to be somewhere...
-
+	//this->iStartUp(); // This was commented out, but it needs to be somewhere...
 	this->iGenBind();
 	ilLoadImage(FileName);
 	return;
@@ -216,7 +225,7 @@ ilImage::ilImage(char *FileName)
 ilImage::ilImage(const ilImage &Image)
 {
 	this->Id = 0;
-	//this->iStartUp();
+	// this->iStartUp();
 	this->iGenBind();
 	*this = Image;
 	return;
@@ -557,13 +566,13 @@ ILubyte* ilImage::GetPalette()
 //
 // Private members
 //
-void ilImage::iStartUp()
+/*void ilImage::iStartUp()
 {
 	ilInit();
 	iluInit();
 	ilutInit();
 	return;
-}
+}*/
 
 void ilImage::iGenBind()
 {

@@ -19,8 +19,8 @@
 //#include <malloc.h>
 #include <stdlib.h>
 
-ILstring _ilVendor		= IL_TEXT("Abysmal Software");
-ILstring _ilVersion		= IL_TEXT("Developer's Image Library (DevIL) 1.7.5");
+ILconst_string _ilVendor		= IL_TEXT("Abysmal Software");
+ILconst_string _ilVersion		= IL_TEXT("Developer's Image Library (DevIL) 1.7.5");
 
 
 char* _ilLoadExt		= "" IL_BMP_EXT IL_CUT_EXT IL_DCX_EXT IL_DDS_EXT
@@ -99,41 +99,41 @@ void ilDefaultStates()
 
 
 //! Returns a constant string detailing aspects about this library.
-ILstring ILAPIENTRY ilGetString(ILenum StringName)
+ILconst_string ILAPIENTRY ilGetString(ILenum StringName)
 {
 	switch (StringName)
 	{
 		case IL_VENDOR:
-			return (ILstring)_ilVendor;
+			return (ILconst_string)_ilVendor;
 		case IL_VERSION_NUM: //changed 2003-08-30: IL_VERSION changes									//switch define ;-)
-			return (ILstring)_ilVersion;
+			return (ILconst_string)_ilVersion;
 		case IL_LOAD_EXT:
-			return (ILstring)_ilLoadExt;
+			return (ILconst_string)_ilLoadExt;
 		case IL_SAVE_EXT:
-			return (ILstring)_ilSaveExt;
+			return (ILconst_string)_ilSaveExt;
 		case IL_TGA_ID_STRING:
-			return (ILstring)ilStates[ilCurrentPos].ilTgaId;
+			return (ILconst_string)ilStates[ilCurrentPos].ilTgaId;
 		case IL_TGA_AUTHNAME_STRING:
-			return (ILstring)ilStates[ilCurrentPos].ilTgaAuthName;
+			return (ILconst_string)ilStates[ilCurrentPos].ilTgaAuthName;
 		case IL_TGA_AUTHCOMMENT_STRING:
-			return (ILstring)ilStates[ilCurrentPos].ilTgaAuthComment;
+			return (ILconst_string)ilStates[ilCurrentPos].ilTgaAuthComment;
 		case IL_PNG_AUTHNAME_STRING:
-			return (ILstring)ilStates[ilCurrentPos].ilPngAuthName;
+			return (ILconst_string)ilStates[ilCurrentPos].ilPngAuthName;
 		case IL_PNG_TITLE_STRING:
-			return (ILstring)ilStates[ilCurrentPos].ilPngTitle;
+			return (ILconst_string)ilStates[ilCurrentPos].ilPngTitle;
 		case IL_PNG_DESCRIPTION_STRING:
-			return (ILstring)ilStates[ilCurrentPos].ilPngDescription;
+			return (ILconst_string)ilStates[ilCurrentPos].ilPngDescription;
 		//2003-08-31: added tif strings
 		case IL_TIF_DESCRIPTION_STRING:
-			return (ILstring)ilStates[ilCurrentPos].ilTifDescription;
+			return (ILconst_string)ilStates[ilCurrentPos].ilTifDescription;
 		case IL_TIF_HOSTCOMPUTER_STRING:
-			return (ILstring)ilStates[ilCurrentPos].ilTifHostComputer;
+			return (ILconst_string)ilStates[ilCurrentPos].ilTifHostComputer;
 		case IL_TIF_DOCUMENTNAME_STRING:
-			return (ILstring)ilStates[ilCurrentPos].ilTifDocumentName;
+			return (ILconst_string)ilStates[ilCurrentPos].ilTifDocumentName;
 		case IL_TIF_AUTHNAME_STRING:
-			return (ILstring)ilStates[ilCurrentPos].ilTifAuthName;
+			return (ILconst_string)ilStates[ilCurrentPos].ilTifAuthName;
 		case IL_CHEAD_HEADER_STRING:
-			return (ILstring)ilStates[ilCurrentPos].ilCHeader;
+			return (ILconst_string)ilStates[ilCurrentPos].ilCHeader;
 		default:
 			ilSetError(IL_INVALID_ENUM);
 			break;

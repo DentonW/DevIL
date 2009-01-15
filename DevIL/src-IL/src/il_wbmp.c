@@ -196,7 +196,7 @@ ILboolean ilSaveWbmpF(ILHANDLE File)
 
 
 //! Writes a Wbmp to a memory "lump"
-ILboolean ilSaveWbmpL(void *Lump, ILuint Size)
+ILboolean ilSaveWbmpL(const void *Lump, ILuint Size)
 {
 	iSetOutputLump(Lump, Size);
 	return iSaveWbmpInternal();
