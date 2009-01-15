@@ -106,7 +106,7 @@ ILboolean iIsValidExr()
 
 	if (!iGetExrHead(&Head))
 		return IL_FALSE;
-	iseek(-(ILint)sizeof(EXRHEAD), IL_SEEK_CUR);
+	iseek(-8, IL_SEEK_CUR);
 	
 	return iCheckExr(&Head);
 }
