@@ -1248,6 +1248,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\il_squish.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\il_stack.c"
 				>
 				<FileConfiguration

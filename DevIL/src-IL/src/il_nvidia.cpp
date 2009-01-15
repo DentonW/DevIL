@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2009 by Denton Woods
 // Last modified: 01/05/2009
 //
-// Filename: src-IL/src/il_nvidia.c
+// Filename: src-IL/src/il_nvidia.cpp
 //
 // Description: Implements access to the nVidia Texture Tools library.
 //
@@ -16,7 +16,6 @@
 #include "il_manip.h"
 #include <limits.h>
 
-//#define IL_NO_DXTC_NVIDIA
 
 #ifdef IL_USE_DXTC_NVIDIA
 #include <nvtt/nvtt.h>

@@ -316,6 +316,7 @@ typedef long long unsigned int ILuint64;
 
 // Compression
 #define IL_NVIDIA_COMPRESS	0x0670
+#define IL_SQUISH_COMPRESS	0x0671
 
 
 // Subimage types
@@ -588,6 +589,7 @@ ILAPI void      ILAPIENTRY ilSetRead(fOpenRProc, fCloseRProc, fEofProc, fGetcPro
 ILAPI void      ILAPIENTRY ilSetString(ILenum Mode, const char *String);
 ILAPI void      ILAPIENTRY ilSetWrite(fOpenWProc, fCloseWProc, fPutcProc, fSeekWProc, fTellWProc, fWriteProc);
 ILAPI void      ILAPIENTRY ilShutDown(void);
+ILAPI ILubyte*	ILAPIENTRY ilSquishCompressDXT(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILenum DxtType);
 ILAPI ILboolean ILAPIENTRY ilTexImage(ILuint Width, ILuint Height, ILuint Depth, ILubyte NumChannels, ILenum Format, ILenum Type, void *Data);
 ILAPI ILenum    ILAPIENTRY ilTypeFromExt(ILconst_string FileName);
 ILAPI ILboolean ILAPIENTRY ilTypeFunc(ILenum Mode);

@@ -10,7 +10,6 @@ Easier:
 - Fix Daniel's suggestions.
 - Added ilSetError error codes to il_files.c.
 - Get rid of check for precache.
-- NTSC function
 
 
 More involved:

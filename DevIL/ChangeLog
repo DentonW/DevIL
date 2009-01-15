@@ -100,3 +100,5 @@
 
 2009-01-15 Denton Woods <doomwiz@users.sf.net>
 	* il_manip.c / il.h: Added ilClampNTSC function.
+	* il_squish.cpp: Added
+	
