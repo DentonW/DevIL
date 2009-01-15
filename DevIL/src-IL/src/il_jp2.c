@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 08/24/2008
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 01/15/2009
 //
 // Filename: src-IL/src/il_jp2.c
 //
@@ -561,7 +561,7 @@ ILint Jp2ConvertData(jas_stream_t *in, jas_image_t *image)
 		{
 			for (cmptno = 0; cmptno < numcmpts; ++cmptno)
 			{
-				/* The sample data is unsigned. */
+				// The sample data is unsigned.
 				int c;
 				if ((c = jas_stream_getc(in)) == EOF) {
 					return -1;
@@ -580,8 +580,7 @@ ILint Jp2ConvertData(jas_stream_t *in, jas_image_t *image)
 	jas_stream_flush(in);
 	ret = 0;
 
-	done:
-
+done:
 	for (cmptno = 0; cmptno < numcmpts; ++cmptno) {
 		if (data[cmptno]) {
 			jas_matrix_destroy(data[cmptno]);

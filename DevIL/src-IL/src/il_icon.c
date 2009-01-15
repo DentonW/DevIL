@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2001-2008 by Denton Woods
-// Last modified: 08/23/2008
+// Copyright (C) 2001-2009 by Denton Woods
+// Last modified: 01/15/2009
 //
 // Filename: src-IL/src/il_icon.c
 //
@@ -72,17 +72,13 @@ ILboolean iLoadIconInternal()
 	ILboolean	BaseCreated = IL_FALSE;
 	ILubyte		PNGTest[3];
 
-
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
-
 	IconDir.Reserved = GetLittleShort();
-
 	IconDir.Type = GetLittleShort();
-
 	IconDir.Count = GetLittleShort();
 
 	if (ieof())

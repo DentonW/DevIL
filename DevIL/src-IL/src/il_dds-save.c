@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 12/06/2006
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 01/15/2009
 //
 // Filename: src-IL/src/il_dds-save.c
 //
@@ -671,7 +671,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 #ifdef IL_USE_DXTC_NVIDIA
 		if (ilIsEnabled(IL_NVIDIA_COMPRESS) && Image->Depth == 1) {  // See if we need to use the nVidia Texture Tools library.
 			if (DXTCFormat == IL_DXT1 || DXTCFormat == IL_DXT1A || DXTCFormat == IL_DXT3 || DXTCFormat == IL_DXT5) {
-				// NVTT needs data as RGBA 32-bit.
+				// NVTT needs data as BGRA 32-bit.
 				if (Image->Format != IL_BGRA || Image->Type != IL_UNSIGNED_BYTE) {  // No need to convert if already this format/type.
 					ByteData = ilConvertBuffer(Image->SizeOfData, Image->Format, IL_BGRA, Image->Type, IL_UNSIGNED_BYTE, Image->Data);
 					if (ByteData == NULL)
@@ -697,8 +697,8 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 		if (ilIsEnabled(IL_SQUISH_COMPRESS) && Image->Depth == 1) {  // See if we need to use the nVidia Texture Tools library.
 			if (DXTCFormat == IL_DXT1 || DXTCFormat == IL_DXT1A || DXTCFormat == IL_DXT3 || DXTCFormat == IL_DXT5) {
 				// NVTT needs data as RGBA 32-bit.
-				if (Image->Format != IL_BGRA || Image->Type != IL_UNSIGNED_BYTE) {  // No need to convert if already this format/type.
-					ByteData = ilConvertBuffer(Image->SizeOfData, Image->Format, IL_BGRA, Image->Type, IL_UNSIGNED_BYTE, Image->Data);
+				if (Image->Format != IL_RGBA || Image->Type != IL_UNSIGNED_BYTE) {  // No need to convert if already this format/type.
+					ByteData = ilConvertBuffer(Image->SizeOfData, Image->Format, IL_RGBA, Image->Type, IL_UNSIGNED_BYTE, Image->Data);
 					if (ByteData == NULL)
 						return 0;
 				}
@@ -887,12 +887,15 @@ ILboolean GetBlock(ILushort *Block, ILushort *Data, ILimage *Image, ILuint XPos,
 
 	for (y = 0; y < 4; y++) {
 		for (x = 0; x < 4; x++) {
-		    if (x < Image->Width && y < Image->Height)
+		    if (XPos + x < Image->Width && YPos + y < Image->Height)
 				Block[i++] = Data[Offset + x];
 			else
+				// If we are out of bounds of the image, just copy the adjacent data.
 			    Block[i++] = Data[Offset];
 		}
-        Offset += Image->Width;
+		// We do not want to read past the end of the image.
+		if (YPos + y + 1 < Image->Height)
+			Offset += Image->Width;
 	}
 
 	return IL_TRUE;
@@ -1109,15 +1112,18 @@ ILuint RMSAlpha(ILubyte *Orig, ILubyte *Test)
 }
 
 
-ILuint Distance(Color888 *c1, Color888 *c2) {
+ILuint Distance(Color888 *c1, Color888 *c2)
+{
 	return  (c1->r - c2->r) * (c1->r - c2->r) +
 			(c1->g - c2->g) * (c1->g - c2->g) +
 			(c1->b - c2->b) * (c1->b - c2->b);
 }
 
 #define Sum(c) ((c)->r + (c)->g + (c)->b)
+#define NormSquared(c) ((c)->r * (c)->r + (c)->g * (c)->g + (c)->b * (c)->b)
 
-void ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1) {
+void ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1)
+{
 	ILuint		i;
 	Color888	Colours[16];
 	ILint		Lowest=0, Highest=0;
@@ -1125,9 +1131,9 @@ void ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1) {
 	for (i = 0; i < 16; i++) {
 		ShortToColor888(Block[i], &Colours[i]);
 	
-		if (Sum(&Colours[i]) < Sum(&Colours[Lowest]))
+		if (NormSquared(&Colours[i]) < NormSquared(&Colours[Lowest]))
 			Lowest = i;
-		if (Sum(&Colours[i]) > Sum(&Colours[Highest]))
+		if (NormSquared(&Colours[i]) > NormSquared(&Colours[Highest]))
  			Highest = i;
 	}
 	*ex0 = Block[Highest];
@@ -1135,6 +1141,7 @@ void ChooseEndpoints(ILushort *Block, ILushort *ex0, ILushort *ex1) {
 }
 
 #undef Sum
+#undef NormSquared
 
 
 void ChooseAlphaEndpoints(ILubyte *Block, ILubyte *a0, ILubyte *a1)
@@ -1142,7 +1149,7 @@ void ChooseAlphaEndpoints(ILubyte *Block, ILubyte *a0, ILubyte *a1)
 	ILuint	i, Lowest = 0xFF, Highest = 0;
 
 	for (i = 0; i < 16; i++) {
-		if( Block[i] < Lowest)
+		if (Block[i] < Lowest)
 			Lowest = Block[i];
 		if (Block[i] > Highest)
 			Highest = Block[i];

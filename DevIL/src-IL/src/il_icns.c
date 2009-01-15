@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2001-2008 by Denton Woods
-// Last modified: 08/23/2008
+// Copyright (C) 2001-2009 by Denton Woods
+// Last modified: 01/15/2009
 //
 // Filename: src-IL/src/il_icns.c
 //
@@ -32,6 +32,69 @@
 		#endif
 	#endif
 #endif//IL_NO_JP2
+
+
+//! Checks if the file specified in FileName is a valid .icns file.
+ILboolean ilIsValidIcns(ILconst_string FileName)
+{
+	ILHANDLE	IcnsFile;
+	ILboolean	bIcns = IL_FALSE;
+
+	if (!iCheckExtension(FileName, IL_TEXT("icns"))) {
+		ilSetError(IL_INVALID_EXTENSION);
+		return bIcns;
+	}
+
+	IcnsFile = iopenr(FileName);
+	if (IcnsFile == NULL) {
+		ilSetError(IL_COULD_NOT_OPEN_FILE);
+		return bIcns;
+	}
+
+	bIcns = ilIsValidIcnsF(IcnsFile);
+	icloser(IcnsFile);
+
+	return bIcns;
+}
+
+
+//! Checks if the ILHANDLE contains a valid .icns file at the current position.
+ILboolean ilIsValidIcnsF(ILHANDLE File)
+{
+	ILuint		FirstPos;
+	ILboolean	bRet;
+
+	iSetInputFile(File);
+	FirstPos = itell();
+	bRet = iIsValidIcns();
+	iseek(FirstPos, IL_SEEK_SET);
+
+	return bRet;
+}
+
+
+//! Checks if Lump is a valid .icns lump.
+ILboolean ilIsValidIcnsL(const void *Lump, ILuint Size)
+{
+	iSetInputLump(Lump, Size);
+	return iIsValidIcns();
+}
+
+
+// Internal function to get the header and check it.
+ILboolean iIsValidIcns()
+{
+	ICNSHEAD	Header;
+
+	iread(Header.Head, 1, 4);
+	iseek(-4, IL_SEEK_CUR);  // Go ahead and restore to previous state
+
+	if (strncmp(Header.Head, "icns", 4))  // First 4 bytes have to be 'icns'.
+		return IL_FALSE;
+
+	return IL_TRUE;
+}
+
 
 //! Reads an icon file.
 ILboolean ilLoadIcns(ILconst_string FileName)
@@ -229,9 +292,9 @@ ILboolean iIcnsReadData(ILboolean *BaseCreated, ILboolean IsAlpha, ILint Width, 
 			TempImage->Data[(i * 4) + 3] = Data[i];
 		}
 	}
-#ifndef IL_NO_JP2
 	else if (Width == 256 || Width == 512)  // JPEG2000 encoded - uses JasPer
 	{
+#ifndef IL_NO_JP2
 		iread(Data, Entry->Size - 8, 1);  // Size includes the header
 		if (ilLoadJp2LInternal(Data, Entry->Size - 8, TempImage) == IL_FALSE)
 		{
@@ -239,8 +302,11 @@ ILboolean iIcnsReadData(ILboolean *BaseCreated, ILboolean IsAlpha, ILint Width, 
 			ilSetError(IL_LIB_JP2_ERROR);
 			return IL_TRUE;
 		}
-	}
+#else  // Cannot handle this size.
+		ilSetError(IL_LIB_JP2_ERROR);  //@TODO: Handle this better...just skip the data.
+		return IL_FALSE;
 #endif//IL_NO_JP2
+	}
 	else  // RGB data
 	{
 		iread(Data, Entry->Size - 8, 1);  // Size includes the header

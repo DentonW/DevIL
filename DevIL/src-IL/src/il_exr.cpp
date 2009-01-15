@@ -42,6 +42,91 @@
 #endif
 
 
+//! Checks if the file specified in FileName is a valid EXR file.
+ILboolean ilIsValidExr(ILconst_string FileName)
+{
+	ILHANDLE	ExrFile;
+	ILboolean	bExr = IL_FALSE;
+	
+	if (!iCheckExtension(FileName, IL_TEXT("exr"))) {
+		ilSetError(IL_INVALID_EXTENSION);
+		return bExr;
+	}
+	
+	ExrFile = iopenr(FileName);
+	if (ExrFile == NULL) {
+		ilSetError(IL_COULD_NOT_OPEN_FILE);
+		return bExr;
+	}
+	
+	bExr = ilIsValidExrF(ExrFile);
+	icloser(ExrFile);
+	
+	return bExr;
+}
+
+
+//! Checks if the ILHANDLE contains a valid EXR file at the current position.
+ILboolean ilIsValidExrF(ILHANDLE File)
+{
+	ILuint		FirstPos;
+	ILboolean	bRet;
+	
+	iSetInputFile(File);
+	FirstPos = itell();
+	bRet = iIsValidExr();
+	iseek(FirstPos, IL_SEEK_SET);
+	
+	return bRet;
+}
+
+
+//! Checks if Lump is a valid EXR lump.
+ILboolean ilIsValidExrL(const void *Lump, ILuint Size)
+{
+	iSetInputLump(Lump, Size);
+	return iIsValidExr();
+}
+
+
+// Internal function used to get the EXR header from the current file.
+ILboolean iGetExrHead(EXRHEAD *Header)
+{
+	Header->MagicNumber = GetLittleUInt();
+	Header->Version = GetLittleUInt();
+
+	return IL_TRUE;
+}
+
+
+// Internal function to get the header and check it.
+ILboolean iIsValidExr()
+{
+	EXRHEAD Head;
+
+	if (!iGetExrHead(&Head))
+		return IL_FALSE;
+	iseek(-(ILint)sizeof(EXRHEAD), IL_SEEK_CUR);
+	
+	return iCheckExr(&Head);
+}
+
+
+// Internal function used to check if the HEADER is a valid EXR header.
+ILboolean iCheckExr(EXRHEAD *Header)
+{
+	// The file magic number (signature) is 0x76, 0x2f, 0x31, 0x01
+	if (Header->MagicNumber != 0x01312F76)
+		return IL_FALSE;
+	// The only valid version so far is version 2.  The upper value has
+	//  to do with tiling.
+	if (Header->Version != 0x002 && Header->Version != 0x202)
+		return IL_FALSE;
+
+	return IL_TRUE;
+}
+
+
 // Nothing to do here in the constructor.
 ilIStream::ilIStream() : Imf::IStream("N/A")
 {

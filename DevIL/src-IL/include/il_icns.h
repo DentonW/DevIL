@@ -28,13 +28,14 @@ typedef struct ICNSHEAD
 typedef struct ICNSDATA
 {
 	ILbyte		ID[4];		// Identifier ('it32', 'il32', etc.)
-	ILint		Size;		// Total size of the file (including header)
+	ILint		Size;		// Total size of the entry (including identifier)
 } IL_PACKSTRUCT ICNSDATA;
 
 #ifdef _WIN32
 	#pragma pack(pop, icns_struct)
 #endif
 
+ILboolean iIsValidIcns();
 ILboolean iLoadIcnsInternal();
 ILboolean iIcnsReadData(ILboolean *BaseCreated, ILboolean IsAlpha, ILint Width, ICNSDATA *Entry, ILimage **Image);
 

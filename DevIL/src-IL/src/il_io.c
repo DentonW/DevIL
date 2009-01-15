@@ -67,6 +67,8 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 		Type = IL_JP2;
 	else if (!iStrCmp(Ext, IL_TEXT("dds")))
 		Type = IL_DDS;
+	else if (!iStrCmp(Ext, IL_TEXT("exr")))
+		Type = IL_EXR;
 	else if (!iStrCmp(Ext, IL_TEXT("png")))
 		Type = IL_PNG;
 	else if (!iStrCmp(Ext, IL_TEXT("bmp")) || !iStrCmp(Ext, IL_TEXT("dib")))
@@ -181,6 +183,11 @@ ILenum ILAPIENTRY ilDetermineTypeF(ILHANDLE File)
 		return IL_BMP;
 	#endif
 
+	#ifndef IL_NO_EXR
+	if (ilIsValidExrF(File))
+		return IL_EXR;
+	#endif
+
 	#ifndef IL_NO_GIF
 	if (ilIsValidGifF(File))
 		return IL_GIF;
@@ -189,6 +196,11 @@ ILenum ILAPIENTRY ilDetermineTypeF(ILHANDLE File)
 	#ifndef IL_NO_HDR
 	if (ilIsValidHdrF(File))
 		return IL_HDR;
+	#endif
+
+	#ifndef IL_NO_ICNS
+	if (ilIsValidIcnsF(File))
+		return IL_ICNS;
 	#endif
 
 	#ifndef IL_NO_LIF
@@ -277,6 +289,11 @@ ILenum ilDetermineTypeL(const void *Lump, ILuint Size)
 		return IL_BMP;
 	#endif
 
+	#ifndef IL_NO_EXR
+	if (ilIsValidExrL(Lump, Size))
+		return IL_EXR;
+	#endif
+
 	#ifndef IL_NO_GIF
 	if (ilIsValidGifL(Lump, Size))
 		return IL_GIF;
@@ -285,6 +302,11 @@ ILenum ilDetermineTypeL(const void *Lump, ILuint Size)
 	#ifndef IL_NO_HDR
 	if (ilIsValidHdrL(Lump, Size))
 		return IL_HDR;
+	#endif
+
+	#ifndef IL_NO_ICNS
+	if (ilIsValidIcnsL(Lump, Size))
+		return IL_ICNS;
 	#endif
 
 	#ifndef IL_NO_LIF
@@ -382,6 +404,11 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, ILstring FileName)
 			return ilIsValidBmp(FileName);
 		#endif
 
+		#ifndef IL_NO_EXR
+		case IL_EXR:
+			return ilIsValidExr(FileName);
+		#endif
+
 		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilIsValidGif(FileName);
@@ -390,6 +417,11 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, ILstring FileName)
 		#ifndef IL_NO_HDR
 		case IL_HDR:
 			return ilIsValidHdr(FileName);
+		#endif
+
+		#ifndef IL_NO_ICNS
+		case IL_ICNS:
+			return ilIsValidIcns(FileName);
 		#endif
 
 		#ifndef IL_NO_LIF
@@ -482,6 +514,11 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 			return ilIsValidBmpF(File);
 		#endif
 
+		#ifndef IL_NO_EXR
+		case IL_EXR:
+			return ilIsValidExrF(File);
+		#endif
+
 		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilIsValidGifF(File);
@@ -490,6 +527,11 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 		#ifndef IL_NO_HDR
 		case IL_HDR:
 			return ilIsValidHdrF(File);
+		#endif
+
+		#ifndef IL_NO_ICNS
+		case IL_ICNS:
+			return ilIsValidIcnsF(File);
 		#endif
 
 		#ifndef IL_NO_LIF
@@ -582,6 +624,11 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, void *Lump, ILuint Size)
 			return ilIsValidBmpL(Lump, Size);
 		#endif
 
+		#ifndef IL_NO_EXR
+		case IL_EXR:
+			return ilIsValidExrL(Lump, Size);
+		#endif
+
 		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilIsValidGifL(Lump, Size);
@@ -590,6 +637,11 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, void *Lump, ILuint Size)
 		#ifndef IL_NO_HDR
 		case IL_HDR:
 			return ilIsValidHdrL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_ICNS
+		case IL_ICNS:
+			return ilIsValidIcnsL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_LIF
