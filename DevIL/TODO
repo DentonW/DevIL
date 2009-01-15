@@ -44,7 +44,7 @@ More involved:
 - Reorder loading/saving in il_io.c
 - Get il_vtf.c to do less memory allocation.  Just use the precache function.
 - In il_gif.c, make sure subimages with offsets will not lead to an overflow.
-- il_bmp.c may not be safe for Big Endian for 16-bit data.
+- il_bmp.c / il_dds.c / il_dds-save.c may not be safe for Big Endian for 16-bit data.
 - Change how mipmaps are stored (do not use Next pointer in ILimage).
 - Check ASCII PPM code for the ability to read data that wraps around to multiple lines.
 - cubemap.hdr.vtf does not load.
@@ -62,6 +62,7 @@ More involved:
 - iluEqualize must be implemented for various Bpc
 - Update the state stack in IL.  Right now, it only saves part of the states when you push/pop.
 - Redo Compress in il_dds-save.c.
+- Check 16-bit images being loaded have their lower bits properly set.  An example is the il_dds.c entry on 2009-01-15.
 
 
 Lots of work:
@@ -116,6 +117,8 @@ Questions:
 - Should iluScale act on faces and mipmaps?
 - Fix problems loading .dds files on Big Endian machines (still a problem or not?)
 - Reimplement DXT2/DXT4 saving?
+- Should we be calculating DXT endpoints before converting data to 565 format?
+- Use Extreme DXT compression code?
 
 
 From old TODO:

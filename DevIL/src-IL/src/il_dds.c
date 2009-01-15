@@ -465,14 +465,9 @@ ILuint DecodePixelFormat()
 				BlockSize *= 16;
 				break;
 
-
-
 			case IL_MAKEFOURCC('A', 'T', 'I', '1'):
-
 				CompFormat = PF_ATI1N;
-
 				BlockSize *= 8;
-
 				break;
 
 			case IL_MAKEFOURCC('A', 'T', 'I', '2'):
@@ -976,15 +971,16 @@ void DxtcReadColors(const ILubyte* Data, Color8888* Out)
 	g1 = ((Data[2] & 0xE0) >> 5) | ((Data[3] & 0x7) << 3);
 	r1 = (Data[3] & 0xF8) >> 3;
 
-	Out[0].r = r0 << 3;
-	Out[0].g = g0 << 2;
-	Out[0].b = b0 << 3;
+	Out[0].r = r0 << 3 | r0 >> 2;
+	Out[0].g = g0 << 2 | g0 >> 3;
+	Out[0].b = b0 << 3 | b0 >> 2;
 
-	Out[1].r = r1 << 3;
-	Out[1].g = g1 << 2;
-	Out[1].b = b1 << 3;
+	Out[1].r = r1 << 3 | r1 >> 2;
+	Out[1].g = g1 << 2 | g1 >> 3;
+	Out[1].b = b1 << 3 | b1 >> 2;
 }
 
+//@TODO: Probably not safe on Big Endian.
 void DxtcReadColor(ILushort Data, Color8888* Out)
 {
 	ILubyte r, g, b;
@@ -993,9 +989,9 @@ void DxtcReadColor(ILushort Data, Color8888* Out)
 	g = (Data & 0x7E0) >> 5;
 	r = (Data & 0xF800) >> 11;
 
-	Out->r = r << 3;
-	Out->g = g << 2;
-	Out->b = b << 3;
+	Out->r = r << 3 | r >> 2;
+	Out->g = g << 2 | g >> 3;
+	Out->b = b << 3 | r >> 2;
 }
 
 ILboolean DecompressDXT1(ILimage *lImage, ILubyte *lCompData)

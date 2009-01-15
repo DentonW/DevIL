@@ -122,4 +122,5 @@
 	* il_exr.c: Added ilIsValidExr*.
 	* il_io.c (ilLoadF): Uncommented ilLoadJp2F.
 	* il_dds-save.c (CompressTo565): Changed 24-bit to 16-bit code based on Charles Bloom's rant.
+	* il_dds.c (DxtcReadColor/DxtcReadColors): Changed conversion to copy high bits to lowest bits as well.
 	
