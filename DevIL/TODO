@@ -6,11 +6,12 @@ Denton:
 
 Easier:
 - iGetString may not work properly with Unicode strings.
-- Add ilIsValid* for .icns and .jp2 (and more?)
+- Add ilIsValid* for .jp2 (and more?)
 - Fix Daniel's suggestions.
 - Added ilSetError error codes to il_files.c.
 - Get rid of check for precache.
 - If IL_NO_JP2 is defined, lines 306-307 shouldn't just cause the entire thing to fail.  We should just skip that entry.
+- Change ilConvertBuffer to be able to convert paletted images as well.
 
 
 More involved:

@@ -612,7 +612,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					last_elapsed = cur_elapsed;
 
 					//ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-					ilEnable(IL_NVIDIA_COMPRESS);
+					//ilEnable(IL_NVIDIA_COMPRESS);
 					//ilEnable(IL_SQUISH_COMPRESS);
 					ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
 					//free(ilNVidiaCompressDXT(ilGetData(), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 1, IL_DXT5));

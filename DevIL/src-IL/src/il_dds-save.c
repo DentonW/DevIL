@@ -356,6 +356,22 @@ ILuint ILAPIENTRY ilGetDXTCData(void *Buffer, ILuint BufferSize, ILenum DXTCForm
 }
 
 
+// Added the next two functions based on Charles Bloom's rant at
+//  http://cbloomrants.blogspot.com/2008/12/12-08-08-dxtc-summary.html.
+//  This code is by ryg and from the Molly Rocket forums:
+//  https://mollyrocket.com/forums/viewtopic.php?t=392.
+static ILint Mul8Bit(ILint a, ILint b)
+{
+	ILint t = a*b + 128;
+	return (t + (t >> 8)) >> 8;
+}
+
+ILushort As16Bit(ILint r, ILint g, ILint b)
+{
+	return (Mul8Bit(r,31) << 11) + (Mul8Bit(g,63) << 5) + Mul8Bit(b,31);
+}
+
+
 ILushort *CompressTo565(ILimage *Image)
 {
 	ILimage		*TempImage;
@@ -383,49 +399,57 @@ ILushort *CompressTo565(ILimage *Image)
 	{
 		case IL_RGB:
 			for (i = 0, j = 0; i < TempImage->SizeOfData; i += 3, j++) {
-				Data[j]  = (TempImage->Data[i  ] >> 3) << 11;
+				/*Data[j]  = (TempImage->Data[i  ] >> 3) << 11;
 				Data[j] |= (TempImage->Data[i+1] >> 2) << 5;
-				Data[j] |=  TempImage->Data[i+2] >> 3;
+				Data[j] |=  TempImage->Data[i+2] >> 3;*/
+				Data[j] = As16Bit(TempImage->Data[i], TempImage->Data[i+1], TempImage->Data[i+2]);
 			}
 			break;
 
 		case IL_RGBA:
 			for (i = 0, j = 0; i < TempImage->SizeOfData; i += 4, j++) {
-				Data[j]  = (TempImage->Data[i  ] >> 3) << 11;
+				/*Data[j]  = (TempImage->Data[i  ] >> 3) << 11;
 				Data[j] |= (TempImage->Data[i+1] >> 2) << 5;
-				Data[j] |=  TempImage->Data[i+2] >> 3;
+				Data[j] |=  TempImage->Data[i+2] >> 3;*/
+				Data[j] = As16Bit(TempImage->Data[i], TempImage->Data[i+1], TempImage->Data[i+2]);
 			}
 			break;
 
 		case IL_BGR:
 			for (i = 0, j = 0; i < TempImage->SizeOfData; i += 3, j++) {
-				Data[j]  = (TempImage->Data[i+2] >> 3) << 11;
+				/*Data[j]  = (TempImage->Data[i+2] >> 3) << 11;
 				Data[j] |= (TempImage->Data[i+1] >> 2) << 5;
-				Data[j] |=  TempImage->Data[i  ] >> 3;
+				Data[j] |=  TempImage->Data[i  ] >> 3;*/
+				Data[j] = As16Bit(TempImage->Data[i+2], TempImage->Data[i+1], TempImage->Data[i]);
 			}
 			break;
 
 		case IL_BGRA:
 			for (i = 0, j = 0; i < TempImage->SizeOfData; i += 4, j++) {
-				Data[j]  = (TempImage->Data[i+2] >> 3) << 11;
+				/*Data[j]  = (TempImage->Data[i+2] >> 3) << 11;
 				Data[j] |= (TempImage->Data[i+1] >> 2) << 5;
-				Data[j] |=  TempImage->Data[i  ] >> 3;
+				Data[j] |=  TempImage->Data[i  ] >> 3;*/
+				Data[j] = As16Bit(TempImage->Data[i+2], TempImage->Data[i+1], TempImage->Data[i]);
 			}
 			break;
 
 		case IL_LUMINANCE:
 			for (i = 0, j = 0; i < TempImage->SizeOfData; i++, j++) {
-				Data[j]  = (TempImage->Data[i] >> 3) << 11;
+				//@TODO: Do better conversion here.
+				/*Data[j]  = (TempImage->Data[i] >> 3) << 11;
 				Data[j] |= (TempImage->Data[i] >> 2) << 5;
-				Data[j] |=  TempImage->Data[i] >> 3;
+				Data[j] |=  TempImage->Data[i] >> 3;*/
+				Data[j] = As16Bit(TempImage->Data[i], TempImage->Data[i], TempImage->Data[i]);
 			}
 			break;
 
 		case IL_LUMINANCE_ALPHA:
 			for (i = 0, j = 0; i < TempImage->SizeOfData; i += 2, j++) {
-				Data[j]  = (TempImage->Data[i] >> 3) << 11;
+				//@TODO: Do better conversion here.
+				/*Data[j]  = (TempImage->Data[i] >> 3) << 11;
 				Data[j] |= (TempImage->Data[i] >> 2) << 5;
-				Data[j] |=  TempImage->Data[i] >> 3;
+				Data[j] |=  TempImage->Data[i] >> 3;*/
+				Data[j] = As16Bit(TempImage->Data[i], TempImage->Data[i], TempImage->Data[i]);
 			}
 			break;
 	}
@@ -459,7 +483,7 @@ ILubyte *CompressTo88(ILimage *Image)
 		return NULL;
 	}
 
-	//changed 20040623: Use TempImages format :)
+	//changed 20040623: Use TempImage's format :)
 	switch (TempImage->Format)
 	{
 		case IL_RGB:
