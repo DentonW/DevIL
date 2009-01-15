@@ -958,11 +958,10 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			#endif
 		#endif
 
-		// There is not a way to do this with the JasPer library.
-		/*#ifndef IL_NO_JP2
+		#ifndef IL_NO_JP2
 		case IL_JP2:
 			return ilLoadJp2F(File);
-		#endif*/
+		#endif
 
 		#ifndef IL_NO_DDS
 		case IL_DDS:
