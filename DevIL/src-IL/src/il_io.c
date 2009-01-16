@@ -810,7 +810,7 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 
 		#ifndef IL_NO_PCD
 		case IL_PCD:
-			bRet = IL_FALSE;//ilLoadPcd(FileName);
+			ilLoadPcd(FileName);
 			break;
 		#endif
 
@@ -1032,7 +1032,7 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 
 		#ifndef IL_NO_PCD
 		case IL_PCD:
-			return IL_FALSE;//return ilLoadPcdF(File);
+			return ilLoadPcdF(File);
 		#endif
 
 		#ifndef IL_NO_PCX
@@ -1215,7 +1215,7 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size)
 
 		#ifndef IL_NO_PCD
 		case IL_PCD:
-			return IL_FALSE;//return ilLoadPcdL(Lump, Size);
+			return ilLoadPcdL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_PCX
@@ -1439,7 +1439,7 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 
 		#ifndef IL_NO_PCD
 		if (!iStrCmp(Ext, IL_TEXT("pcd"))) {
-			bRet = IL_FALSE;//bRet = ilLoadPcd(FileName);
+			bRet = ilLoadPcd(FileName);
 			goto finish;
 		}
 		#endif
@@ -1601,6 +1601,11 @@ ILboolean ILAPIENTRY ilSave(ILenum Type, ILconst_string FileName)
     		return ilSaveDds(FileName);
 		#endif
 
+		#ifndef IL_NO_EXR
+		case IL_EXR:
+    		return ilSaveExr(FileName);
+		#endif
+
 		#ifndef IL_NO_HDR
 		case IL_HDR:
 			return ilSaveHdr(FileName);
@@ -1690,6 +1695,12 @@ ILuint ILAPIENTRY ilSaveF(ILenum Type, ILHANDLE File)
 		#ifndef IL_NO_DDS
 		case IL_DDS:
 			Ret = ilSaveDdsF(File);
+			break;
+		#endif
+
+		#ifndef IL_NO_EXR
+		case IL_EXR:
+			Ret = ilSaveExrF(File);
 			break;
 		#endif
 
@@ -1787,6 +1798,12 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, void *Lump, ILuint Size)
 		#ifndef IL_NO_BMP
 		case IL_BMP:
 			Ret = ilSaveBmpL(Lump, Size);
+			break;
+		#endif
+
+		#ifndef IL_NO_EXR
+		case IL_EXR:
+			Ret = ilSaveExrL(Lump, Size);
 			break;
 		#endif
 
@@ -1914,6 +1931,13 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 	#ifndef IL_NO_DDS
 	if (!iStrCmp(Ext, IL_TEXT("dds"))) {
 		bRet = ilSaveDds(FileName);
+		goto finish;
+	}
+	#endif
+
+	#ifndef IL_NO_EXR
+	if (!iStrCmp(Ext, IL_TEXT("exr"))) {
+		bRet = ilSaveExr(FileName);
 		goto finish;
 	}
 	#endif

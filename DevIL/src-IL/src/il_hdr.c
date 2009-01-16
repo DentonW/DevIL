@@ -585,9 +585,8 @@ ILboolean iSaveHdrInternal()
 		return IL_FALSE;
 
 	if (TempImage->Origin == IL_ORIGIN_LOWER_LEFT)
-		iFlipBuffer(TempImage->Data,TempImage->Depth,TempImage->Bps,TempImage->Height);
+		iFlipBuffer(TempImage->Data, TempImage->Depth, TempImage->Bps, TempImage->Height);
 	data = (ILfloat*)TempImage->Data;
-
 
 	if ((TempImage->Width < 8)||(TempImage->Width > 0x7fff)) {
 		/* run length encoding is not allowed so write flat*/

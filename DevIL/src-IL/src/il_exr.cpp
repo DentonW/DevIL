@@ -227,11 +227,12 @@ ILboolean iLoadExrInternal()
 	ilIStream File;
 	RgbaInputFile in(File);
 
+	Rgba a;
     dataWindow = in.dataWindow();
     pixelAspectRatio = in.pixelAspectRatio();
 
     int dw, dh, dx, dy;
-
+ 
 	dw = dataWindow.max.x - dataWindow.min.x + 1;
     dh = dataWindow.max.y - dataWindow.min.y + 1;
     dx = dataWindow.min.x;
@@ -295,6 +296,133 @@ ILboolean iLoadExrInternal()
 	return IL_TRUE;
 }
 
+
+
+// Nothing to do here in the constructor.
+ilOStream::ilOStream() : Imf::OStream("N/A")
+{
+	return;
+}
+
+void ilOStream::write(const char c[], int n)
+{
+	iwrite(c, 1, n);  //@TODO: Throw an exception here.
+	return;
+}
+
+//@TODO: Make this work with 64-bit values.
+Imf::Int64 ilOStream::tellp()
+{
+	Imf::Int64 Pos;
+
+	// itell only returns a 32-bit value!
+	Pos = itell();
+
+	return Pos;
+}
+
+// Note that there is no return value here, even though there probably should be.
+//@TODO: Make this work with 64-bit values.
+void ilOStream::seekp(Imf::Int64 Pos)
+{
+	// iseek only uses a 32-bit value!
+	iseek((ILint)Pos, IL_SEEK_SET);  // I am assuming this is seeking from the beginning.
+	return;
+}
+
+
+//! Writes a Exr file
+ILboolean ilSaveExr(ILconst_string FileName)
+{
+	ILHANDLE	ExrFile;
+	ILboolean	bExr = IL_FALSE;
+	
+	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
+		if (iFileExists(FileName)) {
+			ilSetError(IL_FILE_ALREADY_EXISTS);
+			return IL_FALSE;
+		}
+	}
+	
+	ExrFile = iopenw(FileName);
+	if (ExrFile == NULL) {
+		ilSetError(IL_COULD_NOT_OPEN_FILE);
+		return bExr;
+	}
+	
+	bExr = ilSaveExrF(ExrFile);
+	iclosew(ExrFile);
+	
+	return bExr;
+}
+
+
+//! Writes a Exr to an already-opened file
+ILboolean ilSaveExrF(ILHANDLE File)
+{
+	iSetOutputFile(File);
+	return iSaveExrInternal();
+}
+
+
+//! Writes a Exr to a memory "lump"
+ILboolean ilSaveExrL(void *Lump, ILuint Size)
+{
+	iSetOutputLump(Lump, Size);
+	return iSaveExrInternal();
+}
+
+
+ILboolean iSaveExrInternal()
+{
+	Imath::Box2i DataWindow(Imath::V2i(0, 0), Imath::V2i(iCurImage->Width-1, iCurImage->Height-1));
+	Imf::LineOrder Order;
+	if (iCurImage->Origin == IL_ORIGIN_LOWER_LEFT)
+		Order = DECREASING_Y;
+	else
+		Order = INCREASING_Y;
+	Imf::Header Head(iCurImage->Width, iCurImage->Height, DataWindow, 1, Imath::V2f (0, 0), 1, Order);
+
+	ilOStream File;
+	Imf::RgbaOutputFile Out(File, Head);
+	ILimage *TempImage = iCurImage;
+
+	//@TODO: Can we always assume that Rgba is packed the same?
+	Rgba *HalfData = (Rgba*)ialloc(TempImage->Width * TempImage->Height * sizeof(Rgba));
+	if (HalfData == NULL)
+		return IL_FALSE;
+
+	if (iCurImage->Format != IL_RGBA || iCurImage->Type != IL_FLOAT) {
+		TempImage = iConvertImage(iCurImage, IL_RGBA, IL_FLOAT);
+		if (TempImage == NULL) {
+			ifree(HalfData);
+			return IL_FALSE;
+		}
+	}
+
+	ILuint Offset = 0;
+	ILfloat *FloatPtr = (ILfloat*)TempImage->Data;
+	for (unsigned int y = 0; y < TempImage->Height; y++) {
+		for (unsigned int x = 0; x < TempImage->Width; x++) {
+			HalfData[y * TempImage->Width + x].r = FloatPtr[Offset];
+			HalfData[y * TempImage->Width + x].g = FloatPtr[Offset + 1];
+			HalfData[y * TempImage->Width + x].b = FloatPtr[Offset + 2];
+			HalfData[y * TempImage->Width + x].a = FloatPtr[Offset + 3];
+			Offset += 4;  // 4 floats
+		}
+	}
+
+	Out.setFrameBuffer(HalfData, 1, TempImage->Width);
+	Out.writePixels(TempImage->Height);  //@TODO: Do each scanline separately to keep from using so much memory.
+
+	// Free our half data.
+	ifree(HalfData);
+	// Destroy our temporary image if we used one.
+	if (TempImage != iCurImage)
+		ilCloseImage(TempImage);
+
+	return IL_TRUE;
+}
 
 
 #endif //IL_NO_EXR

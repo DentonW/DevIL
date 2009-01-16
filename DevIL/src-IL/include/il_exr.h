@@ -50,6 +50,7 @@ extern "C" {
 ILboolean iIsValidExr();
 ILboolean iCheckExr(EXRHEAD *Header);
 ILboolean iLoadExrInternal();
+ILboolean iSaveExrInternal();
 
 #ifdef __cplusplus
 }
@@ -65,6 +66,21 @@ class ilIStream : public Imf::IStream
 		virtual Imf::Int64	tellg ();
 		virtual void	seekg (Imf::Int64 Pos);
 		virtual void	clear ();
+
+	protected:
+
+	private:
+};
+
+class ilOStream : public Imf::OStream
+{
+	public:
+		ilOStream(/*ILHANDLE Handle*/);
+		virtual void	write (const char c[/*n*/], int n);
+		// I don't think I need this one, since we are taking care of the file handles ourselves.
+		//virtual char *	readMemoryMapped (int n);
+		virtual Imf::Int64	tellp ();
+		virtual void	seekp (Imf::Int64 Pos);
 
 	protected:
 

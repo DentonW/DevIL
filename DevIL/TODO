@@ -12,6 +12,7 @@ Easier:
 - Get rid of check for precache.
 - If IL_NO_JP2 is defined, lines 306-307 shouldn't just cause the entire thing to fail.  We should just skip that entry.
 - Change ilConvertBuffer to be able to convert paletted images as well.
+- Update DevIL website with file formats (psd-saving, etc.).
 
 
 More involved:
@@ -25,7 +26,6 @@ More involved:
 - APNG support
 - Fortran support
 - D language support - There exists a program to convert C headers to D.
-- JP2 and EXR loading from file streams.
 - .iff support
 - Look into bug when rescaling.
 - Better DirectX 10 support
@@ -63,6 +63,7 @@ More involved:
 - Update the state stack in IL.  Right now, it only saves part of the states when you push/pop.
 - Redo Compress in il_dds-save.c.
 - Check 16-bit images being loaded have their lower bits properly set.  An example is the il_dds.c entry on 2009-01-15.
+- Make iSaveJp2Internal and iSaveExrInternal work with palettes (make ilConvertBuffer work on palettes as well).
 
 
 Lots of work:
@@ -119,6 +120,7 @@ Questions:
 - Reimplement DXT2/DXT4 saving?
 - Should we be calculating DXT endpoints before converting data to 565 format?
 - Use Extreme DXT compression code?
+- Support half data internally?
 
 
 From old TODO:

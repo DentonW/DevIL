@@ -638,11 +638,16 @@ ILboolean iSaveJp2Internal()
 	}
 
 	if (NewType != iCurImage->Type || NewFormat != iCurImage->Format) {
-		TempImage = iConvertImage(iCurImage, iCurImage->Format, IL_UNSIGNED_BYTE);
+		TempImage = iConvertImage(iCurImage, NewFormat, NewType);
 		if (TempImage == NULL)
 			return IL_FALSE;
 	}
 
+	// The origin is always in the lower left corner.  Flip the buffer if it is not.
+	if (TempImage->Origin == IL_ORIGIN_UPPER_LEFT)
+		iFlipBuffer(TempImage->Data, TempImage->Depth, TempImage->Bps, TempImage->Height);
+
+	// Have to tell JasPer about each channel.  In our case, they all have the same information.
 	for (i = 0; i < NumChans; i++) {
 		cmptparm[i].width = iCurImage->Width;
 		cmptparm[i].height = iCurImage->Height;
@@ -654,13 +659,15 @@ ILboolean iSaveJp2Internal()
 		cmptparm[i].sgnd = 0;  // Unsigned data
 	}
 
-	Jp2Image = jas_image_create(NumChans, cmptparm, JAS_CLRSPC_UNKNOWN);  // Try also JAS_CLRSPC_SRGB and JAS_CLRSPC_SGRAY
+	// Using the unknown color space, since we have not determined the space yet.
+	//  This is done in the following switch statement.
+	Jp2Image = jas_image_create(NumChans, cmptparm, JAS_CLRSPC_UNKNOWN);
 	if (Jp2Image == NULL) {
 		ilSetError(IL_LIB_JP2_ERROR);
 		return IL_FALSE;
 	}
 
-	switch(NumChans)
+	switch (NumChans)
 	{
 		case 1:
 			jas_image_setclrspc(Jp2Image, JAS_CLRSPC_SGRAY);
@@ -702,15 +709,16 @@ ILboolean iSaveJp2Internal()
 		ilSetError(IL_LIB_JP2_ERROR);
 		return IL_FALSE;
 	}
-	//out = jas_stream_memopen(0, 0);
 
+	// Puts data in the format that JasPer wants it in.
 	Jp2ConvertData(Mem, Jp2Image);
 
+	// Does all of the encoding.
 	if (jas_image_encode(Jp2Image, Stream, jas_image_strtofmt("jp2"), NULL)) {  //@TODO: Do we want to use any options?
 		ilSetError(IL_LIB_JP2_ERROR);
 		return IL_FALSE;
 	}
-	jas_stream_flush(Stream);
+	jas_stream_flush(Stream);  // Do any final writing.
 
 	// Close the memory and output streams.
 	jas_stream_close(Mem);

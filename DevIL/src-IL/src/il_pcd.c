@@ -146,6 +146,9 @@ ILboolean iLoadPcdInternal()
 			return IL_FALSE;
 	}
 
+	if (itell() == IL_EOF)  // Supposed to have data here.
+		return IL_FALSE;
+
 	Y1 = (ILubyte*)ialloc(Width);
 	Y2 = (ILubyte*)ialloc(Width);
 	CbCr = (ILubyte*)ialloc(Width);
