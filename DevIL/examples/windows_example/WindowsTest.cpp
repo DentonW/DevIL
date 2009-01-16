@@ -73,11 +73,11 @@ TCHAR	FilterEditString[255];
 TCHAR	NewTitle[512];
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-BOOL APIENTRY AboutDlgProc (HWND hDlg, UINT message, UINT wParam, LONG lParam);
-BOOL APIENTRY PropertiesDlgProc (HWND hDlg, UINT message, UINT wParam, LONG lParam);
-BOOL APIENTRY FilterDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam);
-BOOL APIENTRY ResizeDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam);
-BOOL APIENTRY BatchDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam);
+INT_PTR APIENTRY AboutDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+INT_PTR APIENTRY PropertiesDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+INT_PTR APIENTRY FilterDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+INT_PTR APIENTRY ResizeDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+INT_PTR APIENTRY BatchDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 void BatchConv(char *Directory, char *ExtList, char *ConvExt, bool Recurse);
 void GenFilterString(TCHAR *Out, TCHAR **Strings);
 void ResizeWin(void);
@@ -927,7 +927,7 @@ void GenFilterString(TCHAR *Out, TCHAR **Strings)
 }
 
 
-BOOL APIENTRY AboutDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
+INT_PTR APIENTRY AboutDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
 	{
@@ -972,7 +972,7 @@ BOOL APIENTRY AboutDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
 }
 
 
-BOOL APIENTRY PropertiesDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
+INT_PTR APIENTRY PropertiesDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
 	{
@@ -1012,7 +1012,7 @@ BOOL APIENTRY PropertiesDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lPara
 }
 
 
-BOOL APIENTRY FilterDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
+INT_PTR APIENTRY FilterDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
 	{
@@ -1098,7 +1098,7 @@ BOOL APIENTRY FilterDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
 }
 
 
-BOOL APIENTRY ResizeDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
+INT_PTR APIENTRY ResizeDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	static TCHAR x[255], y[255], z[255];
 	static ILuint xsize, ysize, zsize;
@@ -1158,7 +1158,7 @@ BOOL APIENTRY ResizeDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
 }
 
 
-BOOL APIENTRY BatchDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam)
+INT_PTR APIENTRY BatchDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	static TCHAR	Dir[255], NewExt[255];
 	static bool		Recurse;

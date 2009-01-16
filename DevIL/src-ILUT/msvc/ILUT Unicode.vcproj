@@ -76,9 +76,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\../../lib/unicode/ILUT.dll"
+				OutputFile="../../lib/vc9/x86/unicode/ilut.dll"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile="ilut.def"
+				DelayLoadDLLs="sdl.dll; opengl32.dll; d3d9.dll; d3d10.dll"
+				ImportLibrary="../../lib/vc9/x86/unicode/ilut.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -100,7 +102,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine="copy $(TargetPath) c:\windows\system32"
 			/>
 		</Configuration>
 		<Configuration
@@ -161,9 +163,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\../../lib/unicode/ILUT.dll"
+				AdditionalOptions="/ignore:4197"
+				OutputFile="../../lib/vc9/x64/unicode/ilut.dll"
 				IgnoreDefaultLibraryNames="msvcrt.lib; msvcrtd.lib"
 				ModuleDefinitionFile="ilut.def"
+				DelayLoadDLLs="sdl.dll; opengl32.dll; d3d9.dll; d3d10.dll"
+				ImportLibrary="../../lib/vc9/x64/unicode/ilut.lib"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -186,7 +191,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine="&quot;$(SolutionDir)x64 DLL Install.exe&quot; $(TargetPath) %SYSTEMROOT%\System32\$(TargetFileName)"
 			/>
 		</Configuration>
 		<Configuration
@@ -248,10 +253,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="../../lib/debug/unicode/ilut.dll"
+				OutputFile="../../lib/vc9/x86/unicode/debug/ilut.dll"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile="ilut.def"
+				DelayLoadDLLs="sdl.dll; opengl32.dll; d3d9.dll; d3d10.dll"
 				GenerateDebugInformation="true"
+				ImportLibrary="../../lib/vc9/x86/unicode/debug/ilut.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -273,7 +280,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine="copy $(TargetPath) c:\windows\system32"
 			/>
 		</Configuration>
 		<Configuration
@@ -335,10 +342,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="../../lib/debug/unicode/ilut.dll"
+				AdditionalOptions="/ignore:4197"
+				OutputFile="../../lib/vc9/x64/unicode/debug/ilut.dll"
 				IgnoreDefaultLibraryNames="msvcrt.lib; msvcrtd.lib"
 				ModuleDefinitionFile="ilut.def"
+				DelayLoadDLLs="sdl.dll; opengl32.dll; d3d9.dll; d3d10.dll"
 				GenerateDebugInformation="true"
+				ImportLibrary="../../lib/vc9/x64/unicode/debug/ilut.lib"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -361,7 +371,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine="&quot;$(SolutionDir)x64 DLL Install.exe&quot; $(TargetPath) %SYSTEMROOT%\System32\$(TargetFileName)"
 			/>
 		</Configuration>
 	</Configurations>

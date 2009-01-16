@@ -79,6 +79,7 @@
 				OutputFile=".\../../lib/ILUT.dll"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile="ilut.def"
+				DelayLoadDLLs="sdl.dll; opengl32.dll; d3d9.dll; d3d10.dll"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -141,7 +142,7 @@
 				AdditionalIncludeDirectories="../include;../../include;../../../../PC/_inc/DX"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="true"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderThrough=""
@@ -162,8 +163,9 @@
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile=".\../../lib/ILUT.dll"
-				IgnoreDefaultLibraryNames="msvcrt.lib; msvcrtd.lib"
+				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile="ilut.def"
+				DelayLoadDLLs="sdl.dll; opengl32.dll; d3d9.dll; d3d10.dll"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -251,6 +253,7 @@
 				OutputFile="../../lib/debug/ilut.dll"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile="ilut.def"
+				DelayLoadDLLs="sdl.dll; opengl32.dll; d3d9.dll; d3d10.dll"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
@@ -314,7 +317,7 @@
 				AdditionalIncludeDirectories="../include;../../include;../../../../PC/_inc/DX"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderThrough=""
@@ -336,8 +339,9 @@
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile="../../lib/debug/ilut.dll"
-				IgnoreDefaultLibraryNames="msvcrt.lib; msvcrtd.lib"
+				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile="ilut.def"
+				DelayLoadDLLs="sdl.dll; opengl32.dll; d3d9.dll; d3d10.dll"
 				GenerateDebugInformation="true"
 				TargetMachine="17"
 			/>

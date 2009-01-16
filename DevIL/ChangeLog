@@ -134,3 +134,7 @@
 	* il_jp2.c, il_wbmp.c: Fixed a typo that prevented compilation 
 	* include/IL/devil_cpp_wrapper.hpp: Added a hopefully harmless solution for
 	the initialization of devil.
+
+2009-01-16 Denton woods <doomwiz@users.sf.net>
+	* Updated x64 projects
+	

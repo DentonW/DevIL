@@ -107,8 +107,8 @@ ilTypeFunc
 ilLoadData
 ilLoadDataF
 ilLoadDataL
-ilLoadFromJpegStruct
-ilSaveFromJpegStruct
+;ilLoadFromJpegStruct
+;ilSaveFromJpegStruct
 
 ; Internal but exported functions
 iBindImageTemp

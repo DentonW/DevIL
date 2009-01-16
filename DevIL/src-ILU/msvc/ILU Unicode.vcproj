@@ -78,7 +78,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="odbc32.lib odbccp32.lib"
-				OutputFile="../../lib/debug/unicode/ilu.dll"
+				OutputFile="../../lib/vc9/x86/unicode/debug/ilu.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				IgnoreDefaultLibraryNames=""
@@ -87,7 +87,7 @@
 				ProgramDatabaseFile=".\../../lib/debug/ilu-d.pdb"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
-				ImportLibrary=".\../../lib/debug/unicode/ilu.lib"
+				ImportLibrary="../../lib/vc9/x86/unicode/debug/ilu.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -175,8 +175,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/ignore:4197"
 				AdditionalDependencies="odbc32.lib odbccp32.lib"
-				OutputFile="../../lib/debug/unicode/ilu.dll"
+				OutputFile="../../lib/vc9/x64/unicode/debug/ilu.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				IgnoreDefaultLibraryNames="msvcrt.lib; msvcrtd.lib"
@@ -185,7 +186,7 @@
 				ProgramDatabaseFile=".\../../lib/debug/ilu-d.pdb"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
-				ImportLibrary=".\../../lib/debug/unicode/ilu.lib"
+				ImportLibrary="../../lib/vc9/x64/unicode/debug/ilu.lib"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -210,7 +211,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) c:\windows\system32"
+				CommandLine="&quot;$(SolutionDir)x64 DLL Install.exe&quot; $(TargetPath) %SYSTEMROOT%\System32\$(TargetFileName)"
 			/>
 		</Configuration>
 		<Configuration
@@ -275,7 +276,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="odbc32.lib odbccp32.lib devil.lib"
-				OutputFile=".\../../lib/unicode/ILU.dll"
+				OutputFile="../../lib/vc9/x86/unicode/ilu.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../lib"
@@ -284,7 +285,7 @@
 				ProgramDatabaseFile=".\../../lib/ILU.pdb"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
-				ImportLibrary=".\../../lib/unicode/ILU.lib"
+				ImportLibrary="../../lib/vc9/x86/unicode/ilu.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -373,8 +374,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/ignore:4197"
 				AdditionalDependencies="odbc32.lib odbccp32.lib devil.lib"
-				OutputFile=".\../../lib/unicode/ILU.dll"
+				OutputFile="../../lib/vc9/x64/unicode/ilu.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../lib"
@@ -383,7 +385,7 @@
 				ProgramDatabaseFile=".\../../lib/ILU.pdb"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
-				ImportLibrary=".\../../lib/unicode/ILU.lib"
+				ImportLibrary="../../lib/vc9/x64/unicode/ilu.lib"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -408,7 +410,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) c:\windows\system32"
+				CommandLine="&quot;$(SolutionDir)x64 DLL Install.exe&quot; $(TargetPath) %SYSTEMROOT%\System32\$(TargetFileName)"
 			/>
 		</Configuration>
 	</Configurations>
