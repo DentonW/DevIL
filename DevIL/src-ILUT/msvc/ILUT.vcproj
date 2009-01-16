@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="ILUT"
-	ProjectGUID="{A4563D37-173F-4459-BDC5-9F42992AEF45}"
+	ProjectGUID="{7D060DA4-F2FA-44CC-80BE-065024DD6CA9}"
 	RootNamespace="ILUT"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -20,10 +19,10 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\lib"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory=".\../../lib/vc8/x86"
+			IntermediateDirectory="x86/Release"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -46,21 +45,23 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\../../lib/ILUT.tlb"
+				TypeLibraryName=".\../../lib/vc8/ILUT.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot; /D &quot;_CRT_NONSTDC_NO_DEPRECATE&quot;"
-				Optimization="2"
-				AdditionalIncludeDirectories="../include;../../include;../../../../PC/_inc/DX"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				Optimization="1"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="../include,../../include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ILUT_EXPORTS;IL_STATIC_LIB"
 				StringPooling="true"
 				RuntimeLibrary="2"
-				BufferSecurityCheck="false"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough=""
-				WarningLevel="3"
+				EnableFunctionLevelLinking="true"
+				PrecompiledHeaderFile=".\../src/obj/x86/ILUT.pch"
+				AssemblerListingLocation=".\../src/obj/x86/"
+				ObjectFile=".\../src/obj/x86/"
+				ProgramDataBaseFileName=".\../src/obj/x86/"
+				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -76,10 +77,17 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\../../lib/ILUT.dll"
+				AdditionalDependencies="devil.lib ilu.lib Gdi32.lib User32.lib Comdlg32.lib"
+				OutputFile=".\../../lib/vc8/x86/ILUT.dll"
+				LinkIncremental="1"
+				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories="../../lib/vc8/x86"
 				IgnoreDefaultLibraryNames=""
-				ModuleDefinitionFile="ilut.def"
-				DelayLoadDLLs="sdl.dll; opengl32.dll; d3d9.dll; d3d10.dll"
+				ModuleDefinitionFile=".\ilut.def"
+				DelayLoadDLLs="opengl32.dll,glu32.dll,d3d8.dll,d3d9.dll,sdl.dll,alleg42.dll,wininet.dll"
+				ProgramDatabaseFile=".\../../lib/vc8/ILUT.pdb"
+				ImportLibrary=".\../../lib/vc8/x86/ILUT.lib"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -92,6 +100,8 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
+				SuppressStartupBanner="true"
+				OutputFile=".\../../lib/vc8/ILUT.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -100,16 +110,19 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) %WINDIR%\system32"
+				CommandLine="copy $(TargetPath) %SYSTEMROOT%\system32"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="..\..\lib"
-			IntermediateDirectory="Release"
+			OutputDirectory=".\../../lib/vc8/x64"
+			IntermediateDirectory="$(PlatformName)\x64\$(ConfigurationName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -132,21 +145,23 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="3"
-				TypeLibraryName=".\../../lib/ILUT.tlb"
+				TypeLibraryName=".\../../lib/vc8/ILUT.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot; /D &quot;_CRT_NONSTDC_NO_DEPRECATE&quot;"
-				Optimization="2"
-				AdditionalIncludeDirectories="../include;../../include;../../../../PC/_inc/DX"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				Optimization="1"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="../include,../../include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ILUT_EXPORTS;IL_STATIC_LIB"
 				StringPooling="true"
 				RuntimeLibrary="2"
-				BufferSecurityCheck="false"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough=""
-				WarningLevel="3"
+				EnableFunctionLevelLinking="true"
+				PrecompiledHeaderFile=".\../src/obj/ILUT.pch"
+				AssemblerListingLocation=".\../src/obj/"
+				ObjectFile=".\../src/obj/"
+				ProgramDataBaseFileName=".\../src/obj/"
+				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -162,10 +177,17 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\../../lib/ILUT.dll"
+				AdditionalDependencies="Gdi32.lib User32.lib Comdlg32.lib"
+				OutputFile=".\../../lib/vc8/x64/ILUT.dll"
+				LinkIncremental="1"
+				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories="../../lib/vc8/x64"
+				ManifestFile="$(IntDir)\$(TargetFileName).intermediate.manifest"
 				IgnoreDefaultLibraryNames=""
-				ModuleDefinitionFile="ilut.def"
-				DelayLoadDLLs="sdl.dll; opengl32.dll; d3d9.dll; d3d10.dll"
+				ModuleDefinitionFile=".\ilut.def"
+				DelayLoadDLLs="opengl32.dll,glu32.dll,d3d8.dll,d3d9.dll,sdl.dll,alleg42.dll,wininet.dll"
+				ProgramDatabaseFile=".\../../lib/vc8/x64/ILUT.pdb"
+				ImportLibrary=".\../../lib/vc8/x64/ILUT.lib"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -179,6 +201,8 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
+				SuppressStartupBanner="true"
+				OutputFile=".\../../lib/vc8/ILUT.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -187,16 +211,19 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) %WINDIR%\system32"
+				CommandLine="copy $(TargetPath) c:\windows\system32"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\lib\debug"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory=".\../../lib/vc8/x86/debug"
+			IntermediateDirectory="x86/Debug"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -219,20 +246,21 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\../../lib/debug/ILUT.tlb"
+				TypeLibraryName=".\../../lib/vc8/debug/ILUT.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot; /D &quot;_CRT_NONSTDC_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;../../include;../../../../PC/_inc/DX"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				AdditionalIncludeDirectories="../include,../../include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;ILUT_EXPORTS"
+				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				BufferSecurityCheck="true"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough=""
+				PrecompiledHeaderFile=".\../src/obj/x86/debug/ILUT.pch"
+				AssemblerListingLocation=".\../src/obj/x86/debug/"
+				ObjectFile=".\../src/obj/x86/debug/"
+				ProgramDataBaseFileName=".\../src/obj/x86/debug/"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
@@ -250,11 +278,18 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="../../lib/debug/ilut.dll"
+				AdditionalDependencies="devil.lib ilu.lib delayimp.lib Gdi32.lib User32.lib Comdlg32.lib"
+				OutputFile=".\../../lib/vc8/x86/debug/ILUT.dll"
+				LinkIncremental="2"
+				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories="../../lib/vc8"
 				IgnoreDefaultLibraryNames=""
-				ModuleDefinitionFile="ilut.def"
-				DelayLoadDLLs="sdl.dll; opengl32.dll; d3d9.dll; d3d10.dll"
+				ModuleDefinitionFile=".\ilut.def"
+				DelayLoadDLLs="opengl32.dll,glu32.dll,d3d8.dll,d3d9.dll,d3d10.dll,sdl.dll,alleg42.dll,wininet.dll"
 				GenerateDebugInformation="true"
+				ProgramDatabaseFile=".\../../lib/vc8/debug/ilut.pdb"
+				ImportLibrary=".\../../lib/vc8/x86/debug/ilut.lib"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -267,6 +302,8 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
+				SuppressStartupBanner="true"
+				OutputFile=".\../../lib/vc8/debug/ILUT.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -275,16 +312,19 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) %WINDIR%\system32"
+				CommandLine="copy $(TargetPath) %SYSTEMROOT%\system32"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="..\..\lib\debug"
-			IntermediateDirectory="Debug"
+			OutputDirectory=".\../../lib/vc8/x64/debug"
+			IntermediateDirectory="$(PlatformName)\x64\$(ConfigurationName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -307,20 +347,21 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="3"
-				TypeLibraryName=".\../../lib/debug/ILUT.tlb"
+				TypeLibraryName=".\../../lib/vc8/debug/ILUT.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot; /D &quot;_CRT_NONSTDC_NO_DEPRECATE&quot; /Wp64"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;../../include;../../../../PC/_inc/DX"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				AdditionalIncludeDirectories="../include,../../include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;ILUT_EXPORTS"
+				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				BufferSecurityCheck="true"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough=""
+				PrecompiledHeaderFile=".\../src/obj/debug/ILUT.pch"
+				AssemblerListingLocation=".\../src/obj/debug/"
+				ObjectFile=".\../src/obj/debug/"
+				ProgramDataBaseFileName=".\../src/obj/debug/"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -338,11 +379,18 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="../../lib/debug/ilut.dll"
+				AdditionalDependencies="delayimp.lib Gdi32.lib User32.lib Comdlg32.lib"
+				OutputFile=".\../../lib/vc8/x64/debug/ILUT.dll"
+				LinkIncremental="2"
+				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories=""
+				ManifestFile="$(IntDir)\$(TargetFileName).intermediate.manifest"
 				IgnoreDefaultLibraryNames=""
-				ModuleDefinitionFile="ilut.def"
-				DelayLoadDLLs="sdl.dll; opengl32.dll; d3d9.dll; d3d10.dll"
+				ModuleDefinitionFile=".\ilut.def"
+				DelayLoadDLLs="opengl32.dll,glu32.dll,d3d8.dll,d3d9.dll,d3d10.dll,sdl.dll,alleg42.dll,wininet.dll"
 				GenerateDebugInformation="true"
+				ProgramDatabaseFile=".\../../lib/vc8/x64/debug/ilut.pdb"
+				ImportLibrary=".\../../lib/vc8/x64/debug/ilut.lib"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -356,6 +404,8 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
+				SuppressStartupBanner="true"
+				OutputFile=".\../../lib/vc8/debug/ILUT.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -364,8 +414,11 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) %WINDIR%\system32"
+				CommandLine="copy $(TargetPath) c:\windows\system32"
 			/>
 		</Configuration>
 	</Configurations>
@@ -377,11 +430,55 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="ilut.def"
+				RelativePath="..\msvc\ilut.def"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ilut_allegro.c"
 				>
 			</File>
 			<File
 				RelativePath="..\src\ilut_directx.c"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\ilut_directx10.c"
 				>
 			</File>
 			<File
@@ -389,28 +486,248 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\ilut_directxm.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\ilut_internal.c"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\src\ilut_main.c"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\src\ilut_opengl.c"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\src\ilut_sdlsurface.c"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\src\ilut_states.c"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\src\ilut_win32.c"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -447,12 +764,44 @@
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
 			<File
-				RelativePath=".\resources\IL Logo.ico"
+				RelativePath="resources\IL Logo.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\ILUT.rc"
+				RelativePath="ILUT.rc"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 	</Files>

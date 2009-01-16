@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="ILU"
 	ProjectGUID="{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}"
-	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -19,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\../../lib/debug"
-			IntermediateDirectory="Debug"
+			OutputDirectory=".\../../lib/vc8/x86/debug"
+			IntermediateDirectory="x86/Debug"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -45,7 +44,7 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\../../lib/debug/ILU.tlb"
+				TypeLibraryName=".\../../lib/vc8/debug/ILU.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -56,10 +55,10 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				PrecompiledHeaderFile=".\../src/obj/debug/ILU.pch"
-				AssemblerListingLocation=".\../src/obj/debug/"
-				ObjectFile=".\../src/obj/debug/"
-				ProgramDataBaseFileName=".\../src/obj/debug/"
+				PrecompiledHeaderFile=".\../src/obj/x86/debug/ILU.pch"
+				AssemblerListingLocation=".\../src/obj/x86/debug/"
+				ObjectFile=".\../src/obj/x86/debug/"
+				ProgramDataBaseFileName=".\../src/obj/x86/debug/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
@@ -77,15 +76,14 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="odbc32.lib odbccp32.lib devil.lib"
-				OutputFile="../../lib/debug/ilu.dll"
+				OutputFile="../../lib/vc8/x86/debug/ilu.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile=".\ilu.def"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\../../lib/debug/ilu-d.pdb"
-				ImportLibrary=".\../../lib/debug/ilu.lib"
+				ProgramDatabaseFile=".\../../lib/vc8/debug/ilu.pdb"
+				ImportLibrary=".\../../lib/vc8/x86/debug/ilu.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -100,7 +98,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\../../lib/debug/ILU.bsc"
+				OutputFile=".\../../lib/vc8/debug/ILU.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -109,14 +107,17 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) %WINDIR%\system32"
+				CommandLine="copy $(TargetPath) %SYSTEMROOT%\system32"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory=".\../../lib/debug"
-			IntermediateDirectory="Debug"
+			OutputDirectory=".\../../lib/vc8/x64/debug"
+			IntermediateDirectory="$(PlatformName)\x64\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -141,18 +142,17 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="3"
-				TypeLibraryName=".\../../lib/debug/ILU.tlb"
+				TypeLibraryName=".\../../lib/vc8/debug/ILU.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/Wp64"
 				Optimization="0"
 				AdditionalIncludeDirectories="../include,../../include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;ILU_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
 				PrecompiledHeaderFile=".\../src/obj/debug/ILU.pch"
 				AssemblerListingLocation=".\../src/obj/debug/"
 				ObjectFile=".\../src/obj/debug/"
@@ -174,15 +174,15 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="odbc32.lib odbccp32.lib devil.lib"
-				OutputFile="../../lib/debug/ilu.dll"
+				OutputFile="../../lib/vc8/x64/debug/ilu.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				IgnoreDefaultLibraryNames="msvcrt.lib; msvcrtd.lib"
+				ManifestFile="$(IntDir)\$(TargetFileName).intermediate.manifest"
+				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile=".\ilu.def"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\../../lib/debug/ilu-d.pdb"
-				ImportLibrary=".\../../lib/debug/ilu.lib"
+				ProgramDatabaseFile=".\../../lib/vc8/x64/debug/ilu.pdb"
+				ImportLibrary=".\../../lib/vc8/x64/debug/ilu.lib"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -197,7 +197,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\../../lib/debug/ILU.bsc"
+				OutputFile=".\../../lib/vc8/debug/ILU.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -206,14 +206,17 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) %WINDIR%\system32"
+				CommandLine="copy $(TargetPath) c:\windows\system32"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\../../lib/vc8"
-			IntermediateDirectory="Release"
+			OutputDirectory=".\../../lib/vc8/x86"
+			IntermediateDirectory="x86/Release"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -238,7 +241,107 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\../../lib/ILU.tlb"
+				TypeLibraryName=".\../../lib/vc8/ILU.tlb"
+				HeaderFileName=""
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="1"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="../include,../../include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ILU_EXPORTS"
+				StringPooling="true"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				PrecompiledHeaderFile=".\../src/obj/x86/ILU.pch"
+				AssemblerListingLocation=".\../src/obj/x86/"
+				ObjectFile=".\../src/obj/x86/"
+				ProgramDataBaseFileName=".\../src/obj/x86/"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"
+				AdditionalIncludeDirectories="..\include"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="devil.lib"
+				OutputFile=".\../../lib/vc8/x86/ILU.dll"
+				LinkIncremental="1"
+				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories="../../lib/vc8/x86"
+				IgnoreDefaultLibraryNames=""
+				ModuleDefinitionFile=".\ilu.def"
+				ProgramDatabaseFile=".\../../lib/vc8/ILU.pdb"
+				ImportLibrary=".\../../lib/vc8/x86/ILU.lib"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+				SuppressStartupBanner="true"
+				OutputFile=".\../../lib/vc8/ILU.bsc"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="copy $(TargetPath) %SYSTEMROOT%\system32"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			OutputDirectory=".\../../lib/vc8/x64"
+			IntermediateDirectory="$(PlatformName)\x64\$(ConfigurationName)"
+			ConfigurationType="2"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="true"
+				SuppressStartupBanner="true"
+				TargetEnvironment="3"
+				TypeLibraryName=".\../../lib/vc8/ILU.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -271,112 +374,15 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="odbc32.lib odbccp32.lib devil.lib"
-				OutputFile=".\../../lib/ILU.dll"
+				OutputFile=".\../../lib/vc8/x64/ILU.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="../../lib"
+				AdditionalLibraryDirectories="../../lib/vc8/x64"
+				ManifestFile="$(IntDir)\$(TargetFileName).intermediate.manifest"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile=".\ilu.def"
-				ProgramDatabaseFile=".\../../lib/ILU.pdb"
-				ImportLibrary=".\../../lib/ILU.lib"
-				TargetMachine="1"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\../../lib/ILU.bsc"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) %WINDIR%\system32"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release|x64"
-			OutputDirectory=".\../../lib/vc8"
-			IntermediateDirectory="Release"
-			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="2"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="true"
-				SuppressStartupBanner="true"
-				TargetEnvironment="3"
-				TypeLibraryName=".\../../lib/ILU.tlb"
-				HeaderFileName=""
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="1"
-				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../include,../../include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ILU_EXPORTS"
-				StringPooling="true"
-				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="true"
-				PrecompiledHeaderFile=".\../src/obj/ILU.pch"
-				AssemblerListingLocation=".\../src/obj/"
-				ObjectFile=".\../src/obj/"
-				ProgramDataBaseFileName=".\../src/obj/"
-				WarningLevel="3"
-				SuppressStartupBanner="true"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"
-				AdditionalIncludeDirectories="..\include"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="odbc32.lib odbccp32.lib devil.lib"
-				OutputFile=".\../../lib/ILU.dll"
-				LinkIncremental="1"
-				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="../../lib"
-				IgnoreDefaultLibraryNames="msvcrt.lib; msvcrtd.lib"
-				ModuleDefinitionFile=".\ilu.def"
-				ProgramDatabaseFile=".\../../lib/ILU.pdb"
-				ImportLibrary=".\../../lib/ILU.lib"
+				ProgramDatabaseFile=".\../../lib/vc8/x64/ILU.pdb"
+				ImportLibrary=".\../../lib/vc8/x64/ILU.lib"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -391,7 +397,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\../../lib/ILU.bsc"
+				OutputFile=".\../../lib/vc8/ILU.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -400,8 +406,11 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) %WINDIR%\system32"
+				CommandLine="copy $(TargetPath) c:\windows\system32"
 			/>
 		</Configuration>
 	</Configurations>
@@ -1049,10 +1058,6 @@
 				RelativePath="..\include\ilu_states.h"
 				>
 			</File>
-			<File
-				RelativePath=".\resource.h"
-				>
-			</File>
 			<Filter
 				Name="Error Messages"
 				>
@@ -1066,6 +1071,10 @@
 				</File>
 				<File
 					RelativePath="..\include\ilu_error\ilu_err-english.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\ilu_error\ilu_err-german.h"
 					>
 				</File>
 				<File
