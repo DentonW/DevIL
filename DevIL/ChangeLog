@@ -137,4 +137,7 @@
 
 2009-01-16 Denton woods <doomwiz@users.sf.net>
 	* Updated x64 projects
+
+2009-01-19 Denton woods <doomwiz@users.sf.net>
+	* il_hdr.c: Changed line 73 to have space for terminating NULL.
 	

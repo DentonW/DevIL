@@ -70,7 +70,7 @@ ILboolean iGetHdrHead(HDRHEADER *Header)
 	ILboolean done = IL_FALSE;
 	char a, b;
 	char x[3], y[3]; //changed 20050217: added space for the '\0' char
-	char buff[80];
+	char buff[81]; // 01-19-2009: Added space for the '\0'.
 	ILuint count = 0;
 
 	iread(Header->Signature, 1, 10);
