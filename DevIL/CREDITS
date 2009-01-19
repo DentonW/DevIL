@@ -239,6 +239,9 @@ Antibyte for DDS save bugfix
 
 Stefan Cornelius, Secunia Research, for finding some buffer overflow vulnerabilities.
 
+Nico Golde for finding that my fix for the above vulnerability was not totally complete.
+
+
 
 
 Translations:
