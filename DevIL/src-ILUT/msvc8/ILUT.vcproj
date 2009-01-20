@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="ILUT"
 	ProjectGUID="{7D060DA4-F2FA-44CC-80BE-065024DD6CA9}"
 	RootNamespace="ILUT"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -20,7 +19,7 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\../../lib/vc9/x86"
+			OutputDirectory=".\../../lib/vc8/x86"
 			IntermediateDirectory="x86/Release"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
@@ -79,17 +78,15 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="devil.lib ilu.lib Gdi32.lib User32.lib Comdlg32.lib"
-				OutputFile="../../lib/vc9/x86/ILUT.dll"
+				OutputFile=".\../../lib/vc8/x86/ILUT.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="../../lib/vc9/x86"
+				AdditionalLibraryDirectories="../../lib/vc8/x86"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile=".\ilut.def"
 				DelayLoadDLLs="opengl32.dll,glu32.dll,d3d8.dll,d3d9.dll,sdl.dll,alleg42.dll,wininet.dll"
-				ProgramDatabaseFile="../../lib/vc9/ILUT.pdb"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				ImportLibrary="../../lib/vc9/x86/ILUT.lib"
+				ProgramDatabaseFile=".\../../lib/vc8/ILUT.pdb"
+				ImportLibrary=".\../../lib/vc8/x86/ILUT.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -113,13 +110,16 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine="copy $(TargetPath) %SYSTEMROOT%\system32"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory=".\../../lib/vc9/x64"
+			OutputDirectory=".\../../lib/vc8/x64"
 			IntermediateDirectory="$(PlatformName)\x64\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
@@ -177,20 +177,17 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/ignore:4197"
 				AdditionalDependencies="Gdi32.lib User32.lib Comdlg32.lib"
-				OutputFile="../../lib/vc9/x64/ILUT.dll"
+				OutputFile=".\../../lib/vc8/x64/ILUT.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="../../lib/vc9/x64"
+				AdditionalLibraryDirectories="../../lib/vc8/x64"
 				ManifestFile="$(IntDir)\$(TargetFileName).intermediate.manifest"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile=".\ilut.def"
 				DelayLoadDLLs="opengl32.dll,glu32.dll,d3d8.dll,d3d9.dll,sdl.dll,alleg42.dll,wininet.dll"
-				ProgramDatabaseFile="../../lib/vc9/x64/ILUT.pdb"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				ImportLibrary="../../lib/vc9/x64/ILUT.lib"
+				ProgramDatabaseFile=".\../../lib/vc8/x64/ILUT.pdb"
+				ImportLibrary=".\../../lib/vc8/x64/ILUT.lib"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -214,13 +211,16 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine="copy $(TargetPath) c:\windows\system32"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\../../lib/vc9/x86/debug"
+			OutputDirectory=".\../../lib/vc8/x86/debug"
 			IntermediateDirectory="x86/Debug"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
@@ -279,7 +279,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="devil.lib ilu.lib delayimp.lib Gdi32.lib User32.lib Comdlg32.lib"
-				OutputFile="../../lib/vc9/x86/debug/ILUT.dll"
+				OutputFile=".\../../lib/vc8/x86/debug/ILUT.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../lib/vc8"
@@ -287,10 +287,8 @@
 				ModuleDefinitionFile=".\ilut.def"
 				DelayLoadDLLs="opengl32.dll,glu32.dll,d3d8.dll,d3d9.dll,d3d10.dll,sdl.dll,alleg42.dll,wininet.dll"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="../../lib/vc9/debug/ilut.pdb"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				ImportLibrary="../../lib/vc9/x86/debug/ilut.lib"
+				ProgramDatabaseFile=".\../../lib/vc8/debug/ilut.pdb"
+				ImportLibrary=".\../../lib/vc8/x86/debug/ilut.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -314,13 +312,16 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine="copy $(TargetPath) %SYSTEMROOT%\system32"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory=".\../../lib/vc9/x64/debug"
+			OutputDirectory=".\../../lib/vc8/x64/debug"
 			IntermediateDirectory="$(PlatformName)\x64\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
@@ -378,9 +379,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/ignore:4197"
 				AdditionalDependencies="delayimp.lib Gdi32.lib User32.lib Comdlg32.lib"
-				OutputFile="../../lib/vc9/x64/debug/ILUT.dll"
+				OutputFile=".\../../lib/vc8/x64/debug/ILUT.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=""
@@ -389,10 +389,8 @@
 				ModuleDefinitionFile=".\ilut.def"
 				DelayLoadDLLs="opengl32.dll,glu32.dll,d3d8.dll,d3d9.dll,d3d10.dll,sdl.dll,alleg42.dll,wininet.dll"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="../../lib/vc/x64/debug/ilut.pdb"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				ImportLibrary="../../lib/vc9/x64/debug/ilut.lib"
+				ProgramDatabaseFile=".\../../lib/vc8/x64/debug/ilut.pdb"
+				ImportLibrary=".\../../lib/vc8/x64/debug/ilut.lib"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -414,6 +412,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"

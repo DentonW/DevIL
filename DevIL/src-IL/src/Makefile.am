@@ -11,7 +11,7 @@ libIL_la_SOURCES = il_alloc.c     il_doom.c      il_stack.c    il_pcx.c        i
                    il_io.c        il_pcd.c       il_register.c il_psd.c        il_fastconv.c \
                    il_neuquant.c  il_dds-save.c  il_psp.c      il_pix.c        il_pxr.c \
                    il_xpm.c       il_hdr.c       il_icns.c     il_jp2.c        il_vtf.c \
-                   altivec_common.c altivec_typeconversion.c
+                   il_wbmp.c      altivec_common.c altivec_typeconversion.c
 
 AM_CFLAGS = @LIBIL_CFLAGS@
 libIL_la_LDFLAGS = @WIN32_EXTRA_LDFLAGS@ @VERSIONINFO@
