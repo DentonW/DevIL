@@ -83,7 +83,7 @@ ILboolean iCheckJpg(ILubyte Header[2])
 
 
 // Internal function to get the header and check it.
-ILboolean iIsValidJpg()
+ILboolean iIsValidJpeg()
 {
 	ILubyte Head[2];
 
@@ -95,7 +95,7 @@ ILboolean iIsValidJpg()
 
 
 //! Checks if the file specified in FileName is a valid .jpg file.
-ILboolean ilIsValidJpg(ILconst_string FileName)
+ILboolean ilIsValidJpeg(ILconst_string FileName)
 {
 	ILHANDLE	JpegFile;
 	ILboolean	bJpeg = IL_FALSE;
@@ -114,7 +114,7 @@ ILboolean ilIsValidJpg(ILconst_string FileName)
 		return bJpeg;
 	}
 
-	bJpeg = ilIsValidJpgF(JpegFile);
+	bJpeg = ilIsValidJpegF(JpegFile);
 	icloser(JpegFile);
 
 	return bJpeg;
@@ -122,24 +122,24 @@ ILboolean ilIsValidJpg(ILconst_string FileName)
 
 
 //! Checks if the ILHANDLE contains a valid .jpg file at the current position.
-ILboolean ilIsValidJpgF(ILHANDLE File)
+ILboolean ilIsValidJpegF(ILHANDLE File)
 {
 	ILuint		FirstPos;
 	ILboolean	bRet;
 
 	iSetInputFile(File);
 	FirstPos = itell();
-	bRet = iIsValidJpg();
+	bRet = iIsValidJpeg();
 	iseek(FirstPos, IL_SEEK_SET);
 
 	return bRet;
 }
 
 
-ILboolean ilIsValidJpgL(const void *Lump, ILuint Size)
+ILboolean ilIsValidJpegL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
-	return iIsValidJpg();
+	return iIsValidJpeg();
 }
 
 

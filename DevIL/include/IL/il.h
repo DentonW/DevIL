@@ -220,6 +220,7 @@ typedef long long unsigned int ILuint64;
 #define IL_VTF			0x0444
 #define IL_WBMP			0x0445
 #define IL_SUN			0x0446
+#define IL_IFF			0x0447
 
 
 #define IL_JASC_PAL     0x0475

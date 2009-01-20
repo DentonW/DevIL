@@ -79,6 +79,8 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 		Type = IL_CUT;
 	else if (!iStrCmp(Ext, IL_TEXT("hdr")))
 		Type = IL_HDR;
+	else if (!iStrCmp(Ext, IL_TEXT("iff")))
+		Type = IL_IFF;
 	else if (!iStrCmp(Ext, IL_TEXT("ico")) || !iStrCmp(Ext, IL_TEXT("cur")))
 		Type = IL_ICO;
 	else if (!iStrCmp(Ext, IL_TEXT("icns")))
@@ -164,7 +166,7 @@ ILenum ILAPIENTRY ilDetermineTypeF(ILHANDLE File)
 		return IL_TYPE_UNKNOWN;
 
 	#ifndef IL_NO_JPG
-	if (ilIsValidJpgF(File))
+	if (ilIsValidJpegF(File))
 		return IL_JPG;
 	#endif
 
@@ -270,7 +272,7 @@ ILenum ilDetermineTypeL(const void *Lump, ILuint Size)
 		return IL_TYPE_UNKNOWN;
 
 	#ifndef IL_NO_JPG
-	if (ilIsValidJpgL(Lump, Size))
+	if (ilIsValidJpegL(Lump, Size))
 		return IL_JPG;
 	#endif
 
@@ -386,7 +388,7 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, ILconst_string FileName)
 
 		#ifndef IL_NO_JPG
 		case IL_JPG:
-			return ilIsValidJpg(FileName);
+			return ilIsValidJpeg(FileName);
 		#endif
 
 		#ifndef IL_NO_DDS
@@ -496,7 +498,7 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 
 		#ifndef IL_NO_JPG
 		case IL_JPG:
-			return ilIsValidJpgF(File);
+			return ilIsValidJpegF(File);
 		#endif
 
 		#ifndef IL_NO_DDS
@@ -606,7 +608,7 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, void *Lump, ILuint Size)
 
 		#ifndef IL_NO_JPG
 		case IL_JPG:
-			return ilIsValidJpgL(Lump, Size);
+			return ilIsValidJpegL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_DDS
@@ -778,6 +780,12 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 			break;
 		#endif
 
+		#ifndef IL_NO_IFF
+		case IL_IFF:
+			bRet = ilLoadIff(FileName);
+			break;
+		#endif
+
 		#ifndef IL_NO_ICO
 		case IL_ICO:
 			bRet = ilLoadIcon(FileName);
@@ -876,13 +884,7 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 
 		#ifndef IL_NO_TIF
 		case IL_TIF:
-			//#ifndef _UNICODE
 			bRet = ilLoadTiff(FileName);
-			//#else
-			//	wcstombs(AnsiName, FileName, 512);
-			//	//WideCharToMultiByte(CP_ACP, 0, FileName, -1, AnsiName, 512, NULL, NULL);
-			//	return ilLoadTiff(AnsiName);
-			//#endif//_UNICODE
 			break;
 		#endif
 
@@ -1008,6 +1010,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 		#ifndef IL_NO_ICO
 		case IL_ICO:
 			return ilLoadIconF(File);
+		#endif
+
+		#ifndef IL_NO_IFF
+		case IL_IFF:
+			return ilLoadIffF(File);
 		#endif
 
 		#ifndef IL_NO_ICNS
@@ -1191,6 +1198,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size)
 		#ifndef IL_NO_ICO
 		case IL_ICO:
 			return ilLoadIconL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_IFF
+		case IL_IFF:
+			return ilLoadIffL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_ICNS
@@ -1405,6 +1417,13 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#ifndef IL_NO_ICO
 		if (!iStrCmp(Ext, IL_TEXT("ico")) || !iStrCmp(Ext, IL_TEXT("cur"))) {
 			bRet = ilLoadIcon(FileName);
+			goto finish;
+		}
+		#endif
+
+		#ifndef IL_NO_IFF
+		if (!iStrCmp(Ext, IL_TEXT("iff"))) {
+			bRet = ilLoadIff(FileName);
 			goto finish;
 		}
 		#endif

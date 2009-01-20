@@ -743,6 +743,7 @@ ILboolean ILAPIENTRY ilutGLScreen()
 		return IL_FALSE;  // Error already set.
 	ilutCurImage->Origin = IL_ORIGIN_LOWER_LEFT;
 
+	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glReadPixels(0, 0, ViewPort[2], ViewPort[3], GL_RGB, GL_UNSIGNED_BYTE, ilutCurImage->Data);
 
 	return IL_TRUE;

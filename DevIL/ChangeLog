@@ -133,7 +133,7 @@
 	* configure.ac, lib/Makefile.am: Added wbmp compilation support
 	* il_jp2.c, il_wbmp.c: Fixed a typo that prevented compilation 
 	* include/IL/devil_cpp_wrapper.hpp: Added a hopefully harmless solution for
-	the initialization of devil.
+	the initialization of DevIL.
 
 2009-01-16 Denton woods <doomwiz@users.sf.net>
 	* Updated x64 projects
@@ -147,4 +147,11 @@
 	* src-IL/include/Makefile.am: Added il_exr.h.
 	* il_dds.c/il.h: Readded DXT extension code.
 	* il_internal.h: Added declaration of ilFixCur.
+
+2009-01-19 Denton woods <doomwiz@users.sf.net>
+	* ilut_opengl.c (ilutGLScreen): Added glPixelStorei call.
+	* Added il_iff.c from GAIA.
+	* Added "x64 DLL Install.exe" to SVN.
+	* il_internal.h: Renamed ilIsValidJpg* functions to ilIsValidJpeg*.  Added Iff functions.
+	* il_io.c: Added checks for Iff-loading.
 	

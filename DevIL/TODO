@@ -52,7 +52,6 @@ More involved:
 - cubemap.hdr.vtf does not load.
 - Check return on all ilFixImage calls.
 - Printing not working from Windows test.
-- Better quality DDS saving (as an option).
 - Add function to create cubemaps
 - Request compressed texture data in ilutGLSetTex2D?
 - Upload cubemaps directly to OpenGL/D3D.
@@ -66,6 +65,7 @@ More involved:
 - Redo Compress in il_dds-save.c.
 - Check 16-bit images being loaded have their lower bits properly set.  An example is the il_dds.c entry on 2009-01-15.
 - Make iSaveJp2Internal and iSaveExrInternal work with palettes (make ilConvertBuffer work on palettes as well).
+- Fix image loading problems listed on http://www.seriema.net/thumbview/index.php?page=compatibility.
 
 
 Lots of work:
