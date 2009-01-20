@@ -36,19 +36,21 @@ ILboolean ilutWin32Init()
 
 ILAPI HBITMAP ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 {
-	ILubyte		*Data, *DataBackup;
+	ILubyte		*Data, *DataBackup, *BmpBits;
 	HBITMAP		hBitmap = NULL;
 	ILimage		*TempImage = NULL;
 	ILuint		pad, i, j, k, l, m, n, DepthBackup;
 	ILpal		*palImg;
 	ILboolean	alloc_buffer;
+	BITMAPINFO	bmi;
+	ILenum		Format;
 
 	//reserve space for palette in every case...
 	ILubyte		buff[sizeof(BITMAPINFOHEADER) + 256*sizeof(RGBQUAD)];
 	BITMAPINFO	*info = (BITMAPINFO*)buff;
 	RGBQUAD		*pal = info->bmiColors;
 
-	ilutCurImage = ilGetCurImage();
+	TempImage = ilutCurImage = ilGetCurImage();
 	if (ilutCurImage == NULL) {
 		ilSetError(ILUT_ILLEGAL_OPERATION);
 		return NULL;
@@ -67,147 +69,187 @@ ILAPI HBITMAP ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 	ilutCurImage->Depth = 1;
 	ilutCurImage->Data += ilutCurImage->SizeOfPlane*slice;
 
-	if (ilutCurImage->Type != IL_UNSIGNED_BYTE)
-		TempImage = iConvertImage(ilutCurImage, ilutCurImage->Format, IL_UNSIGNED_BYTE);
-	else
-		TempImage = ilutCurImage;
-	if (TempImage == NULL) {
-		goto error;
-	}
+	//if (ilutCurImage->Type != IL_UNSIGNED_BYTE)
+	//	TempImage = iConvertImage(ilutCurImage, ilutCurImage->Format, IL_UNSIGNED_BYTE);
+	//else
+	//	TempImage = ilutCurImage;
+	//if (TempImage == NULL) {
+	//	goto error;
+	//}
 
-	//changed 2003-09-09: use Temp!
-	ilSetCurImage(TempImage);
+	////changed 2003-09-09: use Temp!
+	//ilSetCurImage(TempImage);
 
-	hBitmap = CreateCompatibleBitmap(hDC, ilutCurImage->Width, ilutCurImage->Height);
-	if (hBitmap == NULL) {
-		ilSetError(IL_UNKNOWN_ERROR);
-		goto error;
-	}
+	//hBitmap = CreateCompatibleBitmap(hDC, ilutCurImage->Width, ilutCurImage->Height);
+	//if (hBitmap == NULL) {
+	//	ilSetError(IL_UNKNOWN_ERROR);
+	//	goto error;
+	//}
 
-	info->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-	info->bmiHeader.biWidth = TempImage->Width;
-	if (TempImage->Origin == IL_ORIGIN_UPPER_LEFT)
-		info->bmiHeader.biHeight = -(ILint)TempImage->Height;
-	else
-		info->bmiHeader.biHeight = TempImage->Height;
-	info->bmiHeader.biPlanes = 1;
-	info->bmiHeader.biCompression = 0;
-	info->bmiHeader.biSizeImage = 0;
-	info->bmiHeader.biXPelsPerMeter = 0;
-	info->bmiHeader.biYPelsPerMeter = 0;
-	info->bmiHeader.biClrUsed = 0;
-	info->bmiHeader.biClrImportant = 0;
+	//info->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	//info->bmiHeader.biWidth = TempImage->Width;
+	//if (TempImage->Origin == IL_ORIGIN_UPPER_LEFT)
+	//	info->bmiHeader.biHeight = -(ILint)TempImage->Height;
+	//else
+	//	info->bmiHeader.biHeight = TempImage->Height;
+	//info->bmiHeader.biPlanes = 1;
+	//info->bmiHeader.biCompression = 0;
+	//info->bmiHeader.biSizeImage = 0;
+	//info->bmiHeader.biXPelsPerMeter = 0;
+	//info->bmiHeader.biYPelsPerMeter = 0;
+	//info->bmiHeader.biClrUsed = 0;
+	//info->bmiHeader.biClrImportant = 0;
 
-	pad = (4 - TempImage->Bps%4)%4;
-	alloc_buffer = (ILboolean)!(pad == 0 && TempImage->Format != IL_RGB
-		&& TempImage->Format != IL_RGBA && TempImage->Format != IL_LUMINANCE_ALPHA);
-	if (!alloc_buffer) {
-		Data = TempImage->Data;
-	}
-	else {
-		ILsizei DataSize = 0;
-		if (TempImage->Format == IL_RGBA) {  // Strip alpha during byte swapping for faster upload to GDI.
-			// Recalculate pad, because it changes when bpp changes.
-			pad = (4 - (3 * TempImage->Width) % 4) % 4;
-			DataSize = (TempImage->Width + pad) * TempImage->Height * 3;
-		}
-		// Strip alpha channel from grayscale image.
-		else if (TempImage->Format == IL_LUMINANCE_ALPHA) {
-			// Added 01-09-2009: Recalculate pad.
-			pad = (4 - TempImage->Width % 4) % 4;
-			DataSize = (TempImage->Width + pad) * TempImage->Height;
-		}
-		else {
-			DataSize = (TempImage->Width + pad) * TempImage->Height * TempImage->Bpp;
-		}
+	//pad = (4 - TempImage->Bps%4)%4;
+	//alloc_buffer = (ILboolean)!(pad == 0 && TempImage->Format != IL_RGB
+	//	&& TempImage->Format != IL_RGBA && TempImage->Format != IL_LUMINANCE_ALPHA);
+	//if (!alloc_buffer) {
+	//	Data = TempImage->Data;
+	//}
+	//else {
+	//	ILsizei DataSize = 0;
+	//	if (TempImage->Format == IL_RGBA) {  // Strip alpha during byte swapping for faster upload to GDI.
+	//		// Recalculate pad, because it changes when bpp changes.
+	//		pad = (4 - (3 * TempImage->Width) % 4) % 4;
+	//		DataSize = (TempImage->Width + pad) * TempImage->Height * 3;
+	//	}
+	//	// Strip alpha channel from grayscale image.
+	//	else if (TempImage->Format == IL_LUMINANCE_ALPHA) {
+	//		// Added 01-09-2009: Recalculate pad.
+	//		pad = (4 - TempImage->Width % 4) % 4;
+	//		DataSize = (TempImage->Width + pad) * TempImage->Height;
+	//	}
+	//	else {
+	//		DataSize = (TempImage->Width + pad) * TempImage->Height * TempImage->Bpp;
+	//	}
 
-		Data = (ILubyte*)ialloc(DataSize);
-		if (Data == NULL) {
-			goto error;
-		}
+	//	Data = (ILubyte*)ialloc(DataSize);
+	//	if (Data == NULL) {
+	//		goto error;
+	//	}
 
-		if (TempImage->Format == IL_RGB || TempImage->Format == IL_RGBA) {
-			//swap bytes
-			m = (TempImage->Format == IL_RGB)?3:4;
-			k = l = 0;
-			for (j = 0; j < TempImage->Height; j++) {
-				for (i = 0, n = 0; i < 3*TempImage->Width; i += 3, n += m) {
-					Data[l + i] = TempImage->Data[k + n + 2];
-					Data[l + i + 1] = TempImage->Data[k + n + 1];
-					Data[l + i + 2] = TempImage->Data[k + n];
-				}
+	//	if (TempImage->Format == IL_RGB || TempImage->Format == IL_RGBA) {
+	//		//swap bytes
+	//		m = (TempImage->Format == IL_RGB)?3:4;
+	//		k = l = 0;
+	//		for (j = 0; j < TempImage->Height; j++) {
+	//			for (i = 0, n = 0; i < 3*TempImage->Width; i += 3, n += m) {
+	//				Data[l + i] = TempImage->Data[k + n + 2];
+	//				Data[l + i + 1] = TempImage->Data[k + n + 1];
+	//				Data[l + i + 2] = TempImage->Data[k + n];
+	//			}
 
-				k += TempImage->Bps;
-				l += 3*TempImage->Width + pad;
-			}
-		}
-		else if (TempImage->Format == IL_LUMINANCE_ALPHA) {
-			//strip alpha channel
-			//recalculate pad because it included alpha channel info
-			pad = (4 - TempImage->Width%4)%4;
-			k = l = 0;
-			for (j = 0; j < TempImage->Height; j++) {
-				for (i = 0, n = 0; i < TempImage->Width; ++i, n += 2) {
-					Data[l + i] = TempImage->Data[k + n];
-				}
-				k += TempImage->Bps;
-				l += TempImage->Width + pad;
-			}
-		}
-		else
-			for (i = 0; i < TempImage->Height; i++)
-				memcpy(Data + i*(TempImage->Bps + pad), TempImage->Data + i*TempImage->Bps, TempImage->Bps);
-	}
+	//			k += TempImage->Bps;
+	//			l += 3*TempImage->Width + pad;
+	//		}
+	//	}
+	//	else if (TempImage->Format == IL_LUMINANCE_ALPHA) {
+	//		//strip alpha channel
+	//		//recalculate pad because it included alpha channel info
+	//		pad = (4 - TempImage->Width%4)%4;
+	//		k = l = 0;
+	//		for (j = 0; j < TempImage->Height; j++) {
+	//			for (i = 0, n = 0; i < TempImage->Width; ++i, n += 2) {
+	//				Data[l + i] = TempImage->Data[k + n];
+	//			}
+	//			k += TempImage->Bps;
+	//			l += TempImage->Width + pad;
+	//		}
+	//	}
+	//	else
+	//		for (i = 0; i < TempImage->Height; i++)
+	//			memcpy(Data + i*(TempImage->Bps + pad), TempImage->Data + i*TempImage->Bps, TempImage->Bps);
+	//}
 
-	switch (TempImage->Format)
+	//switch (TempImage->Format)
+	//{
+	//	case IL_LUMINANCE:
+	//	case IL_LUMINANCE_ALPHA:
+	//	case IL_COLOUR_INDEX:
+	//		if (TempImage->Format != IL_COLOUR_INDEX) {
+	//			//generate greyscale palette
+	//			for (i = 0; i < 256; i++)
+	//				pal[i].rgbRed = pal[i].rgbGreen = pal[i].rgbBlue = (ILubyte)i;
+	//		}
+	//		else {
+	//			palImg = iConvertPal(&TempImage->Pal, IL_PAL_BGR32);
+	//			if (palImg != NULL) {
+	//				memcpy(pal, palImg->Palette, palImg->PalSize);
+	//				ilClosePal(palImg);
+	//			}
+	//			else {
+	//				//ilSetError(IL_INVALID_PARAM);
+	//				// Generate greyscale palette  <-- Why is this here?
+	//				for (i = 0; i < 256; i++)
+	//					pal[i].rgbRed = pal[i].rgbGreen = pal[i].rgbBlue = (ILubyte)i;
+	//			}
+	//		}
+	//		info->bmiHeader.biBitCount = 8;
+	//		break;
+
+	//	case IL_RGB:
+	//	case IL_BGR:
+	//	case IL_RGBA: //alpha is removed during byte swapping
+	//		info->bmiHeader.biBitCount = 24;
+	//		break;
+
+	//	case IL_BGRA:
+	//		info->bmiHeader.biBitCount = 32;
+	//		break;
+
+	//	/*default:
+	//		ilSetError(IL_FORMAT_NOT_SUPPORTED);
+	//		return hBitmap;*/
+	//}
+
+
+	// @TODO:  Add support for palette'd images.
+	switch (ilutCurImage->Format)
 	{
-		case IL_LUMINANCE:
-		case IL_LUMINANCE_ALPHA:
-		case IL_COLOUR_INDEX:
-			if (TempImage->Format != IL_COLOUR_INDEX) {
-				//generate greyscale palette
-				for (i = 0; i < 256; i++)
-					pal[i].rgbRed = pal[i].rgbGreen = pal[i].rgbBlue = (ILubyte)i;
-			}
-			else {
-				palImg = iConvertPal(&TempImage->Pal, IL_PAL_BGR32);
-				if (palImg != NULL) {
-					memcpy(pal, palImg->Palette, palImg->PalSize);
-					ilClosePal(palImg);
-				}
-				else {
-					//ilSetError(IL_INVALID_PARAM);
-					// Generate greyscale palette  <-- Why is this here?
-					for (i = 0; i < 256; i++)
-						pal[i].rgbRed = pal[i].rgbGreen = pal[i].rgbBlue = (ILubyte)i;
-				}
-			}
-			info->bmiHeader.biBitCount = 8;
-			break;
-
-		case IL_RGB:
-		case IL_BGR:
-		case IL_RGBA: //alpha is removed during byte swapping
-			info->bmiHeader.biBitCount = 24;
-			break;
-
+		case IL_RGBA:
 		case IL_BGRA:
-			info->bmiHeader.biBitCount = 32;
+			Format = IL_BGRA;
 			break;
-
-		/*default:
-			ilSetError(IL_FORMAT_NOT_SUPPORTED);
-			return hBitmap;*/
+		default:
+			Format = IL_BGR;
 	}
+
+	if (ilutCurImage->Format != Format || ilutCurImage->Type != IL_UNSIGNED_BYTE) {
+		TempImage = iConvertImage(ilutCurImage, Format, IL_UNSIGNED_BYTE);
+		if (TempImage == NULL)
+			return 0;
+	}
+
+	Data = ilutGetPaddedData();
+	if (Data == NULL) {
+		return 0;
+	}
+
+	ilutGetBmpInfo(&bmi);
+
+	/*DIB_PAL_COLORS*/
+	hBitmap = CreateDIBSection(hDC, &bmi, DIB_RGB_COLORS, (void**)&BmpBits, NULL, 0);
+	if (!hBitmap || !BmpBits) {
+		if (TempImage != ilutCurImage)
+			ilCloseImage(TempImage);
+		// Restore original data
+		ilutCurImage->Data = DataBackup;
+		ilutCurImage->Depth = DepthBackup;
+		ilSetError(ILUT_ILLEGAL_OPERATION);
+		return 0;
+	}
+
+	memcpy(BmpBits, Data, (TempImage->Bps + (4 - (TempImage->Bps % 4)) % 4) * TempImage->Height);
+
 
 	// Restore original data
 	ilutCurImage->Data = DataBackup;
 	ilutCurImage->Depth = DepthBackup;
 
-	SetDIBits(hDC, hBitmap, 0, ilutCurImage->Height, Data, info, DIB_RGB_COLORS);
+	//SetDIBits(hDC, hBitmap, 0, ilutCurImage->Height, Data, info, DIB_RGB_COLORS);
 
-	if (alloc_buffer)
-		ifree(Data);
+	//if (alloc_buffer)
+	//	ifree(Data);
 
 	if (ilutCurImage != TempImage) {
 		ilSetCurImage(ilutCurImage);
@@ -330,7 +372,10 @@ void ILAPIENTRY ilutGetBmpInfo(BITMAPINFO *Info)
 	Info->bmiHeader.biHeight = ilutCurImage->Height;
 	Info->bmiHeader.biPlanes = 1;
 	Info->bmiHeader.biBitCount = ilutCurImage->Bpp << 3;
-	Info->bmiHeader.biCompression = BI_RGB;
+	if (ilutCurImage->Bpp == 32)
+		Info->bmiHeader.biCompression = BI_ALPHABITFIELDS;
+	else
+		Info->bmiHeader.biCompression = BI_RGB;
 	Info->bmiHeader.biSizeImage = NewBps * ilutCurImage->Height;
 	Info->bmiHeader.biXPelsPerMeter = 0;
 	Info->bmiHeader.biYPelsPerMeter = 0;
@@ -339,7 +384,7 @@ void ILAPIENTRY ilutGetBmpInfo(BITMAPINFO *Info)
 		Info->bmiHeader.biClrImportant = Info->bmiHeader.biClrUsed;
 	else
 		Info->bmiHeader.biClrImportant = 0;
-
+AlphaBlend
 	return;
 }
 

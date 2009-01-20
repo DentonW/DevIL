@@ -241,6 +241,9 @@ Stefan Cornelius, Secunia Research, for finding some buffer overflow vulnerabili
 
 Nico Golde for finding that my fix for the above vulnerability was not totally complete.
 
+GAIA (Group for Artificial Intelligence Applications) for contributions including .iff-loading
+and redoing the ilutConvertToHBitmap code.  Their changes are at 
+http://gaia.fdi.ucm.es/grupo/projects/javy/devzone.html#DevILNotes.
 
 
 

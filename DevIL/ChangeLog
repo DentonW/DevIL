@@ -156,4 +156,5 @@
 	* il_io.c: Added checks for Iff-loading.
 	* ilut_win32.c (ilutConvertSliceToHBitmap): Added better error handling.
 	* src-IL/src/Makefile.am: Added il_iff.c.
+	* ilut_win32.c (ilutConvertSliceToHBitmap): Redid using GAIA source changes.
 	

@@ -178,7 +178,7 @@ void CreateGDI()
 	CurMip = ilGetInteger(IL_ACTIVE_MIPMAP);
 	CopyName = ilCloneCurImage();
 	ilBindImage(CopyName);
-	ilConvertImage(IL_BGR, IL_UNSIGNED_BYTE);
+	//ilConvertImage(IL_BGR, IL_UNSIGNED_BYTE);
 	hBitmap = ilutConvertToHBitmap(hDC);
 	ilutGetBmpInfo((BITMAPINFO*)&BmpInfo);
 	DeleteObject(SelectObject(hMemDC, hBitmap));
