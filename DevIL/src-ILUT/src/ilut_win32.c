@@ -37,8 +37,8 @@ ILboolean ilutWin32Init()
 ILAPI HBITMAP ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 {
 	ILubyte		*Data, *DataBackup;
-	HBITMAP		hBitmap;
-	ILimage		*TempImage;
+	HBITMAP		hBitmap = NULL;
+	ILimage		*TempImage = NULL;
 	ILuint		pad, i, j, k, l, m, n, DepthBackup;
 	ILpal		*palImg;
 	ILboolean	alloc_buffer;
@@ -60,8 +60,8 @@ ILAPI HBITMAP ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 		return NULL;
 	}
 
-	//fool iConvertImage into thinking that the current image has
-	//only one slice, the one we want:
+	// Fool iConvertImage into thinking that the current image has
+	//   only one slice, the one we want:
 	DepthBackup = ilutCurImage->Depth;
 	DataBackup = ilutCurImage->Data;
 	ilutCurImage->Depth = 1;
@@ -71,22 +71,22 @@ ILAPI HBITMAP ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 		TempImage = iConvertImage(ilutCurImage, ilutCurImage->Format, IL_UNSIGNED_BYTE);
 	else
 		TempImage = ilutCurImage;
-	if (TempImage == NULL)
-		return NULL;
+	if (TempImage == NULL) {
+		goto error;
+	}
 
 	//changed 2003-09-09: use Temp!
 	ilSetCurImage(TempImage);
 
 	hBitmap = CreateCompatibleBitmap(hDC, ilutCurImage->Width, ilutCurImage->Height);
-	if(hBitmap == NULL) {
-		//ilNewImage
+	if (hBitmap == NULL) {
 		ilSetError(IL_UNKNOWN_ERROR);
-		return NULL;
+		goto error;
 	}
 
 	info->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 	info->bmiHeader.biWidth = TempImage->Width;
-	if(TempImage->Origin == IL_ORIGIN_UPPER_LEFT)
+	if (TempImage->Origin == IL_ORIGIN_UPPER_LEFT)
 		info->bmiHeader.biHeight = -(ILint)TempImage->Height;
 	else
 		info->bmiHeader.biHeight = TempImage->Height;
@@ -123,10 +123,7 @@ ILAPI HBITMAP ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 
 		Data = (ILubyte*)ialloc(DataSize);
 		if (Data == NULL) {
-			ilSetCurImage(ilutCurImage);
-			ilCloseImage(TempImage);
-			ilSetError(IL_OUT_OF_MEMORY);
-			return hBitmap;
+			goto error;
 		}
 
 		if (TempImage->Format == IL_RGB || TempImage->Format == IL_RGBA) {
@@ -144,7 +141,7 @@ ILAPI HBITMAP ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 				l += 3*TempImage->Width + pad;
 			}
 		}
-		else if(TempImage->Format == IL_LUMINANCE_ALPHA) {
+		else if (TempImage->Format == IL_LUMINANCE_ALPHA) {
 			//strip alpha channel
 			//recalculate pad because it included alpha channel info
 			pad = (4 - TempImage->Width%4)%4;
@@ -162,8 +159,8 @@ ILAPI HBITMAP ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 				memcpy(Data + i*(TempImage->Bps + pad), TempImage->Data + i*TempImage->Bps, TempImage->Bps);
 	}
 
-	switch(TempImage->Format) {
-
+	switch (TempImage->Format)
+	{
 		case IL_LUMINANCE:
 		case IL_LUMINANCE_ALPHA:
 		case IL_COLOUR_INDEX:
@@ -179,8 +176,8 @@ ILAPI HBITMAP ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 					ilClosePal(palImg);
 				}
 				else {
-					ilSetError(IL_INVALID_PARAM);
-					//generate greyscale palette
+					//ilSetError(IL_INVALID_PARAM);
+					// Generate greyscale palette  <-- Why is this here?
 					for (i = 0; i < 256; i++)
 						pal[i].rgbRed = pal[i].rgbGreen = pal[i].rgbBlue = (ILubyte)i;
 				}
@@ -203,13 +200,13 @@ ILAPI HBITMAP ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 			return hBitmap;*/
 	}
 
-	//restore original data
+	// Restore original data
 	ilutCurImage->Data = DataBackup;
 	ilutCurImage->Depth = DepthBackup;
 
 	SetDIBits(hDC, hBitmap, 0, ilutCurImage->Height, Data, info, DIB_RGB_COLORS);
 
-	if(alloc_buffer)
+	if (alloc_buffer)
 		ifree(Data);
 
 	if (ilutCurImage != TempImage) {
@@ -218,6 +215,20 @@ ILAPI HBITMAP ILAPIENTRY ilutConvertSliceToHBitmap(HDC hDC, ILuint slice)
 	}
 
 	return hBitmap;
+
+error:
+	// Restore original data
+	ilutCurImage->Data = DataBackup;
+	ilutCurImage->Depth = DepthBackup;
+	if (ilutCurImage != TempImage) {
+		ilSetCurImage(ilutCurImage);
+		ilCloseImage(TempImage);
+	}
+	ilSetCurImage(ilutCurImage);
+	if (hBitmap)
+		DeleteObject(hBitmap);
+
+	return NULL;
 }
 
 HBITMAP ILAPIENTRY ilutConvertToHBitmap(HDC hDC)
