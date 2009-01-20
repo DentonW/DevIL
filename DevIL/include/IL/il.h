@@ -113,13 +113,13 @@ typedef long long unsigned int ILuint64;
 // Matches OpenGL's right now.
 #define IL_COLOUR_INDEX     0x1900
 #define IL_COLOR_INDEX      0x1900
+#define IL_ALPHA			0x1906
 #define IL_RGB              0x1907
 #define IL_RGBA             0x1908
 #define IL_BGR              0x80E0
 #define IL_BGRA             0x80E1
 #define IL_LUMINANCE        0x1909
 #define IL_LUMINANCE_ALPHA  0x190A
-#define IL_ALPHA			0x190B
 
 
 #define IL_BYTE           0x1400
@@ -524,10 +524,12 @@ ILAPI ILboolean ILAPIENTRY ilDefaultImage(void);
 ILAPI void		ILAPIENTRY ilDeleteImage(const ILuint Num);
 ILAPI void      ILAPIENTRY ilDeleteImages(ILsizei Num, const ILuint *Images);
 ILAPI ILboolean ILAPIENTRY ilDisable(ILenum Mode);
+ILAPI ILboolean ILAPIENTRY ilDxtcDataToImage(void);
+ILAPI ILboolean ILAPIENTRY ilDxtcDataToSurface(void);
 ILAPI ILboolean ILAPIENTRY ilEnable(ILenum Mode);
 ILAPI ILboolean ILAPIENTRY ilFormatFunc(ILenum Mode);
 ILAPI void	    ILAPIENTRY ilGenImages(ILsizei Num, ILuint *Images);
-ILAPI ILuint	ILAPIENTRY ilGenImage();
+ILAPI ILuint	ILAPIENTRY ilGenImage(void);
 ILAPI ILubyte*  ILAPIENTRY ilGetAlpha(ILenum Type);
 ILAPI ILboolean ILAPIENTRY ilGetBoolean(ILenum Mode);
 ILAPI void      ILAPIENTRY ilGetBooleanv(ILenum Mode, ILboolean *Param);
@@ -541,6 +543,7 @@ ILAPI ILubyte*  ILAPIENTRY ilGetPalette(void);
 ILAPI ILconst_string  ILAPIENTRY ilGetString(ILenum StringName);
 ILAPI void      ILAPIENTRY ilHint(ILenum Target, ILenum Mode);
 ILAPI void      ILAPIENTRY ilInit(void);
+ILAPI ILboolean ILAPIENTRY ilImageToDxtcData(ILenum Format);
 ILAPI ILboolean ILAPIENTRY ilIsDisabled(ILenum Mode);
 ILAPI ILboolean ILAPIENTRY ilIsEnabled(ILenum Mode);
 ILAPI ILenum	ILAPIENTRY ilDetermineTypeF(ILHANDLE File);
@@ -590,7 +593,9 @@ ILAPI void      ILAPIENTRY ilSetString(ILenum Mode, const char *String);
 ILAPI void      ILAPIENTRY ilSetWrite(fOpenWProc, fCloseWProc, fPutcProc, fSeekWProc, fTellWProc, fWriteProc);
 ILAPI void      ILAPIENTRY ilShutDown(void);
 ILAPI ILubyte*	ILAPIENTRY ilSquishCompressDXT(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILenum DxtFormat, ILuint *DxtSize);
+ILAPI ILboolean ILAPIENTRY ilSurfaceToDxtcData(ILenum Format);
 ILAPI ILboolean ILAPIENTRY ilTexImage(ILuint Width, ILuint Height, ILuint Depth, ILubyte NumChannels, ILenum Format, ILenum Type, void *Data);
+ILAPI ILboolean ILAPIENTRY ilTexImageDxtc(ILint w, ILint h, ILint d, ILenum DxtFormat, const ILubyte* data);
 ILAPI ILenum    ILAPIENTRY ilTypeFromExt(ILconst_string FileName);
 ILAPI ILboolean ILAPIENTRY ilTypeFunc(ILenum Mode);
 ILAPI ILboolean ILAPIENTRY ilLoadData(ILconst_string FileName, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp);

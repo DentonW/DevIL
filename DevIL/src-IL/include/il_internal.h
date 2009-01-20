@@ -182,6 +182,7 @@ ILuint		ilNVidiaCompressDXTFile(ILubyte *Data, ILuint Width, ILuint Height, ILui
 ILboolean	ilAddAlpha(void);
 ILboolean	ilAddAlphaKey(ILimage *Image);
 ILboolean	iFastConvert(ILenum DestFormat);
+ILboolean	ilFixCur(void);
 ILboolean	ilFixImage(void);
 ILboolean	ilRemoveAlpha(void);
 ILboolean	ilSwapColours(void);

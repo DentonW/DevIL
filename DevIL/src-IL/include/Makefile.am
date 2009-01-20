@@ -13,5 +13,6 @@ noinst_HEADERS  = il_targa.h    il_doompal.h \
                   il_stack.h    il_pic.h     \
                   il_psd.h      il_psp.h     \
                   il_gif.h		il_vtf.h     \
+				  il_exr.h \
 				  altivec_common.h \
                   altivec_typeconversion.h

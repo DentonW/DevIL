@@ -143,4 +143,8 @@
 	* src-IL/src/Makefile.am: Added il_vtf.c and *.cpp files.
 	* Fixed the MSVC++ 9 solutions pointing to the MSVC++ 8 project files.
 	* devil_cpp_wrapper.hpp: Updated to use ILconst_string instead of char*.
+	* il.h: Changed definition of IL_ALPHA to match OpenGL's GL_ALPHA.
+	* src-IL/include/Makefile.am: Added il_exr.h.
+	* il_dds.c/il.h: Readded DXT extension code.
+	* il_internal.h: Added declaration of ilFixCur.
 	
