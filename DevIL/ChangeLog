@@ -148,7 +148,7 @@
 	* il_dds.c/il.h: Readded DXT extension code.
 	* il_internal.h: Added declaration of ilFixCur.
 
-2009-01-19 Denton woods <doomwiz@users.sf.net>
+2009-01-20 Denton woods <doomwiz@users.sf.net>
 	* ilut_opengl.c (ilutGLScreen): Added glPixelStorei call.
 	* Added il_iff.c from GAIA.
 	* Added "x64 DLL Install.exe" to SVN.
@@ -156,6 +156,7 @@
 	* il_io.c: Added checks for Iff-loading.
 	* ilut_win32.c (ilutConvertSliceToHBitmap): Added better error handling.
 	* src-IL/src/Makefile.am: Added il_iff.c.
+	* ilu_rotate.c (iluRotate_): Changed ilResizeImage call.
 	* ilut_win32.c (ilutConvertSliceToHBitmap): Redid using GAIA source changes.
 	
 2009-01-20 Matěj Týč <bubla@sf.net>

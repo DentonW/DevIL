@@ -66,6 +66,7 @@ More involved:
 - Check 16-bit images being loaded have their lower bits properly set.  An example is the il_dds.c entry on 2009-01-15.
 - Make iSaveJp2Internal and iSaveExrInternal work with palettes (make ilConvertBuffer work on palettes as well).
 - Fix image loading problems listed on http://www.seriema.net/thumbview/index.php?page=compatibility.
+- Fix iluRotate_ - it shifts images by a pixel each direction sometimes.
 
 
 Lots of work:

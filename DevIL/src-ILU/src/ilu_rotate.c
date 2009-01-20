@@ -88,7 +88,7 @@ ILAPI ILimage* ILAPIENTRY iluRotate_(ILimage *Image, ILfloat Angle)
 	ILfloat		x0, y0, x1, y1;
 	ILfloat		HalfRotW, HalfRotH, HalfImgW, HalfImgH, Cos, Sin;
 	ILuint		RotOffset, ImgOffset;
-	ILint		XCorner[4], YCorner[4], MaxX, MaxY;
+	ILint		XCorner[4], YCorner[4], MinX, MinY, MaxX, MaxY;
 	ILushort	*ShortPtr;
 	ILuint		*IntPtr;
 
@@ -99,9 +99,9 @@ ILAPI ILimage* ILAPIENTRY iluRotate_(ILimage *Image, ILfloat Angle)
 		ilCloseImage(Rotated);
 		return NULL;
 	}
-	// Precalculate shit
-	HalfImgW = Image->Width / 2.0f;
-	HalfImgH = Image->Height / 2.0f;
+	// Precalculate values
+	HalfImgW = (ILfloat)Image->Width / 2.0f;
+	HalfImgH = (ILfloat)Image->Height / 2.0f;
 	Cos = ilCos(Angle);
 	Sin = ilSin(Angle);
 
@@ -115,15 +115,27 @@ ILAPI ILimage* ILAPIENTRY iluRotate_(ILimage *Image, ILfloat Angle)
 	XCorner[3] = ilRound(-HalfImgW * Cos - HalfImgH * Sin);
 	YCorner[3] = ilRound(-HalfImgW * Sin + HalfImgH * Cos);
 
-	MaxX = 0;  MaxY = 0;
+	MaxX = 0;  MaxY = 0;  MinX = 0;  MinY = 0;
 	for (x = 0; x < 4; x++) {
 		if (XCorner[x] > MaxX)
 			MaxX = XCorner[x];
 		if (YCorner[x] > MaxY)
 			MaxY = YCorner[x];
+		if (XCorner[x] < MinX)
+			MinX = XCorner[x];
+		if (YCorner[x] < MinY)
+			MinY = YCorner[x];
 	}
 
-	if (ilResizeImage(Rotated, MaxX * 2, MaxY * 2, 1, Image->Bpp, Image->Bpc) == IL_FALSE) {
+	// Multiples of 90 are special.
+	//@TODO: Make this less of a hack.
+	/*if (fmod((ILdouble)Angle, 90.0) == 0.0)
+		Correction = 1;
+	else
+		Correction = 0;*/
+
+
+	if (ilResizeImage(Rotated, MaxX + abs(MinX), MaxY + abs(MinY), 1, Image->Bpp, Image->Bpc) == IL_FALSE) {
 		ilCloseImage(Rotated);
 		return IL_FALSE;
 	}
@@ -146,6 +158,8 @@ ILAPI ILimage* ILAPIENTRY iluRotate_(ILimage *Image, ILfloat Angle)
 					x0 = x - HalfRotW;
 					x1 = x0 * Cos - y0 * Sin;
 					y1 = x0 * Sin + y0 * Cos;
+					//x1 = (ILuint)(x1 + (ILint)HalfImgW);
+					//y1 = (ILuint)(y1 + (ILint)HalfImgH);
 					x1 += HalfImgW;
 					y1 += HalfImgH;
 
@@ -208,7 +222,6 @@ ILAPI ILimage* ILAPIENTRY iluRotate_(ILimage *Image, ILfloat Angle)
 			Rotated->Bps *= 4;
 			break;
 	}
-	//}
 
 	return Rotated;
 }
