@@ -140,4 +140,6 @@
 
 2009-01-19 Denton woods <doomwiz@users.sf.net>
 	* il_hdr.c: Changed line 73 to have space for terminating NULL.
+	* src-IL/src/Makefile.am: Added il_vtf.c and *.cpp files.
+	* Fixed the MSVC++ 9 solutions pointing to the MSVC++ 8 project files.
 	

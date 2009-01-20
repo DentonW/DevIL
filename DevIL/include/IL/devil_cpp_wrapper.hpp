@@ -13,14 +13,14 @@ class ilImage
 {
 public:
 			ilImage();
-			ilImage(char *);
+			ilImage(ILconst_string);
 			ilImage(const ilImage &);
 	virtual		~ilImage();
 
-	ILboolean	Load(char *);
-	ILboolean	Load(char *, ILenum);
-	ILboolean	Save(char *);
-	ILboolean	Save(char *, ILenum);
+	ILboolean	Load(ILconst_string);
+	ILboolean	Load(ILconst_string, ILenum);
+	ILboolean	Save(ILconst_string);
+	ILboolean	Save(ILconst_string, ILenum);
 
 	// ImageLib functions
 	ILboolean	ActiveImage(ILuint);
@@ -56,7 +56,7 @@ public:
 	ILuint		NumImages(void);
 	ILuint		NumMipmaps(void);
 	ILuint		GetId(void) const;
-        ILenum      GetOrigin(void);
+    ILenum      GetOrigin(void);
 	ILubyte		*GetData(void);
 	ILubyte		*GetPalette(void);
 
@@ -111,7 +111,7 @@ public:
 class ilOgl
 {
 public:
-	static void		Init(void);
+	static void			Init(void);
 	static GLuint		BindTex(ilImage &);
 	static ILboolean	Upload(ilImage &, ILuint);
 	static GLuint		Mipmap(ilImage &);
@@ -151,7 +151,7 @@ public:
 class ilValidate
 {
 public:
-	static ILboolean	Valid(ILenum, char *);
+	static ILboolean	Valid(ILenum, ILconst_string);
 	static ILboolean	Valid(ILenum, FILE *);
 	static ILboolean	Valid(ILenum, void *, ILuint);
 
@@ -166,16 +166,16 @@ class ilState
 public:
 	static ILboolean		Disable(ILenum);
 	static ILboolean		Enable(ILenum);
-	static void			Get(ILenum, ILboolean &);
-	static void			Get(ILenum, ILint &);
+	static void				Get(ILenum, ILboolean &);
+	static void				Get(ILenum, ILint &);
 	static ILboolean		GetBool(ILenum);
 	static ILint			GetInt(ILenum);
 	static const char		*GetString(ILenum);
 	static ILboolean		IsDisabled(ILenum);
 	static ILboolean		IsEnabled(ILenum);
 	static ILboolean		Origin(ILenum);
-	static void			Pop(void);
-	static void			Push(ILuint);
+	static void				Pop(void);
+	static void				Push(ILuint);
 
 protected:
 
@@ -187,8 +187,8 @@ private:
 class ilError
 {
 public:
-	static void		Check(void (*Callback)(const char*));
-	static void		Check(void (*Callback)(ILenum));
+	static void			Check(void (*Callback)(const char*));
+	static void			Check(void (*Callback)(ILenum));
 	static ILenum		Get(void);
 	static const char	*String(void);
 	static const char	*String(ILenum);
@@ -212,7 +212,7 @@ ilImage::ilImage()
 }
 
 
-ilImage::ilImage(char *FileName)
+ilImage::ilImage(ILconst_string *FileName)
 {
 	this->Id = 0;
 	//this->iStartUp(); // This was commented out, but it needs to be somewhere...
@@ -241,28 +241,28 @@ ilImage::~ilImage()
 }
 
 
-ILboolean ilImage::Load(char *FileName)
+ILboolean ilImage::Load(ILconst_string FileName)
 {
 	this->iGenBind();
 	return ilLoadImage(FileName);
 }
 
 
-ILboolean ilImage::Load(char *FileName, ILenum Type)
+ILboolean ilImage::Load(ILconst_string FileName, ILenum Type)
 {
 	this->iGenBind();
 	return ilLoad(Type, FileName);
 }
 
 
-ILboolean ilImage::Save(char *FileName)
+ILboolean ilImage::Save(ILconst_string FileName)
 {
 	this->iGenBind();
 	return ilSaveImage(FileName);
 }
 
 
-ILboolean ilImage::Save(char *FileName, ILenum Type)
+ILboolean ilImage::Save(ILconst_string FileName, ILenum Type)
 {
 	this->iGenBind();
 	return ilSave(Type, FileName);
@@ -833,7 +833,7 @@ ILboolean ilWin32::SetClipboard(ilImage &Image)
 //
 // ILVALIDATE
 //
-ILboolean ilValidate::Valid(ILenum Type, char *FileName)
+ILboolean ilValidate::Valid(ILenum Type, ILconst_string FileName)
 {
 	return ilIsValid(Type, FileName);
 }
