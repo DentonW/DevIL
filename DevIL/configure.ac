@@ -28,7 +28,7 @@ dnl THE ABOVE IS LIBTOOL INIT IS THE GOOD ONE, BUT MAYBE TOO UP-TO-DATE FOR MOST
 AC_PROG_LIBTOOL
 AC_LIBTOOL_WIN32_DLL
 dnl Automake init with all warnings reported
-AM_INIT_AUTOMAKE([-Wall color-tests])
+AM_INIT_AUTOMAKE([-Wall])
 
 dnl
 dnl Note that the libtool version has nothing to do
