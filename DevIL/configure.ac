@@ -28,7 +28,7 @@ dnl THE ABOVE IS LIBTOOL INIT IS THE GOOD ONE, BUT MAYBE TOO UP-TO-DATE FOR MOST
 AC_PROG_LIBTOOL
 AC_LIBTOOL_WIN32_DLL
 dnl Automake init with all warnings reported
-AM_INIT_AUTOMAKE([-Wall])
+AM_INIT_AUTOMAKE([-Wall color-tests])
 
 dnl
 dnl Note that the libtool version has nothing to do
@@ -266,6 +266,7 @@ TEST_FORMAT([gif], [GIF])
 TEST_FORMAT([hdr], [HDR])
 TEST_FORMAT([icns],[ICNS])
 TEST_FORMAT([icon],[ICON])
+TEST_FORMAT([iff], [IFF])
 TEST_FORMAT([jpeg],[JPG], [SETTLE_JPEG])
 TEST_FORMAT([jp2], [JP2], [SETTLE_JASPER])
 TEST_FORMAT([lcms],[LCMS],[SETTLE_LCMS])
@@ -382,6 +383,7 @@ AC_SUBST([ILU_LIBS])
 AC_SUBST([ILUT_CFLAGS])
 AC_SUBST([ILUT_LIBS])
 AC_SUBST([LIBILUT_WIN32LIBPATH])
+AC_SUBST([SUPPORTED_FORMATS])
 
 dnl
 dnl Ouput files to generate
@@ -389,11 +391,13 @@ dnl note: keep the list on one line separated by single spaces
 dnl (otherwise MSYS compilation breaks)
 AC_CONFIG_FILES([Makefile 
 		 lib/Makefile 
+		 test/Makefile 
 		 examples/Makefile
 		 docs/Makefile 
 		 data/DevIL.pc 
 		 data/IL.pc data/ILU.pc 
-		 data/ILUT.pc])
+		 data/ILUT.pc
+		 test/format_test/format_checks.sh])
 dnl		 projects/Makefile]) 
 # src-IL/Makefile  src-IL/src/Makefile  src-IL/include/Makefile  src-ILU/Makefile  src-ILU/src/Makefile  src-ILU/include/Makefile  src-ILUT/Makefile  src-ILUT/src/Makefile  src-ILUT/include/Makefile  include/Makefile  include/IL/Makefile
 AC_OUTPUT

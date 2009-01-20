@@ -1,6 +1,6 @@
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = lib docs
+SUBDIRS = lib docs test
 
 if BUILD_EXAMPLES
 SUBDIRS += examples

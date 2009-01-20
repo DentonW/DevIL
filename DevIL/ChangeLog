@@ -158,3 +158,12 @@
 	* src-IL/src/Makefile.am: Added il_iff.c.
 	* ilut_win32.c (ilutConvertSliceToHBitmap): Redid using GAIA source changes.
 	
+2009-01-20 Matěj Týč <bubla@sf.net>
+	* test/format_test: Added a program and script as 'make check' target.
+	Those  will test whether IL is capable of saving and loading images and whether the saved and
+	loaded image is similar to the original.
+	* configure.ac, lib/Makefile.am: Added support to IFF compilation.
+	* docs/DevIL_manual.texi: Added missing documentation about getting
+	image data + fixed some typos.
+	* include/IL/devil_cpp_wrapper.hpp: Fixed a typo that caused
+	compilation error

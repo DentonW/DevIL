@@ -133,9 +133,6 @@ For 1.7.0
 - ilInit() call iSetImage0 and ilBindTemp. This shouldn't happen and image names must start from 0
 - Rename iGetIntegervImage to ilGetImageIntegerv and make it public
 
-
-
-
 Matej:
 - Make a test suite
 - Make a simple command-line ILU frontend (iller)

@@ -1,0 +1,26 @@
+#!/bin/bash
+
+VERBOSE=""    # set VERBOSE="v" for verbose mode
+# that @expression@ will be substituted by the 'confgure' script
+EXTENSIONS="@SUPPORTED_FORMATS@"
+# Here are the extensions that should support saving according to docs
+#CAN_SAVE=" BMP DDS HDR ICO JPG PCX PNG PPM PSD RAW SGI TGA TIF XPM " RAW and XPM are problematic...
+CAN_SAVE="BMP DDS HDR ICO JPG PCX PNG PPM PSD SGI TGA TIF"
+
+for EXTENSION in $EXTENSIONS
+do
+	#echo expr match "' $CAN_SAVE '" '.*\s'$EXTENSION'\s.*'
+	if [ $(expr match "' $CAN_SAVE '" '.*\s'$EXTENSION'\s.*') -eq 0 ] 
+	then # This extension is not considered supported...
+		continue;
+	fi
+	test -n "$VERBOSE" && echo ../suite -e $EXTENSION
+	./suite -e$VERBOSE $EXTENSION
+	# We have to capture whether the test has failed or not
+	if [ ! $? -eq 0 ]
+	then # we have an error here...
+		FAIL="1"
+	fi
+done
+# And we have to tell the result to the shell, too...
+exit $FAIL

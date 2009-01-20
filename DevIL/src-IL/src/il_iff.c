@@ -93,7 +93,7 @@ ILboolean ilLoadIffF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a IFF
-ILboolean ilLoadIffL(void *Lump, ILuint Size)
+ILboolean ilLoadIffL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadIffInternal();
