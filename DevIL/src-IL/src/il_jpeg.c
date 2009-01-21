@@ -393,7 +393,7 @@ METHODDEF(void)
 term_destination (j_compress_ptr cinfo)
 {
 	iwrite_ptr dest = (iwrite_ptr)cinfo->dest;
-	iwrite(dest->buffer, 1, OUTPUT_BUF_SIZE - dest->pub.free_in_buffer);
+	iwrite(dest->buffer, 1, OUTPUT_BUF_SIZE - (ILuint)dest->pub.free_in_buffer);
 	return;
 }
 

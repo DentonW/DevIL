@@ -26,7 +26,7 @@
 	#include <crtdbg.h>
 #endif
 
-#define ILUT_USE_WIN32
+//#define ILUT_USE_WIN32
 #include <windows.h>
 #include <IL/il.h>
 #include <IL/ilu.h>

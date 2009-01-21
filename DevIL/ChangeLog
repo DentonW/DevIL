@@ -157,7 +157,10 @@
 	* ilut_win32.c (ilutConvertSliceToHBitmap): Added better error handling.
 	* src-IL/src/Makefile.am: Added il_iff.c.
 	* ilu_rotate.c (iluRotate_): Changed ilResizeImage call.
-	* ilut_win32.c (ilutConvertSliceToHBitmap): Redid using GAIA source changes.
+	* Added ilut_config.h.
+	* ilut.h: Added reference to ilut_config.h for Windows.
+	* il_files.c/il_icon.c/il_png.c/il_mng.c: Fixed typecasting warnings.
+	* il_jp2.c/il_wbmp.c (ilSaveJp2L/ilSaveWbmpL): Removed const qualifier.
 	
 2009-01-20 Matěj Týč <bubla@sf.net>
 	* test/format_test: Added a program and script as 'make check' target.

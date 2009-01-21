@@ -120,12 +120,14 @@
 #endif
 */
 
-#ifdef _WIN32
+#if (defined(_WIN32) || defined(_WIN64))
 	#if (defined(IL_USE_PRAGMA_LIBS)) && (!defined(_IL_BUILD_LIBRARY))
 		#if defined(_MSC_VER) || defined(__BORLANDC__)
 			#pragma comment(lib, "ILUT.lib")
 		#endif
 	#endif
+
+	#include "IL/ilut_config.h"
 #endif
 
 
@@ -134,7 +136,7 @@
 //#include "IL/config.h" 
  
 //////////////
-// Opengl
+// OpenGL
 //////////////
 
 #ifdef ILUT_USE_OPENGL
@@ -258,7 +260,6 @@ ILAPI ILboolean     ILAPIENTRY ilutRenderer(ILenum Renderer);
 
 // ImageLib Utility Toolkit's Allegro Functions
 #ifdef ILUT_USE_ALLEGRO
-
 	#ifdef __cplusplus
 	extern "C" {
 	#endif

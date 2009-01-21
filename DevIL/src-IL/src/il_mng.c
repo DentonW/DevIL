@@ -100,7 +100,7 @@ mng_bool MNG_DECL mymngclosestream(mng_handle mng)
 mng_bool MNG_DECL mymngreadstream(mng_handle mng, mng_ptr buffer, mng_size_t size, mng_uint32 *bytesread)
 {
 	// read the requested amount of data from the file
-	*bytesread = iread(buffer, 1, size);
+	*bytesread = iread(buffer, 1, (ILuint)size);
 
 	return MNG_TRUE;
 }
@@ -111,7 +111,7 @@ mng_bool MNG_DECL mymngreadstream(mng_handle mng, mng_ptr buffer, mng_size_t siz
 //---------------------------------------------------------------------------------------------
 mng_bool MNG_DECL mymngwritedata(mng_handle mng, mng_ptr buffer, mng_size_t size, mng_uint32 *byteswritten)
 {
-	*byteswritten = iwrite(buffer, 1, size);
+	*byteswritten = iwrite(buffer, 1, (ILuint)size);
 
 	if (*byteswritten < size) {
 		ilSetError(IL_FILE_WRITE_ERROR);

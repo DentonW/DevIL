@@ -13,7 +13,6 @@ Easier:
 - If IL_NO_JP2 is defined, lines 306-307 shouldn't just cause the entire thing to fail.  We should just skip that entry.
 - Change ilConvertBuffer to be able to convert paletted images as well.
 - Update DevIL website with file formats (psd-saving, etc.).
-- Make sure il_squish.cpp is in all projects.
 - Make sure non-Unicode projects compile fine.
 
 
@@ -110,6 +109,7 @@ http://www.ultranet.com/~aramini/design.html
 - ilKeyColor ilAddKey...
 - Find a way to make the filters (especially the convolution filters) work in three dimensions.
 - Make better versions of the DevIL ports of the NeHe tutorials.  Several of the tutorials don't call ilInit, for instance.
+- Change parameters of iread to use ILsizet.
 
 
 Questions:

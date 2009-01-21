@@ -78,6 +78,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/ignore:4099"
 				AdditionalDependencies="comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib"
 				OutputFile="../../lib/vc9/x86/debug/DevIL.dll"
 				LinkIncremental="2"
@@ -178,7 +179,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/ignore:4197"
+				AdditionalOptions="/ignore:4197 /ignore:4099"
 				AdditionalDependencies="comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib"
 				OutputFile="../../lib/vc9/x64/debug/DevIL.dll"
 				LinkIncremental="2"
@@ -1251,6 +1252,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\il_squish.cpp"
+				>
 			</File>
 			<File
 				RelativePath="..\src\il_stack.c"

@@ -1701,6 +1701,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\src\il_iff.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\il_jp2.c"
 					>
 				</File>

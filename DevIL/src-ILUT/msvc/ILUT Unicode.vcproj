@@ -422,6 +422,10 @@
 				RelativePath="..\src\ilut_win32.c"
 				>
 			</File>
+			<File
+				RelativePath="..\src\ilut_x11.c"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"

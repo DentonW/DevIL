@@ -606,7 +606,7 @@ ILboolean ilReadRLE8Bmp(BMPHEAD *Header)
 				break;
 			default:
 				count = IL_MIN(Bytes[1], iCurImage->SizeOfData-offset);
-				if (iread(iCurImage->Data + offset, count, 1) != 1)
+				if (iread(iCurImage->Data + offset, (ILuint)count, 1) != 1)
 					return IL_FALSE;
 				offset += count;
 				if ((count & 1) == 1)  // Must be on a word boundary

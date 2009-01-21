@@ -147,7 +147,7 @@ ILint ILAPIENTRY iDefaultGetc(ILHANDLE Handle)
 
 ILint ILAPIENTRY iDefaultRead(void *Buffer, ILuint Size, ILuint Number, ILHANDLE Handle)
 {
-	return fread(Buffer, Size, Number, (FILE*)Handle);
+	return (ILint)fread(Buffer, Size, Number, (FILE*)Handle);
 }
 
 
@@ -206,7 +206,7 @@ ILint ILAPIENTRY iDefaultPutc(ILubyte Char, ILHANDLE Handle)
 
 ILint ILAPIENTRY iDefaultWrite(const void *Buffer, ILuint Size, ILuint Number, ILHANDLE Handle)
 {
-	return fwrite(Buffer, Size, Number, (FILE*)Handle);
+	return (ILint)fwrite(Buffer, Size, Number, (FILE*)Handle);
 }
 
 

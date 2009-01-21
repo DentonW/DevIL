@@ -181,7 +181,7 @@ ILboolean iLoadPngInternal()
 static void png_read(png_structp png_ptr, png_bytep data, png_size_t length)
 {
 	(void)png_ptr;
-	iread(data, 1, length);
+	iread(data, 1, (ILuint)length);
 	return;
 }
 
@@ -468,7 +468,7 @@ ILboolean ilSavePngL(void *Lump, ILuint Size)
 void png_write(png_structp png_ptr, png_bytep data, png_size_t length)
 {
 	(void)png_ptr;
-	iwrite(data, 1, length);
+	iwrite(data, 1, (ILuint)length);
 	return;
 }
 

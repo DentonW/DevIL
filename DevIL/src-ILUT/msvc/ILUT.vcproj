@@ -728,6 +728,10 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath="..\src\ilut_x11.c"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -739,6 +743,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\il\ilut.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\IL\ilut_config.h"
 				>
 			</File>
 			<File

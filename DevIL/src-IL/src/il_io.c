@@ -25,7 +25,7 @@ wchar_t *WideFromMultiByte(const char *Multi)
 	ILint	Length;
 	wchar_t	*Temp;
 
-	Length = mbstowcs(NULL, (const char*)Multi, 0) + 1; // note error return of -1 is possible
+	Length = (ILint)mbstowcs(NULL, (const char*)Multi, 0) + 1; // note error return of -1 is possible
 	if (Length == 0) {
 		ilSetError(IL_INVALID_PARAM);
 		return NULL;

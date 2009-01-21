@@ -512,7 +512,7 @@ ILboolean ilSaveJp2F(ILHANDLE File)
 
 
 //! Writes a Jp2 to a memory "lump"
-ILboolean ilSaveJp2L(const void *Lump, ILuint Size)
+ILboolean ilSaveJp2L(void *Lump, ILuint Size)
 {
 	iSetOutputLump(Lump, Size);
 	if (jas_init())
