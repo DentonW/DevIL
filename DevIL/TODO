@@ -13,7 +13,7 @@ Easier:
 - If IL_NO_JP2 is defined, lines 306-307 shouldn't just cause the entire thing to fail.  We should just skip that entry.
 - Change ilConvertBuffer to be able to convert paletted images as well.
 - Update DevIL website with file formats (psd-saving, etc.).
-- Make sure non-Unicode projects compile fine.
+- Add more extensions to top of il_states.c.
 
 
 More involved:
