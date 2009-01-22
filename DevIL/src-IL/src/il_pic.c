@@ -379,8 +379,10 @@ ILboolean channelReadMixed(ILubyte *scan, ILint width, ILint noCol, ILint *off, 
 		if (count >= 128) {  // Repeated sequence
 			if (count == 128) {  // Long run
 				count = GetBigUShort();
-				if (ieof())
+				if (ieof()) {
+					ilSetError(IL_FILE_READ_ERROR);
 					return IL_FALSE;
+				}
 			}
 			else
 				count -= 127;
@@ -388,12 +390,15 @@ ILboolean channelReadMixed(ILubyte *scan, ILint width, ILint noCol, ILint *off, 
 			// We've run past...
 			if ((i + count) > width) {
 				//fprintf(stderr, "ERROR: FF_PIC_load(): Overrun scanline (Repeat) [%d + %d > %d] (NC=%d)\n", i, count, width, noCol);
+				ilSetError(IL_ILLEGAL_FILE_VALUE);
 				return IL_FALSE;
 			}
 
 			for (j = 0; j < noCol; j++)
-				if (iread(&col[j], 1, 1) != 1)
+				if (iread(&col[j], 1, 1) != 1) {
+					ilSetError(IL_FILE_READ_ERROR);
 					return IL_FALSE;
+				}
 
 			for (k = 0; k < count; k++, scan += bytes) {
 				for (j = 0; j < noCol; j++)
@@ -403,13 +408,16 @@ ILboolean channelReadMixed(ILubyte *scan, ILint width, ILint noCol, ILint *off, 
 			count++;
 			if ((i + count) > width) {
 				//fprintf(stderr, "ERROR: FF_PIC_load(): Overrun scanline (Raw) [%d + %d > %d] (NC=%d)\n", i, count, width, noCol);
+				ilSetError(IL_ILLEGAL_FILE_VALUE);
 				return IL_FALSE;
 			}
 			
 			for (k = count; k > 0; k--, scan += bytes) {
 				for (j = 0; j < noCol; j++)
-					if (iread(&scan[off[j]], 1, 1) != 1)
+					if (iread(&scan[off[j]], 1, 1) != 1) {
+						ilSetError(IL_FILE_READ_ERROR);
 						return IL_FALSE;
+					}
 			}
 		}
 	}
@@ -418,6 +426,5 @@ ILboolean channelReadMixed(ILubyte *scan, ILint width, ILint noCol, ILint *off, 
 }
 
 
-
-
 #endif//IL_NO_PIC
+
