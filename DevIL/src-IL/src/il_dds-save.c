@@ -340,7 +340,6 @@ ILuint ILAPIENTRY ilGetDXTCData(void *Buffer, ILuint BufferSize, ILenum DXTCForm
 			iCurImage->Data = CurData;
 			return 0;
 		}
-		ifree(CurData);
 	}
 
 	//@TODO: Is this the best way to do this?
