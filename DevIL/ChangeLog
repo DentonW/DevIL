@@ -175,5 +175,9 @@
 2009-01-22 Denton woods <doomwiz@users.sf.net>
 	* ilut_internal.h:66: Changed to compile under Cygwin.
 	* ilut_opengl.c:108: Replaced _MSC_VER with _WIN32 and _WIN64.
-	* il_dds-save.c:343: Fixed bug #1067590 - Removed this line, which caused crashes
+	* il_dds-save.c:343: Fixed bug #1067590 - Removed this line, which caused crashes.
+	* il_pic.c (iLoadPicInternal): Fixed ilTexImage call, moved it after channel information read.
+	* il_pic.c (readScanline):294-295: Added check for alpha channel.
+ 
+
 
