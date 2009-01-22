@@ -44,7 +44,6 @@ dnl
 DEVIL_LTVERSION=1:1:0
 AC_SUBST([DEVIL_LTVERSION])
 
-
 dnl
 dnl Test build options
 dnl
@@ -70,9 +69,12 @@ AC_ARG_ENABLE([asm],
 
 AS_IF([test "x$enable_release" = "xyes"],
       [AS_IF([test "x$CFLAGS" = "x"],
-	     [CFLAGS="-O3"]) ],
+	     [CFLAGS="-O3"])
+       AS_IF([test "x$CXXFLAGS" = "x"],
+	     [CXXFLAGS="-O3"]) ],
       [test "x$enable_debug" = "xyes"],
       [CFLAGS="$CFLAGS -DNOINLINE -Wall -g -O0"
+       CXXFLAGS="$CXXFLAGS -DNOINLINE -Wall -g -O0"
        AC_DEFINE([DEBUG],
 		 [],
 		 ["Enable debug code features"]) ])
@@ -289,6 +291,9 @@ TEST_FORMAT([tiff],[TIF], [SETTLE_TIFF])
 TEST_FORMAT([xpm], [XPM])
 TEST_FORMAT([wal], [WAL])
 TEST_FORMAT([wdp], [WDP])
+
+DEVIL_CHECK_LIBSQUISH
+DEVIL_CHECK_NVIDIA_TEXTOOLS
 
 dnl
 dnl ILUT APIs library checking

@@ -6,6 +6,7 @@ dnl          ILU_CFLAGS="$ILU_CFLAGS $1"
 dnl          ILUT_CFLAGS="$ILUT_CFLAGS $1"])
 dnl IL_CFLAGS are present everywhere
 
+
 dnl
 dnl Check CPU Extensions
 dnl
@@ -138,6 +139,7 @@ dnl
 dnl Usage:
 dnl DEVIL_IL_LIB(<include>, <library>)
 dnl 	the <library> is appended to IL_LIBS, sets have_<library> to yes/no
+dnl Nothing else is done, see MAYBE_OPTIONAL_DEPENDENCY macro...
 dnl
 AC_DEFUN([DEVIL_IL_LIB],
          [AC_CHECK_HEADER([$1],
@@ -147,6 +149,36 @@ AC_DEFUN([DEVIL_IL_LIB],
                                          have_$2="yes"],
                                         [have_$2="no"])],
                           [have_$2="no"]) ])
+
+dnl
+dnl Checks for squish library = GPU accelerated DXT compression
+dnl Can be used along with nvidia texture tools
+dnl
+AC_DEFUN([DEVIL_CHECK_LIBSQUISH],
+         [DEVIL_IL_LIB([squish.h],
+                       [squish])
+          lib_test_result="$have_squish"
+          AS_IF([test "x$lib_test_result" = "xyes"],
+                [AC_DEFINE([IL_USE_DXTC_SQUISH],
+                           [1],
+                           [Define if you have libsquish installed]) 
+                 MAYBE_OPTIONAL_DEPENDENCY([IL], 
+                                           [libsquish]) ]) ])
+
+dnl
+dnl Checks for nvidia texture tools library - GPU acceleration of DXT compression
+dnl Can be used along with libsquish
+dnl 
+AC_DEFUN([DEVIL_CHECK_NVIDIA_TEXTOOLS],
+         [DEVIL_IL_LIB([nvtt/nvtt.h],
+                       [nvtt])
+          lib_test_result="$have_nvtt"
+          AS_IF([test "x$lib_test_result" = "xyes"],
+                [AC_DEFINE([IL_USE_DXTC_NVIDIA],
+                           [1],
+                           [Define if you have nvidia texture tools library installed]) 
+                 MAYBE_OPTIONAL_DEPENDENCY([IL], 
+                                           [libnvtt-nvidia_texture_tools]) ]) ])
 
 AC_DEFUN([SETTLE_LCMS],
 [AC_CHECK_LIB([lcms],
@@ -231,7 +263,7 @@ AC_DEFUN([SETTLE_TIFF],
                                            [libtiff]) ]) ]) 
 
 dnl
-dnl ILUT APIs checking
+dnl ILUT generic APIs checking
 dnl
 AC_DEFUN([TEST_API],
 	 [AC_ARG_ENABLE([$1],

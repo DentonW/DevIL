@@ -141,4 +141,5 @@ Matej:
 - Make a simple command-line ILU frontend (iller)
 - Make DevIL parts that require external libraries modular
 - Make the library include files correct (fix the config.h problem)
+- Fix the fact that --enable-debug configure switch is ineffective since -g -O2 somehow leaks to CFLAGS during configure...
 
