@@ -119,7 +119,7 @@ ILboolean iLoadIconInternal()
 		if (!strnicmp((char*)PNGTest, "PNG", 3))  // Characters 'P', 'N', 'G' for PNG header
 		{
 #ifdef IL_NO_PNG
-			ilSetError(IL_FORMAT_NOT_SUPPORTED);  // Cannot handle thesse without libpng.
+			ilSetError(IL_FORMAT_NOT_SUPPORTED);  // Cannot handle these without libpng.
 			goto file_read_error;
 #else
 			iseek(DirEntries[i].Offset, IL_SEEK_SET);
@@ -129,6 +129,7 @@ ILboolean iLoadIconInternal()
 		}
 		else
 		{
+			// Need to go back the 4 bytes that were just read.
 			iseek(DirEntries[i].Offset, IL_SEEK_SET);
 
 			IconImages[i].Head.Size = GetLittleInt();
