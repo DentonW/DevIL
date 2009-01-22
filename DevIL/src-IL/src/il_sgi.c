@@ -177,6 +177,13 @@ ILboolean iLoadSgiInternal()
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
 	}
+
+	// Bugfix for #1060946.
+	//  The ZSize should never really be 2 by the specifications.  Some
+	//  application is outputting these, and it looks like the ZSize
+	//  should really be 1.
+	if (Header.ZSize == 2)
+		Header.ZSize = 1;
 	
 	if (Header.Storage == SGI_RLE) {  // RLE
 		bSgi = iReadRleSgi(&Header);
@@ -224,7 +231,7 @@ ILboolean iReadRleSgi(iSgiHeader *Head)
 #endif //__LITTLE_ENDIAN__
 
 	// We have to create a temporary buffer for the image, because SGI
-	//	images are plane-separated. */
+	//	images are plane-separated.
 	TempData = (ILubyte**)ialloc(Head->ZSize * sizeof(ILubyte*));
 	if (TempData == NULL)
 		goto cleanup_error;
@@ -435,9 +442,9 @@ ILboolean iNewSgi(iSgiHeader *Head)
 		case 1:
 			iCurImage->Format = IL_LUMINANCE;
 			break;
-		case 2: 
+		/*case 2:
 			iCurImage->Format = IL_LUMINANCE_ALPHA; 
-			break;
+			break;*/
 		case 3:
 			iCurImage->Format = IL_RGB;
 			break;

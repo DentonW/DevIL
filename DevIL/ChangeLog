@@ -179,4 +179,5 @@
 	* il_pic.c (iLoadPicInternal): Fixed ilTexImage call, moved it after channel information read.
 	* il_pic.c (readScanline):294-295: Added check for alpha channel.
 	* il_pic.c: Added ilSetError calls throughout. 
+	* il_sgi.c (iLoadSgiInternal): Fixed bug #1060946 - Removed IL_LUMINANCE_ALPHA filetype.
 
