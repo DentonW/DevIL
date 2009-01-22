@@ -145,17 +145,26 @@ To also use ILU and ILUT, use @option{-lilu} and @option{-lilut}, respectively.
 Setting up DevIL in this environment requires the following steps:
 
 @enumerate
-	@item Unzip DevIL in an empty directory, by typing @command{gzip –d gzipname} followed by @command{tar –xvf tarname}, where @file{gzipname} and @file{tarname} are @file{DevIL-x.x.x.tar.gz} and @file{DevIL-x.x.x.tar}.
-	@item Unzip should automatically use the directory structure present in the DevIL zip file.
-	@item To use the precompiled libraries, copy @file{libIL.so}, @file{libILU.so} and @file{libILUT.so} to a place specified in your library path, or use the full path to the libraries when compiling.
-	@item To compile the library yourself:
-Type @command{./configure}, you get a long text with results of various tests.
-Then, type @command{make} followed by  @command{make install}.
+	@item Unpack DevIL to your favourite build area: Typically this is done by running @command{tar -xvvf devil-xxx.tar.gz}
+	@item Go to the root devil directory and run @command{./configure <your-favourite options>}
+
+	TIP: Typically, you will want to specify @code{--prefix=/usr} (where to install DevIL), @code{--enable-ILU} and/or @code{--enable-ILUT} and probably also @code{--with-examples}. 
+	Running @command{configure --help} gives you an exhaustive list of possibilities how to tweak DevIL build.
+	@item If no errors occured and you are satisfied with the configure report, you can compile it by running @command{make}
+
+	TIP: You can run @command{make -j3} if you have a dual-core processor. Generally, if you replace the number '3' with 'number of CPU cores' + 1, you are likely to get the job done in the shortest time.
+	@item Run @command{make check} to check whether everything works as it should. 
+	@xref{tests}, for hints what to do if a test fails.
+	@item Install DevIL by running @command{make install} as superuser. 
+
+	TIP: You can override variables at make time if you forgot to do that at configure time. 
+	For instance, you can install by @command{make install prefix=/usr}
 @end enumerate
 
 In order to link to DevIL, you may use autotools with @code{libtool}, which means to link either with @file{libIL.la} or @file{libILU.la} or with @file{libILUT.la} depending what level of functionality you require.
 You may decide to use a monolithic build of the library and you then link with @file{libDevIL.la}.
 The best way is to have this code in your @file{configure.ac} file:
+
 @example
 ...
 @i{dnl Check for libtool (older macro for this is AC_PROG_LIBTOOL)}
@@ -174,13 +183,52 @@ AC_CHECK_LIB([DevIL], [main], [LIBS_WE_NEED="-lDevIL $LIBS_WE_NEED"])
 AC_SUBST([LIBS_WE_NEED])
 ...
 @end example
-
+If this does not work and you get linking errors, complain to your distribution managers. 
+They sometimes take out @file{lib*.la} files, which will cause troubles.
 
 If you use an IDE or if you don't like autotools (which is a big mistake, by the way :-), then you may use @file{pkg-config}. This is not recommended if you intend to use DevIL in a cross-platform programs.
-You can get libraries you need to link to by running @command{pkg-config IL --libs}. Again, you decide whether you need IL, ILU or ILUT.
-Or you may have to run @command{pkg-config DevIL --libs} if you have just the monolithic library.
+You can get libraries you need to link to by running @command{pkg-config IL --libs}. Again, you decide whether you need @code{IL}, @code{ILU} or @code{ILUT}.
+
+Or you may have to run @command{pkg-config DevIL --libs} if you have just the monolithic library. 
+However, if your distribution ships DevIL in the monolithic form, complain to them. 
+The monolithic DevIL is intended for Windows platform.
 
 If you are a happy IDE user, you have to write this commands in the backquotes like @command{`pkg-config ILUT --libs`} into some text boxes that allow you to specify additional LDFLAGS.
+
+@section Test and examples
+
+@anchor{tests}
+@subsection Test suite
+DevIL now comes with a test suite. 
+If you can use autotools to configure and compile it, you can also run the test suite by executing @command{make check} in the directory where you ran @command{configure}.
+
+There are following tests available:
+@itemize
+	@item Format test: An image is generated and saved to disc. 
+	It is loaded afterwards and compared to the original.
+	If they are pretty much the same, the test is passed.
+	@item Format test 2 (coming soon): Some image formats can't be saved. 
+	So a test images are provided and loaded and compared. 
+@end itemize
+
+@subsection Examples
+
+@code{IL} examples:
+@itemize
+	@item Simple
+	@item Read
+	@item Override
+@end itemize
+Note: Those examples are actually linked against @code{ILU}, but this is only because error report functions.
+
+@code{ILUT} examples:
+@itemize
+	@item Allegro
+	@item C++ wrapper
+	@item SDL
+	@item Volume
+	@item OpenGL
+@end itemize
 
 @node Basic usage
 @chapter Basic usage
@@ -260,7 +308,8 @@ When you delete an image, DevIL actually deletes all data and anything associate
 
 DevIL's main purpose is to load images.
 DevIL's loading is designed to be extremely easy but very powerful.
-Appendix B lists the image types DevIL is capable of loading.
+
+@xref{file_formats}, lists the image types DevIL is capable of loading.
 
 DevIL contains four loading functions to support different loading styles and loading from several different image sources.  
 
@@ -281,7 +330,7 @@ Before loading the image, @code{ilLoadImage} must first determine the image form
 @enumerate
 	@item Compares the filename's extension to any registered file handlers, allowing the registered file handlers to take precedence over the default DevIL file handlers.
 If the extension matches a registered file handler, @code{ilLoadImage} passes control to the file handler and returns.
-For more information on registering, refer to the section entitled ``Registration''. 
+For more information on registering, refer to the section entitled (@pxref{registration}). 
 	@item Compares the filename's extension to the extensions natively supported by DevIL.
 If the extension matches a loading function's extension, @code{ilLoadImage} passes control to the file handler and returns.
 	@item Examines the file for a header and tries to match it with a known type of image header.
@@ -292,17 +341,21 @@ If a valid image header is found, @code{ilLoadImage} passes control to the appro
 @subsection Loading from Files -- @code{ilLoad}
 DevIL's other file loading function is @code{ilLoad}.  @code{ilLoad} is similar to @code{ilLoadImage} in many respects but different in other ways.  @code{ilLoad} accepts two parameters: the type of image and the filename of the image.
 
-@code{ilLoad}'s type parameter is what differentiates it from @code{ilLoadImage}.  Type can be any of the values listed in table B-2 in appendix B or the value @code{IL_TYPE_UNKNOWN}.  If Type is a value from table B-1, @code{ilLoad} attempts to load the file as the specified type of image format.
+@code{ilLoad}'s type parameter is what differentiates it from @code{ilLoadImage}. 
+Type can be any of the values listed in table B-2 in appendix B or the value @code{IL_TYPE_UNKNOWN}. 
+If Type is a value from table B-1, @code{ilLoad} attempts to load the file as the specified type of image format.
 Only use this if you know what type of images you will be loading and want to bypass DevIL's checks.
 
-If @code{IL_TYPE_UNKNOWN} is specified for Type, @code{ilLoad} behaves exactly like @code{ilLoadImage}.  Refer to the previous section for detailed behaviour of these two functions.
+If @code{IL_TYPE_UNKNOWN} is specified for Type, @code{ilLoad} behaves exactly like @code{ilLoadImage}.
+Refer to the previous section for detailed behaviour of these two functions.
 
 @subsection Loading from File Streams -- @code{ilLoadF}
-DevIL's file stream loading function is @code{ilLoadF}.  @code{ilLoadF} is exactly equivalent to @code{ilLoad}, but instead of accepting a const char pointer, @code{ilLoadF} accepts an ILHANDLE.
+DevIL's file stream loading function is @code{ilLoadF}.
+@code{ilLoadF} is exactly equivalent to @code{ilLoad}, but instead of accepting a const char pointer, @code{ilLoadF} accepts an @code{ILHANDLE}.
 DevIL defines @code{ILHANDLE} as a void pointer via a typedef.
 Under normal circumstances, File will be a @code{FILE} struct pointer defined in stdio.h.
 
-Refer to the section entitled ``Registration`` for instructions on how to use your own file handling functions and file handles.
+@xref{registration}, for instructions on how to use your own file handling functions and file handles.
 
 @subsection Loading from Memory Lumps -- @code{ilLoadL}
 DevIL's file handling is abstracted to allow loading images from memory called ``lumps''.  @code{ilLoadL} handles loading from lumps.
@@ -323,7 +376,7 @@ ILboolean ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size);
 @end example
 
 DevIL's saving functions are identical to the loading functions, despite the fact that they save images instead of load images.
-Lists of possible values for Type and supported saving formats are located in Appendix B.
+Note that not all formats that have load support have also save support (@pxref{file_formats})
 
 @node Image Management
 @chapter Image Management
@@ -447,7 +500,6 @@ The image bound before calling @code{ilCopyImage} will still be bound after @cod
 
 If you specify an image name in Src that has not been generated by @code{ilGenImages} or @code{ilBindImage}, @code{ilCopyImage} will set the @code{IL_INVALID_PARAM} error and return @code{IL_FALSE}.
 
-
 @subsection Blitting
 @code{ilBlit} copies a portion of an image over to another image.
 This is similar to blitting performed in graphics libraries, such as StretchBlt in the Windows API.
@@ -466,7 +518,6 @@ A description of the various @code{ilBlit} parameters follows:
 	@item @code{Height}: How many pixels to copy in the y direction of the source image.
 	@item @code{Depth}: How many pixels to copy in the z direction of the source image.
 @end itemize
-
 
 @subsection Overlaying
 @code{ilOverlay} is essentially the same as @code{ilBlit}, but it copies the entire image over, instead of just a portion of the image.  @code{ilOverlay} is more of a convenience function, since you can obtain the same results by calling @code{ilBlit} with SrcX, SrcY and SrcZ set to zero, with the Width, Height and Depth parameters set to the source image's height, width and depth, respectively.  @code{ilOverlay} is missing six parameters that @code{ilBlit} has:
@@ -487,7 +538,6 @@ This behavior can be toggled with @code{ilEnable} and @code{ilDisable}.
 ilDisable(IL_BLIT_BLEND);  // Turns off blending
 ilEnable(IL_BLIT_BLEND);  // Turns on blending
 @end example
-
 
 @chapter Image Characteristics
 
@@ -513,14 +563,13 @@ ilSetInteger(@emph{Origin});
 ilGetInteger(IL_ORIGIN_MODE);
 @end example
 
-
 @section Format
 Format refers to the ordering of the bytes for each pixel.
 
-
+@anchor{registration}
+@section Registration
 
 @chapter Error Handling
-
 DevIL contains error-handling routines to alert the users of this library to any internal problems in DevIL.
 The @code{ilGetError} function reports all errors in DevIL.  @code{iluErrorString} converts error numbers returned from @code{ilGetError} to a human-readable format.
 
@@ -536,7 +585,7 @@ All errors are kept on a stack maintained by @code{ilGetError}.  Every time @cod
 You should call @code{ilGetError} until @code{IL_NO_ERROR} is returned.  @code{IL_NO_ERROR} signifies that there are no more errors on the error stack.
 Most errors reported are not harmful, and DevIL operation can continue, except for @code{IL_OUT_OF_MEMORY}.
 
-All error codes that can be returned by @code{ilGetError} are listed in Appendix A.
+@xref{error_codes}, for error codes that can be returned by @code{ilGetError}.
 
 @section Error Strings
 @code{iluErrorString} returns a human readable error string from any error that @code{ilGetError} can return.
@@ -930,6 +979,7 @@ As you can see, they are self-explanatory.
 	@item @code{IL_SPANISH}
 @end itemize
 
+@anchor{error_codes}
 @appendix Common DevIL Error Codes
 
 Errors sometimes occur within DevIL.
@@ -966,6 +1016,7 @@ A table of error codes follows:
 	@item @code{IL_UNKNOWN_ERROR}	@tab @code{0x5FF}	@tab @code{1535}
 @end multitable
 
+@anchor{file_formats}
 @appendix Supported File Formats
 
 DevIL supports loading and saving of a large number of image formats.
