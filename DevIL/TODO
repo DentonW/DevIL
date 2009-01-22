@@ -14,6 +14,7 @@ Easier:
 - Change ilConvertBuffer to be able to convert paletted images as well.
 - Update DevIL website with file formats (psd-saving, etc.).
 - Add more extensions to top of il_states.c.
+- Change line 66 of ilut_opengl.c if none of those are defined.
 
 
 More involved:
@@ -27,7 +28,6 @@ More involved:
 - APNG support
 - Fortran support
 - D language support - There exists a program to convert C headers to D.
-- .iff support
 - Look into bug when rescaling.
 - Better DirectX 10 support
 - Should probably check for errors in iGetWdpHead and etc...
@@ -35,7 +35,6 @@ More involved:
 - Support for DX10 .dds files
 - More checks for headers of unknown file types
 - Set CompSize in ReadData of il_dds.c for DDS_LINEARSIZE flag?
-- It looks like PhotoCD support was disabled.  Why?
 - Look at resize filters in VTFEdit.
 - Get rid of globals in il_dds.c.
 - TIFF with JPEG encoding
@@ -109,7 +108,8 @@ http://www.ultranet.com/~aramini/design.html
 - ilKeyColor ilAddKey...
 - Find a way to make the filters (especially the convolution filters) work in three dimensions.
 - Make better versions of the DevIL ports of the NeHe tutorials.  Several of the tutorials don't call ilInit, for instance.
-- Change parameters of iread to use ILsizet.
+- Change parameters of iread to use ILsizei.
+- Make sure all bugs in bug tracker are squashed.
 
 
 Questions:

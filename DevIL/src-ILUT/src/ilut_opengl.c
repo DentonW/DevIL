@@ -105,7 +105,7 @@ void *aglGetProcAddress( const GLubyte *name ) {
 
 static ILboolean HasCubemapHardware = IL_FALSE;
 static ILboolean HasNonPowerOfTwoHardware = IL_FALSE;
-#if defined(_MSC_VER) || defined(linux) || defined(__APPLE__)
+#if defined(_WIN32) || defined(_WIN64) || defined(linux) || defined(__APPLE__)
 	ILGLTEXIMAGE3DARBPROC			ilGLTexImage3D = NULL;
 	ILGLTEXSUBIMAGE3DARBPROC		ilGLTexSubImage3D = NULL;
 	ILGLCOMPRESSEDTEXIMAGE2DARBPROC	ilGLCompressed2D = NULL;

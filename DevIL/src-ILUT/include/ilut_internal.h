@@ -63,7 +63,7 @@ void	ilutDefaultStates(void);
 #ifdef _WIN32_WCE
 	#include <windows.h>
 	#define IL_TEXT(s) ((char*)TEXT(s))
-#elif _WIN32
+#elif defined(_WIN32)
 	#include <windows.h>
 	#define IL_TEXT(s) TEXT(s)
 #else

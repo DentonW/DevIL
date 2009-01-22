@@ -171,3 +171,8 @@
 	image data + fixed some typos.
 	* include/IL/devil_cpp_wrapper.hpp: Fixed a typo that caused
 	compilation error
+
+2009-01-22 Denton woods <doomwiz@users.sf.net>
+	* ilut_internal.h:66: Changed to compile under Cygwin.
+	* ilut_opengl.c:108: Replaced _MSC_VER with _WIN32 and _WIN64.
+	
