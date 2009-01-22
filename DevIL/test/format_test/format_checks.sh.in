@@ -7,20 +7,42 @@ EXTENSIONS="@SUPPORTED_FORMATS@"
 #CAN_SAVE=" BMP DDS HDR ICO JPG PCX PNG PPM PSD RAW SGI TGA TIF XPM " RAW and XPM are problematic...
 CAN_SAVE="BMP DDS HDR ICO JPG PCX PNG PPM PSD SGI TGA TIF"
 
+echo "Running saving and loading consistency test..."
+FAILED_FORMATS=""
+PASSED_FORMATS=""
+
 for EXTENSION in $EXTENSIONS
 do
 	#echo expr match "' $CAN_SAVE '" '.*\s'$EXTENSION'\s.*'
 	if [ $(expr match "' $CAN_SAVE '" '.*\s'$EXTENSION'\s.*') -eq 0 ] 
-	then # This extension is not considered supported...
+	then # This extension is not considered as supported...
 		continue;
 	fi
 	test -n "$VERBOSE" && echo ../suite -e $EXTENSION
 	./suite -e$VERBOSE $EXTENSION
+	
 	# We have to capture whether the test has failed or not
 	if [ ! $? -eq 0 ]
 	then # we have an error here...
-		FAIL="1"
+		FAILED_FORMATS="$FAILED_FORMATS $EXTENSION"
+		FAILED="$?"
+	else #no error...
+		PASSED_FORMATS="$PASSED_FORMATS $EXTENSION"
 	fi
+
 done
+
+#let's tell something to the user as well:
+if [ "x$FAILED" = "x" ] 
+then #everything went fine
+	echo "All examined formats were OK:$PASSED_FORMATS"
+else #something went wrong
+	echo "Errors were encountered during the test :-("
+	echo "Formats that were OK:$PASSED_FORMATS"
+	echo "Failed formats: $FAILED_FORMATS"
+fi # end of something went wrong
+
+echo
+
 # And we have to tell the result to the shell, too...
-exit $FAIL
+exit $FAILED

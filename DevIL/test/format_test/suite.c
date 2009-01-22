@@ -15,10 +15,11 @@ enum colors {RED, GREEN, BLUE, ALPHA};
 
 enum test_results {TEST_OK = 0, TEST_FAIL = 0x1, TEST_FAIL_QUANTIL = 0x2, TEST_FAIL_INTEGRAL = 0x4 };
 
-enum {ACTION_HELP = 0x1, ACTION_VERBOSE = 0x2};
+enum {ACTION_HELP = 0x1, ACTION_VERBOSE = 0x2, ACTION_PRESERVE_TESTFILE = 0x4};
 enum {EXPECT_EXTENSION = 0x1, EXPECT_QUANTILE = 0x2};
 
 int verbose = 0;
+int preserve_testfile = 0;
 double quantile_spec = 0.65;
 
 int compare_ILubyte (const void * a, const void * b)
@@ -174,7 +175,8 @@ int test_format(const char * suffix)
 	sample = malloc(w * h * bpp * sizeof(ILubyte));
 	if (reference == NULL || sample == NULL)
 	{
-		remove(filename);
+		if (preserve_testfile == 0)
+			remove(filename);
 		fprintf(stderr, "Out of memory, %s:%d\n", __FILE__, __LINE__);
 		return IL_OUT_OF_MEMORY;
 	}
@@ -205,7 +207,8 @@ int test_format(const char * suffix)
 	free(sample);
 	free(reference);
 	/* We do not want to keep the saved test image by default... */
-	remove(filename);
+	if (preserve_testfile == 0)
+		remove(filename);
 	return return_value;
 }
 
@@ -240,6 +243,10 @@ void parse_commandline(int argc, char ** argv, char ** extension)
 				{
 					actions |= ACTION_VERBOSE;
 				}
+				else if (strncmp(argv[i], "--preserve", long_str))
+				{
+					actions |= ACTION_PRESERVE_TESTFILE;
+				}
 
 			}
 			else /* if not (argv[i][1] == '-') */
@@ -261,6 +268,9 @@ void parse_commandline(int argc, char ** argv, char ** extension)
 						case 'q':
 							expectations |= EXPECT_QUANTILE;
 							break;
+						case 'p':
+							actions |= ACTION_PRESERVE_TESTFILE;
+							break;
 					}/* end switch(argv[i][j]) */
 			}/* if not (argv[i][1] == '-') */
 		} 
@@ -281,9 +291,13 @@ void parse_commandline(int argc, char ** argv, char ** extension)
 		{
 			verbose++;
 		}
-		else if (actions & ACTION_HELP)
+		if (actions & ACTION_HELP)
 		{
 			printf("This will be helpful one day...\n");
+		}
+		if (actions & ACTION_PRESERVE_TESTFILE)
+		{
+			preserve_testfile = 1;
 		}
 	}/* endfor <going through argv> */
 }
