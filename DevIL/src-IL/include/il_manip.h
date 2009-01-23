@@ -31,7 +31,7 @@ ILboolean ilMirrorImage(void);	//@JASON New routine created 03/28/2001
 	#pragma warning(push)
 	#pragma warning(disable : 4756)  // Disables 'named type definition in parentheses' warning
 #endif
-INLINE ILfloat ILAPIENTRY ilFloatToHalfOverflow() {
+INLINE ILfloat /*ILAPIENTRY*/ ilFloatToHalfOverflow() {
 	ILfloat f = 1e10;
 	ILint j;
 	for (j = 0; j < 10; j++)

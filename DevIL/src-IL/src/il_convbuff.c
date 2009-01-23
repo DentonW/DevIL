@@ -22,7 +22,7 @@
 void* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestType, void *Buffer);
 ILushort ILAPIENTRY ilFloatToHalf(ILuint i);
 ILuint   ILAPIENTRY ilHalfToFloat (ILushort y);
-ILfloat  ILAPIENTRY ilFloatToHalfOverflow();
+ILfloat  /*ILAPIENTRY*/ ilFloatToHalfOverflow();
 
 #define CHECK_ALLOC() 	if (NewData == NULL) { \
 							if (Data != Buffer) \

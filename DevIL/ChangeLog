@@ -180,4 +180,9 @@
 	* il_pic.c (readScanline):294-295: Added check for alpha channel.
 	* il_pic.c: Added ilSetError calls throughout. 
 	* il_sgi.c (iLoadSgiInternal): Fixed bug #1060946 - Removed IL_LUMINANCE_ALPHA filetype.
-
+	* WindowsTest.cpp:52,53: Changed border size to accomodate Windows Vista/7.
+	* il_endian.h:20: Changed to give __BIG_ENDIAN__ a value of 1.  The Google cached page of
+	http://74.125.47.132/search?q=cache:YfSl36C2pAQJ:patch-tracking.debian.net/patch/series/view/devil/1.7.2-1/00_endian_and_ILvoid_fixes.diff+devil+big+endian&hl=en&ct=clnk&cd=11&gl=us&lr=lang_en
+	has this patch (Nov. 24, 2008 cache).
+	* devil_internal_exports.h:34:Uncommented and commented line 30.
+	

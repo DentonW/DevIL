@@ -17,7 +17,7 @@
 
 #ifdef WORDS_BIGENDIAN //this is defined by ./configure
 	#ifndef __BIG_ENDIAN__
-	#define __BIG_ENDIAN__
+	#define __BIG_ENDIAN__ 1
 	#endif
 #endif
 
@@ -370,7 +370,7 @@ INLINE ILubyte SaveBigDouble(ILdouble d) {
 #endif
 	return iwrite(&d, sizeof(ILdouble), 1);
 }
-#endif
+#endif//NOINLINE
 
 void		EndianSwapData(void *_Image);
 

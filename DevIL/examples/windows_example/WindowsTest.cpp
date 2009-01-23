@@ -49,8 +49,8 @@ HDC hDC = 0, hMemDC = 0;
 HWND HWnd;
 HBRUSH BackBrush;
 
-#define BORDER_W	8
-#define MENU_H		54
+#define BORDER_W	16 //8
+#define MENU_H		58 //54
 #define MIN_W		250  // Accomodate the menu bar.
 #define MAX_W		400
 #define MAX_H		400
