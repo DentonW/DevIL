@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 12/14/2008
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 01/24/2009
 //
 // Filename: src-IL/include/il_internal.h
 //
@@ -166,6 +166,7 @@ ILenum					iGetHint(ILenum Target);
 ILint					iGetInt(ILenum Mode);
 void					ilRemoveRegistered(void);
 ILAPI void ILAPIENTRY	ilSetCurImage(ILimage *Image);
+ILuint					ilDetermineSize(ILenum Type);
 //
 // Rle compression
 //
@@ -188,50 +189,7 @@ ILboolean	ilRemoveAlpha(void);
 ILboolean	ilSwapColours(void);
 // Miscellaneous functions
 char*		iGetString(ILenum StringName);  // Internal version of ilGetString
-// Library usage
-#if _MSC_VER && !_WIN32_WCE
-	#ifndef IL_NO_JPG
-		#ifdef IL_USE_IJL
-			//pragma comment(lib, "ijl15.lib")
-		#else
-			#ifndef IL_DEBUG
-				//pragma comment(lib, "libjpeg.lib")
-			#else
-				//pragma comment(lib, "debug/libjpeg.lib")
-			#endif
-		#endif
-	#endif
-	#ifndef IL_NO_MNG
-		#ifndef IL_DEBUG
-			//pragma comment(lib, "libmng.lib")
-			//pragma comment(lib, "libjpeg.lib")  // For JNG support.
-		#else
-			//pragma comment(lib, "debug/libmng.lib")
-			//pragma comment(lib, "debug/libjpeg.lib")  // For JNG support.
-		#endif
-	#endif
-	#ifndef IL_NO_PNG
-		#ifndef IL_DEBUG
-			//pragma comment(lib, "libpng.lib")
-		#else
-			//pragma comment(lib, "debug/libpng.lib")
-		#endif
-	#endif
-	#ifndef IL_NO_TIF
-		#ifndef IL_DEBUG
-			//pragma comment(lib, "libtiff.lib")
-		#else
-			//pragma comment(lib, "debug/libtiff.lib")
-		#endif
-	#endif
-	#if !defined(IL_NO_MNG) || !defined(IL_NO_PNG)
-		#ifndef IL_DEBUG
-			//pragma comment(lib, "zlib.lib")
-		#else
-			//pragma comment(lib, "debug/zlib.lib")
-		#endif
-	#endif
-#endif
+
 //
 // Image loading/saving functions
 //
@@ -431,7 +389,7 @@ ILboolean ilLoadTiffF(ILHANDLE File);
 ILboolean ilLoadTiffL(const void *Lump, ILuint Size);
 ILboolean ilSaveTiff(ILconst_string FileName);
 ILboolean ilSaveTiffF(ILHANDLE File);
-ILboolean ilSaveTiffL(const void *Lump, ILuint Size);
+ILboolean ilSaveTiffL(void *Lump, ILuint Size);
 ILboolean ilIsValidVtf(ILconst_string FileName);
 ILboolean ilIsValidVtfF(ILHANDLE File);
 ILboolean ilIsValidVtfL(const void *Lump, ILuint Size);

@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 01/06/2009
+// Last modified: 01/24/2009
 //
 // Filename: src-IL/src/il_io.c
 //
@@ -1808,8 +1808,13 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, void *Lump, ILuint Size)
 	ILboolean Ret;
 
 	if (Lump == NULL) {
-		ilSetError(IL_INVALID_PARAM);
-		return 0;
+		if (Size != 0) {
+			ilSetError(IL_INVALID_PARAM);
+			return 0;
+		}
+		else {
+			return ilDetermineSize(Type);
+		}
 	}
 
 	switch (Type)

@@ -1329,6 +1329,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\il_size.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\il_squish.cpp"
 				>
 			</File>

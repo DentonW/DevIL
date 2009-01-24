@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 01/15/2009
+// Last modified: 01/24/2009
 //
 // Filename: src-IL/src/il_manip.c
 //
@@ -11,7 +11,6 @@
 //-----------------------------------------------------------------------------
 
 #include "il_internal.h"
-#include <IL/il.h>
 #include "il_manip.h"
 
 
@@ -27,7 +26,7 @@ ILAPI void ILAPIENTRY iFlipBuffer(ILubyte *buff, ILuint depth, ILuint line_size,
 
 		for (y = 0; y < (line_num/2); y++) {
 			EndPtr -= line_size; 
-			iMemSwap(StartPtr,EndPtr,line_size);
+			iMemSwap(StartPtr, EndPtr, line_size);
 			StartPtr += line_size;
 		}
 	}

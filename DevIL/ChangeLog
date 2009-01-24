@@ -135,10 +135,10 @@
 	* include/IL/devil_cpp_wrapper.hpp: Added a hopefully harmless solution for
 	the initialization of DevIL.
 
-2009-01-16 Denton woods <doomwiz@users.sf.net>
+2009-01-16 Denton Woods <doomwiz@users.sf.net>
 	* Updated x64 projects
 
-2009-01-19 Denton woods <doomwiz@users.sf.net>
+2009-01-19 Denton Woods <doomwiz@users.sf.net>
 	* il_hdr.c: Changed line 73 to have space for terminating NULL.
 	* src-IL/src/Makefile.am: Added il_vtf.c and *.cpp files.
 	* Fixed the MSVC++ 9 solutions pointing to the MSVC++ 8 project files.
@@ -148,7 +148,7 @@
 	* il_dds.c/il.h: Readded DXT extension code.
 	* il_internal.h: Added declaration of ilFixCur.
 
-2009-01-20 Denton woods <doomwiz@users.sf.net>
+2009-01-20 Denton Woods <doomwiz@users.sf.net>
 	* ilut_opengl.c (ilutGLScreen): Added glPixelStorei call.
 	* Added il_iff.c from GAIA.
 	* Added "x64 DLL Install.exe" to SVN.
@@ -172,7 +172,7 @@
 	* include/IL/devil_cpp_wrapper.hpp: Fixed a typo that caused
 	compilation error
 
-2009-01-22 Denton woods <doomwiz@users.sf.net>
+2009-01-22 Denton Woods <doomwiz@users.sf.net>
 	* ilut_internal.h:66: Changed to compile under Cygwin.
 	* ilut_opengl.c:108: Replaced _MSC_VER with _WIN32 and _WIN64.
 	* il_dds-save.c:343: Fixed bug #1067590 - Removed this line, which caused crashes.
@@ -184,5 +184,16 @@
 	* il_endian.h:20: Changed to give __BIG_ENDIAN__ a value of 1.  The Google cached page of
 	http://74.125.47.132/search?q=cache:YfSl36C2pAQJ:patch-tracking.debian.net/patch/series/view/devil/1.7.2-1/00_endian_and_ILvoid_fixes.diff+devil+big+endian&hl=en&ct=clnk&cd=11&gl=us&lr=lang_en
 	has this patch (Nov. 24, 2008 cache).
-	* devil_internal_exports.h:34:Uncommented and commented line 30.
+	* devil_internal_exports.h:34: Uncommented and commented line 30.
+	
+2009-01-24 Denton Woods <doomwiz@users.sf.net>
+	* il_internal.h,il_tiff.c: Changed ilSaveTiffL to void* instead of const void*.
+	* il_tiff.c: Added _tiffFileReadProcW.  Changed _tiffFileSeekProc(W) to return the
+	  result of itell instead of tOff.  This allows us to finally overload the TIFF
+	  writing code.
+	* il_internal.h: Removed #pragma comments, which were commented out anyway.
+	* il_io.c (ilSaveL): Added call to ilDetermineSize.
+	* il_size.c: Added
+	* il_manip.c:14: Removed #include <IL/il.h>.
+	* il_jpeg.c:53: Added check for IL_USE_IJL.
 	

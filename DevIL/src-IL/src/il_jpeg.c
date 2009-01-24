@@ -50,11 +50,15 @@
 
 #if (defined(_WIN32) || defined(_WIN64)) && defined(IL_USE_PRAGMA_LIBS)
 	#if defined(_MSC_VER) || defined(__BORLANDC__)
-		#ifndef _DEBUG
-			#pragma comment(lib, "libjpeg.lib")
+		#ifdef IL_USE_IJL
+			//pragma comment(lib, "ijl15.lib")
 		#else
-			#pragma comment(lib, "libjpeg-d.lib")
-		#endif
+			#ifndef _DEBUG
+				#pragma comment(lib, "libjpeg.lib")
+			#else
+				#pragma comment(lib, "libjpeg-d.lib")
+			#endif
+		#endif//IL_USE_IJL
 	#endif
 #endif
 
