@@ -20,6 +20,8 @@ Easier:
 
 
 More involved:
+- ilSaveF and ilSaveL may just be returning boolean values.
+- It looks like ilSetRead/ilSetWrite don't actually do anything.
 - Commenting out lines 729-731 in pngread.c of libpng (1.2.9?) will allow reading of certain malformed Vista PNG-compressed .ico files with extra data at the end of the stream.  An example can be found in test/in and was created using Microangelo.
 - Add .ico/.icns saving.
 - Add .exr saving.

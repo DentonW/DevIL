@@ -1812,6 +1812,7 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, void *Lump, ILuint Size)
 			ilSetError(IL_INVALID_PARAM);
 			return 0;
 		}
+		// The user wants to know how large of a buffer they need.
 		else {
 			return ilDetermineSize(Type);
 		}

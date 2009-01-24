@@ -779,7 +779,7 @@ _tiffFileSeekProcW(thandle_t fd, toff_t tOff, int whence)
 		return 0xFFFFFFFF;
 
 	iseekw(tOff, whence);
-	return itell();
+	return itellw();
 	//return tOff;
 }
 

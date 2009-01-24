@@ -23,6 +23,8 @@
 
 __FILES_EXTERN void ILAPIENTRY iPreserveReadFuncs(void);
 __FILES_EXTERN void ILAPIENTRY iRestoreReadFuncs(void);
+__FILES_EXTERN void ILAPIENTRY iPreserveWriteFuncs(void);
+__FILES_EXTERN void ILAPIENTRY iRestoreWriteFuncs(void);
 
 __FILES_EXTERN fEofProc		EofProc;
 __FILES_EXTERN fGetcProc	GetcProc;
@@ -57,6 +59,7 @@ __FILES_EXTERN ILuint			(ILAPIENTRY *itell)(void);
 
 __FILES_EXTERN void				iSetOutputFile(ILHANDLE File);
 __FILES_EXTERN void				iSetOutputLump(void *Lump, ILuint Size);
+__FILES_EXTERN void				iSetOutputFake(void);
 __FILES_EXTERN void				(ILAPIENTRY *iclosew)(ILHANDLE);
 __FILES_EXTERN ILHANDLE			(ILAPIENTRY *iopenw)(ILconst_string);
 __FILES_EXTERN ILint			(ILAPIENTRY *iputc)(ILubyte Char);

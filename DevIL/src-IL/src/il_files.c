@@ -45,13 +45,26 @@ fGetcProc	GetcProcCopy;
 fReadProc	ReadProcCopy;
 fSeekRProc	SeekProcCopy;
 fTellRProc	TellProcCopy;
-ILHANDLE	(ILAPIENTRY *iopenCopy)(ILstring);
+ILHANDLE	(ILAPIENTRY *iopenCopy)(ILconst_string);
 void		(ILAPIENTRY *icloseCopy)(ILHANDLE);
+
+fPutcProc	PutcProcCopy;
+fSeekWProc	SeekWProcCopy;
+fTellWProc	TellWProcCopy;
+fWriteProc	WriteProcCopy;
+ILHANDLE	(ILAPIENTRY *iopenwCopy)(ILconst_string);
+void		(ILAPIENTRY *iclosewCopy)(ILHANDLE);
 
 ILboolean	UseCache = IL_FALSE;
 ILubyte		*Cache = NULL;
 ILuint		CacheSize, CachePos, CacheStartPos, CacheBytesRead;
 
+// "Fake" size functions
+//  Definitions are in il_size.c.
+ILint		ILAPIENTRY iSizeSeek(ILint Offset, ILuint Mode);
+ILint		ILAPIENTRY iSizeTell(void);
+ILint		ILAPIENTRY iSizePutc(ILubyte Char);
+ILint		ILAPIENTRY iSizeWrite(const void *Buffer, ILuint Size, ILuint Number);
 
 /*// Just preserves the current read functions and replaces
 //	the current read functions with the default read funcs.
@@ -84,6 +97,39 @@ void ILAPIENTRY iRestoreReadFuncs()
 
 	return;
 }*/
+
+
+// Just preserves the current read functions and replaces
+//	the current read functions with the default read funcs.
+void ILAPIENTRY iPreserveWriteFuncs()
+{
+	// Create backups
+	PutcProcCopy = PutcProc;
+	SeekWProcCopy = SeekWProc;
+	TellWProcCopy = TellWProc;
+	WriteProcCopy = WriteProc;
+	iopenwCopy = iopenw;
+	iclosewCopy = iclosew;
+
+	// Set the standard procs to write
+	ilResetWrite();
+
+	return;
+}
+
+
+// Restores the read functions - must be used after iPreserveReadFuncs().
+void ILAPIENTRY iRestoreWriteFuncs()
+{
+	PutcProc = PutcProcCopy;
+	SeekWProc = SeekWProcCopy;
+	TellWProc = TellWProcCopy;
+	WriteProc = WriteProcCopy;
+	iopenw = iopenwCopy;
+	iclosew = iclosewCopy;
+
+	return;
+}
 
 
 // Next 7 functions are the default read functions
@@ -298,9 +344,26 @@ void iSetOutputFile(ILHANDLE File)
 }
 
 
+// This is only called by ilDetermineSize.  Associates iputc, etc. with
+//  "fake" writing functions in il_size.c.
+void iSetOutputFake(void)
+{
+	iputc  = iSizePutc;
+	iseekw = iSizeSeek;
+	itellw = iSizeTell;
+	iwrite = iSizeWrite;
+	return;
+}
+
+
 // Tells DevIL that we're writing to a lump, not a file
 void iSetOutputLump(void *Lump, ILuint Size)
 {
+	// In this case, ilDetermineSize is currently trying to determine the
+	//  output buffer size.  It already has the write functions it needs.
+	if (Lump == NULL)
+		return;
+
 	iputc  = iPutcLump;
 	iseekw = iSeekWLump;
 	itellw = iTellWLump;

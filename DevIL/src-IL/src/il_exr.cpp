@@ -315,8 +315,8 @@ Imf::Int64 ilOStream::tellp()
 {
 	Imf::Int64 Pos;
 
-	// itell only returns a 32-bit value!
-	Pos = itell();
+	// itellw only returns a 32-bit value!
+	Pos = itellw();
 
 	return Pos;
 }
@@ -325,8 +325,8 @@ Imf::Int64 ilOStream::tellp()
 //@TODO: Make this work with 64-bit values.
 void ilOStream::seekp(Imf::Int64 Pos)
 {
-	// iseek only uses a 32-bit value!
-	iseek((ILint)Pos, IL_SEEK_SET);  // I am assuming this is seeking from the beginning.
+	// iseekw only uses a 32-bit value!
+	iseekw((ILint)Pos, IL_SEEK_SET);  // I am assuming this is seeking from the beginning.
 	return;
 }
 

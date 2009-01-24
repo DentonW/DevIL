@@ -189,11 +189,14 @@
 2009-01-24 Denton Woods <doomwiz@users.sf.net>
 	* il_internal.h,il_tiff.c: Changed ilSaveTiffL to void* instead of const void*.
 	* il_tiff.c: Added _tiffFileReadProcW.  Changed _tiffFileSeekProc(W) to return the
-	  result of itell instead of tOff.  This allows us to finally overload the TIFF
+	  result of itellw instead of tOff.  This allows us to finally overload the TIFF
 	  writing code.
 	* il_internal.h: Removed #pragma comments, which were commented out anyway.
 	* il_io.c (ilSaveL): Added call to ilDetermineSize.
 	* il_size.c: Added
 	* il_manip.c:14: Removed #include <IL/il.h>.
 	* il_jpeg.c:53: Added check for IL_USE_IJL.
+	* il_exr.cpp:319,329: Changed to write functions instead of read.
+	* il_files.c: Added iSetOutputFake.
+	* il_files.c (iSetOutputLump): Added check for NULL to accomodate ilDetermineSize function.
 	
