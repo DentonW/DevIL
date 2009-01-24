@@ -17,14 +17,20 @@ Easier:
 - Change line 66 of ilut_opengl.c if none of those are defined.
 - Do we need IL_TEXT stuff in ilut_internal.h?  Seems Linux is left out there...
 - Fix MSVC8 solutions for text files.
+- Warnings on Mac OS X.
+
+- Update MSVC8 solutions to include il_size.c.
 
 
 More involved:
 - ilSaveF and ilSaveL may just be returning boolean values.
 - It looks like ilSetRead/ilSetWrite don't actually do anything.
+- Run Valgrind on library.
+- Make iSaveJp2Internal and iSaveExrInternal work with palettes (make ilConvertBuffer work on palettes as well).
+- Make .ico/.icns uses Mipmaps field instead for smaller icons (can icns have multiple images?).
+- Work on http://en.wikipedia.org/wiki/Apple_Icon_Image page.
 - Commenting out lines 729-731 in pngread.c of libpng (1.2.9?) will allow reading of certain malformed Vista PNG-compressed .ico files with extra data at the end of the stream.  An example can be found in test/in and was created using Microangelo.
 - Add .ico/.icns saving.
-- Add .exr saving.
 - Readd CMAKE support
 - Better static lib support in MSVC++ 8/9
 - Lib EXIF support
@@ -32,7 +38,6 @@ More involved:
 - APNG support
 - Fortran support
 - D language support - There exists a program to convert C headers to D.
-- Look into bug when rescaling.
 - Better DirectX 10 support
 - Should probably check for errors in iGetWdpHead and etc...
 - ilGetAlpha returns malloc'ed memory that cannot be freed by the caller.
@@ -58,7 +63,6 @@ More involved:
 - Request compressed texture data in ilutGLSetTex2D?
 - Upload cubemaps directly to OpenGL/D3D.
 - Change some calls (such as in il_tiff.c) to ilGetString to non-Unicode.
-- Look at .cgm support.
 - Check saving of Luminance (8 bpp/1 Bpp) BMP
 - Check compatibility with all the files in the BMP Suite.
 - IL_COLOUR_INDEX:  must be implemented in iluReplaceColour(ILubyte Red, ILubyte Green, ILubyte Blue, ILfloat Tolerance);
@@ -66,9 +70,10 @@ More involved:
 - Update the state stack in IL.  Right now, it only saves part of the states when you push/pop.
 - Redo Compress in il_dds-save.c.
 - Check 16-bit images being loaded have their lower bits properly set.  An example is the il_dds.c entry on 2009-01-15.
-- Make iSaveJp2Internal and iSaveExrInternal work with palettes (make ilConvertBuffer work on palettes as well).
 - Fix image loading problems listed on http://www.seriema.net/thumbview/index.php?page=compatibility.
 - Fix iluRotate_ - it shifts images by a pixel each direction sometimes.
+- Look at http://en.wikipedia.org/wiki/Comparison_of_graphics_file_formats
+- Use IL_HALF format internally.
 
 
 Lots of work:

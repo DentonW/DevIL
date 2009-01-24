@@ -14,9 +14,9 @@
 #include "il_internal.h"
 #ifndef IL_NO_ICO
 #include "il_icon.h"
-	#ifndef IL_NO_PNG
+#ifndef IL_NO_PNG
 	#include <png.h>
-	#endif
+#endif
 
 //! Reads an icon file.
 ILboolean ilLoadIcon(ILconst_string FileName)
