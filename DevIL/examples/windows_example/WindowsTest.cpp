@@ -667,8 +667,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					ilEnable(IL_FILE_OVERWRITE);
 					//ilBindImage(Undos[0]);  //@TODO: Do better here...
 
-ilSaveL(IL_TIF, NULL, 0);
-
 					last_elapsed = SDL_GetTicks();
 					ilSaveImage(SaveFileName);
 
