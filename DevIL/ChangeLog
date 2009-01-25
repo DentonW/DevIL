@@ -229,4 +229,5 @@
 	* il_dds-save.c (GetAlphaBlock): Applied code from GetBlock, since it was still reading out of bounds.
 	* il_psd.c (ParseResources):808: Added check for ResourceSize being too small.  
 	  834-837: Added check to insure that we are not copying from past the end of Resource.
+	* il_hdr.c:527-528: Changed order so that beg_run+run_count is tested first.
 	

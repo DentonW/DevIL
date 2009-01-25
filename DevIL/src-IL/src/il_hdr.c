@@ -516,7 +516,7 @@ ILboolean RGBE_WriteBytes_RLE(ILubyte *data, ILuint numbytes)
 	ILubyte	buf[2];
 
 	cur = 0;
-	while(cur < numbytes) {
+	while (cur < numbytes) {
 		beg_run = cur;
 		/* find next run of length at least 4 if one exists */
 		run_count = old_run_count = 0;
@@ -524,8 +524,10 @@ ILboolean RGBE_WriteBytes_RLE(ILubyte *data, ILuint numbytes)
 			beg_run += run_count;
 			old_run_count = run_count;
 			run_count = 1;
-			while((data[beg_run] == data[beg_run + run_count]) 
-				&& (beg_run + run_count < numbytes) && (run_count < 127))
+			// 01-25-2009: Moved test for beg_run + run_count first so that it is
+			//  tested first.  This keeps it from going out of bounds by 1.
+			while((beg_run + run_count < numbytes) && (run_count < 127) && 
+				(data[beg_run] == data[beg_run + run_count]))
 			run_count++;
 		}
 		/* if data before next big run is a short run then write it as such */
