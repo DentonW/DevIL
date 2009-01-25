@@ -826,7 +826,7 @@ ILboolean ParseResources(ILuint ResourceSize, ILubyte *Resources)
 		BigUInt(&Size);
 		Resources += 4;
 
-		ResourceSize -= (4 + 2 + 1 + NameLen);
+		ResourceSize -= (4 + 2 + 1 + NameLen + 4);
 
 		switch (ID)
 		{
