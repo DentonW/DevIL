@@ -28,6 +28,9 @@
 
 ILboolean iIsValidJp2(void);
 
+ILboolean JasperInit = IL_FALSE;
+
+
 //! Checks if the file specified in FileName is a valid .jp2 file.
 ILboolean ilIsValidJp2(ILconst_string FileName)
 {
@@ -127,10 +130,12 @@ ILboolean ilLoadJp2F(ILHANDLE File)
 	iSetInputFile(File);
 	FirstPos = itell();
 
-	if (jas_init())
-	{
-		ilSetError(IL_LIB_JP2_ERROR);
-		return IL_FALSE;
+	if (!JasperInit) {
+		if (jas_init()) {
+			ilSetError(IL_LIB_JP2_ERROR);
+			return IL_FALSE;
+		}
+		JasperInit = IL_TRUE;
 	}
 	Stream = iJp2ReadStream();
 	if (!Stream)
@@ -162,10 +167,12 @@ ILboolean ilLoadJp2LInternal(const void *Lump, ILuint Size, ILimage *Image)
 	ILboolean		bRet;
 	jas_stream_t	*Stream;
 
-	if (jas_init())
-	{
-		ilSetError(IL_LIB_JP2_ERROR);
-		return IL_FALSE;
+	if (!JasperInit) {
+		if (jas_init()) {
+			ilSetError(IL_LIB_JP2_ERROR);
+			return IL_FALSE;
+		}
+		JasperInit = IL_TRUE;
 	}
 	Stream = jas_stream_memopen((char*)Lump, Size);
 	if (!Stream)
@@ -673,6 +680,14 @@ ILboolean iSaveJp2Internal()
 	ILenum	NewFormat, NewType = IL_UNSIGNED_BYTE;
 	ILimage	*TempImage = iCurImage;
 
+	if (!JasperInit) {
+		if (jas_init()) {
+			ilSetError(IL_LIB_JP2_ERROR);
+			return IL_FALSE;
+		}
+		JasperInit = IL_TRUE;
+	}
+
 	if (iCurImage->Type != IL_UNSIGNED_BYTE) {  //@TODO: Support greater than 1 bpc.
 		NewType = IL_UNSIGNED_BYTE;
 	}
@@ -783,6 +798,9 @@ ILboolean iSaveJp2Internal()
 
 	// Does all of the encoding.
 	if (jas_image_encode(Jp2Image, Stream, jas_image_strtofmt("jp2"), NULL)) {  //@TODO: Do we want to use any options?
+		jas_stream_close(Mem);
+		jas_stream_close(Stream);
+		jas_image_destroy(Jp2Image);
 		ilSetError(IL_LIB_JP2_ERROR);
 		return IL_FALSE;
 	}
