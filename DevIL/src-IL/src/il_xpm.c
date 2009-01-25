@@ -17,14 +17,74 @@
 
 
 //If this is defined, only xpm files with 1 char/pixel
-
 //can be loaded. They load somewhat faster then, though
-
 //(not much).
-
 //#define XPM_DONT_USE_HASHTABLE
 
+ILboolean iIsValidXpm(void);
 ILboolean iLoadXpmInternal(void);
+ILint XpmGetsInternal(ILubyte *Buffer, ILint MaxLen);
+
+//! Checks if the file specified in FileName is a valid XPM file.
+ILboolean ilIsValidXpm(ILconst_string FileName)
+{
+	ILHANDLE	XpmFile;
+	ILboolean	bXpm = IL_FALSE;
+	
+	if (!iCheckExtension(FileName, IL_TEXT("xpm"))) {
+		ilSetError(IL_INVALID_EXTENSION);
+		return bXpm;
+	}
+	
+	XpmFile = iopenr(FileName);
+	if (XpmFile == NULL) {
+		ilSetError(IL_COULD_NOT_OPEN_FILE);
+		return bXpm;
+	}
+	
+	bXpm = ilIsValidXpmF(XpmFile);
+	icloser(XpmFile);
+	
+	return bXpm;
+}
+
+
+//! Checks if the ILHANDLE contains a valid XPM file at the current position.
+ILboolean ilIsValidXpmF(ILHANDLE File)
+{
+	ILuint		FirstPos;
+	ILboolean	bRet;
+	
+	iSetInputFile(File);
+	FirstPos = itell();
+	bRet = iIsValidXpm();
+	iseek(FirstPos, IL_SEEK_SET);
+	
+	return bRet;
+}
+
+
+//! Checks if Lump is a valid XPM lump.
+ILboolean ilIsValidXpmL(const void *Lump, ILuint Size)
+{
+	iSetInputLump(Lump, Size);
+	return iIsValidXpm();
+}
+
+
+// Internal function to get the header and check it.
+ILboolean iIsValidXpm(void)
+{
+	ILubyte	Buffer[10];
+	ILuint	Pos = itell();
+
+	XpmGetsInternal(Buffer, 10);
+	iseek(Pos, IL_SEEK_SET);  // Restore position
+
+	if (strncmp("/* XPM */", (char*)Buffer, strlen("/* XPM */")))
+		return IL_FALSE;
+	return IL_TRUE;
+}
 
 
 // Reads an .xpm file
@@ -40,9 +100,7 @@ ILboolean ilLoadXpm(ILconst_string FileName)
 	}
 
 	iSetInputFile(XpmFile);
-
 	bXpm = ilLoadXpmF(XpmFile);
-
 	icloser(XpmFile);
 
 	return bXpm;
@@ -485,7 +543,6 @@ ILboolean XpmGetColour(ILubyte *Buffer, ILint Size, int Len, XpmPixel* Colours)
 
 ILboolean iLoadXpmInternal()
 {
-
 #define BUFFER_SIZE 2000
 	ILubyte			Buffer[BUFFER_SIZE], *Data;
 	ILint			Size, Pos, Width, Height, NumColours, i, x, y;

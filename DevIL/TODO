@@ -6,7 +6,7 @@ Denton:
 
 Easier:
 - iGetString may not work properly with Unicode strings.
-- Add ilIsValid* for .jp2 (and more?)
+- Look at adding ilIsValid* for mng, iff, wbmp, wal and pxr.
 - Fix Daniel's suggestions.
 - Added ilSetError error codes to il_files.c.
 - Get rid of check for precache.

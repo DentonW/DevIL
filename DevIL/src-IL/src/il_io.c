@@ -137,8 +137,6 @@ ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 }
 
 
-//ILenum ilDetermineTypeF(ILHANDLE File);
-
 //changed 2003-09-17 to ILAPIENTRY
 ILenum ILAPIENTRY ilDetermineType(ILconst_string FileName)
 {
@@ -265,6 +263,11 @@ ILenum ILAPIENTRY ilDetermineTypeF(ILHANDLE File)
 		return IL_VTF;
 	#endif
 
+	#ifndef IL_NO_XPM
+	if (ilIsValidXpmF(File))
+		return IL_XPM;
+	#endif
+
 	//moved tga to end of list because it has no magic number
 	//in header to assure that this is really a tga... (20040218)
 	#ifndef IL_NO_TGA
@@ -378,7 +381,12 @@ ILenum ILAPIENTRY ilDetermineTypeL(const void *Lump, ILuint Size)
 
 	#ifndef IL_NO_VTF
 	if (ilIsValidVtfL(Lump, Size))
-		return IL_SUN;
+		return IL_VTF;
+	#endif
+
+	#ifndef IL_NO_XPM
+	if (ilIsValidXpmL(Lump, Size))
+		return IL_XPM;
 	#endif
 
 	//moved tga to end of list because it has no magic number
@@ -505,6 +513,11 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, ILconst_string FileName)
 		case IL_VTF:
 			return ilIsValidVtf(FileName);
 		#endif
+
+		#ifndef IL_NO_XPM
+		case IL_XPM:
+			return ilIsValidXpm(FileName);
+		#endif
 	}
 
 	ilSetError(IL_INVALID_ENUM);
@@ -625,6 +638,11 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 		case IL_VTF:
 			return ilIsValidVtfF(File);
 		#endif
+
+		#ifndef IL_NO_XPM
+		case IL_XPM:
+			return ilIsValidXpmF(File);
+		#endif
 	}
 
 	ilSetError(IL_INVALID_ENUM);
@@ -744,6 +762,11 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, void *Lump, ILuint Size)
 		#ifndef IL_NO_VTF
 		case IL_VTF:
 			return ilIsValidVtfL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_XPM
+		case IL_XPM:
+			return ilIsValidXpmL(Lump, Size);
 		#endif
 	}
 
