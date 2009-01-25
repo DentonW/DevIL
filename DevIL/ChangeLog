@@ -225,4 +225,8 @@
 	  trying to return all along.
 	* il_pal.c:1075: Added error condition.
 	* lib/Makefile.am: Added il_size.c.
+	* simple.c: Added iluInit call.
+	* il_dds-save.c (GetAlphaBlock): Applied code from GetBlock, since it was still reading out of bounds.
+	* il_psd.c (ParseResources):808: Added check for ResourceSize being too small.  
+	  834-837: Added check to insure that we are not copying from past the end of Resource.
 	

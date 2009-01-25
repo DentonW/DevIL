@@ -805,7 +805,7 @@ ILboolean ParseResources(ILuint ResourceSize, ILubyte *Resources)
 		return IL_FALSE;
 	}
 
-	while (ResourceSize) {
+	while (ResourceSize > 13) {  // Absolutely has to be larger than this.
 		if (strncmp("8BIM", (const char*)Resources, 4)) {
 			//return IL_FALSE;
 			return IL_TRUE;  // 05-30-2002: May not necessarily mean corrupt data...
@@ -831,6 +831,10 @@ ILboolean ParseResources(ILuint ResourceSize, ILubyte *Resources)
 		switch (ID)
 		{
 			case 0x040F:  // ICC Profile
+				if (Size > ResourceSize) {  // Check to make sure we are not going past the end of Resources.
+					ilSetError(IL_ILLEGAL_FILE_VALUE);
+					return IL_FALSE;
+				}
 				iCurImage->Profile = (ILubyte*)ialloc(Size);
 				if (iCurImage->Profile == NULL) {
 					return IL_FALSE;

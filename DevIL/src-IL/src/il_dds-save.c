@@ -922,7 +922,8 @@ ILboolean GetBlock(ILushort *Block, ILushort *Data, ILimage *Image, ILuint XPos,
 		    if (XPos + x < Image->Width && YPos + y < Image->Height)
 				Block[i++] = Data[Offset + x];
 			else
-				// If we are out of bounds of the image, just copy the adjacent data.
+				// Variant of bugfix from https://sourceforge.net/forum/message.php?msg_id=5486779.
+				//  If we are out of bounds of the image, just copy the adjacent data.
 			    Block[i++] = Data[Offset];
 		}
 		// We do not want to read past the end of the image.
@@ -940,15 +941,16 @@ ILboolean GetAlphaBlock(ILubyte *Block, ILubyte *Data, ILimage *Image, ILuint XP
 
 	for (y = 0; y < 4; y++) {
 		for (x = 0; x < 4; x++) {
-			if (x < Image->Width && y < Image->Height)
-	            Block[i++] = Data[Offset + x];
-            else
-	            //Block[i++] = Data[Offset];
-				// 10-23-2008
-				// Bugfix from https://sourceforge.net/forum/message.php?msg_id=5486779
-				Block[i++] = YPos * Image->Width + XPos;
+		    if (XPos + x < Image->Width && YPos + y < Image->Height)
+				Block[i++] = Data[Offset + x];
+			else
+				// Variant of bugfix from https://sourceforge.net/forum/message.php?msg_id=5486779.
+				//  If we are out of bounds of the image, just copy the adjacent data.
+			    Block[i++] = Data[Offset];
 		}
-        Offset += Image->Width;
+		// We do not want to read past the end of the image.
+		if (YPos + y + 1 < Image->Height)
+			Offset += Image->Width;
 	}
 
 	return IL_TRUE;
