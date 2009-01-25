@@ -205,6 +205,11 @@ ILenum ILAPIENTRY ilDetermineTypeF(ILHANDLE File)
 		return IL_ICNS;
 	#endif
 
+	#ifndef IL_NO_JP2
+	if (ilIsValidJp2F(File))
+		return IL_JP2;
+	#endif
+
 	#ifndef IL_NO_LIF
 	if (ilIsValidLifF(File))
 		return IL_LIF;
@@ -309,6 +314,11 @@ ILenum ilDetermineTypeL(const void *Lump, ILuint Size)
 	#ifndef IL_NO_ICNS
 	if (ilIsValidIcnsL(Lump, Size))
 		return IL_ICNS;
+	#endif
+
+	#ifndef IL_NO_JP2
+	if (ilIsValidJp2L(Lump, Size))
+		return IL_JP2;
 	#endif
 
 	#ifndef IL_NO_LIF
@@ -426,6 +436,11 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, ILconst_string FileName)
 			return ilIsValidIcns(FileName);
 		#endif
 
+		#ifndef IL_NO_JP2
+		case IL_JP2:
+			return ilIsValidJp2(FileName);
+		#endif
+
 		#ifndef IL_NO_LIF
 		case IL_LIF:
 			return ilIsValidLif(FileName);
@@ -536,6 +551,11 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 			return ilIsValidIcnsF(File);
 		#endif
 
+		#ifndef IL_NO_JP2
+		case IL_JP2:
+			return ilIsValidJp2F(File);
+		#endif
+
 		#ifndef IL_NO_LIF
 		case IL_LIF:
 			return ilIsValidLifF(File);
@@ -644,6 +664,11 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, void *Lump, ILuint Size)
 		#ifndef IL_NO_ICNS
 		case IL_ICNS:
 			return ilIsValidIcnsL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_JP2
+		case IL_JP2:
+			return ilIsValidJp2L(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_LIF

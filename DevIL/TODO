@@ -76,6 +76,7 @@ More involved:
 - Fix iluRotate_ - it shifts images by a pixel each direction sometimes.
 - Look at http://en.wikipedia.org/wiki/Comparison_of_graphics_file_formats
 - Use IL_HALF format internally.
+- PNG and JPG compression in .bmp files?
 
 
 Lots of work:

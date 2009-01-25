@@ -26,6 +26,77 @@
 	#endif
 #endif
 
+ILboolean iIsValidJp2(void);
+
+//! Checks if the file specified in FileName is a valid .icns file.
+ILboolean ilIsValidJp2(ILconst_string FileName)
+{
+	ILHANDLE	Jp2File;
+	ILboolean	bJp2 = IL_FALSE;
+
+	if (!iCheckExtension(FileName, IL_TEXT("jp2"))) {
+		ilSetError(IL_INVALID_EXTENSION);
+		return bJp2;
+	}
+
+	Jp2File = iopenr(FileName);
+	if (Jp2File == NULL) {
+		ilSetError(IL_COULD_NOT_OPEN_FILE);
+		return bJp2;
+	}
+
+	bJp2 = ilIsValidJp2F(Jp2File);
+	icloser(Jp2File);
+
+	return bJp2;
+}
+
+
+//! Checks if the ILHANDLE contains a valid .icns file at the current position.
+ILboolean ilIsValidJp2F(ILHANDLE File)
+{
+	ILuint		FirstPos;
+	ILboolean	bRet;
+
+	iSetInputFile(File);
+	FirstPos = itell();
+	bRet = iIsValidJp2();
+	iseek(FirstPos, IL_SEEK_SET);
+
+	return bRet;
+}
+
+
+//! Checks if Lump is a valid .icns lump.
+ILboolean ilIsValidJp2L(const void *Lump, ILuint Size)
+{
+	iSetInputLump(Lump, Size);
+	return iIsValidJp2();
+}
+
+
+// Internal function to get the header and check it.
+ILboolean iIsValidJp2(void)
+{
+	ILubyte Signature[4];
+
+	iseek(4, IL_SEEK_CUR);  // Skip the 4 bytes that tell the size of the signature box.
+	if (iread(Signature, 1, 4) != 4) {
+		iseek(-4, IL_SEEK_CUR);
+		return IL_FALSE;  // File read error
+	}
+
+	iseek(-8, IL_SEEK_CUR);  // Restore to previous state
+
+	// Signature is 'jP\040\040' by the specs (or 0x6A502020).
+	//  http://www.jpeg.org/public/fcd15444-6.pdf
+	if (Signature[0] != 0x6A || Signature[1] != 0x50 ||
+		Signature[2] != 0x20 || Signature[3] != 0x20)
+		return IL_FALSE;
+
+	return IL_TRUE;
+}
+
 
 //! Reads a Jpeg2000 file.
 ILboolean ilLoadJp2(ILconst_string FileName)

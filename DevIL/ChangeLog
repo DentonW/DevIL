@@ -204,4 +204,6 @@
 	* il_size.c: Added #ifdefs for when user has declared IL_NO_XXX.  Changed error to ENUM instead of PARAM.
 	* Updated MSVC8 projects with il_size.c.
 	* src-IL/src/Makefile.am: Added il_size.c.
+	* il_jp2.c: Added ilIsValidJp2* functions.
+	* il_io.c: Added JP2 support to ilDetermineType and ilIsValid functions.
 	
