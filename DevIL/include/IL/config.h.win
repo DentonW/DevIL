@@ -4,7 +4,7 @@
 #define IL_USE_PRAGMA_LIBS  // Links to only the libraries that are requested.
 #define IL_INLINE_ASM 1  // Define if you can support at least some ASM
 
-/* Supported images formats (il) */
+// Supported images formats (IL)
 
 // #define IL_NO_BMP
 // #define IL_NO_CUT
@@ -12,7 +12,7 @@
 // #define IL_NO_DCX
 // #define IL_NO_DDS
 // #define IL_NO_DOOM
-#define IL_NO_EXR
+// #define IL_NO_EXR
 // #define IL_NO_GIF
 // #define IL_NO_HDR
 // #define IL_NO_ICO
@@ -22,7 +22,7 @@
 // #define IL_NO_LCMS
 // #define IL_NO_LIF
 // #define IL_NO_MDL
-#define IL_NO_MNG
+// #define IL_NO_MNG
 // #define IL_NO_PCD
 // #define IL_NO_PCX
 // #define IL_NO_PIC
@@ -41,6 +41,7 @@
 // #define IL_NO_XPM
 #define IL_USE_JPEGLIB_UNMODIFIED 1
 #define IL_USE_DXTC_NVIDIA
+#define IL_USE_DXTC_SQUISH
 
 /* Supported api (ilut) */
 
@@ -60,7 +61,7 @@
 #define ILUT_USE_DIRECTX9
 #define ILUT_USE_DIRECTX10
 #define ILUT_USE_OPENGL
-#undef ILUT_USE_SDL
+#define ILUT_USE_SDL
 #define ILUT_USE_WIN32
 
 
