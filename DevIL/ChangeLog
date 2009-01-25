@@ -202,4 +202,6 @@
 	* il_hdr.c:457: Changed from char* to ILbyte*.
 	* il_icns.h:24,30: Changed from ILbyte to char.
 	* il_size.c: Added #ifdefs for when user has declared IL_NO_XXX.  Changed error to ENUM instead of PARAM.
+	* Updated MSVC8 projects with il_size.c.
+	* src-IL/src/Makefile.am: Added il_size.c.
 	
