@@ -176,6 +176,12 @@ IL_HINTS ilHints;
 	#define IL_ICO_EXT ""
 #endif
 
+#ifndef IL_NO_IFF
+	#define IL_IFF_EXT "iff "
+#else
+	#define IL_IFF_EXT ""
+#endif
+
 #ifndef IL_NO_JP2
 	#define IL_JP2_EXT "jp2 "
 #else
@@ -204,6 +210,12 @@ IL_HINTS ilHints;
 	#define IL_MNG_EXT "mng jng "
 #else
 	#define IL_MNG_EXT ""
+#endif
+
+#ifndef IL_NO_PCD
+	#define IL_PCD_EXT "pcd "
+#else
+	#define IL_PCD_EXT ""
 #endif
 
 #ifndef IL_NO_PCX
@@ -254,10 +266,22 @@ IL_HINTS ilHints;
 	#define IL_PXR_EXT ""
 #endif
 
+#ifndef IL_NO_RAW
+	#define IL_RAW_EXT "raw "
+#else
+	#define IL_RAW_EXT ""
+#endif
+
 #ifndef IL_NO_SGI
 	#define IL_SGI_EXT "sgi bw rgb rgba "
 #else
 	#define IL_SGI_EXT ""
+#endif
+
+#ifndef IL_NO_SUN
+	#define IL_SUN_EXT "sun "
+#else
+	#define IL_SUN_EXT ""
 #endif
 
 #ifndef IL_NO_TGA
@@ -282,6 +306,12 @@ IL_HINTS ilHints;
 	#define IL_WAL_EXT "wal "
 #else
 	#define IL_WAL_EXT ""
+#endif
+
+#ifndef IL_NO_WBMP
+	#define IL_WBMP_EXT "wbmp "
+#else
+	#define IL_WBMP_EXT ""
 #endif
 
 #ifndef IL_NO_XPM

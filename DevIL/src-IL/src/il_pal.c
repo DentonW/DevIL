@@ -1072,7 +1072,8 @@ ILboolean ILAPIENTRY ilApplyPal(ILconst_string FileName)
 			break;
 
 		default:  // Should be no other!
-			break;
+			ilSetError(IL_INTERNAL_ERROR);
+			return IL_FALSE;
 	}
 
 	iCurImage = CurImage;

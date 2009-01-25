@@ -532,44 +532,53 @@ ILboolean i16BitTarga(ILimage *Image)
 
 
 //! Writes a Targa file
-ILboolean ilSaveTarga(ILconst_string FileName)
+ILboolean ilSaveTarga(const ILstring FileName)
 {
 	ILHANDLE	TargaFile;
-	ILboolean	bTarga = IL_FALSE;
-	
+	ILuint		TargaSize;
+
 	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
 		if (iFileExists(FileName)) {
 			ilSetError(IL_FILE_ALREADY_EXISTS);
 			return IL_FALSE;
 		}
 	}
-	
+
 	TargaFile = iopenw(FileName);
 	if (TargaFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
-		return bTarga;
+		return IL_FALSE;
 	}
-	
-	bTarga = ilSaveTargaF(TargaFile);
+
+	TargaSize = ilSaveTargaF(TargaFile);
 	iclosew(TargaFile);
-	
-	return bTarga;
+
+	if (TargaSize == 0)
+		return IL_FALSE;
+	return IL_TRUE;
 }
 
 
 //! Writes a Targa to an already-opened file
-ILboolean ilSaveTargaF(ILHANDLE File)
+ILuint ilSaveTargaF(ILHANDLE File)
 {
+	ILuint Pos;
 	iSetOutputFile(File);
-	return iSaveTargaInternal();
+	Pos = itellw();
+	if (iSaveTargaInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 
 //! Writes a Targa to a memory "lump"
-ILboolean ilSaveTargaL(void *Lump, ILuint Size)
+ILuint ilSaveTargaL(void *Lump, ILuint Size)
 {
+	ILuint Pos = itellw();
 	iSetOutputLump(Lump, Size);
-	return iSaveTargaInternal();
+	if (iSaveTargaInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 

@@ -424,10 +424,10 @@ devil_jpeg_write_init(j_compress_ptr cinfo)
 
 
 //! Writes a Jpeg file
-ILboolean ilSaveJpeg(ILconst_string FileName)
+ILboolean ilSaveJpeg(const ILstring FileName)
 {
 	ILHANDLE	JpegFile;
-	ILboolean	bJpeg = IL_FALSE;
+	ILuint		JpegSize;
 
 	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
 		if (iFileExists(FileName)) {
@@ -439,29 +439,38 @@ ILboolean ilSaveJpeg(ILconst_string FileName)
 	JpegFile = iopenw(FileName);
 	if (JpegFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
-		return bJpeg;
+		return IL_FALSE;
 	}
 
-	bJpeg = ilSaveJpegF(JpegFile);
+	JpegSize = ilSaveJpegF(JpegFile);
 	iclosew(JpegFile);
 
-	return bJpeg;
+	if (JpegSize == 0)
+		return IL_FALSE;
+	return IL_TRUE;
 }
 
 
 //! Writes a Jpeg to an already-opened file
-ILboolean ilSaveJpegF(ILHANDLE File)
+ILuint ilSaveJpegF(ILHANDLE File)
 {
+	ILuint Pos;
 	iSetOutputFile(File);
-	return iSaveJpegInternal();
+	Pos = itellw();
+	if (iSaveJpegInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 
 //! Writes a Jpeg to a memory "lump"
-ILboolean ilSaveJpegL(void *Lump, ILuint Size)
+ILuint ilSaveJpegL(void *Lump, ILuint Size)
 {
+	ILuint Pos = itellw();
 	iSetOutputLump(Lump, Size);
-	return iSaveJpegInternal();
+	if (iSaveJpegInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 

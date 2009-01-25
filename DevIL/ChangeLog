@@ -215,4 +215,13 @@
 	* il_io.c (ilDetermineTypeL): Changed VTF check to return IL_VTF instead of the miscopied IL_SUN.
 	* il_size.c (ilDetermineSize): Now calls iTargaSize for Targa files.
 	* il_tga.c: Added iTargaSize.
+
+2009-01-25 Denton Woods <doomwiz@users.sf.net>
+	* ilut_internal.h:63-67: Redid definitions of IL_TEXT to coincide with il_internal.h.
+	* il_states.c: Updated _ilLoadExt/_ilSaveExt with all extensions.
+	* il_states.h: Updated with all extensions.
+	* All image formats with saving: Changed return values of ilSaveXxxF and ilSaveXxxL to be
+	  an integer stating the number of bytes written.  This is what ilSaveF/L have been
+	  trying to return all along.
+	* il_pal.c:1075: Added error condition.
 	

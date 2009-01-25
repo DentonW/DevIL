@@ -483,10 +483,10 @@ ILboolean iNewSgi(iSgiHeader *Head)
 /*----------------------------------------------------------------------------*/
 
 //! Writes a SGI file
-ILboolean ilSaveSgi(ILconst_string FileName)
+ILboolean ilSaveSgi(const ILstring FileName)
 {
 	ILHANDLE	SgiFile;
-	ILboolean	bSgi = IL_FALSE;
+	ILuint		SgiSize;
 
 	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
 		if (iFileExists(FileName)) {
@@ -498,31 +498,38 @@ ILboolean ilSaveSgi(ILconst_string FileName)
 	SgiFile = iopenw(FileName);
 	if (SgiFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
-		return bSgi;
+		return IL_FALSE;
 	}
 
-	bSgi = ilSaveSgiF(SgiFile);
+	SgiSize = ilSaveSgiF(SgiFile);
 	iclosew(SgiFile);
 
-	return bSgi;
+	if (SgiSize == 0)
+		return IL_FALSE;
+	return IL_TRUE;
 }
 
-/*----------------------------------------------------------------------------*/
 
-//! Writes a SGI to an already-opened file
-ILboolean ilSaveSgiF(ILHANDLE File)
+//! Writes a Sgi to an already-opened file
+ILuint ilSaveSgiF(ILHANDLE File)
 {
+	ILuint Pos;
 	iSetOutputFile(File);
-	return iSaveSgiInternal();
+	Pos = itellw();
+	if (iSaveSgiInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
-/*----------------------------------------------------------------------------*/
 
-//! Writes a SGI to a memory "lump"
-ILboolean ilSaveSgiL(void *Lump, ILuint Size)
+//! Writes a Sgi to a memory "lump"
+ILuint ilSaveSgiL(void *Lump, ILuint Size)
 {
+	ILuint Pos = itellw();
 	iSetOutputLump(Lump, Size);
-	return iSaveSgiInternal();
+	if (iSaveSgiInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 

@@ -45,7 +45,8 @@ ILboolean ilIsValidBmp(ILconst_string CONST_RESTRICT FileName)
 
 
 //! Checks if the ILHANDLE contains a valid .bmp file at the current position.
-ILboolean ilIsValidBmpF(ILHANDLE File) {
+ILboolean ilIsValidBmpF(ILHANDLE File)
+{
 	ILuint		FirstPos;
 	ILboolean	bRet;
 
@@ -841,11 +842,11 @@ ILboolean iGetOS2Bmp(OS2_HEAD *Header)
 }
 
 
-//! Writes a .bmp file
+//! Writes a Bmp file
 ILboolean ilSaveBmp(const ILstring FileName)
 {
 	ILHANDLE	BitmapFile;
-	ILboolean	bBitmap = IL_FALSE;
+	ILuint		BitmapSize;
 
 	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
 		if (iFileExists(FileName)) {
@@ -857,34 +858,44 @@ ILboolean ilSaveBmp(const ILstring FileName)
 	BitmapFile = iopenw(FileName);
 	if (BitmapFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
-		return bBitmap;
+		return IL_FALSE;
 	}
 
-	bBitmap = ilSaveBmpF(BitmapFile);
+	BitmapSize = ilSaveBmpF(BitmapFile);
 	iclosew(BitmapFile);
 
-	return bBitmap;
+	if (BitmapSize == 0)
+		return IL_FALSE;
+	return IL_TRUE;
 }
 
 
-//! Writes a .bmp to an already-opened file
-ILboolean ilSaveBmpF(ILHANDLE File)
+//! Writes a Bmp to an already-opened file
+ILuint ilSaveBmpF(ILHANDLE File)
 {
+	ILuint Pos;
 	iSetOutputFile(File);
-	return iSaveBitmapInternal();
+	Pos = itellw();
+	if (iSaveBitmapInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 
-//! Writes a .bmp to a memory "lump"
-ILboolean ilSaveBmpL(void *Lump, ILuint Size)
+//! Writes a Bmp to a memory "lump"
+ILuint ilSaveBmpL(void *Lump, ILuint Size)
 {
+	ILuint Pos = itellw();
 	iSetOutputLump(Lump, Size);
-	return iSaveBitmapInternal();
+	if (iSaveBitmapInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 
 // Internal function used to save the .bmp.
-ILboolean iSaveBitmapInternal() {
+ILboolean iSaveBitmapInternal()
+{
 	//int compress_rle8 = ilGetInteger(IL_BMP_RLE);
 	int compress_rle8 = IL_FALSE; // disabled BMP RLE compression. broken
 	ILuint	FileSize, i, PadSize, Padding = 0;

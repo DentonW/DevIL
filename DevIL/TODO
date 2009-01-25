@@ -13,12 +13,9 @@ Easier:
 - If IL_NO_JP2 is defined, lines 306-307 shouldn't just cause the entire thing to fail.  We should just skip that entry.
 - Change ilConvertBuffer to be able to convert paletted images as well.
 - Update DevIL website with file formats (psd-saving, etc.).
-- Add more extensions to top of il_states.c.
 - Change line 66 of ilut_opengl.c if none of those are defined.
-- Do we need IL_TEXT stuff in ilut_internal.h?  Seems Linux is left out there...
 - Fix MSVC8 solutions for text files.
-- Warnings on Mac OS X.
-- Change config.h.win. - Also add Squish to it.
+- ilSavePnmF needs to set FName if not called by ilSavePnm.
 
 - Update MSVC8 solutions to include il_size.c.
 
@@ -142,6 +139,7 @@ Questions:
 - Use Extreme DXT compression code?
 - Support half data internally?
 - Will ilDetermineType fail if file reading functions are overriden?
+- Is ilSaveCHeader fine with Unicode?
 
 
 From old TODO:

@@ -353,10 +353,10 @@ void ReadScanline(ILubyte *scanline, ILuint w) {
 
 
 //! Writes a Hdr file
-ILboolean ilSaveHdr(ILconst_string FileName)
+ILboolean ilSaveHdr(const ILstring FileName)
 {
 	ILHANDLE	HdrFile;
-	ILboolean	bHdr = IL_FALSE;
+	ILuint		HdrSize;
 
 	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
 		if (iFileExists(FileName)) {
@@ -368,30 +368,40 @@ ILboolean ilSaveHdr(ILconst_string FileName)
 	HdrFile = iopenw(FileName);
 	if (HdrFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
-		return bHdr;
+		return IL_FALSE;
 	}
 
-	bHdr = ilSaveHdrF(HdrFile);
+	HdrSize = ilSaveHdrF(HdrFile);
 	iclosew(HdrFile);
 
-	return bHdr;
+	if (HdrSize == 0)
+		return IL_FALSE;
+	return IL_TRUE;
 }
 
 
 //! Writes a Hdr to an already-opened file
-ILboolean ilSaveHdrF(ILHANDLE File)
+ILuint ilSaveHdrF(ILHANDLE File)
 {
+	ILuint Pos;
 	iSetOutputFile(File);
-	return iSaveHdrInternal();
+	Pos = itellw();
+	if (iSaveHdrInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 
 //! Writes a Hdr to a memory "lump"
-ILboolean ilSaveHdrL(void *Lump, ILuint Size)
+ILuint ilSaveHdrL(void *Lump, ILuint Size)
 {
+	ILuint Pos = itellw();
 	iSetOutputLump(Lump, Size);
-	return iSaveHdrInternal();
+	if (iSaveHdrInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
+
 
 //
 // Much of the saving code is based on the code by Bruce Walter,

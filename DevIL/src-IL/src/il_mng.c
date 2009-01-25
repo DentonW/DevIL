@@ -286,10 +286,10 @@ ILboolean iLoadMngInternal()
 ILboolean iSaveMngInternal(void);
 
 //! Writes a Mng file
-ILboolean ilSaveMng(ILconst_string FileName)
+ILboolean ilSaveMng(const ILstring FileName)
 {
 	ILHANDLE	MngFile;
-	ILboolean	bMng = IL_FALSE;
+	ILuint		MngSize;
 
 	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
 		if (iFileExists(FileName)) {
@@ -301,29 +301,37 @@ ILboolean ilSaveMng(ILconst_string FileName)
 	MngFile = iopenw(FileName);
 	if (MngFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
-		return bMng;
+		return IL_FALSE;
 	}
 
-	bMng = ilSaveMngF(MngFile);
+	MngSize = ilSaveMngF(MngFile);
 	iclosew(MngFile);
 
-	return bMng;
+	if (MngSize == 0)
+		return IL_FALSE;
+	return IL_TRUE;
 }
 
 
 //! Writes a Mng to an already-opened file
-ILboolean ilSaveMngF(ILHANDLE File)
+ILuint ilSaveMngF(ILHANDLE File)
 {
+	ILuint Pos = itellw();
 	iSetOutputFile(File);
-	return iSaveMngInternal();
+	if (iSaveMngInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 
 //! Writes a Mng to a memory "lump"
-ILboolean ilSaveMngL(void *Lump, ILuint Size)
+ILuint ilSaveMngL(void *Lump, ILuint Size)
 {
+	ILuint Pos = itellw();
 	iSetOutputLump(Lump, Size);
-	return iSaveMngInternal();
+	if (iSaveMngInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 

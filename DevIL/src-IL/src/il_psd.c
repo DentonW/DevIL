@@ -899,10 +899,10 @@ ILboolean GetSingleChannel(PSDHEAD *Head, ILubyte *Buffer, ILboolean Compressed)
 
 
 //! Writes a Psd file
-ILboolean ilSavePsd(ILconst_string FileName)
+ILboolean ilSavePsd(const ILstring FileName)
 {
 	ILHANDLE	PsdFile;
-	ILboolean	bPsd = IL_FALSE;
+	ILuint		PsdSize;
 
 	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
 		if (iFileExists(FileName)) {
@@ -914,29 +914,38 @@ ILboolean ilSavePsd(ILconst_string FileName)
 	PsdFile = iopenw(FileName);
 	if (PsdFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
-		return bPsd;
+		return IL_FALSE;
 	}
 
-	bPsd = ilSavePsdF(PsdFile);
+	PsdSize = ilSavePsdF(PsdFile);
 	iclosew(PsdFile);
 
-	return bPsd;
+	if (PsdSize == 0)
+		return IL_FALSE;
+	return IL_TRUE;
 }
 
 
 //! Writes a Psd to an already-opened file
-ILboolean ilSavePsdF(ILHANDLE File)
+ILuint ilSavePsdF(ILHANDLE File)
 {
+	ILuint Pos;
 	iSetOutputFile(File);
-	return iSavePsdInternal();
+	Pos = itellw();
+	if (iSavePsdInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 
 //! Writes a Psd to a memory "lump"
-ILboolean ilSavePsdL(void *Lump, ILuint Size)
+ILuint ilSavePsdL(void *Lump, ILuint Size)
 {
+	ILuint Pos = itellw();
 	iSetOutputLump(Lump, Size);
-	return iSavePsdInternal();
+	if (iSavePsdInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 
@@ -1027,7 +1036,7 @@ ILboolean iSavePsdInternal()
 
 	SaveBigInt(0);  // No image resources.
 	SaveBigInt(0);  // No layer information.
-	SaveBigShort(0);  // Raw data, no compression.
+	SaveBigShort(0);  // Psd data, no compression.
 
 	// @TODO:  Add RLE compression.
 

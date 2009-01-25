@@ -132,7 +132,7 @@ ILboolean ilutGLInit()
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
 //#ifndef GL_VERSION_1_3
-	#ifdef _MSC_VER
+	#if (defined (_WIN32) || defined(_WIN64))
 		if (IsExtensionSupported("GL_ARB_texture_compression") &&
 			IsExtensionSupported("GL_EXT_texture_compression_s3tc")) {
 				ilGLCompressed2D = (ILGLCOMPRESSEDTEXIMAGE2DARBPROC)wglGetProcAddress("glCompressedTexImage2DARB");
@@ -165,6 +165,8 @@ ILboolean ilutGLInit()
 		ilGLCompressed2D = glCompressedTexImage2DARB;//(ILGLCOMPRESSEDTEXIMAGE2DARBPROC)aglGetProcAddress((const GLubyte *)"glCompressedTexImage2DARB");
 		ilGLTexImage3D = glTexImage3D;
 		ilGLCompressed3D = glCompressedTexImage3DARB;
+	#else
+		return IL_FALSE;  // @TODO: Find any other systems that we could be on.
 	#endif
 //#else
 //#endif//GL_VERSION_1_3
@@ -255,7 +257,7 @@ ILuint GLGetDXTCNum(ILenum DXTCFormat)
 }
 
 
-// We assume *all* states have been set by the user, including 2d texturing!
+// We assume *all* states have been set by the user, including 2D texturing!
 ILboolean ILAPIENTRY ilutGLTexImage_(GLuint Level, GLuint Target, ILimage *Image)
 {
 	ILimage	*ImageCopy, *OldImage;
@@ -363,18 +365,18 @@ ILboolean ILAPIENTRY ilutGLTexImage(GLuint Level)
 	if (!ilutGetBoolean(ILUT_GL_AUTODETECT_TEXTURE_TARGET))
 		return ilutGLTexImage_(Level, GL_TEXTURE_2D, ilGetCurImage());
 	else {
-		//autodetect texture target
+		// Autodetect texture target
 
-		//cubemap
+		// Cubemap
 		if (ilutCurImage->CubeFlags != 0 && HasCubemapHardware) { //bind to cubemap
 			Temp = ilutCurImage;
-			while(Temp != NULL && Temp->CubeFlags != 0) {
+			while (Temp != NULL && Temp->CubeFlags != 0) {
 				ilutGLTexImage_(Level, iToGLCube(Temp->CubeFlags), Temp);
 				Temp = Temp->Next;
 			}
-			return IL_TRUE; //TODO: check for errors??
+			return IL_TRUE; //@TODO: check for errors??
 		}
-		else  //2d texture
+		else  // 2D texture
 			return ilutGLTexImage_(Level, GL_TEXTURE_2D, ilGetCurImage());
 	}
 }

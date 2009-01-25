@@ -22,7 +22,7 @@
 #include "il_manip.h"
 #include <stdlib.h>
 #if PNG_LIBPNG_VER < 10200
-	#warning DevIL was designed with libpng 1.2.0 or higher in mind.  Consider upgrading at www.libpng.org
+	#warning DevIL was designed with libpng 1.2.0 or higher in mind.  Consider upgrading at www.libpng.org.
 #endif
 
 #if (defined(_WIN32) || defined(_WIN64)) && defined(IL_USE_PRAGMA_LIBS)
@@ -424,10 +424,10 @@ void readpng_cleanup()
 
 
 //! Writes a Png file
-ILboolean ilSavePng(ILconst_string FileName)
+ILboolean ilSavePng(const ILstring FileName)
 {
 	ILHANDLE	PngFile;
-	ILboolean	bPng = IL_FALSE;
+	ILuint		PngSize;
 
 	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
 		if (iFileExists(FileName)) {
@@ -439,29 +439,38 @@ ILboolean ilSavePng(ILconst_string FileName)
 	PngFile = iopenw(FileName);
 	if (PngFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
-		return bPng;
+		return IL_FALSE;
 	}
 
-	bPng = ilSavePngF(PngFile);
+	PngSize = ilSavePngF(PngFile);
 	iclosew(PngFile);
 
-	return bPng;
+	if (PngSize == 0)
+		return IL_FALSE;
+	return IL_TRUE;
 }
 
 
 //! Writes a Png to an already-opened file
-ILboolean ilSavePngF(ILHANDLE File)
+ILuint ilSavePngF(ILHANDLE File)
 {
+	ILuint Pos;
 	iSetOutputFile(File);
-	return iSavePngInternal();
+	Pos = itellw();
+	if (iSavePngInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 
 //! Writes a Png to a memory "lump"
-ILboolean ilSavePngL(void *Lump, ILuint Size)
+ILuint ilSavePngL(void *Lump, ILuint Size)
 {
+	ILuint Pos = itellw();
 	iSetOutputLump(Lump, Size);
-	return iSavePngInternal();
+	if (iSavePngInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 

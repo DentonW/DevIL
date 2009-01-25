@@ -159,10 +159,10 @@ ILboolean WbmpPutMultibyte(ILuint Val)
 
 
 //! Writes a Wbmp file
-ILboolean ilSaveWbmp(ILconst_string FileName)
+ILboolean ilSaveWbmp(const ILstring FileName)
 {
 	ILHANDLE	WbmpFile;
-	ILboolean	bWbmp = IL_FALSE;
+	ILuint		WbmpSize;
 
 	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
 		if (iFileExists(FileName)) {
@@ -170,36 +170,42 @@ ILboolean ilSaveWbmp(ILconst_string FileName)
 			return IL_FALSE;
 		}
 	}
-	
+
 	WbmpFile = iopenw(FileName);
 	if (WbmpFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
-		return bWbmp;
+		return IL_FALSE;
 	}
-	
-	bWbmp = ilSaveWbmpF(WbmpFile);
+
+	WbmpSize = ilSaveWbmpF(WbmpFile);
 	iclosew(WbmpFile);
 
-	// Converts the image to predefined type, format and/or origin if needed.
-	ilFixImage();
-	
-	return bWbmp;
+	if (WbmpSize == 0)
+		return IL_FALSE;
+	return IL_TRUE;
 }
 
 
-//! Writes a Wbmp to an already-opened file
-ILboolean ilSaveWbmpF(ILHANDLE File)
+//! Writes a .wbmp to an already-opened file
+ILuint ilSaveWbmpF(ILHANDLE File)
 {
+	ILuint Pos;
 	iSetOutputFile(File);
-	return iSaveWbmpInternal();
+	Pos = itellw();
+	if (iSaveWbmpInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 
-//! Writes a Wbmp to a memory "lump"
-ILboolean ilSaveWbmpL(void *Lump, ILuint Size)
+//! Writes a .wbmp to a memory "lump"
+ILuint ilSaveWbmpL(void *Lump, ILuint Size)
 {
+	ILuint Pos = itellw();
 	iSetOutputLump(Lump, Size);
-	return iSaveWbmpInternal();
+	if (iSaveWbmpInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 

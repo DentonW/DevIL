@@ -332,44 +332,53 @@ void ilOStream::seekp(Imf::Int64 Pos)
 
 
 //! Writes a Exr file
-ILboolean ilSaveExr(ILconst_string FileName)
+ILboolean ilSaveExr(const ILstring FileName)
 {
 	ILHANDLE	ExrFile;
-	ILboolean	bExr = IL_FALSE;
-	
+	ILuint		ExrSize;
+
 	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
 		if (iFileExists(FileName)) {
 			ilSetError(IL_FILE_ALREADY_EXISTS);
 			return IL_FALSE;
 		}
 	}
-	
+
 	ExrFile = iopenw(FileName);
 	if (ExrFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
-		return bExr;
+		return IL_FALSE;
 	}
-	
-	bExr = ilSaveExrF(ExrFile);
+
+	ExrSize = ilSaveExrF(ExrFile);
 	iclosew(ExrFile);
-	
-	return bExr;
+
+	if (ExrSize == 0)
+		return IL_FALSE;
+	return IL_TRUE;
 }
 
 
 //! Writes a Exr to an already-opened file
-ILboolean ilSaveExrF(ILHANDLE File)
+ILuint ilSaveExrF(ILHANDLE File)
 {
+	ILuint Pos;
 	iSetOutputFile(File);
-	return iSaveExrInternal();
+	Pos = itellw();
+	if (iSaveExrInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 
 //! Writes a Exr to a memory "lump"
-ILboolean ilSaveExrL(void *Lump, ILuint Size)
+ILuint ilSaveExrL(void *Lump, ILuint Size)
 {
+	ILuint Pos = itellw();
 	iSetOutputLump(Lump, Size);
-	return iSaveExrInternal();
+	if (iSaveExrInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 

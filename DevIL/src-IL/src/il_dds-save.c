@@ -20,10 +20,10 @@
 #ifndef IL_NO_DDS
 
 //! Writes a Dds file
-ILboolean ilSaveDds(ILconst_string FileName)
+ILboolean ilSaveDds(const ILstring FileName)
 {
 	ILHANDLE	DdsFile;
-	ILboolean	bDds = IL_FALSE;
+	ILuint		DdsSize;
 
 	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
 		if (iFileExists(FileName)) {
@@ -35,29 +35,38 @@ ILboolean ilSaveDds(ILconst_string FileName)
 	DdsFile = iopenw(FileName);
 	if (DdsFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
-		return bDds;
+		return IL_FALSE;
 	}
 
-	bDds = ilSaveDdsF(DdsFile);
+	DdsSize = ilSaveDdsF(DdsFile);
 	iclosew(DdsFile);
 
-	return bDds;
+	if (DdsSize == 0)
+		return IL_FALSE;
+	return IL_TRUE;
 }
 
 
 //! Writes a Dds to an already-opened file
-ILboolean ilSaveDdsF(ILHANDLE File)
+ILuint ilSaveDdsF(ILHANDLE File)
 {
+	ILuint Pos;
 	iSetOutputFile(File);
-	return iSaveDdsInternal();
+	Pos = itellw();
+	if (iSaveDdsInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 
 //! Writes a Dds to a memory "lump"
-ILboolean ilSaveDdsL(void *Lump, ILuint Size)
+ILuint ilSaveDdsL(void *Lump, ILuint Size)
 {
+	ILuint Pos = itellw();
 	iSetOutputLump(Lump, Size);
-	return iSaveDdsInternal();
+	if (iSaveDdsInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 

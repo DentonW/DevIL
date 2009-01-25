@@ -40,7 +40,7 @@
 static ILboolean iLoadTiffInternal(void);
 static char*     iMakeString(void);
 static TIFF*     iTIFFOpen(char *Mode);
-static ILboolean iSaveTiffInternal(ILconst_string Filename);
+static ILboolean iSaveTiffInternal(/*ILconst_string Filename*/);
 
 /*----------------------------------------------------------------------------*/
 
@@ -874,10 +874,10 @@ TIFF *iTIFFOpen(char *Mode)
 
 
 //! Writes a Tiff file
-ILboolean ilSaveTiff(ILconst_string FileName)
+ILboolean ilSaveTiff(const ILstring FileName)
 {
 	ILHANDLE	TiffFile;
-	ILboolean	bTiff = IL_FALSE;
+	ILuint		TiffSize;
 
 	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
 		if (iFileExists(FileName)) {
@@ -889,40 +889,45 @@ ILboolean ilSaveTiff(ILconst_string FileName)
 	TiffFile = iopenw(FileName);
 	if (TiffFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
-		return bTiff;
+		return IL_FALSE;
 	}
 
-	bTiff = ilSaveTiffF(TiffFile);
+	TiffSize = ilSaveTiffF(TiffFile);
 	iclosew(TiffFile);
 
-	return bTiff;
-
-	//return iSaveTiffInternal(FileName);
+	if (TiffSize == 0)
+		return IL_FALSE;
+	return IL_TRUE;
 }
 
 
 //! Writes a Tiff to an already-opened file
-ILboolean ilSaveTiffF(ILHANDLE File)
+ILuint ilSaveTiffF(ILHANDLE File)
 {
+	ILuint Pos;
 	iSetOutputFile(File);
-	return iSaveTiffInternal(NULL);
-	//return IL_FALSE;
+	Pos = itellw();
+	if (iSaveTiffInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 
 //! Writes a Tiff to a memory "lump"
-ILboolean ilSaveTiffL(void *Lump, ILuint Size)
+ILuint ilSaveTiffL(void *Lump, ILuint Size)
 {
+	ILuint Pos = itellw();
 	iSetOutputLump(Lump, Size);
-	return iSaveTiffInternal(NULL);
-	//return IL_FALSE;
+	if (iSaveTiffInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 
 // @TODO:  Accept palettes!
 
 // Internal function used to save the Tiff.
-ILboolean iSaveTiffInternal(ILconst_string Filename)
+ILboolean iSaveTiffInternal(/*ILconst_string Filename*/)
 {
 	ILenum	Format;
 	ILenum	Compression;

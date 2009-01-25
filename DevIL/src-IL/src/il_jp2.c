@@ -543,56 +543,53 @@ jas_stream_t *iJp2WriteStream()
 
 
 //! Writes a Jp2 file
-ILboolean ilSaveJp2(ILconst_string FileName)
+ILboolean ilSaveJp2(const ILstring FileName)
 {
 	ILHANDLE	Jp2File;
-	ILboolean	bJp2 = IL_FALSE;
-	
+	ILuint		Jp2Size;
+
 	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
 		if (iFileExists(FileName)) {
 			ilSetError(IL_FILE_ALREADY_EXISTS);
 			return IL_FALSE;
 		}
 	}
-	
+
 	Jp2File = iopenw(FileName);
 	if (Jp2File == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
-		return bJp2;
+		return IL_FALSE;
 	}
-	
-	bJp2 = ilSaveJp2F(Jp2File);
+
+	Jp2Size = ilSaveJp2F(Jp2File);
 	iclosew(Jp2File);
-	
-	return bJp2;
+
+	if (Jp2Size == 0)
+		return IL_FALSE;
+	return IL_TRUE;
 }
 
 
 //! Writes a Jp2 to an already-opened file
-ILboolean ilSaveJp2F(ILHANDLE File)
+ILuint ilSaveJp2F(ILHANDLE File)
 {
+	ILuint Pos;
 	iSetOutputFile(File);
-	if (jas_init())
-	{
-		ilSetError(IL_LIB_JP2_ERROR);
-		return IL_FALSE;
-	}
-
-	return iSaveJp2Internal();
+	Pos = itellw();
+	if (iSaveJp2Internal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 
 //! Writes a Jp2 to a memory "lump"
-ILboolean ilSaveJp2L(void *Lump, ILuint Size)
+ILuint ilSaveJp2L(void *Lump, ILuint Size)
 {
+	ILuint Pos = itellw();
 	iSetOutputLump(Lump, Size);
-	if (jas_init())
-	{
-		ilSetError(IL_LIB_JP2_ERROR);
-		return IL_FALSE;
-	}
-
-	return iSaveJp2Internal();
+	if (iSaveJp2Internal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 

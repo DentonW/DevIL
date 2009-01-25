@@ -476,15 +476,13 @@ ILboolean iGetWord(ILboolean final)
 }
 
 
-ILstring FName;
+ILstring FName = NULL;
 
 //! Writes a Pnm file
-ILboolean ilSavePnm(ILconst_string FileName)
+ILboolean ilSavePnm(const ILstring FileName)
 {
 	ILHANDLE	PnmFile;
-	ILboolean	bPnm = IL_FALSE;
-
-	FName = (ILstring)FileName;
+	ILuint		PnmSize;
 
 	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
 		if (iFileExists(FileName)) {
@@ -496,30 +494,39 @@ ILboolean ilSavePnm(ILconst_string FileName)
 	PnmFile = iopenw(FileName);
 	if (PnmFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
-		return bPnm;
+		return IL_FALSE;
 	}
 
-	bPnm = ilSavePnmF(PnmFile);
+	PnmSize = ilSavePnmF(PnmFile);
 	iclosew(PnmFile);
 
-	return bPnm;
+	if (PnmSize == 0)
+		return IL_FALSE;
+	return IL_TRUE;
 }
 
 
 //! Writes a Pnm to an already-opened file
-ILboolean ilSavePnmF(ILHANDLE File)
+ILuint ilSavePnmF(ILHANDLE File)
 {
+	ILuint Pos;
 	iSetOutputFile(File);
-	return iSavePnmInternal();
+	Pos = itellw();
+	if (iSavePnmInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 
 //! Writes a Pnm to a memory "lump"
-ILboolean ilSavePnmL(void *Lump, ILuint Size)
+ILuint ilSavePnmL(void *Lump, ILuint Size)
 {
+	ILuint Pos = itellw();
 	FName = NULL;
 	iSetOutputLump(Lump, Size);
-	return iSavePnmInternal();
+	if (iSavePnmInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 

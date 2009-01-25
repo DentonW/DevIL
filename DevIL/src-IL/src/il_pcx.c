@@ -481,10 +481,10 @@ ILboolean iUncompressSmall(PCXHEAD *Header)
 
 
 //! Writes a .pcx file
-ILboolean ilSavePcx(ILconst_string FileName)
+ILboolean ilSavePcx(const ILstring FileName)
 {
 	ILHANDLE	PcxFile;
-	ILboolean	bPcx = IL_FALSE;
+	ILuint		PcxSize;
 
 	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
 		if (iFileExists(FileName)) {
@@ -496,29 +496,38 @@ ILboolean ilSavePcx(ILconst_string FileName)
 	PcxFile = iopenw(FileName);
 	if (PcxFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
-		return bPcx;
+		return IL_FALSE;
 	}
 
-	bPcx = ilSavePcxF(PcxFile);
+	PcxSize = ilSavePcxF(PcxFile);
 	iclosew(PcxFile);
 
-	return bPcx;
+	if (PcxSize == 0)
+		return IL_FALSE;
+	return IL_TRUE;
 }
 
 
 //! Writes a .pcx to an already-opened file
-ILboolean ilSavePcxF(ILHANDLE File)
+ILuint ilSavePcxF(ILHANDLE File)
 {
+	ILuint Pos;
 	iSetOutputFile(File);
-	return iSavePcxInternal();
+	Pos = itellw();
+	if (iSavePcxInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 
 //! Writes a .pcx to a memory "lump"
-ILboolean ilSavePcxL(void *Lump, ILuint Size)
+ILuint ilSavePcxL(void *Lump, ILuint Size)
 {
+	ILuint Pos = itellw();
 	iSetOutputLump(Lump, Size);
-	return iSavePcxInternal();
+	if (iSavePcxInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
 }
 
 
