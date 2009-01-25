@@ -199,4 +199,7 @@
 	* il_exr.cpp:319,329: Changed to write functions instead of read.
 	* il_files.c: Added iSetOutputFake.
 	* il_files.c (iSetOutputLump): Added check for NULL to accomodate ilDetermineSize function.
+	* il_hdr.c:457: Changed from char* to ILbyte*.
+	* il_icns.h:24,30: Changed from ILbyte to char.
+	* il_size.c: Added #ifdefs for when user has declared IL_NO_XXX.  Changed error to ENUM instead of PARAM.
 	

@@ -18,6 +18,7 @@ Easier:
 - Do we need IL_TEXT stuff in ilut_internal.h?  Seems Linux is left out there...
 - Fix MSVC8 solutions for text files.
 - Warnings on Mac OS X.
+- Change config.h.win. - Also add Squish to it.
 
 - Update MSVC8 solutions to include il_size.c.
 

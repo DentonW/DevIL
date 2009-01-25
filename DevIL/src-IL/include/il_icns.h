@@ -21,13 +21,13 @@
 #endif
 typedef struct ICNSHEAD
 {
-	ILbyte		Head[4];	// Must be 'ICNS'
+	char		Head[4];	// Must be 'ICNS'
 	ILint		Size;		// Total size of the file (including header)
 } IL_PACKSTRUCT ICNSHEAD;
 
 typedef struct ICNSDATA
 {
-	ILbyte		ID[4];		// Identifier ('it32', 'il32', etc.)
+	char		ID[4];		// Identifier ('it32', 'il32', etc.)
 	ILint		Size;		// Total size of the entry (including identifier)
 } IL_PACKSTRUCT ICNSDATA;
 
