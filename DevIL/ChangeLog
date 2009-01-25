@@ -224,4 +224,5 @@
 	  an integer stating the number of bytes written.  This is what ilSaveF/L have been
 	  trying to return all along.
 	* il_pal.c:1075: Added error condition.
+	* lib/Makefile.am: Added il_size.c.
 	

@@ -39,6 +39,7 @@ int main(int argc, char **argv)
 
 	// Initialize DevIL.
 	ilInit();
+	iluInit();
 
 	// Generate the main image name to use.
 	ilGenImages(1, &ImgId);
