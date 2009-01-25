@@ -13,6 +13,9 @@
 #include "il_internal.h"
 
 
+ILuint iTargaSize(void);
+
+
 ILuint CurPos;  // Fake "file" pointer.
 ILuint MaxPos;
 
@@ -155,7 +158,8 @@ ILuint ilDetermineSize(ILenum Type)
 
 		#ifndef IL_NO_TGA
 		case IL_TGA:
-			ilSaveTargaL(NULL, 0);
+			//ilSaveTargaL(NULL, 0);
+			return iTargaSize();
 			break;
 		#endif//IL_NO_TGA
 

@@ -213,4 +213,6 @@
 	* il_icon.c/il_png.c: Renamed color_type to ico_color_type and png_color_type to avoid name conflicts.
 	* il_iff.c: Changed all malloc->ialloc and free->ifree.  Added checks for ialloc failure.
 	* il_io.c (ilDetermineTypeL): Changed VTF check to return IL_VTF instead of the miscopied IL_SUN.
+	* il_size.c (ilDetermineSize): Now calls iTargaSize for Targa files.
+	* il_tga.c: Added iTargaSize.
 	

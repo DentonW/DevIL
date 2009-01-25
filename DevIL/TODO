@@ -77,6 +77,11 @@ More involved:
 - Look at http://en.wikipedia.org/wiki/Comparison_of_graphics_file_formats
 - Use IL_HALF format internally.
 - PNG and JPG compression in .bmp files?
+- Scan line table for RLE .tga files.
+- Allow more formats for saving .tga (does not do IL_ALPHA for instance) - also in iTargaSize.
+  Make sure iConvertImage is called.  Right now, it would not be.
+
+
 
 
 Lots of work:

@@ -816,6 +816,52 @@ ILboolean iSaveTargaInternal()
 }
 
 
+// Only to be called by ilDetermineSize.  Returns the buffer size needed to save the
+//  current image as a Targa file.
+ILuint iTargaSize(void)
+{
+	ILuint	Size, Bpp;
+	ILubyte	IDLen = 0;
+	const char	*ID = iGetString(IL_TGA_ID_STRING);
+	const char	*AuthName = iGetString(IL_TGA_AUTHNAME_STRING);
+	const char	*AuthComment = iGetString(IL_TGA_AUTHCOMMENT_STRING);
+
+	//@TODO: Support color indexed images.
+	if (iGetInt(IL_TGA_RLE) == IL_TRUE || iCurImage->Format == IL_COLOUR_INDEX) {
+		// Use the slower method, since we are using compression.  We do a "fake" write.
+		ilSaveTargaL(NULL, 0);
+	}
+
+	if (ID)
+		IDLen = (ILubyte)ilCharStrLen(ID);
+
+	Size = 18 + IDLen;  // Header + ID
+
+	// Bpp may not be iCurImage->Bpp.
+	switch (iCurImage->Format)
+	{
+		case IL_BGR:
+		case IL_RGB:
+			Bpp = 3;
+			break;
+		case IL_BGRA:
+		case IL_RGBA:
+			Bpp = 4;
+			break;
+		case IL_LUMINANCE:
+			Bpp = 1;
+			break;
+		default:  //@TODO: Do not know what to do with the others yet.
+			return 0;
+	}
+
+	Size += iCurImage->Width * iCurImage->Height * Bpp;
+	Size += 532;  // Size of the extension area
+
+	return Size;
+}
+
+
 /*// Makes a neat string to go into the id field of the .tga
 void iMakeString(char *Str)
 {
