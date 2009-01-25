@@ -12,8 +12,6 @@
 //
 //-----------------------------------------------------------------------------
 
-// @TODO:  Test these extensively...haven't even been tested yet!!!
-
 #include "il_internal.h"
 #ifndef IL_NO_PIC
 #include "il_pic.h"

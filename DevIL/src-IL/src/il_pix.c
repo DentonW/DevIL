@@ -37,15 +37,12 @@ ILboolean iLoadPixInternal(void);
 
 
 // Internal function used to get the Pix header from the current file.
-ILboolean iGetPixHead(PIXHEAD *Header) {
+ILboolean iGetPixHead(PIXHEAD *Header)
+{
 	Header->Width = GetBigUShort();
-
 	Header->Height = GetBigUShort();
-
 	Header->OffX = GetBigUShort();
-
 	Header->OffY = GetBigUShort();
-
 	Header->Bpp = GetBigUShort();
 
 	return IL_TRUE;

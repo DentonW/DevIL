@@ -48,7 +48,7 @@ void		readpng_cleanup(void);
 
 png_structp png_ptr = NULL;
 png_infop   info_ptr = NULL;
-ILint color_type;
+ILint		png_color_type;
 
 #define GAMMA_CORRECTION 1.0  // Doesn't seem to be doing anything...
 
@@ -243,7 +243,7 @@ ILint readpng_init()
 
 
 	/* alternatively, could make separate calls to png_get_image_width(),
-	 * etc., but want bit_depth and color_type for later [don't care about
+	 * etc., but want bit_depth and png_color_type for later [don't care about
 	 * compression_type and filter_type => NULLs] */
 
 	/* OK, that's all we need for now; return happy */
@@ -276,10 +276,10 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 	}
 
 	png_get_IHDR(png_ptr, info_ptr, (png_uint_32*)&width, (png_uint_32*)&height,
-	             &bit_depth, &color_type, NULL, NULL, NULL);
+	             &bit_depth, &png_color_type, NULL, NULL, NULL);
 
 	// Expand low-bit-depth grayscale images to 8 bits
-	if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8) {
+	if (png_color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8) {
 		png_set_gray_1_2_4_to_8(png_ptr);
 	}
 
@@ -291,7 +291,7 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 
 	//refresh information (added 20040224)
 	png_get_IHDR(png_ptr, info_ptr, (png_uint_32*)&width, (png_uint_32*)&height,
-	             &bit_depth, &color_type, NULL, NULL, NULL);
+	             &bit_depth, &png_color_type, NULL, NULL, NULL);
 
 	if (bit_depth < 8) {	// Expanded earlier for grayscale, now take care of palette and rgb
 		bit_depth = 8;
@@ -317,12 +317,12 @@ ILboolean readpng_get_image(ILdouble display_exponent)
 
 	png_read_update_info(png_ptr, info_ptr);
 	channels = (ILint)png_get_channels(png_ptr, info_ptr);
-	//added 20040224: update color_type so that it has the correct value
+	//added 20040224: update png_color_type so that it has the correct value
 	//in iLoadPngInternal (globals rule...)
-	color_type = png_get_color_type(png_ptr, info_ptr);
+	png_color_type = png_get_color_type(png_ptr, info_ptr);
 
 	//determine internal format
-	switch(color_type)
+	switch(png_color_type)
 	{
 		case PNG_COLOR_TYPE_PALETTE:
 			format = IL_COLOUR_INDEX;
@@ -582,7 +582,7 @@ ILboolean iSavePngInternal()
 
 	// Set the image information here.	Width and height are up to 2^31,
 	//	bit_depth is one of 1, 2, 4, 8, or 16, but valid values also depend on
-	//	the color_type selected. color_type is one of PNG_COLOR_TYPE_GRAY,
+	//	the png_color_type selected. png_color_type is one of PNG_COLOR_TYPE_GRAY,
 	//	PNG_COLOR_TYPE_GRAY_ALPHA, PNG_COLOR_TYPE_PALETTE, PNG_COLOR_TYPE_RGB,
 	//	or PNG_COLOR_TYPE_RGB_ALPHA.  interlace is either PNG_INTERLACE_NONE or
 	//	PNG_INTERLACE_ADAM7, and the compression_type and filter_type MUST

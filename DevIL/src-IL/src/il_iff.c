@@ -238,7 +238,7 @@ ILboolean iLoadIffInternal(void)
 					if (data) {
 						tileData = iff_decompress_tile_rle(tile_width, tile_height,
 															bpp, data, remainingDataSize);
-						free(data);
+						ifree(data);
 					}
 				} else {
 					tileData = iffReadUncompressedTile(tile_width, tile_height, bpp);
@@ -254,7 +254,7 @@ ILboolean iLoadIffInternal(void)
 								&tileData[bpp*i*tile_width],
 								tile_width*bpp*sizeof(char));
 					}
-					free(tileData);
+					ifree(tileData);
 					tileData = NULL;
 	    
 					iff_end_read_chunk();
@@ -278,7 +278,8 @@ ILboolean iLoadIffInternal(void)
  *
  */
 
-iff_chunk iff_begin_read_chunk() {
+iff_chunk iff_begin_read_chunk()
+{
 	chunkDepth++;
 	if (chunkDepth >= CHUNK_STACK_SIZE){
 		ilSetError(IL_STACK_OVERFLOW);
@@ -293,7 +294,7 @@ iff_chunk iff_begin_read_chunk() {
 	chunkStack[chunkDepth].tag = GetBigInt();
 	chunkStack[chunkDepth].size = GetBigInt();
     
-	if( chunkStack[chunkDepth].tag == IFF_TAG_FOR4 ) {
+	if (chunkStack[chunkDepth].tag == IFF_TAG_FOR4) {
 		// -- We have a form, so read the form type tag as well. 
 		chunkStack[chunkDepth].chunkType = GetBigInt();
 	} else {
@@ -310,12 +311,12 @@ void iff_end_read_chunk()
   
 	end = chunkStack[chunkDepth].start + chunkStack[chunkDepth].size + 8;
     
-	if ( chunkStack[chunkDepth].chunkType != 0 ) {
+	if (chunkStack[chunkDepth].chunkType != 0) {
 		end += 4;
 	}
 	// Add padding 
 	part = end % 4;
-	if ( part != 0 ) {
+	if (part != 0) {
 	    end += 4 - part;   
 	}
 
@@ -326,10 +327,12 @@ void iff_end_read_chunk()
 
 char * iff_read_data(int size)
 {
-	char	*buffer = malloc(size * sizeof(char));
+	char *buffer = ialloc(size * sizeof(char));
+	if (buffer == NULL)
+		return NULL;
 	
 	if (iread(buffer, size*sizeof(char), 1) != 1) {
-		free(buffer);
+		ifree(buffer);
 		return NULL;
 	}
 
@@ -348,10 +351,13 @@ char *iffReadUncompressedTile(ILushort width, ILushort height, ILbyte depth)
 	char	*finPixel;
 	int		i, j;
 	int		tam = width* height * depth * sizeof(char);
-	data = malloc(tam);
+
+	data = ialloc(tam);
+	if (data == NULL)
+		return NULL;
 
 	if (iread(data, tam, 1) != 1) {
-		free(data);
+		ifree(data);
 		return NULL;
 	}
 
@@ -381,24 +387,29 @@ char *iff_decompress_tile_rle(ILushort width, ILushort height, ILushort depth,
 	// Decompress only in RGBA.
 	if (depth != 4) {
 		ilSetError(IL_ILLEGAL_FILE_VALUE);
-		return 0;
+		return NULL;
 	}
 
 	for (i = depth-1; i >= 0; --i) {
 		channels[i] = iff_decompress_rle(width * height, compressedData, 
-				      compressedDataSize, &compressedStart );
+				      compressedDataSize, &compressedStart);
+		if (channels[i] == NULL)
+			return NULL;
 	}
 
     // Build all the channels from the decompression into an RGBA array.
-	data = malloc(width * height * depth * sizeof(char));
+	data = ialloc(width * height * depth * sizeof(char));
+	if (data == NULL)
+		return NULL;
+
 	for (row = 0; row < height; row++)
 		for (column = 0; column < width; column++)
 			for (k = 0; k < depth; k++)
 				data[depth*(row*width + column) + k] =
 					channels[k][row*width + column];
 	
-	free(channels[0]); free(channels[1]);
-	free(channels[2]); free(channels[3]);
+	ifree(channels[0]); ifree(channels[1]);
+	ifree(channels[2]); ifree(channels[3]);
 
 	return data;
 }
@@ -408,10 +419,13 @@ char *iff_decompress_rle(ILuint numBytes, char *compressedData,
 							ILuint *compressedStartIndex)
 {
 
-	char	*data = malloc(numBytes * sizeof(char));
+	char	*data = ialloc(numBytes * sizeof(char));
 	unsigned char	nextChar, count;
 	int		i;
 	ILuint	byteCount = 0;
+
+	if (data == NULL)
+		return NULL;
 
 	memset(data, 0, numBytes*sizeof(char));
 

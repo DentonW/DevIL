@@ -17,9 +17,72 @@
 
 
 ILboolean iLoadMdlInternal(void);
+ILboolean iIsValidMdl(void);
+
+//! Checks if the file specified in FileName is a valid MDL file.
+ILboolean ilIsValidMdl(ILconst_string FileName)
+{
+	ILHANDLE	MdlFile;
+	ILboolean	bMdl = IL_FALSE;
+	
+	if (!iCheckExtension(FileName, IL_TEXT("mdl"))) {
+		ilSetError(IL_INVALID_EXTENSION);
+		return bMdl;
+	}
+	
+	MdlFile = iopenr(FileName);
+	if (MdlFile == NULL) {
+		ilSetError(IL_COULD_NOT_OPEN_FILE);
+		return bMdl;
+	}
+	
+	bMdl = ilIsValidMdlF(MdlFile);
+	icloser(MdlFile);
+	
+	return bMdl;
+}
 
 
-//! Reads a .Mdl file
+//! Checks if the ILHANDLE contains a valid MDL file at the current position.
+ILboolean ilIsValidMdlF(ILHANDLE File)
+{
+	ILuint		FirstPos;
+	ILboolean	bRet;
+	
+	iSetInputFile(File);
+	FirstPos = itell();
+	bRet = iIsValidMdl();
+	iseek(FirstPos, IL_SEEK_SET);
+	
+	return bRet;
+}
+
+
+//! Checks if Lump is a valid MDL lump.
+ILboolean ilIsValidMdlL(const void *Lump, ILuint Size)
+{
+	iSetInputLump(Lump, Size);
+	return iIsValidMdl();
+}
+
+
+// Internal function to get the header and check it.
+ILboolean iIsValidMdl(void)
+{
+	ILuint Id, Version;
+
+	Id = GetLittleUInt();
+	Version = GetLittleUInt();
+	iseek(-8, IL_SEEK_CUR);  // Restore to previous position.
+
+	// 0x54534449 == "IDST"
+	if (Id != 0x54534449 || Version != 10)
+		return IL_FALSE;
+	return IL_TRUE;
+}
+
+
+//! Reads a .mdl file
 ILboolean ilLoadMdl(ILconst_string FileName)
 {
 	ILHANDLE	MdlFile;
@@ -38,7 +101,7 @@ ILboolean ilLoadMdl(ILconst_string FileName)
 }
 
 
-//! Reads an already-opened .Mdl file
+//! Reads an already-opened .mdl file
 ILboolean ilLoadMdlF(ILHANDLE File)
 {
 	ILuint		FirstPos;
@@ -53,7 +116,7 @@ ILboolean ilLoadMdlF(ILHANDLE File)
 }
 
 
-//! Reads from a memory "lump" that contains a .Mdl
+//! Reads from a memory "lump" that contains a .mdl
 ILboolean ilLoadMdlL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);

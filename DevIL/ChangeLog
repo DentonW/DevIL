@@ -185,7 +185,7 @@
 	http://74.125.47.132/search?q=cache:YfSl36C2pAQJ:patch-tracking.debian.net/patch/series/view/devil/1.7.2-1/00_endian_and_ILvoid_fixes.diff+devil+big+endian&hl=en&ct=clnk&cd=11&gl=us&lr=lang_en
 	has this patch (Nov. 24, 2008 cache).
 	* devil_internal_exports.h:34: Uncommented and commented line 30.
-	
+
 2009-01-24 Denton Woods <doomwiz@users.sf.net>
 	* il_internal.h,il_tiff.c: Changed ilSaveTiffL to void* instead of const void*.
 	* il_tiff.c: Added _tiffFileReadProcW.  Changed _tiffFileSeekProc(W) to return the
@@ -193,7 +193,7 @@
 	  writing code.
 	* il_internal.h: Removed #pragma comments, which were commented out anyway.
 	* il_io.c (ilSaveL): Added call to ilDetermineSize.
-	* il_size.c: Added
+	* il_size.c: Added this file.
 	* il_manip.c:14: Removed #include <IL/il.h>.
 	* il_jpeg.c:53: Added check for IL_USE_IJL.
 	* il_exr.cpp:319,329: Changed to write functions instead of read.
@@ -205,5 +205,11 @@
 	* Updated MSVC8 projects with il_size.c.
 	* src-IL/src/Makefile.am: Added il_size.c.
 	* il_jp2.c: Added ilIsValidJp2* functions.
-	* il_io.c: Added JP2 support to ilDetermineType and ilIsValid functions.
+	* il.h: Added ilDetermineType and ilDetermineTypeL to declarations.
+	* il_io.c: Changed ilDetermineTypeL to be exported.
+	* il_pcx.c: Formatting issues fixed.
+	* il_mdl.c: Added ilIsValidJp2* functions.
+	* il_io.c: Added JP2 and MDL support to ilDetermineType and ilIsValid functions.
+	* il_icon.c/il_png.c: Renamed color_type to ico_color_type and png_color_type to avoid name conflicts.
+	* il_iff.c: Changed all malloc->ialloc and free->ifree.  Added checks for ialloc failure.
 	

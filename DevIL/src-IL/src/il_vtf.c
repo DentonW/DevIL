@@ -110,7 +110,7 @@ ILboolean iGetVtfHead(VTFHEAD *Header)
 
 
 // Internal function to get the header and check it.
-ILboolean iIsValidVtf()
+ILboolean iIsValidVtf(void)
 {
 	VTFHEAD Head;
 

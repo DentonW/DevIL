@@ -120,7 +120,7 @@ ILboolean iCheckTarga(TARGAHEAD *Header)
 		return IL_FALSE;
 	
 	// check type (added 20040218)
-	if(Header->ImageType != TGA_NO_DATA
+	if (Header->ImageType   != TGA_NO_DATA
 	   && Header->ImageType != TGA_COLMAP_UNCOMP
 	   && Header->ImageType != TGA_UNMAP_UNCOMP
 	   && Header->ImageType != TGA_BW_UNCOMP

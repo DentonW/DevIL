@@ -42,7 +42,7 @@ wchar_t *WideFromMultiByte(const char *Multi)
 #endif
 
 
-ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
+ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 {
 	ILenum		Type;
 	ILstring	Ext;
@@ -140,7 +140,7 @@ ILAPI ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 //ILenum ilDetermineTypeF(ILHANDLE File);
 
 //changed 2003-09-17 to ILAPIENTRY
-ILAPI ILenum ILAPIENTRY ilDetermineType(ILconst_string FileName)
+ILenum ILAPIENTRY ilDetermineType(ILconst_string FileName)
 {
 	ILHANDLE	File;
 	ILenum		Type;
@@ -215,6 +215,11 @@ ILenum ILAPIENTRY ilDetermineTypeF(ILHANDLE File)
 		return IL_LIF;
 	#endif
 
+	#ifndef IL_NO_MDL
+	if (ilIsValidMdlF(File))
+		return IL_MDL;
+	#endif
+
 	#ifndef IL_NO_PCX
 	if (ilIsValidPcxF(File))
 		return IL_PCX;
@@ -271,7 +276,7 @@ ILenum ILAPIENTRY ilDetermineTypeF(ILHANDLE File)
 }
 
 
-ILenum ilDetermineTypeL(const void *Lump, ILuint Size)
+ILenum ILAPIENTRY ilDetermineTypeL(const void *Lump, ILuint Size)
 {
 	if (Lump == NULL)
 		return IL_TYPE_UNKNOWN;
@@ -324,6 +329,11 @@ ILenum ilDetermineTypeL(const void *Lump, ILuint Size)
 	#ifndef IL_NO_LIF
 	if (ilIsValidLifL(Lump, Size))
 		return IL_LIF;
+	#endif
+
+	#ifndef IL_NO_MDL
+	if (ilIsValidMdlL(Lump, Size))
+		return IL_MDL;
 	#endif
 
 	#ifndef IL_NO_PCX
@@ -446,6 +456,11 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, ILconst_string FileName)
 			return ilIsValidLif(FileName);
 		#endif
 
+		#ifndef IL_NO_MDL
+		case IL_MDL:
+			return ilIsValidMdl(FileName);
+		#endif
+
 		#ifndef IL_NO_PCX
 		case IL_PCX:
 			return ilIsValidPcx(FileName);
@@ -561,6 +576,11 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 			return ilIsValidLifF(File);
 		#endif
 
+		#ifndef IL_NO_MDL
+		case IL_MDL:
+			return ilIsValidMdlF(File);
+		#endif
+
 		#ifndef IL_NO_PCX
 		case IL_PCX:
 			return ilIsValidPcxF(File);
@@ -674,6 +694,11 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, void *Lump, ILuint Size)
 		#ifndef IL_NO_LIF
 		case IL_LIF:
 			return ilIsValidLifL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_MDL
+		case IL_MDL:
+			return ilIsValidMdlL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_PCX

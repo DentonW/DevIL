@@ -136,6 +136,7 @@ Questions:
 - Should we be calculating DXT endpoints before converting data to 565 format?
 - Use Extreme DXT compression code?
 - Support half data internally?
+- Will ilDetermineType fail if file reading functions are overriden?
 
 
 From old TODO:

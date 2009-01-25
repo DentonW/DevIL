@@ -393,7 +393,7 @@ file_read_error:
 // @TODO: Make .ico and .png use the same functions.
 png_structp ico_png_ptr = NULL;
 png_infop   ico_info_ptr = NULL;
-ILint color_type;
+ILint		ico_color_type;
 
 #define GAMMA_CORRECTION 1.0  // Doesn't seem to be doing anything...
 
@@ -490,7 +490,7 @@ ILint ico_readpng_init()
 	png_read_info(ico_png_ptr, ico_info_ptr);  /* read all PNG info up to image data */
 
 	/* alternatively, could make separate calls to png_get_image_width(),
-	 * etc., but want bit_depth and color_type for later [don't care about
+	 * etc., but want bit_depth and ico_color_type for later [don't care about
 	 * compression_type and filter_type => NULLs] */
 
 	/* OK, that's all we need for now; return happy */
@@ -523,10 +523,10 @@ ILboolean ico_readpng_get_image(ICOIMAGE *Icon, ILdouble display_exponent)
 	}
 
 	png_get_IHDR(ico_png_ptr, ico_info_ptr, (png_uint_32*)&width, (png_uint_32*)&height,
-	             &bit_depth, &color_type, NULL, NULL, NULL);
+	             &bit_depth, &ico_color_type, NULL, NULL, NULL);
 
 	// Expand low-bit-depth grayscale images to 8 bits
-	if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8) {
+	if (ico_color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8) {
 		png_set_gray_1_2_4_to_8(ico_png_ptr);
 	}
 
@@ -538,7 +538,7 @@ ILboolean ico_readpng_get_image(ICOIMAGE *Icon, ILdouble display_exponent)
 
 	//refresh information (added 20040224)
 	png_get_IHDR(ico_png_ptr, ico_info_ptr, (png_uint_32*)&width, (png_uint_32*)&height,
-	             &bit_depth, &color_type, NULL, NULL, NULL);
+	             &bit_depth, &ico_color_type, NULL, NULL, NULL);
 
 	if (bit_depth < 8) {	// Expanded earlier for grayscale, now take care of palette and rgb
 		bit_depth = 8;
@@ -564,12 +564,12 @@ ILboolean ico_readpng_get_image(ICOIMAGE *Icon, ILdouble display_exponent)
 
 	png_read_update_info(ico_png_ptr, ico_info_ptr);
 	channels = (ILint)png_get_channels(ico_png_ptr, ico_info_ptr);
-	// added 20040224: update color_type so that it has the correct value
+	// added 20040224: update ico_color_type so that it has the correct value
 	// in iLoadPngInternal (globals rule...)
-	color_type = png_get_color_type(ico_png_ptr, ico_info_ptr);
+	ico_color_type = png_get_color_type(ico_png_ptr, ico_info_ptr);
 
 	// Determine internal format
-	switch (color_type)
+	switch (ico_color_type)
 	{
 		case PNG_COLOR_TYPE_PALETTE:
 			Icon->Head.BitCount = 8;
@@ -589,7 +589,7 @@ ILboolean ico_readpng_get_image(ICOIMAGE *Icon, ILdouble display_exponent)
 			return IL_FALSE;
 	}
 
-	if (color_type & PNG_COLOR_MASK_COLOR)
+	if (ico_color_type & PNG_COLOR_MASK_COLOR)
 		png_set_bgr(ico_png_ptr);
 
 	Icon->Head.Width = width;

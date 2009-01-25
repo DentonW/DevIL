@@ -28,7 +28,7 @@
 
 ILboolean iIsValidJp2(void);
 
-//! Checks if the file specified in FileName is a valid .icns file.
+//! Checks if the file specified in FileName is a valid .jp2 file.
 ILboolean ilIsValidJp2(ILconst_string FileName)
 {
 	ILHANDLE	Jp2File;
@@ -52,7 +52,7 @@ ILboolean ilIsValidJp2(ILconst_string FileName)
 }
 
 
-//! Checks if the ILHANDLE contains a valid .icns file at the current position.
+//! Checks if the ILHANDLE contains a valid .jp2 file at the current position.
 ILboolean ilIsValidJp2F(ILHANDLE File)
 {
 	ILuint		FirstPos;
@@ -67,7 +67,7 @@ ILboolean ilIsValidJp2F(ILHANDLE File)
 }
 
 
-//! Checks if Lump is a valid .icns lump.
+//! Checks if Lump is a valid .jp2 lump.
 ILboolean ilIsValidJp2L(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);

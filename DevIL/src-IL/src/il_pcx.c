@@ -18,7 +18,8 @@
 
 
 //! Checks if the file specified in FileName is a valid .pcx file.
-ILboolean ilIsValidPcx(ILconst_string FileName) {
+ILboolean ilIsValidPcx(ILconst_string FileName)
+{
 	ILHANDLE	PcxFile;
 	ILboolean	bPcx = IL_FALSE;
 
@@ -41,7 +42,8 @@ ILboolean ilIsValidPcx(ILconst_string FileName) {
 
 
 //! Checks if the ILHANDLE contains a valid .pcx file at the current position.
-ILboolean ilIsValidPcxF(ILHANDLE File) {
+ILboolean ilIsValidPcxF(ILHANDLE File)
+{
 	ILuint		FirstPos;
 	ILboolean	bRet;
 
@@ -55,58 +57,42 @@ ILboolean ilIsValidPcxF(ILHANDLE File) {
 
 
 //! Checks if Lump is a valid .pcx lump.
-ILboolean ilIsValidPcxL(const void *Lump, ILuint Size) {
+ILboolean ilIsValidPcxL(const void *Lump, ILuint Size)
+{
 	iSetInputLump(Lump, Size);
 	return iIsValidPcx();
 }
 
 
 // Internal function obtain the .pcx header from the current file.
-ILboolean iGetPcxHead(PCXHEAD *Head) {
-
+ILboolean iGetPcxHead(PCXHEAD *Head)
+{
 	Head->Manufacturer = igetc();
-
 	Head->Version = igetc();
-
 	Head->Encoding = igetc();
-
 	Head->Bpp = igetc();
-
 	Head->Xmin = GetLittleUShort();
-
 	Head->Ymin = GetLittleUShort();
-
 	Head->Xmax = GetLittleUShort();
-
 	Head->Ymax = GetLittleUShort();
-
 	Head->HDpi = GetLittleUShort();
-
 	Head->VDpi = GetLittleUShort();
-
 	iread(Head->ColMap, 1, 48);
-
 	Head->Reserved = igetc();
-
 	Head->NumPlanes = igetc();
-
 	Head->Bps = GetLittleUShort();
-
 	Head->PaletteInfo = GetLittleUShort();
-
 	Head->HScreenSize = GetLittleUShort();
-
 	Head->VScreenSize = GetLittleUShort();
-
 	iread(Head->Filler, 1, 54);
-
 
 	return IL_TRUE;
 }
 
 
 // Internal function to get the header and check it.
-ILboolean iIsValidPcx() {
+ILboolean iIsValidPcx()
+{
 	PCXHEAD Head;
 
 	if (!iGetPcxHead(&Head))
@@ -119,7 +105,8 @@ ILboolean iIsValidPcx() {
 
 // Internal function used to check if the HEADER is a valid .pcx header.
 // Should we also do a check on Header->Bpp?
-ILboolean iCheckPcx(PCXHEAD *Header) {
+ILboolean iCheckPcx(PCXHEAD *Header)
+{
 	ILuint	Test;
 
 	//	Got rid of the Reserved check, because I've seen some .pcx files with invalid values in it.
@@ -155,7 +142,8 @@ ILboolean iCheckPcx(PCXHEAD *Header) {
 
 
 //! Reads a .pcx file
-ILboolean ilLoadPcx(ILconst_string FileName) {
+ILboolean ilLoadPcx(ILconst_string FileName)
+{
 	ILHANDLE	PcxFile;
 	ILboolean	bPcx = IL_FALSE;
 
@@ -173,7 +161,8 @@ ILboolean ilLoadPcx(ILconst_string FileName) {
 
 
 //! Reads an already-opened .pcx file
-ILboolean ilLoadPcxF(ILHANDLE File) {
+ILboolean ilLoadPcxF(ILHANDLE File)
+{
 	ILuint		FirstPos;
 	ILboolean	bRet;
 
@@ -187,14 +176,16 @@ ILboolean ilLoadPcxF(ILHANDLE File) {
 
 
 //! Reads from a memory "lump" that contains a .pcx
-ILboolean ilLoadPcxL(const void *Lump, ILuint Size) {
+ILboolean ilLoadPcxL(const void *Lump, ILuint Size)
+{
 	iSetInputLump(Lump, Size);
 	return iLoadPcxInternal();
 }
 
 
 // Internal function used to load the .pcx.
-ILboolean iLoadPcxInternal() {
+ILboolean iLoadPcxInternal()
+{
 	PCXHEAD	Header;
 	ILboolean bPcx = IL_FALSE;
 
@@ -219,7 +210,8 @@ ILboolean iLoadPcxInternal() {
 
 
 // Internal function to uncompress the .pcx (all .pcx files are rle compressed)
-ILboolean iUncompressPcx(PCXHEAD *Header) {
+ILboolean iUncompressPcx(PCXHEAD *Header)
+{
 	//changed decompression loop 2003-09-01
 	//From the pcx spec: "There should always
 	//be a decoding break at the end of each scan line.
@@ -357,7 +349,8 @@ file_read_error:
 }
 
 
-ILboolean iUncompressSmall(PCXHEAD *Header) {
+ILboolean iUncompressSmall(PCXHEAD *Header)
+{
 	ILuint	i = 0, j, k, c, d, x, y, Bps;
 	ILubyte	HeadByte, Colour, Data = 0, *ScanLine;
 
@@ -488,7 +481,8 @@ ILboolean iUncompressSmall(PCXHEAD *Header) {
 
 
 //! Writes a .pcx file
-ILboolean ilSavePcx(ILconst_string FileName) {
+ILboolean ilSavePcx(ILconst_string FileName)
+{
 	ILHANDLE	PcxFile;
 	ILboolean	bPcx = IL_FALSE;
 
@@ -513,21 +507,24 @@ ILboolean ilSavePcx(ILconst_string FileName) {
 
 
 //! Writes a .pcx to an already-opened file
-ILboolean ilSavePcxF(ILHANDLE File) {
+ILboolean ilSavePcxF(ILHANDLE File)
+{
 	iSetOutputFile(File);
 	return iSavePcxInternal();
 }
 
 
 //! Writes a .pcx to a memory "lump"
-ILboolean ilSavePcxL(void *Lump, ILuint Size) {
+ILboolean ilSavePcxL(void *Lump, ILuint Size)
+{
 	iSetOutputLump(Lump, Size);
 	return iSavePcxInternal();
 }
 
 
 // Internal function used to save the .pcx.
-ILboolean iSavePcxInternal() {
+ILboolean iSavePcxInternal()
+{
 	ILuint	i, c, PalSize;
 	ILpal	*TempPal;
 	ILimage	*TempImage = iCurImage;
@@ -656,7 +653,8 @@ ILboolean iSavePcxInternal() {
 
 
 // Routine used from ZSoft's pcx documentation
-ILuint encput(ILubyte byt, ILubyte cnt) {
+ILuint encput(ILubyte byt, ILubyte cnt)
+{
 	if (cnt) {
 		if ((cnt == 1) && (0xC0 != (0xC0 & byt))) {
 			if (IL_EOF == iputc(byt))
@@ -675,9 +673,8 @@ ILuint encput(ILubyte byt, ILubyte cnt) {
 	return (0);
 }
 
-/* This subroutine encodes one scanline and writes it to a file.
-It returns number of bytes written into outBuff, 0 if failed. */
-
+// This subroutine encodes one scanline and writes it to a file.
+//  It returns number of bytes written into outBuff, 0 if failed.
 ILuint encLine(ILubyte *inBuff, ILint inLen, ILubyte Stride)
 {
 	ILubyte _this, last;

@@ -18,7 +18,8 @@
 
 
 //! Checks if the file specified in FileName is a valid .dcx file.
-ILboolean ilIsValidDcx(ILconst_string FileName) {
+ILboolean ilIsValidDcx(ILconst_string FileName)
+{
 	ILHANDLE	DcxFile;
 	ILboolean	bDcx = IL_FALSE;
 
@@ -41,7 +42,8 @@ ILboolean ilIsValidDcx(ILconst_string FileName) {
 
 
 //! Checks if the ILHANDLE contains a valid .dcx file at the current position.
-ILboolean ilIsValidDcxF(ILHANDLE File) {
+ILboolean ilIsValidDcxF(ILHANDLE File)
+{
 	ILuint		FirstPos;
 	ILboolean	bRet;
 
@@ -55,32 +57,25 @@ ILboolean ilIsValidDcxF(ILHANDLE File) {
 
 
 //! Checks if Lump is a valid .dcx lump.
-ILboolean ilIsValidDcxL(const void *Lump, ILuint Size) {
+ILboolean ilIsValidDcxL(const void *Lump, ILuint Size)
+{
 	iSetInputLump(Lump, Size);
 	return iIsValidDcx();
 }
 
 
 // Internal function obtain the .dcx header from the current file.
-ILboolean iGetDcxHead(DCXHEAD *Head) {
+ILboolean iGetDcxHead(DCXHEAD *Head)
+{
 	Head->Xmin = GetLittleUShort();
-
 	Head->Ymin = GetLittleUShort();
-
 	Head->Xmax = GetLittleUShort();
-
 	Head->Ymax = GetLittleUShort();
-
 	Head->HDpi = GetLittleUShort();
-
 	Head->VDpi = GetLittleUShort();
-
 	Head->Bps = GetLittleUShort();
-
 	Head->PaletteInfo = GetLittleUShort();
-
 	Head->HScreenSize = GetLittleUShort();
-
 	Head->VScreenSize = GetLittleUShort();
 
 	return IL_TRUE;
