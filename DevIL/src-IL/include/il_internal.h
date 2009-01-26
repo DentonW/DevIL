@@ -101,6 +101,10 @@ extern "C" {
 	//@TODO: Windows 64 compiler cannot use inline ASM, so we need to
 	//  generate some MASM code at some point.
 	#endif
+
+	#ifdef _WIN32_WCE  // Cannot use our inline ASM in Windows Mobile.
+		#undef USE_WIN32_ASM
+	#endif
 #endif
 extern ILimage *iCurImage;
 #define BIT_0	0x00000001
@@ -139,7 +143,11 @@ extern ILimage *iCurImage;
 #if !_WIN32 || _WIN32_WCE
 	int stricmp(const char *src1, const char *src2);
 	int strnicmp(const char *src1, const char *src2, size_t max);
+	char *strdup(const char *src);
 #endif//_WIN32
+#ifdef _WIN32_WCE
+	char *strdup(const char *src);
+#endif
 int iStrCmp(ILconst_string src1, ILconst_string src2);
 
 //

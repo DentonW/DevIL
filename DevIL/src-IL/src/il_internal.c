@@ -39,6 +39,10 @@ ILimage *iCurImage = NULL;
 	{
 		return _strnicmp(src1, src2, max);
 	}
+	char *strdup(const char *src)
+	{
+		return _strdup(src);
+	}
 #endif /* _WIN32 */
 
 

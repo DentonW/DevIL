@@ -233,4 +233,6 @@
 	* il_psd.c:829: Subtracted an additional 4 for the Size obtained in the lines before.
 	* il_jp2.c:792-792: Added cleanup code if failure.  676-680: Added call to jas_init.
 	  Added code throughout to prevent from having to initialize Jasper more than once.
+	* il_internal.h/il_internal.c: Added strdup for Windows CE.
+	* il_internal.h:105-107: Added so that we do not try to compile inline ASM with Windows Mobile.
 	
