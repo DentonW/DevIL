@@ -1,7 +1,7 @@
 README.win is more relevant in this release.
 
-CMAKE files are included, but they need to be udpated.
-This is the only way to create VC6 and VC2003 projects
+CMAKE files are included, but they need to be updated.
+This is the only way to create VC6 and VC2003 projects.
 
 
 ......
