@@ -1,7 +1,7 @@
-IL_INCLUDE_PATH="/usr/local/include"
-IL_LIB_PATH="/usr/lib/include"
-LUA_INCLUDE_PATH="/opt/local/include"
-LUA_LIB_PATH="/opt/local/lib"
+IL_INCLUDE_PATH="/usr/include"
+IL_LIB_PATH="/usr/lib"
+LUA_INCLUDE_PATH="/usr/include/lua5.1"
+LUA_LIB_PATH="/usr/lib"
 OSX=no
 
 echo "Building the lua binding!"
@@ -14,7 +14,7 @@ if [ $? -ne 0 ] ; then
 fi
 
 compile() {
-	gcc luadevil.c "$1" -o luadevil "-L$LUA_LIB_PATH" "-I$LUA_INCLUDE_PATH" "-I$IL_LIB_PATH" -lIL -lILU -lILUT -llua &>/dev/null
+	gcc luadevil.c "$1" -o luadevil "-L$LUA_LIB_PATH" "-I$LUA_INCLUDE_PATH" "-I$IL_LIB_PATH" -lIL -lILU -lILUT -llua5.1 &>/dev/null
 	err=$?
 	if [ "$OSX" = "no" ] ; then
 		gcc -shared "$1" -o DevIL.so "-L$LUA_LIB_PATH" "-I$LUA_INCLUDE_PATH" "-I$IL_LIB_PATH" -lIL -lILU -lILUT &>/dev/null
