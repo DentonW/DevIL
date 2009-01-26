@@ -1,13 +1,13 @@
 %module DevIL
 %{
-#include "IL/il.h"
-#include "IL/ilu.h"
-#include "IL/ilut.h"
-//#include "IL/ilu_region.h"
+#include "il.h"
+#include "ilu.h"
+#include "ilut.h"
+//#include "ilu_region.h"
 %}
 
-%include "IL/il.h"
-%include "IL/ilu.h"
-%include "IL/ilut.h"
-//%include "IL/ilu_region.h"
+%include "il.h"
+%include "ilu.h"
+%include "ilut.h"
+//%include "ilu_region.h"
 

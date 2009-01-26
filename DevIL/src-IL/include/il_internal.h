@@ -143,7 +143,6 @@ extern ILimage *iCurImage;
 #if !_WIN32 || _WIN32_WCE
 	int stricmp(const char *src1, const char *src2);
 	int strnicmp(const char *src1, const char *src2, size_t max);
-	char *strdup(const char *src);
 #endif//_WIN32
 #ifdef _WIN32_WCE
 	char *strdup(const char *src);
