@@ -127,7 +127,7 @@
 		#endif
 	#endif
 
-	#include "IL/ilut_config.h"
+	#include <IL/ilut_config.h>
 #endif
 
 
@@ -160,7 +160,9 @@
 	#ifdef _DEBUG 
 		#define _CRTDBG_MAP_ALLOC
 		#include <stdlib.h>
-		#include <crtdbg.h>
+		#ifndef _WIN32_WCE
+			#include <crtdbg.h>
+		#endif
 	#endif
 	#include <windows.h>
 #endif

@@ -12,10 +12,12 @@
 		//pragma comment(linker, "/NODEFAULTLIB:libc")
 		#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
 
-	#ifdef _DEBUG 
-		#define _CRTDBG_MAP_ALLOC
-		#include <stdlib.h>
-		#include <crtdbg.h>
+		#ifdef _DEBUG 
+			#define _CRTDBG_MAP_ALLOC
+			#include <stdlib.h>
+			#ifndef _WIN32_WCE
+				#include <crtdbg.h>
+			#endif
 		#endif
 	#endif // _MSC_VER > 1000
 #endif
