@@ -235,4 +235,6 @@
 	  Added code throughout to prevent from having to initialize Jasper more than once.
 	* il_internal.h/il_internal.c: Added strdup for Windows CE.
 	* il_internal.h:105-107: Added so that we do not try to compile inline ASM with Windows Mobile.
-	
+
+2009-01-26 Denton Woods <doomwiz@users.sf.net>
+	* projects/win mobile: Added Windows Mobile projects.
