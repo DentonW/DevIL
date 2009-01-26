@@ -60,7 +60,9 @@ ILint bclose(BITFILE *BitFile)
 	if (BitFile == NULL || BitFile->File == NULL)
 		return IL_EOF;
 
-	icloser(BitFile->File);
+	// Removed 01-26-2008.  The file will get closed later by
+	//  the calling function.
+	//icloser(BitFile->File);
 	ifree(BitFile);
 
 	return 0;
@@ -118,12 +120,12 @@ ILint bseek(BITFILE *BitFile, ILuint Offset, ILuint Mode)
 
 
 // hehe, "bread".  It reads data into Buffer from the BITFILE, just like fread for FILE.
-//@TODO: Make it read into Size bytes instead of just 1 byte at a time.
 ILint bread(void *Buffer, ILuint Size, ILuint Number, BITFILE *BitFile)
 {
-	//Note that this function is somewhat useless: In binary image
-	//formats, there are some pad bits after each scanline. This
-	//function does not take that into account, so...
+	// Note that this function is somewhat useless: In binary image
+	// formats, there are some pad bits after each scanline. This
+	// function does not take that into account, so you must use bseek to
+	// skip the calculated value of bits.
 
 	ILuint	BuffPos = 0, Count = Size * Number;
 

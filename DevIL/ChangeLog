@@ -239,4 +239,5 @@
 2009-01-26 Denton Woods <doomwiz@users.sf.net>
 	* projects/win mobile: Added Windows Mobile projects.
 	* Removed .cvsignore files from SVN.
-	
+	* il_bits.c:65: Commented out icloser call.
+
