@@ -39,11 +39,14 @@ ILimage *iCurImage = NULL;
 	{
 		return _strnicmp(src1, src2, max);
 	}
+#endif /* _WIN32 */
+
+#ifdef _WIN32_WCE
 	char *strdup(const char *src)
 	{
 		return _strdup(src);
 	}
-#endif /* _WIN32 */
+#endif//_WIN32_WCE
 
 
 #ifdef _UNICODE
