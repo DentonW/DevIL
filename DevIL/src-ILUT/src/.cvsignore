@@ -1,9 +1,0 @@
-Makefile
-.deps
-.libs
-libILUT.la
-*.o
-*.lo
-obj
-Makefile.in
-*.loT

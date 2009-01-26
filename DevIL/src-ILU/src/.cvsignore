@@ -1,9 +1,0 @@
-Makefile
-.DS_Store
-.deps
-.libs
-*.o
-*.lo
-libILU.la
-obj
-Makefile.in
