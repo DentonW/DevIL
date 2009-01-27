@@ -245,3 +245,8 @@
 	* il_tpl.c: Added for TPL support.
 	* il_io.c: Added function calls for TPL support.
 	* il_internal.h: Added declarations for TPL support.
+
+2009-01-27 Denton Woods <doomwiz@users.sf.net>
+	* il_bits.c (bseek): Changed check for return values of iseek.
+	* il_tpl.c: Added support for many more TPL data formats.
+	

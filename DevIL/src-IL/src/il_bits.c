@@ -87,13 +87,13 @@ ILint bseek(BITFILE *BitFile, ILuint Offset, ILuint Mode)
 	switch (Mode)
 	{
 		case IL_SEEK_SET:
-			if (iseek(Offset >> 3, Mode)) {
+			if (!iseek(Offset >> 3, Mode)) {
 				BitFile->BitPos = Offset;
 				BitFile->ByteBitOff = BitFile->BitPos % 8;
 			}
 			break;
 		case IL_SEEK_CUR:
-			if (iseek(Offset >> 3, Mode)) {
+			if (!iseek(Offset >> 3, Mode)) {
 				BitFile->BitPos += Offset;
 				BitFile->ByteBitOff = BitFile->BitPos % 8;
 			}
@@ -104,7 +104,7 @@ ILint bseek(BITFILE *BitFile, ILuint Offset, ILuint Mode)
 			Len = itell();
 			iseek(0, IL_SEEK_SET);
 
-			if (iseek(Offset >> 3, Mode)) {
+			if (!iseek(Offset >> 3, Mode)) {
 				BitFile->BitPos = (Len << 3) + Offset;
 				BitFile->ByteBitOff = BitFile->BitPos % 8;
 			}

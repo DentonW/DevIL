@@ -186,6 +186,7 @@ ILboolean iLoadTplInternal(void)
 	ILuint		x, y, xBlock, yBlock;
 	ILenum		Format;
 	ILushort	Width, Height, ShortPixel;
+	ILubyte		BytePixel;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -207,12 +208,16 @@ ILboolean iLoadTplInternal(void)
 	TexOff = GetBigUInt();
 	PalOff = GetBigUInt();
 	// Go to the texture header.
-	iseek(TexOff, IL_SEEK_SET);
-	/*if (iseek(TexOff, IL_SEEK_SET) != TexOff)
-		return IL_FALSE;*/
+	if (iseek(TexOff, IL_SEEK_SET))
+		return IL_FALSE;
 
 	Height = GetBigUShort();
 	Width = GetBigUShort();
+	if (Width == 0 || Height == 0) {  //@TODO: It looks like files actually have n-1 images, with the nth one having 0 height and width.
+		ilSetError(IL_ILLEGAL_FILE_VALUE);
+		return IL_FALSE;
+	}
+
 	DataFormat = GetBigUInt();
 	TexOff = GetBigUInt();
 	WrapS = GetBigUInt();
@@ -226,16 +231,43 @@ ILboolean iLoadTplInternal(void)
 	}
 
 	// Go to the actual texture data.
-	iseek(TexOff, IL_SEEK_SET);
-	/*if (iseek(TexOff, IL_SEEK_SET) != TexOff)
-		return IL_FALSE;*/
+	if (iseek(TexOff, IL_SEEK_SET))
+		return IL_FALSE;
 
 	switch (DataFormat)
 	{
+		case TPL_I4:
+		case TPL_I8:
+			Format = IL_LUMINANCE;
+			Bpp = 1;
+			break;
+		case TPL_IA4:
+		case TPL_IA8:
+			Format = IL_LUMINANCE_ALPHA;
+			Bpp = 1;
+			break;
 		case TPL_RGB565:
 			Format = IL_RGB;
 			Bpp = 3;
 			break;
+		case TPL_RGB5A3:
+			Format = IL_RGBA;
+			Bpp = 4;
+			break;
+		case TPL_RGBA8:
+			Format = IL_RGBA;
+			Bpp = 4;
+			break;
+		/*case TPL_CI4:
+		case TPL_CI8:
+			Format = IL_COLOR_INDEX;
+			Bpp = 1;
+			break;
+		//case TPL_CI4X2:  // Not supported at all in DevIL, since it has a huge palette (> 256 colors).
+		case TPL_CMP:
+			Format = IL_RGBA;
+			Bpp = 4;
+			break;*/
 
 		default:
 			ilSetError(IL_FORMAT_NOT_SUPPORTED);
@@ -248,6 +280,74 @@ ILboolean iLoadTplInternal(void)
 
 	switch (DataFormat)
 	{
+		case TPL_I4:
+			// 8x8 tiles of 4-bit intensity values
+			for (y = 0; y < iCurImage->Height; y += 8) {
+				for (x = 0; x < iCurImage->Width; x += 8) {
+					for (yBlock = 0; yBlock < 4 && y + yBlock < iCurImage->Height; yBlock++) {
+						DataOff = iCurImage->Bps * (y + yBlock) + iCurImage->Bpp * x;
+						for (xBlock = 0; xBlock < 8 && x + xBlock < iCurImage->Width; xBlock += 2) {
+							BytePixel = igetc();
+							iCurImage->Data[DataOff] = (BytePixel & 0xF0) | (BytePixel & 0xF0) >> 4;
+							DataOff++;
+							if (x + xBlock >= iCurImage->Width)
+								break;
+							iCurImage->Data[DataOff+1] = (BytePixel & 0x0F) << 4 | (BytePixel & 0x0F);
+							DataOff++;
+						}
+					}
+				}
+			}
+			break;
+
+		case TPL_I8:
+			// 8x4 tiles of 8-bit intensity values
+			for (y = 0; y < iCurImage->Height; y += 4) {
+				for (x = 0; x < iCurImage->Width; x += 8) {
+					for (yBlock = 0; yBlock < 4 && y + yBlock < iCurImage->Height; yBlock++) {
+						DataOff = iCurImage->Bps * (y + yBlock) + iCurImage->Bpp * x;
+						for (xBlock = 0; xBlock < 8 && x + xBlock < iCurImage->Width; xBlock++) {
+							iCurImage->Data[DataOff] = igetc();  // Luminance value
+							DataOff++;
+						}
+					}
+				}
+			}
+			break;
+
+		case TPL_IA4:
+			// 8x4 tiles of 4-bit intensity and 4-bit alpha values
+			for (y = 0; y < iCurImage->Height; y += 4) {
+				for (x = 0; x < iCurImage->Width; x += 8) {
+					for (yBlock = 0; yBlock < 4 && y + yBlock < iCurImage->Height; yBlock++) {
+						DataOff = iCurImage->Bps * (y + yBlock) + iCurImage->Bpp * x;
+						for (xBlock = 0; xBlock < 8 && x + xBlock < iCurImage->Width; xBlock += 2) {
+							BytePixel = igetc();
+							iCurImage->Data[DataOff] = (BytePixel & 0xF0) | (BytePixel & 0xF0) >> 4;
+							iCurImage->Data[DataOff+1] = (BytePixel & 0x0F) << 4 | (BytePixel & 0x0F);
+							DataOff += 2;
+						}
+					}
+				}
+			}
+			break;
+
+		case TPL_IA8:
+			// 4x4 tiles of 8-bit intensity and 8-bit alpha values
+			for (y = 0; y < iCurImage->Height; y += 4) {
+				for (x = 0; x < iCurImage->Width; x += 4) {
+					for (yBlock = 0; yBlock < 4 && y + yBlock < iCurImage->Height; yBlock++) {
+						DataOff = iCurImage->Bps * (y + yBlock) + iCurImage->Bpp * x;
+						for (xBlock = 0; xBlock < 4 && x + xBlock < iCurImage->Width; xBlock += 2) {
+							iCurImage->Data[DataOff] = igetc();
+							iCurImage->Data[DataOff+1] = igetc();
+							DataOff += 2;
+						}
+					}
+				}
+			}
+			break;
+
 		case TPL_RGB565:
 			// 4x4 tiles of RGB565 data
 			for (y = 0; y < iCurImage->Height; y += 4) {
@@ -259,6 +359,59 @@ ILboolean iLoadTplInternal(void)
 							iCurImage->Data[DataOff] = ((ShortPixel & 0xF800) >> 8) | ((ShortPixel & 0xE000) >> 13); // Red
 							iCurImage->Data[DataOff+1] = ((ShortPixel & 0x7E0) >> 3) | ((ShortPixel & 0x600) >> 9); // Green
 							iCurImage->Data[DataOff+2] = ((ShortPixel & 0x1f) << 3) | ((ShortPixel & 0x1C) >> 2); // Blue
+							DataOff += 3;
+						}
+					}
+				}
+			}
+			break;
+
+		case TPL_RGB5A3:
+			// 4x4 tiles of either RGB5 or RGB4A3 depending on the MSB. 0x80
+			for (y = 0; y < iCurImage->Height; y += 4) {
+				for (x = 0; x < iCurImage->Width; x += 4) {
+					for (yBlock = 0; yBlock < 4 && y + yBlock < iCurImage->Height; yBlock++) {
+						DataOff = iCurImage->Bps * (y + yBlock) + iCurImage->Bpp * x;
+						for (xBlock = 0; xBlock < 4 && x + xBlock < iCurImage->Width; xBlock++) {
+							ShortPixel = GetBigUShort();
+							if (ShortPixel & 0x8000) {  // Check MSB
+								// We have RGB5.
+								iCurImage->Data[DataOff] = ((ShortPixel & 0x7C00) >> 7) | ((ShortPixel & 0x7000) >> 12); // Red
+								iCurImage->Data[DataOff+1] = ((ShortPixel & 0x3E0) >> 2) | ((ShortPixel & 0x380) >> 7); // Green
+								iCurImage->Data[DataOff+2] = ((ShortPixel & 0x1F) << 3) | ((ShortPixel & 0x1C) >> 2); // Blue
+								iCurImage->Data[DataOff+3] = 0xFF;  // I am just assuming that it is opaque.
+							}
+							else {
+								// We have RGB4A3.
+								iCurImage->Data[DataOff] = ((ShortPixel & 0x7800) >> 7) | ((ShortPixel & 0x7800) >> 11); // Red
+								iCurImage->Data[DataOff+1] = ((ShortPixel & 0x0780) >> 3) | ((ShortPixel & 0x0780) >> 7); // Green
+								iCurImage->Data[DataOff+2] = ((ShortPixel & 0x0078) << 1) | ((ShortPixel & 0x0078) >> 3); // Blue
+								iCurImage->Data[DataOff+3] = ((ShortPixel & 0x07) << 5) | ((ShortPixel & 0x07) << 2) | (ShortPixel >> 1); // Alpha
+							}
+							DataOff += 3;
+						}
+					}
+				}
+			}
+			break;
+
+		case TPL_RGBA8:
+			// 4x4 tiles of RGBA data
+			for (y = 0; y < iCurImage->Height; y += 4) {
+				for (x = 0; x < iCurImage->Width; x += 4) {
+					for (yBlock = 0; yBlock < 4 && y + yBlock < iCurImage->Height; yBlock++) {
+						DataOff = iCurImage->Bps * (y + yBlock) + iCurImage->Bpp * x;
+						// First it has the AR data.
+						for (xBlock = 0; xBlock < 4 && x + xBlock < iCurImage->Width; xBlock++) {
+							iCurImage->Data[DataOff+3] = igetc();  // Alpha
+							iCurImage->Data[DataOff] = igetc();  // Red
+							DataOff += 3;
+						}
+						DataOff = iCurImage->Bps * (y + yBlock) + iCurImage->Bpp * x;
+						// Then it has the GB data.
+						for (xBlock = 0; xBlock < 4 && x + xBlock < iCurImage->Width; xBlock++) {
+							iCurImage->Data[DataOff+1] = igetc();  // Green
+							iCurImage->Data[DataOff+2] = igetc();  // Blue
 							DataOff += 3;
 						}
 					}
