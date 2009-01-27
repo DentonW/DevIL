@@ -15,6 +15,7 @@
 
 #include "il_internal.h"
 #ifndef IL_NO_TPL
+#include "il_dds.h"
 
 
 typedef struct TPLHEAD
@@ -181,12 +182,15 @@ ILboolean ilLoadTplL(const void *Lump, ILuint Size)
 ILboolean iLoadTplInternal(void)
 {
 	TPLHEAD		Header;
-	ILimage		*Image, *BaseImage = iCurImage;
+	ILimage		/**Image, */*BaseImage = iCurImage;
 	ILuint		CurName, Pos, TexOff, PalOff, DataFormat, Bpp, DataOff, WrapS, WrapT;
-	ILuint		x, y, xBlock, yBlock;
+	ILuint		x, y, xBlock, yBlock, i, j, k;
 	ILenum		Format;
 	ILushort	Width, Height, ShortPixel;
-	ILubyte		BytePixel;
+	ILubyte		BytePixel, CompData[8];
+	Color8888	colours[4], *col;
+	ILushort	color_0, color_1;
+	ILuint		bitmask, Select;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -262,12 +266,12 @@ ILboolean iLoadTplInternal(void)
 		case TPL_CI8:
 			Format = IL_COLOR_INDEX;
 			Bpp = 1;
-			break;
+			break;*/
 		//case TPL_CI4X2:  // Not supported at all in DevIL, since it has a huge palette (> 256 colors).
 		case TPL_CMP:
 			Format = IL_RGBA;
 			Bpp = 4;
-			break;*/
+			break;
 
 		default:
 			ilSetError(IL_FORMAT_NOT_SUPPORTED);
@@ -417,8 +421,79 @@ ILboolean iLoadTplInternal(void)
 					}
 				}
 			}
-
 			break;
+
+		case TPL_CMP:
+			// S3TC 2x2 blocks of 4x4 tiles.  I am assuming that this is DXT1, since it is not specified in the specs.
+			//  Most of this ended up being copied from il_dds.c, from the DecompressDXT1 function.
+			//@TODO: Make this/that code a bit more modular.
+			for (y = 0; y < iCurImage->Height; y += 8) {
+				for (x = 0; x < iCurImage->Width; x += 8) {
+					for (yBlock = 0; yBlock < 8 && y + yBlock < iCurImage->Height; yBlock += 4) {
+						for (xBlock = 0; xBlock < 8 && x + xBlock < iCurImage->Width; xBlock += 4) {
+							if (iread(CompData, 1, 8) != 8)
+								return IL_FALSE;  //@TODO: Need to do any cleanup here?
+							color_0 = *((ILushort*)CompData);
+							UShort(&color_0);
+							color_1 = *((ILushort*)(CompData + 2));
+							UShort(&color_1);
+							DxtcReadColor(color_0, colours);
+							DxtcReadColor(color_1, colours + 1);
+							bitmask = ((ILuint*)CompData)[1];
+							UInt(&bitmask);
+
+							if (color_0 > color_1) {
+								// Four-color block: derive the other two colors.
+								// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
+								// These 2-bit codes correspond to the 2-bit fields 
+								// stored in the 64-bit block.
+								colours[2].b = (2 * colours[0].b + colours[1].b + 1) / 3;
+								colours[2].g = (2 * colours[0].g + colours[1].g + 1) / 3;
+								colours[2].r = (2 * colours[0].r + colours[1].r + 1) / 3;
+								//colours[2].a = 0xFF;
+
+								colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
+								colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
+								colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
+								colours[3].a = 0xFF;
+							}
+							else { 
+								// Three-color block: derive the other color.
+								// 00 = color_0,  01 = color_1,  10 = color_2,
+								// 11 = transparent.
+								// These 2-bit codes correspond to the 2-bit fields 
+								// stored in the 64-bit block. 
+								colours[2].b = (colours[0].b + colours[1].b) / 2;
+								colours[2].g = (colours[0].g + colours[1].g) / 2;
+								colours[2].r = (colours[0].r + colours[1].r) / 2;
+								//colours[2].a = 0xFF;
+
+								colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
+								colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
+								colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
+								colours[3].a = 0x00;
+							}
+
+							for (j = 0, k = 0; j < 4; j++) {
+								for (i = 0; i < 4; i++, k++) {
+									Select = (bitmask & (0x03 << k*2)) >> k*2;
+									col = &colours[Select];
+
+									if (((x + xBlock + i) < iCurImage->Width) && ((y + yBlock + j) < iCurImage->Height)) {
+										DataOff = (y + yBlock + j) * iCurImage->Bps + (x + xBlock + i) * iCurImage->Bpp;
+										iCurImage->Data[DataOff + 0] = col->r;
+										iCurImage->Data[DataOff + 1] = col->g;
+										iCurImage->Data[DataOff + 2] = col->b;
+										iCurImage->Data[DataOff + 3] = col->a;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			break;
+
 	}
 
 

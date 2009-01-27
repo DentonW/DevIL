@@ -20,6 +20,7 @@ Easier:
 - Update DevIL website with file formats (psd-saving, etc.).
 - Fix MSVC8 solutions for text files.
 - ilSavePnmF needs to set FName if not called by ilSavePnm.
+- Make TPL_CMP case in iLoadTplInternal code more modular (also in il_dds.c).
 
 - Update MSVC8 solutions to include il_size.c.
 
