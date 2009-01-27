@@ -4,6 +4,11 @@ DevIL TODO:
 
 Denton:
 
+By next release:
+- Add il_tpl.c to MSVC8 projects.
+- Change version numbers.
+
+
 Easier:
 - iGetString may not work properly with Unicode strings.
 - Look at adding ilIsValid* for mng, iff, wbmp, wal and pxr.

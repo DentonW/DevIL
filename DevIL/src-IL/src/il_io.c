@@ -120,6 +120,8 @@ ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 		Type = IL_SUN;
 	else if (!iStrCmp(Ext, IL_TEXT("tif")) || !iStrCmp(Ext, IL_TEXT("tiff")))
 		Type = IL_TIF;
+	else if (!iStrCmp(Ext, IL_TEXT("tpl")))
+		Type = IL_TPL;
 	else if (!iStrCmp(Ext, IL_TEXT("vtf")))
 		Type = IL_VTF;
 	else if (!iStrCmp(Ext, IL_TEXT("wal")))
@@ -258,6 +260,11 @@ ILenum ILAPIENTRY ilDetermineTypeF(ILHANDLE File)
 		return IL_TIF;
 	#endif
 
+	#ifndef IL_NO_TPL
+	if (ilIsValidTplF(File))
+		return IL_TPL;
+	#endif
+
 	#ifndef IL_NO_VTF
 	if (ilIsValidVtfF(File))
 		return IL_VTF;
@@ -377,6 +384,11 @@ ILenum ILAPIENTRY ilDetermineTypeL(const void *Lump, ILuint Size)
 	#ifndef IL_NO_TIF
 	if (ilIsValidTiffL(Lump, Size))
 		return IL_TIF;
+	#endif
+
+	#ifndef IL_NO_TPL
+	if (ilIsValidTplL(Lump, Size))
+		return IL_TPL;
 	#endif
 
 	#ifndef IL_NO_VTF
@@ -509,6 +521,11 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, ILconst_string FileName)
 			return ilIsValidTiff(FileName);
 		#endif
 
+		#ifndef IL_NO_TPL
+		case IL_TPL:
+			return ilIsValidTpl(FileName);
+		#endif
+
 		#ifndef IL_NO_VTF
 		case IL_VTF:
 			return ilIsValidVtf(FileName);
@@ -634,6 +651,11 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 			return ilIsValidTiffF(File);
 		#endif
 
+		#ifndef IL_NO_TPL
+		case IL_TPL:
+			return ilIsValidTplF(File);
+		#endif
+
 		#ifndef IL_NO_VTF
 		case IL_VTF:
 			return ilIsValidVtfF(File);
@@ -757,6 +779,11 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, void *Lump, ILuint Size)
 		#ifndef IL_NO_TIF
 		case IL_TIF:
 			return ilIsValidTiffL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_TPL
+		case IL_TPL:
+			return ilIsValidTplL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_VTF
@@ -958,6 +985,12 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 		#ifndef IL_NO_TIF
 		case IL_TIF:
 			bRet = ilLoadTiff(FileName);
+			break;
+		#endif
+
+		#ifndef IL_NO_TPL
+		case IL_TPL:
+			bRet = ilLoadTpl(FileName);
 			break;
 		#endif
 
@@ -1170,6 +1203,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadTiffF(File);
 		#endif
 
+		#ifndef IL_NO_TPL
+		case IL_TPL:
+			return ilLoadTplF(File);
+		#endif
+
 		#ifndef IL_NO_VTF
 		case IL_VTF:
 			return ilLoadVtfF(File);
@@ -1356,6 +1394,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size)
 		#ifndef IL_NO_TIF
 		case IL_TIF:
 			return ilLoadTiffL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_TPL
+		case IL_TPL:
+			return ilLoadTplL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_VTF
@@ -1618,6 +1661,13 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#ifndef IL_NO_TIF
 		if (!iStrCmp(Ext, IL_TEXT("tif")) || !iStrCmp(Ext, IL_TEXT("tiff"))) {
 			bRet = ilLoadTiff(FileName);
+			goto finish;
+		}
+		#endif
+
+		#ifndef IL_NO_TPL
+		if (!iStrCmp(Ext, IL_TEXT("tpl"))) {
+			bRet = ilLoadTpl(FileName);
 			goto finish;
 		}
 		#endif

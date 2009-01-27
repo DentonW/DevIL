@@ -242,4 +242,6 @@
 	* il_bits.c:65: Commented out icloser call.
 	* include/IL/DevIL.i: Removed IL/ prefix on header filenames.
 	* projects folder: Renamed msvc to msvc9.
-	
+	* il_tpl.c: Added for TPL support.
+	* il_io.c: Added function calls for TPL support.
+	* il_internal.h: Added declarations for TPL support.

@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 01/03/2008
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 01/03/2009
 //
 // Filename: src-IL/src/il_vtf.c
 //
@@ -112,13 +112,13 @@ ILboolean iGetVtfHead(VTFHEAD *Header)
 // Internal function to get the header and check it.
 ILboolean iIsValidVtf(void)
 {
-	VTFHEAD Head;
+	VTFHEAD Header;
 
-	if (!iGetVtfHead(&Head))
+	if (!iGetVtfHead(&Header))
 		return IL_FALSE;
 	iseek(-(ILint)sizeof(VTFHEAD), IL_SEEK_CUR);
 	
-	return iCheckVtf(&Head);
+	return iCheckVtf(&Header);
 }
 
 
@@ -211,7 +211,7 @@ ILboolean ilLoadVtfL(const void *Lump, ILuint Size)
 
 
 // Internal function used to load the VTF.
-ILboolean iLoadVtfInternal()
+ILboolean iLoadVtfInternal(void)
 {
 	ILboolean	bVtf = IL_TRUE;
 	ILimage		*Image, *BaseImage;

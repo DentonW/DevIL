@@ -2480,6 +2480,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\src\il_tpl.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\il_vtf.c"
 					>
 				</File>
