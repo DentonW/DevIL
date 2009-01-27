@@ -267,7 +267,7 @@ ILboolean iLoadTplInternal(void)
 			Format = IL_COLOR_INDEX;
 			Bpp = 1;
 			break;*/
-		//case TPL_CI4X2:  // Not supported at all in DevIL, since it has a huge palette (> 256 colors).
+		//case TPL_CI4X2:  // Not supported at all in DevIL, since it has a huge palette (> 256 colors).  Convert to RGBA.
 		case TPL_CMP:
 			Format = IL_RGBA;
 			Bpp = 4;
