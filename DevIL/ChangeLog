@@ -241,4 +241,5 @@
 	* Removed .cvsignore files from SVN.
 	* il_bits.c:65: Commented out icloser call.
 	* include/IL/DevIL.i: Removed IL/ prefix on header filenames.
-
+	* projects folder: Renamed msvc to msvc9.
+	
