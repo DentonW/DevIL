@@ -81,6 +81,7 @@ More involved:
 - Allow more formats for saving .tga (does not do IL_ALPHA for instance) - also in iTargaSize.
   Make sure iConvertImage is called.  Right now, it would not be.
 - Find test images for all .tpl formats.
+- Create new palette types for luminance, luminance-alpha and alpha (.tpl has luminance-alpha).
 
 
 Lots of work:

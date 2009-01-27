@@ -43,10 +43,16 @@ typedef struct TPLHEAD
 #define	TPL_REPEAT	1
 #define TPL_MIRROR	2
 
+// Palette entries
+#define TPL_PAL_IA8		0
+#define TPL_PAL_RGB565	1
+#define TPL_PAL_RGB5A3	2
+
 
 ILboolean iIsValidTpl(void);
 ILboolean iCheckTpl(TPLHEAD *Header);
 ILboolean iLoadTplInternal(void);
+ILboolean TplGetIndexImage(ILimage *Image, ILuint TexOff, ILuint DataFormat);
 
 
 //! Checks if the file specified in FileName is a valid TPL file.
@@ -262,12 +268,15 @@ ILboolean iLoadTplInternal(void)
 			Format = IL_RGBA;
 			Bpp = 4;
 			break;
-		/*case TPL_CI4:
+		case TPL_CI4:
 		case TPL_CI8:
 			Format = IL_COLOR_INDEX;
 			Bpp = 1;
-			break;*/
-		//case TPL_CI4X2:  // Not supported at all in DevIL, since it has a huge palette (> 256 colors).  Convert to RGBA.
+			break;
+		case TPL_CI14X2:
+			Format = IL_RGBA;
+			Bpp = 3;
+			break;
 		case TPL_CMP:
 			Format = IL_RGBA;
 			Bpp = 4;
@@ -288,7 +297,7 @@ ILboolean iLoadTplInternal(void)
 			// 8x8 tiles of 4-bit intensity values
 			for (y = 0; y < iCurImage->Height; y += 8) {
 				for (x = 0; x < iCurImage->Width; x += 8) {
-					for (yBlock = 0; yBlock < 4; yBlock++) {
+					for (yBlock = 0; yBlock < 8; yBlock++) {
 						if ((y + yBlock) >= iCurImage->Height) {
 							iseek(8, IL_SEEK_CUR);  // Entire row of pad bytes skipped.
 							continue;
@@ -480,6 +489,16 @@ ILboolean iLoadTplInternal(void)
 			}
 			break;
 
+		case TPL_CI4:
+		case TPL_CI8:
+		case TPL_CI14X2:
+			// Seek to the palette header.
+			if (iseek(PalOff, IL_SEEK_SET))
+				return IL_FALSE;
+			if (!TplGetIndexImage(iCurImage, TexOff, DataFormat))
+				return IL_FALSE;
+			break;
+
 		case TPL_CMP:
 			// S3TC 2x2 blocks of 4x4 tiles.  I am assuming that this is DXT1, since it is not specified in the specs.
 			//  Most of this ended up being copied from il_dds.c, from the DecompressDXT1 function.
@@ -553,10 +572,196 @@ ILboolean iLoadTplInternal(void)
 
 	}
 
-
-
 	ilBindImage(CurName);  // Set to parent image first.
 	return ilFixImage();
 }
 
+
+ILboolean TplGetIndexImage(ILimage *Image, ILuint TexOff, ILuint DataFormat)
+{
+	ILushort	NumPal, ShortPixel;
+	ILubyte		LumVal, BytePixel;
+	ILuint		PalFormat, PalOff, PalBpp, DataOff;
+	ILuint		x, y, xBlock, yBlock, i;
+
+	NumPal = GetBigUShort();
+	iseek(2, IL_SEEK_CUR);  // Do we need to do anything with the 'unpacked' entry?  I see nothing in the specs about it.
+	PalFormat = GetBigUInt();
+
+	// Now we have to find out where the actual palette data is stored.
+	//@TODO: Do we need to set any errors here?
+	PalOff = GetBigUInt();
+	if (iseek(PalOff, IL_SEEK_SET))
+		return IL_FALSE;
+
+	switch (PalFormat)
+	{
+		case TPL_PAL_IA8:
+			Image->Pal.Palette = (ILubyte*)ialloc(NumPal * 4);
+			if (Image->Pal.Palette == NULL)
+				return IL_FALSE;
+			Image->Pal.PalType = IL_PAL_RGBA32;  //@TODO: Use this format natively.
+			Image->Pal.PalSize = NumPal * 4;
+			PalBpp = 4;
+
+			for (i = 0; i < NumPal; i++) {
+				LumVal = igetc();
+				//@TODO: Do proper conversion of luminance, or support this format natively.
+				Image->Pal.Palette[i * 4] = LumVal;  // Assign the luminance value.
+				Image->Pal.Palette[i * 4 + 1] = LumVal;
+				Image->Pal.Palette[i * 4 + 2] = LumVal;
+				Image->Pal.Palette[i * 4 + 3] = igetc();  // Get alpha value.
+			}
+			break;
+
+		case TPL_PAL_RGB565:
+			Image->Pal.Palette = (ILubyte*)ialloc(NumPal * 3);
+			if (Image->Pal.Palette == NULL)
+				return IL_FALSE;
+			Image->Pal.PalType = IL_PAL_RGB24;
+			Image->Pal.PalSize = NumPal * 3;
+			PalBpp = 3;
+
+			for (i = 0; i < NumPal; i++) {
+				ShortPixel = GetBigUShort();
+				// This is mostly the same code as in the TPL_RGB565 case.
+				Image->Pal.Palette[i*3] = ((ShortPixel & 0xF800) >> 8) | ((ShortPixel & 0xE000) >> 13); // Red
+				Image->Pal.Palette[i*3+1] = ((ShortPixel & 0x7E0) >> 3) | ((ShortPixel & 0x600) >> 9); // Green
+				Image->Pal.Palette[i*3+2] = ((ShortPixel & 0x1f) << 3) | ((ShortPixel & 0x1C) >> 2); // Blue
+			}
+			break;
+
+		case TPL_PAL_RGB5A3:
+			Image->Pal.Palette = (ILubyte*)ialloc(NumPal * 4);
+			if (Image->Pal.Palette == NULL)
+				return IL_FALSE;
+			Image->Pal.PalType = IL_PAL_RGBA32;
+			Image->Pal.PalSize = NumPal * 4;
+			PalBpp = 4;
+
+			for (i = 0; i < NumPal; i++) {
+				ShortPixel = GetBigUShort();
+				// This is mostly the same code as in the TPL_RGB565 case.
+				if (ShortPixel & 0x8000) {  // Check MSB.
+					// We have RGB5.
+					Image->Pal.Palette[i*4] = ((ShortPixel & 0x7C00) >> 7) | ((ShortPixel & 0x7000) >> 12); // Red
+					Image->Pal.Palette[i*4+1] = ((ShortPixel & 0x3E0) >> 2) | ((ShortPixel & 0x380) >> 7); // Green
+					Image->Pal.Palette[i*4+2] = ((ShortPixel & 0x1F) << 3) | ((ShortPixel & 0x1C) >> 2); // Blue
+					Image->Pal.Palette[i*4+3] = 0xFF;  // I am just assuming that it is opaque.
+				}
+				else {
+					// We have RGB4A3.
+					Image->Pal.Palette[i*4] = ((ShortPixel & 0x7800) >> 7) | ((ShortPixel & 0x7800) >> 11); // Red
+					Image->Pal.Palette[i*4+1] = ((ShortPixel & 0x0780) >> 3) | ((ShortPixel & 0x0780) >> 7); // Green
+					Image->Pal.Palette[i*4+2] = ((ShortPixel & 0x0078) << 1) | ((ShortPixel & 0x0078) >> 3); // Blue
+					Image->Pal.Palette[i*4+3] = ((ShortPixel & 0x07) << 5) | ((ShortPixel & 0x07) << 2) | (ShortPixel >> 1); // Alpha
+				}
+			}
+			break;
+
+		default:
+			ilSetError(IL_ILLEGAL_FILE_VALUE);
+			return IL_FALSE;
+	}
+
+	// Go back to the texture data.
+	if (iseek(TexOff, IL_SEEK_SET))
+		return IL_FALSE;
+
+	switch (DataFormat)
+	{
+		case TPL_CI4:
+			// 8x8 tiles of 4-bit color indices
+			//  This is the exact same code as the TPL_I4 case.
+			for (y = 0; y < Image->Height; y += 8) {
+				for (x = 0; x < Image->Width; x += 8) {
+					for (yBlock = 0; yBlock < 8; yBlock++) {
+						if ((y + yBlock) >= Image->Height) {
+							iseek(8, IL_SEEK_CUR);  // Entire row of pad bytes skipped.
+							continue;
+						}
+						DataOff = Image->Bps * (y + yBlock) + Image->Bpp * x;
+						for (xBlock = 0; xBlock < 8; xBlock += 2) {
+							BytePixel = igetc();
+							if ((x + xBlock) >= Image->Width)
+								continue;  // Already read the pad byte.
+							Image->Data[DataOff] = (BytePixel & 0xF0) | (BytePixel & 0xF0) >> 4;
+							DataOff++;
+							// We have to do this check again, so we do not go past the last pixel in the image (ex. 1 pixel wide image).
+							if ((x + xBlock) >= Image->Width)
+								continue;  // Already read the pad byte.
+							Image->Data[DataOff+1] = (BytePixel & 0x0F) << 4 | (BytePixel & 0x0F);
+							DataOff++;
+						}
+					}
+				}
+			}
+			break;
+
+		case TPL_CI8:
+			// 8x4 tiles of 8-bit intensity values
+			//  This is the exact same code as the TPL_I8 case.
+			for (y = 0; y < Image->Height; y += 4) {
+				for (x = 0; x < Image->Width; x += 8) {
+					for (yBlock = 0; yBlock < 4; yBlock++) {
+						if ((y + yBlock) >= Image->Height) {
+							iseek(8, IL_SEEK_CUR);  // Entire row of pad bytes skipped.
+							continue;
+						}
+						DataOff = Image->Bps * (y + yBlock) + Image->Bpp * x;
+						for (xBlock = 0; xBlock < 8; xBlock++) {
+							if ((x + xBlock) >= Image->Width) {
+								igetc();  // Skip the pad byte.
+								continue;
+							}
+							Image->Data[DataOff] = igetc();  // Color index
+							DataOff++;
+						}
+					}
+				}
+			}
+			break;
+
+
+		//@TODO: Convert to more formats than just RGBA.
+		case TPL_CI14X2:
+			// 4x4 tiles of 14-bit indices into a palette.  Not supported at all in DevIL, since
+			//  it has a huge palette (> 256 colors).  Convert to RGBA.
+			for (y = 0; y < Image->Height; y += 4) {
+				for (x = 0; x < Image->Width; x += 4) {
+					for (yBlock = 0; yBlock < 4; yBlock++) {
+						if ((y + yBlock) >= Image->Height) {
+							iseek(8, IL_SEEK_CUR);  // Entire row of pad bytes skipped.
+							continue;
+						}
+						DataOff = Image->Bps * (y + yBlock) + Image->Bpp * x;
+						for (xBlock = 0; xBlock < 4; xBlock++) {
+							if ((x + xBlock) >= Image->Width) {
+								GetBigUShort();  // Skip the pad short.
+								continue;
+							}
+							ShortPixel = GetBigUShort();
+							ShortPixel >>= 2;  // Lower 2 bits are padding bits.
+							Image->Data[DataOff] = Image->Pal.Palette[ShortPixel * PalBpp];
+							Image->Data[DataOff+1] = Image->Pal.Palette[ShortPixel * PalBpp + 1];
+							Image->Data[DataOff+2] = Image->Pal.Palette[ShortPixel * PalBpp + 2];
+							if (PalFormat == TPL_PAL_RGB565)
+								Image->Data[DataOff+3] = 0xFF;
+							else
+								Image->Data[DataOff+3] = Image->Pal.Palette[ShortPixel * PalBpp + 3];
+							DataOff++;
+						}
+					}
+				}
+			}
+			// Get rid of the palette, since we no longer need it.
+			ifree(Image->Pal.Palette);
+			Image->Pal.PalType = IL_PAL_NONE;
+			Image->Pal.PalSize = 0;
+			break;
+
+	}
+
+	return IL_TRUE;
+}
 #endif//IL_NO_TPL

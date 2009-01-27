@@ -54,7 +54,7 @@ typedef struct ILpal
 {
 	ILubyte* Palette; // the image palette (if any)
 	ILuint   PalSize; // size of the palette (in bytes)
-	ILenum   PalType; // the palette types below (0x0500 range)
+	ILenum   PalType; // the palette types in il.h (0x0500 range)
 } ILpal;
 
 
