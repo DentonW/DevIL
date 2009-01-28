@@ -156,13 +156,28 @@
 		A36D113D080E92150012BB8B /* il_stack.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D111D080E92150012BB8B /* il_stack.h */; };
 		A36D113E080E92150012BB8B /* il_states.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D111E080E92150012BB8B /* il_states.h */; };
 		A36D113F080E92150012BB8B /* il_targa.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D111F080E92150012BB8B /* il_targa.h */; };
-		A36D1171080E95D60012BB8B /* ilut.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D115F080E95D60012BB8B /* ilut.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A36D1172080E95D60012BB8B /* ilu_region.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1165080E95D60012BB8B /* ilu_region.h */; };
 		A36D1173080E95D60012BB8B /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1166080E95D60012BB8B /* config.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A36D1174080E95D60012BB8B /* il.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1167080E95D60012BB8B /* il.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A36D1175080E95D60012BB8B /* ilu.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D1168080E95D60012BB8B /* ilu.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A36D1176080E95D60012BB8B /* devil_internal_exports.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D116C080E95D60012BB8B /* devil_internal_exports.h */; };
 		A36D1177080E95D60012BB8B /* il_wrap.h in Headers */ = {isa = PBXBuildFile; fileRef = A36D116E080E95D60012BB8B /* il_wrap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EAF51F360F2FB9FE00264BE8 /* il_exr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAF51F2A0F2FB9FE00264BE8 /* il_exr.cpp */; };
+		EAF51F370F2FB9FE00264BE8 /* il_icns.c in Sources */ = {isa = PBXBuildFile; fileRef = EAF51F2B0F2FB9FE00264BE8 /* il_icns.c */; };
+		EAF51F380F2FB9FE00264BE8 /* il_iff.c in Sources */ = {isa = PBXBuildFile; fileRef = EAF51F2C0F2FB9FE00264BE8 /* il_iff.c */; };
+		EAF51F390F2FB9FE00264BE8 /* il_jp2.c in Sources */ = {isa = PBXBuildFile; fileRef = EAF51F2D0F2FB9FE00264BE8 /* il_jp2.c */; };
+		EAF51F3A0F2FB9FE00264BE8 /* il_nvidia.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAF51F2E0F2FB9FE00264BE8 /* il_nvidia.cpp */; };
+		EAF51F3B0F2FB9FE00264BE8 /* il_size.c in Sources */ = {isa = PBXBuildFile; fileRef = EAF51F2F0F2FB9FE00264BE8 /* il_size.c */; };
+		EAF51F3C0F2FB9FE00264BE8 /* il_squish.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAF51F300F2FB9FE00264BE8 /* il_squish.cpp */; };
+		EAF51F3D0F2FB9FE00264BE8 /* il_sun.c in Sources */ = {isa = PBXBuildFile; fileRef = EAF51F310F2FB9FE00264BE8 /* il_sun.c */; };
+		EAF51F3E0F2FB9FE00264BE8 /* il_tpl.c in Sources */ = {isa = PBXBuildFile; fileRef = EAF51F320F2FB9FE00264BE8 /* il_tpl.c */; };
+		EAF51F3F0F2FB9FE00264BE8 /* il_vtf.c in Sources */ = {isa = PBXBuildFile; fileRef = EAF51F330F2FB9FE00264BE8 /* il_vtf.c */; };
+		EAF51F400F2FB9FE00264BE8 /* il_wbmp.c in Sources */ = {isa = PBXBuildFile; fileRef = EAF51F340F2FB9FE00264BE8 /* il_wbmp.c */; };
+		EAF51F410F2FB9FE00264BE8 /* il_wdp.c in Sources */ = {isa = PBXBuildFile; fileRef = EAF51F350F2FB9FE00264BE8 /* il_wdp.c */; };
+		EAF51F590F2FCF5400264BE8 /* ilu_err-arabic.h in Headers */ = {isa = PBXBuildFile; fileRef = EAF51F580F2FCF5400264BE8 /* ilu_err-arabic.h */; };
+		EAF51F5F0F2FCF6A00264BE8 /* ilu_err-dutch.h in Headers */ = {isa = PBXBuildFile; fileRef = EAF51F5A0F2FCF6A00264BE8 /* ilu_err-dutch.h */; };
+		EAF51F600F2FCF6A00264BE8 /* ilu_err-english.h in Headers */ = {isa = PBXBuildFile; fileRef = EAF51F5B0F2FCF6A00264BE8 /* ilu_err-english.h */; };
+		EAF51F610F2FCF6A00264BE8 /* ilu_err-german.h in Headers */ = {isa = PBXBuildFile; fileRef = EAF51F5C0F2FCF6A00264BE8 /* ilu_err-german.h */; };
+		EAF51F620F2FCF6A00264BE8 /* ilu_err-japanese.h in Headers */ = {isa = PBXBuildFile; fileRef = EAF51F5D0F2FCF6A00264BE8 /* ilu_err-japanese.h */; };
+		EAF51F630F2FCF6A00264BE8 /* ilu_err-spanish.h in Headers */ = {isa = PBXBuildFile; fileRef = EAF51F5E0F2FCF6A00264BE8 /* ilu_err-spanish.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -371,6 +386,24 @@
 		A39B3BAD081C189200115B25 /* altivec_typeconversion.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = altivec_typeconversion.c; sourceTree = "<group>"; };
 		A39B3BAE081C18DF00115B25 /* altivec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = altivec.h; sourceTree = "<group>"; };
 		EA942B270E79433800D95BD5 /* ilu_alloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ilu_alloc.h; path = "../../src-ILU/include/ilu_alloc.h"; sourceTree = SOURCE_ROOT; };
+		EAF51F2A0F2FB9FE00264BE8 /* il_exr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = il_exr.cpp; sourceTree = "<group>"; };
+		EAF51F2B0F2FB9FE00264BE8 /* il_icns.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = il_icns.c; sourceTree = "<group>"; };
+		EAF51F2C0F2FB9FE00264BE8 /* il_iff.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = il_iff.c; sourceTree = "<group>"; };
+		EAF51F2D0F2FB9FE00264BE8 /* il_jp2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = il_jp2.c; sourceTree = "<group>"; };
+		EAF51F2E0F2FB9FE00264BE8 /* il_nvidia.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = il_nvidia.cpp; sourceTree = "<group>"; };
+		EAF51F2F0F2FB9FE00264BE8 /* il_size.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = il_size.c; sourceTree = "<group>"; };
+		EAF51F300F2FB9FE00264BE8 /* il_squish.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = il_squish.cpp; sourceTree = "<group>"; };
+		EAF51F310F2FB9FE00264BE8 /* il_sun.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = il_sun.c; sourceTree = "<group>"; };
+		EAF51F320F2FB9FE00264BE8 /* il_tpl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = il_tpl.c; sourceTree = "<group>"; };
+		EAF51F330F2FB9FE00264BE8 /* il_vtf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = il_vtf.c; sourceTree = "<group>"; };
+		EAF51F340F2FB9FE00264BE8 /* il_wbmp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = il_wbmp.c; sourceTree = "<group>"; };
+		EAF51F350F2FB9FE00264BE8 /* il_wdp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = il_wdp.c; sourceTree = "<group>"; };
+		EAF51F580F2FCF5400264BE8 /* ilu_err-arabic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ilu_err-arabic.h"; path = "../../src-ILU/include/ilu_error/ilu_err-arabic.h"; sourceTree = SOURCE_ROOT; };
+		EAF51F5A0F2FCF6A00264BE8 /* ilu_err-dutch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ilu_err-dutch.h"; path = "../../src-ILU/include/ilu_error/ilu_err-dutch.h"; sourceTree = SOURCE_ROOT; };
+		EAF51F5B0F2FCF6A00264BE8 /* ilu_err-english.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ilu_err-english.h"; path = "../../src-ILU/include/ilu_error/ilu_err-english.h"; sourceTree = SOURCE_ROOT; };
+		EAF51F5C0F2FCF6A00264BE8 /* ilu_err-german.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ilu_err-german.h"; path = "../../src-ILU/include/ilu_error/ilu_err-german.h"; sourceTree = SOURCE_ROOT; };
+		EAF51F5D0F2FCF6A00264BE8 /* ilu_err-japanese.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ilu_err-japanese.h"; path = "../../src-ILU/include/ilu_error/ilu_err-japanese.h"; sourceTree = SOURCE_ROOT; };
+		EAF51F5E0F2FCF6A00264BE8 /* ilu_err-spanish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ilu_err-spanish.h"; path = "../../src-ILU/include/ilu_error/ilu_err-spanish.h"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -406,7 +439,6 @@
 		08FB7794FE84155DC02AAC07 /* DevIL */ = {
 			isa = PBXGroup;
 			children = (
-				EA942B270E79433800D95BD5 /* ilu_alloc.h */,
 				A38C3BE30818FAB2008EE126 /* altivec */,
 				A36D1100080E91B20012BB8B /* IL */,
 				A32D489B0810233E008510AC /* ILU */,
@@ -505,6 +537,8 @@
 		A32D48D60810234E008510AC /* include */ = {
 			isa = PBXGroup;
 			children = (
+				EAF51F570F2FCF3A00264BE8 /* ilu_error */,
+				EA942B270E79433800D95BD5 /* ilu_alloc.h */,
 				A32D48D80810234E008510AC /* include */,
 				A32D48D90810234E008510AC /* ilu_filter.h */,
 				A32D48DA0810234E008510AC /* ilu_internal.h */,
@@ -572,6 +606,18 @@
 		A36D10DB080E85070012BB8B /* src */ = {
 			isa = PBXGroup;
 			children = (
+				EAF51F2A0F2FB9FE00264BE8 /* il_exr.cpp */,
+				EAF51F2B0F2FB9FE00264BE8 /* il_icns.c */,
+				EAF51F2C0F2FB9FE00264BE8 /* il_iff.c */,
+				EAF51F2D0F2FB9FE00264BE8 /* il_jp2.c */,
+				EAF51F2E0F2FB9FE00264BE8 /* il_nvidia.cpp */,
+				EAF51F300F2FB9FE00264BE8 /* il_squish.cpp */,
+				EAF51F310F2FB9FE00264BE8 /* il_sun.c */,
+				EAF51F320F2FB9FE00264BE8 /* il_tpl.c */,
+				EAF51F330F2FB9FE00264BE8 /* il_vtf.c */,
+				EAF51F340F2FB9FE00264BE8 /* il_wbmp.c */,
+				EAF51F350F2FB9FE00264BE8 /* il_wdp.c */,
+				EAF51F2F0F2FB9FE00264BE8 /* il_size.c */,
 				A36D106F080E84D70012BB8B /* il_alloc.c */,
 				A36D1070080E84D70012BB8B /* il_bits.c */,
 				A36D1071080E84D70012BB8B /* il_bmp.c */,
@@ -689,6 +735,19 @@
 			path = ../../altivec;
 			sourceTree = SOURCE_ROOT;
 		};
+		EAF51F570F2FCF3A00264BE8 /* ilu_error */ = {
+			isa = PBXGroup;
+			children = (
+				EAF51F5A0F2FCF6A00264BE8 /* ilu_err-dutch.h */,
+				EAF51F5B0F2FCF6A00264BE8 /* ilu_err-english.h */,
+				EAF51F5C0F2FCF6A00264BE8 /* ilu_err-german.h */,
+				EAF51F5D0F2FCF6A00264BE8 /* ilu_err-japanese.h */,
+				EAF51F5E0F2FCF6A00264BE8 /* ilu_err-spanish.h */,
+				EAF51F580F2FCF5400264BE8 /* ilu_err-arabic.h */,
+			);
+			name = ilu_error;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -701,6 +760,11 @@
 				A32D48E40810234E008510AC /* ilu_mipmap.h in Headers */,
 				A32D48E50810234E008510AC /* ilu_region.h in Headers */,
 				A32D48E60810234E008510AC /* ilu_states.h in Headers */,
+				EAF51F5F0F2FCF6A00264BE8 /* ilu_err-dutch.h in Headers */,
+				EAF51F600F2FCF6A00264BE8 /* ilu_err-english.h in Headers */,
+				EAF51F610F2FCF6A00264BE8 /* ilu_err-german.h in Headers */,
+				EAF51F620F2FCF6A00264BE8 /* ilu_err-japanese.h in Headers */,
+				EAF51F630F2FCF6A00264BE8 /* ilu_err-spanish.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -748,13 +812,11 @@
 				A36D113D080E92150012BB8B /* il_stack.h in Headers */,
 				A36D113E080E92150012BB8B /* il_states.h in Headers */,
 				A36D113F080E92150012BB8B /* il_targa.h in Headers */,
-				A36D1171080E95D60012BB8B /* ilut.h in Headers */,
-				A36D1172080E95D60012BB8B /* ilu_region.h in Headers */,
 				A36D1173080E95D60012BB8B /* config.h in Headers */,
 				A36D1174080E95D60012BB8B /* il.h in Headers */,
-				A36D1175080E95D60012BB8B /* ilu.h in Headers */,
 				A36D1176080E95D60012BB8B /* devil_internal_exports.h in Headers */,
 				A36D1177080E95D60012BB8B /* il_wrap.h in Headers */,
+				EAF51F590F2FCF5400264BE8 /* ilu_err-arabic.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -976,6 +1038,18 @@
 				A36D10D7080E84D80012BB8B /* il_utility.c in Sources */,
 				A36D10D8080E84D80012BB8B /* il_wal.c in Sources */,
 				A36D10D9080E84D80012BB8B /* il_xpm.c in Sources */,
+				EAF51F360F2FB9FE00264BE8 /* il_exr.cpp in Sources */,
+				EAF51F370F2FB9FE00264BE8 /* il_icns.c in Sources */,
+				EAF51F380F2FB9FE00264BE8 /* il_iff.c in Sources */,
+				EAF51F390F2FB9FE00264BE8 /* il_jp2.c in Sources */,
+				EAF51F3A0F2FB9FE00264BE8 /* il_nvidia.cpp in Sources */,
+				EAF51F3B0F2FB9FE00264BE8 /* il_size.c in Sources */,
+				EAF51F3C0F2FB9FE00264BE8 /* il_squish.cpp in Sources */,
+				EAF51F3D0F2FB9FE00264BE8 /* il_sun.c in Sources */,
+				EAF51F3E0F2FB9FE00264BE8 /* il_tpl.c in Sources */,
+				EAF51F3F0F2FB9FE00264BE8 /* il_vtf.c in Sources */,
+				EAF51F400F2FB9FE00264BE8 /* il_wbmp.c in Sources */,
+				EAF51F410F2FB9FE00264BE8 /* il_wdp.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
