@@ -1395,10 +1395,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src-IL\include\il_endian.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\il\ilut.h"
 				>
 			</File>
