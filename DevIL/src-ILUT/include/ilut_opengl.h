@@ -15,13 +15,9 @@
 
 #include "ilut_internal.h"
 
-void iGLSetMaxW(ILuint Width);
-void iGLSetMaxH(ILuint Height);
-
 #ifndef min
 #define min(a, b)	(((a) < (b)) ? (a) : (b))
 #endif
-
 
 #ifdef ILUT_USE_OPENGL
 ILenum    ilutGLFormat(ILenum, ILubyte);

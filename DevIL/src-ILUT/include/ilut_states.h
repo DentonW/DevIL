@@ -40,6 +40,9 @@ typedef struct ILUT_STATES
 	ILboolean	ilutUseS3TC;
 	ILboolean	ilutGenS3TC;
 	ILboolean	ilutAutodetectTextureTarget;
+	ILint		MaxTexW;
+	ILint		MaxTexH;
+	ILint		MaxTexD;
 
 	// D3D states
 	ILuint		D3DMipLevels;

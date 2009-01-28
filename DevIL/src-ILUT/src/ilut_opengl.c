@@ -13,28 +13,7 @@
 
 #include "ilut_opengl.h"
 
-static ILint MaxTexW = 256, MaxTexH = 256, MaxTexD = 1;  // maximum texture widths, heights and depths
-
-void iGLSetMaxW(ILuint Width)
-{
-	MaxTexW = Width;
-	return;
-}
-
-void iGLSetMaxH(ILuint Height)
-{
-	MaxTexH = Height;
-	return;
-}
-
-void iGLSetMaxD(ILuint Depth)
-{
-	MaxTexD = Depth;
-	return;
-}
-
 #ifdef ILUT_USE_OPENGL
-
 
 #include <stdio.h>
 #include <string.h>
@@ -117,6 +96,8 @@ static ILboolean HasNonPowerOfTwoHardware = IL_FALSE;
 //	Call this after OpenGL has initialized.
 ILboolean ilutGLInit()
 {
+	ILint MaxTexW, MaxTexH, MaxTexD = 1;
+
 	// Should we really be setting all this ourselves?  Seems too much like a glu(t) approach...
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -180,6 +161,10 @@ ILboolean ilutGLInit()
 		MaxTexW = MaxTexH = 256;  // Trying this because of the VooDoo series of cards.
 		MaxTexD = 1;
 	}
+
+	ilutSetInteger(ILUT_MAXTEX_WIDTH, MaxTexW);
+	ilutSetInteger(ILUT_MAXTEX_HEIGHT, MaxTexH);
+	ilutSetInteger(ILUT_MAXTEX_DEPTH, MaxTexD);
 
 	if (IsExtensionSupported("GL_ARB_texture_cube_map"))
 		HasCubemapHardware = IL_TRUE;
@@ -530,6 +515,10 @@ ILimage* MakeGLCompliant2D(ILimage *Src)
 	ILenum		Filter;
 	ILubyte		*Flipped;
 	ILboolean   need_resize = IL_FALSE;
+	ILint		MaxTexW, MaxTexH;
+
+	MaxTexW = ilutGetInteger(ILUT_MAXTEX_WIDTH);
+	MaxTexH = ilutGetInteger(ILUT_MAXTEX_HEIGHT);
 	
 	if (Src->Pal.Palette != NULL && Src->Pal.PalSize != 0 && Src->Pal.PalType != IL_PAL_NONE) {
 		//ilSetCurImage(Src);
@@ -608,7 +597,12 @@ ILimage* MakeGLCompliant3D(ILimage *Src)
 	ILenum		Filter;
 	ILubyte		*Flipped;
 	ILboolean   need_resize = IL_FALSE;
-	
+	ILint		MaxTexW, MaxTexH, MaxTexD;
+
+	MaxTexW = ilutGetInteger(ILUT_MAXTEX_WIDTH);
+	MaxTexH = ilutGetInteger(ILUT_MAXTEX_HEIGHT);
+	MaxTexD = ilutGetInteger(ILUT_MAXTEX_DEPTH);
+
 	if (Src->Pal.Palette != NULL && Src->Pal.PalSize != 0 && Src->Pal.PalType != IL_PAL_NONE) {
 		//ilSetCurImage(Src);
 		Dest = iConvertImage(Src, ilGetPalBaseType(Src->Pal.PalType), IL_UNSIGNED_BYTE);
