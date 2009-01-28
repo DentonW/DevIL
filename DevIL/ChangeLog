@@ -268,4 +268,7 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* ilut_opengl.c: Removed iGLSetMaxW/H/D and MaxTexW/H/D.
 	* ilut_states.h/ilut_states.c: Added MaxTexW/H/D to ILUT_STATES.
 	* ilut_states.c (ilutGetIntegerv): Added ILUT_MAXTEX_WIDTH/HEIGHT/DEPTH.
+
+2009-01-28 Denton Woods <doomwiz@users.sf.net>
+	* il_tpl.c: Added line 219.
 	

@@ -10,6 +10,9 @@ By next release:
 - Update MSVC8 solutions to include il_size.c.
 - Change cubemap and mipmap code.
 - Test ilutConvertToSDLSurface.
+- Mention Unicode and 64-bit compatibility on website.
+- Update DevIL website with file formats (psd-saving, etc.).
+- Keep .tpl DXT data.
 
 
 Easier:
@@ -20,7 +23,6 @@ Easier:
 - Get rid of check for precache.
 - If IL_NO_JP2 is defined, lines 306-307 shouldn't just cause the entire thing to fail.  We should just skip that entry.
 - Change ilConvertBuffer to be able to convert paletted images as well.
-- Update DevIL website with file formats (psd-saving, etc.).
 - Fix MSVC8 solutions for text files.
 - ilSavePnmF needs to set FName if not called by ilSavePnm.
 - Make TPL_CMP case in iLoadTplInternal code more modular (also in il_dds.c).

@@ -211,11 +211,12 @@ ILboolean iLoadTplInternal(void)
 		return IL_FALSE;
 	}
 
-	// Points to the beginning of the texture headers.
+	// Points to the beginning of the texture header directory.
 	Pos = itell();
 
 	for (n = 0; n < Header.nTextures; n++) {
-		//@TODO: Read more than one image if it exists.
+		// Go back to the texture header directory for texture number n+1.
+		iseek(Pos + n * 8, IL_SEEK_SET);
 		TexOff = GetBigUInt();
 		PalOff = GetBigUInt();
 		// Go to the texture header.
