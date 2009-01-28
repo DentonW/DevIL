@@ -264,4 +264,5 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* il_tpl.c: Added support for many more TPL data formats.
 	* il_tpl.c: Added support for color indexed data formats.
 	* il_tpl.c: Added support for multiple images in a file.
+	* il_sdl.c (ilutConvertToSDLSurface): Overhauled this code.
 	

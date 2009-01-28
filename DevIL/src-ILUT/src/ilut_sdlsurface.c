@@ -15,6 +15,7 @@
 #include "ilut_internal.h"
 #ifdef ILUT_USE_SDL
 #include <SDL.h>
+//#include "endian.h"
 
 #ifdef  _MSC_VER
 	#pragma comment(lib, "sdl.lib")
@@ -25,18 +26,19 @@ int rmask, gmask, bmask, amask;
 
 void InitSDL()
 {
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+//#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+#ifdef __BIG_ENDIAN__
 	isBigEndian = 1;
-	rmask = 0x000000FF;
-	gmask = 0x0000FF00;
-	bmask = 0x00FF0000;
-	amask = 0;
+    rmask = 0xFF000000;
+    gmask = 0x00FF0000;
+    bmask = 0x0000FF00;
+    amask = 0x000000FF;
 #else
 	isBigEndian = 0;
-	rmask = 0x00FF0000;
-	gmask = 0x0000FF00;
-	bmask = 0x000000FF;
-	amask = 0;
+    rmask = 0x000000FF;
+    gmask = 0x0000FF00;
+    bmask = 0x00FF0000;
+    amask = 0xFF000000;
 #endif
 	return;
 }
@@ -46,13 +48,14 @@ void InitSDL()
 //ILpal *Pal;
 
 // Does not account for converting luminance...
-SDL_Surface * ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags)
+SDL_Surface *ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags)
 {
-	SDL_Surface *Bitmap;
-	ILuint	i = 0, Pad, BppPal;
-	ILubyte	*Dest;
+	SDL_Surface *Bitmap = NULL;
+	ILuint		i = 0, Pad, BppPal;
+	ILubyte		*Dest, *Data;
+	ILimage		*Image;
 
-	ilutCurImage = ilGetCurImage();
+	Image = ilutCurImage = ilGetCurImage();
 	if (ilutCurImage == NULL) {
 		ilSetError(ILUT_ILLEGAL_OPERATION);
 		return NULL;
@@ -62,34 +65,62 @@ SDL_Surface * ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags)
 
 	// Should be IL_BGR(A).
 	if (ilutCurImage->Format == IL_RGB || ilutCurImage->Format == IL_RGBA) {
-		if (!isBigEndian)
-			iluSwapColours();
+		if (!isBigEndian) {
+			//iluSwapColours();  // No need to swap colors.  Just use the bitmasks.
+			rmask = 0x00FF0000;
+			gmask = 0x0000FF00;
+			bmask = 0x000000FF;
+		}
+	}
+	else if (ilutCurImage->Format == IL_BGR || ilutCurImage->Format == IL_BGRA) {
+		if (isBigEndian) {
+			rmask = 0x0000FF00;
+			gmask = 0x00FF0000;
+			bmask = 0xFF000000;
+		}
+	}
+	else if (Image->Format != IL_COLOR_INDEX) {  // We have to convert the image.
+		#ifdef __BIG_ENDIAN__
+		Image = iConvertImage(Image, IL_RGBA, IL_UNSIGNED_BYTE);
+		#else
+		Image = iConvertImage(Image, IL_BGRA, IL_UNSIGNED_BYTE);
+		#endif
+		if (Image == NULL)
+			return NULL;
 	}
 
-	if (ilutCurImage->Origin == IL_ORIGIN_LOWER_LEFT)
-		iluFlipImage();
-	if (ilutCurImage->Type > IL_UNSIGNED_BYTE) {}  // Can't do anything about this right now...
-	if (ilutCurImage->Type == IL_BYTE) {}  // Can't do anything about this right now...
+	if (Image->Type != IL_UNSIGNED_BYTE) {
+		// We do not have to worry about Image != iCurImage at this point, because if it was converted,
+		//  it was converted to a type of unsigned byte.
+		Image = iConvertImage(Image, Image->Format, IL_UNSIGNED_BYTE);
+		if (Image == NULL)
+			return NULL;
+	}
 
-	Bitmap = SDL_CreateRGBSurface(flags,ilutCurImage->Width,ilutCurImage->Height,ilutCurImage->Bpp * 8,
+	Data = Image->Data;
+	if (Image->Origin == IL_ORIGIN_LOWER_LEFT) {
+		Data = iGetFlipped(Image);
+		if (Data == NULL)
+			goto done;
+	}
+
+	Bitmap = SDL_CreateRGBSurface(flags, Image->Width, Image->Height, Image->Bpp * 8,
 					rmask,gmask,bmask,amask);
-
-	if (Bitmap == NULL) {
-		return IL_FALSE;
-	}
+	if (Bitmap == NULL)
+		goto done;
 
 	if (SDL_MUSTLOCK(Bitmap))
 		SDL_LockSurface(Bitmap);
 
-	Pad = Bitmap->pitch - ilutCurImage->Bps;
+	Pad = Bitmap->pitch - Image->Bps;
 	if (Pad == 0) {
-		memcpy(Bitmap->pixels, ilutCurImage->Data, ilutCurImage->SizeOfData);
+		memcpy(Bitmap->pixels, Data, Image->SizeOfData);
 	}
 	else {  // Must pad the lines on some images.
 		Dest = Bitmap->pixels;
-		for (i = 0; i < ilutCurImage->Height; i++) {
-			memcpy(Dest, ilutCurImage->Data + i * ilutCurImage->Bps, ilutCurImage->Bps);
-			imemclear(Dest + ilutCurImage->Bps, Pad);
+		for (i = 0; i < Image->Height; i++) {
+			memcpy(Dest, Data + i * Image->Bps, Image->Bps);
+			imemclear(Dest + Image->Bps, Pad);
 			Dest += Bitmap->pitch;
 		}
 	}
@@ -97,8 +128,8 @@ SDL_Surface * ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags)
 	if (SDL_MUSTLOCK(Bitmap))
 		SDL_UnlockSurface(Bitmap);
 
-	if (ilutCurImage->Bpp == 1) {
-		BppPal = ilGetBppPal(ilutCurImage->Pal.PalType);
+	if (Image->Format == IL_COLOR_INDEX) {
+		BppPal = ilGetBppPal(Image->Pal.PalType);
 		switch (ilutCurImage->Pal.PalType)
 		{
 			case IL_PAL_RGB24:
@@ -108,7 +139,7 @@ SDL_Surface * ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags)
 					(Bitmap->format)->palette->colors[i].r = ilutCurImage->Pal.Palette[i*BppPal+0];
 					(Bitmap->format)->palette->colors[i].g = ilutCurImage->Pal.Palette[i*BppPal+1];
 					(Bitmap->format)->palette->colors[i].b = ilutCurImage->Pal.Palette[i*BppPal+2];
-					(Bitmap->format)->palette->colors[i].unused = 255;
+					(Bitmap->format)->palette->colors[i].unused = 0xFF;
 				}
 				break;
 			case IL_PAL_BGR24:
@@ -118,7 +149,7 @@ SDL_Surface * ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags)
 					(Bitmap->format)->palette->colors[i].b = ilutCurImage->Pal.Palette[i*BppPal+0];
 					(Bitmap->format)->palette->colors[i].g = ilutCurImage->Pal.Palette[i*BppPal+1];
 					(Bitmap->format)->palette->colors[i].r = ilutCurImage->Pal.Palette[i*BppPal+2];
-					(Bitmap->format)->palette->colors[i].unused = 255;
+					(Bitmap->format)->palette->colors[i].unused = 0xFF;
 				}
 				break;
 			default:
@@ -126,7 +157,12 @@ SDL_Surface * ILAPIENTRY ilutConvertToSDLSurface(unsigned int flags)
 		}
 	}
 
-	return Bitmap;
+done:
+	if (Data != Image->Data)
+		ifree(Data);  // This is flipped data.
+	if (Image != ilutCurImage)
+		ilCloseImage(Image);  // This is a converted image.
+	return Bitmap;  // This is NULL if there was an error.
 }
 
 

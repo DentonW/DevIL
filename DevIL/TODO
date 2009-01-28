@@ -8,6 +8,8 @@ By next release:
 - Add il_tpl.c to MSVC8 projects.
 - Change version numbers.
 - Update MSVC8 solutions to include il_size.c.
+- Change cubemap and mipmap code.
+- Test ilutConvertToSDLSurface.
 
 
 Easier:
@@ -22,6 +24,7 @@ Easier:
 - Fix MSVC8 solutions for text files.
 - ilSavePnmF needs to set FName if not called by ilSavePnm.
 - Make TPL_CMP case in iLoadTplInternal code more modular (also in il_dds.c).
+- Get rid of iluSwapColours call in ilutConvertToSDLSurface.
 
 
 More involved:
@@ -81,7 +84,7 @@ More involved:
 - Allow more formats for saving .tga (does not do IL_ALPHA for instance) - also in iTargaSize.
   Make sure iConvertImage is called.  Right now, it would not be.
 - Find test images for all .tpl formats.
-- Create new palette types for luminance, luminance-alpha and alpha (.tpl has luminance-alpha).
+- Create new palette types for luminance, luminance-alpha and alpha (.tpl has luminance-alpha) (also change ilutConvertToSDLSurface and maybe others).
 
 
 Lots of work:
