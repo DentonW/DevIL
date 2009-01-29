@@ -27,6 +27,8 @@ Easier:
 - ilSavePnmF needs to set FName if not called by ilSavePnm.
 - Make TPL_CMP case in iLoadTplInternal code more modular (also in il_dds.c).
 - Get rid of iluSwapColours call in ilutConvertToSDLSurface.
+- Use GL/glext.h.
+- Update Eclipse projects.
 
 
 More involved:
@@ -85,6 +87,8 @@ More involved:
 - Scan line table for RLE .tga files.
 - Allow more formats for saving .tga (does not do IL_ALPHA for instance) - also in iTargaSize.
   Make sure iConvertImage is called.  Right now, it would not be.
+- XBM support.
+- Check XPM support for different types: http://en.wikipedia.org/wiki/XPM_(image_format)
 - Find test images for all .tpl formats.
 - Create new palette types for luminance, luminance-alpha and alpha (.tpl has luminance-alpha) (also change ilutConvertToSDLSurface and maybe others).
 

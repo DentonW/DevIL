@@ -254,6 +254,7 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* Removed .cvsignore files from SVN.
 	* il_bits.c:65: Commented out icloser call.
 	* include/IL/DevIL.i: Removed IL/ prefix on header filenames.
+	* include/IL/build-python and build-lua: Updated paths.
 	* projects folder: Renamed msvc to msvc9.
 	* il_tpl.c: Added for TPL support.
 	* il_io.c: Added function calls for TPL support.
@@ -271,4 +272,4 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 
 2009-01-28 Denton Woods <doomwiz@users.sf.net>
 	* il_tpl.c: Added line 219.
-	
+
