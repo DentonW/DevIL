@@ -274,9 +274,9 @@ ILboolean iLoadDdsCubemapInternal()
 	}
 
 	startImage = Image;
-	// run through cube map possibilities
+	// Run through cube map possibilities
 	for (i = 0; i < CUBEMAP_SIDES; i++) {
-		// reset each time
+		// Reset each time
 		Width = Head.Width;
 		Height = Head.Height;
 		Depth = Head.Depth;
@@ -294,8 +294,8 @@ ILboolean iLoadDdsCubemapInternal()
 					|| CompFormat == PF_R32F
 					|| CompFormat == PF_G32R32F
 					|| CompFormat == PF_A32B32G32R32F) {
-					//DevIL's format autodetection doesn't work for
-					//float images...correct this
+					// DevIL's format autodetection doesn't work for
+					//  float images...correct this.
 					Image->Type = IL_FLOAT;
 					Image->Bpp = Channels;
 				}

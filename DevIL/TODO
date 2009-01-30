@@ -5,17 +5,13 @@ DevIL TODO:
 Denton:
 
 By next release:
-- Add il_tpl.c to MSVC8 projects.
 - Change version numbers.
-- Update MSVC8 solutions to include il_size.c.
-- Test ilutConvertToSDLSurface.
 - Keep .tpl DXT data.
-- Test DDS mipmaps and cubemaps (modified DDSView for instance?).
 - Update docs with next DXT code, new mipmap/cubemap access, new SaveL code.
-- Put my utilities in SVN.
 - Mention Unicode and 64-bit compatibility on website.
 - Update DevIL website with file formats (psd-saving, etc.).
 - Add Nebula Device to projects page.
+- DevIL x64 DLL Install to SVN
 
 
 Easier:
