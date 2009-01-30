@@ -286,4 +286,8 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* il_vtf.c (VtfInitMipmaps): Changed to reflect the new mipmap arrangement as well.
 	* il_wal.c:141,142: Changed ->Next to ->Mipmaps.
 	* il_wal.c: Cleaned up the formatting a bit.
+	* il_stack.c (ilActiveMipmap): Changed ->Next to ->Mipmaps.
+	* il_stack.c (ilActiveImage/Mipmap/Face/Layer): Added another check for NULL, changed error.
+	  Changed order of statements in for loop.  This leads to much much less in the way of
+	  ilSetError calls, since we do not have iCurImage == NULL.
 	

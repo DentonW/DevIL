@@ -267,11 +267,8 @@ ILboolean iLoadDdsCubemapInternal()
 	CompData = NULL;
 
 	Bpp = iCompFormatToBpp(CompFormat);
-
 	Channels = iCompFormatToChannelCount(CompFormat);
-
 	Bpc = iCompFormatToBpc(CompFormat);
-
 	if (CompFormat == PF_LUMINANCE && Head.RGBBitCount == 16 && Head.RBitMask == 0xFFFF) { //@TODO: This is a HACK.
 		Bpc = 2; Bpp = 2;
 	}

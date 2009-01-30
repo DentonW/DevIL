@@ -8,14 +8,14 @@ By next release:
 - Add il_tpl.c to MSVC8 projects.
 - Change version numbers.
 - Update MSVC8 solutions to include il_size.c.
-- Change cubemap and mipmap code - what formats left?
 - Test ilutConvertToSDLSurface.
-- Mention Unicode and 64-bit compatibility on website.
-- Update DevIL website with file formats (psd-saving, etc.).
 - Keep .tpl DXT data.
 - Test DDS mipmaps and cubemaps (modified DDSView for instance?).
 - Update docs with next DXT code, new mipmap/cubemap access, new SaveL code.
 - Put my utilities in SVN.
+- Mention Unicode and 64-bit compatibility on website.
+- Update DevIL website with file formats (psd-saving, etc.).
+- Add Nebula Device to projects page.
 
 
 Easier:
@@ -34,7 +34,8 @@ Easier:
 - Update Eclipse projects.
 - Add Code::Blocks projects.
 - Check to make sure all VTF formats are supported.
-- From line 420 of VTFFile.c of VTFLib, we need to find out sphere or cube by the first frame number .
+- From line 420 of VTFFile.c of VTFLib, we need to find out sphere or cube by the first frame number.
+- Look at DDSTextureLoader.cpp for new DDS formats.
 
 
 More involved:
@@ -156,7 +157,6 @@ Questions:
 - Why is IL_HALF even used in ilut_directx9.c?
 - Should iluScale act on faces and mipmaps?
 - Fix problems loading .dds files on Big Endian machines (still a problem or not?)
-- Reimplement DXT2/DXT4 saving?
 - Should we be calculating DXT endpoints before converting data to 565 format?
 - Use Extreme DXT compression code?
 - Support half data internally?

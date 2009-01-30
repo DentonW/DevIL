@@ -353,7 +353,6 @@ ILuint iGetActiveNum(ILenum Type)
 	}
 
 	BaseImage = iGetBaseImage();
-
 	if (BaseImage == iCurImage)
 		return 0;
 

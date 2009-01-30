@@ -54,7 +54,8 @@ void ILAPIENTRY ilGenImages(ILsizei Num, ILuint *Images)
 	return;
 }
 
-ILuint ILAPIENTRY ilGenImage() {
+ILuint ILAPIENTRY ilGenImage()
+{
     ILuint i;
     ilGenImages(1,&i);
     return i;
@@ -283,13 +284,19 @@ ILboolean ILAPIENTRY ilActiveMipmap(ILuint Number)
 
     iTempImage = iCurImage;
 	iCurImage = iCurImage->Mipmaps;
+	if (iCurImage == NULL) {
+		iCurImage = iTempImage;
+		ilSetError(IL_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
 	for (Current = 1; Current < Number; Current++) {
+		iCurImage = iCurImage->Mipmaps;
 		if (iCurImage == NULL) {
-			ilSetError(IL_INTERNAL_ERROR);
+			ilSetError(IL_ILLEGAL_OPERATION);
 			iCurImage = iTempImage;
 			return IL_FALSE;
 		}
-		iCurImage = iCurImage->Next;
 	}
 
 	ParentImage = IL_FALSE;
@@ -315,14 +322,20 @@ ILboolean ILAPIENTRY ilActiveImage(ILuint Number)
 
     iTempImage = iCurImage;
 	iCurImage = iCurImage->Next;
+	if (iCurImage == NULL) {
+		iCurImage = iTempImage;
+		ilSetError(IL_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
 	Number--;  // Skip 0 (parent image)
 	for (Current = 0; Current < Number; Current++) {
+		iCurImage = iCurImage->Next;
 		if (iCurImage == NULL) {
-			ilSetError(IL_INTERNAL_ERROR);
+			ilSetError(IL_ILLEGAL_OPERATION);
 			iCurImage = iTempImage;
 			return IL_FALSE;
 		}
-		iCurImage = iCurImage->Next;
 	}
 
 	ParentImage = IL_FALSE;
@@ -348,14 +361,20 @@ ILboolean ILAPIENTRY ilActiveFace(ILuint Number)
 
     iTempImage = iCurImage;
 	iCurImage = iCurImage->Faces;
+	if (iCurImage == NULL) {
+		iCurImage = iTempImage;
+		ilSetError(IL_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
 	//Number--;  // Skip 0 (parent image)
 	for (Current = 1; Current < Number; Current++) {
+		iCurImage = iCurImage->Faces;
 		if (iCurImage == NULL) {
-			ilSetError(IL_INTERNAL_ERROR);
+			ilSetError(IL_ILLEGAL_OPERATION);
 			iCurImage = iTempImage;
 			return IL_FALSE;
 		}
-		iCurImage = iCurImage->Faces;
 	}
 
 	ParentImage = IL_FALSE;
@@ -382,14 +401,20 @@ ILboolean ILAPIENTRY ilActiveLayer(ILuint Number)
 
     iTempImage = iCurImage;
 	iCurImage = iCurImage->Layers;
+	if (iCurImage == NULL) {
+		iCurImage = iTempImage;
+		ilSetError(IL_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
 	//Number--;  // Skip 0 (parent image)
 	for (Current = 1; Current < Number; Current++) {
+		iCurImage = iCurImage->Layers;
 		if (iCurImage == NULL) {
-			ilSetError(IL_INTERNAL_ERROR);
+			ilSetError(IL_ILLEGAL_OPERATION);
 			iCurImage = iTempImage;
 			return IL_FALSE;
 		}
-		iCurImage = iCurImage->Layers;
 	}
 
 	ParentImage = IL_FALSE;
