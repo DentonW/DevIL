@@ -34,6 +34,7 @@ Easier:
 - Update Eclipse projects.
 - Add Code::Blocks projects.
 - Check to make sure all VTF formats are supported.
+- From line 420 of VTFFile.c of VTFLib, we need to find out sphere or cube by the first frame number .
 
 
 More involved:
