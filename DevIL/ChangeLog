@@ -285,4 +285,5 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* il_states.c (iGetActiveNum): Rewrote to not use ->Next pointer for everything.
 	* il_vtf.c (VtfInitMipmaps): Changed to reflect the new mipmap arrangement as well.
 	* il_wal.c:141,142: Changed ->Next to ->Mipmaps.
+	* il_wal.c: Cleaned up the formatting a bit.
 	
