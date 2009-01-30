@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 01/29/2002 <--Y2K Compliant! =]
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 01/29/2009
 //
 // Filename: src-IL/include/il_endian.h
 //
@@ -15,7 +15,7 @@
 
 #include "il_internal.h"
 
-#ifdef WORDS_BIGENDIAN //this is defined by ./configure
+#ifdef WORDS_BIGENDIAN  // This is defined by ./configure.
 	#ifndef __BIG_ENDIAN__
 	#define __BIG_ENDIAN__ 1
 	#endif
@@ -127,8 +127,8 @@ INLINE void iSwapUInt(ILuint *i) {
 		}
 	#else
 	#ifdef GCC_X86_ASM
-			asm("bswap  %0;"
-				: "=r" (*i) : "0" (*i) );
+			asm("bswap %0;"
+				: "+r" (*i));
 	#else
 		*i = ((*i)>>24) | (((*i)>>8) & 0xff00) | (((*i)<<8) & 0xff0000) | ((*i)<<24);
 	#endif //GCC_X86_ASM

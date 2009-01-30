@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 12/17/2008
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 01/30/2009
 //
 // Filename: src-IL/src/il_states.c
 //
@@ -340,6 +340,8 @@ ILboolean ILAPIENTRY ilGetBoolean(ILenum Mode)
 
 ILimage *iGetBaseImage(void);
 
+//! Internal function to figure out where we are in an image chain.
+//@TODO: This may get much more complex with mipmaps under faces, etc.
 ILuint iGetActiveNum(ILenum Type)
 {
 	ILimage *BaseImage;
@@ -359,24 +361,47 @@ ILuint iGetActiveNum(ILenum Type)
 	{
 		case IL_ACTIVE_IMAGE:
 			BaseImage = BaseImage->Next;
+			do {
+				if (BaseImage == NULL)
+					return 0;
+				Num++;
+				if (BaseImage == iCurImage)
+					return Num;
+			} while ((BaseImage = BaseImage->Next));
 			break;
 		case IL_ACTIVE_MIPMAP:
 			BaseImage = BaseImage->Mipmaps;
+			do {
+				if (BaseImage == NULL)
+					return 0;
+				Num++;
+				if (BaseImage == iCurImage)
+					return Num;
+			} while ((BaseImage = BaseImage->Mipmaps));
 			break;
 		case IL_ACTIVE_LAYER:
 			BaseImage = BaseImage->Layers;
+			do {
+				if (BaseImage == NULL)
+					return 0;
+				Num++;
+				if (BaseImage == iCurImage)
+					return Num;
+			} while ((BaseImage = BaseImage->Layers));
+			break;
+		case IL_ACTIVE_FACE:
+			BaseImage = BaseImage->Faces;
+			do {
+				if (BaseImage == NULL)
+					return 0;
+				Num++;
+				if (BaseImage == iCurImage)
+					return Num;
+			} while ((BaseImage = BaseImage->Faces));
 			break;
 	}
 
-	do {
-		if (BaseImage == NULL)
-			return 0;
-		Num++;
-		if (BaseImage == iCurImage)
-			return Num;
-	} while ((BaseImage = BaseImage->Next));
-
-	//ilSetError(IL_ILLEGAL_OPERATION);
+	//@TODO: Any error needed here?
 
 	return 0;
 }
@@ -527,6 +552,7 @@ void ILAPIENTRY iGetIntegervImage(ILimage *Image, ILenum Mode, ILint *Param)
         return;
     }
     *Param = 0;
+
     switch (Mode)
     {
         case IL_DXTC_DATA_FORMAT:
@@ -601,7 +627,7 @@ void ILAPIENTRY iGetIntegervImage(ILimage *Image, ILenum Mode, ILint *Param)
                 (*Param)++;
             break;
         case IL_NUM_MIPMAPS:
-            for (SubImage = Image->Mipmaps; SubImage; SubImage = SubImage->Next)
+			for (SubImage = Image->Mipmaps; SubImage; SubImage = SubImage->Mipmaps)
                 (*Param)++;
             break;
 

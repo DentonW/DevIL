@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 01/03/2009
+// Last modified: 01/30/2009
 //
 // Filename: src-IL/src/il_vtf.c
 //
@@ -610,18 +610,10 @@ ILboolean VtfInitMipmaps(ILimage *BaseImage, VTFHEAD *Header)
 		Height = (Height >> 1) == 0 ? 1 : (Height >> 1);
 		Depth = (Depth >> 1) == 0 ? 1 : (Depth >> 1);
 
-		if (Mipmap == 1) {  // Our first mipmap is at Mipmap.
-			Image->Mipmaps = ilNewImage(Width, Height, Depth, BaseImage->Bpp, BaseImage->Bpc);
-			if (Image->Mipmaps == NULL)
-				return IL_FALSE;
-			Image = Image->Mipmaps;
-		}
-		else {  // The other mipmaps are at Mipmap->Next.
-			Image->Next = ilNewImage(Width, Height, Depth, BaseImage->Bpp, BaseImage->Bpc);
-			if (Image->Next == NULL)
-				return IL_FALSE;
-			Image = Image->Next;
-		}
+		Image->Mipmaps = ilNewImage(Width, Height, Depth, BaseImage->Bpp, BaseImage->Bpc);
+		if (Image->Mipmaps == NULL)
+			return IL_FALSE;
+		Image = Image->Mipmaps;
 
 		// ilNewImage does not set these.
 		Image->Format = BaseImage->Format;

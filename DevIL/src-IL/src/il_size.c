@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 01/24/2009
+// Last modified: 01/30/2009
 //
 // Filename: src-IL/src/il_size.c
 //

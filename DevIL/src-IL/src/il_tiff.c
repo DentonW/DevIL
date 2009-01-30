@@ -362,7 +362,7 @@ ILboolean iLoadTiffInternal()
 			if (!Image) {
 				int type = IL_UNSIGNED_BYTE;
 				if (bitspersample == 16) type = IL_UNSIGNED_SHORT;
-				if(!ilTexImage(w, h, 1, 1, IL_LUMINANCE, type, NULL)) {
+				if (!ilTexImage(w, h, 1, 1, IL_LUMINANCE, type, NULL)) {
 					TIFFClose(tif);
 					return IL_FALSE;
 				}
@@ -370,7 +370,7 @@ ILboolean iLoadTiffInternal()
 			}
 			else {
 				Image->Next = ilNewImage(w, h, 1, 1, 1);
-				if(Image->Next == NULL) {
+				if (Image->Next == NULL) {
 					TIFFClose(tif);
 					return IL_FALSE;
 				}

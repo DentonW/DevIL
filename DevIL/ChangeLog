@@ -273,3 +273,16 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 2009-01-28 Denton Woods <doomwiz@users.sf.net>
 	* il_tpl.c: Added line 219.
 
+2009-01-30 Denton Woods <doomwiz@users.sf.net>
+	* Added DevIL.NET to projects folder.
+	* il_dds.c: Changed Image->Next code for cubemaps to read Image->Faces.  Also changed Image->Next
+	  code for mipmaps to read Image->Mipmaps, even further down the chain.
+	* il_dds.c (ilTexImageDxtc): Added call to ilCloseImage for Image->Faces.
+	* il_endian.h:113: Fixed bug #2545848 - inline GCC ASM changed.
+	* ilut_directx9.c (ilutD3D9CubeTexture): Changed ->Next to ->Faces.
+	* ilut_directx9.c (iD3D9CreateMipmaps): Changed ->Next to ->Mipmaps.
+	* il_states.c:605: Changed from ->Next to ->Mipmaps.
+	* il_states.c (iGetActiveNum): Rewrote to not use ->Next pointer for everything.
+	* il_vtf.c (VtfInitMipmaps): Changed to reflect the new mipmap arrangement as well.
+	* il_wal.c:141,142: Changed ->Next to ->Mipmaps.
+	

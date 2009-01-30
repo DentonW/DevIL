@@ -138,8 +138,8 @@ ILboolean iLoadWalInternal()
 	iCurImage = CurImage;
 	ilCloseImage(iCurImage->Mipmaps);
 	iCurImage->Mipmaps = Mipmaps[0];
-	Mipmaps[0]->Next = Mipmaps[1];
-	Mipmaps[1]->Next = Mipmaps[2];
+	Mipmaps[0]->Mipmaps = Mipmaps[1];
+	Mipmaps[1]->Mipmaps = Mipmaps[2];
 
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 

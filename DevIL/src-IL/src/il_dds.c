@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 12/27/2008
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 01/30/2009
 //
 // Filename: src-IL/src/il_dds.c
 //
@@ -97,7 +97,6 @@ ILboolean ilIsValidDdsL(const void *Lump, ILuint Size)
 // Internal function used to get the .dds header from the current file.
 ILboolean iGetDdsHead(DDSHEAD *Header)
 {
-
 	ILint i;
 
 	iread(&Header->Signature, 1, 4);
@@ -286,11 +285,11 @@ ILboolean iLoadDdsCubemapInternal()
 		Depth = Head.Depth;
 		if (Head.ddsCaps2 & CubemapDirections[i]) {
 			if (i != 0) {
-				Image->Next = ilNewImage(Width, Height, Depth, Channels, Bpc);
-				if (Image->Next == NULL)
+				Image->Faces = ilNewImage(Width, Height, Depth, Channels, Bpc);
+				if (Image->Faces == NULL)
 					return IL_FALSE;
 
-				Image = Image->Next;
+				Image = Image->Faces;
 
 				if (CompFormat == PF_R16F
 					|| CompFormat == PF_G16R16F
@@ -305,7 +304,8 @@ ILboolean iLoadDdsCubemapInternal()
 				}
 
 				ilBindImage(ilGetCurName()); // Set to parent image first.
-				ilActiveImage(i); //@TODO: now Image == iCurImage...globals SUCK, fix this!!!
+				//ilActiveImage(i); //@TODO: now Image == iCurImage...globals SUCK, fix this!!!
+				ilActiveFace(i);
 			}
 
 			if (!ReadData())
@@ -881,10 +881,10 @@ ILboolean ReadMipmaps()
 		if (Height == 0) 
 			Height = 1;
 
-		Image->Next = ilNewImage(Width, Height, Depth, Channels, Bpc);
-		if (Image->Next == NULL)
+		Image->Mipmaps = ilNewImage(Width, Height, Depth, Channels, Bpc);
+		if (Image->Mipmaps == NULL)
 			goto mip_fail;
-		Image = Image->Next;
+		Image = Image->Mipmaps;
 		Image->Origin = IL_ORIGIN_UPPER_LEFT;
 
 		if (Head.Flags1 & DDS_LINEARSIZE) {
@@ -940,24 +940,23 @@ ILboolean ReadMipmaps()
 	}
 
 	Head.LinearSize = LastLinear;
-	StartImage->Mipmaps = StartImage->Next;
-	StartImage->Next = NULL;
 	Image = StartImage;
 
 	return IL_TRUE;
 
 mip_fail:
 	Image = StartImage;
-	StartImage = StartImage->Next;
+	StartImage = StartImage->Mipmaps;
 	while (StartImage) {
 		TempImage = StartImage;
-		StartImage = StartImage->Next;
+		StartImage = StartImage->Mipmaps;
 		ifree(TempImage);
 	}
 
-	Image->Next = NULL;
+	Image->Mipmaps = NULL;
 	return IL_FALSE;
 }
+
 
 void DxtcReadColors(const ILubyte* Data, Color8888* Out)
 {
@@ -1995,8 +1994,10 @@ ILAPI ILboolean ILAPIENTRY ilTexImageDxtc(ILint w, ILint h, ILint d, ILenum DxtF
 		ifree(Image->Pal.Palette);
 	}
 
+	// These are set NULL later by the memset call.
 	ilCloseImage(Image->Mipmaps);
 	ilCloseImage(Image->Next);
+	ilCloseImage(Image->Faces);
 	ilCloseImage(Image->Layers);
 
 	if (Image->AnimList) ifree(Image->AnimList);
@@ -2007,7 +2008,7 @@ ILAPI ILboolean ILAPIENTRY ilTexImageDxtc(ILint w, ILint h, ILint d, ILenum DxtF
 
 	////
 
-	memset (Image, 0, sizeof(ILimage));
+	memset(Image, 0, sizeof(ILimage));
 	Image->Width	   = w;
 	Image->Height	   = h;
 	Image->Depth	   = d;

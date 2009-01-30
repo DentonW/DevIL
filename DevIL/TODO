@@ -8,11 +8,14 @@ By next release:
 - Add il_tpl.c to MSVC8 projects.
 - Change version numbers.
 - Update MSVC8 solutions to include il_size.c.
-- Change cubemap and mipmap code.
+- Change cubemap and mipmap code - what formats left?
 - Test ilutConvertToSDLSurface.
 - Mention Unicode and 64-bit compatibility on website.
 - Update DevIL website with file formats (psd-saving, etc.).
 - Keep .tpl DXT data.
+- Test DDS mipmaps and cubemaps (modified DDSView for instance?).
+- Update docs with next DXT code, new mipmap/cubemap access, new SaveL code.
+- Put my utilities in SVN.
 
 
 Easier:
@@ -29,6 +32,8 @@ Easier:
 - Get rid of iluSwapColours call in ilutConvertToSDLSurface.
 - Use GL/glext.h.
 - Update Eclipse projects.
+- Add Code::Blocks projects.
+- Check to make sure all VTF formats are supported.
 
 
 More involved:
@@ -66,6 +71,7 @@ More involved:
 - Change how mipmaps are stored (do not use Next pointer in ILimage).
 - Check ASCII PPM code for the ability to read data that wraps around to multiple lines.
 - cubemap.hdr.vtf does not load.
+- Cubemap VTF loading.
 - Check return on all ilFixImage calls.
 - Printing not working from Windows test.
 - Add function to create cubemaps
@@ -91,6 +97,9 @@ More involved:
 - Check XPM support for different types: http://en.wikipedia.org/wiki/XPM_(image_format)
 - Find test images for all .tpl formats.
 - Create new palette types for luminance, luminance-alpha and alpha (.tpl has luminance-alpha) (also change ilutConvertToSDLSurface and maybe others).
+- iGetActiveNum needs to be rewritten somehow to allow for mipmaps under a cubemap in an animation chain (extreme example).
+- VTF saving
+- TPL saving
 
 
 Lots of work:
@@ -152,6 +161,8 @@ Questions:
 - Support half data internally?
 - Will ilDetermineType fail if file reading functions are overriden?
 - Is ilSaveCHeader fine with Unicode?
+- Should ilFlipSurfaceDxtcData and more work on mipmaps/cubemaps as well?
+- Should ilImageToDxtcData work on cubemaps?
 
 
 From old TODO:

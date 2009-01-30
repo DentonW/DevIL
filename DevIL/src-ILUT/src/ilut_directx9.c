@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Toolkit Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 11/07/2008
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 01/30/2009
 //
 // Filename: src-ILUT/src/ilut_directx9.c
 //
@@ -125,7 +125,8 @@ ILboolean ILAPIENTRY ilutD3D9CubeTexFromResource(IDirect3DDevice9 *Device,
  }
 
 ILboolean ILAPIENTRY ilutD3D9CubeTexFromFileHandle(IDirect3DDevice9 *Device,
-			ILHANDLE File, IDirect3DCubeTexture9 **Texture) {
+			ILHANDLE File, IDirect3DCubeTexture9 **Texture)
+{
 	iBindImageTemp();
     if( !ilLoadF(IL_TYPE_UNKNOWN, File) )
     	return IL_FALSE;
@@ -135,7 +136,8 @@ ILboolean ILAPIENTRY ilutD3D9CubeTexFromFileHandle(IDirect3DDevice9 *Device,
     return IL_TRUE;
 }
 
-D3DCUBEMAP_FACES iToD3D9Cube(ILuint cube) {
+D3DCUBEMAP_FACES iToD3D9Cube(ILuint cube)
+{
 	switch (cube) {
     	case IL_CUBEMAP_POSITIVEX:
         	return D3DCUBEMAP_FACE_POSITIVE_X;
@@ -154,7 +156,8 @@ D3DCUBEMAP_FACES iToD3D9Cube(ILuint cube) {
 	}
  }
  
- IDirect3DCubeTexture9* ILAPIENTRY ilutD3D9CubeTexture(IDirect3DDevice9 *Device) {
+ IDirect3DCubeTexture9* ILAPIENTRY ilutD3D9CubeTexture(IDirect3DDevice9 *Device)
+ {
 	IDirect3DCubeTexture9   *Texture;
 	D3DLOCKED_RECT  Box;
     D3DFORMAT               Format;
@@ -179,18 +182,18 @@ D3DCUBEMAP_FACES iToD3D9Cube(ILuint cube) {
 		return NULL;
 	}
 
-    StartImage=ilutCurImage;
+    StartImage = ilutCurImage;
     if (FAILED(IDirect3DDevice9_CreateCubeTexture(Device, StartImage->Width,
                        ilutGetInteger(ILUT_D3D_MIPLEVELS),0,Format, (D3DPOOL)ilutGetInteger(ILUT_D3D_POOL), &Texture, NULL)))
                return NULL;
 		for (i = 0; i < CUBEMAP_SIDES; i++) {
-       		if( ilutCurImage==NULL || ilutCurImage->CubeFlags == 0) {
+       		if (ilutCurImage==NULL || ilutCurImage->CubeFlags == 0) {
             	SAFE_RELEASE(Texture)
                 return NULL;
             }
             Image = ilutCurImage;
 				
-				Image = MakeD3D9Compliant(Device, &Format);
+			Image = MakeD3D9Compliant(Device, &Format);
             if( Image == NULL ) {
             	SAFE_RELEASE(Texture)
                 return NULL;
@@ -205,9 +208,9 @@ D3DCUBEMAP_FACES iToD3D9Cube(ILuint cube) {
           		SAFE_RELEASE(Texture)
             	return IL_FALSE;
         	}
-       		ilutCurImage=ilutCurImage->Next;
+       		ilutCurImage=ilutCurImage->Faces;
        	}
-       	ilutCurImage=StartImage;
+       	ilutCurImage = StartImage;
 
        	// We don't want to have mipmaps for such a large image.
 		//if (Image != ilutCurImage)
@@ -737,7 +740,7 @@ ILboolean iD3D9CreateMipmaps(IDirect3DTexture9 *Texture, ILimage *Image)
 			memcpy(Rect.pBits, Temp->Data, Temp->SizeOfData);
 
 		IDirect3DTexture9_UnlockRect(Texture, i);
-		Temp = Temp->Next;
+		Temp = Temp->Mipmaps;
 	}
 
 	if (MipImage != Image)

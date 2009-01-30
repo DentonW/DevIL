@@ -407,6 +407,7 @@ typedef long long unsigned int ILuint64;
 #define IL_ACTIVE_IMAGE          0x0DF4
 #define IL_ACTIVE_MIPMAP         0x0DF5
 #define IL_ACTIVE_LAYER          0x0DF6
+#define IL_ACTIVE_FACE           0x0E00
 #define IL_CUR_IMAGE             0x0DF7
 #define IL_IMAGE_DURATION        0x0DF8
 #define IL_IMAGE_PLANESIZE       0x0DF9
