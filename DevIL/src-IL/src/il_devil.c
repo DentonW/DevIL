@@ -74,7 +74,7 @@ ILAPI ILimage* ILAPIENTRY ilNewImage(ILuint Width, ILuint Height, ILuint Depth, 
 		return NULL;
 	}
 
-	if (!ilInitImage (Image, Width, Height, Depth, Bpp, ilGetFormatBpp(Bpp), ilGetTypeBpc(Bpc), NULL)) {
+	if (!ilInitImage(Image, Width, Height, Depth, Bpp, ilGetFormatBpp(Bpp), ilGetTypeBpc(Bpc), NULL)) {
 		if (Image->Data != NULL) {
 			ifree(Image->Data);
 		}

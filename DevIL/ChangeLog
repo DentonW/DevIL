@@ -290,4 +290,8 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* il_stack.c (ilActiveImage/Mipmap/Face/Layer): Added another check for NULL, changed error.
 	  Changed order of statements in for loop.  This leads to much much less in the way of
 	  ilSetError calls, since we do not have iCurImage == NULL.
+	* il_vtf.h:43: Changed to ILuint from ILint.
+	* il_vtf.c: Changed VtfInitMipmaps calls to VtfInitFacesMipmaps calls and changed iLoadVtfInternal
+	  to support environment maps.
+	* il.h:384: Added IL_SPHEREMAP.
 	

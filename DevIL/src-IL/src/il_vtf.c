@@ -150,18 +150,22 @@ ILboolean iCheckVtf(VTFHEAD *Header)
 	// Width and Height must be powers of 2.
 	if ((ilNextPower2(Header->Width) != Header->Width) || (ilNextPower2(Header->Height) != Header->Height))
 		return IL_FALSE;
-	if ((ilNextPower2(Header->LowResImageWidth) != Header->LowResImageWidth)
-		|| (ilNextPower2(Header->LowResImageHeight) != Header->LowResImageHeight))
-		return IL_FALSE;
+	// It looks like width and height of zero are valid - i.e. no low res image.
+	if (Header->LowResImageWidth != 0 && Header->LowResImageHeight != 0) {
+		if ((ilNextPower2(Header->LowResImageWidth) != Header->LowResImageWidth)
+			|| (ilNextPower2(Header->LowResImageHeight) != Header->LowResImageHeight))
+			return IL_FALSE;
+	}
 	// In addition, the LowResImage has to have dimensions no greater than 16.
-	if ((Header->LowResImageWidth > 16) || (Header->LowResImageHeight > 16)
-		|| (Header->LowResImageWidth == 0) || (Header->LowResImageHeight == 0))
+	if ((Header->LowResImageWidth > 16) || (Header->LowResImageHeight > 16))
+		//|| (Header->LowResImageWidth == 0) || (Header->LowResImageHeight == 0))
+		// It looks like width and height of zero are valid.
 		return IL_FALSE;
 	// And the LowResImage has to have dimensions less than or equal to the main image.
 	if ((Header->LowResImageWidth > Header->Width) || (Header->LowResImageHeight > Header->Height))
 		return IL_FALSE;
-	// The LowResImage must be in DXT1 format.
-	if (Header->LowResImageFormat != IMAGE_FORMAT_DXT1)
+	// The LowResImage must be in DXT1 format, or if it does not exist, it is denoted by all bits set.
+	if (Header->LowResImageFormat != IMAGE_FORMAT_DXT1 && Header->LowResImageFormat != 0xFFFFFFFF)
 		return IL_FALSE;
 	
 	return IL_TRUE;
@@ -216,9 +220,9 @@ ILboolean iLoadVtfInternal(void)
 	ILboolean	bVtf = IL_TRUE;
 	ILimage		*Image, *BaseImage;
 	ILenum		Format, Type;
-	ILint		Frame, Mipmap;
+	ILint		Frame, Face, Mipmap;
 	ILuint		SizeOfData, Channels, k;
-	ILubyte		*CompData = NULL, SwapVal, *Data16Bit, *Temp;
+	ILubyte		*CompData = NULL, SwapVal, *Data16Bit, *Temp, NumFaces;
 	VTFHEAD		Head;
 	ILuint		CurName;
 
@@ -235,20 +239,19 @@ ILboolean iLoadVtfInternal(void)
 		return IL_FALSE;
 	}
 
-	//@TODO: Take care of animation chains soon.
-	//if (Head.Frames > 1) {
-	//	ilSetError(IL_FORMAT_NOT_SUPPORTED);
-	//	return IL_FALSE;
-	//}
-	//@TODO: Find out how to tell whether the environment map is cubic or spherical.
 	if (Head.Flags & TEXTUREFLAGS_ENVMAP) {
-		ilSetError(IL_FORMAT_NOT_SUPPORTED);
-		return IL_FALSE;
+		// If we have a spherical map in addition to the 6 sides of the cubemap, FirstFrame's bits
+		//  are all set.  The only place I found out about this was VTFLib.
+		NumFaces = Head.FirstFrame == 0xFFFF ? 6 : 7;
 	}
+	else
+		NumFaces = 1;  // This is not an environmental map.
 
 	// Skip the low resolution image.  This is just a thumbnail.
 	//  The block size is 8, and the compression ratio is 6:1.
 	SizeOfData = max(Head.LowResImageWidth * Head.LowResImageHeight / 2, 8);
+	if (Head.LowResImageWidth == 0 && Head.LowResImageHeight == 0)
+		SizeOfData = 0;  // No low resolution image present.
 	iseek(SizeOfData, IL_SEEK_CUR);
 
 	//@TODO: Make this a helper function that set channels, bpc and format.
@@ -360,7 +363,7 @@ ILboolean iLoadVtfInternal(void)
 	// The origin should be in the upper left.
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 	// Create any mipmaps.
-	VtfInitMipmaps(iCurImage, &Head);
+	VtfInitFacesMipmaps(iCurImage, NumFaces, &Head);
 
 	// Create our animation chain
 	BaseImage = Image = iCurImage;  // Top-level image
@@ -372,222 +375,226 @@ ILboolean iLoadVtfInternal(void)
 		// The origin should be in the upper left.
 		Image->Origin = IL_ORIGIN_UPPER_LEFT;
 
-		// Create our mipmaps for each frame.
-		VtfInitMipmaps(Image, &Head);
+		// Create our faces and mipmaps for each frame.
+		VtfInitFacesMipmaps(Image, NumFaces, &Head);
 	}
 
 	// We want to put the smallest mipmap at the end, but it is first in the file, so we count backwards.
 	for (Mipmap = Head.MipmapCount - 1; Mipmap >= 0; Mipmap--) {
 		// Frames are in the normal order.
 		for (Frame = 0; Frame < Head.Frames; Frame++) {
-			//@TODO: Would probably be quicker to do the linked list traversal manually here.
-			ilBindImage(CurName);
-			ilActiveImage(Frame);
-			ilActiveMipmap(Mipmap);
-			Image = iCurImage;
+			// @TODO: Cubemap faces are always in the same order?
+			for (Face = 0; Face < NumFaces; Face++) {
+				//@TODO: Would probably be quicker to do the linked list traversal manually here.
+				ilBindImage(CurName);
+				ilActiveImage(Frame);
+				ilActiveFace(Face);
+				ilActiveMipmap(Mipmap);
+				Image = iCurImage;
 
-			switch (Head.HighResImageFormat)
-			{
-				// DXT1 compression
-				case IMAGE_FORMAT_DXT1:
-				case IMAGE_FORMAT_DXT1_ONEBITALPHA:
-					// The block size is 8.
-					SizeOfData = max(Image->Width * Image->Height * Image->Depth / 2, 8);
-					CompData = ialloc(SizeOfData);  // Gives a 6:1 compression ratio (or 8:1 for DXT1 with alpha)
-					iread(CompData, 1, SizeOfData);
-					if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
-						Image->DxtcSize = SizeOfData;
-						Image->DxtcData = CompData;
-						Image->DxtcFormat = IL_DXT5;
-						CompData = NULL;
-					}
-					bVtf = DecompressDXT1(Image, CompData);
-					break;
-
-				// DXT3 compression
-				case IMAGE_FORMAT_DXT3:
-					// The block size is 16.
-					SizeOfData = max(Image->Width * Image->Height * Image->Depth, 16);
-					CompData = ialloc(SizeOfData);  // Gives a 4:1 compression ratio
-					iread(CompData, 1, SizeOfData);
-					if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
-						Image->DxtcSize = SizeOfData;
-						Image->DxtcData = CompData;
-						Image->DxtcFormat = IL_DXT3;
-						CompData = NULL;
-					}
-					bVtf = DecompressDXT3(Image, CompData);
-					break;
-
-				// DXT5 compression
-				case IMAGE_FORMAT_DXT5:
-					// The block size is 16.
-					SizeOfData = max(Image->Width * Image->Height * Image->Depth, 16);
-					CompData = ialloc(SizeOfData);  // Gives a 4:1 compression ratio
-					iread(CompData, 1, SizeOfData);
-					if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
-						Image->DxtcSize = SizeOfData;
-						Image->DxtcData = CompData;
-						Image->DxtcFormat = IL_DXT5;
-						CompData = NULL;
-					}
-					bVtf = DecompressDXT5(Image, CompData);
-					break;
-
-				// Uncompressed BGR(A) data (24-bit and 32-bit)
-				case IMAGE_FORMAT_BGR888:
-				case IMAGE_FORMAT_BGRA8888:
-				// Uncompressed RGB(A) data (24-bit and 32-bit)
-				case IMAGE_FORMAT_RGB888:
-				case IMAGE_FORMAT_RGBA8888:
-				// Uncompressed 16-bit shorts
-				case IMAGE_FORMAT_RGBA16161616:
-				// Luminance data only
-				case IMAGE_FORMAT_I8:
-				// Luminance and alpha data
-				case IMAGE_FORMAT_IA88:
-				// Alpha data only
-				case IMAGE_FORMAT_A8:
-				// We will ignore the part about the bluescreen right now.
-				//   I could not find any information about it.
-				case IMAGE_FORMAT_RGB888_BLUESCREEN:
-				case IMAGE_FORMAT_BGR888_BLUESCREEN:
-					// Just copy the data over - no compression.
-					if (iread(Image->Data, 1, Image->SizeOfData) != Image->SizeOfData)
-						bVtf = IL_FALSE;
-					else
-						bVtf = IL_TRUE;
-					break;
-
-				// Uncompressed 24-bit data with an unused alpha channel (we discard it)
-				case IMAGE_FORMAT_BGRX8888:
-					SizeOfData = Image->Width * Image->Height * Image->Depth * 3;
-					Temp = CompData = ialloc(SizeOfData / 3 * 4);  // Not compressed data
-					if (iread(CompData, 1, SizeOfData / 3 * 4) != SizeOfData / 3 * 4) {
-						bVtf = IL_FALSE;
+				switch (Head.HighResImageFormat)
+				{
+					// DXT1 compression
+					case IMAGE_FORMAT_DXT1:
+					case IMAGE_FORMAT_DXT1_ONEBITALPHA:
+						// The block size is 8.
+						SizeOfData = max(Image->Width * Image->Height * Image->Depth / 2, 8);
+						CompData = ialloc(SizeOfData);  // Gives a 6:1 compression ratio (or 8:1 for DXT1 with alpha)
+						iread(CompData, 1, SizeOfData);
+						if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
+							Image->DxtcSize = SizeOfData;
+							Image->DxtcData = CompData;
+							Image->DxtcFormat = IL_DXT5;
+							CompData = NULL;
+						}
+						bVtf = DecompressDXT1(Image, CompData);
 						break;
-					}
-					for (k = 0; k < SizeOfData; k += 3) {
-						Image->Data[k]   = Temp[0];
-						Image->Data[k+1] = Temp[1];
-						Image->Data[k+2] = Temp[2];
-						Temp += 4;
-					}
 
-					break;
-
-				// Uncompressed 16-bit floats (must be converted to 32-bit)
-				case IMAGE_FORMAT_RGBA16161616F:
-					SizeOfData = Image->Width * Image->Height * Image->Depth * Image->Bpp * 2;
-					CompData = ialloc(SizeOfData);  // Not compressed data
-					if (iread(CompData, 1, SizeOfData) != SizeOfData) {
-						bVtf = IL_FALSE;
+					// DXT3 compression
+					case IMAGE_FORMAT_DXT3:
+						// The block size is 16.
+						SizeOfData = max(Image->Width * Image->Height * Image->Depth, 16);
+						CompData = ialloc(SizeOfData);  // Gives a 4:1 compression ratio
+						iread(CompData, 1, SizeOfData);
+						if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
+							Image->DxtcSize = SizeOfData;
+							Image->DxtcData = CompData;
+							Image->DxtcFormat = IL_DXT3;
+							CompData = NULL;
+						}
+						bVtf = DecompressDXT3(Image, CompData);
 						break;
-					}
-					bVtf = iConvFloat16ToFloat32((ILuint*)Image->Data, (ILushort*)CompData, SizeOfData / 2);
-					break;
 
-				// Uncompressed 32-bit ARGB and ABGR data.  DevIL does not handle this
-				//   internally, so we have to swap values.
-				case IMAGE_FORMAT_ARGB8888:
-				case IMAGE_FORMAT_ABGR8888:
-					if (iread(Image->Data, 1, Image->SizeOfData) != Image->SizeOfData) {
-						bVtf = IL_FALSE;
+					// DXT5 compression
+					case IMAGE_FORMAT_DXT5:
+						// The block size is 16.
+						SizeOfData = max(Image->Width * Image->Height * Image->Depth, 16);
+						CompData = ialloc(SizeOfData);  // Gives a 4:1 compression ratio
+						iread(CompData, 1, SizeOfData);
+						if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
+							Image->DxtcSize = SizeOfData;
+							Image->DxtcData = CompData;
+							Image->DxtcFormat = IL_DXT5;
+							CompData = NULL;
+						}
+						bVtf = DecompressDXT5(Image, CompData);
 						break;
-					}
-					else {
-						bVtf = IL_TRUE;
-					}
-					// Swap the data
-					for (k = 0; k < Image->SizeOfData; k += 4) {
-						SwapVal = Image->Data[k];
-						Image->Data[k]   = Image->Data[k+3];
-						Image->Data[k+3] = SwapVal;
-						SwapVal = Image->Data[k+1];
-						Image->Data[k+1] = Image->Data[k+2];
-						Image->Data[k+2] = SwapVal;
-					}
-					break;
 
-				// Uncompressed 16-bit RGB and BGR data.  We have to expand this to 24-bit, since
-				//   DevIL does not handle this internally.
-				//   The data is in the file as: gggbbbbb rrrrrrggg
-				case IMAGE_FORMAT_RGB565:
-				case IMAGE_FORMAT_BGR565:
-					SizeOfData = Image->Width * Image->Height * Image->Depth * 2;
-					Data16Bit = CompData = ialloc(SizeOfData);  // Not compressed data
-					if (iread(CompData, 1, SizeOfData) != SizeOfData) {
-						bVtf = IL_FALSE;
+					// Uncompressed BGR(A) data (24-bit and 32-bit)
+					case IMAGE_FORMAT_BGR888:
+					case IMAGE_FORMAT_BGRA8888:
+					// Uncompressed RGB(A) data (24-bit and 32-bit)
+					case IMAGE_FORMAT_RGB888:
+					case IMAGE_FORMAT_RGBA8888:
+					// Uncompressed 16-bit shorts
+					case IMAGE_FORMAT_RGBA16161616:
+					// Luminance data only
+					case IMAGE_FORMAT_I8:
+					// Luminance and alpha data
+					case IMAGE_FORMAT_IA88:
+					// Alpha data only
+					case IMAGE_FORMAT_A8:
+					// We will ignore the part about the bluescreen right now.
+					//   I could not find any information about it.
+					case IMAGE_FORMAT_RGB888_BLUESCREEN:
+					case IMAGE_FORMAT_BGR888_BLUESCREEN:
+						// Just copy the data over - no compression.
+						if (iread(Image->Data, 1, Image->SizeOfData) != Image->SizeOfData)
+							bVtf = IL_FALSE;
+						else
+							bVtf = IL_TRUE;
 						break;
-					}
-					for (k = 0; k < Image->SizeOfData; k += 3) {
-						Image->Data[k]   =  (Data16Bit[0] & 0x1F) << 3;
-						Image->Data[k+1] = ((Data16Bit[1] & 0x07) << 5) | ((Data16Bit[0] & 0xE0) >> 3);
-						Image->Data[k+2] =   Data16Bit[1] & 0xF8;
-						Data16Bit += 2;
-					}
-					break;
 
-				// Uncompressed 16-bit BGRA data (1-bit alpha).  We have to expand this to 32-bit,
-				//   since DevIL does not handle this internally.
-				//   Something seems strange with this one, but this is how VTFEdit outputs.
-				//   The data is in the file as: gggbbbbb arrrrrgg
-				case IMAGE_FORMAT_BGRA5551:
-					SizeOfData = Image->Width * Image->Height * Image->Depth * 2;
-					Data16Bit = CompData = ialloc(SizeOfData);  // Not compressed data
-					if (iread(CompData, 1, SizeOfData) != SizeOfData) {
-						bVtf = IL_FALSE;
-						break;
-					}
-					for (k = 0; k < Image->SizeOfData; k += 4) {
-						Image->Data[k]   =  (Data16Bit[0] & 0x1F) << 3;
-						Image->Data[k+1] = ((Data16Bit[0] & 0xE0) >> 2) | ((Data16Bit[1] & 0x03) << 6);
-						Image->Data[k+2] =  (Data16Bit[1] & 0x7C) << 1;
-						// 1-bit alpha is either off or on.
-						Image->Data[k+3] = ((Data16Bit[0] & 0x80) == 0x80) ? 0xFF : 0x00;
-						Data16Bit += 2;
-					}
-					break;
+					// Uncompressed 24-bit data with an unused alpha channel (we discard it)
+					case IMAGE_FORMAT_BGRX8888:
+						SizeOfData = Image->Width * Image->Height * Image->Depth * 3;
+						Temp = CompData = ialloc(SizeOfData / 3 * 4);  // Not compressed data
+						if (iread(CompData, 1, SizeOfData / 3 * 4) != SizeOfData / 3 * 4) {
+							bVtf = IL_FALSE;
+							break;
+						}
+						for (k = 0; k < SizeOfData; k += 3) {
+							Image->Data[k]   = Temp[0];
+							Image->Data[k+1] = Temp[1];
+							Image->Data[k+2] = Temp[2];
+							Temp += 4;
+						}
 
-				// Same as above, but the alpha channel is unused.
-				case IMAGE_FORMAT_BGRX5551:
-					SizeOfData = Image->Width * Image->Height * Image->Depth * 2;
-					Data16Bit = CompData = ialloc(SizeOfData);  // Not compressed data
-					if (iread(CompData, 1, SizeOfData) != SizeOfData) {
-						bVtf = IL_FALSE;
 						break;
-					}
-					for (k = 0; k < Image->SizeOfData; k += 3) {
-						Image->Data[k]   =  (Data16Bit[0] & 0x1F) << 3;
-						Image->Data[k+1] = ((Data16Bit[0] & 0xE0) >> 2) | ((Data16Bit[1] & 0x03) << 6);
-						Image->Data[k+2] =  (Data16Bit[1] & 0x7C) << 1;
-						Data16Bit += 2;
-					}
-					break;
 
-				// Data is reduced to a 4-bits per channel format.
-				case IMAGE_FORMAT_BGRA4444:
-					SizeOfData = Image->Width * Image->Height * Image->Depth * 4;
-					Temp = CompData = ialloc(SizeOfData / 2);  // Not compressed data
-					if (iread(CompData, 1, SizeOfData / 2) != SizeOfData / 2) {
-						bVtf = IL_FALSE;
+					// Uncompressed 16-bit floats (must be converted to 32-bit)
+					case IMAGE_FORMAT_RGBA16161616F:
+						SizeOfData = Image->Width * Image->Height * Image->Depth * Image->Bpp * 2;
+						CompData = ialloc(SizeOfData);  // Not compressed data
+						if (iread(CompData, 1, SizeOfData) != SizeOfData) {
+							bVtf = IL_FALSE;
+							break;
+						}
+						bVtf = iConvFloat16ToFloat32((ILuint*)Image->Data, (ILushort*)CompData, SizeOfData / 2);
 						break;
-					}
-					for (k = 0; k < SizeOfData; k += 4) {
-						// We double the data here.
-						Image->Data[k]   = (Temp[0] & 0x0F) << 4 | (Temp[0] & 0x0F);
-						Image->Data[k+1] = (Temp[0] & 0xF0) >> 4 | (Temp[0] & 0xF0);
-						Image->Data[k+2] = (Temp[1] & 0x0F) << 4 | (Temp[1] & 0x0F);
-						Image->Data[k+3] = (Temp[1] & 0xF0) >> 4 | (Temp[1] & 0xF0);
-						Temp += 2;
-					}
-					break;
+
+					// Uncompressed 32-bit ARGB and ABGR data.  DevIL does not handle this
+					//   internally, so we have to swap values.
+					case IMAGE_FORMAT_ARGB8888:
+					case IMAGE_FORMAT_ABGR8888:
+						if (iread(Image->Data, 1, Image->SizeOfData) != Image->SizeOfData) {
+							bVtf = IL_FALSE;
+							break;
+						}
+						else {
+							bVtf = IL_TRUE;
+						}
+						// Swap the data
+						for (k = 0; k < Image->SizeOfData; k += 4) {
+							SwapVal = Image->Data[k];
+							Image->Data[k]   = Image->Data[k+3];
+							Image->Data[k+3] = SwapVal;
+							SwapVal = Image->Data[k+1];
+							Image->Data[k+1] = Image->Data[k+2];
+							Image->Data[k+2] = SwapVal;
+						}
+						break;
+
+					// Uncompressed 16-bit RGB and BGR data.  We have to expand this to 24-bit, since
+					//   DevIL does not handle this internally.
+					//   The data is in the file as: gggbbbbb rrrrrrggg
+					case IMAGE_FORMAT_RGB565:
+					case IMAGE_FORMAT_BGR565:
+						SizeOfData = Image->Width * Image->Height * Image->Depth * 2;
+						Data16Bit = CompData = ialloc(SizeOfData);  // Not compressed data
+						if (iread(CompData, 1, SizeOfData) != SizeOfData) {
+							bVtf = IL_FALSE;
+							break;
+						}
+						for (k = 0; k < Image->SizeOfData; k += 3) {
+							Image->Data[k]   =  (Data16Bit[0] & 0x1F) << 3;
+							Image->Data[k+1] = ((Data16Bit[1] & 0x07) << 5) | ((Data16Bit[0] & 0xE0) >> 3);
+							Image->Data[k+2] =   Data16Bit[1] & 0xF8;
+							Data16Bit += 2;
+						}
+						break;
+
+					// Uncompressed 16-bit BGRA data (1-bit alpha).  We have to expand this to 32-bit,
+					//   since DevIL does not handle this internally.
+					//   Something seems strange with this one, but this is how VTFEdit outputs.
+					//   The data is in the file as: gggbbbbb arrrrrgg
+					case IMAGE_FORMAT_BGRA5551:
+						SizeOfData = Image->Width * Image->Height * Image->Depth * 2;
+						Data16Bit = CompData = ialloc(SizeOfData);  // Not compressed data
+						if (iread(CompData, 1, SizeOfData) != SizeOfData) {
+							bVtf = IL_FALSE;
+							break;
+						}
+						for (k = 0; k < Image->SizeOfData; k += 4) {
+							Image->Data[k]   =  (Data16Bit[0] & 0x1F) << 3;
+							Image->Data[k+1] = ((Data16Bit[0] & 0xE0) >> 2) | ((Data16Bit[1] & 0x03) << 6);
+							Image->Data[k+2] =  (Data16Bit[1] & 0x7C) << 1;
+							// 1-bit alpha is either off or on.
+							Image->Data[k+3] = ((Data16Bit[0] & 0x80) == 0x80) ? 0xFF : 0x00;
+							Data16Bit += 2;
+						}
+						break;
+
+					// Same as above, but the alpha channel is unused.
+					case IMAGE_FORMAT_BGRX5551:
+						SizeOfData = Image->Width * Image->Height * Image->Depth * 2;
+						Data16Bit = CompData = ialloc(SizeOfData);  // Not compressed data
+						if (iread(CompData, 1, SizeOfData) != SizeOfData) {
+							bVtf = IL_FALSE;
+							break;
+						}
+						for (k = 0; k < Image->SizeOfData; k += 3) {
+							Image->Data[k]   =  (Data16Bit[0] & 0x1F) << 3;
+							Image->Data[k+1] = ((Data16Bit[0] & 0xE0) >> 2) | ((Data16Bit[1] & 0x03) << 6);
+							Image->Data[k+2] =  (Data16Bit[1] & 0x7C) << 1;
+							Data16Bit += 2;
+						}
+						break;
+
+					// Data is reduced to a 4-bits per channel format.
+					case IMAGE_FORMAT_BGRA4444:
+						SizeOfData = Image->Width * Image->Height * Image->Depth * 4;
+						Temp = CompData = ialloc(SizeOfData / 2);  // Not compressed data
+						if (iread(CompData, 1, SizeOfData / 2) != SizeOfData / 2) {
+							bVtf = IL_FALSE;
+							break;
+						}
+						for (k = 0; k < SizeOfData; k += 4) {
+							// We double the data here.
+							Image->Data[k]   = (Temp[0] & 0x0F) << 4 | (Temp[0] & 0x0F);
+							Image->Data[k+1] = (Temp[0] & 0xF0) >> 4 | (Temp[0] & 0xF0);
+							Image->Data[k+2] = (Temp[1] & 0x0F) << 4 | (Temp[1] & 0x0F);
+							Image->Data[k+3] = (Temp[1] & 0xF0) >> 4 | (Temp[1] & 0xF0);
+							Temp += 2;
+						}
+						break;
+				}
+
+				ifree(CompData);
+				CompData = NULL;
+				if (bVtf == IL_FALSE)  //@TODO: Do we need to do any cleanup here?
+					return IL_FALSE;
 			}
-
-			ifree(CompData);
-			CompData = NULL;
-			if (bVtf == IL_FALSE)  //@TODO: Do we need to do any cleanup here?
-				return IL_FALSE;
 		}
 	}
 
@@ -596,10 +603,67 @@ ILboolean iLoadVtfInternal(void)
 }
 
 
+ILuint GetFaceFlag(ILuint FaceNum)
+{
+	switch (FaceNum)
+	{
+		case 0:
+			return IL_CUBEMAP_POSITIVEX;
+		case 1:
+			return IL_CUBEMAP_NEGATIVEX;
+		case 2:
+			return IL_CUBEMAP_POSITIVEY;
+		case 3:
+			return IL_CUBEMAP_NEGATIVEY;
+		case 4:
+			return IL_CUBEMAP_POSITIVEZ;
+		case 5:
+			return IL_CUBEMAP_NEGATIVEZ;
+		case 6:
+			return IL_SPHEREMAP;
+	}
+
+	return IL_SPHEREMAP;  // Should never reach here!
+}
+
+
+ILboolean VtfInitFacesMipmaps(ILimage *BaseImage, ILuint NumFaces, VTFHEAD *Header)
+{
+	ILimage	*Image;
+	ILuint	Face;
+
+	// Initialize mipmaps under the base image.
+	VtfInitMipmaps(BaseImage, Header);
+	Image = BaseImage;
+
+	// We have an environment map.
+	if (NumFaces != 1) {
+		Image->CubeFlags = IL_CUBEMAP_POSITIVEX;
+	}
+
+	for (Face = 1; Face < NumFaces; Face++) {
+		Image->Faces = ilNewImageFull(Image->Width, Image->Height, Image->Depth, Image->Bpp, Image->Format, Image->Type, NULL);
+		if (Image->Faces == NULL)
+			return IL_FALSE;
+		Image = Image->Faces;
+
+		// The origin should be in the upper left.
+		Image->Origin = IL_ORIGIN_UPPER_LEFT;
+		// Set the flags that tell which face this is.
+		Image->CubeFlags = GetFaceFlag(Face);
+
+		// Now we can initialize the mipmaps under each face.
+		VtfInitMipmaps(Image, Header);
+	}
+
+	return IL_TRUE;
+}
+
+
 ILboolean VtfInitMipmaps(ILimage *BaseImage, VTFHEAD *Header)
 {
-	ILimage *Image;
-	ILuint Width, Height, Depth, Mipmap;
+	ILimage	*Image;
+	ILuint	Width, Height, Depth, Mipmap;
 
 	Image = BaseImage;
 	Width = BaseImage->Width;  Height = BaseImage->Height;  Depth = BaseImage->Depth;
@@ -610,7 +674,7 @@ ILboolean VtfInitMipmaps(ILimage *BaseImage, VTFHEAD *Header)
 		Height = (Height >> 1) == 0 ? 1 : (Height >> 1);
 		Depth = (Depth >> 1) == 0 ? 1 : (Depth >> 1);
 
-		Image->Mipmaps = ilNewImage(Width, Height, Depth, BaseImage->Bpp, BaseImage->Bpc);
+		Image->Mipmaps = ilNewImageFull(Width, Height, Depth, BaseImage->Bpp, BaseImage->Format, BaseImage->Type, NULL);
 		if (Image->Mipmaps == NULL)
 			return IL_FALSE;
 		Image = Image->Mipmaps;

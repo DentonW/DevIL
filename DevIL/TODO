@@ -11,6 +11,7 @@ By next release:
 - Mention Unicode and 64-bit compatibility on website.
 - Update DevIL website with file formats (psd-saving, etc.).
 - Add Nebula Device to projects page.
+- Add VTF Edit to projects page.
 - DevIL x64 DLL Install to SVN
 
 
@@ -30,7 +31,6 @@ Easier:
 - Update Eclipse projects.
 - Add Code::Blocks projects.
 - Check to make sure all VTF formats are supported.
-- From line 420 of VTFFile.c of VTFLib, we need to find out sphere or cube by the first frame number.
 - Look at DDSTextureLoader.cpp for new DDS formats.
 
 
@@ -68,8 +68,6 @@ More involved:
 - il_bmp.c / il_dds.c / il_dds-save.c may not be safe for Big Endian for 16-bit data.
 - Change how mipmaps are stored (do not use Next pointer in ILimage).
 - Check ASCII PPM code for the ability to read data that wraps around to multiple lines.
-- cubemap.hdr.vtf does not load.
-- Cubemap VTF loading.
 - Check return on all ilFixImage calls.
 - Printing not working from Windows test.
 - Add function to create cubemaps
@@ -98,6 +96,7 @@ More involved:
 - iGetActiveNum needs to be rewritten somehow to allow for mipmaps under a cubemap in an animation chain (extreme example).
 - VTF saving
 - TPL saving
+- Test Windows Mobile code.
 
 
 Lots of work:

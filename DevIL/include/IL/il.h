@@ -374,13 +374,14 @@ typedef long long unsigned int ILuint64;
 #define IL_ATI1N            0x0710
 #define IL_DXT1A            0x0711  // Normally the same as IL_DXT1, except for nVidia Texture Tools.
 
-// Cube map definitions
+// Environment map definitions
 #define IL_CUBEMAP_POSITIVEX 0x00000400
 #define IL_CUBEMAP_NEGATIVEX 0x00000800
 #define IL_CUBEMAP_POSITIVEY 0x00001000
 #define IL_CUBEMAP_NEGATIVEY 0x00002000
 #define IL_CUBEMAP_POSITIVEZ 0x00004000
 #define IL_CUBEMAP_NEGATIVEZ 0x00008000
+#define IL_SPHEREMAP         0x00010000
 
 
 // Values

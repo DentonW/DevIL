@@ -85,7 +85,8 @@ ILboolean ILAPIENTRY ilutD3D9TexFromFile(IDirect3DDevice9 *Device, ILconst_strin
 
 #ifndef _WIN32_WCE
 ILboolean ILAPIENTRY ilutD3D9CubeTexFromFile(IDirect3DDevice9 *Device,
-			ILconst_string FileName, IDirect3DCubeTexture9 **Texture) {
+			ILconst_string FileName, IDirect3DCubeTexture9 **Texture)
+{
 	iBindImageTemp();
 	if (!ilLoadImage(FileName))
     	return IL_FALSE;
@@ -97,7 +98,8 @@ ILboolean ILAPIENTRY ilutD3D9CubeTexFromFile(IDirect3DDevice9 *Device,
 
 #endif//_WIN32_WCE
 ILboolean ILAPIENTRY ilutD3D9CubeTexFromFileInMemory(IDirect3DDevice9 *Device,
-				void *Lump, ILuint Size, IDirect3DCubeTexture9 **Texture) {
+				void *Lump, ILuint Size, IDirect3DCubeTexture9 **Texture)
+{
 	iBindImageTemp();
     if( !ilLoadL(IL_TYPE_UNKNOWN, Lump, Size) )
     	return IL_FALSE;
@@ -108,7 +110,8 @@ ILboolean ILAPIENTRY ilutD3D9CubeTexFromFileInMemory(IDirect3DDevice9 *Device,
  }
  
 ILboolean ILAPIENTRY ilutD3D9CubeTexFromResource(IDirect3DDevice9 *Device,
-		HMODULE SrcModule, ILconst_string SrcResource, IDirect3DCubeTexture9 **Texture) {
+		HMODULE SrcModule, ILconst_string SrcResource, IDirect3DCubeTexture9 **Texture)
+{
 	HRSRC   Resource;
     ILubyte *Data;
 
@@ -138,7 +141,8 @@ ILboolean ILAPIENTRY ilutD3D9CubeTexFromFileHandle(IDirect3DDevice9 *Device,
 
 D3DCUBEMAP_FACES iToD3D9Cube(ILuint cube)
 {
-	switch (cube) {
+	switch (cube)
+	{
     	case IL_CUBEMAP_POSITIVEX:
         	return D3DCUBEMAP_FACE_POSITIVE_X;
         case IL_CUBEMAP_NEGATIVEX:
