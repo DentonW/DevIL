@@ -303,5 +303,5 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* Added new MSVC++ projects for examples.
 	* il_bmp.c:556: Changed to Header->biWidth from iCurImage->Width.  iCurImage->Width was not
 	  updated to the new width at this point.
-	
+	* il_rotate.c (iluRotate_): Rewrote to fix 1 pixel shifting issue.
 	

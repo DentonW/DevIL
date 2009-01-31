@@ -32,6 +32,7 @@ Easier:
 - Add Code::Blocks projects.
 - Check to make sure all VTF formats are supported.
 - Look at DDSTextureLoader.cpp for new DDS formats.
+- http://www.leunen.com/cbuilder/rotbmp.html
 
 
 More involved:
