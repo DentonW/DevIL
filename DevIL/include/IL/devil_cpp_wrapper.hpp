@@ -3,18 +3,12 @@
 
 #include <IL/ilut.h>  // Probably only have to #include this one
 
-#ifdef _MSC_VER
-	#ifndef _IL_WRAP_BUILD_LIB
-		#pragma comment(lib, "il_wrap.lib")
-	#endif
-#endif
-
 class ilImage
 {
 public:
-			ilImage();
-			ilImage(ILconst_string);
-			ilImage(const ilImage &);
+				ilImage();
+				ilImage(ILconst_string);
+				ilImage(const ilImage &);
 	virtual		~ilImage();
 
 	ILboolean	Load(ILconst_string);

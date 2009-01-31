@@ -14,12 +14,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ILUT", "..\..\src-ILUT\msvc
 		{B46B180B-6079-4CE6-8647-A7D712774255} = {B46B180B-6079-4CE6-8647-A7D712774255}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowsTest", "..\..\examples\windows_example\windowstest-vc8.vcproj", "{22B03048-FD11-4D7F-88F5-C2628F8B6777}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B46B180B-6079-4CE6-8647-A7D712774255} = {B46B180B-6079-4CE6-8647-A7D712774255}
-		{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009} = {CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}
-		{7D060DA4-F2FA-44CC-80BE-065024DD6CA9} = {7D060DA4-F2FA-44CC-80BE-065024DD6CA9}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Windows Example", "..\..\examples\windows_example\windows_example-vc8.vcproj", "{22B03048-FD11-4D7F-88F5-C2628F8B6777}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

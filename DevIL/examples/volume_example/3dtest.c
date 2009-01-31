@@ -16,7 +16,7 @@
 
 #ifdef _MSC_VER
 	#pragma comment(lib, "opengl32.lib")
-	#pragma comment(lib, "freeglut13.lib")
+	#pragma comment(lib, "freeglut.lib")
 
 	// Prevent the console window from popping up.
 	#pragma comment(linker, "/entry:mainCRTStartup")

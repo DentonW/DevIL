@@ -50,7 +50,7 @@ ILint ILAPIENTRY iSizeSeek(ILint Offset, ILuint Mode)
 	return 0;  // Code for success
 }
 
-ILint ILAPIENTRY iSizeTell(void)
+ILuint ILAPIENTRY iSizeTell(void)
 {
 	return CurPos;
 }
