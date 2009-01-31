@@ -32,7 +32,6 @@ Easier:
 - Add Code::Blocks projects.
 - Check to make sure all VTF formats are supported.
 - Look at DDSTextureLoader.cpp for new DDS formats.
-- rgbrle8.bmp does not load properly.
 
 
 More involved:
@@ -100,6 +99,7 @@ More involved:
 - Test Windows Mobile code.
 - OpenMP support: http://stackoverflow.com/questions/326487/multithreaded-image-processing-in-c
   http://www.ddj.com/architect/184405586
+- Shear rotation: http://www.codeproject.com/KB/graphics/rotatebyshear.aspx
 
 
 Lots of work:
