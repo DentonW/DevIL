@@ -294,4 +294,7 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* il_vtf.c: Changed VtfInitMipmaps calls to VtfInitFacesMipmaps calls and changed iLoadVtfInternal
 	  to support environment maps.
 	* il.h:384: Added IL_SPHEREMAP.
+
+2009-01-31 Denton Woods <doomwiz@users.sf.net>
+	* Added newlines to several files to keep gcc quiet.
 	

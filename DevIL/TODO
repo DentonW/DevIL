@@ -97,6 +97,7 @@ More involved:
 - VTF saving
 - TPL saving
 - Test Windows Mobile code.
+- OpenMP support: http://stackoverflow.com/questions/326487/multithreaded-image-processing-in-c
 
 
 Lots of work:
