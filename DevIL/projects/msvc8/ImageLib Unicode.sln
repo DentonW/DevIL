@@ -16,6 +16,19 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ILUT", "..\..\src-ILUT\msvc
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Windows Example", "..\..\examples\windows_example\windows_example-vc8.vcproj", "{22B03048-FD11-4D7F-88F5-C2628F8B6777}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Text Files", "Solution Text Files", "{D80F24EB-FFDB-4DBA-9714-12B21BA8AF2E}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\AUTHORS = ..\..\AUTHORS
+		..\..\ChangeLog = ..\..\ChangeLog
+		..\..\CREDITS = ..\..\CREDITS
+		..\..\Libraries.txt = ..\..\Libraries.txt
+		..\..\MSVC++.txt = ..\..\MSVC++.txt
+		..\..\NEWS = ..\..\NEWS
+		..\..\README.unix = ..\..\README.unix
+		..\..\README.win = ..\..\README.win
+		..\..\TODO = ..\..\TODO
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32

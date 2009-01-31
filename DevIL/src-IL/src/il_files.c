@@ -62,7 +62,7 @@ ILuint		CacheSize, CachePos, CacheStartPos, CacheBytesRead;
 // "Fake" size functions
 //  Definitions are in il_size.c.
 ILint		ILAPIENTRY iSizeSeek(ILint Offset, ILuint Mode);
-ILint		ILAPIENTRY iSizeTell(void);
+ILuint		ILAPIENTRY iSizeTell(void);
 ILint		ILAPIENTRY iSizePutc(ILubyte Char);
 ILint		ILAPIENTRY iSizeWrite(const void *Buffer, ILuint Size, ILuint Number);
 

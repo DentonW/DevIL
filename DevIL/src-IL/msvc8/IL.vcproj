@@ -2774,47 +2774,6 @@
 				</FileConfiguration>
 			</File>
 		</Filter>
-		<Filter
-			Name="Text Files"
-			Filter="txt"
-			>
-			<File
-				RelativePath="..\..\AUTHORS"
-				>
-			</File>
-			<File
-				RelativePath="..\..\ChangeLog"
-				>
-			</File>
-			<File
-				RelativePath="..\..\CREDITS"
-				>
-			</File>
-			<File
-				RelativePath="..\..\libraries.txt"
-				>
-			</File>
-			<File
-				RelativePath="..\..\MSVC++.txt"
-				>
-			</File>
-			<File
-				RelativePath="..\..\NEWS"
-				>
-			</File>
-			<File
-				RelativePath="..\..\README.unix"
-				>
-			</File>
-			<File
-				RelativePath="..\..\README.win"
-				>
-			</File>
-			<File
-				RelativePath="..\..\TODO"
-				>
-			</File>
-		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
