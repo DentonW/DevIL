@@ -299,4 +299,6 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* devil_cpp_wrapper.hpp: Removed MSVC++ #pragma at the top for deprecated lib.
 
 2009-01-31 Denton Woods <doomwiz@users.sf.net>
-	* Added newlines to several files to keep gcc quiet.
+	* Added newlines to the end of several files to keep gcc quiet.
+	* Added new MSVC++ projects for examples.
+	
