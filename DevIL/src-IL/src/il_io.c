@@ -802,6 +802,15 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, void *Lump, ILuint Size)
 }
 
 
+//! Attempts to load an image from a file.  The file format is specified by the user.
+/*! \param Type Format of this file.  Acceptable values are IL_BMP, IL_CUT, IL_DCX, IL_DDS, IL_DOOM,
+	IL_DOOM_FLAT, IL_EXR, IL_GIF, IL_HDR, IL_ICO, IL_ICNS, IL_IFF, IL_JP2, IL_JPG, IL_LIF, IL_MDL,
+	IL_MNG, IL_PCD, IL_PCX, IL_PIX, IL_PNG, IL_PNM, IL_PSD, IL_PSP, IL_PXR, IL_SGI, IL_SUN, IL_TGA,
+	IL_TIF, IL_TPL, IL_VTF, IL_WAL, IL_WBMP, IL_XPM, IL_RAW and IL_JASC_PAL.
+	\param FileName Ansi or Unicode string, depending on the compiled version of DevIL, that gives
+	       the filename of the file to load.
+	\return Boolean value of failure or success.  Returns IL_FALSE if all three loading methods
+	       have been tried and failed.*/
 ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 {
 	ILboolean	bRet;
@@ -1427,7 +1436,17 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size)
 }
 
 
-//! Attempts to load an image with various different methods before failing - very generic.
+//! Attempts to load an image from a file with various different methods before failing - very generic.
+/*! The ilLoadImage function allows a general interface to the specific internal file-loading
+	routines.  First, it finds the extension and checks to see if any user-registered functions
+	(registered through ilRegisterLoad) match the extension. If nothing matches, it takes the
+	extension and determines which function to call based on it. Lastly, it attempts to identify
+	the image based on various image header verification functions, such as ilIsValidPngF.
+	If all this checking fails, IL_FALSE is returned with no modification to the current bound image.
+	\param FileName Ansi or Unicode string, depending on the compiled version of DevIL, that gives
+	       the filename of the file to load.
+	\return Boolean value of failure or success.  Returns IL_FALSE if all three loading methods
+	       have been tried and failed.*/
 ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 {
 	ILstring	Ext;

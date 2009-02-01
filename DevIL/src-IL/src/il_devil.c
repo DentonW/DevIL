@@ -201,7 +201,14 @@ ILAPI ILboolean ILAPIENTRY ilTexSubImage_(ILimage *Image, void *Data)
 }
 
 
-ILubyte* ILAPIENTRY ilGetData()
+//! Returns a pointer to the current image's data.
+/*! The pointer to the image data returned by this function is only valid until any
+    operations are done on the image.  After any operations, this function should be
+	called again.  The pointer can be cast to other types for images that have more
+	than one byte per channel for easier access to data.
+	\exception IL_ILLEGAL_OPERATION No currently bound image
+	\return ILubyte pointer to image data.*/
+ILubyte* ILAPIENTRY ilGetData(void)
 {
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -212,7 +219,13 @@ ILubyte* ILAPIENTRY ilGetData()
 }
 
 
-ILubyte* ILAPIENTRY ilGetPalette()
+//! Returns a pointer to the current image's palette data.
+/*! The pointer to the image palette data returned by this function is only valid until
+	any operations are done on the image.  After any operations, this function should be
+	called again.
+	\exception IL_ILLEGAL_OPERATION No currently bound image
+	\return ILubyte pointer to image palette data.*/
+ILubyte* ILAPIENTRY ilGetPalette(void)
 {
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);

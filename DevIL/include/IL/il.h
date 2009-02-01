@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 12/23/2008
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 02/01/2009
 //
 // Filename: IL/il.h
 //
@@ -33,8 +33,10 @@ extern "C" {
 #define CLAMP_FLOATS	1
 #define CLAMP_DOUBLES	1
 
-#ifdef _WIN32_WCE
+/*#ifdef _WIN32_WCE
+	#define IL_NO_EXR
 	#define IL_NO_GIF
+	#define IL_NO_JP2
 	#define IL_NO_JPG
 	#define IL_NO_MNG
 	#define IL_NO_PNG
@@ -43,13 +45,15 @@ extern "C" {
 #endif //_WIN32_WCE
 
 #ifdef DJGPP
+	#define IL_NO_EXR
 	#define IL_NO_GIF
+	#define IL_NO_JP2
 	#define IL_NO_JPG
 	#define IL_NO_MNG
 	#define IL_NO_PNG
 	#define IL_NO_TIF
 	#define IL_NO_LCMS
-#endif //DJGPP
+#endif //DJGPP*/
 
 #ifdef _WIN32
 	#if (defined(IL_USE_PRAGMA_LIBS)) && (!defined(_IL_BUILD_LIBRARY))
@@ -111,10 +115,11 @@ typedef long long unsigned int ILuint64;
 	#define ILconst_string char const *
 #endif //_UNICODE
 
-#define IL_FALSE							0
-#define IL_TRUE								1
+#define IL_FALSE			0
+#define IL_TRUE				1
 
-// Matches OpenGL's right now.
+//  Matches OpenGL's right now.
+//! Data formats \link Formats Formats\endlink
 #define IL_COLOUR_INDEX     0x1900
 #define IL_COLOR_INDEX      0x1900
 #define IL_ALPHA			0x1906
@@ -125,7 +130,7 @@ typedef long long unsigned int ILuint64;
 #define IL_LUMINANCE        0x1909
 #define IL_LUMINANCE_ALPHA  0x190A
 
-
+//! Data types \link Types Types\endlink
 #define IL_BYTE           0x1400
 #define IL_UNSIGNED_BYTE  0x1401
 #define IL_SHORT          0x1402
@@ -184,51 +189,51 @@ typedef long long unsigned int ILuint64;
 
 // Image types
 #define IL_TYPE_UNKNOWN 0x0000
-#define IL_BMP          0x0420
-#define IL_CUT          0x0421
-#define IL_DOOM         0x0422
-#define IL_DOOM_FLAT    0x0423
-#define IL_ICO          0x0424
-#define IL_JPG          0x0425
-#define IL_JFIF         0x0425
-#define IL_LBM          0x0426
-#define IL_PCD          0x0427
-#define IL_PCX          0x0428
-#define IL_PIC          0x0429
-#define IL_PNG          0x042A
-#define IL_PNM          0x042B
-#define IL_SGI          0x042C
-#define IL_TGA          0x042D
-#define IL_TIF          0x042E
-#define IL_CHEAD        0x042F
-#define IL_RAW          0x0430
-#define IL_MDL          0x0431
-#define IL_WAL          0x0432
-#define IL_LIF          0x0434
-#define IL_MNG          0x0435
-#define IL_JNG          0x0435
-#define IL_GIF          0x0436
-#define IL_DDS          0x0437
-#define IL_DCX          0x0438
-#define IL_PSD          0x0439
-#define IL_EXIF         0x043A
-#define IL_PSP          0x043B
-#define IL_PIX          0x043C
-#define IL_PXR          0x043D
-#define IL_XPM          0x043E
-#define IL_HDR          0x043F
-#define IL_ICNS			0x0440
-#define IL_JP2			0x0441
-#define IL_EXR			0x0442
-#define IL_WDP			0x0443
-#define IL_VTF			0x0444
-#define IL_WBMP			0x0445
-#define IL_SUN			0x0446
-#define IL_IFF			0x0447
-#define IL_TPL			0x0448
+#define IL_BMP          0x0420  //!< Microsoft Windows Bitmap - .bmp extension
+#define IL_CUT          0x0421  //!< Dr. Halo - .cut extension
+#define IL_DOOM         0x0422  //!< DooM walls - no specific extension
+#define IL_DOOM_FLAT    0x0423  //!< DooM flats - no specific extension
+#define IL_ICO          0x0424  //!< Microsoft Windows Icons and Cursors - .ico and .cur extensions
+#define IL_JPG          0x0425  //!< JPEG - .jpg, .jpe and .jpeg extensions
+#define IL_JFIF         0x0425  //!<
+#define IL_LBM          0x0426  //!< Interlaced bitmap - .lbm extension
+#define IL_PCD          0x0427  //!< Kodak PhotoCD - .pcd extension
+#define IL_PCX          0x0428  //!< ZSoft PCX - .pcx extension
+#define IL_PIC          0x0429  //!< PIC - .pic extension
+#define IL_PNG          0x042A  //!< Portable Network Graphics - .png extension
+#define IL_PNM          0x042B  //!< Portable Any Map - .pbm, .pgm, .ppm and .pnm extensions
+#define IL_SGI          0x042C  //!< Silicon Graphics - .sgi, .bw, .rgb and .rgba extensions
+#define IL_TGA          0x042D  //!< TrueVision Targa File - .tga, .vda, .icb and .vst extensions
+#define IL_TIF          0x042E  //!< Tagged Image File Format - .tif and .tiff extensions
+#define IL_CHEAD        0x042F  //!< C-Style Header - .h extension
+#define IL_RAW          0x0430  //!< Raw Image Data - any extension
+#define IL_MDL          0x0431  //!< Half-Life Model Texture - .mdl extension
+#define IL_WAL          0x0432  //!< Quake 2 Texture - .wal extension
+#define IL_LIF          0x0434  //!< Homeworld Texture - .lif extension
+#define IL_MNG          0x0435  //!< Multiple-image Network Graphics - .mng extension
+#define IL_JNG          0x0435  //!< 
+#define IL_GIF          0x0436  //!< Graphics Interchange Format - .gif extension
+#define IL_DDS          0x0437  //!< DirectDraw Surface - .dds extension
+#define IL_DCX          0x0438  //!< ZSoft Multi-PCX - .dcx extension
+#define IL_PSD          0x0439  //!< Adobe PhotoShop - .psd extension
+#define IL_EXIF         0x043A  //!< 
+#define IL_PSP          0x043B  //!< PaintShop Pro - .psp extension
+#define IL_PIX          0x043C  //!< PIX - .pix extension
+#define IL_PXR          0x043D  //!< Pixar - .pxr extension
+#define IL_XPM          0x043E  //!< X Pixel Map - .xpm extension
+#define IL_HDR          0x043F  //!< Radiance High Dynamic Range - .hdr extension
+#define IL_ICNS			0x0440  //!< Macintosh Icon - .icns extension
+#define IL_JP2			0x0441  //!< Jpeg 2000 - .jp2 extension
+#define IL_EXR			0x0442  //!< OpenEXR - .exr extension
+#define IL_WDP			0x0443  //!< 
+#define IL_VTF			0x0444  //!< Valve Texture Format - .vtf extension
+#define IL_WBMP			0x0445  //!< Wireless Bitmap - .wbmp extension
+#define IL_SUN			0x0446  //!< Sun Raster - .sun, .ras, .rs, .im1, .im8, .im24 and .im32 extensions
+#define IL_IFF			0x0447  //!< Interchange File Format - .iff extension
+#define IL_TPL			0x0448  //!< Gamecube Texture - .tpl extension
 
 
-#define IL_JASC_PAL     0x0475
+#define IL_JASC_PAL     0x0475  //!< PaintShop Pro Palette
 
 
 // Error Types

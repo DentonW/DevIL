@@ -6,7 +6,7 @@
 //
 // Filename: src-IL/src/il_targa.c
 //
-// Description: Reads from and writes to a targa (.tga) file.
+// Description: Reads from and writes to a Targa (.tga) file.
 //
 //-----------------------------------------------------------------------------
 

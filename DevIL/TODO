@@ -13,6 +13,13 @@ By next release:
 - Add VTF Edit to projects page.
 - DevIL x64 DLL Install to SVN.
 - Check exported function names.
+- Verify all formats are listed in il_io.c Doxygen documentation.
+- http://www.fileformat.info/format/drhalo/sample/index.htm - Check these.
+- Add .wbmp and .sun to DevIL_manual.pdf.
+- Update Portable Any Map name in manual and code. http://www.bbhscanners.com/support/infinity_WF/faqs/faq_001.html
+- Update http://en.wikipedia.org/wiki/Tagged_Image_File_Format name as above.
+- Same with MNG
+- Update Targa extensions in manual.
 
 
 Easier:
@@ -38,6 +45,7 @@ Easier:
   http://zach.in.tu-clausthal.de/teaching/cg2_07/literatur/frame_buffer_objects.html
   http://objectmix.com/graphics/745877-glgeneratemipmapext.html
 - Make libsquish and NVTT code compress volume textures (do each slice separately).
+- Check .dcx code - does it even load multiple images?
 
 
 More involved:
