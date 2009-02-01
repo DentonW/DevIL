@@ -57,7 +57,7 @@ HBRUSH BackBrush;
 #define TITLE		L"DevIL Windows Test"
 ILuint	NumUndosAllowed = 4, UndoSize = 0;
 ILuint	Undos[11] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-ILuint	Width, Height, Depth;  // Main image
+ILuint	Width, Height, Depth, Size;  // Main image
 ILint	CurImage;
 TCHAR	CurFileName[2048];
 
@@ -610,6 +610,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					cur_elapsed = SDL_GetTicks();
 					elapsed = cur_elapsed - last_elapsed;
 					last_elapsed = cur_elapsed;
+
+					ilCompressDXT(ilGetData(), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 1, IL_DXT5, &Size);
 
 					//ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
 					//ilEnable(IL_NVIDIA_COMPRESS);

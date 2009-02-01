@@ -1303,11 +1303,12 @@ ILAPI ILubyte* ILAPIENTRY ilCompressDXT(ILubyte *Data, ILuint Width, ILuint Heig
 		ifree(Buffer);
 		return NULL;
 	}
+	*DXTCSize = BuffSize;
 
 	// Restore backup of iCurImage.
 	iCurImage = CurImage;
 	TempImage->Data = NULL;
 	ilCloseImage(TempImage);
 
-	return NULL;
+	return Buffer;
 }
