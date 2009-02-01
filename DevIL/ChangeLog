@@ -318,4 +318,6 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* Updated several functions with appropriate Doxygen comments.
 	* il.h: Updated IL_XXX file format defines with Doxygen comments.
 	* ilu_rotate.c: Changed min/max calls to IL_MIN/IL_MAX.
-	
+	* ilut_states.c (ilutSetInteger): Fixed ILUT_MAXTEX_DEPTH call and added checks around first
+	  three calls for Param >= 1.
+

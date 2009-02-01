@@ -273,13 +273,22 @@ void ILAPIENTRY ilutSetInteger(ILenum Mode, ILint Param)
 
 //#ifdef ILUT_USE_OPENGL
 		case ILUT_MAXTEX_WIDTH:
-			ilutStates[ilutCurrentPos].MaxTexW = Param;
-			return;
+			if (Param >= 1) {
+				ilutStates[ilutCurrentPos].MaxTexW = Param;
+				return;
+			}
+			break;
 		case ILUT_MAXTEX_HEIGHT:
-			ilutStates[ilutCurrentPos].MaxTexH = Param;
-			return;
+			if (Param >= 1) {
+				ilutStates[ilutCurrentPos].MaxTexH = Param;
+				return;
+			}
+			break;
 		case ILUT_MAXTEX_DEPTH:
-			ilutStates[ilutCurrentPos].MaxTexD = Param;
+			if (Param >= 1) {
+				ilutStates[ilutCurrentPos].MaxTexD = Param;
+				return;
+			}
 			break;
 		case ILUT_GL_USE_S3TC:
 			if (Param == IL_TRUE || Param == IL_FALSE) {
