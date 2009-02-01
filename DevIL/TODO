@@ -11,7 +11,8 @@ By next release:
 - Update DevIL website with file formats (psd-saving, etc.).
 - Add Nebula Device to projects page.
 - Add VTF Edit to projects page.
-- DevIL x64 DLL Install to SVN
+- DevIL x64 DLL Install to SVN.
+- Check exported function names.
 
 
 Easier:
@@ -36,6 +37,7 @@ Easier:
 - 3d mipmaps and better 2d: http://www.opengl.org/discussion_boards/ubbthreads.php?ubb=showflat&Number=236590&fpart=2
   http://zach.in.tu-clausthal.de/teaching/cg2_07/literatur/frame_buffer_objects.html
   http://objectmix.com/graphics/745877-glgeneratemipmapext.html
+- Make libsquish and NVTT code compress volume textures (do each slice separately).
 
 
 More involved:

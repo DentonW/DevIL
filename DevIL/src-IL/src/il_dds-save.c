@@ -74,7 +74,7 @@ ILuint ilSaveDdsL(void *Lump, ILuint Size)
 ILuint GetCubemapInfo(ILimage* image, ILint* faces)
 {
 	ILint	indices[] = { -1, -1, -1,  -1, -1, -1 }, i;
-	ILimage*	img;
+	ILimage	*img;
 	ILuint	ret = 0, srcMipmapCount, srcImagesCount, mipmapCount;
 
 	if (image == NULL)
@@ -89,7 +89,7 @@ ILuint GetCubemapInfo(ILimage* image, ILint* faces)
 	mipmapCount = srcMipmapCount;
 
 	for (i = 0; i < 6; ++i) {
-		switch(img->CubeFlags)
+		switch (img->CubeFlags)
 		{
 			case DDS_CUBEMAP_POSITIVEX:
 				indices[i] = 0;
@@ -125,7 +125,7 @@ ILuint GetCubemapInfo(ILimage* image, ILint* faces)
 	if (ret != 0) //should always be true
 		ret |= DDS_CUBEMAP;
 
-	for (i =0; i < 6; ++i)
+	for (i = 0; i < 6; ++i)
 		faces[indices[i]] = i;
 
 	return ret;
@@ -148,7 +148,7 @@ ILboolean iSaveDdsInternal()
 	WriteHeader(iCurImage, DXTCFormat, CubeFlags);
 
 	if (CubeFlags != 0)
-		numFaces = ilGetInteger(IL_NUM_IMAGES); //should always be 5 for now
+		numFaces = ilGetInteger(IL_NUM_FACES); // Should always be 5 for now
 	else
 		numFaces = 0;
 
@@ -387,7 +387,7 @@ ILushort *CompressTo565(ILimage *Image)
 	ILuint		i, j;
 
 	if ((Image->Type != IL_UNSIGNED_BYTE && Image->Type != IL_BYTE) || Image->Format == IL_COLOUR_INDEX) {
-		TempImage = iConvertImage(iCurImage, IL_BGR, IL_UNSIGNED_BYTE);  // @TODO: Needs to be BGRA.
+		TempImage = iConvertImage(iCurImage, IL_BGRA, IL_UNSIGNED_BYTE);  // @TODO: Needs to be BGRA.
 		if (TempImage == NULL)
 			return NULL;
 	}
@@ -459,6 +459,10 @@ ILushort *CompressTo565(ILimage *Image)
 				Data[j] |=  TempImage->Data[i] >> 3;*/
 				Data[j] = As16Bit(TempImage->Data[i], TempImage->Data[i], TempImage->Data[i]);
 			}
+			break;
+
+		case IL_ALPHA:
+			memset(Data, 0, iCurImage->Width * iCurImage->Height * 2 * iCurImage->Depth);
 			break;
 	}
 
@@ -728,7 +732,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 #ifdef IL_USE_DXTC_SQUISH
 		if (ilIsEnabled(IL_SQUISH_COMPRESS) && Image->Depth == 1) {  // See if we need to use the nVidia Texture Tools library.
 			if (DXTCFormat == IL_DXT1 || DXTCFormat == IL_DXT1A || DXTCFormat == IL_DXT3 || DXTCFormat == IL_DXT5) {
-				// NVTT needs data as RGBA 32-bit.
+				// libsquish needs data as RGBA 32-bit.
 				if (Image->Format != IL_RGBA || Image->Type != IL_UNSIGNED_BYTE) {  // No need to convert if already this format/type.
 					ByteData = ilConvertBuffer(Image->SizeOfData, Image->Format, IL_RGBA, Image->Type, IL_UNSIGNED_BYTE, Image->Data);
 					if (ByteData == NULL)
@@ -1237,4 +1241,73 @@ void PreMult(ILushort *Data, ILubyte *Alpha)
 	}
 
 	return;
+}
+
+
+//! Compresses data to a DXT format using different methods.
+//  The data must be in unsigned byte RGBA or BGRA format.  Only DXT1, DXT3 and DXT5 are supported.
+ILAPI ILubyte* ILAPIENTRY ilCompressDXT(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILenum DXTCFormat, ILuint *DXTCSize)
+{
+	ILimage *TempImage, *CurImage = iCurImage;
+	ILuint	BuffSize;
+	ILubyte	*Buffer;
+
+	if ((DXTCFormat != IL_DXT1 && DXTCFormat != IL_DXT1A && DXTCFormat != IL_DXT3 && DXTCFormat != IL_DXT5)
+		|| Data == NULL || Width == 0 || Height == 0 || Depth == 0) {
+		ilSetError(IL_INVALID_PARAM);
+		return NULL;
+	}
+
+	// We want to try nVidia compression first, because it is the fastest.
+#ifdef IL_USE_DXTC_NVIDIA
+	if (ilIsEnabled(IL_NVIDIA_COMPRESS) && Depth == 1) {  // See if we need to use the nVidia Texture Tools library.
+		// NVTT needs data as BGRA 32-bit.
+		// Here's where all the compression and writing goes on.
+		return ilNVidiaCompressDXT(Data, Width, Height, 1, DXTCFormat, DXTCSize);
+	}
+#endif//IL_USE_DXTC_NVIDIA
+
+	// libsquish generates better quality output than DevIL does, so we try it next.
+#ifdef IL_USE_DXTC_SQUISH
+	if (ilIsEnabled(IL_SQUISH_COMPRESS) && Depth == 1) {  // See if we need to use the nVidia Texture Tools library.
+		if (DXTCFormat == IL_DXT1 || DXTCFormat == IL_DXT1A || DXTCFormat == IL_DXT3 || DXTCFormat == IL_DXT5) {
+			// libsquish needs data as RGBA 32-bit.
+			// Get compressed data here.
+			return ilSquishCompressDXT(Data, Width, Height, 1, DXTCFormat, DXTCSize);
+		}
+	}
+#endif//IL_USE_DXTC_SQUISH
+
+	TempImage = (ILimage*)ialloc(sizeof(ILimage));
+	memset(TempImage, 0, sizeof(ILimage));
+	TempImage->Width = Width;
+	TempImage->Height = Height;
+	TempImage->Depth = Depth;
+	TempImage->Bpp = 4;  // RGBA or BGRA
+	TempImage->Format = IL_BGRA;
+	TempImage->Bpc = 1;  // Unsigned bytes only
+	TempImage->Type = IL_UNSIGNED_BYTE;
+	TempImage->SizeOfPlane = TempImage->Bps * Height;
+	TempImage->SizeOfData  = TempImage->SizeOfPlane * Depth;
+	TempImage->Origin = IL_ORIGIN_UPPER_LEFT;
+	TempImage->Data = Data;
+
+	BuffSize = ilGetDXTCData(NULL, 0, DXTCFormat);
+	if (BuffSize == 0)
+		return NULL;
+	Buffer = (ILubyte*)ialloc(BuffSize);
+	if (Buffer == NULL)
+		return NULL;
+
+	if (ilGetDXTCData(Buffer, BuffSize, DXTCFormat) != BuffSize) {
+		ifree(Buffer);
+		return NULL;
+	}
+
+	// Restore backup of iCurImage.
+	iCurImage = CurImage;
+	TempImage->Data = NULL;
+	ilCloseImage(TempImage);
+
+	return NULL;
 }

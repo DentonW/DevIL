@@ -193,6 +193,11 @@ ILAPI void ILAPIENTRY ilCloseImage(ILimage *Image)
 		Image->Next = NULL;
 	}
 
+	if (Image->Faces != NULL) {
+		ilCloseImage(Image->Faces);
+		Image->Mipmaps = NULL;
+	}
+
 	if (Image->Mipmaps != NULL) {
 		ilCloseImage(Image->Mipmaps);
 		Image->Mipmaps = NULL;

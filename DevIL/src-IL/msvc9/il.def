@@ -11,6 +11,7 @@ ilBlit
 ilClearColour
 ilClearImage
 ilCloneCurImage
+ilCompressDXT
 ilCompressFunc
 ilConvertImage
 ilConvertPal
@@ -125,8 +126,10 @@ ilCopyImage_
 iGetFlipped
 ilIsValidPal
 ilNewImage
+ilNVidiaCompressDXT
 ilResizeImage
 ilSetCurImage
+ilSquishCompressDXT
 ilTexImage_
 ilTexSubImage_
 ialloc

@@ -893,18 +893,38 @@ ilSetInteger(IL_DXTC_FORMAT, Format);
 
 @emph{Format} can be IL_DXT1, IL_DXT3 or IL_DXT5.
 
+@subsection Compression Method
+DevIL can use the nVidia Texture Tools (NVTT) library, the libsquish library and its own internal compressor to generate DXTC data.  By default, DevIL uses its internal compressor.  This compressor is fast but is not very high quality.  NVTT is usually CUDA-enabled, meaning that it can run quickly on computers with GeForce 8-series and higher cards.  libsquish generates images with the highest quality possible, but it can be very slow.
+
+To enable compression by NVTT or libsquish, use one of the following lines of code:
+
+@example
+ilEnable(IL_NVIDIA_COMPRESS);
+ilEnable(IL_SQUISH_COMPRESS);
+@end example
+
+You can also disable compression by these libraries by using ilDisable.  If both are enabled, NVTT is used.
+
 @section Retrieving DXTC Data
 To retrieve a copy of the DXTC data, use @code{ilGetDXTCData}.  To determine how large Buffer should be, first call @code{ilGetDXTCData} with the Buffer parameter as @code{NULL}.  This function will then return the number of bytes that are required to completely store the DXTC data.
 Call it a second time to actually retrieve the data.
 
 @example
-ILuint ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize,
-   ILenum DXTCFormat);
+ILuint ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize, ILenum DXTCFormat);
 @end example
 
 If the DXTC data does not exist in the format that you request, DevIL will automatically compress the data.
 If @code{ilGetDXTCData} returns 0, then the data could not be compressed.
 To see if a certain format of DXTC data already exists for the currently bound image, call @code{ilGetInteger} with the @code{IL_DXTC_DATA_FORMAT} parameter.
+
+@section Compressing DXTC Data
+In the previous section, it was mentioned that DevIL can compress the data of an image with DXT compression.  If you have image data in your program that you want to compress, you can use the @code{ilCompressDXT} function.
+
+@example
+ILubyte *ilCompressDXT(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILenum DXTCFormat, ILuint *DXTCSize);
+@end example
+
+Data must be in BGRA format for NVTT and DevIL's compressor, and it must be in RGBA format for libsquish.  Please keep this in mind when calling this @code{ilCompressDXT}.  Look at Compression Method in this section for information on how to use these libraries.
 
 @section OpenGL/Direct3D DXTC Support
 ILUT allows you to directly send the DXTC data to OpenGL or Direct3D.
