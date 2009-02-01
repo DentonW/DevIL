@@ -910,7 +910,8 @@ To retrieve a copy of the DXTC data, use @code{ilGetDXTCData}.  To determine how
 Call it a second time to actually retrieve the data.
 
 @example
-ILuint ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize, ILenum DXTCFormat);
+ILuint ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize,
+                     ILenum DXTCFormat);
 @end example
 
 If the DXTC data does not exist in the format that you request, DevIL will automatically compress the data.
@@ -921,7 +922,8 @@ To see if a certain format of DXTC data already exists for the currently bound i
 In the previous section, it was mentioned that DevIL can compress the data of an image with DXT compression.  If you have image data in your program that you want to compress, you can use the @code{ilCompressDXT} function.
 
 @example
-ILubyte *ilCompressDXT(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILenum DXTCFormat, ILuint *DXTCSize);
+ILubyte *ilCompressDXT(ILubyte *Data, ILuint Width, ILuint Height,
+                    ILuint Depth, ILenum DXTCFormat, ILuint *DXTCSize);
 @end example
 
 Data must be in BGRA format for NVTT and DevIL's compressor, and it must be in RGBA format for libsquish.  Please keep this in mind when calling this @code{ilCompressDXT}.  Look at Compression Method in this section for information on how to use these libraries.
@@ -1049,8 +1051,7 @@ Table lists the formats DevIL supports sorted according to @code{#define}.
 	@headitem Format name	@tab Extension	@tab IL @code{#define} @tab Loading?	@tab Saving?
 	@item Windows bitmap	@tab .bmp	@tab @code{IL_BMP}	@tab yes	@tab yes
 	@item C-style header	@tab .h	@tab @code{IL_CHED}	@tab no	@tab yes
-	@item Dr.
-Halo Cut File	@tab .cut	@tab @code{IL_CUT}	@tab yes	@tab no
+	@item Dr. Halo Cut File	@tab .cut	@tab @code{IL_CUT}	@tab yes	@tab no
 	@item ZSoft Multi-PCX	@tab .dcx	@tab @code{IL_DCX}	@tab yes	@tab no
 	@item DirectDraw surface	@tab .dds	@tab @code{IL_DDS}	@tab yes	@tab yes
 	@item DOOM walls/flats	@tab .lmp	@tab @code{IL_DOOM}, @code{IL_DOOM_FLAT}	@tab yes	@tab no
@@ -1058,13 +1059,15 @@ Halo Cut File	@tab .cut	@tab @code{IL_CUT}	@tab yes	@tab no
 	@item Radiance High Dynamic Range	@tab .hdr	@tab @code{IL_HDR}	@tab yes	@tab yes
 	@item Icons	@tab .ico, .cur	@tab @code{IL_ICO}	@tab yes	@tab no
 	@item Macintosh Icons	@tab .icns	@tab @code{IL_ICNS}	@tab yes	@tab no
+	@item Interchange File Format	@tab .iff	@tab @code{IL_IFF}	@tab yes	@tab no
 	@item Jpeg Network Graphics	@tab .jng	@tab @code{IL_JNG}	@tab yes	@tab no
-	@item Jpeg 2000	@tab .jp2	@tab @code{IL_JP2}	@tab yes	@tab no
+	@item Jpeg 2000	@tab .jp2	@tab @code{IL_JP2}	@tab yes	@tab yes
 	@item Jpeg	@tab .jpg, .jpe, .jpeg	@tab @code{IL_JPG}	@tab yes	@tab yes
 	@item Interlaced Bitmap	@tab .lbm	@tab @code{IL_LBM}	@tab yes	@tab no
 	@item Homeworld File	@tab .lif	@tab @code{IL_LIF}	@tab yes	@tab no
 	@item Half-Life Model	@tab .mdl	@tab @code{IL_MDL}	@tab yes	@tab no
 	@item Mng Animation	@tab .mng	@tab @code{IL_MNG}	@tab yes	@tab no
+	@item OpenEXR	@tab .exr	@tab @code{IL_EXR}	@tab yes	@tab yes
 	@item PhotoCD	@tab .pcd	@tab @code{IL_PCD}	@tab yes	@tab no
 	@item ZSoft PCX	@tab .pcx	@tab @code{IL_PCX}	@tab yes	@tab yes
 	@item PIC	@tab .pic	@tab @code{IL_PIC}	@tab yes	@tab no
