@@ -6,7 +6,7 @@
 
 @copying
 This is DevIL manual. 
-Copyright @copyright{} 2008
+Copyright @copyright{} 2008-2009
 @end copying
 
 @titlepage
@@ -372,10 +372,13 @@ DevIL also has some powerful saving functions to fully complement the loading fu
 ILboolean ilSaveImage(const char *FileName);
 ILboolean ilSave(ILenum Type, const char *FileName);
 ILboolean ilSaveF(ILenum Type, ILHANDLE File);
-ILboolean ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size);
+ILuint ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size);
 @end example
 
 DevIL's saving functions are identical to the loading functions, despite the fact that they save images instead of load images.
+
+Typically, the user does not know exactly how large the output image will be.  If you pass NULL for @code{Lump} and 0 for @code{Size} to @code{ilSaveL}, @code{ilSaveL} will return the buffer size needed to save an image of @code{Type}.  When a buffer is passed for @code{Lump}, the return value is how many bytes were written to the buffer.
+
 Note that not all formats that have load support have also save support (@pxref{file_formats})
 
 @node Image Management

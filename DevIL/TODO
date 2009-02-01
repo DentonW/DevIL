@@ -33,6 +33,9 @@ Easier:
 - Check to make sure all VTF formats are supported.
 - Look at DDSTextureLoader.cpp for new DDS formats.
 - http://www.leunen.com/cbuilder/rotbmp.html
+- 3d mipmaps and better 2d: http://www.opengl.org/discussion_boards/ubbthreads.php?ubb=showflat&Number=236590&fpart=2
+  http://zach.in.tu-clausthal.de/teaching/cg2_07/literatur/frame_buffer_objects.html
+  http://objectmix.com/graphics/745877-glgeneratemipmapext.html
 
 
 More involved:
@@ -54,7 +57,7 @@ More involved:
 - Better DirectX 10 support
 - Should probably check for errors in iGetWdpHead and etc...
 - ilGetAlpha returns malloc'ed memory that cannot be freed by the caller.
-- Support for DX10 .dds files
+- Support for DX10 .dds files - one new format is found in HDRRendering sample in nVidia DX10 SDK.
 - More checks for headers of unknown file types
 - Set CompSize in ReadData of il_dds.c for DDS_LINEARSIZE flag?
 - Look at resize filters in VTFEdit.
