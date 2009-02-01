@@ -1038,6 +1038,7 @@ A table of error codes follows:
 	@item @code{IL_LIB_TIFF_ERROR}	@tab @code{0x5E4}	@tab @code{1508}
 	@item @code{IL_LIB_MNG_ERROR}	@tab @code{0x5E5}	@tab @code{1509}
 	@item @code{IL_LIB_JP2_ERROR}	@tab @code{0x5E6}	@tab @code{1510}
+	@item @code{IL_LIB_EXR_ERROR}	@tab @code{0x5E7}	@tab @code{1511}
 	@item @code{IL_UNKNOWN_ERROR}	@tab @code{0x5FF}	@tab @code{1535}
 @end multitable
 
