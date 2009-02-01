@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 01/04/2009
+// Last modified: 02/01/2009
 //
 // Filename: src-IL/src/il_devil.c
 //
@@ -113,6 +113,17 @@ ILAPI ILimage* ILAPIENTRY ilNewImageFull(ILuint Width, ILuint Height, ILuint Dep
 
 
 //! Changes the current bound image to use these new dimensions (current data is destroyed).
+/*! \param Width Specifies the new image width.  This cannot be 0.
+	\param Height Specifies the new image height.  This cannot be 0.
+	\param Depth Specifies the new image depth.  This cannot be 0.
+	\param Bpp Number of channels (ex. 3 for RGB)
+	\param Format Enum of the desired format.  Any format values are accepted.
+	\param Type Enum of the desired type.  Any type values are accepted.
+	\param Data Specifies data that should be copied to the new image. If this parameter is NULL, no data is copied, and the new image data consists of undefined values.
+	\exception IL_ILLEGAL_OPERATION No currently bound image.
+	\exception IL_INVALID_PARAM One of the parameters is incorrect, such as one of the dimensions being 0.
+	\exception IL_OUT_OF_MEMORY Could not allocate enough memory.
+	\return Boolean value of failure or success*/
 ILboolean ILAPIENTRY ilTexImage(ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, void *Data)
 {
 	return ilTexImage_(iCurImage, Width, Height, Depth, Bpp, Format, Type, Data);
@@ -157,6 +168,11 @@ ILAPI ILboolean ILAPIENTRY ilTexImage_(ILimage *Image, ILuint Width, ILuint Heig
 
 
 //! Uploads Data of the same size to replace the current image's data.
+/*! \param Data New image data to update the currently bound image
+	\exception IL_ILLEGAL_OPERATION No currently bound image
+	\exception IL_INVALID_PARAM Data was NULL.
+	\return Boolean value of failure or success
+*/
 ILboolean ILAPIENTRY ilSetData(void *Data)
 {
 	if (iCurImage == NULL) {

@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Toolkit Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 08/23/2008
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 02/01/2009
 //
 // Filename: IL/ilut.h
 //
@@ -10,6 +10,10 @@
 //
 //-----------------------------------------------------------------------------
 
+// Doxygen comment
+/*! \file ilut.h
+    The main include file for ILUT
+*/
 
 #ifndef __ilut_h_
 #ifndef __ILUT_H__

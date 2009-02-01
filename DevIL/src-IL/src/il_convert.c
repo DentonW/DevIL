@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 12/06/2006
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 02/01/2009
 //
 // Filename: src-IL/src/il_convert.c
 //
@@ -375,9 +375,15 @@ ILAPI ILimage* ILAPIENTRY iConvertImage(ILimage *Image, ILenum DestFormat, ILenu
 
 
 //! Converts the current image to the DestFormat format.
+/*! \param DestFormat An enum of the desired output format.  Any format values are accepted.
+    \param DestType An enum of the desired output type.  Any type values are accepted.
+	\exception IL_ILLEGAL_OPERATION No currently bound image
+	\exception IL_INVALID_CONVERSION DestFormat or DestType was an invalid identifier.
+	\exception IL_OUT_OF_MEMORY Could not allocate enough memory.
+	\return Boolean value of failure or success*/
 ILboolean ILAPIENTRY ilConvertImage(ILenum DestFormat, ILenum DestType)
 {
-	ILimage *Image, *pCurrImage;
+	ILimage *Image, *pCurImage;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -398,36 +404,36 @@ ILboolean ILAPIENTRY ilConvertImage(ILenum DestFormat, ILenum DestType)
 		ilAddAlphaKey(iCurImage);
 	}
 
-	pCurrImage = iCurImage;
-	while (pCurrImage != NULL)
+	pCurImage = iCurImage;
+	while (pCurImage != NULL)
 	{
-		Image = iConvertImage(pCurrImage, DestFormat, DestType);
+		Image = iConvertImage(pCurImage, DestFormat, DestType);
 		if (Image == NULL)
 			return IL_FALSE;
 
-		//ilCopyImageAttr(pCurrImage, Image);  // Destroys subimages.
+		//ilCopyImageAttr(pCurImage, Image);  // Destroys subimages.
 
 		// We don't copy the colour profile here, since it stays the same.
 		//	Same with the DXTC data.
-		pCurrImage->Format = DestFormat;
-		pCurrImage->Type = DestType;
-		pCurrImage->Bpc = ilGetBpcType(DestType);
-		pCurrImage->Bpp = ilGetBppFormat(DestFormat);
-		pCurrImage->Bps = pCurrImage->Width * pCurrImage->Bpc * pCurrImage->Bpp;
-		pCurrImage->SizeOfPlane = pCurrImage->Bps * pCurrImage->Height;
-		pCurrImage->SizeOfData = pCurrImage->Depth * pCurrImage->SizeOfPlane;
-		if (pCurrImage->Pal.Palette && pCurrImage->Pal.PalSize && pCurrImage->Pal.PalType != IL_PAL_NONE)
-			ifree(pCurrImage->Pal.Palette);
-		pCurrImage->Pal.Palette = Image->Pal.Palette;
-		pCurrImage->Pal.PalSize = Image->Pal.PalSize;
-		pCurrImage->Pal.PalType = Image->Pal.PalType;
+		pCurImage->Format = DestFormat;
+		pCurImage->Type = DestType;
+		pCurImage->Bpc = ilGetBpcType(DestType);
+		pCurImage->Bpp = ilGetBppFormat(DestFormat);
+		pCurImage->Bps = pCurImage->Width * pCurImage->Bpc * pCurImage->Bpp;
+		pCurImage->SizeOfPlane = pCurImage->Bps * pCurImage->Height;
+		pCurImage->SizeOfData = pCurImage->Depth * pCurImage->SizeOfPlane;
+		if (pCurImage->Pal.Palette && pCurImage->Pal.PalSize && pCurImage->Pal.PalType != IL_PAL_NONE)
+			ifree(pCurImage->Pal.Palette);
+		pCurImage->Pal.Palette = Image->Pal.Palette;
+		pCurImage->Pal.PalSize = Image->Pal.PalSize;
+		pCurImage->Pal.PalType = Image->Pal.PalType;
 		Image->Pal.Palette = NULL;
-		ifree(pCurrImage->Data);
-		pCurrImage->Data = Image->Data;
+		ifree(pCurImage->Data);
+		pCurImage->Data = Image->Data;
 		Image->Data = NULL;
 		ilCloseImage(Image);
 
-		pCurrImage = pCurrImage->Next;
+		pCurImage = pCurImage->Next;
 	}
 
 	return IL_TRUE;

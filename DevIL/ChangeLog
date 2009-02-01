@@ -311,4 +311,9 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* il_dds-save.c:151: Changed to Faces from Images.
 	* il_dds-save.c (CompressTo565): Added IL_ALPHA case.
 	* Updated DevIL Manual with new DXTC information.
+
+2009-02-01 Denton Woods <doomwiz@users.sf.net>
+	* devil_internal_exports.h: Commented members of ILimage struct using Doxygen-style comments.
+	  Removed deprecated, commented-out members (NumNext, NumLayers, NumMips).
+	* Updated several functions with appropriate Doxygen comments.
 	

@@ -49,48 +49,47 @@ extern "C" {
 #define IL_MIN(a,b) (((a) < (b)) ? (a) : (b))
 
 
-// Basic Palette struct
+//! Basic Palette struct
 typedef struct ILpal
 {
-	ILubyte* Palette; // the image palette (if any)
-	ILuint   PalSize; // size of the palette (in bytes)
-	ILenum   PalType; // the palette types in il.h (0x0500 range)
+	ILubyte* Palette; //!< the image palette (if any)
+	ILuint   PalSize; //!< size of the palette (in bytes)
+	ILenum   PalType; //!< the palette types in il.h (0x0500 range)
 } ILpal;
 
 
-// The Fundamental Image struct
+//! The Fundamental Image structure
+/*! Every bit of information about an image is stored in this internal structure.*/
 typedef struct ILimage
 {
-	ILuint          Width;       // the image's width
-	ILuint          Height;      // the image's height
-	ILuint          Depth;       // the image's depth
-	ILubyte         Bpp;         // bytes per pixel (now number of channels)
-	ILubyte         Bpc;         // bytes per channel
-	ILuint          Bps;         // bytes per scanline (components for IL)
-	ILubyte*        Data;        // the image data
-	ILuint          SizeOfData;  // the total size of the data (in bytes)
-	ILuint          SizeOfPlane; // SizeOfData in a 2d image, size of each plane slice in a 3d image (in bytes)
-	ILenum          Format;      // image format (in IL enum style)
-	ILenum          Type;        // image type (in IL enum style)
-	ILenum          Origin;      // origin of the image
-	ILpal           Pal;         // palette details
-	ILuint          Duration;    // length of the time to display this "frame"
-	ILenum          CubeFlags;   // cube map flags for sides present in chain
-	struct ILimage* Mipmaps;     // mipmapped versions of this image terminated by a NULL - usu. NULL
-	struct ILimage* Next;        // next image in the chain - usu. NULL
-	struct ILimage* Faces;       // next cubemap face in the chain - usu. NULL
-	struct ILimage* Layers;      // subsequent layers in the chain - usu. NULL
-//	ILuint          NumNext;     // number of images following this one (0 when not parent). These are calculated on request
-//	ILuint	        NumMips;     // number of mipmaps (0 when not parent)
-//	ILuint          NumLayers;   // number of layers (0 when not parent)
-	ILuint*         AnimList;    // animation list
-	ILuint          AnimSize;    // animation list size
-	void*           Profile;     // colour profile
-	ILuint          ProfileSize; // colour profile size
-	ILuint          OffX, OffY;  // offset of the image
-	ILubyte*        DxtcData;    // compressed data
-	ILenum          DxtcFormat;  // compressed data format
-	ILuint          DxtcSize;    // compressed data size
+	ILuint          Width;       //!< the image's width
+	ILuint          Height;      //!< the image's height
+	ILuint          Depth;       //!< the image's depth
+	ILubyte         Bpp;         //!< bytes per pixel (now number of channels)
+	ILubyte         Bpc;         //!< bytes per channel
+	ILuint          Bps;         //!< bytes per scanline (components for IL)
+	ILubyte*        Data;        //!< the image data
+	ILuint          SizeOfData;  //!< the total size of the data (in bytes)
+	ILuint          SizeOfPlane; //!< SizeOfData in a 2d image, size of each plane slice in a 3d image (in bytes)
+	ILenum          Format;      //!< image format (in IL enum style)
+	ILenum          Type;        //!< image type (in IL enum style)
+	ILenum          Origin;      //!< origin of the image
+	ILpal           Pal;         //!< palette details
+	ILuint          Duration;    //!< length of the time to display this "frame"
+	ILenum          CubeFlags;   //!< cube map flags for sides present in chain
+	struct ILimage* Mipmaps;     //!< mipmapped versions of this image terminated by a NULL - usu. NULL
+	struct ILimage* Next;        //!< next image in the chain - usu. NULL
+	struct ILimage* Faces;       //!< next cubemap face in the chain - usu. NULL
+	struct ILimage* Layers;      //!< subsequent layers in the chain - usu. NULL
+	ILuint*         AnimList;    //!< animation list
+	ILuint          AnimSize;    //!< animation list size
+	void*           Profile;     //!< colour profile
+	ILuint          ProfileSize; //!< colour profile size
+	ILuint          OffX;        //!< x-offset of the image
+	ILuint			OffY;        //!< y-offset of the image
+	ILubyte*        DxtcData;    //!< compressed data
+	ILenum          DxtcFormat;  //!< compressed data format
+	ILuint          DxtcSize;    //!< compressed data size
 } ILimage;
 
 
