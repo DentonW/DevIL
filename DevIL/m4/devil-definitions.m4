@@ -104,10 +104,10 @@ dnl
 AC_DEFUN([TEST_FORMAT],
 	 [AC_ARG_ENABLE([$1],
 			[AC_HELP_STRING([--enable-$1],
-					[Compile $1 support[[default=yes]]])],
+					[Compile $1 supporto (default=yes) ])],
 		        [],
 			[enable_$1="yes"]) 
-         AS_IF([test $# -eq 3],
+         AS_IF([test $# -eq 3 -a "x$enable_$1" = "xyes"],
                [$3]) 
          AC_MSG_CHECKING([whether we would like to have support for $1 format])
          AS_IF([test "x$enable_$1" = "xno" -o "x$lib_test_result" = "xno"],
@@ -268,7 +268,7 @@ dnl
 AC_DEFUN([TEST_API],
 	 [AC_ARG_ENABLE([$1],
 			[AC_HELP_STRING([--enable-$1],
-					[Compiles $1 support for ILUT [[default=yes]]])],
+					[Compiles $1 support for ILUT (default=yes) ])],
                         [],
 			[enable_$1="yes"]) ])
 

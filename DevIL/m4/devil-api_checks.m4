@@ -110,13 +110,25 @@ AS_IF([test "x$enable_directx9" = "xyes"],
 		                  [Support DirectX9 API])
                         use_directx9="yes"
                         SUPPORTED_API="$SUPPORTED_API DirectX9"]) ]) ])
+
+dnl
+dnl DirectX 10
+dnl sets use_directx10 variable
+dnl
+AC_DEFUN([SETTLE_DX10],
+[TEST_API([directx10])
+AS_IF([test "x$enable_directx10" = "xyes"],
+      [AC_CHECK_HEADER([d3d10.h],
+		       [AC_DEFINE([ILUT_USE_DIRECTX10],,
+		                  [Support DirectX10 API])
+                        use_directx10="yes"
+                        SUPPORTED_API="$SUPPORTED_API DirectX10"]) ]) ])
 dnl
 dnl Checks for X11 developement stuff and for XShm
 dnl sets use_x11 and use_xshm vars
 dnl
 AC_DEFUN([SETTLE_X11],
-         [TEST_API(x11)
-          TEST_API(shm)
+         [TEST_API([x11])
           AS_IF([test "x$enable_x11" = "xyes"],
                 [AC_CHECK_HEADER([X11/Xlib.h],
 	 	                 [use_x11="yes"],
@@ -126,24 +138,41 @@ AC_DEFUN([SETTLE_X11],
                               [dnl The use_x11 var is either "yes" already, or we don't want "no" to be overwritten
                                ILUT_LIBS="-lX11 $ILUT_LIBS"],
                               [use_x11="no"]) ])
-                 AS_IF([test "x$enable_shm" = "xyes"],
-                       [AC_CHECK_HEADER([X11/extensions/XShm.h],
-		                        [use_xshm="yes"],
-		                        [use_xshm="no"],
-		                        [[#include <X11/Xlib.h>]]) 
+          TEST_API([shm])
+          AS_IF([test "x$enable_shm" = "xyes"],
+                [AC_CHECK_HEADER([X11/extensions/XShm.h],
+	                         [use_xshm="yes"],
+		                 [use_xshm="no"],
+		                 [[#include <X11/Xlib.h>]]) 
                  AC_CHECK_LIB([Xext],
                               [main],
                               [use_shm="yes"
                                ILUT_LIBS="-lXext $ILUT_LIBS"],
                               [use_shm="no"]) ])
+	  TEST_API([render])
+          AS_IF([test "x$enable_render" = "xyes"],
+                [AC_CHECK_HEADER([X11/extensions/Xrender.h],
+                                 [use_xrender="yes"],
+                                 [use_xrender="no"],
+                                 [[#include <X11/Xlib.h>]])
+                 AC_CHECK_LIB([Xrender],
+                              [main],
+                              [use_render="yes"
+                               ILUT_LIBS="-lXrender $ILUT_LIBS"],
+                              [use_render="no"]) ])
 
-                 AS_IF([test "x$use_x11" != "xno"],
-	               [AC_DEFINE([ILUT_USE_X11],
-			          [1],
-			          [Support X11 API])
+          AS_IF([test "x$use_x11" != "xno"],
+	        [AC_DEFINE([ILUT_USE_X11],
+		           [1],
+		           [Support X11 API])
                  SUPPORTED_API="$SUPPORTED_API X11"]) 
                  AS_IF([test "$use_xshm" = "yes"],
 		       [AC_DEFINE([ILUT_USE_XSHM],
 			          [],
 			          [Support X11 XShm extension])
-		 SUPPORTED_API="$SUPPORTED_API XShm"]) ])
+		        SUPPORTED_API="$SUPPORTED_API XShm"]) 
+                 AS_IF([test "$use_xrender" = "yes"],
+                       [AC_DEFINE([ILUT_USE_XRENDER],
+                                  [],
+                                  [Support X11 XRender extension])
+                        SUPPORTED_API="$SUPPORTED_API XRender"]) ])

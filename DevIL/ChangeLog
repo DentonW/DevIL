@@ -320,4 +320,10 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* ilu_rotate.c: Changed min/max calls to IL_MIN/IL_MAX.
 	* ilut_states.c (ilutSetInteger): Fixed ILUT_MAXTEX_DEPTH call and added checks around first
 	  three calls for Param >= 1.
-
+	
+2009-01-20 Matěj Týč <bubla@sf.net>
+	* test/format_test: Tweaked the script to use wine if cross-compiling
+	to run the tests, extended testil capabilities
+	* m4/devil-definitions.m4: Fixed bugs that caused that you couldn't
+	disable support for some formats no matter what :-)
+	* m4/devil-api-checks.m4: Added Xrender build support (by Jesse Maurais)

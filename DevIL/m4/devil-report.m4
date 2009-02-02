@@ -44,7 +44,7 @@ AS_IF([test "x$with_examples" = "xyes"],
        AC_MSG_NOTICE([+----------------------------------------+-------+])
        AC_MSG_NOTICE([$EXAMPLES_TO_BUILD])
        AS_IF([test "x$build" != "x$host"],
-             [AC_MSG_NOTICE([Note: You may get some errors when cross-compiling when using Allegro and/or SDL. So if you are cross-compiling and getting these errors, just pass --disable-allegro or --disable-sdl to the configure script.]) ]) ],
+             [AC_MSG_NOTICE([Note: You may get some errors when cross-compiling when using OpenEXR, Allegro and/or SDL. So if you are cross-compiling and getting these errors (very likely if you use MingW), just pass --disable-exr, --disable-allegro or --disable-sdl to the configure script.]) ]) ],
       [AC_MSG_NOTICE([\|  Not building any examples   \|]) 
        AC_MSG_NOTICE([+----------------------------------------+-------+])
        AC_MSG_NOTICE([Pass --with-examples option to the configure script if you want to build examples.]) ])

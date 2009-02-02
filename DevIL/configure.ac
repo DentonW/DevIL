@@ -365,16 +365,17 @@ AS_IF([test "x$have_glut" = "xyes" -a "x$use_x11" = "xyes"],
 dnl Win32
 AS_CASE([$host],
         [*mingw32*],
-        [ADD_CFLAGS([-mno-cygwin])
-	 PLATFORM="MINGW32"],
+        [PLATFORM="MINGW32"],
         [*cygwin*],
-        [LIBILUT_WIN32LIBPATH="-L/usr/lib/w32api"
+        [ADD_CFLAGS([-mno-cygwin])
+	 LIBILUT_WIN32LIBPATH="-L/usr/lib/w32api"
 	 PLATFORM="CYGWIN"],
         [*darwin*],
 	[AC_DEFINE([MAX_OS_X],
 		   [],
 		   [Building on Mac OS X]) 
 	 PLATFORM="OSX"])
+AC_SUBST([PLATFORM])
 
 AM_CONDITIONAL([WINDOWS_BUILD],
 	       [test "x$PLATFORM" = "xMINGW32" -o "x$PLATFORM" = "xCYGWIN"])
