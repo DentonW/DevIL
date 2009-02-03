@@ -46,6 +46,7 @@ Easier:
   http://objectmix.com/graphics/745877-glgeneratemipmapext.html
 - Make libsquish and NVTT code compress volume textures (do each slice separately).
 - Check .dcx code - does it even load multiple images?
+- Make ilBlit either error with color indexed images or work with them.		
 
 
 More involved:

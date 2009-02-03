@@ -709,7 +709,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 			if (DXTCFormat == IL_DXT1 || DXTCFormat == IL_DXT1A || DXTCFormat == IL_DXT3 || DXTCFormat == IL_DXT5) {
 				// NVTT needs data as BGRA 32-bit.
 				if (Image->Format != IL_BGRA || Image->Type != IL_UNSIGNED_BYTE) {  // No need to convert if already this format/type.
-					ByteData = ilConvertBuffer(Image->SizeOfData, Image->Format, IL_BGRA, Image->Type, IL_UNSIGNED_BYTE, Image->Data);
+					ByteData = ilConvertBuffer(Image->SizeOfData, Image->Format, IL_BGRA, Image->Type, IL_UNSIGNED_BYTE, NULL, Image->Data);
 					if (ByteData == NULL)
 						return 0;
 				}
@@ -734,7 +734,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 			if (DXTCFormat == IL_DXT1 || DXTCFormat == IL_DXT1A || DXTCFormat == IL_DXT3 || DXTCFormat == IL_DXT5) {
 				// libsquish needs data as RGBA 32-bit.
 				if (Image->Format != IL_RGBA || Image->Type != IL_UNSIGNED_BYTE) {  // No need to convert if already this format/type.
-					ByteData = ilConvertBuffer(Image->SizeOfData, Image->Format, IL_RGBA, Image->Type, IL_UNSIGNED_BYTE, Image->Data);
+					ByteData = ilConvertBuffer(Image->SizeOfData, Image->Format, IL_RGBA, Image->Type, IL_UNSIGNED_BYTE, NULL, Image->Data);
 					if (ByteData == NULL)
 						return 0;
 				}

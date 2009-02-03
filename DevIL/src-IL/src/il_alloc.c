@@ -94,6 +94,8 @@ void* ILAPIENTRY ialloc(const ILsizei Size)
 
 void ILAPIENTRY ifree(const void * CONST_RESTRICT Ptr)
 {
+	if (Ptr == NULL)
+		return;
 	ifree_ptr(Ptr);
 	return;
 }

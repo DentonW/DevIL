@@ -322,7 +322,7 @@ ILuint ILAPIENTRY ilCopyPixels(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Wid
 	if (DestSize == 0) {
 		return DestSize;
 	}
-	if (Data == NULL) {
+	if (Data == NULL || Format == IL_COLOUR_INDEX) {
 		ilSetError(IL_INVALID_PARAM);
 		return 0;
 	}
@@ -358,7 +358,7 @@ ILuint ILAPIENTRY ilCopyPixels(ILuint XOff, ILuint YOff, ILuint ZOff, ILuint Wid
 		return DestSize;
 	}
 
-	Converted = ilConvertBuffer(SrcSize, iCurImage->Format, Format, iCurImage->Type, Type, TempBuff);
+	Converted = ilConvertBuffer(SrcSize, iCurImage->Format, Format, iCurImage->Type, Type, &iCurImage->Pal, TempBuff);
 	if (Converted == NULL)
 		goto failed;
 
@@ -567,7 +567,7 @@ void ILAPIENTRY ilSetPixels(ILint XOff, ILint YOff, ILint ZOff, ILuint Width, IL
 		Converted = (void*)Data;
 	}
 	else {
-		Converted = ilConvertBuffer(Width * Height * Depth * ilGetBppFormat(Format) * ilGetBpcType(Type), Format, iCurImage->Format, Type, iCurImage->Type, Data);
+		Converted = ilConvertBuffer(Width * Height * Depth * ilGetBppFormat(Format) * ilGetBpcType(Type), Format, iCurImage->Format, Type, iCurImage->Type, NULL, Data);
 		if (!Converted)
 			return;
 	}

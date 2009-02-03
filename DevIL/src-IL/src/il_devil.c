@@ -669,14 +669,14 @@ ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX,  ILint DestY,   ILint De
 	ILfloat		Back;
 
 	// Check if the desiination image really exists
-	if( DestName == 0 || iCurImage == NULL ) {
+	if (DestName == 0 || iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 	Dest = iCurImage;
 	
 	// set the destination image to upper left origin
-	if( Dest->Origin == IL_ORIGIN_LOWER_LEFT ) {  // Dest
+	if (Dest->Origin == IL_ORIGIN_LOWER_LEFT) {  // Dest
 		DestFlipped = IL_TRUE;
 		ilFlipImage();
 	}
@@ -684,7 +684,7 @@ ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX,  ILint DestY,   ILint De
 	ilBindImage(Source);
 	
 	// Check if the source image really exists
-	if( iCurImage == NULL ) {
+	if (iCurImage == NULL) {
 		ilSetError(IL_INVALID_PARAM);
 		return IL_FALSE;
 	}
@@ -711,7 +711,7 @@ ILboolean ILAPIENTRY ilBlit(ILuint Source, ILint DestX,  ILint DestY,   ILint De
 	}
 	
 	// convert source image to match the destination image type and format
-	Converted = (ILubyte*)ilConvertBuffer(Src->SizeOfData, Src->Format, Dest->Format, Src->Type, Dest->Type, SrcTemp);
+	Converted = (ILubyte*)ilConvertBuffer(Src->SizeOfData, Src->Format, Dest->Format, Src->Type, Dest->Type, NULL, SrcTemp);
 	if (Converted == NULL)
 		return IL_FALSE;
 	

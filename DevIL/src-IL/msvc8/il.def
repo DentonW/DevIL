@@ -12,6 +12,7 @@ ilClampNTSC
 ilClearColour
 ilClearImage
 ilCloneCurImage
+ilCompressDXT
 ilCompressFunc
 ilConvertImage
 ilConvertPal

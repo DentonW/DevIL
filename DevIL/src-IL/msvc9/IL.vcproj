@@ -442,7 +442,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\msvc\il.def"
+				RelativePath=".\il.def"
 				>
 			</File>
 			<File

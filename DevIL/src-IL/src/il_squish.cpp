@@ -79,4 +79,12 @@ ILAPI ILubyte* ILAPIENTRY ilSquishCompressDXT(ILubyte *Data, ILuint Width, ILuin
 	return DxtcData;
 }
 
+#else
+// Let's have this so that the function is always created and exported, even if it does nothing.
+ILAPI ILubyte* ILAPIENTRY ilSquishCompressDXT(ILubyte *Data, ILuint Width, ILuint Height, ILuint Depth, ILenum DxtFormat, ILuint *DxtSize)
+{
+	//@TODO: Do we need to set an error message?
+	return NULL;
+}
+
 #endif//IL_NO_DXTC_SQUISH
