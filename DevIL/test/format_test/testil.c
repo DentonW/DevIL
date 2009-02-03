@@ -2,6 +2,7 @@
 #include <IL/il.h>
 #include <IL/ilu.h>
 
+#define _USE_MATH_DEFINES  // Have to add for MSVC++ to use M_PI properly.
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>

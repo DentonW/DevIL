@@ -335,4 +335,5 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* il_alloc.c (ifree): Changed so that if Ptr == NULL, it does not try to free the pointer.
 	* il_nvidia.cpp/il_squish.cpp: Added empty functions if nVidia or libsquish support is not
 	  compiled in.
+	* test/format_test/testil.c:5: Added _USE_MATH_DEFINES.
 	
