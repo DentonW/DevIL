@@ -1,3 +1,6 @@
+all_include = $(srcdir)/../include
+AM_CPPFLAGS = -I $(all_include)
+
 check_PROGRAMS = testil
 check_SCRIPTS = format_test/format_checks.sh
 

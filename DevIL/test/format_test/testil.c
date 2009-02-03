@@ -78,6 +78,7 @@ void generate_test_image(ILubyte * data, int w, int h, Parameters params)
 	int bpp = params.bpp;
 
 	int i, j, index, j_index;
+	double red, green, blue, sum;
 	/* For easier notations */
 	int h_5 = h / 5;
 	for (j = 0, index = 0; j < h_5 * 3; j++)
@@ -91,7 +92,6 @@ void generate_test_image(ILubyte * data, int w, int h, Parameters params)
 			if (test_alpha)
 				data[j_index + i + ALPHA] = 255 - 63 * ((j * 4 / h_5) % 4);
 		}
-	double red, green, blue, sum;
 	for (j = 3 * h_5; j < 4 * h_5; j++)
 		for (i = 0; i < w * bpp; i += bpp)
 		{/* Making color gradient */
@@ -180,7 +180,7 @@ int calculate_median_pixel_distance_abs(ILubyte * reference, ILubyte * sample, i
 	int ii, difference;
 	for (ii = 0; ii < num_subpixels; ii++)
 	{/* Going through all pixel components and assigning the absolute difference to differences array */
-		difference = (int)sample[ii] - reference[ii];	/* avoiding overflow + need to have abs() */
+		difference = (int)sample[ii] - reference[ii];	/* avoiding: overflow + need to have abs() */
 		differences[ii] = (difference >= 0) ? difference : - difference;
 	}
 	/* We need the quantile, so we have to sort the array */
@@ -477,7 +477,7 @@ int parse_commandline(int argc, char ** argv, Parameters * params)
 			}
 			else if (expectations & EXPECT_RESOLUTION)
 			{/* This parameter SHOULD specify the geometry... */
-				sscanf(argv[i], "%dx%d", & params->resolution[0], & params->resolution[0]);
+				sscanf(argv[i], "%dx%d", & params->resolution[0], & params->resolution[1]);
 			}
 			else if (expectations & EXPECT_FILENAME)
 			{/* This parameter SHOULD specify one filename... */
