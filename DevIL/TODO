@@ -11,6 +11,7 @@ By next release:
 - Update DevIL website with file formats (psd-saving, etc.).
 - Add Nebula Device to projects page.
 - Add VTF Edit to projects page.
+- Add http://vrml.cip.ica.uni-stuttgart.de/dune/install.html to projects page.
 - DevIL x64 DLL Install to SVN.
 - Check exported function names.
 - Verify all formats are listed in il_io.c Doxygen documentation.

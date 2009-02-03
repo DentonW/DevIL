@@ -336,4 +336,7 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* il_nvidia.cpp/il_squish.cpp: Added empty functions if nVidia or libsquish support is not
 	  compiled in.
 	* test/format_test/testil.c:5: Added _USE_MATH_DEFINES.
+
+2009-02-03 Denton Woods <doomwiz@users.sf.net>
+	* il_io.c: Updated Doxygen comments.
 	
