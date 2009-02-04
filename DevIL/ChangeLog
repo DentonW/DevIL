@@ -339,4 +339,5 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 
 2009-02-03 Denton Woods <doomwiz@users.sf.net>
 	* il_io.c: Updated Doxygen comments.
+	* il_fits.c: Added this file (not in any projects yet).
 	
