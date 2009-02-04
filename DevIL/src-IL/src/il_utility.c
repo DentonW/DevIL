@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 12/15/2009
+// Last modified: 02/04/2009
 //
 // Filename: src-IL/src/il_utility.c
 //
@@ -17,7 +17,8 @@
 // Returns the bpp of any Format
 ILAPI ILubyte ILAPIENTRY ilGetBppFormat(ILenum Format)
 {
-	switch (Format) {
+	switch (Format)
+	{
 		case IL_COLOUR_INDEX:
 		case IL_LUMINANCE:
 		case IL_ALPHA:
