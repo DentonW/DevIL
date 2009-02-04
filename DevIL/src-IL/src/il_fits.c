@@ -16,11 +16,6 @@
 #include "il_internal.h"
 #ifndef IL_NO_FITS
 
-ILboolean iIsValidFits(void);
-ILboolean iCheckFits(FITSHEAD *Header);
-ILboolean iLoadFitsInternal(void);
-ILuint GetCardImage(FITSHEAD *Header);
-
 typedef struct FITSHEAD
 {
 	ILboolean	IsSimple;
@@ -33,21 +28,25 @@ typedef struct FITSHEAD
 
 } FITSHEAD;
 
-ILenum
-{
+enum {
 	CARD_READ_FAIL = -1,
 	CARD_END = 1,
 	CARD_SIMPLE,
 	CARD_NOT_SIMPLE,
 	CARD_BITPIX,
 	CARD_NUMAXES,
-	CARD_AXIS
-
+	CARD_AXIS,
+	CARD_SKIP
 };
 
+ILboolean iIsValidFits(void);
+ILboolean iCheckFits(FITSHEAD *Header);
+ILboolean iLoadFitsInternal(void);
+ILenum GetCardImage(FITSHEAD *Header);
+ILboolean GetCardInt(char *Buffer, ILint *Val);
 
 //! Checks if the file specified in FileName is a valid FITS file.
-ILboolean ilIsValidFits(ILconst_string FileName)
+/*ILboolean ilIsValidFits(ILconst_string FileName)
 {
 	ILHANDLE	FitsFile;
 	ILboolean	bFits = IL_FALSE;
@@ -90,7 +89,7 @@ ILboolean ilIsValidFitsL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidFits();
-}
+}*/
 
 
 // Internal function used to get the FITS header from the current file.
@@ -106,6 +105,8 @@ ILboolean iGetFitsHead(FITSHEAD *Header)
 		if (CardKey == CARD_END)  // End of the header
 			break;
 		if (CardKey == CARD_READ_FAIL)
+			return IL_FALSE;
+		if (CardKey == CARD_NOT_SIMPLE)
 			return IL_FALSE;
 	} while (!ieof());
 
@@ -138,7 +139,7 @@ ILboolean iIsValidFits(void)
 // Internal function used to check if the HEADER is a valid FITS header.
 ILboolean iCheckFits(FITSHEAD *Header)
 {
-return IL_FALSE;
+
 	return IL_TRUE;
 }
 
@@ -189,8 +190,8 @@ ILboolean ilLoadFitsL(const void *Lump, ILuint Size)
 ILboolean iLoadFitsInternal(void)
 {
 	FITSHEAD	Header;
-	//ILuint		Bpc; - Needed?
 	ILenum		Format, Type;
+	ILuint		i, NumPix;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -208,10 +209,10 @@ ILboolean iLoadFitsInternal(void)
 			Type = IL_UNSIGNED_BYTE;
 			break;
 		case 16:
-			Type = IL_SIGNED_SHORT;
+			Type = IL_SHORT;
 			break;
 		case 32:
-			Type = IL_SIGNED_INT;
+			Type = IL_INT;
 			break;
 		case -32:
 			Type = IL_FLOAT;
@@ -220,8 +221,8 @@ ILboolean iLoadFitsInternal(void)
 			Type = IL_DOUBLE;
 			break;
 		default:  // No default error needed, since iCheckFits did this already.
+			break;
 	}
-	Bpc = ilGetBpcType(Type);  // Bytes per channel of Type
 
 	switch (Header.NumAxes)
 	{
@@ -239,40 +240,56 @@ ILboolean iLoadFitsInternal(void)
 			break;
 
 		case 3:
-			// If NumChans > 4, we have to instead do a volume image.
-			if (Header.NumChans > 4) {
-				Format = IL_LUMINANCE;
-				Header.Depth = Header.NumChans;
-				Header.NumChans = 1;
-			}
-			else {
-//@TODO: We are going to assume that the formats are the same right now.  Change needed?
-				Format = ilGetFormatBpp(Header.NumChans);
-				Header.Depth = 1;
-			}
+			// We cannot deal with more than 4 channels in an image.
+			Format = IL_LUMINANCE;
+			Header.NumChans = 1;
 			break;
 
-		case 4:
-			// We cannot deal with more than 4 channels in an image.
-			if (Header.NumChans > 4) {
-				ilSetError(IL_FORMAT_NOT_SUPPORTED);
-				return IL_FALSE;
-			}
-
 		default:  // Should already be taken care of by iCheckFits.
+			break;
 	}
 
 	// Possibility that one of these values is returned as <= 0 by atoi, which we cannot use.
 	if (Header.Width <= 0 || Header.Height <= 0 || Header.Depth <= 0) {
-		ilSetError(IL_INVALID_HEADER);
+		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
 	}
 
-	if (!ilTexImage(Header.Width, Header.Height, Header.Depth, Header.NumAxes, Format, Type, NULL))
+	if (!ilTexImage(Header.Width, Header.Height, Header.Depth, Header.NumChans, Format, Type, NULL))
 		return IL_FALSE;
 
-	if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) != iCurImage->SizeOfData)
-		return IL_FALSE;
+	/*if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) != iCurImage->SizeOfData)
+		return IL_FALSE;*/
+
+	NumPix = Header.Width * Header.Height * Header.Depth;
+//@TODO: Do some checks while reading to see if we have hit the end of the file.
+	switch (Type)
+	{
+		case IL_UNSIGNED_BYTE:
+			if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) != iCurImage->SizeOfData)
+				return IL_FALSE;
+			break;
+		case IL_SHORT:
+			for (i = 0; i < NumPix; i++) {
+				((ILshort*)iCurImage->Data)[i] = GetBigShort();
+			}
+			break;
+		case IL_INT:
+			for (i = 0; i < NumPix; i++) {
+				((ILint*)iCurImage->Data)[i] = GetBigInt();
+			}
+			break;
+		case IL_FLOAT:
+			for (i = 0; i < NumPix; i++) {
+				((ILfloat*)iCurImage->Data)[i] = GetBigFloat();
+			}
+			break;
+		case IL_DOUBLE:
+			for (i = 0; i < NumPix; i++) {
+				((ILdouble*)iCurImage->Data)[i] = GetBigDouble();
+			}
+			break;
+	}
 
 /*Intentionally left here to cause compilation error -
   Make sure ilConvertImage can deal with signed formats.
@@ -285,17 +302,16 @@ ILboolean iLoadFitsInternal(void)
 //@TODO: NAXISx have to come in order.  Check this!
 ILenum GetCardImage(FITSHEAD *Header)
 {
-	ILuint	Buffer[80];
+	char	Buffer[80];
 
-	if (iread(Buffer, 1, 80) != 80) {  // Each card image is exactly 80 bytes long.
+	if (iread(Buffer, 1, 80) != 80)  // Each card image is exactly 80 bytes long.
 		return CARD_READ_FAIL;
 
-
-//@TODO: Use something other than !stricmp?
-	if (!stricmp(Buffer, "END", 3))
+//@TODO: Use something other than !strncmp?
+	if (!strncmp(Buffer, "END ", 4))
 		return CARD_END;
 
-	else if (!stricmp(Buffer, "SIMPLE", 6)) {
+	else if (!strncmp(Buffer, "SIMPLE ", 7)) {
 		// The true value 'T' is always in the 30th position.
 		if (Buffer[29] != 'T') {
 			// We cannot support FITS files that do not correspond to the standard.
@@ -307,10 +323,10 @@ ILenum GetCardImage(FITSHEAD *Header)
 		return CARD_SIMPLE;
 	}
 
-	else if (!stricmp(Buffer, "BITPIX")) {
+	else if (!strncmp(Buffer, "BITPIX ", 7)) {
 		// The specs state that BITPIX has to come after SIMPLE.
 		if (Header->IsSimple != IL_TRUE) {
-			ilSetError(IL_INVALID_HEADER);
+			ilSetError(IL_INVALID_FILE_HEADER);
 			return CARD_READ_FAIL;
 		}
 		if (GetCardInt(Buffer, &Header->BitsPixel) != IL_TRUE)
@@ -323,20 +339,21 @@ ILenum GetCardImage(FITSHEAD *Header)
 		return CARD_BITPIX;
 	}
 
-	else if (!stricmp(Buffer, "NAXIS")) {
+	// Needs the space after NAXIS so that it does not get this confused with NAXIS1, NAXIS2, etc.
+	else if (!strncmp(Buffer, "NAXIS ", 6)) {
 		if (GetCardInt(Buffer, &Header->NumAxes) != IL_TRUE)
 			return CARD_READ_FAIL;
 //@TODO: Should I do this check from the calling function?  Does it really matter?
-		if (Header->NumAxes < 1 || Header->NumAxes > 4) {
+		if (Header->NumAxes < 1 || Header->NumAxes > 3) {
 			ilSetError(IL_FORMAT_NOT_SUPPORTED);
 			return CARD_READ_FAIL;
 		}
 		return CARD_NUMAXES;
 	}
 
-	else if (!stricmp(Buffer, "NAXIS1")) {
+	else if (!strncmp(Buffer, "NAXIS1 ", 7)) {
 		if (Header->NumAxes == 0) {  // Has not been initialized, and it has to come first.
-			ilSetError(IL_INVALID_HEADER);
+			ilSetError(IL_INVALID_FILE_HEADER);
 			return CARD_READ_FAIL;
 		}
 		// First one will always be the width.
@@ -345,14 +362,14 @@ ILenum GetCardImage(FITSHEAD *Header)
 		return CARD_AXIS;
 	}
 
-	else if (!stricmp(Buffer, "NAXIS2")) {
+	else if (!strncmp(Buffer, "NAXIS2 ", 7)) {
 		if (Header->NumAxes == 0) {  // Has not been initialized, and it has to come first.
-			ilSetError(IL_INVALID_HEADER);
+			ilSetError(IL_INVALID_FILE_HEADER);
 			return CARD_READ_FAIL;
 		}
 		// Cannot have a 2nd axis for 0 or 1.
 		if (Header->NumAxes == 0 || Header->NumAxes == 1) {
-			ilSetError(IL_INVALID_HEADER);
+			ilSetError(IL_INVALID_FILE_HEADER);
 			return CARD_READ_FAIL;
 		}
 		
@@ -363,47 +380,23 @@ ILenum GetCardImage(FITSHEAD *Header)
 		return CARD_AXIS;
 	}
 
-	else if (!stricmp(Buffer, "NAXIS3")) {
+	else if (!strncmp(Buffer, "NAXIS3 ", 7)) {
 		if (Header->NumAxes == 0) {  // Has not been initialized, and it has to come first.
-			ilSetError(IL_INVALID_HEADER);
+			ilSetError(IL_INVALID_FILE_HEADER);
 			return CARD_READ_FAIL;
 		}
 		// Cannot have a 3rd axis for 0, 1 and 2.
 		if (Header->NumAxes < 3) {
-			ilSetError(IL_INVALID_HEADER);
+			ilSetError(IL_INVALID_FILE_HEADER);
 			return CARD_READ_FAIL;
 		}
 
-//@TODO: We are assuming that this is the bpp of the image.  Could it be the depth?
-		if (Header->NumAxes == 3) {
-			if (GetCardInt(Buffer, &Header->NumChans) != IL_TRUE)
-				return CARD_READ_FAIL;
-		}
-		else {  // This is guaranteed to be 4 by the earlier check on NumAxes
-			if (GetCardInt(Buffer, &Header->Depth) != IL_TRUE)
-				return CARD_READ_FAIL;
-		}
-		return CARD_AXIS;
-	}
-
-	else if (!stricmp(Buffer, "NAXIS4")) {
-		if (Header->NumAxes == 0) {  // Has not been initialized, and it has to come first.
-			ilSetError(IL_INVALID_HEADER);
-			return CARD_READ_FAIL;
-		}
-		// Cannot have a 4th axis for NumAxes < 4.
-		if (Header->NumAxes < 4) {
-			ilSetError(IL_INVALID_HEADER);
-			return CARD_READ_FAIL;
-		}
-
-//@TODO: We are assuming that this is the bpp of the image.  Could it be something other?
-		if (GetCardInt(Buffer, &Header->NumChans) != IL_TRUE)
+		if (GetCardInt(Buffer, &Header->Depth) != IL_TRUE)
 			return CARD_READ_FAIL;
 		return CARD_AXIS;
 	}
 
-	return CARD_READ_FAIL;
+	return CARD_SKIP;  // This is a card that we do not recognize, so skip it.
 }
 
 
@@ -414,15 +407,16 @@ ILboolean GetCardInt(char *Buffer, ILint *Val)
 
 	if (Buffer[7] != '=' && Buffer[8] != '=')
 		return IL_FALSE;
-	for (i = 9; i < 29; i++) {
-		if (Buffer[i] != ' ' || Buffer[i] != 0)  // Right-aligned with ' ' or 0, so skip.
+	for (i = 9; i < 30; i++) {
+		if (Buffer[i] != ' ' && Buffer[i] != 0)  // Right-aligned with ' ' or 0, so skip.
 			break;
 	}
-	if (i == 29)  // Did not find the integer in positions 10 - 30.
+	if (i == 30)  // Did not find the integer in positions 10 - 30.
 		return IL_FALSE;
+
   //@TODO: Safest way to do this?
-	memcpy(ValString, &Buffer[i-1], 29-i);
-	ValString[29-i] = 0;  // Terminate the string.
+	memcpy(ValString, &Buffer[i], 30-i);
+	ValString[30-i] = 0;  // Terminate the string.
 
 	//@TODO: Check the return somehow?
 	*Val = atoi(ValString);
@@ -431,3 +425,4 @@ ILboolean GetCardInt(char *Buffer, ILint *Val)
 }
 
 #endif//IL_NO_FITS
+

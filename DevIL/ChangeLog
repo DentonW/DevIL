@@ -344,4 +344,6 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 
 2009-02-04 Denton Woods <doomwiz@users.sf.net>
 	* ilut_opengl.c:160: Changed checks to see if less than 0.
+	* il_fits.c: Got this reading FITS files properly.
+
 

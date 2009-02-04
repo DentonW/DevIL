@@ -1539,12 +1539,14 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		}
 		#endif
 
-		/*#ifndef IL_NO_FITS
+#if 0  // Probably will not have this ready by this upcoming release.
+		#ifndef IL_NO_FITS
 		if (!iStrCmp(Ext, IL_TEXT("fits"))) {
 			bRet = ilLoadFits(FileName);
 			goto finish;
 		}
-		#endif*/
+		#endif
+#endif
 
 		#ifndef IL_NO_GIF
 		if (!iStrCmp(Ext, IL_TEXT("gif"))) {

@@ -94,7 +94,6 @@ int main(int argc, char** argv)
 	// Needed to initialize DevIL.
 	ilInit ();
 	iluInit();
-	ilutInit();
 
 	// GL cannot use palettes anyway, so convert early.
 	ilEnable (IL_CONV_PAL);
@@ -142,6 +141,8 @@ int main(int argc, char** argv)
 	glutInitWindowSize     (Width, Height);
 	
 	window = glutCreateWindow("Developer's Image Library (DevIL) Test");
+
+	ilutInit();
 
 	glutDisplayFunc  (DisplayFunc);
 	glutKeyboardFunc (KeyboardFunc);
