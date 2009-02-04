@@ -262,6 +262,12 @@ ILboolean iLoadFitsInternal(void)
 		default:  // Should already be taken care of by iCheckFits.
 	}
 
+	// Possibility that one of these values is returned as <= 0 by atoi, which we cannot use.
+	if (Header.Width <= 0 || Header.Height <= 0 || Header.Depth <= 0) {
+		ilSetError(IL_INVALID_HEADER);
+		return IL_FALSE;
+	}
+
 	if (!ilTexImage(Header.Width, Header.Height, Header.Depth, Header.NumAxes, Format, Type, NULL))
 		return IL_FALSE;
 
