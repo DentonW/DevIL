@@ -9,7 +9,7 @@ dnl configure.ac initialization
 dnl we use some macros that are in m4 directory
 dnl
 AC_INIT([DevIL], 
-	1.7.5,
+	1.7.6,
 	[bubla@users.sourceforge.net])
 dnl Minimum Autoconf version
 AC_PREREQ(2.52)
@@ -41,7 +41,7 @@ dnl If nothing notable changes, increment revision
 dnl current is an interface number
 dnl library supports interfaces from current - age to current
 dnl
-DEVIL_LTVERSION=1:1:0
+DEVIL_LTVERSION=2:0:1
 AC_SUBST([DEVIL_LTVERSION])
 
 dnl

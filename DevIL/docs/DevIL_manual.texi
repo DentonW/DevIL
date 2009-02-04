@@ -174,19 +174,21 @@ LT_INIT
 @i{dnl Check that we have the header}
 AC_CHECK_HEADER([IL/il.h])
 @i{dnl Check for the IL part on DevIL on unix-like systems}
-AC_CHECK_LIB([IL], [ilInit], [LIBS_WE_NEED="-lIL $LIBS_WE_NEED"])
+PKG_CHECK_MODULES([DEVIL], 
+                  [IL ILU ILUT])
 @i{dnl Check that DevIL library exists (good for Windows)}
 AC_CHECK_LIB([DevIL], [main], [LIBS_WE_NEED="-lDevIL $LIBS_WE_NEED"])
 ...
 @i{dnl Now export the variable that contains libraries}
 @i{dnl  so we can use it in makefiles}
 AC_SUBST([LIBS_WE_NEED])
+AC_SUBST([DEVIL_CFLAGS DEVIL_LIBS])
 ...
 @end example
-If this does not work and you get linking errors, complain to your distribution managers. 
-They sometimes take out @file{lib*.la} files, which will cause troubles.
+If you are skilled with automake, you may link with the libtool files directly, which is more portable (@code{pkg-config} currently breaks cross-compilation).
 
-If you use an IDE or if you don't like autotools (which is a big mistake, by the way :-), then you may use @file{pkg-config}. This is not recommended if you intend to use DevIL in a cross-platform programs.
+If you use an IDE or if you don't like autotools (which is a big mistake, by the way :-), then you may use @file{pkg-config} as a program. 
+This is not recommended if you intend to use DevIL in a cross-platform programs.
 You can get libraries you need to link to by running @command{pkg-config IL --libs}. Again, you decide whether you need @code{IL}, @code{ILU} or @code{ILUT}.
 
 Or you may have to run @command{pkg-config DevIL --libs} if you have just the monolithic library. 
