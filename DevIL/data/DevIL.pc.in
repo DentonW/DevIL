@@ -1,6 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+
 Name: DevIL
 Description: Developer's Image Library - monolithic build (not sure what may be included)
 Version: @VERSION@
-Libs: -L${libdir} -lDevIL
-Libs.private: @LIBS@
-Cflags:
+URL: http://openil.sourceforge.net
+Libs: -L@libdir@ -lDevIL
+Libs.private: @IL_LIBS@ @ILU_LIBS@
+Cflags: -I@includedir@ @IL_CFLAGS@

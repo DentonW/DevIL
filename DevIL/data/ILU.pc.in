@@ -1,6 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+
 Name: ILU
 Description: Developer's Image Library - ILU part (image library utilities)
 Version: @VERSION@
-Libs: -L${libdir} -lILU 
-Libs.private: @LIBS@
-Cflags:
+URL: http://openil.sourceforge.net
+Libs: -L@libdir@ -lILU 
+Libs.private: @ILU_LIBS@ -lIL
+Cflags: -I@includedir@ @IL_CFLAGS@

@@ -400,9 +400,9 @@ AC_CONFIG_FILES([Makefile
 		 test/Makefile 
 		 examples/Makefile
 		 docs/Makefile 
+		 data/Makefile 
 		 data/DevIL.pc 
-		 data/IL.pc data/ILU.pc 
-		 data/ILUT.pc
+		 data/IL.pc data/ILU.pc data/ILUT.pc
 		 test/format_test/format_checks.sh])
 dnl		 projects/Makefile]) 
 # src-IL/Makefile  src-IL/src/Makefile  src-IL/include/Makefile  src-ILU/Makefile  src-ILU/src/Makefile  src-ILU/include/Makefile  src-ILUT/Makefile  src-ILUT/src/Makefile  src-ILUT/include/Makefile  include/Makefile  include/IL/Makefile
