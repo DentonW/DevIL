@@ -274,9 +274,9 @@ ILboolean iLoadFitsInternal(void)
 	if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) != iCurImage->SizeOfData)
 		return IL_FALSE;
 
-Intentionally left here to cause compilation error -
+/*Intentionally left here to cause compilation error -
   Make sure ilConvertImage can deal with signed formats.
-  Write iCheckFits.
+  Write iCheckFits.*/
 
 	return ilFixImage();
 }

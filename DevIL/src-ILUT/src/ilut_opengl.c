@@ -157,7 +157,7 @@ ILboolean ilutGLInit()
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, (GLint*)&MaxTexH);
 	if (ilGLTexImage3D != NULL)
 		glGetIntegerv(ILGL_MAX_3D_TEXTURE_SIZE, (GLint*)&MaxTexD);
-	if (MaxTexW == 0 || MaxTexH == 0 || MaxTexD == 0) {
+	if (MaxTexW <= 0 || MaxTexH <= 0 || MaxTexD <= 0) {
 		MaxTexW = MaxTexH = 256;  // Trying this because of the VooDoo series of cards.
 		MaxTexD = 1;
 	}

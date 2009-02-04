@@ -341,4 +341,7 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* il_io.c: Updated Doxygen comments.
 	* il_fits.c: Added this file (not in any projects yet).
 	* il_fits.c: Wrote beginning of FITS loading code.
-	
+
+2009-02-04 Denton Woods <doomwiz@users.sf.net>
+	* ilut_opengl.c:160: Changed checks to see if less than 0.
+
