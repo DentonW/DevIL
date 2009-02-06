@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 02/01/2009
+// Last modified: 02/05/2009
 //
 // Filename: IL/il.h
 //
@@ -161,8 +161,8 @@ typedef long long unsigned int ILuint64;
 // IL-specific #define's
 //
 
-#define IL_VERSION_1_7_5 1
-#define IL_VERSION       175
+#define IL_VERSION_1_7_7 1
+#define IL_VERSION       177
 
 
 // Attribute Bits
@@ -544,6 +544,7 @@ ILAPI ILboolean ILAPIENTRY ilDisable(ILenum Mode);
 ILAPI ILboolean ILAPIENTRY ilDxtcDataToImage(void);
 ILAPI ILboolean ILAPIENTRY ilDxtcDataToSurface(void);
 ILAPI ILboolean ILAPIENTRY ilEnable(ILenum Mode);
+ILAPI void		ILAPIENTRY ilFlipSurfaceDxtcData(void);
 ILAPI ILboolean ILAPIENTRY ilFormatFunc(ILenum Mode);
 ILAPI void	    ILAPIENTRY ilGenImages(ILsizei Num, ILuint *Images);
 ILAPI ILuint	ILAPIENTRY ilGenImage(void);
@@ -559,6 +560,7 @@ ILAPI ILuint    ILAPIENTRY ilGetLumpPos(void);
 ILAPI ILubyte*  ILAPIENTRY ilGetPalette(void);
 ILAPI ILconst_string  ILAPIENTRY ilGetString(ILenum StringName);
 ILAPI void      ILAPIENTRY ilHint(ILenum Target, ILenum Mode);
+ILAPI ILboolean	ILAPIENTRY ilInvertSurfaceDxtcDataAlpha(void);
 ILAPI void      ILAPIENTRY ilInit(void);
 ILAPI ILboolean ILAPIENTRY ilImageToDxtcData(ILenum Format);
 ILAPI ILboolean ILAPIENTRY ilIsDisabled(ILenum Mode);

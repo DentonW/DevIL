@@ -5,6 +5,8 @@ DevIL TODO:
 Denton:
 
 By next release:
+- NVTT.dll as a delay-loaded DLL.
+- New functions in il.def.
 - Change version numbers.
 - Update docs with next DXT code, new mipmap/cubemap access, new SaveL code.
 - Mention Unicode and 64-bit compatibility on website.

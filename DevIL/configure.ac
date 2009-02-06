@@ -9,7 +9,7 @@ dnl configure.ac initialization
 dnl we use some macros that are in m4 directory
 dnl
 AC_INIT([DevIL], 
-	1.7.6,
+	1.7.7,
 	[bubla@users.sourceforge.net])
 dnl Minimum Autoconf version
 AC_PREREQ(2.52)

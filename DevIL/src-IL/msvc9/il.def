@@ -1,6 +1,7 @@
 ; To remove an export, add a semicolon at the beginning of the line to comment it out.
 
 EXPORTS
+ilActiveFace
 ilActiveImage
 ilActiveLayer
 ilActiveMipmap
@@ -8,6 +9,7 @@ ilApplyProfile
 ilApplyPal
 ilBindImage
 ilBlit
+ilClampNTSC
 ilClearColour
 ilClearImage
 ilCloneCurImage
@@ -25,6 +27,8 @@ ilDetermineType
 ilDetermineTypeF
 ilDetermineTypeL
 ilDisable
+ilDxtcDataToImage
+ilDxtcDataToSurface
 ilEnable
 ilFormatFunc
 ilGenImage
@@ -52,6 +56,7 @@ ilGetTypeBpc
 ilHint
 ilInit
 ilInitImage
+ilImageToDxtcData
 ilIsDisabled
 ilIsEnabled
 ilIsImage
@@ -74,6 +79,7 @@ ilPushAttrib
 ilRegisterFormat
 ilRegisterLoad
 ilRegisterMipNum
+ilRegisterNumFaces
 ilRegisterNumImages
 ilRegisterOrigin
 ilRegisterPal
@@ -103,7 +109,9 @@ ilSetPixels
 ilSetString
 ilSetWrite
 ilShutDown
+ilSurfaceToDxtcData
 ilTexImage
+ilTexImageDxtc
 ilTypeFromExt
 ilTypeFunc
 ilLoadData
@@ -126,10 +134,8 @@ ilCopyImage_
 iGetFlipped
 ilIsValidPal
 ilNewImage
-ilNVidiaCompressDXT
 ilResizeImage
 ilSetCurImage
-ilSquishCompressDXT
 ilTexImage_
 ilTexSubImage_
 ialloc
