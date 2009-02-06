@@ -355,3 +355,6 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 2009-02-06 Denton Woods <doomwiz@users.sf.net>
 	* README.win and README.unix: Updated with Cygwin/MinGW instructions.
 	
+2009-02-06 Matěj Týč <bubla@sf.net>
+	* configure.ac, lib/Makefile.am: Added explicit linking with libm
+	library + fixed the ilut_x11.c file conditions of compilation

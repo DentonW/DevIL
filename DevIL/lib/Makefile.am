@@ -108,8 +108,12 @@ libILUT_la_SOURCES += $(ilut_src)/ilut_sdlsurface.c
 endif #USE_SDL
 
 if USE_OPENGL
-libILUT_la_SOURCES += $(ilut_include)/ilut_opengl.h $(ilut_src)/ilut_opengl.c $(ilut_src)/ilut_x11.c
+libILUT_la_SOURCES += $(ilut_include)/ilut_opengl.h $(ilut_src)/ilut_opengl.c 
 endif #USE_OPENGL
+
+if USE_X11
+libILUT_la_SOURCES += $(ilut_src)/ilut_x11.c
+endif #USE_X11
 
 if USE_W32
 libILUT_la_SOURCES += $(ilut_src)/ilut_win32.c  

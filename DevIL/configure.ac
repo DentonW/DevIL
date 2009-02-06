@@ -256,6 +256,12 @@ AS_IF([test "x$enable_zlib" = "xyes"],
        AS_IF([test "$enable_zlib" = "yes"],
              [AC_CHECK_LIB([z],
                            [main]) ]) ])
+
+dnl 
+dnl We need to link in math stuff, maybe we have to do it manually here...
+dnl
+AC_CHECK_LIB([m],
+	     [main])
 dnl 
 dnl Ask here whether the user wants to support a format, optionally do some tests whether it can be supported
 dnl
