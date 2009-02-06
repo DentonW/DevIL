@@ -442,7 +442,7 @@ ILboolean iReadBwTga(TARGAHEAD *Header)
 
 ILboolean iUncompressTgaData(ILimage *Image)
 {
-	ILuint	BytesRead = 0, Size, RunLen, i;
+	ILuint	BytesRead = 0, Size, RunLen, i, ToRead;
 	ILubyte Header, Color[4];
 	ILint	c;
 	
@@ -461,7 +461,8 @@ ILboolean iUncompressTgaData(ILimage *Image)
 			}
 			RunLen = (Header+1) * Image->Bpp;
 			for (i = 0; i < RunLen; i += Image->Bpp) {
-				for (c = 0; c < Image->Bpp; c++) {
+				// Read the color in, but we check to make sure that we do not go past the end of the image.
+				for (c = 0; c < Image->Bpp && BytesRead+i+c < Size; c++) {
 					Image->Data[BytesRead+i+c] = Color[c];
 				}
 			}
@@ -469,11 +470,19 @@ ILboolean iUncompressTgaData(ILimage *Image)
 		}
 		else {
 			RunLen = (Header+1) * Image->Bpp;
-			if (iread(Image->Data + BytesRead, 1, RunLen) != RunLen) {
-				iUnCache();
+			// We have to check that we do not go past the end of the image data.
+			if (BytesRead + RunLen > Size)
+				ToRead = Size - BytesRead;
+			else
+				ToRead = RunLen;
+			if (iread(Image->Data + BytesRead, 1, ToRead) != ToRead) {
+				iUnCache();  //@TODO: Error needed here?
 				return IL_FALSE;
 			}
 			BytesRead += RunLen;
+
+			if (BytesRead + RunLen > Size)
+				iseek(RunLen - ToRead, IL_SEEK_CUR);
 		}
 	}
 	
