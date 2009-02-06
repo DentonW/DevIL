@@ -341,6 +341,11 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* il_io.c: Updated Doxygen comments.
 	* il_fits.c: Added this file (not in any projects yet).
 	* il_fits.c: Wrote beginning of FITS loading code.
+	
+2009-02-04 Matěj Týč <bubla@sf.net>
+	* configure.ac: Corrected handling of --enable-debug options, added
+	working install support for pkg-config
+	* data/Makefile.am, *.pc.in: Corrected pkg-config files
 
 2009-02-04 Denton Woods <doomwiz@users.sf.net>
 	* ilut_opengl.c:160: Changed checks to see if less than 0.
@@ -358,3 +363,6 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 2009-02-06 Matěj Týč <bubla@sf.net>
 	* configure.ac, lib/Makefile.am: Added explicit linking with libm
 	library + fixed the ilut_x11.c file conditions of compilation
+	* examples/Makefile.am + IL examples, test/Makefile.am + testil: Added
+	conditional compilation option when compiling only with IL (without
+	ILU, iluErrorString() absence workaround)

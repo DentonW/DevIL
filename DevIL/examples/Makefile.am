@@ -5,17 +5,17 @@ examplesdir = $(devildir)/examples
 AM_CPPFLAGS = -I $(all_include)
 
 if BUILD_MONOLITHIC
-#il_library = ../lib/libDevIL.la # just not needed now
+il_library = ../lib/libDevIL.la 
 ilu_library = ../lib/libDevIL.la
 ilut_library = ../lib/libDevIL.la
 else #NOT BUILD_MONOLITHIC
-#il_library = ../lib/libIL.la # just not needed now
+il_library = ../lib/libIL.la 
 ilu_library = ../lib/libILU.la
 ilut_library = ../lib/libILUT.la
 endif #BUILD_MONOLITHIC
 
 EXTRA_DIST =
-examples_PROGRAMS =
+examples_PROGRAMS = IL_override IL_read IL_simple 
 
 if BUILD_ILUT
 
@@ -45,12 +45,6 @@ endif #HAVE_GLUT
 
 endif #BUILD_ILUT
 
-if BUILD_ILU
-
-examples_PROGRAMS += ILU_override ILU_read ILU_simple 
-
-endif #BUILD_ILU
-
 ILUT_allegro_SOURCES = allegro_example/allegtest.c
 ILUT_allegro_CFLAGS = $(alleg_CFLAGS)
 ILUT_allegro_LDFLAGS = $(ilut_library) 
@@ -70,17 +64,24 @@ ILUT_d3d_LDFLAGS = $(ilut_library)
 ILUT_cpp_wrapper_SOURCES = cpp_wrapper_example/il_wrap.cpp
 ILUT_cpp_wrapper_LDFLAGS = $(ilut_library) 
 
-ILU_override_SOURCES = override_example/iotest.c
-ILU_override_LDFLAGS = $(ilu_library)
+IL_override_SOURCES = override_example/iotest.c
 
 ILUT_gl_SOURCES = opengl_example/gltest.c opengl_example/gltest.h
 ILUT_gl_LDFLAGS = $(ilut_library)
 
-ILU_read_SOURCES = register_read_example/readtest.c
-ILU_read_LDFLAGS = $(ilu_library)
+IL_read_SOURCES = register_read_example/readtest.c
 
-ILU_simple_SOURCES = simple_example/simple.c
-ILU_simple_LDFLAGS = $(ilu_library)
+IL_simple_SOURCES = simple_example/simple.c
+
+if BUILD_ILU
+IL_override_LDFLAGS = $(ilu_library)
+IL_read_LDFLAGS = $(ilu_library)
+IL_simple_LDFLAGS = $(ilu_library)
+else	#not BUILD_ILU
+IL_override_LDFLAGS = $(il_library)
+IL_read_LDFLAGS = $(il_library)
+IL_simple_LDFLAGS = $(il_library)
+endif	#not BUILD_ILU
 
 ILUT_volume_SOURCES = volume_example/3dtest.h volume_example/3dtest.c
 ILUT_volume_LDFLAGS = $(ilut_library)

@@ -67,14 +67,15 @@ AC_ARG_ENABLE([asm],
 	      [enable_asm="yes"
 	       test "x$enable_debug" = "xyes" && enable_asm="no"])
 
+dnl Set right flags regarding whether we explicitly debug or release
 AS_IF([test "x$enable_release" = "xyes"],
       [AS_IF([test "x$CFLAGS" = "x"],
 	     [CFLAGS="-O3"])
        AS_IF([test "x$CXXFLAGS" = "x"],
 	     [CXXFLAGS="-O3"]) ],
       [test "x$enable_debug" = "xyes"],
-      [CFLAGS="$CFLAGS -DNOINLINE -Wall -g -O0"
-       CXXFLAGS="$CXXFLAGS -DNOINLINE -Wall -g -O0"
+      [CFLAGS="-DNOINLINE -Wall -g -O0"
+       CXXFLAGS="-DNOINLINE -Wall -g -O0"
        AC_DEFINE([DEBUG],
 		 [],
 		 ["Enable debug code features"]) ])
@@ -145,6 +146,14 @@ AM_CONDITIONAL([BUILD_ILU],
 	       [test "x$enable_ILU" = "xyes" -o "x$enable_ILUT" = "xyes"])
 AM_CONDITIONAL([BUILD_ILUT],
 	       [test "x$enable_ILUT" = "xyes"])
+
+dnl
+dnl We want to build ILU, so let's tell it (useful for examples/tests)
+dnl while iluErrorString is still in ILU
+dnl
+AS_IF([test "x$enable_ILU" = "xyes" -o "x$enable_ILUT" = "xyes"],
+      [AC_DEFINE([ILU_ENABLED],,
+		 [Define if you want to build ILU part of DevIL (used in DevIL examples/tests)]) ])
 
 dnl Test for restrict c/c++ keyword
 DEVIL_CHECK_RESTRICT

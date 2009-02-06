@@ -13,9 +13,21 @@
 //-----------------------------------------------------------------------------
 
 // Required include files.
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif /* HAVE_CONFIG_H */
+
 #include <IL/il.h>
-#include <IL/ilu.h>
 #include <stdio.h>
+
+/* We would need ILU just because of iluErrorString() function... */
+/* So make it possible for both with and without ILU!  */
+#ifdef ILU_ENABLED
+#include <IL/ilu.h>
+#define PRINT_ERROR_MACRO printf("Error: %s\n", iluErrorString(Error))
+#else /* not ILU_ENABLED */
+#define PRINT_ERROR_MACRO printf("Error: 0x%X\n", (unsigned int)Error)
+#endif /* not ILU_ENABLED */
 
 int main(int argc, char **argv)
 {
@@ -31,15 +43,16 @@ int main(int argc, char **argv)
 	}
 
 	// Check if the shared lib's version matches the executable's version.
-	if (ilGetInteger(IL_VERSION_NUM) < IL_VERSION ||
-		iluGetInteger(ILU_VERSION_NUM) < ILU_VERSION) {
+	if (ilGetInteger(IL_VERSION_NUM) < IL_VERSION) {
 		printf("DevIL version is different...exiting!\n");
 		return 2;
 	}
 
 	// Initialize DevIL.
 	ilInit();
+#ifdef ILU_ENABLED
 	iluInit();
+#endif 
 
 	// Generate the main image name to use.
 	ilGenImages(1, &ImgId);
@@ -74,8 +87,7 @@ int main(int argc, char **argv)
 
 	// Simple Error detection loop that displays the Error to the user in a human-readable form.
 	while ((Error = ilGetError())) {
-		printf("Error: %s\n", iluErrorString(Error));
-	}
+		PRINT_ERROR_MACRO;}
 
 	return 0;
 

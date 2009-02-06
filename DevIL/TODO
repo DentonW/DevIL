@@ -190,9 +190,9 @@ For 1.7.0
 - Rename iGetIntegervImage to ilGetImageIntegerv and make it public
 
 Matej:
-- Make a test suite
+- Make a test suite (IL ok, now ILU tests)
 - Make a simple command-line ILU frontend (iller)
 - Make DevIL parts that require external libraries modular
 - Make the library include files correct (fix the config.h problem)
 - Look into TIFF loading (support for images with greater bpp should be possible)
-- Fix the fact that --enable-debug configure switch is ineffective since -g -O2 somehow leaks to CFLAGS during configure...
+- Fix examples

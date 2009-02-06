@@ -1,6 +1,8 @@
-#include "config.h"
 #include <IL/il.h>
-#include <IL/ilu.h>
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif /* HAVE_CONFIG_H */
 
 #define _USE_MATH_DEFINES  // Have to add for MSVC++ to use M_PI properly.
 #include <stdlib.h>
@@ -12,6 +14,15 @@ enum colors {ALPHA, BLUE, GREEN, RED};
 #else /* not WORDS_BIGENDIAN */
 enum colors {RED, GREEN, BLUE, ALPHA};
 #endif /* not WORDS_BIGENDIAN */
+
+/* We would need ILU just because of iluErrorString() function... */
+/* So make it possible for both with and without ILU!  */
+#ifdef ILU_ENABLED
+#include <IL/ilu.h>
+#define ERROR_SAVING_FILE_MACRO fprintf(stderr, "Error saving file '%s'\nReason: %s\n", name, iluErrorString(return_value))
+#else /* not ILU_ENABLED */
+#define ERROR_SAVING_FILE_MACRO fprintf(stderr, "Error saving file '%s'\nError code: 0x%X\n", name, (unsigned int)return_value)
+#endif /* not ILU_ENABLED */
 
 /** How did the tests ended? */
 enum test_results {TEST_OK = 0, TEST_FAIL = 0x1, TEST_FAIL_QUANTIL = 0x2, TEST_FAIL_INTEGRAL = 0x4 };
@@ -150,7 +161,7 @@ int save_test_image(const char * name, int w, int h, Parameters params)
 	if (saved == IL_FALSE)	
 	{
 		return_value = ilGetError();
-		fprintf(stderr, "Error saving file '%s'\nReason: %s\n", name, iluErrorString(return_value));
+		ERROR_SAVING_FILE_MACRO;
 	}
 	/* Finally, clean the mess! */
 	ilDeleteImages(1, & handle);
@@ -540,7 +551,9 @@ int main(int argc, char ** argv)
 {
 	/* has to be done */
 	ilInit();
+#ifdef ILU_ENABLED
 	iluInit();
+#endif 
 	/* Consistent loading stuff... */
 	ilEnable(IL_ORIGIN_SET);
 	
