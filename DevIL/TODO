@@ -7,7 +7,7 @@ Denton:
 By next release:
 - NVTT.dll as a delay-loaded DLL.
 - New functions in il.def.
-- Change version numbers.
+
 - Update docs with next DXT code, new mipmap/cubemap access, new SaveL code.
 - Mention Unicode and 64-bit compatibility on website.
 - Update DevIL website with file formats (psd-saving, etc.).
@@ -15,7 +15,6 @@ By next release:
 - Add VTF Edit to projects page.
 - Add http://vrml.cip.ica.uni-stuttgart.de/dune/install.html to projects page.
 - DevIL x64 DLL Install to SVN.
-- Check exported function names.
 - Verify all formats are listed in il_io.c Doxygen documentation.
 - http://www.fileformat.info/format/drhalo/sample/index.htm - Check these.
 - Add .wbmp and .sun to DevIL_manual.pdf.
