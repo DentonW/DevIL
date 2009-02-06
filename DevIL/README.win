@@ -1,7 +1,8 @@
 Where do I find the project files ?
 -----------------------------------------
 
-MSVC++ projects are in \DevIL\projects\MSVC.
+MSVC++ projects are in DevIL\projects\vc8 and DevIL\projects\vc9.
+If compiling with Cygwin or MinGW, use the instructions in README.unix.
 
 
 The IL_NO_XXX #define's:

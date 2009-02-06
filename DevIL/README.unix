@@ -1,5 +1,5 @@
-How do I compile the 3 libraries ?
------------------------------------------
+How do I compile the 3 libraries?
+--------------------------------
 
 You will need autoconf, automake and libtool.
 
@@ -27,6 +27,11 @@ Enable/Disable:
 All features are basically enabled, and a test will be performed
 to verify if is possible to compile them in. If they are explicitly enabled
 or disabled no test will occour.
+
+Compiling under Cygwin or MingW in Windows:
+------------------------------------------
+
+Run the same commands as above.  You will need to have the following packages installed: gcc-core, gcc-mingw-core, gcc-g++, autoconf, automake, libtool.
 
 Config.h and JasPer:
 -------------------
