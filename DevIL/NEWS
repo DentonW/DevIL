@@ -1,16 +1,51 @@
-1.7.6
+These are just highlights of what was changed during each release.  For a more in-depth version of what was changed, please look at the ChangeLog.
+
+1.7.7
 ---
-- Readded EXR code.
 - Redefined clamping values in il.h.
 - Added 64-bit integer types.
 - Fixed bug in iRegisterLoad (https://sourceforge.net/forum/message.php?msg_id=5973761).
-- Changed seek functions in il_files.c to return ILint.
-- Added rpcsal.h and sal.h #includes to ilut.h for DX10.
-- Added IL_MAX_QUANT_INDICES to use instead of IL_MAX_QUANT_INDEXS (mispelled).
 - Added WBMP support (loading and saving).
 - EXR files can now be loaded as file streams and lumps.
 - Changed iNeuQuant to take number of colors in palette.
 - Compiled MNG support back in.
+- Added Sun Raster file reading.
+- Better Linux configuration scripts
+- Added libsquish and nVidia Texture Tools support - accessed through ilCompressDXT.
+- Added IL_ALPHA support.
+- Fixed a bug dealing with 16-bit luminance .psd images.
+- Added ilutGLSetTex2D and ilutGLSetTex3D.
+- Added support for BGRA4444 .vtf images.
+- Changed support for cubemaps to be separate from animation lists.
+- Fixed possible buffer overruns in .hdr and .pnm loading code.
+- Changed GIF loading code to better load files with local palettes in each frame.
+- Added support for environment maps and animations to .vtf loading.
+- Added ilClampNTSC function.
+- Added TIFF saving to file streams.
+- Added JPEG 2000 saving.
+- Added support for more .jp2 formats.
+- Improved the internal DXT compressor.
+- Added OpenEXR saving.
+- Reenabled PhotoCD support.
+- Fixed SoftImage PIC support.
+- Updated MSVC++ x64 projects.
+- Readded DXT extension functions.
+- Added IFF loading.
+- Fixed pixel shift issue with iluRotate.
+- Added code in ilSaveL to return the number of bytes required by the output file data.
+- Added code to determine the filetypes of JP2, MDL, XMP and EXR from their headers.
+- Changed the return values of ilSaveF and ilSaveL to integers telling the number of bytes written.
+- Added checks for malformed .psd files.
+- Added Windows Mobile projects.
+- Added DevIL.Net project.
+- Added TPL format loading.
+- Updated ilutConvertToSDLSurface.
+- Rearranged how mipmaps are stored internally and accessed.
+- Fixed bug loading malformed RLE Targa images.
+- Added support in ilCopyPixels when copying from indexed images.
+- Added Doxygen documentation.
+- Updated main documentation.
+
 
 1.7.5
 ---
