@@ -1629,6 +1629,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\il_fits.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\il_gif.c"
 					>
 					<FileConfiguration
@@ -1710,6 +1714,10 @@
 				</File>
 				<File
 					RelativePath="..\src\il_iff.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\il_iwi.c"
 					>
 				</File>
 				<File

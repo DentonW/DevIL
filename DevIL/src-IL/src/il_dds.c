@@ -33,7 +33,7 @@
 static DDSHEAD	Head;				// Image header
 static ILubyte	*CompData = NULL;	// Compressed data
 static ILuint	CompSize;			// Compressed size
-static ILuint	CompFormat;			// Compressed format
+//static ILuint	CompFormat;			// Compressed format
 static ILimage	*Image;
 static ILint	Width, Height, Depth;
 
@@ -258,7 +258,7 @@ ILubyte iCompFormatToChannelCount(ILenum Format)
 }
 
 
-ILboolean iLoadDdsCubemapInternal()
+ILboolean iLoadDdsCubemapInternal(ILuint CompFormat)
 {
 	ILuint	i;
 	ILubyte	Bpp, Channels, Bpc;
@@ -308,7 +308,7 @@ ILboolean iLoadDdsCubemapInternal()
 			if (!ReadData())
 				return IL_FALSE;
 
-			if (!AllocImage()) {
+			if (!AllocImage(CompFormat)) {
 				if (CompData) {
 					ifree(CompData);
 					CompData = NULL;
@@ -318,7 +318,7 @@ ILboolean iLoadDdsCubemapInternal()
 
 			Image->CubeFlags = CubemapDirections[i];
 
-			if (!Decompress()) {
+			if (!DdsDecompress(CompFormat)) {
 				if (CompData) {
 					ifree(CompData);
 					CompData = NULL;
@@ -326,7 +326,7 @@ ILboolean iLoadDdsCubemapInternal()
 				return IL_FALSE;
 			}
 
-			if (!ReadMipmaps()) {
+			if (!ReadMipmaps(CompFormat)) {
 				if (CompData) {
 					ifree(CompData);
 					CompData = NULL;
@@ -348,7 +348,8 @@ ILboolean iLoadDdsCubemapInternal()
 
 ILboolean iLoadDdsInternal()
 {
-	ILuint BlockSize = 0;
+	ILuint	BlockSize = 0;
+	ILuint	CompFormat;
 
 	CompData = NULL;
 	Image = NULL;
@@ -367,7 +368,7 @@ ILboolean iLoadDdsInternal()
 		return IL_FALSE;
 	}
 
-	BlockSize = DecodePixelFormat();
+	BlockSize = DecodePixelFormat(&CompFormat);
 	if (CompFormat == PF_UNKNOWN) {
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
@@ -383,7 +384,7 @@ ILboolean iLoadDdsInternal()
 	Image = iCurImage;
 	if (Head.ddsCaps1 & DDS_COMPLEX) {
 		if (Head.ddsCaps2 & DDS_CUBEMAP) {
-			if (!iLoadDdsCubemapInternal())
+			if (!iLoadDdsCubemapInternal(CompFormat))
 				return IL_FALSE;
 			return IL_TRUE;
 		}
@@ -392,18 +393,18 @@ ILboolean iLoadDdsInternal()
 	Width = Head.Width;
 	Height = Head.Height;
 	Depth = Head.Depth;
-	AdjustVolumeTexture(&Head);
+	AdjustVolumeTexture(&Head, CompFormat);
 
 	if (!ReadData())
 		return IL_FALSE;
-	if (!AllocImage()) {
+	if (!AllocImage(CompFormat)) {
 		if (CompData) {
 			ifree(CompData);
 			CompData = NULL;
 		}
 		return IL_FALSE;
 	}
-	if (!Decompress()) {
+	if (!DdsDecompress(CompFormat)) {
 		if (CompData) {
 			ifree(CompData);
 			CompData = NULL;
@@ -411,7 +412,7 @@ ILboolean iLoadDdsInternal()
 		return IL_FALSE;
 	}
 
-	if (!ReadMipmaps()) {
+	if (!ReadMipmaps(CompFormat)) {
 		if (CompData) {
 			ifree(CompData);
 			CompData = NULL;
@@ -429,7 +430,7 @@ ILboolean iLoadDdsInternal()
 }
 
 
-ILuint DecodePixelFormat()
+ILuint DecodePixelFormat(ILuint *CompFormat)
 {
 	ILuint BlockSize;
 
@@ -438,82 +439,82 @@ ILuint DecodePixelFormat()
 		switch (Head.FourCC)
 		{
 			case IL_MAKEFOURCC('D','X','T','1'):
-				CompFormat = PF_DXT1;
+				*CompFormat = PF_DXT1;
 				BlockSize *= 8;
 				break;
 
 			case IL_MAKEFOURCC('D','X','T','2'):
-				CompFormat = PF_DXT2;
+				*CompFormat = PF_DXT2;
 				BlockSize *= 16;
 				break;
 
 			case IL_MAKEFOURCC('D','X','T','3'):
-				CompFormat = PF_DXT3;
+				*CompFormat = PF_DXT3;
 				BlockSize *= 16;
 				break;
 
 			case IL_MAKEFOURCC('D','X','T','4'):
-				CompFormat = PF_DXT4;
+				*CompFormat = PF_DXT4;
 				BlockSize *= 16;
 				break;
 
 			case IL_MAKEFOURCC('D','X','T','5'):
-				CompFormat = PF_DXT5;
+				*CompFormat = PF_DXT5;
 				BlockSize *= 16;
 				break;
 
 			case IL_MAKEFOURCC('A', 'T', 'I', '1'):
-				CompFormat = PF_ATI1N;
+				*CompFormat = PF_ATI1N;
 				BlockSize *= 8;
 				break;
 
 			case IL_MAKEFOURCC('A', 'T', 'I', '2'):
-				CompFormat = PF_3DC;
+				*CompFormat = PF_3DC;
 				BlockSize *= 16;
 				break;
 
 			case IL_MAKEFOURCC('R', 'X', 'G', 'B'):
-				CompFormat = PF_RXGB;
+				*CompFormat = PF_RXGB;
 				BlockSize *= 16;
 				break;
 
 			case IL_MAKEFOURCC('$', '\0', '\0', '\0'):
-				CompFormat = PF_A16B16G16R16;
+				*CompFormat = PF_A16B16G16R16;
 				BlockSize = Head.Width * Head.Height * Head.Depth * 8;
 				break;
 
 			case IL_MAKEFOURCC('o', '\0', '\0', '\0'):
-				CompFormat = PF_R16F;
+				*CompFormat = PF_R16F;
 				BlockSize = Head.Width * Head.Height * Head.Depth * 2;
 				break;
 
 			case IL_MAKEFOURCC('p', '\0', '\0', '\0'):
-				CompFormat = PF_G16R16F;
+				*CompFormat = PF_G16R16F;
 				BlockSize = Head.Width * Head.Height * Head.Depth * 4;
 				break;
 
 			case IL_MAKEFOURCC('q', '\0', '\0', '\0'):
-				CompFormat = PF_A16B16G16R16F;
+				*CompFormat = PF_A16B16G16R16F;
 				BlockSize = Head.Width * Head.Height * Head.Depth * 8;
 				break;
 
 			case IL_MAKEFOURCC('r', '\0', '\0', '\0'):
-				CompFormat = PF_R32F;
+				*CompFormat = PF_R32F;
 				BlockSize = Head.Width * Head.Height * Head.Depth * 4;
 				break;
 
 			case IL_MAKEFOURCC('s', '\0', '\0', '\0'):
-				CompFormat = PF_G32R32F;
+				*CompFormat = PF_G32R32F;
 				BlockSize = Head.Width * Head.Height * Head.Depth * 8;
 				break;
 
 			case IL_MAKEFOURCC('t', '\0', '\0', '\0'):
-				CompFormat = PF_A32B32G32R32F;
+				*CompFormat = PF_A32B32G32R32F;
 				BlockSize = Head.Width * Head.Height * Head.Depth * 16;
 				break;
 
 			default:
-				CompFormat = PF_UNKNOWN;
+				*CompFormat = PF_UNKNOWN;
 				BlockSize *= 16;
 				break;
 		}
@@ -521,16 +522,16 @@ ILuint DecodePixelFormat()
 		// This dds texture isn't compressed so write out ARGB or luminance format
 		if (Head.Flags2 & DDS_LUMINANCE) {
 			if (Head.Flags2 & DDS_ALPHAPIXELS) {
-				CompFormat = PF_LUMINANCE_ALPHA;
+				*CompFormat = PF_LUMINANCE_ALPHA;
 			} else {
-				CompFormat = PF_LUMINANCE;
+				*CompFormat = PF_LUMINANCE;
 			}
 		}
 		else {
 			if (Head.Flags2 & DDS_ALPHAPIXELS) {
-				CompFormat = PF_ARGB;
+				*CompFormat = PF_ARGB;
 			} else {
-				CompFormat = PF_RGB;
+				*CompFormat = PF_RGB;
 			}
 		}
 		BlockSize = (Head.Width * Head.Height * Head.Depth * (Head.RGBBitCount >> 3));
@@ -542,7 +543,7 @@ ILuint DecodePixelFormat()
 
 // The few volume textures that I have don't have consistent LinearSize
 //	entries, even though the DDS_LINEARSIZE flag is set.
-void AdjustVolumeTexture(DDSHEAD *Head)
+void AdjustVolumeTexture(DDSHEAD *Head, ILuint CompFormat)
 {
 	if (Head->Depth <= 1)
 		return;
@@ -653,7 +654,7 @@ ILboolean ReadData()
 }
 
 
-ILboolean AllocImage()
+ILboolean AllocImage(ILuint CompFormat)
 {
 	ILubyte channels = 4;
 	ILenum format = IL_RGBA;
@@ -754,7 +755,7 @@ ILboolean AllocImage()
  *
  * @TODO: don't use globals, clean this function (and this file) up
  */
-ILboolean Decompress()
+ILboolean DdsDecompress(ILuint CompFormat)
 {
 	switch (CompFormat)
 	{
@@ -808,7 +809,7 @@ ILboolean Decompress()
 }
 
 
-ILboolean ReadMipmaps()
+ILboolean ReadMipmaps(ILuint CompFormat)
 {
 	ILuint	i, CompFactor=0;
 	ILubyte	Bpp, Channels, Bpc;
@@ -932,7 +933,7 @@ ILboolean ReadMipmaps()
 			memcpy(Image->DxtcData, CompData, Image->DxtcSize);
 		}
 
-		if (!Decompress())
+		if (!DdsDecompress(CompFormat))
 			goto mip_fail;
 	}
 
@@ -1680,7 +1681,7 @@ void CorrectPreMult()
 }
 
 
-ILboolean DecompressARGB() {
+ILboolean DecompressARGB(ILuint CompFormat) {
 	ILuint ReadI = 0, TempBpp, i;
 	ILuint RedL, RedR;
 	ILuint GreenL, GreenR;
@@ -1691,7 +1692,7 @@ ILboolean DecompressARGB() {
 	if (!CompData)
 		return IL_FALSE;
 
-	if(CompFormat == PF_LUMINANCE && Head.RGBBitCount == 16 && Head.RBitMask == 0xFFFF) { //HACK
+	if (CompFormat == PF_LUMINANCE && Head.RGBBitCount == 16 && Head.RBitMask == 0xFFFF) { //HACK
 		memcpy(Image->Data, CompData, Image->SizeOfData);
 		return IL_TRUE;
 	}
@@ -1835,6 +1836,8 @@ void ilFreeImageDxtcData()
  */
 ILAPI ILboolean ILAPIENTRY ilDxtcDataToSurface()
 {
+	ILuint CompFormat;
+
 	if (iCurImage == NULL || iCurImage->DxtcData == NULL) {
 		ilSetError(IL_INVALID_PARAM);
 		return IL_FALSE;
@@ -1877,7 +1880,7 @@ ILAPI ILboolean ILAPIENTRY ilDxtcDataToSurface()
 		case IL_DXT5: CompFormat = PF_DXT5; break;
 	}
 	CompData = iCurImage->DxtcData;
-	Decompress(); //globals suck...fix this
+	DdsDecompress(CompFormat); //globals suck...fix this
 
 	//@TODO: origin should be set in Decompress()...
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;

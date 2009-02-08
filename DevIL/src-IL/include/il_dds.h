@@ -171,11 +171,11 @@ enum PixFormat
 ILboolean	iLoadDdsInternal(void);
 ILboolean	iIsValidDds(void);
 ILboolean	iCheckDds(DDSHEAD *Head);
-void		AdjustVolumeTexture(DDSHEAD *Head);
+void		AdjustVolumeTexture(DDSHEAD *Head, ILuint CompFormat);
 ILboolean	ReadData();
-ILboolean	AllocImage();
-ILboolean	Decompress();
-ILboolean	ReadMipmaps();
+ILboolean	AllocImage(ILuint CompFormat);
+ILboolean	DdsDecompress(ILuint CompFormat);
+ILboolean	ReadMipmaps(ILuint CompFormat);
 ILuint		DecodePixelFormat();
 void		DxtcReadColor(ILushort Data, Color8888* Out);
 void		DxtcReadColors(const ILubyte* Data, Color8888* Out);

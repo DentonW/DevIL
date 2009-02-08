@@ -400,7 +400,10 @@ ILboolean iLoadVtfInternal(void)
 						// The block size is 8.
 						SizeOfData = max(Image->Width * Image->Height * Image->Depth / 2, 8);
 						CompData = ialloc(SizeOfData);  // Gives a 6:1 compression ratio (or 8:1 for DXT1 with alpha)
+						if (CompData == NULL)
+							return IL_FALSE;
 						iread(CompData, 1, SizeOfData);
+						// Keep a copy of the DXTC data if the user wants it.
 						if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
 							Image->DxtcSize = SizeOfData;
 							Image->DxtcData = CompData;
@@ -415,7 +418,10 @@ ILboolean iLoadVtfInternal(void)
 						// The block size is 16.
 						SizeOfData = max(Image->Width * Image->Height * Image->Depth, 16);
 						CompData = ialloc(SizeOfData);  // Gives a 4:1 compression ratio
+						if (CompData == NULL)
+							return IL_FALSE;
 						iread(CompData, 1, SizeOfData);
+						// Keep a copy of the DXTC data if the user wants it.
 						if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
 							Image->DxtcSize = SizeOfData;
 							Image->DxtcData = CompData;
@@ -430,7 +436,10 @@ ILboolean iLoadVtfInternal(void)
 						// The block size is 16.
 						SizeOfData = max(Image->Width * Image->Height * Image->Depth, 16);
 						CompData = ialloc(SizeOfData);  // Gives a 4:1 compression ratio
+						if (CompData == NULL)
+							return IL_FALSE;
 						iread(CompData, 1, SizeOfData);
+						// Keep a copy of the DXTC data if the user wants it.
 						if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
 							Image->DxtcSize = SizeOfData;
 							Image->DxtcData = CompData;
@@ -469,6 +478,8 @@ ILboolean iLoadVtfInternal(void)
 					case IMAGE_FORMAT_BGRX8888:
 						SizeOfData = Image->Width * Image->Height * Image->Depth * 3;
 						Temp = CompData = ialloc(SizeOfData / 3 * 4);  // Not compressed data
+						if (CompData == NULL)
+							return IL_FALSE;
 						if (iread(CompData, 1, SizeOfData / 3 * 4) != SizeOfData / 3 * 4) {
 							bVtf = IL_FALSE;
 							break;
@@ -486,6 +497,8 @@ ILboolean iLoadVtfInternal(void)
 					case IMAGE_FORMAT_RGBA16161616F:
 						SizeOfData = Image->Width * Image->Height * Image->Depth * Image->Bpp * 2;
 						CompData = ialloc(SizeOfData);  // Not compressed data
+						if (CompData == NULL)
+							return IL_FALSE;
 						if (iread(CompData, 1, SizeOfData) != SizeOfData) {
 							bVtf = IL_FALSE;
 							break;
@@ -522,6 +535,8 @@ ILboolean iLoadVtfInternal(void)
 					case IMAGE_FORMAT_BGR565:
 						SizeOfData = Image->Width * Image->Height * Image->Depth * 2;
 						Data16Bit = CompData = ialloc(SizeOfData);  // Not compressed data
+						if (CompData == NULL)
+							return IL_FALSE;
 						if (iread(CompData, 1, SizeOfData) != SizeOfData) {
 							bVtf = IL_FALSE;
 							break;
@@ -541,6 +556,8 @@ ILboolean iLoadVtfInternal(void)
 					case IMAGE_FORMAT_BGRA5551:
 						SizeOfData = Image->Width * Image->Height * Image->Depth * 2;
 						Data16Bit = CompData = ialloc(SizeOfData);  // Not compressed data
+						if (CompData == NULL)
+							return IL_FALSE;
 						if (iread(CompData, 1, SizeOfData) != SizeOfData) {
 							bVtf = IL_FALSE;
 							break;
@@ -575,6 +592,8 @@ ILboolean iLoadVtfInternal(void)
 					case IMAGE_FORMAT_BGRA4444:
 						SizeOfData = Image->Width * Image->Height * Image->Depth * 4;
 						Temp = CompData = ialloc(SizeOfData / 2);  // Not compressed data
+						if (CompData == NULL)
+							return IL_FALSE;
 						if (iread(CompData, 1, SizeOfData / 2) != SizeOfData / 2) {
 							bVtf = IL_FALSE;
 							break;

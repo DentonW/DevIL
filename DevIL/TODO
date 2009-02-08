@@ -5,6 +5,9 @@ DevIL TODO:
 Denton:
 
 By next release:
+
+- il_fits.c and il_iwi.c added to projects.
+
 - NVTT.dll as a delay-loaded DLL.
 - New functions in il.def.
 

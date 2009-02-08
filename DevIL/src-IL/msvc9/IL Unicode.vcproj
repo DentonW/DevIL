@@ -845,6 +845,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\il_fits.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\il_internal.c"
 				>
 				<FileConfiguration
@@ -923,6 +927,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\il_iwi.c"
+				>
 			</File>
 			<File
 				RelativePath="..\src\il_main.c"
