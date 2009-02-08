@@ -124,9 +124,10 @@ ILboolean iCheckIwi(IWIHEAD *Header)
 		return IL_FALSE;
 	if (Header->Width == 0 || Header->Height == 0)
 		return IL_FALSE;
-	// All images must have power-of-2 dimensions.
-	if (Header->Width != ilNextPower2(Header->Width) || Header->Height != ilNextPower2(Header->Height))
-		return IL_FALSE;
+	// DXT images must have power-of-2 dimensions.
+	if (Header->Format == IWI_DXT1 || Header->Format == IWI_DXT3 || Header->Format == IWI_DXT5)
+		if (Header->Width != ilNextPower2(Header->Width) || Header->Height != ilNextPower2(Header->Height))
+			return IL_FALSE;
 	// 0x0B, 0x0C and 0x0D are DXT formats.
 	if (Header->Format != IWI_ARGB4 && Header->Format != IWI_RGB8 && Header->Format != IWI_ARGB8 && Header->Format != IWI_A8 
 		&& Header->Format != IWI_DXT1 && Header->Format != IWI_DXT3 && Header->Format != IWI_DXT5)
@@ -206,6 +207,7 @@ ILboolean iLoadIwiInternal(void)
 	Format = IwiGetFormat(Header.Format, &Bpp);
 	if (!ilTexImage(Header.Width, Header.Height, 1, Bpp, Format, IL_UNSIGNED_BYTE, NULL))
 		return IL_FALSE;
+	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 	if (HasMipmaps)
 		if (!IwiInitMipmaps(iCurImage, &NumMips))
 			return IL_FALSE;
@@ -225,7 +227,7 @@ ILenum IwiGetFormat(ILubyte Format, ILubyte *Bpp)
 			return IL_BGRA;
 		case IWI_RGB8:
 			*Bpp = 3;
-			return IL_RGB;
+			return IL_BGR;
 		case IWI_ARGB4:
 			*Bpp = 4;
 			return IL_BGRA;
