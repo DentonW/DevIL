@@ -1399,6 +1399,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\IL\ilut_config.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\ilut_internal.h"
 				>
 			</File>

@@ -1,9 +1,12 @@
-2009-02-07 Denton Woods <doomwiz@users.sf.net>
+2009-02-07/08 Denton Woods <doomwiz@users.sf.net>
 	* il_iwi.c: Added this file and code to load .iwi files.
 	* il_vtf.c (iLoadVtfInternal): Added checks for CompData == NULL.
 	* il_dds.c/il_dds.h: Changed CompFormat to a local variable.  Renamed Decompress to DdsDecompress.
 	* ChangeLog (this file): Changed order to newest at the top.
-	
+	* il.h: Added IL_FITS and IL_IWI defines.
+	* config.h.win: Added IL_FITS, IL_IWI, IL_SUN and IL_TPL.
+	* lib/Makefile.am and src-IL/src/Makefile.am: Added il_fits.c and il_iwi.c to source line.
+
 --- 1.7.7 release ---
 
 2009-02-06 Matěj Týč <bubla@sf.net>
@@ -30,12 +33,12 @@
 	* configure.ac: Corrected handling of --enable-debug options, added
 	working install support for pkg-config
 	* data/Makefile.am, *.pc.in: Corrected pkg-config files
-	
+
 2009-02-03 Denton Woods <doomwiz@users.sf.net>
 	* il_io.c: Updated Doxygen comments.
 	* il_fits.c: Added this file (not in any projects yet).
 	* il_fits.c: Wrote beginning of FITS loading code.
-	
+
 2009-02-02 Denton Woods <doomwiz@users.sf.net>
 	* il_manip.c (ilCopyPixels):311: Added check for destination format of color index.
 	* il_convbuff.c (ilConvertBuffer): Changed to accept the source image palette.  Added code to
@@ -60,7 +63,7 @@
 	* ilu_rotate.c: Changed min/max calls to IL_MIN/IL_MAX.
 	* ilut_states.c (ilutSetInteger): Fixed ILUT_MAXTEX_DEPTH call and added checks around first
 	  three calls for Param >= 1.
-	
+
 2009-01-31 Denton Woods <doomwiz@users.sf.net>
 	* Added newlines to the end of several files to keep gcc quiet.
 	* Added new MSVC++ projects for examples.
@@ -211,7 +214,7 @@
 	* ilut.h: Added reference to ilut_config.h for Windows.
 	* il_files.c/il_icon.c/il_png.c/il_mng.c: Fixed typecasting warnings.
 	* il_jp2.c/il_wbmp.c (ilSaveJp2L/ilSaveWbmpL): Removed const qualifier.
-	
+
 2009-01-19 Denton Woods <doomwiz@users.sf.net>
 	* il_hdr.c: Changed line 73 to have space for terminating NULL.
 	* src-IL/src/Makefile.am: Added il_vtf.c and *.cpp files.
@@ -258,7 +261,7 @@
 	* il_io.c: Reenabled PhotoCD support.
 	* il_pcd.c (iLoadPcdInternal): Added check for end-of-file.
 	* il_exr.c: Added EXR saving functions.
-	
+
 2009-01-13 Denton Woods <doomwiz@users.sf.net>
 	* Converted source repository to SVN from CVS.
 
@@ -269,7 +272,7 @@
 	* MSVC9 Unicode projects: Updated to work better in 64-bit Windows.
 	* il_vtf.c: Removed commented lines 238-242.
 	* Created application to copy DLL files to the System32 directory.
-	
+
 2009-01-10 Matěj Týč <bubla@sf.net>
 	* m4/devil-definitions.m4, m4/devil-reports.m4: Added a report saying
 	what libraries were linked with DevIL (should be helpful to packagers
@@ -310,7 +313,7 @@
 	* il_convert.c (iConvertPalette): Changed references of iCurImage to Image.
 	* il_gif.c (GifGetData): Added DataPtr and changed line 636 to use Data instead of Image->Data.
 	* il_gif.c (iGetPalette / GetImages): Changed to better deal with local palettes.
-	
+
 2009-01-08 Matěj Týč <bubla@sf.net>
 	* TODO: Added some tasks that I would like to undertake
 	* ChangeLog, NEWS: Copied old ChangeLog entries to NEWS file
@@ -348,7 +351,7 @@
 	* il_nvidia.cpp: Added DXT1a, DXT3 and DXT5 support.  Renamed ilnVidiaCompressDXT to
 	ilnVidiaCompressDXT and added the DxtType parameter.
 	* il_internal.c: Cleaned up extra whitespace toward end.
-	
+
 2009-01-02 Matěj Týč <bubla@sf.net>
 	* src-{IL,ILU,ILUT}/src/*_internal.c: Hopefully resolved the
 	HAVE_CONFIG_H thing once for all :-)
@@ -361,7 +364,7 @@
 	etc. that prevented compilation
 	* build setup (Makefile.am and configure.ac): Added support for
 	compilation of EXR and WDP formats + various other tweaks.
-	
+
 Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* Readded EXR code.
 	* Redefined clamping values in il.h.

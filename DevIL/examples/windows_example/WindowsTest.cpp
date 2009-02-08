@@ -36,7 +36,7 @@
 #include <stdlib.h>
 #include <wchar.h>
 
-#pragma comment(lib, "sdl.lib")
+//#pragma comment(lib, "sdl.lib")
 //#pragma comment(lib, "sdlmain.lib")
 //#pragma comment(lib, "colorpicker.lib")
 
@@ -122,9 +122,9 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 	if (HWnd == NULL)
 		return FALSE;
 
-	if (SDL_Init(SDL_INIT_TIMER) < 0)
-		return FALSE;
-	atexit(SDL_Quit);
+	//if (SDL_Init(SDL_INIT_TIMER) < 0)
+	//	return FALSE;
+	//atexit(SDL_Quit);
 
 	// Display the window
 	ShowWindow(HWnd, nCmdShow);
@@ -603,11 +603,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					ilGenImages(1, Undos);
 					ilBindImage(Undos[0]);
 
-					last_elapsed = SDL_GetTicks();
+					//last_elapsed = SDL_GetTicks();
 					if (!ilLoadImage(OpenFileName))
 						return (0L);
 					CurImage = 0;
-					cur_elapsed = SDL_GetTicks();
+					//cur_elapsed = SDL_GetTicks();
 					elapsed = cur_elapsed - last_elapsed;
 					last_elapsed = cur_elapsed;
 
@@ -669,10 +669,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					ilEnable(IL_FILE_OVERWRITE);
 					//ilBindImage(Undos[0]);  //@TODO: Do better here...
 
-					last_elapsed = SDL_GetTicks();
+					//last_elapsed = SDL_GetTicks();
 					ilSaveImage(SaveFileName);
 
-					cur_elapsed = SDL_GetTicks();
+					//cur_elapsed = SDL_GetTicks();
 					elapsed = cur_elapsed - last_elapsed;
 					last_elapsed = cur_elapsed;
 

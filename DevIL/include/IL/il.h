@@ -231,6 +231,8 @@ typedef long long unsigned int ILuint64;
 #define IL_SUN			0x0446  //!< Sun Raster - .sun, .ras, .rs, .im1, .im8, .im24 and .im32 extensions
 #define IL_IFF			0x0447  //!< Interchange File Format - .iff extension
 #define IL_TPL			0x0448  //!< Gamecube Texture - .tpl extension
+#define IL_FITS			0x0449  //!< Flexible Image Transport System - .fit and .fits extensions
+#define IL_IWI			0x044A  //!< Call of Duty Infinity Ward Image - .iwi extension
 
 
 #define IL_JASC_PAL     0x0475  //!< PaintShop Pro Palette

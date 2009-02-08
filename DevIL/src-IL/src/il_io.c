@@ -1576,6 +1576,13 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		}
 		#endif
 
+		#ifndef IL_NO_FITS
+		if (!iStrCmp(Ext, IL_TEXT("fit")) || !iStrCmp(Ext, IL_TEXT("fits"))) {
+			bRet = ilLoadIcon(FileName);
+			goto finish;
+		}
+		#endif
+
 		#ifndef IL_NO_ICO
 		if (!iStrCmp(Ext, IL_TEXT("ico")) || !iStrCmp(Ext, IL_TEXT("cur"))) {
 			bRet = ilLoadIcon(FileName);
@@ -1593,6 +1600,13 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#ifndef IL_NO_ICNS
 		if (!iStrCmp(Ext, IL_TEXT("icns"))) {
 			bRet = ilLoadIcns(FileName);
+			goto finish;
+		}
+		#endif
+
+		#ifndef IL_NO_IWI
+		if (!iStrCmp(Ext, IL_TEXT("iwi"))) {
+			bRet = ilLoadIwi(FileName);
 			goto finish;
 		}
 		#endif
