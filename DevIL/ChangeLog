@@ -14,7 +14,7 @@
 
 --- 1.7.7 release ---
 
-2009-02-06 Matěj Týč <bubla@sf.net>
+2009-02-06 Matěj Týč <bubla@users.sf.net>
 	* configure.ac, lib/Makefile.am: Added explicit linking with libm
 	library + fixed the ilut_x11.c file conditions of compilation
 	* examples/Makefile.am + IL examples, test/Makefile.am + testil: Added
@@ -34,7 +34,7 @@
 	* ilut_opengl.c:160: Changed checks to see if less than 0.
 	* il_fits.c: Got this reading FITS files properly.
 
-2009-02-04 Matěj Týč <bubla@sf.net>
+2009-02-04 Matěj Týč <bubla@users.sf.net>
 	* configure.ac: Corrected handling of --enable-debug options, added
 	working install support for pkg-config
 	* data/Makefile.am, *.pc.in: Corrected pkg-config files
@@ -53,7 +53,7 @@
 	  compiled in.
 	* test/format_test/testil.c:5: Added _USE_MATH_DEFINES.
 
-2009-02-01 Matěj Týč <bubla@sf.net>
+2009-02-01 Matěj Týč <bubla@users.sf.net>
 	* test/format_test: Tweaked the script to use wine if cross-compiling
 	to run the tests, extended testil capabilities
 	* m4/devil-definitions.m4: Fixed bugs that caused that you couldn't
@@ -196,7 +196,7 @@
 	has this patch (Nov. 24, 2008 cache).
 	* devil_internal_exports.h:34: Uncommented and commented line 30.
 
-2009-01-20 Matěj Týč <bubla@sf.net>
+2009-01-20 Matěj Týč <bubla@users.sf.net>
 	* test/format_test: Added a program and script as 'make check' target.
 	Those  will test whether IL is capable of saving and loading images and whether the saved and
 	loaded image is similar to the original.
@@ -233,7 +233,7 @@
 2009-01-16 Denton Woods <doomwiz@users.sf.net>
 	* Updated x64 projects
 
-2009-01-15 Matěj Týč <bubla@sf.net>
+2009-01-15 Matěj Týč <bubla@users.sf.net>
 	* il_io.h, include/IL/il.h, il_states.h: Changed some normal strings to constant
 	strings (in ilSave, ilIsValid and ilGetString)
 	* configure.ac, lib/Makefile.am: Added wbmp compilation support
@@ -278,7 +278,7 @@
 	* il_vtf.c: Removed commented lines 238-242.
 	* Created application to copy DLL files to the System32 directory.
 
-2009-01-10 Matěj Týč <bubla@sf.net>
+2009-01-10 Matěj Týč <bubla@users.sf.net>
 	* m4/devil-definitions.m4, m4/devil-reports.m4: Added a report saying
 	what libraries were linked with DevIL (should be helpful to packagers
 	who need to know DevIL dependencies)
@@ -319,7 +319,7 @@
 	* il_gif.c (GifGetData): Added DataPtr and changed line 636 to use Data instead of Image->Data.
 	* il_gif.c (iGetPalette / GetImages): Changed to better deal with local palettes.
 
-2009-01-08 Matěj Týč <bubla@sf.net>
+2009-01-08 Matěj Týč <bubla@users.sf.net>
 	* TODO: Added some tasks that I would like to undertake
 	* ChangeLog, NEWS: Copied old ChangeLog entries to NEWS file
 	* lib/Makefile.am: Added two new files to the list of IL sources
@@ -357,7 +357,7 @@
 	ilnVidiaCompressDXT and added the DxtType parameter.
 	* il_internal.c: Cleaned up extra whitespace toward end.
 
-2009-01-02 Matěj Týč <bubla@sf.net>
+2009-01-02 Matěj Týč <bubla@users.sf.net>
 	* src-{IL,ILU,ILUT}/src/*_internal.c: Hopefully resolved the
 	HAVE_CONFIG_H thing once for all :-)
 	* src-IL/src/il_exr.cpp: Undefined OPENEXR_DLL if we are not on
@@ -382,3 +382,7 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* EXR files can now be loaded as file streams and lumps.
 	* Changed iNeuQuant to take number of colors in palette.
 	* Compiled MNG support back in.
+
+2009-09-02 Matěj Týč <bubla@users.sf.net>
+	* tests/testil.c: Added checks what IL loading/saving routines ended
+	* build system: Removed --enable-monolithic option.

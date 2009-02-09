@@ -5,6 +5,7 @@ Name: ILU
 Description: Developer's Image Library - ILU part (image library utilities)
 Version: @VERSION@
 URL: http://openil.sourceforge.net
+Requires: IL
 Libs: -L@libdir@ -lILU 
 Libs.private: @ILU_LIBS@ -lIL
 Cflags: -I@includedir@ @IL_CFLAGS@

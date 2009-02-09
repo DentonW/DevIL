@@ -14,58 +14,29 @@ il_HEADERS =  $(all_include)/IL/devil_cpp_wrapper.hpp
 AM_LDFLAGS = -version-info @DEVIL_LTVERSION@
 AM_CFLAGS = $(GENERAL_CFLAGS)
 
-if BUILD_MONOLITHIC
-lib_LTLIBRARIES += libDevIL.la
-libDevIL_la_SOURCES = 
-libDevIL_la_CPPFLAGS = 
-libDevIL_la_CFLAGS = $(AM_CFLAGS)
-libDevIL_la_LDFLAGS = $(AM_LDFLAGS)
-endif 
-
 if WINDOWS_BUILD
 AM_LDFLAGS += -no-undefined
 endif #WINDOWS_BUILD
 
 if BUILD_IL
 
-if BUILD_MONOLITHIC
-libDevIL_la_SOURCES  += $(libIL_la_SOURCES)
-libDevIL_la_CPPFLAGS += $(libIL_la_CPPFLAGS)
-libDevIL_la_CFLAGS += $(libIL_la_CFLAGS)
-libDevIL_la_LDFLAGS += @IL_LIBS@
-else #!BUILD_MONOLITHIC
 lib_LTLIBRARIES += libIL.la 
-endif #BUILD_MONOLITHIC
-
 il_HEADERS += $(all_include)/IL/il.h
+
 endif #BUILD_IL
 
 if BUILD_ILU
 
-if BUILD_MONOLITHIC
-libDevIL_la_SOURCES  += $(libILU_la_SOURCES)
-libDevIL_la_CPPFLAGS += $(libILU_la_CPPFLAGS)
-libDevIL_la_CFLAGS += $(libILU_la_CFLAGS)
-libDevIL_la_LDFLAGS += @ILU_LIBS@
-else #!BUILD_MONOLITHIC
 lib_LTLIBRARIES += libILU.la 
-endif #BUILD_MONOLITHIC
-
 il_HEADERS += $(all_include)/IL/ilu.h $(all_include)/IL/ilu_region.h
+
 endif #BUILD_ILU
 
 if BUILD_ILUT
 
-##if BUILD_MONOLITHIC
-##libDevIL_la_SOURCES  += $(libILUT_la_SOURCES)
-##libDevIL_la_CPPFLAGS += $(libILUT_la_CPPFLAGS)
-##libDevIL_la_CFLAGS += $(libILUT_la_CFLAGS)
-##libDevIL_la_LDFLAGS += @ILUT_LIBS@
-##else #!BUILD_MONOLITHIC
 lib_LTLIBRARIES += libILUT.la 
-##endif #BUILD_MONOLITHIC
-
 il_HEADERS += $(all_include)/IL/ilut.h
+
 endif #BUILD_ILUT
 
 libIL_la_CPPFLAGS = -I $(il_include) -I $(all_include)

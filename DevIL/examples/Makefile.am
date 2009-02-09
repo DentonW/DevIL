@@ -4,15 +4,9 @@ examplesdir = $(devildir)/examples
 
 AM_CPPFLAGS = -I $(all_include)
 
-if BUILD_MONOLITHIC
-il_library = ../lib/libDevIL.la 
-ilu_library = ../lib/libDevIL.la
-ilut_library = ../lib/libDevIL.la
-else #NOT BUILD_MONOLITHIC
 il_library = ../lib/libIL.la 
 ilu_library = ../lib/libILU.la
 ilut_library = ../lib/libILUT.la
-endif #BUILD_MONOLITHIC
 
 EXTRA_DIST =
 examples_PROGRAMS = IL_override IL_read IL_simple 

@@ -110,14 +110,6 @@ AM_CONDITIONAL([BUILD_EXAMPLES],
 	       [test "x$with_examples" = "xyes"])
 
 dnl Do we want monolithic library (DevIL instead of IL, ILU, ILUT). Useful probably only on Windows... Discouraged.
-AC_ARG_ENABLE([monolithic],
-	      [AS_HELP_STRING([--enable-monolithic[[=yes/no]]],
-			      [Builds only one library instead of separate ones (IL, ILU, ILUT -> DevIL). Default set to 'disabled'])],
-              [],
-	      [enable_monolithic="no"])
-AM_CONDITIONAL([BUILD_MONOLITHIC],
-	       [test "x$enable_monolithic" = "xyes"])
-
 dnl Whether to build IL. You have to anyway :-)
 dnl AC_ARG_ENABLE([IL],
 dnl	      [AS_HELP_STRING([--enable-IL[[=yes/no]]],

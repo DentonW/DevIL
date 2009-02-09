@@ -19,9 +19,11 @@ enum colors {RED, GREEN, BLUE, ALPHA};
 /* So make it possible for both with and without ILU!  */
 #ifdef ILU_ENABLED
 #include <IL/ilu.h>
-#define ERROR_SAVING_FILE_MACRO fprintf(stderr, "Error saving file '%s'\nReason: %s\n", name, iluErrorString(return_value))
+#define ERROR_LOADING_FILE_MACRO(filename, code) fprintf(stderr, "Error loading file '%s'\nReason: %s\n", (filename), iluErrorString((code)))
+#define ERROR_SAVING_FILE_MACRO(filename, code) fprintf(stderr, "Error saving file '%s'\nReason: %s\n", (filename), iluErrorString((code)))
 #else /* not ILU_ENABLED */
-#define ERROR_SAVING_FILE_MACRO fprintf(stderr, "Error saving file '%s'\nError code: 0x%X\n", name, (unsigned int)return_value)
+#define ERROR_LOADING_FILE_MACRO(filename, code) fprintf(stderr, "Error loading file '%s'\nError code: 0x%X\n", (filename), (unsigned int)(code))
+#define ERROR_SAVING_FILE_MACRO(filename, code) fprintf(stderr, "Error saving file '%s'\nError code: 0x%X\n", (filename), (unsigned int)(code))
 #endif /* not ILU_ENABLED */
 
 /** How did the tests ended? */
@@ -161,7 +163,7 @@ int save_test_image(const char * name, int w, int h, Parameters params)
 	if (saved == IL_FALSE)	
 	{
 		return_value = ilGetError();
-		ERROR_SAVING_FILE_MACRO;
+		ERROR_SAVING_FILE_MACRO(name,return_value);
 	}
 	/* Finally, clean the mess! */
 	ilDeleteImages(1, & handle);
@@ -270,7 +272,12 @@ int test_is_testimage(Parameters params)
 	ILuint handle;
 	ilGenImages(1, & handle);
 	ilBindImage(handle);
-	ilLoadImage(params.first_filename);
+	int loaded = ilLoadImage(params.first_filename);
+	if (loaded == IL_FALSE)
+	{/* something went wrong */
+		ERROR_LOADING_FILE_MACRO(params.first_filename, loaded);
+		return loaded;
+	}
 	/* getting image width and height */
 	int w, h;
 	w = ilGetInteger(IL_IMAGE_WIDTH);  
@@ -327,15 +334,27 @@ int test_are_same(Parameters params)
 {
 	const int images_count = 2;
 	ILuint handle[images_count];
+	int i;
 	ILubyte * image_data[images_count];
+	for (i = 0; i < images_count; i++)
+		image_data[i] = NULL;
 	ilGenImages(images_count, & handle[0]);
 	const char * filenames [] = {params.first_filename, params.second_filename};
-	int i;
 	int w, h;
 	for (i = 0; i < images_count; i++)
 	{
 		ilBindImage(handle[i]);
-		ilLoadImage(filenames[i]);
+		int loaded = ilLoadImage(filenames[i]);
+		if (loaded == IL_FALSE)
+		{/* something went wrong */
+			ERROR_LOADING_FILE_MACRO(filenames[i], loaded);
+			for (i--; i >= 0; i--)
+			{/* We might allocated something, so let's clean it up :)) */
+				free(image_data[i]);
+				image_data[i] = NULL;
+			}
+			return loaded;
+		}
 		/* getting image width and height */
 		if (i == 0)
 		{

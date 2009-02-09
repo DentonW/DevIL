@@ -5,9 +5,9 @@ VERBOSE=""    # set VERBOSE="v" for verbose mode
 EXTENSIONS="@SUPPORTED_FORMATS@"
 # Here are the extensions that should support saving according to docs
 #CAN_SAVE=" BMP DDS HDR ICO JPG PCX PNG PPM PSD RAW SGI TGA TIF XPM " RAW and XPM are problematic...
-CAN_SAVE="BMP DDS HDR ICO JP2 JPG PCX PNG PPM PSD SGI TGA TIF"
+CAN_SAVE="BMP DDS EXR HDR ICO JP2 JPG PCX PNG PPM PSD SGI TGA TIF"
 # List of formats that we don't test since they are problematic
-PROBLEMATIC="RAW XPM"
+PROBLEMATIC="RAW WBMP XPM"
 
 echo "Running saving and loading consistency test..."
 FAILED_FORMATS=""
