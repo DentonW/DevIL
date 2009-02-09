@@ -29,6 +29,7 @@ By next release:
 
 
 Easier:
+- dcraw support
 - Keep .tpl DXT data.
 - iGetString may not work properly with Unicode strings.
 - Look at adding ilIsValid* for mng, iff, wbmp, wal and pxr.

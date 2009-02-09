@@ -9,6 +9,7 @@
 
 2009-02-09 Denton Woods <doomwiz@users.sf.net>
 	* ilu_scale2d.c (iluScale2DBilinear_): Started rewrite, since results were really ugly.
+	* il_iwi.c / il_vtf.c: Changed max references to IL_MAX.
 	
 
 --- 1.7.7 release ---

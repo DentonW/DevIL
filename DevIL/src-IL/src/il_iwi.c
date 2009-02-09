@@ -323,7 +323,7 @@ ILboolean IwiReadImage(ILimage *BaseImage, IWIHEAD *Header, ILuint NumMips)
 
 			case IWI_DXT1:
 				// DXT1 data has at least 8 bytes, even for one pixel.
-				SizeOfData = max(Image->Width * Image->Height / 2, 16);
+				SizeOfData = IL_MAX(Image->Width * Image->Height / 2, 16);
 				CompData = ialloc(SizeOfData);  // Gives a 6:1 compression ratio (or 8:1 for DXT1 with alpha)
 				if (CompData == NULL)
 					return IL_FALSE;
@@ -351,7 +351,7 @@ ILboolean IwiReadImage(ILimage *BaseImage, IWIHEAD *Header, ILuint NumMips)
 
 			case IWI_DXT3:
 				// DXT3 data has at least 16 bytes, even for one pixel.
-				SizeOfData = max(Image->Width * Image->Height, 16);
+				SizeOfData = IL_MAX(Image->Width * Image->Height, 16);
 				CompData = ialloc(SizeOfData);  // Gives a 4:1 compression ratio
 				if (CompData == NULL)
 					return IL_FALSE;
@@ -369,7 +369,7 @@ ILboolean IwiReadImage(ILimage *BaseImage, IWIHEAD *Header, ILuint NumMips)
 
 			case IWI_DXT5:
 				// DXT5 data has at least 16 bytes, even for one pixel.
-				SizeOfData = max(Image->Width * Image->Height, 16);
+				SizeOfData = IL_MAX(Image->Width * Image->Height, 16);
 				CompData = ialloc(SizeOfData);  // Gives a 4:1 compression ratio
 				if (CompData == NULL)
 					return IL_FALSE;

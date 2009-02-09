@@ -20,7 +20,7 @@
 
 // the max and min functions are not present, at least not on Unixes
 #ifndef max
-	#define max( a, b ) ( ((a) > (b)) ? (a) : (b) )
+	#define IL_MAX( a, b ) ( ((a) > (b)) ? (a) : (b) )
 #endif
 
 #ifndef min
@@ -249,7 +249,7 @@ ILboolean iLoadVtfInternal(void)
 
 	// Skip the low resolution image.  This is just a thumbnail.
 	//  The block size is 8, and the compression ratio is 6:1.
-	SizeOfData = max(Head.LowResImageWidth * Head.LowResImageHeight / 2, 8);
+	SizeOfData = IL_MAX(Head.LowResImageWidth * Head.LowResImageHeight / 2, 8);
 	if (Head.LowResImageWidth == 0 && Head.LowResImageHeight == 0)
 		SizeOfData = 0;  // No low resolution image present.
 	iseek(SizeOfData, IL_SEEK_CUR);
@@ -398,7 +398,7 @@ ILboolean iLoadVtfInternal(void)
 					case IMAGE_FORMAT_DXT1:
 					case IMAGE_FORMAT_DXT1_ONEBITALPHA:
 						// The block size is 8.
-						SizeOfData = max(Image->Width * Image->Height * Image->Depth / 2, 8);
+						SizeOfData = IL_MAX(Image->Width * Image->Height * Image->Depth / 2, 8);
 						CompData = ialloc(SizeOfData);  // Gives a 6:1 compression ratio (or 8:1 for DXT1 with alpha)
 						if (CompData == NULL)
 							return IL_FALSE;
@@ -416,7 +416,7 @@ ILboolean iLoadVtfInternal(void)
 					// DXT3 compression
 					case IMAGE_FORMAT_DXT3:
 						// The block size is 16.
-						SizeOfData = max(Image->Width * Image->Height * Image->Depth, 16);
+						SizeOfData = IL_MAX(Image->Width * Image->Height * Image->Depth, 16);
 						CompData = ialloc(SizeOfData);  // Gives a 4:1 compression ratio
 						if (CompData == NULL)
 							return IL_FALSE;
@@ -434,7 +434,7 @@ ILboolean iLoadVtfInternal(void)
 					// DXT5 compression
 					case IMAGE_FORMAT_DXT5:
 						// The block size is 16.
-						SizeOfData = max(Image->Width * Image->Height * Image->Depth, 16);
+						SizeOfData = IL_MAX(Image->Width * Image->Height * Image->Depth, 16);
 						CompData = ialloc(SizeOfData);  // Gives a 4:1 compression ratio
 						if (CompData == NULL)
 							return IL_FALSE;

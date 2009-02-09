@@ -22,17 +22,19 @@
 #if defined(_WIN32) && defined(IL_USE_PRAGMA_LIBS)
 	#if defined(_MSC_VER) || defined(__BORLANDC__)
 		#ifndef _DEBUG
-			#pragma comment(lib, "wmpglue.lib")
+			/*#pragma comment(lib, "wmpglue.lib")
 			#pragma comment(lib, "commonlib.lib")
 			#pragma comment(lib, "decodelib.lib")
 			#pragma comment(lib, "encodelib.lib")
-			#pragma comment(lib, "WMPMetaLib.lib")
+			#pragma comment(lib, "WMPMetaLib.lib")*/
+			#pragma comment(lib, "wmplib.lib")
 		#else
-			#pragma comment(lib, "wmpglue.lib")
+			/*#pragma comment(lib, "wmpglue.lib")
 			#pragma comment(lib, "commonlib.lib")
 			#pragma comment(lib, "decodelib.lib")
 			#pragma comment(lib, "encodelib.lib")
-			#pragma comment(lib, "WMPMetaLib.lib")
+			#pragma comment(lib, "WMPMetaLib.lib")*/
+			#pragma comment(lib, "wmplib-d.lib")
 		#endif
 	#endif
 #endif
@@ -106,14 +108,15 @@ ILboolean iLoadWdpInternal(ILconst_string FileName)
     //{
 
 	// Right now, we are just assuming one frame.
-	//pDecoder->GetRawStream(pDecoder, pDecoder->pStream);
+	pDecoder->SelectFrame(pDecoder, 1);
+	pDecoder->GetRawStream(pDecoder, &pDecoder->pStream);
 	Data = ialloc(pDecoder->uWidth * pDecoder->uHeight * 3);
 	Rect.Height = pDecoder->uHeight; Rect.Width = pDecoder->uWidth; Rect.X = 0; Rect.Y = 0;
-	//for (i = 0; i < pDecoder->uHeight; i++)
-	//{
-	//	Rect.Y = i;
-	//	pDecoder->Copy(pDecoder, &Rect, Data + pDecoder->uWidth * 3 * i, 0);
-	//}
+	/*for (i = 0; i < pDecoder->uHeight; i++)
+	{
+		Rect.Y = i;
+		pDecoder->Copy(pDecoder, &Rect, Data + pDecoder->uWidth * 3 * i, 0);
+	}*/
 	pDecoder->Copy(pDecoder, &Rect, Data, pDecoder->uWidth);
 	//pCodecFactory->CreateFormatConverter(&pConverter));
 
