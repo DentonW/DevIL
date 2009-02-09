@@ -19,6 +19,23 @@
 #include <WMPGlue.h>
 #include "il_wdp.h"
 
+#if defined(_WIN32) && defined(IL_USE_PRAGMA_LIBS)
+	#if defined(_MSC_VER) || defined(__BORLANDC__)
+		#ifndef _DEBUG
+			#pragma comment(lib, "wmpglue.lib")
+			#pragma comment(lib, "commonlib.lib")
+			#pragma comment(lib, "decodelib.lib")
+			#pragma comment(lib, "encodelib.lib")
+			#pragma comment(lib, "WMPMetaLib.lib")
+		#else
+			#pragma comment(lib, "wmpglue.lib")
+			#pragma comment(lib, "commonlib.lib")
+			#pragma comment(lib, "decodelib.lib")
+			#pragma comment(lib, "encodelib.lib")
+			#pragma comment(lib, "WMPMetaLib.lib")
+		#endif
+	#endif
+#endif
 
 //! Reads a .wdp file
 ILboolean ilLoadWdp(ILconst_string FileName)
@@ -43,6 +60,7 @@ ILboolean iLoadWdpInternal(ILconst_string FileName)
 	PKRect Rect;
 	U8 *Data;
 
+	//@TODO: Look at CreateWS_Memory.
 
 	//Call(PKCreateFactory(&pFactory, PK_SDK_VERSION));
 	//Call(PKCreateCodecFactory(&pCodecFactory, WMP_SDK_VERSION));
@@ -50,7 +68,7 @@ ILboolean iLoadWdpInternal(ILconst_string FileName)
 	PKCreateFactory(&pFactory, PK_SDK_VERSION);
 	PKCreateCodecFactory(&pCodecFactory, WMP_SDK_VERSION);
 	pCodecFactory->CreateDecoderFromFile(FileName, &pDecoder);
-
+	//@TODO: Check loading.
 	guidPixFormat = GUID_PKPixelFormat24bppRGB;
 
     // == color transcoding,
