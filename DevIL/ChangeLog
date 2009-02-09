@@ -7,6 +7,10 @@
 	* config.h.win: Added IL_FITS, IL_IWI, IL_SUN and IL_TPL.
 	* lib/Makefile.am and src-IL/src/Makefile.am: Added il_fits.c and il_iwi.c to source line.
 
+2009-02-09 Denton Woods <doomwiz@users.sf.net>
+	* ilu_scale2d.c (iluScale2DBilinear_): Started rewrite, since results were really ugly.
+	
+
 --- 1.7.7 release ---
 
 2009-02-06 Matěj Týč <bubla@sf.net>

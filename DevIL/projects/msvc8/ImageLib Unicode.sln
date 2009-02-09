@@ -2,8 +2,17 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ILUT", "..\..\src-ILUT\msvc8\ILUT Unicode.vcproj", "{7D060DA4-F2FA-44CC-80BE-065024DD6CA9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009} = {CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}
+		{B46B180B-6079-4CE6-8647-A7D712774255} = {B46B180B-6079-4CE6-8647-A7D712774255}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Windows Example", "..\..\examples\windows_example\windows_example-vc8.vcproj", "{22B03048-FD11-4D7F-88F5-C2628F8B6777}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B46B180B-6079-4CE6-8647-A7D712774255} = {B46B180B-6079-4CE6-8647-A7D712774255}
+		{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009} = {CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}
+		{7D060DA4-F2FA-44CC-80BE-065024DD6CA9} = {7D060DA4-F2FA-44CC-80BE-065024DD6CA9}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Text Files", "Solution Text Files", "{D80F24EB-FFDB-4DBA-9714-12B21BA8AF2E}"
 	ProjectSection(SolutionItems) = preProject
@@ -16,6 +25,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Text Files", "Solu
 		..\..\README.unix = ..\..\README.unix
 		..\..\README.win = ..\..\README.win
 		..\..\TODO = ..\..\TODO
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{070A7CB0-A79E-473F-9F36-4B00BFD60113}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\src-IL\msvc8\IL Unicode.vcproj = ..\..\src-IL\msvc8\IL Unicode.vcproj
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IL", "..\..\src-IL\msvc8\IL Unicode.vcproj", "{B46B180B-6079-4CE6-8647-A7D712774255}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ILU", "..\..\src-ILU\msvc8\ILU Unicode.vcproj", "{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B46B180B-6079-4CE6-8647-A7D712774255} = {B46B180B-6079-4CE6-8647-A7D712774255}
 	EndProjectSection
 EndProject
 Global
@@ -40,6 +61,22 @@ Global
 		{22B03048-FD11-4D7F-88F5-C2628F8B6777}.Release|Win32.ActiveCfg = Release|Win32
 		{22B03048-FD11-4D7F-88F5-C2628F8B6777}.Release|Win32.Build.0 = Release|Win32
 		{22B03048-FD11-4D7F-88F5-C2628F8B6777}.Release|x64.ActiveCfg = Release|Win32
+		{B46B180B-6079-4CE6-8647-A7D712774255}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B46B180B-6079-4CE6-8647-A7D712774255}.Debug|Win32.Build.0 = Debug|Win32
+		{B46B180B-6079-4CE6-8647-A7D712774255}.Debug|x64.ActiveCfg = Debug|x64
+		{B46B180B-6079-4CE6-8647-A7D712774255}.Debug|x64.Build.0 = Debug|x64
+		{B46B180B-6079-4CE6-8647-A7D712774255}.Release|Win32.ActiveCfg = Release|Win32
+		{B46B180B-6079-4CE6-8647-A7D712774255}.Release|Win32.Build.0 = Release|Win32
+		{B46B180B-6079-4CE6-8647-A7D712774255}.Release|x64.ActiveCfg = Release|x64
+		{B46B180B-6079-4CE6-8647-A7D712774255}.Release|x64.Build.0 = Release|x64
+		{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}.Debug|Win32.Build.0 = Debug|Win32
+		{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}.Debug|x64.ActiveCfg = Debug|x64
+		{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}.Debug|x64.Build.0 = Debug|x64
+		{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}.Release|Win32.ActiveCfg = Release|Win32
+		{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}.Release|Win32.Build.0 = Release|Win32
+		{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}.Release|x64.ActiveCfg = Release|x64
+		{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

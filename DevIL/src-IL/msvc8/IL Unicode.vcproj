@@ -178,6 +178,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/ignore:4197"
 				AdditionalDependencies="comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib"
 				OutputFile="../../lib/vc8/unicode/x64/debug/DevIL.dll"
 				LinkIncremental="2"
@@ -382,6 +383,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/ignore:4197"
 				AdditionalDependencies="comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib"
 				OutputFile="../../lib/vc8/unicode/x64/DevIL.dll"
 				LinkIncremental="1"
@@ -1748,6 +1750,10 @@
 				</File>
 				<File
 					RelativePath="..\src\il_iff.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\il_iwi.c"
 					>
 				</File>
 				<File

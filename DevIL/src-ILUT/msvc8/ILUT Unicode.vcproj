@@ -177,6 +177,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/ignore:4197"
 				AdditionalDependencies="Gdi32.lib User32.lib Comdlg32.lib"
 				OutputFile=".\../../lib/vc8/unicode/x64/ILUT.dll"
 				LinkIncremental="1"
@@ -378,6 +379,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/ignore:4197"
 				AdditionalDependencies="delayimp.lib Gdi32.lib User32.lib Comdlg32.lib"
 				OutputFile=".\../../lib/vc8/unicode/x64/debug/ILUT.dll"
 				LinkIncremental="2"

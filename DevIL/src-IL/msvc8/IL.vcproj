@@ -178,6 +178,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/ignore:4197"
 				AdditionalDependencies="comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib"
 				OutputFile="../../lib/vc8/x64/debug/DevIL.dll"
 				LinkIncremental="2"
@@ -288,7 +289,7 @@
 				AdditionalLibraryDirectories=""
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile=".\il.def"
-				DelayLoadDLLs="ilmimf.dll half.dll"
+				DelayLoadDLLs="ilmimf.dll half.dll nvtt.dll"
 				ProgramDatabaseFile=".\../../lib/vc8/x86/DevIL.pdb"
 				OptimizeForWindows98="1"
 				ImportLibrary=".\../../lib/vc8/x86/DevIL.lib"
@@ -383,6 +384,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/ignore:4197"
 				AdditionalDependencies="lcms.lib libtiff.lib libpng.lib comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib"
 				OutputFile="../../lib/vc8/x64/DevIL.dll"
 				LinkIncremental="1"
@@ -391,7 +393,7 @@
 				ManifestFile="$(IntDir)\$(TargetFileName).intermediate.manifest"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile=".\il.def"
-				DelayLoadDLLs="ilmimf.dll half.dll"
+				DelayLoadDLLs="ilmimf.dll half.dll nvtt.dll"
 				ProgramDatabaseFile=".\../../lib/vc8/x64/DevIL.pdb"
 				OptimizeForWindows98="1"
 				ImportLibrary=".\../../lib/vc8/x64/DevIL.lib"
@@ -1710,6 +1712,10 @@
 				</File>
 				<File
 					RelativePath="..\src\il_iff.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\il_iwi.c"
 					>
 				</File>
 				<File

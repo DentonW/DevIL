@@ -52,7 +52,9 @@ Easier:
   http://objectmix.com/graphics/745877-glgeneratemipmapext.html
 - Make libsquish and NVTT code compress volume textures (do each slice separately).
 - Check .dcx code - does it even load multiple images?
-- Make ilBlit either error with color indexed images or work with them.		
+- Make ilBlit either error with color indexed images or work with them.
+- iluScale: Make ilTexImage or whatever actually use Temp->Data instead of copying.
+- Get rid of globals in il_dds.c and ilu_scale2d.c.
 
 
 More involved:
