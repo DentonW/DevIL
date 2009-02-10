@@ -39,6 +39,12 @@ extern "C" {
 #include "il_files.h"
 #include "il_endian.h"
 
+#ifndef _WIN32
+	// The Microsoft HD Photo Device Porting Kit has not been ported to anything other
+	//  than Windows yet, so we disable this if Windows is not the current platform.
+	#define IL_NO_WDP
+#endif//_WIN32
+
 // Windows-specific
 #ifdef _WIN32
 	#ifdef _MSC_VER
@@ -53,30 +59,11 @@ extern "C" {
 			#if _MSC_VER >= 1300
 				#pragma warning(disable : 4996)  // MSVC++ 8/9 deprecation warnings
 			#endif
-			//pragma comment(linker, "/NODEFAULTLIB:libc")
-			//pragma comment(linker, "/NODEFAULTLIB:libcd")
-			//pragma comment(linker, "/NODEFAULTLIB:libcmt.lib")
-			//#ifdef _DEBUG
-			//	pragma comment(linker, "/NODEFAULTLIB:libcmtd")
-			//	pragma comment(linker, "/NODEFAULTLIB:msvcrt.lib")
-			//#endif // _DEBUG
 		#endif // _MSC_VER > 1000
 	#endif
 	#define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers
 	#include <windows.h>
-#endif
-// Windows has a TEXT macro defined in WinNT.h that makes string Unicode if UNICODE is defined.
-/*#ifndef _WIN32
-	#define IL_TEXT(s) s
-#endif*/
-/*#ifdef _WIN32_WCE
-	#define IL_TEXT(s) ((char*)TEXT(s))
-#elif _WIN32
-	#define IL_TEXT(s) (s)
-#else
-	#define IL_TEXT(s) (s)
-	#define TEXT(s) (s)
-#endif*/
+#endif//_WIN32
 
 #ifdef _UNICODE
 	#define IL_TEXT(s) L##s
