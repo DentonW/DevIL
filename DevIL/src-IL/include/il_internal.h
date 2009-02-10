@@ -190,18 +190,18 @@ char*		iGetString(ILenum StringName);  // Internal version of ilGetString
 //
 // Image loading/saving functions
 //
-ILboolean ilIsValidBlp(ILconst_string CONST_RESTRICT FileName);
+ILboolean ilIsValidBlp(ILconst_string FileName);
 ILboolean ilIsValidBlpF(ILHANDLE File);
-ILboolean ilIsValidBlpL(const void *Lump, const ILuint Size);
+ILboolean ilIsValidBlpL(const void *Lump, ILuint Size);
 ILboolean ilLoadBlp(ILconst_string FileName);
 ILboolean ilLoadBlpF(ILHANDLE File);
-ILboolean ilLoadBlpL(const void *Lump, const ILuint Size);
+ILboolean ilLoadBlpL(const void *Lump, ILuint Size);
 ILboolean ilIsValidBmp(ILconst_string CONST_RESTRICT FileName);
 ILboolean ilIsValidBmpF(ILHANDLE File);
-ILboolean ilIsValidBmpL(const void *Lump, const ILuint Size);
+ILboolean ilIsValidBmpL(const void *Lump, ILuint Size);
 ILboolean ilLoadBmp(ILconst_string FileName);
 ILboolean ilLoadBmpF(ILHANDLE File);
-ILboolean ilLoadBmpL(const void *Lump, const ILuint Size);
+ILboolean ilLoadBmpL(const void *Lump, ILuint Size);
 ILboolean ilSaveBmp(ILconst_string FileName);
 ILuint    ilSaveBmpF(ILHANDLE File);
 ILuint    ilSaveBmpL(void *Lump, ILuint Size);

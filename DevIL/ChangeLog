@@ -7,6 +7,7 @@
 	* il.h: Added IL_BLP and IL_DICOM.  Switched IL_DICOM and IL_IWI defines.
 	* il_internal.h: Added Blp and Dicom function defines.
 	* il_blp.c: Added this file and started code.
+	* lib/Makefile.am and src-IL/src/Makefile.am: Added il_blp.c to source line.
 
 2009-02-09 Matěj Týč <bubla@users.sf.net>
 	* tests/testil.c: Added checks what IL loading/saving routines ended

@@ -11,32 +11,35 @@
 //
 //-----------------------------------------------------------------------------
 
+//@TODO: Add support for the BLP1 format as well.
 
 #include "il_internal.h"
 #ifndef IL_NO_BLP
 #include "il_dds.h"
 
 
-typedef struct BLP2HEAD {
-	uint8_t    Magic[4];       // "BLP2" magic number
-	uint32_t   Type;           // Texture type: 0 = JPG, 1 = DXTC
-	uint8_t    Compression;    // Compression mode: 1 = raw, 2 = DXTC
-	uint8_t    AlphaBits;      // 0, 1, or 8
-	uint8_t    AlphaType;      // 0, 1, 7 or 8
-	uint8_t    HasMips;        // 0 = no mips levels, 1 = has mips (number of levels determined by image size)
-	uint32_t   Width;          // Image width in pixels
-	uint32_t   Height;         // Image height in pixels
-	uint32_t   MipOffsets[16]; // The file offsets of each mipmap, 0 for unused
-	uint32_t   MipLengths[16]; // The length of each mipmap data block
+typedef struct BLP2HEAD
+{
+	ILubyte	Sig[4];         // "BLP2" signature
+	ILuint	Type;           // Texture type: 0 = JPG, 1 = DXTC
+	ILubyte	Compression;    // Compression mode: 1 = raw, 2 = DXTC
+	ILubyte	AlphaBits;      // 0, 1, or 8
+	ILubyte	AlphaType;      // 0, 1, 7 or 8
+	ILubyte	HasMips;        // 0 = no mips levels, 1 = has mips (number of levels determined by image size)
+	ILuint	Width;          // Image width in pixels
+	ILuint	Height;         // Image height in pixels
+	ILuint	MipOffsets[16]; // The file offsets of each mipmap, 0 for unused
+	ILuint	MipLengths[16]; // The length of each mipmap data block
 } BLP2HEAD;
 
-
 // Data formats
-#define BLP_JPG		0
-#define BLP_DXTC	1
+#define BLP_TYPE_JPG		0
+#define BLP_TYPE_DXTC_RAW	1
+#define BLP_RAW				1
+#define BLP_DXTC			2
 
-ILboolean iIsValidBlp(void);
-ILboolean iCheckBlp(BLPHEAD *Header);
+ILboolean iIsValidBlp2(void);
+ILboolean iCheckBlp2(BLP2HEAD *Header);
 ILboolean iLoadBlpInternal(void);
 
 
@@ -72,7 +75,7 @@ ILboolean ilIsValidBlpF(ILHANDLE File)
 	
 	iSetInputFile(File);
 	FirstPos = itell();
-	bRet = iIsValidBlp();
+	bRet = iIsValidBlp2();
 	iseek(FirstPos, IL_SEEK_SET);
 	
 	return bRet;
@@ -83,34 +86,67 @@ ILboolean ilIsValidBlpF(ILHANDLE File)
 ILboolean ilIsValidBlpL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
-	return iIsValidBlp();
+	return iIsValidBlp2();
 }
 
 
 // Internal function used to get the BLP header from the current file.
-ILboolean iGetBlpHead(BLPHEAD *Header)
+ILboolean iGetBlp2Head(BLP2HEAD *Header)
 {
+	ILuint i;
+
+	iread(Header->Sig, 1, 4);
+	Header->Type = GetLittleUInt();
+	Header->Compression = igetc();
+	Header->AlphaBits = igetc();
+	Header->AlphaType = igetc();
+	Header->HasMips = igetc();
+	Header->Width = GetLittleUInt();
+	Header->Height = GetLittleUInt();
+	for (i = 0; i < 16; i++)
+		Header->MipOffsets[i] = GetLittleUInt();
+	for (i = 0; i < 16; i++)
+		Header->MipLengths[i] = GetLittleUInt();
 
 	return IL_TRUE;
 }
 
 
 // Internal function to get the header and check it.
-ILboolean iIsValidBlp(void)
+ILboolean iIsValidBlp2(void)
 {
-	BLPHEAD Header;
+	BLP2HEAD Header;
 
-	if (!iGetBlpHead(&Header))
+	if (!iGetBlp2Head(&Header))
 		return IL_FALSE;
 	iseek(-148, IL_SEEK_CUR);
 	
-	return iCheckBlp(&Header);
+	return iCheckBlp2(&Header);
 }
 
 
 // Internal function used to check if the HEADER is a valid BLP header.
-ILboolean iCheckBlp(BLPHEAD *Header)
+ILboolean iCheckBlp2(BLP2HEAD *Header)
 {
+	// The file signature is 'BLP2'.
+	if (strncmp(Header->Sig, "BLP2", 4))
+		return IL_FALSE;
+	// Valid types are JPEG and DXTC.  JPEG is not common, though.
+	//  WoW only uses DXTC.
+	if (Header->Type != BLP_TYPE_JPG && Header->Type != BLP_TYPE_DXTC_RAW)
+		return IL_FALSE;
+	// For BLP_TYPE_DXTC_RAW, we can have RAW and DXTC compression.
+	if (Header->Compression != BLP_RAW && Header->Compression != BLP_DXTC)
+		return IL_FALSE;
+	// Alpha bits can only be 0, 1 and 8.
+	if (Header->AlphaBits != 0 && Header->AlphaBits != 1 && Header->AlphaBits != 8)
+		return IL_FALSE;
+	// Alpha type can only be 0, 1, 7 and 8.
+	if (Header->AlphaType != 0 && Header->AlphaType != 1 && Header->AlphaType != 7 && Header->AlphaType != 8)
+		return IL_FALSE;
+	// Width or height of 0 makes no sense.
+	if (Header->Width == 0 || Header->Height == 0)
+		return IL_FALSE;
 
 	return IL_TRUE;
 }
@@ -151,7 +187,7 @@ ILboolean ilLoadBlpF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a BLP
-ILboolean ilLoadBlpL(const void *Lump, ILuint Size)
+ILboolean ilLoadBlpL(const void *Lump, const ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadBlpInternal();
@@ -167,6 +203,14 @@ ILboolean iLoadBlpInternal(void)
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
+
+	if (!iGetBlp2Head(&Header))
+		return IL_FALSE;
+	if (!iCheckBlp2(&Header)) {
+		ilSetError(IL_INVALID_FILE_HEADER);
+		return IL_FALSE;
+	}
+
 
 	return ilFixImage();
 }
