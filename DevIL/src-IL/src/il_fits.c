@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 02/03/2009
+// Last modified: 02/09/2009
 //
 // Filename: src-IL/src/il_fits.c
 //
@@ -46,7 +46,7 @@ ILenum GetCardImage(FITSHEAD *Header);
 ILboolean GetCardInt(char *Buffer, ILint *Val);
 
 //! Checks if the file specified in FileName is a valid FITS file.
-/*ILboolean ilIsValidFits(ILconst_string FileName)
+ILboolean ilIsValidFits(ILconst_string FileName)
 {
 	ILHANDLE	FitsFile;
 	ILboolean	bFits = IL_FALSE;
@@ -89,7 +89,7 @@ ILboolean ilIsValidFitsL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iIsValidFits();
-}*/
+}
 
 
 // Internal function used to get the FITS header from the current file.

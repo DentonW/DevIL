@@ -1380,6 +1380,10 @@
 				Name="File Formats"
 				>
 				<File
+					RelativePath="..\src\il_blp.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\il_bmp.c"
 					>
 					<FileConfiguration

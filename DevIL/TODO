@@ -4,14 +4,14 @@ DevIL TODO:
 
 Denton:
 
+Bugs:
+- Conversion to IL_ALPHA seems to be crashing.
+
+
 By next release:
 
-- il_fits.c and il_iwi.c added to projects.
 - ilut_config.h to projects.
-
 - NVTT.dll as a delay-loaded DLL.
-- New functions in il.def.
-
 - Update docs with next DXT code, new mipmap/cubemap access, new SaveL code.
 - Mention Unicode and 64-bit compatibility on website.
 - Update DevIL website with file formats (psd-saving, etc.).
@@ -30,7 +30,11 @@ By next release:
 
 Easier:
 - dcraw support
+- http://en.wikipedia.org/wiki/2xSaI
+- Clean up WDP code.
 - Keep .tpl DXT data.
+- Add ilIsValidFits* functions to il_io.c.
+- Add ilIsValidWdp* functions.
 - iGetString may not work properly with Unicode strings.
 - Look at adding ilIsValid* for mng, iff, wbmp, wal and pxr.
 - Fix Daniel's suggestions.
@@ -59,6 +63,8 @@ Easier:
 
 
 More involved:
+- .blp support
+- JPEG and PNG in .bmp files
 - It looks like ilSetRead/ilSetWrite don't actually do anything.
 - Run Valgrind on library.
 - Make iSaveJp2Internal and iSaveExrInternal work with palettes (make ilConvertBuffer work on palettes as well).

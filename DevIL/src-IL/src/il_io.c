@@ -2,11 +2,11 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 01/24/2009
+// Last modified: 02/09/2009
 //
 // Filename: src-IL/src/il_io.c
 //
-// Description: Determines image types and loads images
+// Description: Determines image types and loads/saves images
 //
 //-----------------------------------------------------------------------------
 
@@ -67,8 +67,6 @@ ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 		Type = IL_JP2;
 	else if (!iStrCmp(Ext, IL_TEXT("dds")))
 		Type = IL_DDS;
-	else if (!iStrCmp(Ext, IL_TEXT("exr")))
-		Type = IL_EXR;
 	else if (!iStrCmp(Ext, IL_TEXT("png")))
 		Type = IL_PNG;
 	else if (!iStrCmp(Ext, IL_TEXT("bmp")) || !iStrCmp(Ext, IL_TEXT("dib")))
@@ -77,6 +75,10 @@ ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 		Type = IL_GIF;
 	else if (!iStrCmp(Ext, IL_TEXT("cut")))
 		Type = IL_CUT;
+	else if (!iStrCmp(Ext, IL_TEXT("exr")))
+		Type = IL_EXR;
+	else if (!iStrCmp(Ext, IL_TEXT("fit")) || !iStrCmp(Ext, IL_TEXT("fits")))
+		Type = IL_BMP;
 	else if (!iStrCmp(Ext, IL_TEXT("hdr")))
 		Type = IL_HDR;
 	else if (!iStrCmp(Ext, IL_TEXT("iff")))
@@ -85,6 +87,10 @@ ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 		Type = IL_ICO;
 	else if (!iStrCmp(Ext, IL_TEXT("icns")))
 		Type = IL_ICNS;
+	else if (!iStrCmp(Ext, IL_TEXT("iwi")))
+		Type = IL_IWI;
+	else if (!iStrCmp(Ext, IL_TEXT("iwi")))
+		Type = IL_IWI;
 	else if (!iStrCmp(Ext, IL_TEXT("jng")))
 		Type = IL_JNG;
 	else if (!iStrCmp(Ext, IL_TEXT("lif")))
@@ -203,6 +209,11 @@ ILenum ILAPIENTRY ilDetermineTypeF(ILHANDLE File)
 	#ifndef IL_NO_ICNS
 	if (ilIsValidIcnsF(File))
 		return IL_ICNS;
+	#endif
+
+	#ifndef IL_NO_IWI
+	if (ilIsValidIwiF(File))
+		return IL_IWI;
 	#endif
 
 	#ifndef IL_NO_JP2
@@ -329,6 +340,11 @@ ILenum ILAPIENTRY ilDetermineTypeL(const void *Lump, ILuint Size)
 	#ifndef IL_NO_ICNS
 	if (ilIsValidIcnsL(Lump, Size))
 		return IL_ICNS;
+	#endif
+
+	#ifndef IL_NO_IWI
+	if (ilIsValidIwiL(Lump, Size))
+		return IL_IWI;
 	#endif
 
 	#ifndef IL_NO_JP2
@@ -466,6 +482,11 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, ILconst_string FileName)
 			return ilIsValidIcns(FileName);
 		#endif
 
+		#ifndef IL_NO_IWI
+		case IL_IWI:
+			return ilIsValidIwi(FileName);
+		#endif
+
 		#ifndef IL_NO_JP2
 		case IL_JP2:
 			return ilIsValidJp2(FileName);
@@ -596,6 +617,11 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 			return ilIsValidIcnsF(File);
 		#endif
 
+		#ifndef IL_NO_IWI
+		case IL_IWI:
+			return ilIsValidIwiF(File);
+		#endif
+
 		#ifndef IL_NO_JP2
 		case IL_JP2:
 			return ilIsValidJp2F(File);
@@ -724,6 +750,11 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, void *Lump, ILuint Size)
 		#ifndef IL_NO_ICNS
 		case IL_ICNS:
 			return ilIsValidIcnsL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_IWI
+		case IL_IWI:
+			return ilIsValidIwiL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_JP2
@@ -890,9 +921,15 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 			break;
 		#endif
 
-		#ifndef IL_NO_IFF
-		case IL_IFF:
-			bRet = ilLoadIff(FileName);
+		#ifndef IL_NO_EXR
+		case IL_EXR:
+			bRet = ilLoadExr(FileName);
+			break;
+		#endif
+
+		#ifndef IL_NO_FITS
+		case IL_FITS:
+			bRet = ilLoadFits(FileName);
 			break;
 		#endif
 
@@ -905,6 +942,18 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 		#ifndef IL_NO_ICNS
 		case IL_ICNS:
 			bRet = ilLoadIcns(FileName);
+			break;
+		#endif
+
+		#ifndef IL_NO_IFF
+		case IL_IFF:
+			bRet = ilLoadIff(FileName);
+			break;
+		#endif
+
+		#ifndef IL_NO_IWI
+		case IL_IWI:
+			bRet = ilLoadIwi(FileName);
 			break;
 		#endif
 
@@ -1034,12 +1083,6 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 			break;
 		#endif
 
-		#ifndef IL_NO_EXR
-		case IL_EXR:
-			bRet = ilLoadExr(FileName);
-			break;
-		#endif
-
 		default:
 			ilSetError(IL_INVALID_ENUM);
 			bRet = IL_FALSE;
@@ -1121,6 +1164,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadExrF(File);
 		#endif
 
+		#ifndef IL_NO_FITS
+		case IL_FITS:
+			return ilLoadFitsF(File);
+		#endif
+
 		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilLoadGifF(File);
@@ -1136,14 +1184,19 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadIconF(File);
 		#endif
 
+		#ifndef IL_NO_ICNS
+		case IL_ICNS:
+			return ilLoadIcnsF(File);
+		#endif
+
 		#ifndef IL_NO_IFF
 		case IL_IFF:
 			return ilLoadIffF(File);
 		#endif
 
-		#ifndef IL_NO_ICNS
-		case IL_ICNS:
-			return ilLoadIcnsF(File);
+		#ifndef IL_NO_IWI
+		case IL_IWI:
+			return ilLoadIwiF(File);
 		#endif
 
 		#ifndef IL_NO_LIF
@@ -1323,6 +1376,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size)
 			return ilLoadExrL(Lump, Size);
 		#endif
 
+		#ifndef IL_NO_FITS
+		case IL_FITS:
+			return ilLoadFitsL(Lump, Size);
+		#endif
+
 		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilLoadGifL(Lump, Size);
@@ -1338,14 +1396,19 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size)
 			return ilLoadIconL(Lump, Size);
 		#endif
 
+		#ifndef IL_NO_ICNS
+		case IL_ICNS:
+			return ilLoadIcnsL(Lump, Size);
+		#endif
+
 		#ifndef IL_NO_IFF
 		case IL_IFF:
 			return ilLoadIffL(Lump, Size);
 		#endif
 
-		#ifndef IL_NO_ICNS
-		case IL_ICNS:
-			return ilLoadIcnsL(Lump, Size);
+		#ifndef IL_NO_IWI
+		case IL_IWI:
+			return ilLoadIwiL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_LIF
@@ -1539,15 +1602,6 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		}
 		#endif
 
-#if 0  // Probably will not have this ready by this upcoming release.
-		#ifndef IL_NO_FITS
-		if (!iStrCmp(Ext, IL_TEXT("fits"))) {
-			bRet = ilLoadFits(FileName);
-			goto finish;
-		}
-		#endif
-#endif
-
 		#ifndef IL_NO_GIF
 		if (!iStrCmp(Ext, IL_TEXT("gif"))) {
 			bRet = ilLoadGif(FileName);
@@ -1577,8 +1631,8 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#endif
 
 		#ifndef IL_NO_FITS
-		if (!iStrCmp(Ext, IL_TEXT("fit")) || !iStrCmp(Ext, IL_TEXT("fits"))) {
-			bRet = ilLoadIcon(FileName);
+		if (!iStrCmp(Ext, IL_TEXT("fits")) || !iStrCmp(Ext, IL_TEXT("fit"))) {
+			bRet = ilLoadFits(FileName);
 			goto finish;
 		}
 		#endif
@@ -1590,16 +1644,16 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		}
 		#endif
 
-		#ifndef IL_NO_IFF
-		if (!iStrCmp(Ext, IL_TEXT("iff"))) {
-			bRet = ilLoadIff(FileName);
+		#ifndef IL_NO_ICNS
+		if (!iStrCmp(Ext, IL_TEXT("icns"))) {
+			bRet = ilLoadIcns(FileName);
 			goto finish;
 		}
 		#endif
 
-		#ifndef IL_NO_ICNS
-		if (!iStrCmp(Ext, IL_TEXT("icns"))) {
-			bRet = ilLoadIcns(FileName);
+		#ifndef IL_NO_IFF
+		if (!iStrCmp(Ext, IL_TEXT("iff"))) {
+			bRet = ilLoadIff(FileName);
 			goto finish;
 		}
 		#endif

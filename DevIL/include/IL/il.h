@@ -232,7 +232,9 @@ typedef long long unsigned int ILuint64;
 #define IL_IFF			0x0447  //!< Interchange File Format - .iff extension
 #define IL_TPL			0x0448  //!< Gamecube Texture - .tpl extension
 #define IL_FITS			0x0449  //!< Flexible Image Transport System - .fit and .fits extensions
-#define IL_IWI			0x044A  //!< Call of Duty Infinity Ward Image - .iwi extension
+#define IL_DICOM		0x044A  //!< Digital Imaging and Communications in Medicine (DICOM) - .dcm and .dicom extensions
+#define IL_IWI			0x044B  //!< Call of Duty Infinity Ward Image - .iwi extension
+#define IL_BLP			0x044C  //!< Blizzard Texture Format - .blp extension
 
 
 #define IL_JASC_PAL     0x0475  //!< PaintShop Pro Palette
@@ -601,7 +603,7 @@ ILAPI ILuint    ILAPIENTRY ilSaveF(ILenum Type, ILHANDLE File);
 ILAPI ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName);
 ILAPI ILuint    ILAPIENTRY ilSaveL(ILenum Type, void *Lump, ILuint Size);
 ILAPI ILboolean ILAPIENTRY ilSavePal(ILconst_string FileName);
-ILAPI ILboolean ILAPIENTRY ilSetAlpha( ILdouble AlphaValue );
+ILAPI ILboolean ILAPIENTRY ilSetAlpha(ILdouble AlphaValue);
 ILAPI ILboolean ILAPIENTRY ilSetData(void *Data);
 ILAPI ILboolean ILAPIENTRY ilSetDuration(ILuint Duration);
 ILAPI void      ILAPIENTRY ilSetInteger(ILenum Mode, ILint Param);

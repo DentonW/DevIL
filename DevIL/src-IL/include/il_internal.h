@@ -20,7 +20,7 @@
 #endif*/
 #ifdef HAVE_CONFIG_H //if we use autotools, we have HAVE_CONFIG_H defined and we have to look for it like that
 #include <config.h>
-#else // if we don't use autotools, we have to point to (possibly different) config.h than in the opposite case
+#else // If we do not use autotools, we have to point to (possibly different) config.h than in the opposite case
 #include <IL/config.h>
 #endif
 
@@ -190,6 +190,12 @@ char*		iGetString(ILenum StringName);  // Internal version of ilGetString
 //
 // Image loading/saving functions
 //
+ILboolean ilIsValidBlp(ILconst_string CONST_RESTRICT FileName);
+ILboolean ilIsValidBlpF(ILHANDLE File);
+ILboolean ilIsValidBlpL(const void *Lump, const ILuint Size);
+ILboolean ilLoadBlp(ILconst_string FileName);
+ILboolean ilLoadBlpF(ILHANDLE File);
+ILboolean ilLoadBlpL(const void *Lump, const ILuint Size);
 ILboolean ilIsValidBmp(ILconst_string CONST_RESTRICT FileName);
 ILboolean ilIsValidBmpF(ILHANDLE File);
 ILboolean ilIsValidBmpL(const void *Lump, const ILuint Size);
@@ -233,6 +239,9 @@ ILboolean ilLoadExrL(const void *Lump, ILuint Size);
 ILboolean ilSaveExr(ILconst_string FileName);
 ILuint    ilSaveExrF(ILHANDLE File);
 ILuint    ilSaveExrL(void *Lump, ILuint Size);
+ILboolean ilIsValidFits(ILconst_string FileName);
+ILboolean ilIsValidFitsF(ILHANDLE File);
+ILboolean ilIsValidFitsL(const void *Lump, ILuint Size);
 ILboolean ilLoadFits(ILconst_string FileName);
 ILboolean ilLoadFitsF(ILHANDLE File);
 ILboolean ilLoadFitsL(const void *Lump, ILuint Size);

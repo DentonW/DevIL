@@ -1,3 +1,17 @@
+2009-02-09 Denton Woods <doomwiz@users.sf.net>
+	* ilu_scale2d.c (iluScale2DBilinear_): Started rewrite, since results were really ugly.
+	* il_iwi.c / il_vtf.c: Changed max references to IL_MAX.
+	* il_wdp.c: Redid all of the code so that it actually works now.
+	* il_internal.h:42-46: Added lines to define IL_NO_WDP if not in Windows.
+	* il_io.c: Added Iwi and Fits loading calls.
+	* il.h: Added IL_BLP and IL_DICOM.  Switched IL_DICOM and IL_IWI defines.
+	* il_internal.h: Added Blp and Dicom function defines.
+	* il_blp.c: Added this file and started code.
+
+2009-02-09 Matěj Týč <bubla@users.sf.net>
+	* tests/testil.c: Added checks what IL loading/saving routines ended
+	* build system: Removed --enable-monolithic option.
+
 2009-02-07/08 Denton Woods <doomwiz@users.sf.net>
 	* il_iwi.c: Added this file and code to load .iwi files.
 	* il_vtf.c (iLoadVtfInternal): Added checks for CompData == NULL.
@@ -7,15 +21,6 @@
 	* config.h.win: Added IL_FITS, IL_IWI, IL_SUN and IL_TPL.
 	* lib/Makefile.am and src-IL/src/Makefile.am: Added il_fits.c and il_iwi.c to source line.
 
-2009-02-09 Denton Woods <doomwiz@users.sf.net>
-	* ilu_scale2d.c (iluScale2DBilinear_): Started rewrite, since results were really ugly.
-	* il_iwi.c / il_vtf.c: Changed max references to IL_MAX.
-	* il_wdp.c: Redid all of the code so that it actually works now.
-	* il_internal.h:42-46: Added lines to define IL_NO_WDP if not in Windows.
-
-2009-02-09 Matěj Týč <bubla@users.sf.net>
-	* tests/testil.c: Added checks what IL loading/saving routines ended
-	* build system: Removed --enable-monolithic option.
 
 --- 1.7.7 release ---
 

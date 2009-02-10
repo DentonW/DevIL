@@ -213,7 +213,7 @@ ERR iReadWS_File(struct WMPStream* pWS, void* pv, size_t cb)
 {
 	// For some reason, the WDP images load just fine, but it tries to read too much,
 	//  so IL_FILE_READ_ERROR is set.  So we get rid of the error.
-	if (iread(pv, 1, cb) != cb)
+	if (iread(pv, 1, (ILuint)cb) != cb)
 		ilGetError();
     return WMP_errSuccess;
 }
@@ -223,7 +223,7 @@ ERR iWriteWS_File(struct WMPStream* pWS, const void* pv, size_t cb)
     ERR err = WMP_errSuccess;
 
     if (0 != cb) {
-		FailIf(1 != iwrite(pv, cb, 1), WMP_errFileIO);
+		FailIf(1 != iwrite(pv, (ILuint)cb, 1), WMP_errFileIO);
     }
 
 Cleanup:
@@ -235,7 +235,7 @@ ERR iSetPosWS_File(struct WMPStream* pWS, size_t offPos)
     ERR err = WMP_errSuccess;
 
     //FailIf(0 != fseek(pWS->state.file.pFile, (long)offPos, SEEK_SET), WMP_errFileIO);
-	FailIf(0 != iseek(offPos, IL_SEEK_SET), WMP_errFileIO);
+	FailIf(0 != iseek((ILuint)offPos, IL_SEEK_SET), WMP_errFileIO);
 
 Cleanup:
     return err;
