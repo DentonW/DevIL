@@ -466,8 +466,9 @@ ILuint ilSaveJpegF(ILHANDLE File)
 //! Writes a Jpeg to a memory "lump"
 ILuint ilSaveJpegL(void *Lump, ILuint Size)
 {
-	ILuint Pos = itellw();
+	ILuint Pos;
 	iSetOutputLump(Lump, Size);
+	Pos = itellw();
 	if (iSaveJpegInternal() == IL_FALSE)
 		return 0;  // Error occurred
 	return itellw() - Pos;  // Return the number of bytes written.

@@ -1,3 +1,8 @@
+2009-02-11 Denton Woods <doomwiz@users.sf.net>
+	* il_jpeg.c (ilSaveJpegL): Changed the itellw call to after iSetOutputLump
+	  (was returning bad values, since the lump was not set yet).
+	* il_io.c (ilSaveL): Changed return value to Ret and got rid of IL_FALSE check.
+
 2009-02-10 Denton Woods <doomwiz@users.sf.net>
 	* il_io.c: Added ilLoadBlp calls in il_io.c.
 	* VC9 projects: Turned off x64 incremental linking to prevent debugging problems described here:

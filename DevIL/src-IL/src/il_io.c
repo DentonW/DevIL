@@ -2189,10 +2189,7 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, void *Lump, ILuint Size)
 			return 0;
 	}
 
-	if (Ret == IL_FALSE)
-		return 0;
-
-	return itellw();
+	return Ret;
 }
 
 
