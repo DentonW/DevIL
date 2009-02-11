@@ -29,6 +29,7 @@ By next release:
 
 
 Easier:
+- Add JPEG 2000 extensions from http://www.library.cornell.edu/preservation/tutorial/presentation/table7-1.html.
 - Add BLP calls to il_io.c.
 - Read BLP1 files.
 - Add IL_PAL_BGRX define for BLP files (alpha is discarded).
@@ -94,6 +95,10 @@ More involved:
 - Lib EXIF support
 - FITS support
 - APNG support
+- Koala support
+- Flashpix (.fpx) support
+- DPX support
+- Multipage PNM files
 - MP3 album art (ID3V2 tag)
 - Fortran support
 - D language support - There exists a program to convert C headers to D.
@@ -158,6 +163,7 @@ Lots of work:
 - Librsvg
 - Give estimates for buffer sizes for ilSaveL.
 - MNG saving
+- Metadata
 - Thread safe version
 - Add flag for determining whether DDS data is outdated.
 - TIFF saving to file streams and lumps
