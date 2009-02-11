@@ -142,6 +142,7 @@ More involved:
 - OpenMP support: http://stackoverflow.com/questions/326487/multithreaded-image-processing-in-c
   http://www.ddj.com/architect/184405586
 - Shear rotation: http://www.codeproject.com/KB/graphics/rotatebyshear.aspx
+- Icon Library (.icl) support.
 
 
 Lots of work:
