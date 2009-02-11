@@ -33,12 +33,16 @@ Easier:
 - Read BLP1 files.
 - Add IL_PAL_BGRX define for BLP files (alpha is discarded).
 - Clean up ilSetAlpha.
+- Add faces to WindowsTest.
+- Add reading other files in directory to WindowsTest, so you can easily view all files in a dir.
+- Rename WindowsTest to WindowsExample.
 - Check all possible IWI types.
 - Tell IWI converter guy that his converter does not read all mipmaps.
 - Finish BLP loading (indexed mipmaps, jpeg data).
 - dcraw support
 - http://en.wikipedia.org/wiki/2xSaI
 - Clean up WDP code.
+- Get WDP code to do conversions within the WDP library (check to see if type/format set by user).
 - Get WDP code to properly do float, short, etc.
 - Make DecompressDXT1 and DecompressDXT1a functions separate (.blp files could use this).
 - Keep TPL DXT data.
