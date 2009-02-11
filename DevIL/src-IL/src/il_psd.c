@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 01/07/2009
+// Last modified: 02/09/2009
 //
 // Filename: src-IL/src/il_psd.c
 //
@@ -945,8 +945,9 @@ ILuint ilSavePsdF(ILHANDLE File)
 //! Writes a Psd to a memory "lump"
 ILuint ilSavePsdL(void *Lump, ILuint Size)
 {
-	ILuint Pos = itellw();
+	ILuint Pos;
 	iSetOutputLump(Lump, Size);
+	Pos = itellw();
 	if (iSavePsdInternal() == IL_FALSE)
 		return 0;  // Error occurred
 	return itellw() - Pos;  // Return the number of bytes written.

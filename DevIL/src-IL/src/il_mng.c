@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 01/09/2009
+// Last modified: 02/09/2009
 //
 // Filename: src-IL/src/il_mng.c
 //
@@ -327,8 +327,9 @@ ILuint ilSaveMngF(ILHANDLE File)
 //! Writes a Mng to a memory "lump"
 ILuint ilSaveMngL(void *Lump, ILuint Size)
 {
-	ILuint Pos = itellw();
+	ILuint Pos;
 	iSetOutputLump(Lump, Size);
+	Pos = itellw();
 	if (iSaveMngInternal() == IL_FALSE)
 		return 0;  // Error occurred
 	return itellw() - Pos;  // Return the number of bytes written.
@@ -340,6 +341,7 @@ ILboolean iSaveMngInternal()
 {
 	//mng_handle mng;
 
+	// Not working yet, so just error out.
 	ilSetError(IL_INVALID_EXTENSION);
 	return IL_FALSE;
 

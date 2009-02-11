@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 01/04/2009
+// Last modified: 02/09/2009
 //
 // Filename: src-IL/src/il_wbmp.c
 //
@@ -201,8 +201,9 @@ ILuint ilSaveWbmpF(ILHANDLE File)
 //! Writes a .wbmp to a memory "lump"
 ILuint ilSaveWbmpL(void *Lump, ILuint Size)
 {
-	ILuint Pos = itellw();
+	ILuint Pos;
 	iSetOutputLump(Lump, Size);
+	Pos = itellw();
 	if (iSaveWbmpInternal() == IL_FALSE)
 		return 0;  // Error occurred
 	return itellw() - Pos;  // Return the number of bytes written.

@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 01/15/2009
+// Last modified: 02/09/2009
 //
 // Filename: src-IL/src/il_dds-save.c
 //
@@ -62,8 +62,9 @@ ILuint ilSaveDdsF(ILHANDLE File)
 //! Writes a Dds to a memory "lump"
 ILuint ilSaveDdsL(void *Lump, ILuint Size)
 {
-	ILuint Pos = itellw();
+	ILuint Pos;
 	iSetOutputLump(Lump, Size);
+	Pos = itellw();
 	if (iSaveDdsInternal() == IL_FALSE)
 		return 0;  // Error occurred
 	return itellw() - Pos;  // Return the number of bytes written.

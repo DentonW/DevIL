@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2008 by Denton Woods (this file by thakis / Denton)
-// Last modified: 12/14/2008
+// Last modified: 02/09/2009
 //
 // Filename: src-IL/src/il_hdr.c
 //
@@ -395,8 +395,9 @@ ILuint ilSaveHdrF(ILHANDLE File)
 //! Writes a Hdr to a memory "lump"
 ILuint ilSaveHdrL(void *Lump, ILuint Size)
 {
-	ILuint Pos = itellw();
+	ILuint Pos;
 	iSetOutputLump(Lump, Size);
+	Pos = itellw();
 	if (iSaveHdrInternal() == IL_FALSE)
 		return 0;  // Error occurred
 	return itellw() - Pos;  // Return the number of bytes written.

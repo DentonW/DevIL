@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/21/2002 <--Y2K Compliant! =]
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 02/09/2009
 //
 // Filename: src-IL/src/il_pnm.c
 //
@@ -521,9 +521,10 @@ ILuint ilSavePnmF(ILHANDLE File)
 //! Writes a Pnm to a memory "lump"
 ILuint ilSavePnmL(void *Lump, ILuint Size)
 {
-	ILuint Pos = itellw();
+	ILuint Pos;
 	FName = NULL;
 	iSetOutputLump(Lump, Size);
+	Pos = itellw();
 	if (iSavePnmInternal() == IL_FALSE)
 		return 0;  // Error occurred
 	return itellw() - Pos;  // Return the number of bytes written.

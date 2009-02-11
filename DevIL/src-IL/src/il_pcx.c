@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 09/01/2003 <--Y2K Compliant! =]
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 02/09/2009
 //
 // Filename: src-IL/src/il_pcx.c
 //
@@ -523,8 +523,9 @@ ILuint ilSavePcxF(ILHANDLE File)
 //! Writes a .pcx to a memory "lump"
 ILuint ilSavePcxL(void *Lump, ILuint Size)
 {
-	ILuint Pos = itellw();
+	ILuint Pos;
 	iSetOutputLump(Lump, Size);
+	Pos = itellw();
 	if (iSavePcxInternal() == IL_FALSE)
 		return 0;  // Error occurred
 	return itellw() - Pos;  // Return the number of bytes written.

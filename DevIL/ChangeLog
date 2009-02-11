@@ -2,6 +2,9 @@
 	* il_jpeg.c (ilSaveJpegL): Changed the itellw call to after iSetOutputLump
 	  (was returning bad values, since the lump was not set yet).
 	* il_io.c (ilSaveL): Changed return value to Ret and got rid of IL_FALSE check.
+	* il_bmp.c, il_dds-save.c, il_hdr.c, il_jp2.c, il_pcx.c, il_png.c, il_pnm.c, il_psd.c, il_raw.c,
+	  il_sgi.c, il_wbmp.c: Fixed same problem that il_jpeg.c had with saving lumps.
+	* il_sgi.c: Put header on file.
 
 2009-02-10 Denton Woods <doomwiz@users.sf.net>
 	* il_io.c: Added ilLoadBlp calls in il_io.c.
