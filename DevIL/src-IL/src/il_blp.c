@@ -187,7 +187,7 @@ ILboolean ilLoadBlpF(ILHANDLE File)
 
 
 //! Reads from a memory "lump" that contains a BLP
-ILboolean ilLoadBlpL(const void *Lump, const ILuint Size)
+ILboolean ilLoadBlpL(const void *Lump, ILuint Size)
 {
 	iSetInputLump(Lump, Size);
 	return iLoadBlpInternal();
@@ -198,6 +198,9 @@ ILboolean ilLoadBlpL(const void *Lump, const ILuint Size)
 ILboolean iLoadBlpInternal(void)
 {
 	BLP2HEAD	Header;
+	ILubyte		*CompData;
+	ILimage		*Image = iCurImage;
+	ILuint		i;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -211,6 +214,101 @@ ILboolean iLoadBlpInternal(void)
 		return IL_FALSE;
 	}
 
+//@TODO: Remove this!
+	if (Header.Type != BLP_TYPE_DXTC_RAW || Header.Compression != BLP_DXTC)
+		return IL_FALSE;
+
+//@TODO: Read other mipmaps.
+	//if (Header.HasMips
+
+	i = 0;
+
+	switch (Header.Compression)
+	{
+		case BLP_RAW:
+			if (!ilTexImage(Header.Width, Header.Height, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL))
+				return IL_FALSE;
+			Image->Origin = IL_ORIGIN_UPPER_LEFT;
+
+			Image->Pal.Palette = (ILubyte*)ialloc(4 * 256);  // 256 entries of ARGB8888 values (1024).
+			if (Image->Pal.Palette == NULL)
+				return IL_FALSE;
+			Image->Pal.PalSize = 1024;
+			Image->Pal.PalType = IL_PAL_BGRA32;  //@TODO: Find out if this is really BGRA data.
+			if (iread(Image->Pal.Palette, 1, 1024) != 1024)  // Read in the palette.
+				return IL_FALSE;
+
+			// These two should be the same (tells us how much data is in the file for this mipmap level).
+			if (Header.MipLengths[i] != Image->SizeOfData) {
+				ilSetError(IL_INVALID_FILE_HEADER);
+				return IL_FALSE;
+			}
+			// Finally read in the image data.
+			if (!iread(Image->Data, 1, Image->SizeOfData) != Image->SizeOfData)
+				return IL_FALSE;
+			break;
+
+		case BLP_DXTC:
+			//@TODO: Other formats
+			//if (Header.AlphaBits == 0)
+			//	if (!ilTexImage(Header.Width, Header.Height, 1, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL))
+			//	return IL_FALSE;
+			if (!ilTexImage(Header.Width, Header.Height, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL))
+				return IL_FALSE;
+			Image->Origin = IL_ORIGIN_UPPER_LEFT;
+
+			//@TODO: Only do the allocation once.
+			CompData = (ILubyte*)ialloc(Header.MipLengths[0]);
+			if (CompData == NULL)
+				return IL_FALSE;
+
+			//@TODO: Checks on whether Header.MipLengths is wrong!
+			iseek(Header.MipOffsets[i], IL_SEEK_SET);
+			if (iread(CompData, 1, Header.MipLengths[i]) != Header.MipLengths[i]) {
+				ifree(CompData);
+				return IL_FALSE;
+			}
+
+			switch (Header.AlphaBits)
+			{
+				case 0:  // DXT1 without alpha
+				case 1:  // DXT1 with alpha
+					if (!DecompressDXT1(Image, CompData)) {
+						ifree(CompData);
+						return IL_FALSE;
+					}
+					break;
+
+				case 8:
+					switch (Header.AlphaType)
+					{
+						case 0:  // All three of
+						case 1:  //  these refer to
+						case 8:  //  DXT3...
+							if (!DecompressDXT3(Image, CompData)) {
+								ifree(CompData);
+								return IL_FALSE;
+							}
+							break;
+
+						case 7:  // DXT5 compression
+							if (!DecompressDXT5(Image, CompData)) {
+								ifree(CompData);
+								return IL_FALSE;
+							}
+							break;
+
+						//default:  // Should already be checked by iCheckBlp2.
+					}
+					break;
+				//default:  // Should already be checked by iCheckBlp2.
+			}
+
+			//@TODO: Save DXTC data.
+			ifree(CompData);
+			break;
+		//default:
+	}
 
 	return ilFixImage();
 }

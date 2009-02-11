@@ -29,10 +29,13 @@ By next release:
 
 
 Easier:
+- Add blp calls to il_io.c.
 - dcraw support
 - http://en.wikipedia.org/wiki/2xSaI
 - Clean up WDP code.
+- Make DecompressDXT1 and DecompressDXT1a functions separate (.blp files could use this).
 - Keep .tpl DXT data.
+- DecompressDXT1 (and more) do not set an error if returning IL_FALSE (should be an internal error, I think).
 - Add ilIsValidFits* functions to il_io.c.
 - Add ilIsValidWdp* functions.
 - iGetString may not work properly with Unicode strings.
@@ -192,6 +195,8 @@ Questions:
 - Is ilSaveCHeader fine with Unicode?
 - Should ilFlipSurfaceDxtcData and more work on mipmaps/cubemaps as well?
 - Should ilImageToDxtcData work on cubemaps?
+- Should we seek back to the initial position on filestreams?
+- Should we return the number of bytes read in loading lumps?
 
 
 From old TODO:

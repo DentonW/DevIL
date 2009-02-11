@@ -829,6 +829,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/ignore:4197"
 				OutputFile="../../lib/vc9/x64/unicode/debug/ilut.dll"
+				LinkIncremental="1"
 				IgnoreDefaultLibraryNames="msvcrt.lib; msvcrtd.lib"
 				ModuleDefinitionFile="ilut.def"
 				DelayLoadDLLs="sdl.dll; opengl32.dll; d3d9.dll; d3d10.dll"

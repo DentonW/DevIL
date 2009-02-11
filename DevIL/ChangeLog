@@ -1,3 +1,9 @@
+2009-02-10 Denton Woods <doomwiz@users.sf.net>
+	* il_io.c: Added ilLoadBlp calls in il_io.c.
+	* VC9 projects: Turned off x64 incremental linking to prevent debugging problems described here:
+	  http://stackoverflow.com/questions/218747/msvcr90ddll-not-found-in-debug-mode-with-visual-c-2008
+	* il_blp.c: Added code to read BLP2 files.
+
 2009-02-09 Denton Woods <doomwiz@users.sf.net>
 	* ilu_scale2d.c (iluScale2DBilinear_): Started rewrite, since results were really ugly.
 	* il_iwi.c / il_vtf.c: Changed max references to IL_MAX.

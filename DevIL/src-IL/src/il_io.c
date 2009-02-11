@@ -888,6 +888,12 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 			break;
 		#endif
 
+		#ifndef IL_NO_BLP
+		case IL_BLP:
+			bRet = ilLoadBlp(FileName);
+			break;
+		#endif
+
 		#ifndef IL_NO_BMP
 		case IL_BMP:
 			bRet = ilLoadBmp(FileName);
@@ -1142,6 +1148,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadPngF(File);
 		#endif
 
+		#ifndef IL_NO_BLP
+		case IL_BLP:
+			return ilLoadBlpF(File);
+		#endif
+
 		#ifndef IL_NO_BMP
 		case IL_BMP:
 			return ilLoadBmpF(File);
@@ -1352,6 +1363,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size)
 		#ifndef IL_NO_PNG
 		case IL_PNG:
 			return ilLoadPngL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_BLP
+		case IL_BLP:
+			return ilLoadBlpL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_BMP
@@ -1591,6 +1607,13 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#ifndef IL_NO_BMP
 		if (!iStrCmp(Ext, IL_TEXT("bmp")) || !iStrCmp(Ext, IL_TEXT("dib"))) {
 			bRet = ilLoadBmp(FileName);
+			goto finish;
+		}
+		#endif
+
+		#ifndef IL_NO_BLP
+		if (!iStrCmp(Ext, IL_TEXT("blp"))) {
+			bRet = ilLoadBlp(FileName);
 			goto finish;
 		}
 		#endif

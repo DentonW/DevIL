@@ -182,7 +182,7 @@
 				AdditionalOptions="/ignore:4197 /ignore:4099"
 				AdditionalDependencies="comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib"
 				OutputFile="../../lib/vc9/x64/unicode/debug/DevIL.dll"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../projects/msvc/extlibs"
 				IgnoreDefaultLibraryNames=""
