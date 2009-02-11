@@ -94,6 +94,7 @@ More involved:
 - Lib EXIF support
 - FITS support
 - APNG support
+- MP3 album art (ID3V2 tag)
 - Fortran support
 - D language support - There exists a program to convert C headers to D.
 - Better DirectX 10 support
