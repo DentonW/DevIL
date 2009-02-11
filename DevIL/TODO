@@ -31,6 +31,7 @@ By next release:
 Easier:
 - Add BLP calls to il_io.c.
 - Read BLP1 files.
+- Add IL_PAL_BGRX define for BLP files (alpha is discarded).
 - Clean up ilSetAlpha.
 - Check all possible IWI types.
 - Tell IWI converter guy that his converter does not read all mipmaps.
