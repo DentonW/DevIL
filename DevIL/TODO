@@ -86,6 +86,7 @@ More involved:
 - Add .ico/.icns saving.
 - Readd CMAKE support
 - Better static lib support in MSVC++ 8/9
+- Median cut quantization
 - Lib EXIF support
 - FITS support
 - APNG support
