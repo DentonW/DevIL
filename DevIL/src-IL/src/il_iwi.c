@@ -218,6 +218,7 @@ ILboolean iLoadIwiInternal(void)
 }
 
 
+// Helper function to convert IWI formats to DevIL formats and Bpp.
 ILenum IwiGetFormat(ILubyte Format, ILubyte *Bpp)
 {
 	switch (Format)
@@ -248,6 +249,8 @@ ILenum IwiGetFormat(ILubyte Format, ILubyte *Bpp)
 	return 0;  // Will never reach this.
 }
 
+
+// Function to intialize the mipmaps and determine the number of mipmaps.
 ILboolean IwiInitMipmaps(ILimage *BaseImage, ILuint *NumMips)
 {
 	ILimage	*Image;

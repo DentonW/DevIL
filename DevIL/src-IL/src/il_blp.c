@@ -199,8 +199,9 @@ ILboolean iLoadBlpInternal(void)
 {
 	BLP2HEAD	Header;
 	ILubyte		*CompData;
-	ILimage		*Image = iCurImage;
-	ILuint		i;
+	ILimage		*Image;
+	ILuint		i, CompSize;
+	ILboolean	BaseCreated = IL_FALSE;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -215,12 +216,13 @@ ILboolean iLoadBlpInternal(void)
 	}
 
 //@TODO: Remove this!
-	if (Header.Type != BLP_TYPE_DXTC_RAW || Header.Compression != BLP_DXTC)
+	if (Header.Type != BLP_TYPE_DXTC_RAW)
 		return IL_FALSE;
 
 //@TODO: Read other mipmaps.
 	//if (Header.HasMips
 
+//@TODO: Get rid of this line.
 	i = 0;
 
 	switch (Header.Compression)
@@ -228,6 +230,8 @@ ILboolean iLoadBlpInternal(void)
 		case BLP_RAW:
 			if (!ilTexImage(Header.Width, Header.Height, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL))
 				return IL_FALSE;
+			Image = iCurImage;
+			BaseCreated = IL_TRUE;
 			Image->Origin = IL_ORIGIN_UPPER_LEFT;
 
 			Image->Pal.Palette = (ILubyte*)ialloc(4 * 256);  // 256 entries of ARGB8888 values (1024).
@@ -249,63 +253,96 @@ ILboolean iLoadBlpInternal(void)
 			break;
 
 		case BLP_DXTC:
-			//@TODO: Other formats
-			//if (Header.AlphaBits == 0)
-			//	if (!ilTexImage(Header.Width, Header.Height, 1, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL))
-			//	return IL_FALSE;
-			if (!ilTexImage(Header.Width, Header.Height, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL))
-				return IL_FALSE;
-			Image->Origin = IL_ORIGIN_UPPER_LEFT;
-
-			//@TODO: Only do the allocation once.
-			CompData = (ILubyte*)ialloc(Header.MipLengths[0]);
-			if (CompData == NULL)
-				return IL_FALSE;
-
-			//@TODO: Checks on whether Header.MipLengths is wrong!
-			iseek(Header.MipOffsets[i], IL_SEEK_SET);
-			if (iread(CompData, 1, Header.MipLengths[i]) != Header.MipLengths[i]) {
-				ifree(CompData);
-				return IL_FALSE;
-			}
-
-			switch (Header.AlphaBits)
-			{
-				case 0:  // DXT1 without alpha
-				case 1:  // DXT1 with alpha
-					if (!DecompressDXT1(Image, CompData)) {
-						ifree(CompData);
+			for (i = 0; i < 16; i++) {  // Possible maximum of 16 mipmaps
+				//@TODO: Other formats
+				//if (Header.AlphaBits == 0)
+				//	if (!ilTexImage(Header.Width, Header.Height, 1, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL))
+				//	return IL_FALSE;
+				if (!BaseCreated) {  // Have not created the base image yet, so use ilTexImage.
+					if (!ilTexImage(Header.Width, Header.Height, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL))
 						return IL_FALSE;
-					}
-					break;
+					Image = iCurImage;
+					BaseCreated = IL_TRUE;
+				}
+				else {
+					if (Header.HasMips == 0)  // Does not have mipmaps, so we are done.
+						break;
+					if (Image->Width == 1 && Image->Height == 1)  // Already at the smallest mipmap (1x1), so we are done.
+						break;
 
-				case 8:
-					switch (Header.AlphaType)
-					{
-						case 0:  // All three of
-						case 1:  //  these refer to
-						case 8:  //  DXT3...
-							if (!DecompressDXT3(Image, CompData)) {
-								ifree(CompData);
-								return IL_FALSE;
-							}
-							break;
+					//@TODO: Other formats
+					// ilNewImageFull automatically changes widths and heights of 0 to 1, so we do not have to worry about it.
+					Image->Mipmaps = ilNewImageFull(Image->Width >> 1, Image->Height >> 1, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL);
+					if (Image->Mipmaps == NULL)
+						return IL_FALSE;
+					Image = Image->Mipmaps;
+				}
+				// The origin should be in the upper left.
+				Image->Origin = IL_ORIGIN_UPPER_LEFT;
 
-						case 7:  // DXT5 compression
-							if (!DecompressDXT5(Image, CompData)) {
-								ifree(CompData);
-								return IL_FALSE;
-							}
-							break;
+				//@TODO: Only do the allocation once.
+				CompData = (ILubyte*)ialloc(Header.MipLengths[i]);
+				if (CompData == NULL)
+					return IL_FALSE;
 
-						//default:  // Should already be checked by iCheckBlp2.
-					}
-					break;
-				//default:  // Should already be checked by iCheckBlp2.
+				//@TODO: Checks on whether Header.MipLengths is wrong!
+				iseek(Header.MipOffsets[i], IL_SEEK_SET);
+				if (iread(CompData, 1, Header.MipLengths[i]) != Header.MipLengths[i]) {
+					ifree(CompData);
+					return IL_FALSE;
+				}
+
+				switch (Header.AlphaBits)
+				{
+					case 0:  // DXT1 without alpha
+					case 1:  // DXT1 with alpha
+						// Check to make sure that the MipLength reported is the size needed, so that
+						//  DecompressDXT1 does not crash.
+						CompSize = ((Image->Width + 3) / 4) * ((Image->Height + 3) / 4) * 8;
+						if (CompSize != Header.MipLengths[i]) {
+							ilSetError(IL_INVALID_FILE_HEADER);
+							return IL_FALSE;
+						}
+						if (!DecompressDXT1(Image, CompData)) {
+							ifree(CompData);
+							return IL_FALSE;
+						}
+						break;
+
+					case 8:
+						// Check to make sure that the MipLength reported is the size needed, so that
+						//  DecompressDXT3/5 do not crash.
+						CompSize = ((Image->Width + 3) / 4) * ((Image->Height + 3) / 4) * 16;
+						if (CompSize != Header.MipLengths[i]) {
+							ilSetError(IL_INVALID_FILE_HEADER);
+							return IL_FALSE;
+						}
+						switch (Header.AlphaType)
+						{
+							case 0:  // All three of
+							case 1:  //  these refer to
+							case 8:  //  DXT3...
+								if (!DecompressDXT3(Image, CompData)) {
+									ifree(CompData);
+									return IL_FALSE;
+								}
+								break;
+
+							case 7:  // DXT5 compression
+								if (!DecompressDXT5(Image, CompData)) {
+									ifree(CompData);
+									return IL_FALSE;
+								}
+								break;
+
+							//default:  // Should already be checked by iCheckBlp2.
+						}
+						break;
+					//default:  // Should already be checked by iCheckBlp2.
+				}
+				//@TODO: Save DXTC data.
+				ifree(CompData);
 			}
-
-			//@TODO: Save DXTC data.
-			ifree(CompData);
 			break;
 		//default:
 	}

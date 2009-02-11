@@ -29,12 +29,18 @@ By next release:
 
 
 Easier:
-- Add blp calls to il_io.c.
+- Add BLP calls to il_io.c.
+- Read BLP1 files.
+- Clean up ilSetAlpha.
+- Check all possible IWI types.
+- Tell IWI converter guy that his converter does not read all mipmaps.
+- Finish BLP loading (indexed mipmaps, jpeg data).
 - dcraw support
 - http://en.wikipedia.org/wiki/2xSaI
 - Clean up WDP code.
+- Get WDP code to properly do float, short, etc.
 - Make DecompressDXT1 and DecompressDXT1a functions separate (.blp files could use this).
-- Keep .tpl DXT data.
+- Keep TPL DXT data.
 - DecompressDXT1 (and more) do not set an error if returning IL_FALSE (should be an internal error, I think).
 - Add ilIsValidFits* functions to il_io.c.
 - Add ilIsValidWdp* functions.
@@ -66,7 +72,8 @@ Easier:
 
 
 More involved:
-- .blp support
+- Finish .blp support
+- Use loaded mipmaps in OpenGL and DirectX.
 - JPEG and PNG in .bmp files
 - It looks like ilSetRead/ilSetWrite don't actually do anything.
 - Run Valgrind on library.
