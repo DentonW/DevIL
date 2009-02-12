@@ -6,7 +6,7 @@
 //
 // Filename: src-IL/src/il_ftx.c
 //
-// Description: Reads from an .ftx file.
+// Description: Reads from a Heavy Metal: FAKK2 (.ftx) file.
 //
 //-----------------------------------------------------------------------------
 
@@ -73,11 +73,11 @@ ILboolean iLoadFtxInternal(void)
 	HasAlpha = GetLittleUInt();  // Kind of backwards from what I would think...
 
 	if (HasAlpha == 0) {  // BGRA format
-		if (!ilTexImage(Width, Height, 1, 4, IL_BGRA, IL_UNSIGNED_BYTE, NULL))
+		if (!ilTexImage(Width, Height, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL))
 			return IL_FALSE;
 	}
 	else if (HasAlpha == 1) {  // BGR format
-		if (!ilTexImage(Width, Height, 1, 3, IL_BGR, IL_UNSIGNED_BYTE, NULL))
+		if (!ilTexImage(Width, Height, 1, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL))
 			return IL_FALSE;
 	}
 	else {  // Unknown format
@@ -85,8 +85,10 @@ ILboolean iLoadFtxInternal(void)
 		return IL_FALSE;
 	}
 
+	// The origin will always be in the upper left.
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 
+	// All we have to do for this format is read the raw, uncompressed data.
 	if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) != iCurImage->SizeOfData)
 		return IL_FALSE;
 
