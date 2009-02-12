@@ -88,6 +88,7 @@ More involved:
 - Rewrite all code that uses mipmaps.
 - Work on http://en.wikipedia.org/wiki/Apple_Icon_Image page.
 - http://mirrored.xentax.com/gfe/index.html (lots of game graphics formats)
+- Strife textures
 - Commenting out lines 729-731 in pngread.c of libpng (1.2.9?) will allow reading of certain malformed Vista PNG-compressed .ico files with extra data at the end of the stream.  An example can be found in test/in and was created using Microangelo.
 - Add .ico/.icns saving.
 - Readd CMAKE support
