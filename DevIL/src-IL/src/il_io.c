@@ -939,6 +939,12 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 			break;
 		#endif
 
+		#ifndef IL_NO_FTX
+		case IL_FTX:
+			bRet = ilLoadFtx(FileName);
+			break;
+		#endif
+
 		#ifndef IL_NO_ICO
 		case IL_ICO:
 			bRet = ilLoadIcon(FileName);
@@ -1180,6 +1186,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadFitsF(File);
 		#endif
 
+		#ifndef IL_NO_FTX
+		case IL_FTX:
+			return ilLoadFtxF(File);
+		#endif
+
 		#ifndef IL_NO_GIF
 		case IL_GIF:
 			return ilLoadGifF(File);
@@ -1395,6 +1406,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size)
 		#ifndef IL_NO_FITS
 		case IL_FITS:
 			return ilLoadFitsL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_FTX
+		case IL_FTX:
+			return ilLoadFtxL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_GIF
@@ -1656,6 +1672,13 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#ifndef IL_NO_FITS
 		if (!iStrCmp(Ext, IL_TEXT("fits")) || !iStrCmp(Ext, IL_TEXT("fit"))) {
 			bRet = ilLoadFits(FileName);
+			goto finish;
+		}
+		#endif
+
+		#ifndef IL_NO_FTX
+		if (!iStrCmp(Ext, IL_TEXT("ftx"))) {
+			bRet = ilLoadFtx(FileName);
 			goto finish;
 		}
 		#endif

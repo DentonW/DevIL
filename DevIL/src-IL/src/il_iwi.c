@@ -334,7 +334,6 @@ ILboolean IwiReadImage(ILimage *BaseImage, IWIHEAD *Header, ILuint NumMips)
 					ifree(CompData);
 					return IL_FALSE;
 				}
-				iread(CompData, 1, SizeOfData);
 
 				// Decompress the DXT1 data into Image (ith mipmap).
 				if (!DecompressDXT1(Image, CompData)) {
