@@ -911,7 +911,7 @@ ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 
 		ifree(Data);
 		ifree(Alpha);
-	} //else no 3dc
+	} //else no 3DC
 
 	return Count;  // Returns 0 if no compression was done.
 }

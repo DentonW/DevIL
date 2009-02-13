@@ -1633,6 +1633,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\il_ftx.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\il_gif.c"
 					>
 					<FileConfiguration

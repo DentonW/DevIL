@@ -5,7 +5,7 @@ DevIL TODO:
 Denton:
 
 Bugs:
-- Conversion to IL_ALPHA seems to be crashing.
+- Conversion to IL_ALPHA seems to be crashing (WindowsTest.cpp).
 
 
 By next release:
@@ -204,6 +204,7 @@ http://www.ultranet.com/~aramini/design.html
 
 
 Questions:
+- Should IL_CONV_PAL convert to more than RGB?
 - Possibly readd VC6 projects?
 - Add BeOS support back in?
 - Create Dev-C++/MingW/Cygwin .a files for releases?
