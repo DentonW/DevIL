@@ -8,7 +8,7 @@
 #include <string>
 using namespace std;
 
-char *ImageExtArray[] =
+TCHAR *ImageExtArray[] =
 {
 	"jpe", "jpg", "jpeg",
 	"bmp",
@@ -33,7 +33,7 @@ string	NewExt;
 int		i, j;
 
 
-void BatchConv(char *Directory, char *ExtList, char *ConvExt, bool Recurse)
+void BatchConv(TCHAR *Directory, TCHAR *ExtList, TCHAR *ConvExt, bool Recurse)
 {
 	ILuint Id, OrigId;
 	ilGenImages(1, &Id);
@@ -52,7 +52,7 @@ void BatchConv(char *Directory, char *ExtList, char *ConvExt, bool Recurse)
 }
 
 
-void ParseDirs(const string &_Dir, char **ExtList, char *ConvExt, bool Recurse)
+void ParseDirs(const string &_Dir, TCHAR **ExtList, TCHAR *ConvExt, bool Recurse)
 {
 	HANDLE			Search;
 	WIN32_FIND_DATA	FindData;
@@ -84,7 +84,7 @@ void ParseDirs(const string &_Dir, char **ExtList, char *ConvExt, bool Recurse)
 				NewName += ConvExt;
 				if (!ilLoadImage(FindData.cFileName))
 					break;
-				ilSaveImage((char*)NewName.c_str());
+				ilSaveImage((TCHAR*)NewName.c_str());
 				break;
 			}
 		}
@@ -104,10 +104,10 @@ bool IsDir(WIN32_FIND_DATA *_Data)
 }
 
 
-char *GetExtension(const char *FileName)
+TCHAR *GetExtension(const TCHAR *FileName)
 {
 	bool PeriodFound = false;
-	char *Ext = (char*)FileName;
+	TCHAR *Ext = (TCHAR*)FileName;
 	long i, Len = (long)strlen(FileName);
 
 	if (FileName == NULL || !Len)  // if not a good filename/extension, exit early
@@ -131,7 +131,7 @@ char *GetExtension(const char *FileName)
 
 
 // Simple function to test if a filename has a given extension, disregarding case
-bool CheckExtension(char *Arg, char *Ext)
+bool CheckExtension(TCHAR *Arg, TCHAR *Ext)
 {
 	bool	PeriodFound = false;
 	char	*Argu = Arg;  // pointer to arg so we don't destroy arg
@@ -159,3 +159,4 @@ bool CheckExtension(char *Arg, char *Ext)
 
 	return false;  // if all else fails, return IL_FALSE
 }
+

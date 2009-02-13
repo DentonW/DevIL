@@ -78,7 +78,7 @@ INT_PTR APIENTRY PropertiesDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPAR
 INT_PTR APIENTRY FilterDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 INT_PTR APIENTRY ResizeDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 INT_PTR APIENTRY BatchDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
-void BatchConv(char *Directory, char *ExtList, char *ConvExt, bool Recurse);
+void BatchConv(TCHAR *Directory, TCHAR *ExtList, TCHAR *ConvExt, bool Recurse);
 void GenFilterString(TCHAR *Out, TCHAR **Strings);
 void ResizeWin(void);
 void CreateGDI(void);
