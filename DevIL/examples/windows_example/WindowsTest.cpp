@@ -83,6 +83,8 @@ void GenFilterString(TCHAR *Out, TCHAR **Strings);
 void ResizeWin(void);
 void CreateGDI(void);
 bool IsOpenable(TCHAR *FileName);
+bool GetPrevImage(TCHAR *OpenFileName, TCHAR *ConvExt);
+bool GetNextImage(TCHAR *OpenFileName, TCHAR *ConvExt);
 
 //extern "C"
 //// Colour picker export
@@ -402,6 +404,67 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				ResizeWin();
 				CreateGDI();
 			}
+
+			if (wParam == VK_PRIOR) {
+				GetPrevImage(OpenFileName);
+
+				DestroyGDI();
+				ilDeleteImages(UndoSize, Undos);
+				UndoSize = 0;
+				XOff = 0;
+				YOff = 0;
+
+				ilGenImages(1, Undos);
+				ilBindImage(Undos[0]);
+
+				//last_elapsed = SDL_GetTicks();
+				if (!ilLoadImage(OpenFileName))
+					return (0L);
+				CurImage = 0;
+				//cur_elapsed = SDL_GetTicks();
+				elapsed = cur_elapsed - last_elapsed;
+				last_elapsed = cur_elapsed;
+
+				ilutRenderer(ILUT_WIN32);
+				ResizeWin();
+				CreateGDI();
+
+				wsprintf(CurFileName, L"%s", OpenFileName);
+				wsprintf(NewTitle, L"%s - %s:  %u ms", TITLE, OpenFileName, (unsigned int)elapsed);
+				SetWindowText(hWnd, NewTitle);
+
+			}
+
+			if (wParam == VK_NEXT) {
+				GetNextImage(OpenFileName);
+
+				DestroyGDI();
+				ilDeleteImages(UndoSize, Undos);
+				UndoSize = 0;
+				XOff = 0;
+				YOff = 0;
+
+				ilGenImages(1, Undos);
+				ilBindImage(Undos[0]);
+
+				//last_elapsed = SDL_GetTicks();
+				if (!ilLoadImage(OpenFileName))
+					return (0L);
+				CurImage = 0;
+				//cur_elapsed = SDL_GetTicks();
+				elapsed = cur_elapsed - last_elapsed;
+				last_elapsed = cur_elapsed;
+
+				ilutRenderer(ILUT_WIN32);
+				ResizeWin();
+				CreateGDI();
+
+				wsprintf(CurFileName, L"%s", OpenFileName);
+				wsprintf(NewTitle, L"%s - %s:  %u ms", TITLE, OpenFileName, (unsigned int)elapsed);
+				SetWindowText(hWnd, NewTitle);
+
+			}
+
 
 			InvalidateRect(hWnd, NULL, FALSE);
 			break;
@@ -1204,3 +1267,44 @@ INT_PTR APIENTRY BatchDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 
 	return FALSE;
 }
+
+
+bool GetPrevImage(TCHAR *OpenFileName, TCHAR *ConvExt)
+{
+	HANDLE			Search;
+	WIN32_FIND_DATA		FindData;
+	int			Total = 0, FileNamePos;
+
+	Search = FindFirstFile(L"*.*", &FindData);
+
+	do {
+		if (!_wcsicmp(FindData.cFileName, L".") || !strcmp(FindData.cFileName, L".."))
+			continue;
+		Ext = GetExtension(FindData.cFileName);
+		if (Ext == NULL)
+			continue;
+		if (!_wcsicmp(Ext, ConvExt))  // Already has that extension.
+			continue;
+		for (j = 0; ExtList[j] != NULL; j++) {
+			
+			if (CheckExtension(FindData.cFileName, ExtList[j])) {
+				if (FindData.cFileName
+				break;
+			}
+		}
+	} while (FindNextFile(Search, &FindData));
+
+	FindClose(Search);
+	return;
+
+	return TRUE;
+}
+
+
+bool GetNextImage(TCHAR *OpenFileName, TCHAR *ConvExt)
+{
+
+
+	return TRUE;
+}
+
