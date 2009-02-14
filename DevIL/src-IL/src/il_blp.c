@@ -281,12 +281,7 @@ ILboolean iLoadBlpInternal(void)
 						return IL_FALSE;
 
 					// Copy the palette from the first image before we change our Image pointer.
-					Image->Mipmaps->Pal.Palette = (ILubyte*)ialloc(256 * 4);
-					if (Image->Mipmaps->Pal.Palette == NULL)
-						return IL_FALSE;
-					Image->Mipmaps->Pal.PalSize = 1024;
-					Image->Mipmaps->Pal.PalType = IL_PAL_BGRA32;
-					memcpy(Image->Mipmaps->Pal.Palette, Image->Pal.Palette, 1024);
+					iCopyPalette(&Image->Mipmaps->Pal, &Image->Pal);
 
 					// Move to the next mipmap in the linked list.
 					Image = Image->Mipmaps;

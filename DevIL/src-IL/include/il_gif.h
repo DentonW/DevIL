@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/18/2002 <--Y2K Compliant! =]
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 02/14/2009
 //
 // Filename: src-IL/include/il_gif.h
 //
@@ -66,7 +66,6 @@ ILboolean GetImages(ILpal *GlobalPal, GIFHEAD *GifHead);
 ILboolean SkipExtensions(GFXCONTROL *Gfx);
 ILboolean GifGetData(ILimage *Image, ILubyte *Data, ILuint ImageSize, ILuint Width, ILuint Height, ILuint Stride, ILuint PalOffset, GFXCONTROL *Gfx);
 ILboolean RemoveInterlace(ILimage *image);
-ILboolean iCopyPalette(ILpal *Dest, ILpal *Src);
 ILboolean ConvertTransparent(ILimage *Image, ILubyte TransColour);
 
 #endif//GIF_H

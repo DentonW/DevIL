@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 03/15/2002 <--Y2K Compliant! =]
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 02/14/2009
 //
 // Filename: src-IL/src/il_pal.c
 //
@@ -541,6 +541,25 @@ ILboolean ilLoadPltPal(ILconst_string FileName)
 }
 
 
+// Assumes that Dest has nothing in it.
+ILboolean iCopyPalette(ILpal *Dest, ILpal *Src)
+{
+	if (Src->Palette == NULL || Src->PalSize == 0)
+		return IL_FALSE;
+
+	Dest->Palette = (ILubyte*)ialloc(Src->PalSize);
+	if (Dest->Palette == NULL)
+		return IL_FALSE;
+
+	memcpy(Dest->Palette, Src->Palette, Src->PalSize);
+
+	Dest->PalSize = Src->PalSize;
+	Dest->PalType = Src->PalType;
+
+	return IL_TRUE;
+}
+
+
 ILAPI ILpal* ILAPIENTRY iCopyPal()
 {
 	ILpal *Pal;
@@ -555,15 +574,10 @@ ILAPI ILpal* ILAPIENTRY iCopyPal()
 	if (Pal == NULL) {
 		return NULL;
 	}
-	Pal->Palette = (ILubyte*)ialloc(iCurImage->Pal.PalSize);
-	if (Pal->Palette == NULL) {
+	if (!iCopyPalette(Pal, &iCurImage->Pal)) {
 		ifree(Pal);
 		return NULL;
 	}
-
-	memcpy(Pal->Palette, iCurImage->Pal.Palette, iCurImage->Pal.PalSize);
-	Pal->PalSize = iCurImage->Pal.PalSize;
-	Pal->PalType = iCurImage->Pal.PalType;
 
 	return Pal;
 }

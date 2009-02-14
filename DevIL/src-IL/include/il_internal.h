@@ -184,6 +184,8 @@ ILboolean	ilFixCur(void);
 ILboolean	ilFixImage(void);
 ILboolean	ilRemoveAlpha(void);
 ILboolean	ilSwapColours(void);
+// Palette functions
+ILboolean	iCopyPalette(ILpal *Dest, ILpal *Src);
 // Miscellaneous functions
 char*		iGetString(ILenum StringName);  // Internal version of ilGetString
 
