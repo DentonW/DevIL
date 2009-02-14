@@ -2,7 +2,7 @@
 //
 // ImageLib Windows (GDI) Test Source
 // Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 08/22/2008
+// Last modified: 02/14/2009
 //
 // Filename: testil/windowstest/windowstest.c
 //

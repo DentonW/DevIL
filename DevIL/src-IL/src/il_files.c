@@ -66,7 +66,7 @@ ILuint		ILAPIENTRY iSizeTell(void);
 ILint		ILAPIENTRY iSizePutc(ILubyte Char);
 ILint		ILAPIENTRY iSizeWrite(const void *Buffer, ILuint Size, ILuint Number);
 
-/*// Just preserves the current read functions and replaces
+// Just preserves the current read functions and replaces
 //	the current read functions with the default read funcs.
 void ILAPIENTRY iPreserveReadFuncs()
 {
@@ -96,7 +96,7 @@ void ILAPIENTRY iRestoreReadFuncs()
 	icloser = icloseCopy;
 
 	return;
-}*/
+}
 
 
 // Just preserves the current read functions and replaces
