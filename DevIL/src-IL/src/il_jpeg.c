@@ -326,25 +326,24 @@ ILboolean iLoadJpegInternal()
 		return IL_FALSE;
 	}
 
-	JpegInfo.err = jpeg_std_error( &Error );		// init standard error handlers
+	JpegInfo.err = jpeg_std_error(&Error);		// init standard error handlers
 	Error.error_exit = iJpegErrorExit;				// add our exit handler
 	Error.output_message = OutputMsg;
 
-	if ((result = setjmp(JpegJumpBuffer) == 0) != IL_FALSE)
-	{
-		jpeg_create_decompress( &JpegInfo );
+	if ((result = setjmp(JpegJumpBuffer) == 0) != IL_FALSE) {
+		jpeg_create_decompress(&JpegInfo);
 		JpegInfo.do_block_smoothing = IL_TRUE;
 		JpegInfo.do_fancy_upsampling = IL_TRUE;
 
 		//jpeg_stdio_src(&JpegInfo, iGetFile());
 
-		devil_jpeg_read_init( &JpegInfo );
-		jpeg_read_header( &JpegInfo, IL_TRUE );
+		devil_jpeg_read_init(&JpegInfo);
+		jpeg_read_header(&JpegInfo, IL_TRUE);
 
-		result = ilLoadFromJpegStruct( &JpegInfo );
+		result = ilLoadFromJpegStruct(&JpegInfo);
 
-		jpeg_finish_decompress( &JpegInfo );
-		jpeg_destroy_decompress( &JpegInfo );
+		jpeg_finish_decompress(&JpegInfo);
+		jpeg_destroy_decompress(&JpegInfo);
 
 	}
 	else
@@ -352,9 +351,8 @@ ILboolean iLoadJpegInternal()
 		jpeg_destroy_decompress(&JpegInfo);
 	}
 
-	if (result == IL_FALSE)
-		return IL_FALSE;
-	return ilFixImage();
+	//return ilFixImage();  // No need to call it again (called first in ilLoadFromJpegStruct).
+	return result;
 }
 
 

@@ -29,9 +29,13 @@ By next release:
 
 
 Easier:
+- Make sure ilFixImage is called everytime something is loaded.
 - Add JPEG 2000 extensions from http://www.library.cornell.edu/preservation/tutorial/presentation/table7-1.html.
 - Add BLP calls to il_io.c.
-- Read BLP1 files.
+- Find out why BLP2 files do not follow DXTC specs when width or height < 4.
+  It looks like they are not wasting space with the small mipmaps.
+  An example is a 2x8 image in DXT5.  Their mipmap length claims to be 16, instead of 32.
+- Recompile libtiff with extra options (but not jpeg...).
 - Add IL_PAL_BGRX define for BLP files (alpha is discarded).
 - Clean up ilSetAlpha.
 - Add faces to WindowsTest.
@@ -89,6 +93,7 @@ More involved:
 - Work on http://en.wikipedia.org/wiki/Apple_Icon_Image page.
 - http://mirrored.xentax.com/gfe/index.html (lots of game graphics formats)
 - Strife textures
+- Starcraft GRP textures - http://web.archive.org/web/20041011165218/http://user.cs.tu-berlin.de/~mickyk/cv.html
 - Commenting out lines 729-731 in pngread.c of libpng (1.2.9?) will allow reading of certain malformed Vista PNG-compressed .ico files with extra data at the end of the stream.  An example can be found in test/in and was created using Microangelo.
 - Add .ico/.icns saving.
 - Readd CMAKE support

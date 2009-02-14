@@ -1,5 +1,3 @@
-$Header: /home/dwoods/openil-cvsbackup/DevIL/test/in/tiff/README,v 1.1 2004-06-24 01:43:01 idadesub Exp $
-
 The following image files are included for testing.  Note that a wide
 variety of images can be generated using the tools provided with the
 library (e.g. tiffcp, tiff2bw, tiffmedian, etc.); see below for some
@@ -10,13 +8,18 @@ PlanarConfiguration = 1 (packed data)
 caspian.tif	279x220 64-bit floating point (deflate) Caspian Sea from space
 cramps.tif	800x607 8-bit b&w (packbits) "cramps poster"
 cramps-tile.tif	256x256 tiled version of cramps.tif (no compression)
+dscf0013.tif	640x480 YCbCr digital camera image which lacks Reference
+		Black/White values. Contains EXIF SubIFD. No compression.
 fax2d.tif	1728x1082 1-bit b&w (G3/2D) facsimile
 g3test.g3	raw Group 3 encoded fax file
 g3test.tif	TIFF equivalent of g3test.g3 created by fax2tiff
 jello.tif	256x192 8-bit RGB (lzw palette) Paul Heckbert "jello"
+ladoga.tif	158x118 16-bit unsigned, single band, deflate
 off_l16.tif	333x225 8-bit CIE LogL (SGILog) office from Greg Larson
 off_luv24.tif	333x225 8-bit CIE LogLuv (SGILog24) office from " "
 off_luv32.tif	333x225	8-bit CIE LogLuv (SGILog) office from " "
+pc260001.tif	640x480 8-bit RGB digital camera image. Contains EXIF SubIFD.
+		No compression.
 quad-jpeg.tif	512x384 8-bit YCbCr (jpeg) version of quad-lzw.tif
 quad-lzw.tif	512x384 8-bit RGB (lzw) "quadric surfaces"
 quad-tile.tif	512x384 tiled version of quad-lzw.tif (lzw)

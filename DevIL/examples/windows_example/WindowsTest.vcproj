@@ -166,7 +166,7 @@
 				AdditionalIncludeDirectories="../../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				StringPooling="true"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				PrecompiledHeaderFile=".\obj/WindowsTest.pch"
 				AssemblerListingLocation=".\obj/"
@@ -753,7 +753,7 @@
 				AdditionalIncludeDirectories="../../include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
 				PrecompiledHeaderFile=".\obj/debug/WindowsTest.pch"
 				AssemblerListingLocation=".\obj/debug/"
 				ObjectFile=".\obj/debug/"
@@ -1408,6 +1408,10 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
+			<File
+				RelativePath=".\BatchConv.cpp"
+				>
+			</File>
 			<File
 				RelativePath="WindowsTest.cpp"
 				>

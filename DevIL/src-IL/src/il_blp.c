@@ -339,6 +339,7 @@ ILboolean iLoadBlpInternal(void)
 						//  DecompressDXT3/5 do not crash.
 						CompSize = ((Image->Width + 3) / 4) * ((Image->Height + 3) / 4) * 16;
 						if (CompSize != Header.MipLengths[i]) {
+							ifree(CompData);
 							ilSetError(IL_INVALID_FILE_HEADER);
 							return IL_FALSE;
 						}
@@ -462,12 +463,19 @@ ILboolean iLoadBlp1()
 				ifree(JpegHeader);
 				return IL_FALSE;
 			}
-			memcpy(JpegData, JpegData, JpegHeaderSize + Header.MipLengths[Mip]);
-			if (iread(JpegData, Header.MipLengths[Mip], 1) != 1)
+			memcpy(JpegData, JpegHeader, JpegHeaderSize);
+			if (iread(JpegData + JpegHeaderSize, Header.MipLengths[Mip], 1) != 1)
 				return IL_FALSE;
 
+			// Just send the data straight to the Jpeg loader.
 			if (!ilLoadJpegL(JpegData, JpegHeaderSize + Header.MipLengths[Mip]))
 				return IL_FALSE;
+
+			// The image data is in BGR(A) order, even though it is Jpeg-compressed.
+			if (Image->Format == IL_RGBA)
+				Image->Format = IL_BGRA;
+			if (Image->Format == IL_RGB)
+				Image->Format = IL_BGR;
 
 			ifree(JpegHeader);
 			ifree(JpegData);
