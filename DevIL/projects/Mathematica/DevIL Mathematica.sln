@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DevIL Mathematica", "DevIL Mathematica.vcproj", "{A73E8E53-2A08-405E-B462-E1541FE3E00F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A73E8E53-2A08-405E-B462-E1541FE3E00F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A73E8E53-2A08-405E-B462-E1541FE3E00F}.Debug|Win32.Build.0 = Debug|Win32
+		{A73E8E53-2A08-405E-B462-E1541FE3E00F}.Release|Win32.ActiveCfg = Release|Win32
+		{A73E8E53-2A08-405E-B462-E1541FE3E00F}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
