@@ -305,6 +305,10 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
+				RelativePath=".\BatchConv.cpp"
+				>
+			</File>
+			<File
 				RelativePath="WindowsTest.cpp"
 				>
 				<FileConfiguration

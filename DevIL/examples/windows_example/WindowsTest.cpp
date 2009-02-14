@@ -51,9 +51,9 @@ HBRUSH BackBrush;
 
 #define BORDER_W	16 //8
 #define MENU_H		58 //54
-#define MIN_W		250  // Accomodate the menu bar.
-#define MAX_W		400
-#define MAX_H		400
+#define MIN_W		450  // Accomodate the menu bar.
+//#define MAX_W		400
+//#define MAX_H		400
 #define TITLE		L"DevIL Windows Test"
 ILuint	NumUndosAllowed = 4, UndoSize = 0;
 ILuint	Undos[11] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -69,8 +69,16 @@ ILuint	FilterType;
 ILuint	FilterParamInt;
 ILfloat	FilterParamFloat;
 TCHAR	FilterEditString[255];
-
+TCHAR	OpenFileName[2048];
+TCHAR	SaveFileName[2048];
 TCHAR	NewTitle[512];
+
+TCHAR *ExtList[] = {
+	L"pix", L"cut", L"dcx", L"gif", L"mdl", L"lif", L"jpe", L"jpg", L"jpeg", L"lif", L"bmp",
+	L"ico", L"pbm", L"pgm", L"ppm", L"png", L"bw", L"rgb", L"rgba", L"sgi", L"tga", L"tif",
+	L"tiff", L"xpm", L"psp", L"psd", L"iwi", L"exr", L"blp", L"tpl", L"wdp", L"pcx", NULL
+};
+
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 INT_PTR APIENTRY AboutDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
@@ -83,8 +91,10 @@ void GenFilterString(TCHAR *Out, TCHAR **Strings);
 void ResizeWin(void);
 void CreateGDI(void);
 bool IsOpenable(TCHAR *FileName);
-bool GetPrevImage(TCHAR *OpenFileName, TCHAR *ConvExt);
-bool GetNextImage(TCHAR *OpenFileName, TCHAR *ConvExt);
+bool GetPrevImage(void);
+bool GetNextImage(void);
+TCHAR *GetExtension(const TCHAR *FileName);
+bool CheckExtension(TCHAR *Arg, TCHAR *Ext);
 
 //extern "C"
 //// Colour picker export
@@ -101,6 +111,7 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR lpCmdLine, 
 	HACCEL		hAccelTable;
 
 	hInstance = hInst;
+	memset(OpenFileName, 0, 2048 * sizeof(TCHAR));
 
 	BackBrush = CreateSolidBrush(RGB(128,128,128));
 
@@ -248,9 +259,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static PAINTSTRUCT	ps;
     static HDROP		hDrop;
 
-	static TCHAR OpenFileName[2048];
 	static TCHAR OpenFilter[2048];
-	static TCHAR SaveFileName[2048];
 	static TCHAR SaveFilter[2048];
 	static TCHAR *OFilter[] = {
 		L"All Files (*.*)", L"*.*",
@@ -297,7 +306,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		L"ZSoft Pcx Files (*.pcx)", L"*.pcx",
 		L"\0\0"
 	};
-
 	static OPENFILENAME Ofn = {
 		sizeof(OPENFILENAME),
 		hWnd,
@@ -406,7 +414,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 
 			if (wParam == VK_PRIOR) {
-				GetPrevImage(OpenFileName);
+				if (!GetPrevImage())
+					break;
 
 				DestroyGDI();
 				ilDeleteImages(UndoSize, Undos);
@@ -418,8 +427,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				ilBindImage(Undos[0]);
 
 				//last_elapsed = SDL_GetTicks();
-				if (!ilLoadImage(OpenFileName))
+				if (!ilLoadImage(OpenFileName)) {
+					wsprintf(CurFileName, L"%s", OpenFileName);
+					wsprintf(NewTitle, L"%s - Could not open %s", TITLE, OpenFileName);
+					SetWindowText(hWnd, NewTitle);
 					return (0L);
+				}
 				CurImage = 0;
 				//cur_elapsed = SDL_GetTicks();
 				elapsed = cur_elapsed - last_elapsed;
@@ -432,11 +445,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				wsprintf(CurFileName, L"%s", OpenFileName);
 				wsprintf(NewTitle, L"%s - %s:  %u ms", TITLE, OpenFileName, (unsigned int)elapsed);
 				SetWindowText(hWnd, NewTitle);
-
 			}
 
 			if (wParam == VK_NEXT) {
-				GetNextImage(OpenFileName);
+				if (!GetNextImage())
+					break;
 
 				DestroyGDI();
 				ilDeleteImages(UndoSize, Undos);
@@ -448,8 +461,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				ilBindImage(Undos[0]);
 
 				//last_elapsed = SDL_GetTicks();
-				if (!ilLoadImage(OpenFileName))
+				if (!ilLoadImage(OpenFileName)) {
+					wsprintf(CurFileName, L"%s", OpenFileName);
+					wsprintf(NewTitle, L"%s - Could not open %s", TITLE, OpenFileName);
+					SetWindowText(hWnd, NewTitle);
 					return (0L);
+				}
 				CurImage = 0;
 				//cur_elapsed = SDL_GetTicks();
 				elapsed = cur_elapsed - last_elapsed;
@@ -462,9 +479,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				wsprintf(CurFileName, L"%s", OpenFileName);
 				wsprintf(NewTitle, L"%s - %s:  %u ms", TITLE, OpenFileName, (unsigned int)elapsed);
 				SetWindowText(hWnd, NewTitle);
-
 			}
-
 
 			InvalidateRect(hWnd, NULL, FALSE);
 			break;
@@ -1269,42 +1284,136 @@ INT_PTR APIENTRY BatchDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 }
 
 
-bool GetPrevImage(TCHAR *OpenFileName, TCHAR *ConvExt)
+bool GetPrevImage()
 {
 	HANDLE			Search;
-	WIN32_FIND_DATA		FindData;
-	int			Total = 0, FileNamePos;
+	WIN32_FIND_DATA	FindData;
+	int				i = 0, j, Total = 0, FileNamePos = -1;
+	TCHAR			*Ext, *CurName;
 
 	Search = FindFirstFile(L"*.*", &FindData);
+	CurName = wcsrchr(CurFileName, '\\');
+	if (CurName == NULL) {
+		CurName = CurFileName;
+	}
+	else {
+		CurName++;  // Skip the '\'
+	}
 
 	do {
-		if (!_wcsicmp(FindData.cFileName, L".") || !strcmp(FindData.cFileName, L".."))
+		if (!_wcsicmp(FindData.cFileName, L".") || !_wcsicmp(FindData.cFileName, L".."))
 			continue;
 		Ext = GetExtension(FindData.cFileName);
 		if (Ext == NULL)
 			continue;
-		if (!_wcsicmp(Ext, ConvExt))  // Already has that extension.
-			continue;
 		for (j = 0; ExtList[j] != NULL; j++) {
-			
 			if (CheckExtension(FindData.cFileName, ExtList[j])) {
-				if (FindData.cFileName
+				if (!_wcsicmp(FindData.cFileName, CurName))
+					FileNamePos = Total;
+				Total++;
 				break;
 			}
 		}
 	} while (FindNextFile(Search, &FindData));
 
 	FindClose(Search);
-	return;
+	Search = FindFirstFile(L"*.*", &FindData);
 
-	return TRUE;
+	if (Total == 0 || FileNamePos == -1)
+		return false;
+
+	if (FileNamePos == 0)
+		FileNamePos = Total;
+
+	do {
+		if (!_wcsicmp(FindData.cFileName, L".") || !_wcsicmp(FindData.cFileName, L".."))
+			continue;
+		Ext = GetExtension(FindData.cFileName);
+		if (Ext == NULL)
+			continue;
+		for (j = 0; ExtList[j] != NULL; j++) {
+			if (CheckExtension(FindData.cFileName, ExtList[j])) {
+				if (FileNamePos == i+1) {
+					wcscpy(OpenFileName, FindData.cFileName);
+					i++;
+					break;
+				}
+				i++;
+				break;
+			}
+		}
+	} while (FindNextFile(Search, &FindData));
+
+
+	FindClose(Search);
+	return true;
 }
 
 
-bool GetNextImage(TCHAR *OpenFileName, TCHAR *ConvExt)
+bool GetNextImage()
 {
+	HANDLE			Search;
+	WIN32_FIND_DATA	FindData;
+	int				i = 0, j, Total = 0, FileNamePos = -1;
+	TCHAR			*Ext, *CurName;
+
+	Search = FindFirstFile(L"*.*", &FindData);
+	CurName = wcsrchr(CurFileName, '\\');
+	if (CurName == NULL) {
+		CurName = CurFileName;
+	}
+	else {
+		CurName++;  // Skip the '\'
+	}
+
+	do {
+		if (!_wcsicmp(FindData.cFileName, L".") || !_wcsicmp(FindData.cFileName, L".."))
+			continue;
+		Ext = GetExtension(FindData.cFileName);
+		if (Ext == NULL)
+			continue;
+		for (j = 0; ExtList[j] != NULL; j++) {
+			if (CheckExtension(FindData.cFileName, ExtList[j])) {
+				if (!_wcsicmp(FindData.cFileName, CurName))
+					FileNamePos = Total;
+				Total++;
+				break;
+			}
+		}
+	} while (FindNextFile(Search, &FindData));
+
+	FindClose(Search);
+	Search = FindFirstFile(L"*.*", &FindData);
+
+	if (Total == 0 || FileNamePos == -1)
+		return false;
+
+	if (FileNamePos == Total-1)
+		FileNamePos = -1;
+
+	do {
+		if (!_wcsicmp(FindData.cFileName, L".") || !_wcsicmp(FindData.cFileName, L".."))
+			continue;
+		Ext = GetExtension(FindData.cFileName);
+		if (Ext == NULL)
+			continue;
+		for (j = 0; ExtList[j] != NULL; j++) {
+			if (CheckExtension(FindData.cFileName, ExtList[j])) {
+				if (FileNamePos == i-1) {
+					wcscpy(OpenFileName, FindData.cFileName);
+					i++;
+					break;
+				}
+				i++;
+				break;
+			}
+		}
+	} while (FindNextFile(Search, &FindData));
 
 
-	return TRUE;
+	FindClose(Search);
+	return true;
 }
+
+
 

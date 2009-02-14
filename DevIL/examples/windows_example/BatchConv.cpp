@@ -10,14 +10,14 @@ using namespace std;
 
 TCHAR *ImageExtArray[] =
 {
-	"jpe", "jpg", "jpeg",
-	"bmp",
-	"ico",
-	"pbm", "pgm", "pnm", "ppm",
-	"png",
-	"bw", "rgb", "rgba", "sgi",
-	"tga", "tif", "tiff",
-	"pcx",
+	L"jpe", L"jpg", L"jpeg",
+	L"bmp",
+	L"ico",
+	L"pbm", L"pgm", L"pnm", L"ppm",
+	L"png",
+	L"bw", L"rgb", L"rgba", L"sgi",
+	L"tga", L"tif", L"tiff",
+	L"pcx",
 	NULL
 };
 
@@ -28,87 +28,87 @@ char	*GetExtension(const char *FileName);
 bool	CheckExtension(char *Arg, char *Ext);
 
 
-char	*Ext;
+TCHAR	*Ext;
 string	NewExt;
 int		i, j;
 
 
-void BatchConv(TCHAR *Directory, TCHAR *ExtList, TCHAR *ConvExt, bool Recurse)
-{
-	ILuint Id, OrigId;
-	ilGenImages(1, &Id);
-	OrigId = ilGetInteger(IL_CUR_IMAGE);
-	ilBindImage(Id);
-	if (ExtList == NULL)
-		ParseDirs(string(Directory), ImageExtArray, ConvExt, Recurse);
-	else {
-		/*char **List = ConvertExtList(ExtList);
-		ParseDirs(string(Directory), ConvertExtList(ExtList), ConvExt, Recurse);
-		DestroyExtList(List);*/
-	}
-	ilDeleteImages(1, &Id);
-	ilBindImage(OrigId);
-	return;
-}
-
-
-void ParseDirs(const string &_Dir, TCHAR **ExtList, TCHAR *ConvExt, bool Recurse)
-{
-	HANDLE			Search;
-	WIN32_FIND_DATA	FindData;
-
-	_chdir(_Dir.c_str());
-	Search = FindFirstFile("*.*", &FindData);
-
-	do {
-		if (!strcmp(FindData.cFileName, ".") || !strcmp(FindData.cFileName, ".."))
-			continue;
-		if (IsDir(&FindData) && Recurse) {
-			_chdir(FindData.cFileName);
-			string NewDir = _Dir + string("\\");
-			NewDir += FindData.cFileName;
-			ParseDirs(NewDir, ExtList, ConvExt, Recurse);
-			_chdir("..");
-		}
-		Ext = GetExtension(FindData.cFileName);
-		if (Ext == NULL)
-			continue;
-		if (!_stricmp(Ext, ConvExt))  // Already has that extension.
-			continue;
-		for (j = 0; ExtList[j] != NULL; j++) {
-			if (CheckExtension(FindData.cFileName, ExtList[j])) {
-				string NewName;
-				for (i = 0; i < Ext - FindData.cFileName; i++) {
-					NewName += FindData.cFileName[i];
-				}
-				NewName += ConvExt;
-				if (!ilLoadImage(FindData.cFileName))
-					break;
-				ilSaveImage((TCHAR*)NewName.c_str());
-				break;
-			}
-		}
-	} while (FindNextFile(Search, &FindData));
-
-	FindClose(Search);
-	return;
-}
-
-
-// Is the file actually a directory?
-bool IsDir(WIN32_FIND_DATA *_Data)
-{
-	if (_Data->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-		return true;
-	return false;
-}
+//void BatchConv(TCHAR *Directory, TCHAR *ExtList, TCHAR *ConvExt, bool Recurse)
+//{
+//	ILuint Id, OrigId;
+//	ilGenImages(1, &Id);
+//	OrigId = ilGetInteger(IL_CUR_IMAGE);
+//	ilBindImage(Id);
+//	if (ExtList == NULL)
+//		ParseDirs(string(Directory), ImageExtArray, ConvExt, Recurse);
+//	else {
+//		/*char **List = ConvertExtList(ExtList);
+//		ParseDirs(string(Directory), ConvertExtList(ExtList), ConvExt, Recurse);
+//		DestroyExtList(List);*/
+//	}
+//	ilDeleteImages(1, &Id);
+//	ilBindImage(OrigId);
+//	return;
+//}
+//
+//
+//void ParseDirs(const string &_Dir, TCHAR **ExtList, TCHAR *ConvExt, bool Recurse)
+//{
+//	HANDLE			Search;
+//	WIN32_FIND_DATA	FindData;
+//
+//	_chdir(_Dir.c_str());
+//	Search = FindFirstFile("*.*", &FindData);
+//
+//	do {
+//		if (!strcmp(FindData.cFileName, ".") || !strcmp(FindData.cFileName, ".."))
+//			continue;
+//		if (IsDir(&FindData) && Recurse) {
+//			_chdir(FindData.cFileName);
+//			string NewDir = _Dir + string("\\");
+//			NewDir += FindData.cFileName;
+//			ParseDirs(NewDir, ExtList, ConvExt, Recurse);
+//			_chdir("..");
+//		}
+//		Ext = GetExtension(FindData.cFileName);
+//		if (Ext == NULL)
+//			continue;
+//		if (!_stricmp(Ext, ConvExt))  // Already has that extension.
+//			continue;
+//		for (j = 0; ExtList[j] != NULL; j++) {
+//			if (CheckExtension(FindData.cFileName, ExtList[j])) {
+//				string NewName;
+//				for (i = 0; i < Ext - FindData.cFileName; i++) {
+//					NewName += FindData.cFileName[i];
+//				}
+//				NewName += ConvExt;
+//				if (!ilLoadImage(FindData.cFileName))
+//					break;
+//				ilSaveImage((TCHAR*)NewName.c_str());
+//				break;
+//			}
+//		}
+//	} while (FindNextFile(Search, &FindData));
+//
+//	FindClose(Search);
+//	return;
+//}
+//
+//
+//// Is the file actually a directory?
+//bool IsDir(WIN32_FIND_DATA *_Data)
+//{
+//	if (_Data->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+//		return true;
+//	return false;
+//}
 
 
 TCHAR *GetExtension(const TCHAR *FileName)
 {
 	bool PeriodFound = false;
 	TCHAR *Ext = (TCHAR*)FileName;
-	long i, Len = (long)strlen(FileName);
+	long i, Len = (long)wcslen(FileName);
 
 	if (FileName == NULL || !Len)  // if not a good filename/extension, exit early
 		return NULL;
@@ -134,16 +134,16 @@ TCHAR *GetExtension(const TCHAR *FileName)
 bool CheckExtension(TCHAR *Arg, TCHAR *Ext)
 {
 	bool	PeriodFound = false;
-	char	*Argu = Arg;  // pointer to arg so we don't destroy arg
+	TCHAR	*Argu = Arg;  // pointer to arg so we don't destroy arg
 	unsigned int i;
 
-	if (Arg == NULL || Ext == NULL || !strlen(Arg) || !strlen(Ext))  // if not a good filename/extension, exit early
+	if (Arg == NULL || Ext == NULL || !wcslen(Arg) || !wcslen(Ext))  // if not a good filename/extension, exit early
 		return false;
 
-	Argu += strlen(Arg);  // start at the end
+	Argu += wcslen(Arg);  // start at the end
 
 
-	for (i = (int)strlen(Arg); i >= 0; i--) {
+	for (i = (int)wcslen(Arg); i >= 0; i--) {
 		if (*Argu == '.') {  // try to find a period 
 			PeriodFound = true;
 			break;
@@ -154,7 +154,7 @@ bool CheckExtension(TCHAR *Arg, TCHAR *Ext)
 	if (!PeriodFound)  // if no period, no extension
 		return false;
 
-	if (!_stricmp(Argu+1, Ext))  // extension and ext match?
+	if (!_wcsicmp(Argu+1, Ext))  // extension and ext match?
 		return true;
 
 	return false;  // if all else fails, return IL_FALSE

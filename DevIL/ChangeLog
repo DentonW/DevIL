@@ -1,4 +1,7 @@
 2009-02-12 Denton Woods <doomwiz@users.sf.net>
+	* WindowsTest.cpp: Added slideshows capabilities with Page Up and Page Down.
+
+2009-02-12 Denton Woods <doomwiz@users.sf.net>
 	* il_ftx.c: Added this file.
 	* lib/Makefile.am and src-IL/src/Makefile.am: Added il_ftx.c to source line.
 	* il_io.c: Added Ftx loading function calls.
