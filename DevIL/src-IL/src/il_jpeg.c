@@ -352,8 +352,9 @@ ILboolean iLoadJpegInternal()
 		jpeg_destroy_decompress(&JpegInfo);
 	}
 
-	return result;
-
+	if (result == IL_FALSE)
+		return IL_FALSE;
+	return ilFixImage();
 }
 
 
@@ -703,9 +704,7 @@ ILboolean iLoadJpegInternal(ILstring FileName, void *Lump, ILuint Size)
 	}
 
 	ijlFree(&Image);
-	ilFixImage();
-
-	return IL_TRUE;
+	return ilFixImage();
 }
 
 
@@ -906,8 +905,7 @@ ILboolean ilLoadFromJpegStruct(void *_JpegInfo)
 	if (jpgErrorOccured)
 		return IL_FALSE;
 
-	ilFixImage();
-	return IL_TRUE;
+	return ilFixImage();
 #endif
 #endif
 	return IL_FALSE;

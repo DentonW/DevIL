@@ -1,5 +1,7 @@
 2009-02-12 Denton Woods <doomwiz@users.sf.net>
 	* WindowsTest.cpp: Added slideshows capabilities with Page Up and Page Down.
+	* il_jpeg.c:357: Added ilFixImage call.
+	* il_jpeg.c (ilLoadFromJpegStruct): Changed return value to the return of ilFixImage.
 
 2009-02-12 Denton Woods <doomwiz@users.sf.net>
 	* il_ftx.c: Added this file.
