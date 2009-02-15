@@ -1,10 +1,6 @@
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = lib docs test data
-
-if BUILD_EXAMPLES
-SUBDIRS += examples
-endif #BUILD_EXAMPLES
+SUBDIRS = lib bin docs test data
 
 #SUBDIRS = src-IL src-ILU src-ILUT include
 #DIST_SUBDIRS = src-IL src-ILU src-ILUT include

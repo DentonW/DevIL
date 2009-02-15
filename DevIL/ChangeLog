@@ -440,3 +440,10 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* EXR files can now be loaded as file streams and lumps.
 	* Changed iNeuQuant to take number of colors in palette.
 	* Compiled MNG support back in.
+
+2009-02-15 Matěj Týč <bubla@users.sf.net>
+	* src-ILU/ilur: Added the ilur - commandline ILU frontend
+	* bin, examples/Makefile.am: Moved examples's Makefile.am to bin
+	directory. Added ilur to it.
+	* docs/DevIL_manual.texi: Made slight syntax corrections, fixed the
+	sample program and added functions index

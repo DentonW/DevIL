@@ -404,11 +404,10 @@ dnl note: keep the list on one line separated by single spaces
 dnl (otherwise MSYS compilation breaks)
 AC_CONFIG_FILES([Makefile 
 		 lib/Makefile 
+		 bin/Makefile
 		 test/Makefile 
-		 examples/Makefile
 		 docs/Makefile 
 		 data/Makefile 
-		 data/DevIL.pc 
 		 data/IL.pc data/ILU.pc data/ILUT.pc
 		 test/format_test/format_checks.sh])
 dnl		 projects/Makefile]) 

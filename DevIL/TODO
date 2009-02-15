@@ -240,7 +240,6 @@ For 1.7.0
 
 Matej:
 - Make a test suite (IL ok, now ILU tests)
-- Make a simple command-line ILU frontend (iller)
 - Make DevIL parts that require external libraries modular
 - Make the library include files correct (fix the config.h problem)
 - Look into TIFF loading (support for images with greater bpp should be possible)
