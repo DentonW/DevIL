@@ -5,6 +5,7 @@
 	* il_io.c / il_jp2.c: Added .jpx, .j2k and .j2c extensions for JPEG 2000.
 	* il_io.c / il_jpeg.c: Added .jif and .jfif extensions for JPEG.
 	* il_dicom.c: Added DICOM loading for uncompressed formats and little endian data.
+	* lib/Makefile.am and src-IL/src/Makefile.am: Added il_dicom.c to source line.
 
 2009-02-14 Denton Woods <doomwiz@users.sf.net>
 	* il_blp.c (iLoadBlp1): Support for mipmaps added.
