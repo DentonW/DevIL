@@ -2,6 +2,7 @@
 	* il_blp.c (iLoadBlp1): Support for mipmaps added.
 	* il_gif.h: Moved iCopyPalette declaration out of here into il_internal.h.
 	* il_gif.c: Moved iCopyPalette definition out of here into il_pal.c.
+	* projects/Mathematica: Added this folder.	
 	* il_fits.c (iCheckFits): Implemented this.
 	* il_fits.c (iLoadFitsInternal): Renormalized float and double data.
 	* il_blp.c (iLoadBlp1): Added seeks to image data (not necessarily following palette).
