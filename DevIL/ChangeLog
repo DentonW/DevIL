@@ -6,6 +6,7 @@
 	* il_io.c / il_jpeg.c: Added .jif and .jfif extensions for JPEG.
 	* il_dicom.c: Added DICOM loading for uncompressed formats and little endian data.
 	* lib/Makefile.am and src-IL/src/Makefile.am: Added il_dicom.c to source line.
+	* il_dicom.c: Added DICOM support for big endian data.
 
 2009-02-14 Denton Woods <doomwiz@users.sf.net>
 	* il_blp.c (iLoadBlp1): Support for mipmaps added.
