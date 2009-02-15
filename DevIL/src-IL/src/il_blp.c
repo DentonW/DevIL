@@ -226,9 +226,10 @@ ILboolean iLoadBlpInternal(void)
 	BLP2HEAD	Header;
 	ILubyte		*CompData;
 	ILimage		*Image;
-	ILuint		i, CompSize, AlphaSize, AlphaOff;
+	ILuint		Mip, j, x, CompSize, AlphaSize, AlphaOff;
+	ILint		y;
 	ILboolean	BaseCreated = IL_FALSE;
-	ILubyte		*DataAndAlpha, *Palette, AlphaMask; //, *JpegHeader, *JpegData;
+	ILubyte		*DataAndAlpha = NULL, *Palette = NULL, AlphaMask; //, *JpegHeader, *JpegData;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -248,7 +249,16 @@ ILboolean iLoadBlpInternal(void)
 	switch (Header.Compression)
 	{
 		case BLP_RAW:
-			for (i = 0; i < 16; i++) {  // Possible maximum of 16 mipmaps
+			for (Mip = 0; Mip < 16; Mip++) {  // Possible maximum of 16 mipmaps
+				if (BaseCreated) {
+					if (Header.HasMips == 0)  // Does not have mipmaps, so we are done.
+						break;
+					if (Image->Width == 1 && Image->Height == 1)  // Already at the smallest mipmap (1x1), so we are done.
+						break;
+					if (Header.MipOffsets[Mip] == 0 || Header.MipLengths == 0)  // No more mipmaps in the file.
+						break;
+				}
+
 				switch (Header.AlphaBits)
 				{
 					case 0:
@@ -267,20 +277,12 @@ ILboolean iLoadBlpInternal(void)
 								return IL_FALSE;
 						}
 						else {
-							if (Header.HasMips == 0)  // Does not have mipmaps, so we are done.
-								break;
-							if (Image->Width == 1 && Image->Height == 1)  // Already at the smallest mipmap (1x1), so we are done.
-								break;
-							if (Header.MipOffsets[i] == 0 || Header.MipLengths == 0)  // No more mipmaps in the file.
-								break;
-
 							Image->Mipmaps = ilNewImageFull(Image->Width >> 1, Image->Height >> 1, 1, 1, IL_COLOUR_INDEX, IL_UNSIGNED_BYTE, NULL);
 							if (Image->Mipmaps == NULL)
 								return IL_FALSE;
 
 							// Copy the palette from the first image before we change our Image pointer.
 							iCopyPalette(&Image->Mipmaps->Pal, &Image->Pal);
-
 							// Move to the next mipmap in the linked list.
 							Image = Image->Mipmaps;
 						}
@@ -288,12 +290,12 @@ ILboolean iLoadBlpInternal(void)
 						Image->Origin = IL_ORIGIN_UPPER_LEFT;
 
 						// These two should be the same (tells us how much data is in the file for this mipmap level).
-						if (Header.MipLengths[i] != Image->SizeOfData) {
+						if (Header.MipLengths[Mip] != Image->SizeOfData) {
 							ilSetError(IL_INVALID_FILE_HEADER);
 							return IL_FALSE;
 						}
 						// Finally read in the image data.
-						iseek(Header.MipOffsets[i], IL_SEEK_SET);
+						iseek(Header.MipOffsets[Mip], IL_SEEK_SET);
 						if (iread(Image->Data, 1, Image->SizeOfData) != Image->SizeOfData)
 							return IL_FALSE;
 						break;
@@ -314,15 +316,16 @@ ILboolean iLoadBlpInternal(void)
 								ifree(Palette);
 								return IL_FALSE;
 							}
+
+							// We only allocate this once and reuse this buffer with every mipmap (since successive ones are smaller).
+							DataAndAlpha = (ILubyte*)ialloc(Image->Width * Image->Height);
+							if (DataAndAlpha == NULL) {
+								ifree(DataAndAlpha);
+								ifree(Palette);
+								return IL_FALSE;
+							}
 						}
 						else {
-							if (Header.HasMips == 0)  // Does not have mipmaps, so we are done.
-								break;
-							if (Image->Width == 1 && Image->Height == 1)  // Already at the smallest mipmap (1x1), so we are done.
-								break;
-							if (Header.MipOffsets[i] == 0 || Header.MipLengths == 0)  // No more mipmaps in the file.
-								break;
-
 							Image->Mipmaps = ilNewImageFull(Image->Width >> 1, Image->Height >> 1, 1, 4, IL_BGRA, IL_UNSIGNED_BYTE, NULL);
 							if (Image->Mipmaps == NULL)
 								return IL_FALSE;
@@ -333,23 +336,18 @@ ILboolean iLoadBlpInternal(void)
 						// The origin should be in the upper left.
 						Image->Origin = IL_ORIGIN_UPPER_LEFT;
 
-						// These two should be the same (tells us how much data is in the file for this mipmap level).
+						// Determine the size of the alpha data following the color indices.
 						AlphaSize = Image->Width * Image->Height / 8;
 						if (AlphaSize == 0)
 							AlphaSize = 1;  // Should never be 0.
-						if (Header.MipLengths[i] != Image->SizeOfData / 4) {
+						// These two should be the same (tells us how much data is in the file for this mipmap level).
+						if (Header.MipLengths[Mip] != Image->SizeOfData / 4 + AlphaSize) {
 							ilSetError(IL_INVALID_FILE_HEADER);
 							return IL_FALSE;
 						}
 
-						DataAndAlpha = (ILubyte*)ialloc(Image->Width * Image->Height);
-						if (DataAndAlpha == NULL) {
-							ifree(DataAndAlpha);
-							ifree(Palette);
-							return IL_FALSE;
-						}
 						// Seek to the data and read it.
-						iseek(Header.MipOffsets[i], IL_SEEK_SET);						
+						iseek(Header.MipOffsets[Mip], IL_SEEK_SET);						
 						if (iread(DataAndAlpha, Image->Width * Image->Height, 1) != 1) {
 							ifree(DataAndAlpha);
 							ifree(Palette);
@@ -357,10 +355,10 @@ ILboolean iLoadBlpInternal(void)
 						}
 
 						// Convert the color-indexed data to BGRX.
-						for (i = 0; i < Image->Width * Image->Height; i++) {
-							Image->Data[i*4]   = Palette[DataAndAlpha[i]*4];
-							Image->Data[i*4+1] = Palette[DataAndAlpha[i]*4+1];
-							Image->Data[i*4+2] = Palette[DataAndAlpha[i]*4+2];
+						for (j = 0; j < Image->Width * Image->Height; j++) {
+							Image->Data[j*4]   = Palette[DataAndAlpha[j]*4];
+							Image->Data[j*4+1] = Palette[DataAndAlpha[j]*4+1];
+							Image->Data[j*4+2] = Palette[DataAndAlpha[j]*4+2];
 						}
 
 						// Read in the alpha list.
@@ -369,20 +367,23 @@ ILboolean iLoadBlpInternal(void)
 							ifree(Palette);
 							return IL_FALSE;
 						}
-						// Finally put the alpha data into the image data.
-						AlphaMask = 0x80;  // Top-most bit
+
+						AlphaMask = 0x01;  // Lowest bit
 						AlphaOff = 0;
-						for (i = 0; i < Image->Width * Image->Height; i++) {
-							if (AlphaMask == 0) {
-								AlphaOff++;
-								AlphaMask = 0x80;  // Reset the alpha mask.
+						// The really strange thing about this alpha data is that it is upside-down when compared to the
+						//   regular color-indexed data, so we have to flip it.
+						for (y = Image->Height - 1; y >= 0; y--) {
+							for (x = 0; x < Image->Width; x++) {
+								if (AlphaMask == 0) {  // Shifting it past the highest bit makes it 0, since we only have 1 byte.
+									AlphaOff++;        // Move along the alpha buffer.
+									AlphaMask = 0x01;  // Reset the alpha mask.
+								}
+								// This is just 1-bit alpha, so it is either on or off.
+								Image->Data[Image->Bps * y + x * 4 + 3] = DataAndAlpha[AlphaOff] & AlphaMask ? 0xFF : 0x00;
+								AlphaMask <<= 1;
 							}
-							Image->Data[i*4+3] = DataAndAlpha[AlphaOff] & AlphaMask ? 0xFF : 0x00;
-							AlphaMask >>= 1;
 						}
 
-						ifree(DataAndAlpha);
-						ifree(Palette);
 						break;
 
 					default:
@@ -391,10 +392,15 @@ ILboolean iLoadBlpInternal(void)
 						return IL_FALSE;
 				}
 			}
+
+			// Done, so we can finally free these two.
+			ifree(DataAndAlpha);
+			ifree(Palette);
+
 			break;
 
 		case BLP_DXTC:
-			for (i = 0; i < 16; i++) {  // Possible maximum of 16 mipmaps
+			for (Mip = 0; Mip < 16; Mip++) {  // Possible maximum of 16 mipmaps
 				//@TODO: Other formats
 				//if (Header.AlphaBits == 0)
 				//	if (!ilTexImage(Header.Width, Header.Height, 1, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL))
@@ -410,7 +416,7 @@ ILboolean iLoadBlpInternal(void)
 						break;
 					if (Image->Width == 1 && Image->Height == 1)  // Already at the smallest mipmap (1x1), so we are done.
 						break;
-					if (Header.MipOffsets[i] == 0 || Header.MipLengths == 0)  // No more mipmaps in the file.
+					if (Header.MipOffsets[Mip] == 0 || Header.MipLengths[Mip] == 0)  // No more mipmaps in the file.
 						break;
 
 					//@TODO: Other formats
@@ -424,13 +430,13 @@ ILboolean iLoadBlpInternal(void)
 				Image->Origin = IL_ORIGIN_UPPER_LEFT;
 
 				//@TODO: Only do the allocation once.
-				CompData = (ILubyte*)ialloc(Header.MipLengths[i]);
+				CompData = (ILubyte*)ialloc(Header.MipLengths[Mip]);
 				if (CompData == NULL)
 					return IL_FALSE;
 
 				// Read in the compressed mipmap data.
-				iseek(Header.MipOffsets[i], IL_SEEK_SET);
-				if (iread(CompData, 1, Header.MipLengths[i]) != Header.MipLengths[i]) {
+				iseek(Header.MipOffsets[Mip], IL_SEEK_SET);
+				if (iread(CompData, 1, Header.MipLengths[Mip]) != Header.MipLengths[Mip]) {
 					ifree(CompData);
 					return IL_FALSE;
 				}
@@ -442,7 +448,7 @@ ILboolean iLoadBlpInternal(void)
 						// Check to make sure that the MipLength reported is the size needed, so that
 						//  DecompressDXT1 does not crash.
 						CompSize = ((Image->Width + 3) / 4) * ((Image->Height + 3) / 4) * 8;
-						if (CompSize != Header.MipLengths[i]) {
+						if (CompSize != Header.MipLengths[Mip]) {
 							ilSetError(IL_INVALID_FILE_HEADER);
 							ifree(CompData);
 							return IL_FALSE;
@@ -457,7 +463,7 @@ ILboolean iLoadBlpInternal(void)
 						// Check to make sure that the MipLength reported is the size needed, so that
 						//  DecompressDXT3/5 do not crash.
 						CompSize = ((Image->Width + 3) / 4) * ((Image->Height + 3) / 4) * 16;
-						if (CompSize != Header.MipLengths[i]) {
+						if (CompSize != Header.MipLengths[Mip]) {
 							ifree(CompData);
 							ilSetError(IL_INVALID_FILE_HEADER);
 							return IL_FALSE;
@@ -635,7 +641,7 @@ ILboolean iLoadBlp1()
 						else {
 							if (Image->Width == 1 && Image->Height == 1)  // Already at the smallest mipmap (1x1), so we are done.
 								break;
-							if (Header.MipOffsets[i] == 0 || Header.MipLengths == 0)  // No more mipmaps in the file.
+							if (Header.MipOffsets[i] == 0 || Header.MipLengths[i] == 0)  // No more mipmaps in the file.
 								break;
 
 							Image->Mipmaps = ilNewImageFull(Image->Width >> 1, Image->Height >> 1, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL);

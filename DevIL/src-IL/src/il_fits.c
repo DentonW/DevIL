@@ -43,11 +43,11 @@ enum {
 	CARD_SKIP
 };
 
-ILboolean iIsValidFits(void);
-ILboolean iCheckFits(FITSHEAD *Header);
-ILboolean iLoadFitsInternal(void);
-ILenum GetCardImage(FITSHEAD *Header);
-ILboolean GetCardInt(char *Buffer, ILint *Val);
+ILboolean	iIsValidFits(void);
+ILboolean	iCheckFits(FITSHEAD *Header);
+ILboolean	iLoadFitsInternal(void);
+ILenum		GetCardImage(FITSHEAD *Header);
+ILboolean	GetCardInt(char *Buffer, ILint *Val);
 
 //! Checks if the file specified in FileName is a valid FITS file.
 ILboolean ilIsValidFits(ILconst_string FileName)
@@ -55,7 +55,7 @@ ILboolean ilIsValidFits(ILconst_string FileName)
 	ILHANDLE	FitsFile;
 	ILboolean	bFits = IL_FALSE;
 	
-	if (!iCheckExtension(FileName, IL_TEXT("fits"))) {
+	if (!iCheckExtension(FileName, IL_TEXT("fits")) && !iCheckExtension(FileName, IL_TEXT("fit"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bFits;
 	}
@@ -339,10 +339,6 @@ ILboolean iLoadFitsInternal(void)
 				((ILdouble*)iCurImage->Data)[i] = ((ILdouble*)iCurImage->Data)[i] / MaxD;
 			}			break;
 	}
-
-/*Intentionally left here to cause compilation error -
-  Make sure ilConvertImage can deal with signed formats.
-  Write iCheckFits.*/
 
 	return ilFixImage();
 }

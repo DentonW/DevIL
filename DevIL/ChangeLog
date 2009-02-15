@@ -1,3 +1,8 @@
+2009-02-15 Denton Woods <doomwiz@users.sf.net>
+	* il_blp.c (iLoadBlpInternal): Finished testing and fixed BLP2 RAW with 1-bit alpha.
+	* il_dicom.c: Added this file.
+	* config.h.win: Added defines for new image formats.
+
 2009-02-14 Denton Woods <doomwiz@users.sf.net>
 	* il_blp.c (iLoadBlp1): Support for mipmaps added.
 	* il_gif.h: Moved iCopyPalette declaration out of here into il_internal.h.
