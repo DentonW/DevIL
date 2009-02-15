@@ -8,6 +8,13 @@
 	* lib/Makefile.am and src-IL/src/Makefile.am: Added il_dicom.c to source line.
 	* il_dicom.c: Added DICOM support for big endian data.
 
+2009-02-15 Matěj Týč <bubla@users.sf.net>
+	* src-ILU/ilur: Added the ilur - commandline ILU frontend
+	* bin, examples/Makefile.am: Moved examples's Makefile.am to bin
+	directory. Added ilur to it.
+	* docs/DevIL_manual.texi: Made slight syntax corrections, fixed the
+	sample program and added functions index
+
 2009-02-14 Denton Woods <doomwiz@users.sf.net>
 	* il_blp.c (iLoadBlp1): Support for mipmaps added.
 	* il_gif.h: Moved iCopyPalette declaration out of here into il_internal.h.
@@ -441,10 +448,3 @@ Up to 2009-01-02 (since 1.7.5 release) Denton Woods <doomwiz@users.sf.net>
 	* EXR files can now be loaded as file streams and lumps.
 	* Changed iNeuQuant to take number of colors in palette.
 	* Compiled MNG support back in.
-
-2009-02-15 Matěj Týč <bubla@users.sf.net>
-	* src-ILU/ilur: Added the ilur - commandline ILU frontend
-	* bin, examples/Makefile.am: Moved examples's Makefile.am to bin
-	directory. Added ilur to it.
-	* docs/DevIL_manual.texi: Made slight syntax corrections, fixed the
-	sample program and added functions index
