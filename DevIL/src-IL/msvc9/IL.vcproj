@@ -1585,6 +1585,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\src\il_dicom.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\il_doom.c"
 					>
 					<FileConfiguration
