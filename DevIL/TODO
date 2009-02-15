@@ -29,8 +29,8 @@ By next release:
 
 
 Easier:
+- Add DICOM calls to il_io.c.
 - Make sure ilFixImage is called everytime something is loaded.
-- Add JPEG 2000 extensions from http://www.library.cornell.edu/preservation/tutorial/presentation/table7-1.html.
 - Add BLP loading of alpha sizes other than 0 and 1 for BLP2 RAW.
 - Add BLP loading of mipmaps for all other types (jpeg will be the hardest).
 - Find out why BLP2 files do not follow DXTC specs when width or height < 4.
@@ -82,6 +82,7 @@ Easier:
 
 
 More involved:
+- ILinfo struct still has number of images...
 - Use loaded mipmaps in OpenGL and DirectX.
 - JPEG and PNG in .bmp files
 - It looks like ilSetRead/ilSetWrite don't actually do anything.

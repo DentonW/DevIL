@@ -236,8 +236,10 @@ ILboolean iLoadBlpInternal(void)
 		return IL_FALSE;
 	}
 
-	if (!iGetBlp2Head(&Header))
+	if (!iGetBlp2Head(&Header)) {
+		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
+	}
 	if (!iCheckBlp2(&Header)) {
 		goto check_blp1;
 	}

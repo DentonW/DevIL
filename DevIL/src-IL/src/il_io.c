@@ -1672,6 +1672,13 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		}
 		#endif
 
+		#ifndef IL_NO_DICOM
+		if (!iStrCmp(Ext, IL_TEXT("dicom")) || !iStrCmp(Ext, IL_TEXT("dcm"))) {
+			bRet = ilLoadDicom(FileName);
+			goto finish;
+		}
+		#endif
+
 		#ifndef IL_NO_FITS
 		if (!iStrCmp(Ext, IL_TEXT("fits")) || !iStrCmp(Ext, IL_TEXT("fit"))) {
 			bRet = ilLoadFits(FileName);
