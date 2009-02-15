@@ -7,6 +7,7 @@
 	* il_dicom.c: Added DICOM loading for uncompressed formats and little endian data.
 	* lib/Makefile.am and src-IL/src/Makefile.am: Added il_dicom.c to source line.
 	* il_dicom.c: Added DICOM support for big endian data.
+	* test/in/tiff: Removed this directory.
 
 2009-02-15 Matěj Týč <bubla@users.sf.net>
 	* src-ILU/ilur: Added the ilur - commandline ILU frontend
