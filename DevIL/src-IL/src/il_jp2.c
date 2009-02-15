@@ -37,7 +37,8 @@ ILboolean ilIsValidJp2(ILconst_string FileName)
 	ILHANDLE	Jp2File;
 	ILboolean	bJp2 = IL_FALSE;
 
-	if (!iCheckExtension(FileName, IL_TEXT("jp2"))) {
+	if (!iCheckExtension(FileName, IL_TEXT("jp2")) && !iCheckExtension(FileName, IL_TEXT("jpx")) &&
+		!iCheckExtension(FileName, IL_TEXT("j2k")) && !iCheckExtension(FileName, IL_TEXT("j2c"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bJp2;
 	}

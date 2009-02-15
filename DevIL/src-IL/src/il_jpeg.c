@@ -104,9 +104,11 @@ ILboolean ilIsValidJpeg(ILconst_string FileName)
 	ILHANDLE	JpegFile;
 	ILboolean	bJpeg = IL_FALSE;
 
-	if (!iCheckExtension(FileName, IL_TEXT( "jpg" ) ) &&
-		!iCheckExtension(FileName, IL_TEXT( "jpe" ) ) &&
-		!iCheckExtension(FileName, IL_TEXT( "jpeg" ) ) )
+	if (!iCheckExtension(FileName, IL_TEXT("jpg")) &&
+		!iCheckExtension(FileName, IL_TEXT("jpe")) &&
+		!iCheckExtension(FileName, IL_TEXT("jpeg")) &&
+		!iCheckExtension(FileName, IL_TEXT("jif")) &&
+		!iCheckExtension(FileName, IL_TEXT("jfif")))
 	{
 		ilSetError(IL_INVALID_EXTENSION);
 		return bJpeg;

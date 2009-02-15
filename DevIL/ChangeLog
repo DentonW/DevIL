@@ -2,6 +2,8 @@
 	* il_blp.c (iLoadBlpInternal): Finished testing and fixed BLP2 RAW with 1-bit alpha.
 	* il_dicom.c: Added this file.
 	* config.h.win: Added defines for new image formats.
+	* il_io.c / il_jp2.c: Added .jpx, .j2k and .j2c extensions for JPEG 2000.
+	* il_io.c / il_jpeg.c: Added .jif and .jfif extensions for JPEG.
 
 2009-02-14 Denton Woods <doomwiz@users.sf.net>
 	* il_blp.c (iLoadBlp1): Support for mipmaps added.

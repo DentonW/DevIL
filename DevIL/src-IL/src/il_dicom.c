@@ -25,8 +25,7 @@ typedef struct DICOMHEAD
 ILboolean	iIsValidDicom(void);
 ILboolean	iCheckDicom(DICOMHEAD *Header);
 ILboolean	iLoadDicomInternal(void);
-ILenum		GetCardImage(DICOMHEAD *Header);
-ILboolean	GetCardInt(char *Buffer, ILint *Val);
+
 
 //! Checks if the file specified in FileName is a valid DICOM file.
 ILboolean ilIsValidDicom(ILconst_string FileName)

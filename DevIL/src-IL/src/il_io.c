@@ -61,9 +61,11 @@ ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 	if (!iStrCmp(Ext, IL_TEXT("tga")) || !iStrCmp(Ext, IL_TEXT("vda")) ||
 		!iStrCmp(Ext, IL_TEXT("icb")) || !iStrCmp(Ext, IL_TEXT("vst")))
 		Type = IL_TGA;
-	else if (!iStrCmp(Ext, IL_TEXT("jpg")) || !iStrCmp(Ext, IL_TEXT("jpe")) || !iStrCmp(Ext, IL_TEXT("jpeg")))
+	else if (!iStrCmp(Ext, IL_TEXT("jpg")) || !iStrCmp(Ext, IL_TEXT("jpe")) ||
+		!iStrCmp(Ext, IL_TEXT("jpeg")) || !iStrCmp(Ext, IL_TEXT("jif")) || !iStrCmp(Ext, IL_TEXT("jfif")))
 		Type = IL_JPG;
-	else if (!iStrCmp(Ext, IL_TEXT("jp2")))
+	else if (!iStrCmp(Ext, IL_TEXT("jp2")) || !iStrCmp(Ext, IL_TEXT("jpx")) ||
+		!iStrCmp(Ext, IL_TEXT("j2k")) || !iStrCmp(Ext, IL_TEXT("j2c")))
 		Type = IL_JP2;
 	else if (!iStrCmp(Ext, IL_TEXT("dds")))
 		Type = IL_DDS;
@@ -1593,14 +1595,15 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 
 		#ifndef IL_NO_JPG
 		if (!iStrCmp(Ext, IL_TEXT("jpg")) || !iStrCmp(Ext, IL_TEXT("jpe")) ||
-			!iStrCmp(Ext, IL_TEXT("jpeg"))) {
+			!iStrCmp(Ext, IL_TEXT("jpeg")) || !iStrCmp(Ext, IL_TEXT("jif")) || !iStrCmp(Ext, IL_TEXT("jfif"))) {
 			bRet = ilLoadJpeg(FileName);
 			goto finish;
 		}
 		#endif
 
 		#ifndef IL_NO_JP2
-		if (!iStrCmp(Ext, IL_TEXT("jp2"))) {
+		if (!iStrCmp(Ext, IL_TEXT("jp2")) || !iStrCmp(Ext, IL_TEXT("jpx")) ||
+			!iStrCmp(Ext, IL_TEXT("j2k")) || !iStrCmp(Ext, IL_TEXT("j2c"))) {
 			bRet = ilLoadJp2(FileName);
 			goto finish;
 		}
