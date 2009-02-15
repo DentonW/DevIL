@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 02/09/2009
+// Last modified: 02/14/2009
 //
 // Filename: src-IL/src/il_fits.c
 //
@@ -19,12 +19,16 @@
 typedef struct FITSHEAD
 {
 	ILboolean	IsSimple;
-	ILint	BitsPixel;
-	ILint	NumAxes;  // Number of dimensions / axes
-	ILint	Width;
-	ILint	Height;
-	ILint	Depth;
-	ILint	NumChans;
+	ILint		BitsPixel;
+	ILint		NumAxes;  // Number of dimensions / axes
+	ILint		Width;
+	ILint		Height;
+	ILint		Depth;
+	ILint		NumChans;
+
+	// Not in the header, but it keeps everything together.
+	ILenum		Type;
+	ILenum		Format;
 
 } FITSHEAD;
 
@@ -117,6 +121,54 @@ ILboolean iGetFitsHead(FITSHEAD *Header)
 	// The header must always be a multiple of 2880, so we skip the padding bytes (spaces).
 	iseek((2880 - (itell() % 2880)) % 2880, IL_SEEK_CUR);
 
+	switch (Header->BitsPixel)
+	{
+		case 8:
+			Header->Type = IL_UNSIGNED_BYTE;
+			break;
+		case 16:
+			Header->Type = IL_SHORT;
+			break;
+		case 32:
+			Header->Type = IL_INT;
+			break;
+		case -32:
+			Header->Type = IL_FLOAT;
+			break;
+		case -64:
+			Header->Type = IL_DOUBLE;
+			break;
+		default:
+			ilSetError(IL_INVALID_FILE_HEADER);
+			return IL_FALSE;
+	}
+
+	switch (Header->NumAxes)
+	{
+		case 1:  // Just a 1D image
+			Header->Format = IL_LUMINANCE;
+			Header->Height = 1;
+			Header->Depth = 1;
+			Header->NumChans = 1;
+			break;
+
+		case 2:  // Assuming it is a 2D image (width+height)
+			Header->Format = IL_LUMINANCE;
+			Header->Depth = 1;
+			Header->NumChans = 1;
+			break;
+
+		case 3:
+			// We cannot deal with more than 3 channels in an image.
+			Header->Format = IL_LUMINANCE;
+			Header->NumChans = 1;
+			break;
+
+		default:
+			ilSetError(IL_INVALID_FILE_HEADER);
+			return IL_FALSE;
+	}
+
 	return IL_TRUE;
 }
 
@@ -139,6 +191,33 @@ ILboolean iIsValidFits(void)
 // Internal function used to check if the HEADER is a valid FITS header.
 ILboolean iCheckFits(FITSHEAD *Header)
 {
+	switch (Header->BitsPixel)
+	{
+		case 8:  // These are the only values accepted.
+		case 16:
+		case 32:
+		case -32:
+		case -64:
+			break;
+		default:
+			return IL_FALSE;
+	}
+
+	switch (Header->NumAxes)
+	{
+		case 1:  // Just a 1D image
+		case 2:  // Assuming it is a 2D image (width+height)
+		case 3:  // 3D image (with depth)
+			break;
+		default:
+			return IL_FALSE;
+	}
+
+	// Possibility that one of these values is returned as <= 0 by atoi, which we cannot use.
+	if (Header->Width <= 0 || Header->Height <= 0 || Header->Depth <= 0) {
+		ilSetError(IL_INVALID_FILE_HEADER);
+		return IL_FALSE;
+	}
 
 	return IL_TRUE;
 }
@@ -190,8 +269,9 @@ ILboolean ilLoadFitsL(const void *Lump, ILuint Size)
 ILboolean iLoadFitsInternal(void)
 {
 	FITSHEAD	Header;
-	ILenum		Format, Type;
 	ILuint		i, NumPix;
+	ILfloat		MaxF = 0.0f;
+	ILdouble	MaxD = 0.0f;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -203,59 +283,7 @@ ILboolean iLoadFitsInternal(void)
 	if (!iCheckFits(&Header))
 		return IL_FALSE;
 
-	switch (Header.BitsPixel)
-	{
-		case 8:
-			Type = IL_UNSIGNED_BYTE;
-			break;
-		case 16:
-			Type = IL_SHORT;
-			break;
-		case 32:
-			Type = IL_INT;
-			break;
-		case -32:
-			Type = IL_FLOAT;
-			break;
-		case -64:
-			Type = IL_DOUBLE;
-			break;
-		default:  // No default error needed, since iCheckFits did this already.
-			break;
-	}
-
-	switch (Header.NumAxes)
-	{
-		case 1:  // Just a 1D image
-			Format = IL_LUMINANCE;
-			Header.Height = 1;
-			Header.Depth = 1;
-			Header.NumChans = 1;
-			break;
-
-		case 2:  // Assuming it is a 2D image (width+height)
-			Format = IL_LUMINANCE;
-			Header.Depth = 1;
-			Header.NumChans = 1;
-			break;
-
-		case 3:
-			// We cannot deal with more than 4 channels in an image.
-			Format = IL_LUMINANCE;
-			Header.NumChans = 1;
-			break;
-
-		default:  // Should already be taken care of by iCheckFits.
-			break;
-	}
-
-	// Possibility that one of these values is returned as <= 0 by atoi, which we cannot use.
-	if (Header.Width <= 0 || Header.Height <= 0 || Header.Depth <= 0) {
-		ilSetError(IL_INVALID_FILE_HEADER);
-		return IL_FALSE;
-	}
-
-	if (!ilTexImage(Header.Width, Header.Height, Header.Depth, Header.NumChans, Format, Type, NULL))
+	if (!ilTexImage(Header.Width, Header.Height, Header.Depth, Header.NumChans, Header.Format, Header.Type, NULL))
 		return IL_FALSE;
 
 	/*if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) != iCurImage->SizeOfData)
@@ -263,7 +291,7 @@ ILboolean iLoadFitsInternal(void)
 
 	NumPix = Header.Width * Header.Height * Header.Depth;
 //@TODO: Do some checks while reading to see if we have hit the end of the file.
-	switch (Type)
+	switch (Header.Type)
 	{
 		case IL_UNSIGNED_BYTE:
 			if (iread(iCurImage->Data, 1, iCurImage->SizeOfData) != iCurImage->SizeOfData)
@@ -282,13 +310,34 @@ ILboolean iLoadFitsInternal(void)
 		case IL_FLOAT:
 			for (i = 0; i < NumPix; i++) {
 				((ILfloat*)iCurImage->Data)[i] = GetBigFloat();
+				if (((ILfloat*)iCurImage->Data)[i] > MaxF)
+					MaxF = ((ILfloat*)iCurImage->Data)[i];
+			}
+
+			// Renormalize to [0..1].
+			for (i = 0; i < NumPix; i++) {
+				// Change all negative numbers to 0.
+				if (((ILfloat*)iCurImage->Data)[i] < 0.0f)
+					((ILfloat*)iCurImage->Data)[i] = 0.0f;
+				// Do the renormalization now, dividing by the maximum value.
+				((ILfloat*)iCurImage->Data)[i] = ((ILfloat*)iCurImage->Data)[i] / MaxF;
 			}
 			break;
 		case IL_DOUBLE:
 			for (i = 0; i < NumPix; i++) {
 				((ILdouble*)iCurImage->Data)[i] = GetBigDouble();
+				if (((ILdouble*)iCurImage->Data)[i] > MaxD)
+					MaxD = ((ILdouble*)iCurImage->Data)[i];
 			}
-			break;
+
+			// Renormalize to [0..1].
+			for (i = 0; i < NumPix; i++) {
+				// Change all negative numbers to 0.
+				if (((ILdouble*)iCurImage->Data)[i] < 0.0f)
+					((ILdouble*)iCurImage->Data)[i] = 0.0f;
+				// Do the renormalization now, dividing by the maximum value.
+				((ILdouble*)iCurImage->Data)[i] = ((ILdouble*)iCurImage->Data)[i] / MaxD;
+			}			break;
 	}
 
 /*Intentionally left here to cause compilation error -
@@ -425,4 +474,3 @@ ILboolean GetCardInt(char *Buffer, ILint *Val)
 }
 
 #endif//IL_NO_FITS
-

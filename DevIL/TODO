@@ -59,7 +59,6 @@ Easier:
 - Add ilIsValidWdp* functions.
 - iGetString may not work properly with Unicode strings.
 - Look at adding ilIsValid* for mng, iff, wbmp, wal and pxr.
-- Fix Daniel's suggestions.
 - Added ilSetError error codes to il_files.c.
 - Get rid of check for precache.
 - If IL_NO_JP2 is defined, lines 306-307 shouldn't just cause the entire thing to fail.  We should just skip that entry.
@@ -89,7 +88,7 @@ More involved:
 - Use loaded mipmaps in OpenGL and DirectX.
 - JPEG and PNG in .bmp files
 - It looks like ilSetRead/ilSetWrite don't actually do anything.
-- Run Valgrind on library.
+- Run Valgrind on library - all functions.
 - Make iSaveJp2Internal and iSaveExrInternal work with palettes (make ilConvertBuffer work on palettes as well).
 - Make .ico/.icns uses Mipmaps field instead for smaller icons (can icns have multiple images?).
 - Rewrite all code that uses mipmaps.
@@ -103,7 +102,6 @@ More involved:
 - Better static lib support in MSVC++ 8/9
 - Median cut quantization
 - Lib EXIF support
-- FITS support
 - APNG support
 - Koala support
 - Flashpix (.fpx) support
@@ -125,6 +123,7 @@ More involved:
 - Bicubic scaling
 - Use glTexImage3D and update OpenGL calls.
 - Freebasic support
+- Multiple images in FITs files (through extensions).
 - Reorder loading/saving in il_io.c
 - Get il_vtf.c to do less memory allocation.  Just use the precache function.
 - In il_gif.c, make sure subimages with offsets will not lead to an overflow.
@@ -133,7 +132,8 @@ More involved:
 - Check ASCII PPM code for the ability to read data that wraps around to multiple lines.
 - Check return on all ilFixImage calls.
 - Printing not working from Windows test.
-- Add function to create cubemaps
+- Can ilConvertImage deal correctly with signed image formats?
+- Add function to create cubemaps.
 - Request compressed texture data in ilutGLSetTex2D?
 - Upload cubemaps directly to OpenGL/D3D.
 - Change some calls (such as in il_tiff.c) to ilGetString to non-Unicode.
@@ -219,7 +219,6 @@ Questions:
 - Create Dev-C++/MingW/Cygwin .a files for releases?
 - Does ilIsValidTga generate an unncessary IL_INVALID_EXTENSION error?
 - Why is IL_HALF even used in ilut_directx9.c?
-- Should iluScale act on faces and mipmaps?
 - Fix problems loading .dds files on Big Endian machines (still a problem or not?)
 - Should we be calculating DXT endpoints before converting data to 565 format?
 - Use Extreme DXT compression code?
@@ -230,6 +229,7 @@ Questions:
 - Should ilImageToDxtcData work on cubemaps?
 - Should we seek back to the initial position on filestreams?
 - Should we return the number of bytes read in loading lumps?
+- Should we be renormalizing float and double data in FITS files?
 
 
 From old TODO:

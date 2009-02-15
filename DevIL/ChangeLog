@@ -2,7 +2,10 @@
 	* il_blp.c (iLoadBlp1): Support for mipmaps added.
 	* il_gif.h: Moved iCopyPalette declaration out of here into il_internal.h.
 	* il_gif.c: Moved iCopyPalette definition out of here into il_pal.c.
-	
+	* il_fits.c (iCheckFits): Implemented this.
+	* il_fits.c (iLoadFitsInternal): Renormalized float and double data.
+	* il_blp.c (iLoadBlp1): Added seeks to image data (not necessarily following palette).
+	* il_blp.c (iLoadBlpInternal): Added loading for BLP2 RAW with 1-bit alpha.
 
 2009-02-13 Denton Woods <doomwiz@users.sf.net>
 	* WindowsTest.cpp: Added slideshows capabilities with Page Up and Page Down.
