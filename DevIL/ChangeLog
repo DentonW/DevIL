@@ -8,6 +8,8 @@
 	* lib/Makefile.am and src-IL/src/Makefile.am: Added il_dicom.c to source line.
 	* il_dicom.c: Added DICOM support for big endian data.
 	* test/in/tiff: Removed this directory.
+	* il_rot.c: Added this file.  Added .rot loading.
+	* lib/Makefile.am and src-IL/src/Makefile.am: Added il_rot.c to source line.
 
 2009-02-15 Matěj Týč <bubla@users.sf.net>
 	* src-ILU/ilur: Added the ilur - commandline ILU frontend

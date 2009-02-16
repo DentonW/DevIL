@@ -77,6 +77,7 @@ TCHAR *ExtList[] = {
 	L"pix", L"cut", L"dcx", L"gif", L"mdl", L"lif", L"jpe", L"jpg", L"jpeg", L"lif", L"bmp",
 	L"ico", L"pbm", L"pgm", L"ppm", L"png", L"bw", L"rgb", L"rgba", L"sgi", L"tga", L"tif",
 	L"tiff", L"xpm", L"psp", L"psd", L"iwi", L"exr", L"blp", L"tpl", L"wdp", L"pcx", L"dcm",
+	L"rot",
 	NULL
 };
 

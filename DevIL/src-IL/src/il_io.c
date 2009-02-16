@@ -1810,6 +1810,13 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		}
 		#endif
 
+		#ifndef IL_NO_ROT
+		if (!iStrCmp(Ext, IL_TEXT("rot"))) {
+			bRet = ilLoadRot(FileName);
+			goto finish;
+		}
+		#endif
+
 		#ifndef IL_NO_SGI
 		if (!iStrCmp(Ext, IL_TEXT("sgi")) || !iStrCmp(Ext, IL_TEXT("bw")) ||
 			!iStrCmp(Ext, IL_TEXT("rgb")) || !iStrCmp(Ext, IL_TEXT("rgba"))) {

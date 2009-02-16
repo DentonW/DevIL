@@ -2376,6 +2376,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\src\il_rot.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\il_sgi.c"
 					>
 					<FileConfiguration
