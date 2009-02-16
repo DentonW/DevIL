@@ -236,6 +236,7 @@ typedef long long unsigned int ILuint64;
 #define IL_IWI			0x044B  //!< Call of Duty Infinity Ward Image - .iwi extension
 #define IL_BLP			0x044C  //!< Blizzard Texture Format - .blp extension
 #define IL_FTX			0x044D  //!< Heavy Metal: FAKK2 Texture - .ftx extension
+#define IL_ROT			0x044E  //!< Homeworld 2 - Relic Texture - .rot extension
 
 
 #define IL_JASC_PAL     0x0475  //!< PaintShop Pro Palette

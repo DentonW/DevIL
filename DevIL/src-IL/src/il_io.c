@@ -464,6 +464,11 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, ILconst_string FileName)
 			return ilIsValidBmp(FileName);
 		#endif
 
+		#ifndef IL_NO_DICOM
+		case IL_DICOM:
+			return ilIsValidDicom(FileName);
+		#endif
+
 		#ifndef IL_NO_EXR
 		case IL_EXR:
 			return ilIsValidExr(FileName);
@@ -599,6 +604,11 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 			return ilIsValidBmpF(File);
 		#endif
 
+		#ifndef IL_NO_DICOM
+		case IL_DICOM:
+			return ilIsValidDicomF(File);
+		#endif
+
 		#ifndef IL_NO_EXR
 		case IL_EXR:
 			return ilIsValidExrF(File);
@@ -732,6 +742,11 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, void *Lump, ILuint Size)
 		#ifndef IL_NO_BMP
 		case IL_BMP:
 			return ilIsValidBmpL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_DICOM
+		case IL_DICOM:
+			return ilIsValidDicomL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_EXR
@@ -920,6 +935,12 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 			break;
 		#endif
 
+		#ifndef IL_NO_DICOM
+		case IL_DICOM:
+			bRet = ilLoadDicom(FileName);
+			break;
+		#endif
+
 		#ifndef IL_NO_DOOM
 		case IL_DOOM:
 			bRet = ilLoadDoom(FileName);
@@ -1040,6 +1061,12 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 		#ifndef IL_NO_RAW
 		case IL_RAW:
 			bRet = ilLoadRaw(FileName);
+			break;
+		#endif
+
+		#ifndef IL_NO_ROT
+		case IL_ROT:
+			bRet = ilLoadRot(FileName);
 			break;
 		#endif
 
@@ -1171,6 +1198,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadCutF(File);
 		#endif
 
+		#ifndef IL_NO_DICOM
+		case IL_DICOM:
+			return ilLoadDicomF(File);
+		#endif
+
 		#ifndef IL_NO_DOOM
 		case IL_DOOM:
 			return ilLoadDoomF(File);
@@ -1283,6 +1315,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadRawF(File);
 		#endif
 
+		#ifndef IL_NO_ROT
+		case IL_ROT:
+			return ilLoadRotF(File);
+		#endif
+
 		#ifndef IL_NO_SGI
 		case IL_SGI:
 			return ilLoadSgiF(File);
@@ -1391,6 +1428,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size)
 		#ifndef IL_NO_CUT
 		case IL_CUT:
 			return ilLoadCutL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_DICOM
+		case IL_DICOM:
+			return ilLoadDicomL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_DOOM
@@ -1503,6 +1545,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size)
 		#ifndef IL_NO_RAW
 		case IL_RAW:
 			return ilLoadRawL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_ROT
+		case IL_ROT:
+			return ilLoadRotL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_SGI
