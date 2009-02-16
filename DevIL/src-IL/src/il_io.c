@@ -1082,6 +1082,12 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 			break;
 		#endif
 
+		#ifndef IL_NO_TEXTURE
+		case IL_TEXTURE:
+			bRet = ilLoadTexture(FileName);
+			break;
+		#endif
+
 		#ifndef IL_NO_TIF
 		case IL_TIF:
 			bRet = ilLoadTiff(FileName);
@@ -1330,6 +1336,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadSunF(File);
 		#endif
 
+		#ifndef IL_NO_TEXTURE
+		case IL_TIF:
+			return ilLoadTextureF(File);
+		#endif
+
 		#ifndef IL_NO_TIF
 		case IL_TIF:
 			return ilLoadTiffF(File);
@@ -1560,6 +1571,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size)
 		#ifndef IL_NO_SUN
 		case IL_SUN:
 			return ilLoadSunL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_TEXTURE
+		case IL_TEXTURE:
+			return ilLoadTextureL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_TIF
@@ -1878,6 +1894,13 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 			!iStrCmp(Ext, IL_TEXT("im8")) || !iStrCmp(Ext, IL_TEXT("im24")) ||
 			!iStrCmp(Ext, IL_TEXT("im32"))) {
 			bRet = ilLoadSun(FileName);
+			goto finish;
+		}
+		#endif
+
+		#ifndef IL_NO_TEXTURE
+		if (!iStrCmp(Ext, IL_TEXT("texture"))) {
+			bRet = ilLoadTexture(FileName);
 			goto finish;
 		}
 		#endif

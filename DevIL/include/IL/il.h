@@ -237,6 +237,7 @@ typedef long long unsigned int ILuint64;
 #define IL_BLP			0x044C  //!< Blizzard Texture Format - .blp extension
 #define IL_FTX			0x044D  //!< Heavy Metal: FAKK2 Texture - .ftx extension
 #define IL_ROT			0x044E  //!< Homeworld 2 - Relic Texture - .rot extension
+#define IL_TEXTURE		0x044F  //!< Medieval II: Total War Texture - .texture extension
 
 
 #define IL_JASC_PAL     0x0475  //!< PaintShop Pro Palette

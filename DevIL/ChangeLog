@@ -2,6 +2,10 @@
 	* il_manip.c (ilGetAlpha): Added IL_ALPHA case.
 	* il_manip.c (ilSetAlpha): Cleaned up formatting.  Added IL_ALPHA case.
 	  Fixed casting issue in integer case.
+	* il_texture.c: Added this file and the simple .texture loading.
+	* lib/Makefile.am and src-IL/src/Makefile.am: Added il_texture.c to source line.
+	* il.h: Added IL_TEXTURE define.
+	* il_internal.h: Added .texture loading declarations.
 
 2009-02-15 Denton Woods <doomwiz@users.sf.net>
 	* il_blp.c (iLoadBlpInternal): Finished testing and fixed BLP2 RAW with 1-bit alpha.
@@ -16,7 +20,8 @@
 	* il_rot.c: Added this file.  Added .rot loading.
 	* lib/Makefile.am and src-IL/src/Makefile.am: Added il_rot.c to source line.
 	* il.h: Added IL_ROT define.
-
+	* il_internal.h: Added Rot loading declarations.
+	
 2009-02-15 Matěj Týč <bubla@users.sf.net>
 	* src-ILU/ilur: Added the ilur - commandline ILU frontend
 	* bin, examples/Makefile.am: Moved examples's Makefile.am to bin
