@@ -1,3 +1,8 @@
+2009-02-16 Denton Woods <doomwiz@users.sf.net>
+	* il_manip.c (ilGetAlpha): Added IL_ALPHA case.
+	* il_manip.c (ilSetAlpha): Cleaned up formatting.  Added IL_ALPHA case.
+	  Fixed casting issue in integer case.
+
 2009-02-15 Denton Woods <doomwiz@users.sf.net>
 	* il_blp.c (iLoadBlpInternal): Finished testing and fixed BLP2 RAW with 1-bit alpha.
 	* il_dicom.c: Added this file.

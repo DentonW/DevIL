@@ -705,6 +705,12 @@ ILubyte* ILAPIENTRY ilGetAlpha(ILenum Type)
 			return Alpha;
 	}
 
+	// If our format is alpha, just return a copy.
+	if (TempImage->Format == IL_ALPHA) {
+		memcpy(Alpha, TempImage->Data, TempImage->SizeOfData);
+		return Alpha;
+	}
+		
 	if (TempImage->Format == IL_LUMINANCE_ALPHA)
 		AlphaOff = 2;
 	else
@@ -747,79 +753,88 @@ ILubyte* ILAPIENTRY ilGetAlpha(ILenum Type)
 }
 
 // sets the Alpha value to a specific value for each pixel in the image
-ILboolean ILAPIENTRY ilSetAlpha( ILdouble AlphaValue ) {
-    ILboolean ret = IL_TRUE;
-    ILuint    i,Size;
-    ILimage  *image = iCurImage;
-	ILuint AlphaOff;
-    
-    if (image == NULL) {
-        ilSetError(IL_ILLEGAL_OPERATION);
-        return IL_FALSE;
-    }
-    
-    AlphaValue = IL_CLAMP(AlphaValue);
-    
-    switch (image->Format)
+ILboolean ILAPIENTRY ilSetAlpha(ILdouble AlphaValue)
+{
+	ILboolean	ret = IL_TRUE;
+	ILuint		i,Size;
+	ILimage		*Image = iCurImage;
+	ILuint		AlphaOff;
+
+	if (Image == NULL) {
+		ilSetError(IL_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+
+	AlphaValue = IL_CLAMP(AlphaValue);
+
+	switch (Image->Format)
 	{
-            case IL_RGB:
-                ret = ilConvertImage(IL_RGBA,image->Type);
-            case IL_RGBA:
-                AlphaOff = 4;
-                break;
-            case IL_BGR:
-                ret = ilConvertImage(IL_BGRA,image->Type);
-            case IL_BGRA:
-                AlphaOff = 4;
-                break;
-            case IL_LUMINANCE:
-                ret = ilConvertImage(IL_LUMINANCE_ALPHA,image->Type);
-            case IL_LUMINANCE_ALPHA:
-                AlphaOff = 2;
-                break;
-            case IL_COLOUR_INDEX: //@TODO use palette with alpha
-                ret = ilConvertImage(IL_RGBA,image->Type);
-                AlphaOff = 4;
-                break;
-    }
-    if (ret == IL_FALSE) {
-    	return IL_FALSE;
-    	// error has been set by ilConvertImage
-    }
-	Size = image->Width * image->Height * image->Depth * image->Bpp;
-	
-    switch (iCurImage->Type)
+		case IL_RGB:
+			ret = ilConvertImage(IL_RGBA, Image->Type);
+		case IL_RGBA:
+			AlphaOff = 4;
+		break;
+		case IL_BGR:
+			ret = ilConvertImage(IL_BGRA, Image->Type);
+		case IL_BGRA:
+			AlphaOff = 4;
+			break;
+		case IL_LUMINANCE:
+			ret = ilConvertImage(IL_LUMINANCE_ALPHA, Image->Type);
+		case IL_LUMINANCE_ALPHA:
+			AlphaOff = 2;
+			break;
+		case IL_ALPHA:
+			AlphaOff = 1;
+		case IL_COLOUR_INDEX: //@TODO use palette with alpha
+			ret = ilConvertImage(IL_RGBA, Image->Type);
+			AlphaOff = 4;
+			break;
+	}
+	if (ret == IL_FALSE) {
+		// Error has been set by ilConvertImage.
+		return IL_FALSE;
+	}
+	Size = Image->Width * Image->Height * Image->Depth * Image->Bpp;
+
+	switch (iCurImage->Type)
 	{
-        case IL_BYTE: 
+		case IL_BYTE: 
 		case IL_UNSIGNED_BYTE: {
-        	const ILbyte alpha = (ILubyte)(AlphaValue * IL_MAX_UNSIGNED_BYTE + .5);
-            for (i = AlphaOff-1; i < Size; i += AlphaOff)
-                image->Data[i] = alpha;
-			break; }
-        case IL_SHORT:
+			const ILbyte alpha = (ILubyte)(AlphaValue * IL_MAX_UNSIGNED_BYTE + .5);
+			for (i = AlphaOff-1; i < Size; i += AlphaOff)
+				Image->Data[i] = alpha;
+			break;
+		}
+		case IL_SHORT:
 		case IL_UNSIGNED_SHORT: {
-            const ILushort alpha = (ILushort)(AlphaValue * IL_MAX_UNSIGNED_SHORT + .5);
-            for( i = AlphaOff-1; i < Size; i += AlphaOff)
-                ((ILushort*)image->Data)[i] = alpha;
-			break; }
-        case IL_INT: 
+			const ILushort alpha = (ILushort)(AlphaValue * IL_MAX_UNSIGNED_SHORT + .5);
+			for (i = AlphaOff-1; i < Size; i += AlphaOff)
+				((ILushort*)Image->Data)[i] = alpha;
+			break;
+		}
+		case IL_INT:
 		case IL_UNSIGNED_INT: {
-            const ILushort alpha = (ILushort)(AlphaValue * IL_MAX_UNSIGNED_INT + .5);
-            for (i = AlphaOff-1; i < Size; i += AlphaOff)
-                ((ILushort*)image->Data)[i] = alpha;
-			break; }
+			const ILushort alpha = (ILushort)(AlphaValue * IL_MAX_UNSIGNED_INT + .5);
+			for (i = AlphaOff-1; i < Size; i += AlphaOff)
+				((ILuint*)Image->Data)[i] = alpha;
+			break;
+		}
 		case IL_FLOAT: {
-            const ILfloat alpha = (ILfloat)AlphaValue;
-            for (i = AlphaOff-1; i < Size; i += AlphaOff)
-                ((ILfloat*)image->Data)[i] = alpha;
-			break; }
+			const ILfloat alpha = (ILfloat)AlphaValue;
+			for (i = AlphaOff-1; i < Size; i += AlphaOff)
+				((ILfloat*)Image->Data)[i] = alpha;
+			break;
+		}
 		case IL_DOUBLE: {
-            const ILdouble alpha  = AlphaValue;
-            for (i = AlphaOff-1; i < Size; i += AlphaOff)
-                ((ILdouble*)image->Data)[i] = alpha;
-			break; }
-    }
-    return IL_TRUE;
+			const ILdouble alpha  = AlphaValue;
+			for (i = AlphaOff-1; i < Size; i += AlphaOff)
+				((ILdouble*)Image->Data)[i] = alpha;
+			break;
+		}
+	}
+	
+	return IL_TRUE;
 }
 
 void ILAPIENTRY ilModAlpha(ILdouble AlphaValue)

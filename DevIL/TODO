@@ -83,6 +83,8 @@ Easier:
 - Make ilBlit either error with color indexed images or work with them.
 - iluScale: Make ilTexImage or whatever actually use Temp->Data instead of copying.
 - Get rid of globals in il_dds.c and ilu_scale2d.c.
+- Make ilApplyPal also work for file streams and lumps.
+- Make a version of ilApplyPal where a palette buffer and palette type are specified.
 
 
 More involved:
