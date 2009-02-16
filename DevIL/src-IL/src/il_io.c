@@ -1337,7 +1337,7 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 		#endif
 
 		#ifndef IL_NO_TEXTURE
-		case IL_TIF:
+		case IL_TEXTURE:
 			return ilLoadTextureF(File);
 		#endif
 

@@ -1,3 +1,11 @@
+2009-02-16 Matěj Týč <bubla@users.sf.net>
+	* src-ILU/ilur: Made ilur independent on regex.h
+	* autogen.sh: Simplified autotools invocation to autoreconf only
+	* configure.ac: Added support for IL_NO_GAMES if users don't want
+	support for game formats
+	* docs/DevIL_manual.texi: Fixed errors causing trouble when making
+	info files + some minor syntax enhancements.
+
 2009-02-16 Denton Woods <doomwiz@users.sf.net>
 	* il_manip.c (ilGetAlpha): Added IL_ALPHA case.
 	* il_manip.c (ilSetAlpha): Cleaned up formatting.  Added IL_ALPHA case.

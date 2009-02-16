@@ -263,10 +263,23 @@ dnl We need to link in math stuff, maybe we have to do it manually here...
 dnl
 AC_CHECK_LIB([m],
 	     [main])
+
+dnl
+dnl DevIL now supports a lot of game image formats.
+dnl Some people may not like it, so let's give'em a choice!
+dnl
+AC_ARG_ENABLE([game-formats],
+	       [AS_HELP_STRING([--enable-game-formats[[=yes/no]]],
+			       [Disable support for various game formats (default=yes)]) ],
+	       [],
+	       [enable_game_formats="yes"])
+AS_IF([test "x$enable_game_formats" = "xno"],
+      [AC_DEFINE([IL_NO_GAMES],,
+		 [Define if you want to disable support for various game formats]) ])
+
 dnl 
 dnl Ask here whether the user wants to support a format, optionally do some tests whether it can be supported
 dnl
-
 TEST_FORMAT([bmp], [BMP])
 TEST_FORMAT([dcx], [DCX])
 TEST_FORMAT([doom],[WAD])
@@ -292,12 +305,18 @@ TEST_FORMAT([psd], [PSD])
 TEST_FORMAT([psp], [PSP])
 TEST_FORMAT([pxr], [PXR])
 TEST_FORMAT([raw], [RAW])
+TEST_FORMAT([rot], [ROT])
 TEST_FORMAT([sgi], [SGI])
+TEST_FORMAT([sun], [SUN])
+TEST_FORMAT([texture], [TEXTURE])
 TEST_FORMAT([tga], [TGA])
 TEST_FORMAT([tiff],[TIF], [SETTLE_TIFF])
-TEST_FORMAT([xpm], [XPM])
+TEST_FORMAT([tpl], [TPL])
+TEST_FORMAT([vtf], [VTF])
 TEST_FORMAT([wal], [WAL])
+TEST_FORMAT([wbmp], [WBMP])
 TEST_FORMAT([wdp], [WDP])
+TEST_FORMAT([xpm], [XPM])
 
 DEVIL_CHECK_LIBSQUISH
 DEVIL_CHECK_NVIDIA_TEXTOOLS

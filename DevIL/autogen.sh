@@ -1,5 +1,6 @@
 #!/bin/sh
-# Author: Meloni Dario <mellon85 -at- gmail.com>
+# Author: originally Meloni Dario <mellon85 -at- gmail.com>
+# Now Matěj Týč <bubla@users.sf.net>
 
 # use the -v flag to get all the output
 if [ "$1" = "-v" ] ; then
@@ -21,9 +22,6 @@ log() {
 	fi
 }
 
-log "aclocal -I ."
-log "autoheader"
-log "automake --foreign --include-deps --add-missing --copy"
-log "autoconf"
+log "autoreconf -i"
 exit 0
 

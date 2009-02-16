@@ -4,8 +4,16 @@
 @settitle Developer's Image Library manual
 @c %**end of header
 
+@c QUITE IMPORTANT: This document is revision-controlled.
+@c Revision-control systems operate on per-line basis, so they
+@c will like if editors write using 'one sentence = one line' rule.
+
+@c just some fancy stuff like VERSION and UPDATED generation
+@c version.texi is generated automatically
+@include version.texi
+
 @copying
-This is DevIL manual. 
+This is DevIL version @value{VERSION} manual, last updated @value{UPDATED}. 
 Copyright @copyright{} 2008-2009
 @end copying
 
@@ -29,13 +37,15 @@ This is a manual describing IL part of DevIL -- handling images.
 @menu
 * Introduction::     General intro
 * Basic usage::      How to write your first code
-* Image Management:: How to manage images :-)
+* Image management:: How to manage images :-)
+* Error handling::   If you encounter an error...
+* Image manipulation:: How to manipulate with images using ILU
 * Common #defines::  #defines you are likely to come across when using DevIL
 * Sample program::   If you want to get going quickly
-* Index::            Complete index.
+* Functions index::  Index of IL and ILU functions
 @end menu
 
-@anchor{Introduction}
+@node Introduction
 @chapter Introduction
 @section General introduction
 
@@ -231,7 +241,7 @@ Note: Those examples are actually linked against @code{ILU}, but this is only be
 	@item OpenGL
 @end itemize
 
-@anchor{Basic usage}
+@node Basic usage
 @chapter Basic usage
 You must initialize DevIL, or it will most certainly crash.
 You need to initialize each library (IL, ILU, and ILUT) separately.
@@ -393,8 +403,8 @@ When a buffer is passed for @code{Lump}, the return value is how many bytes were
 
 Note that not all formats that have load support have also save support (@pxref{file_formats})
 
-@anchor{Image Management}
-@chapter Image Management
+@node Image management
+@chapter Image management
 
 @findex ilTexImage
 @anchor{ilTexImage reference}
@@ -592,7 +602,8 @@ Format refers to the ordering of the bytes for each pixel.
 @anchor{registration}
 @section Registration
 
-@chapter Error Handling
+@node Error handling
+@chapter Error handling
 DevIL contains error-handling routines to alert the users of this library to any internal problems in DevIL.
 The @code{ilGetError} function reports all errors in DevIL.  @code{iluErrorString} converts error numbers returned from @code{ilGetError} to a human-readable format.
 
@@ -617,17 +628,20 @@ Most errors reported are not harmful, and DevIL operation can continue, except f
 This is useful for when you want to display what kind of error happened to the user.
 
 @subsection Languages
-The ILU error messages have been translated into multiple languages: Arabic, Dutch, German, Japanese and Spanish.
+The ILU error messages have been translated into multiple languages: 
+Arabic, Dutch, German, Japanese and Spanish.
 The default language is English.
 
 @subsection Selecting a Language
 @code{iluSetLanguage} will change the error string returned by @code{iluErrorString} to the language specified in its parameter.
-Languages supported are: English, Arabic, Dutch, German, Japanese and Spanish.  @xref{language #defines}, for a list of possible values.
+Languages supported are: English, Arabic, Dutch, German, Japanese and Spanish. 
+@xref{language #defines}, for a list of possible values.
 
 Be aware that if the Unicode version of DevIL is not being used, some translations will not display properly.
 An example is Arabic, which uses characters outside of the standard ASCII character set.
 
-@chapter Image Manipulation
+@node Image manipulation
+@chapter Image manipulation
 
 ILU (Image Library Utilities) contains functions to manipulate any type of image in a variety of ways.
 Some functions filter images, while others perform a wider variety of operations, such as scaling an image.
@@ -640,7 +654,8 @@ This section will give a comparison of the utility functions against the below f
 @section Alienifying
 @code{iluAlienify} is a filter I created purely by accident, when I was attempting to write colour matrix code.
 The effect @code{iluAlienify} gives to an image is a green and purple tint.
-On images with humans in them, @code{iluAlienify} generally makes the people look green, hence the fabricated term ``alienify''.  @code{iluAlienify} does not accept any parameters.
+On images with humans in them, @code{iluAlienify} generally makes the people look green, hence the fabricated term ``alienify''.  
+@code{iluAlienify} does not accept any parameters.
 The figure below illustrates this effect on the DevIL logo.
 
 @center @image{images/sample_alienified,5cm}
@@ -683,7 +698,8 @@ Values outside of the 0.0 to 1.7 range will give undefined results.  -0.5 to 0.0
 
 @findex iluEqualize
 @section Equalization
-Sometimes it may be useful to equalize an image – that is, bring the extreme colour values to a median point.  @code{iluEqualize} darkens the bright colours and lightens the dark colours, reducing the contrast in an image or ``equalizing'' it.
+Sometimes it may be useful to equalize an image – that is, bring the extreme colour values to a median point.
+@code{iluEqualize} darkens the bright colours and lightens the dark colours, reducing the contrast in an image or ``equalizing'' it.
 The below figure shows the results of applying @code{iluEqualize} to the DevIL image.
 
 @center @image{images/sample_equalized,5cm}
@@ -694,7 +710,8 @@ The below figure shows the results of applying @code{iluEqualize} to the DevIL i
 @code{iluGammaCorrect} applies gamma correction to an image using an exponential curve.
 The single parameter @code{iluGammaCorrect} accepts is the gamma correction factor you wish to use.
 A gamma correction factor of 1.0 leaves the image unmodified.
-Values in the range 0.0 - 1.0 darken the image.  0.0 leaves a totally black image.
+Values in the range @code{0.0 - 1.0} darken the image.  
+0.0 leaves a totally black image.
 Anything above 1.0 brightens the image, but values too large may saturate the image.
 
 @c @center @image{images/sample_gamma_05,5cm}
@@ -707,7 +724,8 @@ Anything above 1.0 brightens the image, but values too large may saturate the im
 @section Negativity
 @code{iluNegative} is a very basic function that inverts every pixel's colour in an image.
 For example, pure white becomes pure black, and vice-versa.
-The resulting colour of a pixel can be determined by this formula: @code{new_colour = ~old_colour} (where the tilde is the negation of the set of bits).  @code{iluNegative} does not accept any parameters and is reversible by calling it again.
+The resulting colour of a pixel can be determined by this formula: @code{new_colour = ~old_colour} (where the tilde is the negation of the set of bits). 
+@code{iluNegative} does not accept any parameters and is reversible by calling it again.
 
 @c @center @image{images/sample_negative,5cm}
 @c @center @emph{@code{iluNegative} example}
@@ -746,7 +764,8 @@ Values less than 1 generate an error.
 
 @findex iluSharpen
 @section Sharpening
-Sharpening sharply defines the outlines in an image.  @code{iluSharpen} performs this sharpening effect on an image.  @code{iluSharpen} accepts two parameters: the sharpening factor and the number of iterations to perform the sharpening effect.
+Sharpening sharply defines the outlines in an image.  @code{iluSharpen} performs this sharpening effect on an image.
+@code{iluSharpen} accepts two parameters: the sharpening factor and the number of iterations to perform the sharpening effect.
 
 The sharpening factor must be in the range of 0.0 - 2.5.
 A value of 1.0 for the sharpening factor will have no effect on the image.
@@ -768,9 +787,11 @@ The time it takes to run this function is directly proportional to the number of
 @findex iluScale
 @section Basic Scaling
 To resize images, use the @code{iluScale} function:
+
 @example
 ILboolean iluScale(ILuint Width, ILuint Height, ILuint Depth);
 @end example 
+
 The three parameters are relatively explanatory.
 Any image can be resized to a new width, height and depth, provided that you have enough memory to hold the new image.
 The new dimensions do not have to be the same as the original in any way.
@@ -1004,7 +1025,7 @@ This can adversely affect your performance while loading textures, though, so us
 ILUT's Direct3D (D3D) support works exactly like the OpenGL support, except you use the @code{ILUT_D3D_USE_DXTC} and @code{ILUT_D3D_GEN_DXTC} defines instead of @code{ILUT_GL_USE_S3TC} and @code{ILUT_GL_GEN_S3TC}, respectively.
 
 
-@anchor{Common #defines}
+@node Common #defines
 @appendix Common DevIL @code{#defines}
 Here goes lists of DevIL @code{#defines} used in functions that manipulate image data.
 As you can see, they are self-explanatory.
@@ -1131,7 +1152,7 @@ Table lists the formats DevIL supports sorted according to @code{#define}.
 
 @strong{Exception:} @code{IL_JPG} (IJL) type is not supported by @code{ilLoadF} nor by @code{ilSaveF}. @code{IL_JPG} (libjpeg) is supported by both.
 
-@anchor{Sample program}
+@node Sample program
 @appendix Sample DevIL program
 
 If you are not used to this approach, you may be grateful for a short program demonstrating how to actually use DevIL:
@@ -1181,6 +1202,7 @@ int @b{main}(int argc, const char * argv[])
 @}
 @end example
 
+@node Functions index
 @unnumbered Functions index
 @printindex fn
 @bye

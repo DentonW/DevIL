@@ -1,4 +1,3 @@
-#include <regex.h>
 #include <string.h>
 #include <stdio.h>
 #include <malloc.h>
@@ -123,30 +122,39 @@ void destroy_params(Params * to_destroy)
  */
 int parse_function(const char * string, char * name, char * params)
 {
-	regex_t rex;
-	const int match_num = 3;
-	regmatch_t matchptr[3];
-	/* First we have to compile the regex */
-	regcomp (& rex, "\\([[:alnum:]]*\\)[[:space:]]*(\\(.*\\))", 0);
-	/* Then we match it */
-	regexec (& rex, string, match_num, matchptr, 0);
-	/* Match No.0: Not interesting (it is the whole expression in this case) */
-	/* Match No.1: The name of the function. How long is it? */
-	int funlength = matchptr[1].rm_eo - matchptr[1].rm_so;
-	/* Match No.2: What was between the first brackets? */
-	int paramlength = matchptr[2].rm_eo - matchptr[2].rm_so;
-	/* Was actually anything there? No attempts to make an exploit? */
-	if (funlength > long_strlen - 2 || paramlength > long_strlen - 2)
-		return -1;
-	/* Let's get it all! */
-	if (funlength > 0)
-		strncpy(name, string + matchptr[1].rm_so, funlength);
-	/* And terminate it with the zero... */
-	name[funlength] = '\0';
-	/* and do the same for the parameter string... */
-	if (paramlength > 0)
-		strncpy(params, string + matchptr[2].rm_so, paramlength);
-	params[paramlength] = '\0';
+	int i;
+	/* num of whitespaces in front of the function */
+	int num_front_whitespaces = 0;
+	/* num of character that bears the first parameter char - beyond '(' */
+	int in_parameters = 0;
+	/* trim the leading whitespaces */
+	for (i = 0; i < long_strlen - 1; i++)
+		if(string[i] == ' ' || string[i] == '\t')
+			num_front_whitespaces++;
+		else
+			break;
+	/* copy the function name */
+	for (; i < long_strlen - 1 && string[i] != '('; i++)
+		if(string[i] == ' ' || string[i] == '\t')
+			break;
+		else
+			name[i - num_front_whitespaces] = string[i];
+	/* terminate the string */
+	name[i - num_front_whitespaces] = '\0';
+	/* finally get the parameter */
+	for (; i < long_strlen - 1 && string[i] != ')'; i++)
+		if(string[i] == '(')
+		{
+			in_parameters = i + 1;
+			continue;
+		}
+		else
+		{
+			if(in_parameters != 0)
+				params[i - in_parameters] = string[i];
+		}
+	/* again terminate the string */
+	params[i - in_parameters] = '\0';
 	return 0;
 }
 
