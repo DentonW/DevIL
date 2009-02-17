@@ -1,3 +1,7 @@
+2009-02-17 Matěj Týč <bubla@users.sf.net>
+	* configure.ac, m4/devil-definitions.m4 (TEST_FORMAT): Added an option
+	to describe image formats.
+
 2009-02-16 Matěj Týč <bubla@users.sf.net>
 	* src-ILU/ilur: Made ilur independent on regex.h
 	* autogen.sh: Simplified autotools invocation to autoreconf only

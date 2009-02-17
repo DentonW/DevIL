@@ -104,17 +104,17 @@ dnl
 AC_DEFUN([TEST_FORMAT],
 	 [AC_ARG_ENABLE([$1],
 			[AC_HELP_STRING([--enable-$1],
-					[Compile $1 supporto (default=yes) ])],
+					[Compile $1 support. $3 (default=yes) ])],
 		        [],
 			[enable_$1="yes"]) 
-         AS_IF([test $# -eq 3 -a "x$enable_$1" = "xyes"],
-               [$3]) 
+         AS_IF([test $# -eq 4 -a "x$enable_$1" = "xyes"],
+               [$4]) 
          AC_MSG_CHECKING([whether we would like to have support for $1 format])
          AS_IF([test "x$enable_$1" = "xno" -o "x$lib_test_result" = "xno"],
                [AC_MSG_RESULT([no])
                 AC_DEFINE([IL_NO_$2],
                           [],
-                          [$1 support])],
+                          [$1 support ($3)])],
                [AC_MSG_RESULT([yes]) 
                 SUPPORTED_FORMATS="$SUPPORTED_FORMATS $2"]) 
          lib_test_result="" ])

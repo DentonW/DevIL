@@ -737,7 +737,7 @@ The function, @code{iluNoisify}, simply uses the standard libc @code{rand} funct
 Of course, the noise added to the image is not totally random, since no such thing exists, but there should be no repeating, except in extremely large images.
 
 @code{iluNoisify} accepts a single parameter – the tolerance to use.
-This parameter is a clamped (float) value that should be in the range 0.0f - 1.0f.
+This parameter is a clamped (float) value that should be in the range @code{0.0f - 1.0f}.
 Lower values indicate a lower tolerance, while higher values indicate the opposite.
 The tolerance indicates just how much of a mono intensity that @code{iluNoisify} is allowed to apply to each pixel.
 A ``random'' mono intensity is applied to each pixel so that you will not end up with totally new colours, just the same colours with a different luminance value.
