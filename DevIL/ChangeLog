@@ -1,3 +1,6 @@
+2009-02-18 Denton Woods <doomwiz@users.sf.net>
+	* configure.ac: Added descriptions of more image formats.
+
 2009-02-17 Denton Woods <doomwiz@users.sf.net>
 	* ilu_mipmap.c: Changed all references of Next to Mipmaps to fix bug noticed at
 	  https://sourceforge.net/forum/message.php?msg_id=6443698.
