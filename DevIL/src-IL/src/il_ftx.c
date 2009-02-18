@@ -21,7 +21,7 @@ ILboolean ilLoadFtx(ILconst_string FileName)
 {
 	ILHANDLE	FtxFile;
 	ILboolean	bFtx = IL_FALSE;
-	
+
 	FtxFile = iopenr(FileName);
 	if (FtxFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
@@ -72,18 +72,20 @@ ILboolean iLoadFtxInternal(void)
 	Height = GetLittleUInt();
 	HasAlpha = GetLittleUInt();  // Kind of backwards from what I would think...
 
-	if (HasAlpha == 0) {  // BGRA format
+	//@TODO: Right now, it appears that all images are in RGBA format.  See if I can find specs otherwise
+	//  or images that load incorrectly like this.
+	//if (HasAlpha == 0) {  // RGBA format
 		if (!ilTexImage(Width, Height, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL))
 			return IL_FALSE;
-	}
-	else if (HasAlpha == 1) {  // BGR format
-		if (!ilTexImage(Width, Height, 1, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL))
-			return IL_FALSE;
-	}
-	else {  // Unknown format
-		ilSetError(IL_INVALID_FILE_HEADER);
-		return IL_FALSE;
-	}
+	//}
+	//else if (HasAlpha == 1) {  // RGB format
+	//	if (!ilTexImage(Width, Height, 1, 3, IL_RGB, IL_UNSIGNED_BYTE, NULL))
+	//		return IL_FALSE;
+	//}
+	//else {  // Unknown format
+	//	ilSetError(IL_INVALID_FILE_HEADER);
+	//	return IL_FALSE;
+	//}
 
 	// The origin will always be in the upper left.
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;

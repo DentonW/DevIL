@@ -1,5 +1,6 @@
 2009-02-18 Denton Woods <doomwiz@users.sf.net>
 	* configure.ac: Added descriptions of more image formats.
+	* il_ftx.c (iLoadFtxInternal): Changed to load all FTX images as RGBA.
 
 2009-02-17 Denton Woods <doomwiz@users.sf.net>
 	* ilu_mipmap.c: Changed all references of Next to Mipmaps to fix bug noticed at
