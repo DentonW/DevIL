@@ -1,6 +1,7 @@
 2009-02-17 Denton Woods <doomwiz@users.sf.net>
 	* ilu_mipmap.c: Changed all references of Next to Mipmaps to fix bug noticed at
 	  https://sourceforge.net/forum/message.php?msg_id=6443698.
+	* Added support for IL_NO_GAMES in il_internal.h.
 
 2009-02-17 Matěj Týč <bubla@users.sf.net>
 	* configure.ac, m4/devil-definitions.m4 (TEST_FORMAT): Added an option

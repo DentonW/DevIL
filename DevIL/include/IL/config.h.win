@@ -38,6 +38,7 @@
 // #define IL_NO_PSP
 // #define IL_NO_PXR
 // #define IL_NO_RAW
+// #define IL_NO_ROT
 // #define IL_NO_SGI
 // #define IL_NO_SUN
 // #define IL_NO_TGA
@@ -46,9 +47,12 @@
 // #define IL_NO_WAL
 // #define IL_NO_WDP
 // #define IL_NO_XPM
+
 #define IL_USE_JPEGLIB_UNMODIFIED 1
 #define IL_USE_DXTC_NVIDIA
 #define IL_USE_DXTC_SQUISH
+
+//#define IL_NO_GAMES
 
 /* Supported api (ilut) */
 

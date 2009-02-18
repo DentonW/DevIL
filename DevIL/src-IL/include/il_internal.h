@@ -19,9 +19,9 @@
 	#define HAVE_CONFIG_H
 #endif*/
 #ifdef HAVE_CONFIG_H //if we use autotools, we have HAVE_CONFIG_H defined and we have to look for it like that
-#include <config.h>
+	#include <config.h>
 #else // If we do not use autotools, we have to point to (possibly different) config.h than in the opposite case
-#include <IL/config.h>
+	#include <IL/config.h>
 #endif
 
 // Standard headers
@@ -44,6 +44,19 @@ extern "C" {
 	//  than Windows yet, so we disable this if Windows is not the current platform.
 	#define IL_NO_WDP
 #endif//_WIN32
+
+// If we do not want support for game image formats, this define removes them all.
+#ifdef IL_NO_GAMES
+	#define IL_NO_BLP
+	#define IL_NO_DOOM
+	#define IL_NO_FTX
+	#define IL_NO_IWI
+	#define IL_NO_LIF
+	#define IL_NO_MDL
+	#define IL_NO_ROT
+	#define IL_NO_TPL
+	#define IL_NO_WAL
+#endif//IL_NO_GAMES
 
 // Windows-specific
 #ifdef _WIN32
