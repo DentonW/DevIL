@@ -141,14 +141,14 @@ ILboolean iBuild1DMipmaps_(ILuint Width)
 	ILuint i, j, c;
 
 	if (CurMipMap != NULL && CurMipMap->Width <= 1) {  // Already at the last mipmap
-		CurMipMap->Next = NULL;  // Terminate the list
+		CurMipMap->Mipmaps = NULL;  // Terminate the list
 		return IL_TRUE;
 	}
 
 	MipMap = ilNewImage(Width, 1, 1, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (MipMap == NULL) {
 		if (CurMipMap != NULL)
-			CurMipMap->Next = NULL;
+			CurMipMap->Mipmaps = NULL;
 		return IL_FALSE;
 	}
 
@@ -172,7 +172,7 @@ ILboolean iBuild1DMipmaps_(ILuint Width)
 		CurMipMap = iluCurImage;
 	}
 	else {
-		CurMipMap->Next = MipMap;
+		CurMipMap->Mipmaps = MipMap;
 	}
 
 	for (c = 0; c < CurMipMap->Bpp; c++) {  // 8-12-2001
@@ -200,14 +200,14 @@ ILboolean iBuild1DMipmapsVertical_(ILuint Height)
 	ILuint i = 0, j = 0, c;
 
 	if (CurMipMap != NULL && CurMipMap->Height <= 1) {  // Already at the last mipmap
-		CurMipMap->Next = NULL;  // Terminate the list
+		CurMipMap->Mipmaps = NULL;  // Terminate the list
 		return IL_TRUE;
 	}
 
 	MipMap = ilNewImage(1, Height, 1, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (MipMap == NULL) {
 		if (CurMipMap != NULL)
-			CurMipMap->Next = NULL;
+			CurMipMap->Mipmaps = NULL;
 		return IL_FALSE;
 	}
 
@@ -231,7 +231,7 @@ ILboolean iBuild1DMipmapsVertical_(ILuint Height)
 		Src = iluCurImage;
 	}
 	else {
-		CurMipMap->Next = MipMap;
+		CurMipMap->Mipmaps = MipMap;
 		Src = CurMipMap;
 	}
 
@@ -261,7 +261,7 @@ ILboolean iBuild2DMipmaps_(ILuint Width, ILuint Height)
 
 	if (CurMipMap) {
 		if (CurMipMap->Width == 1 && CurMipMap->Height == 1) {  // Already at the last mipmap
-			CurMipMap->Next = NULL;  // Terminate the list
+			CurMipMap->Mipmaps = NULL;  // Terminate the list
 			return IL_TRUE;
 		}
 
@@ -293,7 +293,7 @@ ILboolean iBuild2DMipmaps_(ILuint Width, ILuint Height)
 	MipMap = ilNewImage(Width, Height, 1, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (MipMap == NULL) {
 		if (CurMipMap != NULL)
-			CurMipMap->Next = NULL;
+			CurMipMap->Mipmaps = NULL;
 		return IL_FALSE;
 	}
 
@@ -317,7 +317,7 @@ ILboolean iBuild2DMipmaps_(ILuint Width, ILuint Height)
 		Src = iluCurImage;
 	}
 	else {
-		CurMipMap->Next = MipMap;
+		CurMipMap->Mipmaps = MipMap;
 		Src = CurMipMap;
 	}
 
@@ -369,7 +369,7 @@ ILboolean iBuild3DMipmaps_(ILuint Width, ILuint Height, ILuint Depth)
 	if (CurMipMap) {
 		// Already at the last mipmap
 		if (CurMipMap->Width == 1 && CurMipMap->Height == 1 && CurMipMap->Depth == 1) {
-			CurMipMap->Next = NULL;  // Terminate the list
+			CurMipMap->Mipmaps = NULL;  // Terminate the list
 			return IL_TRUE;
 		}
 
@@ -406,7 +406,7 @@ ILboolean iBuild3DMipmaps_(ILuint Width, ILuint Height, ILuint Depth)
 	MipMap = ilNewImage(Width, Height, Depth, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (MipMap == NULL) {
 		if (CurMipMap != NULL)
-			CurMipMap->Next = NULL;
+			CurMipMap->Mipmaps = NULL;
 		return IL_FALSE;
 	}
 
@@ -430,7 +430,7 @@ ILboolean iBuild3DMipmaps_(ILuint Width, ILuint Height, ILuint Depth)
 		Src = iluCurImage;
 	}
 	else {
-		CurMipMap->Next = MipMap;
+		CurMipMap->Mipmaps = MipMap;
 		Src = CurMipMap;
 	}
 
@@ -473,7 +473,7 @@ ILboolean iBuild3DMipmapsVertical_(ILuint Height, ILuint Depth)
 	if (CurMipMap) {
 		// Already at the last mipmap
 		if (CurMipMap->Width == 1 && CurMipMap->Height == 1 && CurMipMap->Depth == 1) {
-			CurMipMap->Next = NULL;  // Terminate the list
+			CurMipMap->Mipmaps = NULL;  // Terminate the list
 			return IL_TRUE;
 		}
 
@@ -497,7 +497,7 @@ ILboolean iBuild3DMipmapsVertical_(ILuint Height, ILuint Depth)
 	MipMap = ilNewImage(1, Height, Depth, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (MipMap == NULL) {
 		if (CurMipMap != NULL)
-			CurMipMap->Next = NULL;
+			CurMipMap->Mipmaps = NULL;
 		return IL_FALSE;
 	}
 
@@ -520,7 +520,7 @@ ILboolean iBuild3DMipmapsVertical_(ILuint Height, ILuint Depth)
 		Src = iluCurImage;
 	}
 	else {
-		CurMipMap->Next = MipMap;
+		CurMipMap->Mipmaps = MipMap;
 		Src = CurMipMap;
 	}
 
@@ -555,7 +555,7 @@ ILboolean iBuild3DMipmapsHorizontal_(ILuint Width, ILuint Depth)
 	if (CurMipMap) {
 		// Already at the last mipmap
 		if (CurMipMap->Width == 1 && CurMipMap->Height == 1 && CurMipMap->Depth == 1) {
-			CurMipMap->Next = NULL;  // Terminate the list
+			CurMipMap->Mipmaps = NULL;  // Terminate the list
 			return IL_TRUE;
 		}
 
@@ -579,7 +579,7 @@ ILboolean iBuild3DMipmapsHorizontal_(ILuint Width, ILuint Depth)
 	MipMap = ilNewImage(Width, 1, Depth, iluCurImage->Bpp, iluCurImage->Bpc);
 	if (MipMap == NULL) {
 		if (CurMipMap != NULL)
-			CurMipMap->Next = NULL;
+			CurMipMap->Mipmaps = NULL;
 		return IL_FALSE;
 	}
 
@@ -602,7 +602,7 @@ ILboolean iBuild3DMipmapsHorizontal_(ILuint Width, ILuint Depth)
 		Src = iluCurImage;
 	}
 	else {
-		CurMipMap->Next = MipMap;
+		CurMipMap->Mipmaps = MipMap;
 		Src = CurMipMap;
 	}
 

@@ -1,3 +1,7 @@
+2009-02-17 Denton Woods <doomwiz@users.sf.net>
+	* ilu_mipmap.c: Changed all references of Next to Mipmaps to fix bug noticed at
+	  https://sourceforge.net/forum/message.php?msg_id=6443698.
+
 2009-02-17 Matěj Týč <bubla@users.sf.net>
 	* configure.ac, m4/devil-definitions.m4 (TEST_FORMAT): Added an option
 	to describe image formats.
@@ -8,7 +12,7 @@
 	* configure.ac: Added support for IL_NO_GAMES if users don't want
 	support for game formats
 	* docs/DevIL_manual.texi: Fixed errors causing trouble when making
-	info files + some minor syntax enhancements.
+	  info files + some minor syntax enhancements.
 
 2009-02-16 Denton Woods <doomwiz@users.sf.net>
 	* il_manip.c (ilGetAlpha): Added IL_ALPHA case.
@@ -18,6 +22,7 @@
 	* lib/Makefile.am and src-IL/src/Makefile.am: Added il_texture.c to source line.
 	* il.h: Added IL_TEXTURE define.
 	* il_internal.h: Added .texture loading declarations.
+	* DevIL.nb: Removed the test image from the notebook to drop it from over 9MB to 4.5KB.
 
 2009-02-15 Denton Woods <doomwiz@users.sf.net>
 	* il_blp.c (iLoadBlpInternal): Finished testing and fixed BLP2 RAW with 1-bit alpha.

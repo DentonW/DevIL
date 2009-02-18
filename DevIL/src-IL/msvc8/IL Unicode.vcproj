@@ -1585,6 +1585,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\src\il_dicom.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\il_doom.c"
 					>
 					<FileConfiguration
@@ -2373,6 +2377,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\src\il_rot.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\il_sgi.c"
 					>
 					<FileConfiguration
@@ -2455,6 +2463,10 @@
 							PreprocessorDefinitions=""
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\src\il_texture.c"
+					>
 				</File>
 				<File
 					RelativePath="..\src\il_tiff.c"
