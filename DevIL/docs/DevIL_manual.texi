@@ -13,14 +13,14 @@
 @include version.texi
 
 @copying
-This is DevIL version @value{VERSION} manual, last updated @value{UPDATED}. 
+This is @code{DevIL} version @value{VERSION} manual, last updated @value{UPDATED}. 
 Copyright @copyright{} 2008-2009
 @end copying
 
 @titlepage
 @title Developer's Image Library manual
 @sp 1
-@center @image{images/DevIL,15cm}
+@center @image{images/DevIL,14.9cm}
 @c The following two commands start the copyright page.
 @page
 @vskip 0pt plus 1filll
@@ -32,7 +32,7 @@ Copyright @copyright{} 2008-2009
 @ifnottex
 @node Top
 @top IL manual
-This is a manual describing IL part of DevIL -- handling images.
+This is a manual describing IL part of @code{DevIL} -- handling images.
 @end ifnottex
 @menu
 * Introduction::     General intro
@@ -49,10 +49,10 @@ This is a manual describing IL part of DevIL -- handling images.
 @chapter Introduction
 @section General introduction
 
-Developer's Image Library was previously called OpenIL, but due to trademark issues, OpenIL is now known as DevIL.
+Developer's Image Library was previously called OpenIL, but due to trademark issues, @code{OpenIL} is now known as @code{DevIL}.
 
-DevIL is an Open Source programming library for programmers to incorporate into their own programs.
-DevIL loads and saves a large variety of images for use in a software developer's program.
+@code{DevIL} is an Open Source programming library for programmers to incorporate into their own programs.
+@code{DevIL} loads and saves a large variety of images for use in a software developer's program.
 This library is capable of manipulating images in various ways and passing image information to display APIs, such as OpenGL and Direct3D.
 
 The purpose of this manual is to guide users in coding with the Developer's Image Library.
@@ -60,7 +60,7 @@ This manual is for users proficient in C and with competent knowledge of the int
 
 @section Library Reference
 
-Several times throughout this document, the three different sub-libraries of DevIL are referenced as IL, ILU and ILUT.
+Several times throughout this document, the three different sub-libraries of @code{DevIL} are referenced as IL, ILU and ILUT.
 IL refers to the base library for loading, saving and converting images.
 ILU refers to the middle level library for image manipulation.
 ILUT refers to the high level library for displaying images.
@@ -70,29 +70,29 @@ Functions in IL, ILU and ILUT are prefixed by ‘il', ‘ilu' and ‘ilut', resp
 @chapter Library setup
 @section Microsoft Visual C++ setup
 
-DevIL setup for Windows is straightforward.
-Unzip DevIL in an empty directory.
+@code{DevIL} setup for Windows is straightforward.
+Unzip @code{DevIL} in an empty directory.
 If using WinZip, check the ``Use folder names'' box before unzipping.
 Use the -d command line option if using pkunzip.
-Then double-click on the ImageLib.sln file in the install directory to load the DevIL workspace in Microsoft Visual C++ (MSVC++).
+Then double-click on the ImageLib.sln file in the install directory to load the @code{DevIL} workspace in Microsoft Visual C++ (MSVC++).
 
 @subsection Directories
 
-You will need to change some directory settings in MSVC++ to get DevIL working.
+You will need to change some directory settings in MSVC++ to get @code{DevIL} working.
 
 @enumerate
 	@item Navigate to the Tools menu and select Options.
 	@item Click on the Directories tab.
 	@item Under Show directories for, select ``Include files''.
 	@item Click the New button (to the left of the red 'X')
-	@item Type the directory DevIL is installed in, plus @file{\Include}.  For example, if you installed DevIL to E:\ImageLib, enter @file{E:\ImageLib\Include}.
+	@item Type the directory @code{DevIL} is installed in, plus @file{\Include}.  For example, if you installed @code{DevIL} to E:\ImageLib, enter @file{E:\ImageLib\Include}.
 	@image{images/devil_msvc_include}
 	@item Under Show directories for, click on ``Library files''.
 	@item Click the New button (to the left of the red 'X').
-	@item Type the directory DevIL is installed in, plus @file{\Lib}.  For example, if you installed DevIL to E:\ImageLib, enter @file{E:\ImageLib\Lib}.
+	@item Type the directory @code{DevIL} is installed in, plus @file{\Lib}.  For example, if you installed @code{DevIL} to E:\ImageLib, enter @file{E:\ImageLib\Lib}.
 	@image{images/devil_msvc_lib}
 	@item Click the New button (to the left of the red ‘X').
-	@item Type the directory DevIL is installed in, plus @file{\Lib\Debug}.  In the previous example, you would enter @file{E:\ImageLib\Lib\Debug}.
+	@item Type the directory @code{DevIL} is installed in, plus @file{\Lib\Debug}.  In the previous example, you would enter @file{E:\ImageLib\Lib\Debug}.
 	@item Choose OK.
 @end enumerate
 
@@ -111,12 +111,12 @@ Some people link libraries into their project this way, which really should be d
 
 @subsection Multithreading
 
-DevIL takes advantage of the multithreaded standard LIBC DLLs.
-To use file streams with DevIL, you must change the project settings of your project.
-If you do not perform these steps, your program will crash whenever you attempt to use a DevIL file stream.
+@code{DevIL} takes advantage of the multithreaded standard @code{LIBC} DLLs.
+To use file streams with @code{DevIL}, you must change the project settings of your project.
+If you do not perform these steps, your program will crash whenever you attempt to use a @code{DevIL} file stream.
 
-Generally, DevIL is not thread safe.
-You should make sure that threads in your application do not use DevIL at the same time.
+Generally, @code{DevIL} is not thread safe.
+You should make sure that threads in your application do not use @code{DevIL} at the same time.
 
 @enumerate
 	@item Navigate to the Project menu and choose Settings.
@@ -127,50 +127,50 @@ Change the Use run-time library drop-down menu to Debug Multithreaded DLL if the
 	@item Choose OK.  
 @end enumerate
 
-@section DJGPP Setup
+@section @code{DJGPP} Setup
 
-Setting up DevIL in DJGPP requires the following steps:
+Setting up @code{DevIL} in DJGPP requires the following steps:
 
 @enumerate
-	@item Unzip DevIL in an empty directory.
+	@item Unzip @code{DevIL} in an empty directory.
 If using WinZip, check the ``Use folder names'' box before unzipping.
 Use the -d command line option if using pkunzip.
-	@item Create a new subdirectory called ‘il' in your DJGPP include directory.
+	@item Create a new subdirectory called ‘il' in your @code{DJGPP} include directory.
 	@item Copy the files to their respective places:
 	@itemize
-		@item To use the precompiled libraries, copy libil.a, libilu.a and libilut.a from ImageLib\lib\djgpp to your DJGPP lib directory.
-Then copy il.h, ilu.h and ilut.h from your ImageLib\lib\il directory to your DJGPP include\il directory.
+		@item To use the precompiled libraries, copy @file{libil.a}, @file{libilu.a} and @file{libilut.a} from ImageLib\lib\djgpp to your @code{DJGPP} lib directory.
+Then copy il.h, ilu.h and ilut.h from your ImageLib\lib\il directory to your @code{DJGPP} include\il directory.
 		@item To compile the library yourself, change directories to ImageLib\Makefiles\Djgpp.
-This folder contains only a makefile for DJGPP.
-Simply type ‘make', and the makefile will compile DevIL and copy the files to their respective locations.
+This folder contains only a makefile for @code{DJGPP}.
+Simply type @command{make}, and the makefile will compile @code{DevIL} and copy the files to their respective locations.
 	@end itemize
 @end enumerate
 
-To compile with DevIL in DJGPP, add @option{-lil} to your command line.
+To compile with @code{DevIL} in DJGPP, add @option{-lil} to your command line.
 To also use ILU and ILUT, use @option{-lilu} and @option{-lilut}, respectively.
 
 @section General GCC-based (Linux, Cygwin, Max OS X, etc.) Setup
 
-Setting up DevIL in this environment requires the following steps:
+Setting up @code{DevIL} in this environment requires the following steps:
 
 @enumerate
-	@item Unpack DevIL to your favourite build area: Typically this is done by running @command{tar -xvvf devil-xxx.tar.gz}
+	@item Unpack @code{DevIL} to your favourite build area: Typically this is done by running @command{tar -xvvf devil-xxx.tar.gz}
 	@item Go to the root devil directory and run @command{./configure <your-favourite options>}
 
-	TIP: Typically, you will want to specify @code{--prefix=/usr} (where to install DevIL), @code{--enable-ILU} and/or @code{--enable-ILUT} and probably also @code{--with-examples}. 
-	Running @command{configure --help} gives you an exhaustive list of possibilities how to tweak DevIL build.
+	TIP: Typically, you will want to specify @code{--prefix=/usr} (where to install @code{DevIL}), @code{--enable-ILU} and/or @code{--enable-ILUT} and probably also @code{--with-examples}. 
+	Running @command{configure --help} gives you an exhaustive list of possibilities how to tweak @code{DevIL} build.
 	@item If no errors occured and you are satisfied with the configure report, you can compile it by running @command{make}
 
 	TIP: You can run @command{make -j3} if you have a dual-core processor. Generally, if you replace the number '3' with 'number of CPU cores' + 1, you are likely to get the job done in the shortest time.
 	@item Run @command{make check} to check whether everything works as it should. 
 	@xref{tests}, for hints what to do if a test fails.
-	@item Install DevIL by running @command{make install} as superuser. 
+	@item Install @code{DevIL} by running @command{make install} as superuser. 
 
 	TIP: You can override variables at make time if you forgot to do that at configure time. 
 	For instance, you can install by @command{make install prefix=/usr}
 @end enumerate
 
-In order to link to DevIL, you may use autotools with @code{libtool}, which means to link either with @file{libIL.la} or @file{libILU.la} or with @file{libILUT.la} depending what level of functionality you require.
+In order to link to @code{DevIL}, you may use autotools with @code{libtool}, which means to link either with @file{libIL.la} or @file{libILU.la} or with @file{libILUT.la} depending what level of functionality you require.
 You may decide to use a monolithic build of the library and you then link with @file{libDevIL.la}.
 The best way is to have this code in your @file{configure.ac} file:
 
@@ -197,20 +197,17 @@ AC_SUBST([DEVIL_CFLAGS DEVIL_LIBS])
 If you are skilled with automake, you may link with the libtool files directly, which is more portable (@code{pkg-config} currently breaks cross-compilation).
 
 If you use an IDE or if you don't like autotools (which is a big mistake, by the way :-), then you may use @file{pkg-config} as a program. 
-This is not recommended if you intend to use DevIL in a cross-platform programs.
+This is not recommended if you intend to use @code{DevIL} in a cross-platform programs.
 You can get libraries you need to link to by running @command{pkg-config IL --libs}. Again, you decide whether you need @code{IL}, @code{ILU} or @code{ILUT}.
+Also pass @command{pkg-config IL --cflags} to the compiler!
 
-Or you may have to run @command{pkg-config DevIL --libs} if you have just the monolithic library. 
-However, if your distribution ships DevIL in the monolithic form, complain to them. 
-The monolithic DevIL is intended for Windows platform.
-
-If you are a happy IDE user, you have to write this commands in the backquotes like @command{`pkg-config ILUT --libs`} into some text boxes that allow you to specify additional LDFLAGS.
+If you are a happy IDE user, you have to write this commands in the backquotes like @command{`pkg-config ILUT --libs`} into some text boxes that allow you to specify additional @code{LDFLAGS}.
 
 @section Test and examples
 
 @anchor{tests}
 @subsection Test suite
-DevIL now comes with a test suite. 
+@code{DevIL} now comes with a test suite. 
 If you can use autotools to configure and compile it, you can also run the test suite by executing @command{make check} in the directory where you ran @command{configure}.
 
 There are following tests available:
@@ -230,7 +227,7 @@ There are following tests available:
 	@item Read
 	@item Override
 @end itemize
-Note: Those examples are actually linked against @code{ILU}, but this is only because error report functions.
+Note: Those examples can be linked against @code{ILU}, but this is only because error report functions.
 
 @code{ILUT} examples:
 @itemize
@@ -243,7 +240,7 @@ Note: Those examples are actually linked against @code{ILU}, but this is only be
 
 @node Basic usage
 @chapter Basic usage
-You must initialize DevIL, or it will most certainly crash.
+You must initialize @code{DevIL}, or it will most certainly crash.
 You need to initialize each library (IL, ILU, and ILUT) separately.
 You do not need to initialize libraries you are not using, but keep in mind that the higher level libraries are dependent on the lower ones.
 For example, ILUT is dependent on ILU and IL, so you have to initialize IL and ILU as well.
@@ -287,8 +284,8 @@ ilutRenderer(ILUT_OPENGL);
 @end example
 
 @section Image Name Handling
-Image names are DevIL's way of keeping track of images it is currently containing.
-Some other image libraries return structs, but they generally seem more cluttered than DevIL's image name handling.  
+Image names are @code{DevIL}'s way of keeping track of images it is currently containing.
+Some other image libraries return structs, but they generally seem more cluttered than @code{DevIL}'s image name handling.  
 
 @example
 ILvoid ilGenImages(ILsizei Num, ILuint *Images);
@@ -307,27 +304,27 @@ The only guarantee is that each member of the Images parameter (up to Num number
 @findex ilBindImage 
 @subsection Binding Image Names
 @code{ilBindImage} binds the current image to the image described by the image name in Image.
-DevIL reserves the number zero for the default base image.
+@code{DevIL} reserves the number zero for the default base image.
 If you pass a value for Image that was not generated by @code{ilGenImages}, @code{ilBindImage} automatically creates an image specified by the image name passed.
 An image must always be bound before you call any functions that operate on images and their data.
 
-When DevIL creates a new image, the image has the default properties of with a bit depth of 8.
-DevIL creates a new image when you call @code{ilBindImage} with an image name that has not been generated by @code{ilGenImages} or when you call @code{ilGenImages} specifically.
+When @code{DevIL} creates a new image, the image has the default properties of with a bit depth of 8.
+@code{DevIL} creates a new image when you call @code{ilBindImage} with an image name that has not been generated by @code{ilGenImages} or when you call @code{ilGenImages} specifically.
 
 @findex ilDeleteImages
 @subsection Deleting Image Names
 @code{ilDeleteImages} is the exact opposite of @code{ilGenImages} and even accepts the exact same parameters.  @code{ilDeleteImages} deletes image names to free memory for subsequent operations.
 You should always call @code{ilDeleteImages} on images that are not in use anymore.
-When you delete an image, DevIL actually deletes all data and anything associate with it, so that @code{ilGenImages} can possibly use the image name later.
+When you delete an image, @code{DevIL} actually deletes all data and anything associate with it, so that @code{ilGenImages} can possibly use the image name later.
 
 @section File handling -- loading images
 
-DevIL's main purpose is to load images.
-DevIL's loading is designed to be extremely easy but very powerful.
+@code{DevIL}'s main purpose is to load images.
+@code{DevIL}'s loading is designed to be extremely easy but very powerful.
 
-@xref{file_formats}, lists the image types DevIL is capable of loading.
+@xref{file_formats}, lists the image types @code{DevIL} is capable of loading.
 
-DevIL contains four loading functions to support different loading styles and loading from several different image sources.  
+@code{DevIL} contains four loading functions to support different loading styles and loading from several different image sources.  
 
 @example
 ILboolean ilLoadImage(const char *FileName);
@@ -338,17 +335,17 @@ ILboolean ilLoadL(ILenum Type, ILvoid *Lump, ILuint Size);
 
 @findex ilLoadImage
 @subsection Loading from Files -- @code{ilLoadImage}
-@code{ilLoadImage} is the main DevIL loading function.
+@code{ilLoadImage} is the main @code{DevIL} loading function.
 All you do is pass @code{ilLoadImage} the filename of the image you wish to load.  @code{ilLoadImage} takes care of the rest.  @code{ilLoadImage} allows users to transparently load several different image formats uniformly.
-DevIL's most powerful function is @code{ilLoadImage} because of this feature.
+@code{DevIL}'s most powerful function is @code{ilLoadImage} because of this feature.
 
 Before loading the image, @code{ilLoadImage} must first determine the image format of the file.  @code{ilLoadImage} performs the following steps:
 
 @enumerate
-	@item Compares the filename's extension to any registered file handlers, allowing the registered file handlers to take precedence over the default DevIL file handlers.
+	@item Compares the filename's extension to any registered file handlers, allowing the registered file handlers to take precedence over the default @code{DevIL} file handlers.
 If the extension matches a registered file handler, @code{ilLoadImage} passes control to the file handler and returns.
 For more information on registering, refer to the section entitled (@pxref{registration}). 
-	@item Compares the filename's extension to the extensions natively supported by DevIL.
+	@item Compares the filename's extension to the extensions natively supported by @code{DevIL}.
 If the extension matches a loading function's extension, @code{ilLoadImage} passes control to the file handler and returns.
 	@item Examines the file for a header and tries to match it with a known type of image header.
 If a valid image header is found, @code{ilLoadImage} passes control to the appropriate file hander and returns.
@@ -357,36 +354,36 @@ If a valid image header is found, @code{ilLoadImage} passes control to the appro
 
 @findex ilLoad
 @subsection Loading from Files -- @code{ilLoad}
-DevIL's other file loading function is @code{ilLoad}.  @code{ilLoad} is similar to @code{ilLoadImage} in many respects but different in other ways.  @code{ilLoad} accepts two parameters: the type of image and the filename of the image.
+@code{DevIL}'s other file loading function is @code{ilLoad}.  @code{ilLoad} is similar to @code{ilLoadImage} in many respects but different in other ways.  @code{ilLoad} accepts two parameters: the type of image and the filename of the image.
 
 @code{ilLoad}'s type parameter is what differentiates it from @code{ilLoadImage}. 
 Type can be any of the values listed in table B-2 in appendix B or the value @code{IL_TYPE_UNKNOWN}. 
 If Type is a value from table B-1, @code{ilLoad} attempts to load the file as the specified type of image format.
-Only use this if you know what type of images you will be loading and want to bypass DevIL's checks.
+Only use this if you know what type of images you will be loading and want to bypass @code{DevIL}'s checks.
 
 If @code{IL_TYPE_UNKNOWN} is specified for Type, @code{ilLoad} behaves exactly like @code{ilLoadImage}.
 Refer to the previous section for detailed behaviour of these two functions.
 
 @findex ilLoadF
 @subsection Loading from File Streams -- @code{ilLoadF}
-DevIL's file stream loading function is @code{ilLoadF}.
+@code{DevIL}'s file stream loading function is @code{ilLoadF}.
 @code{ilLoadF} is exactly equivalent to @code{ilLoad}, but instead of accepting a const char pointer, @code{ilLoadF} accepts an @code{ILHANDLE}.
-DevIL defines @code{ILHANDLE} as a void pointer via a typedef.
+@code{DevIL} defines @code{ILHANDLE} as a void pointer via a typedef.
 Under normal circumstances, File will be a @code{FILE} struct pointer defined in stdio.h.
 
 @xref{registration}, for instructions on how to use your own file handling functions and file handles.
 
 @findex ilLoadL
 @subsection Loading from Memory Lumps -- @code{ilLoadL}
-DevIL's file handling is abstracted to allow loading images from memory called ``lumps''.  @code{ilLoadL} handles loading from lumps.
+@code{DevIL}'s file handling is abstracted to allow loading images from memory called ``lumps''.  @code{ilLoadL} handles loading from lumps.
 You must specify a valid type as the first parameter and the lump as the second parameter.
 
 The third parameter that @code{ilLoadL} accepts is the total size of the lump.
-DevIL uses this value to perform bounds checking on the input data.
+@code{DevIL} uses this value to perform bounds checking on the input data.
 Specify a value of zero for Size if you do not want @code{ilLoadL} to perform any bounds checking.
 
 @subsection Saving to Files
-DevIL also has some powerful saving functions to fully complement the loading functions.
+@code{DevIL} also has some powerful saving functions to fully complement the loading functions.
 
 @example
 ILboolean ilSaveImage(const char *FileName);
@@ -395,7 +392,7 @@ ILboolean ilSaveF(ILenum Type, ILHANDLE File);
 ILuint ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size);
 @end example
 
-DevIL's saving functions are identical to the loading functions, despite the fact that they save images instead of load images.
+@code{DevIL}'s saving functions are identical to the loading functions, despite the fact that they save images instead of load images.
 
 Typically, the user does not know exactly how large the output image will be.  
 If you pass NULL for @code{Lump} and 0 for @code{Size} to @code{ilSaveL}, @code{ilSaveL} will return the buffer size needed to save an image of @code{Type}.  
@@ -416,13 +413,13 @@ Any image data or attributes previously in the current bound image are lost afte
 ILboolean ilTexImage(ILuint Width, ILuint Height, ILuint Depth, @*    ILubyte Bpp, ILenum Format, ILenum Type, ILvoid *Data);
 @end example
 
-@code{ilTexImage} has one of the longer parameter lists of the DevIL functions, so we will briefly go over what is expected for each argument.
+@code{ilTexImage} has one of the longer parameter lists of the @code{DevIL} functions, so we will briefly go over what is expected for each argument.
 
 @itemize @minus
 	@item @code{Width}: The width of the image.
-If this is zero, DevIL creates an image with a width of one.
+If this is zero, @code{DevIL} creates an image with a width of one.
 	@item @code{Height}: The height of the image.
-If this is zero, DevIL creates an image with a height of one.
+If this is zero, @code{DevIL} creates an image with a height of one.
 	@item @code{Depth}: The depth of the image, if it is an image volume.
 Most applications should specify 0 or 1 for this parameter.
 	@item @code{Bpp}: The bytes per pixel of the image data.
@@ -458,19 +455,19 @@ To get information about the image data, use @code{ilGetInteger}.
 @findex ilCopyPixels
 @subsection The Flexible Method
 Use @code{ilCopyPixels} to get a portion of the current bound image's data or to get the current image's data with in a different format / type.
-DevIL takes care of all conversions automatically for you to give you the image data in the format or type that you need.
+@code{DevIL} takes care of all conversions automatically for you to give you the image data in the format or type that you need.
 The data block can range from a single line to a rectangle, all the way to a cube.
 
 @code{ilCopyPixels} has a long parameter list, like @code{ilTexImage}, so here is a description of the parameters of @code{ilCopyPixels}:
 
 @itemize @minus
-	@item @code{XOff}: Specifies where to start copying in the x direction.
-	@item @code{YOff}: Specifies where to start copying in the y direction.
-	@item @code{ZOff}: Specifies where to start copying in the z direction.
+	@item @code{XOff}: Specifies where to start copying in the @i{x} direction.
+	@item @code{YOff}: Specifies where to start copying in the @i{y} direction.
+	@item @code{ZOff}: Specifies where to start copying in the @i{z} direction.
 This will be 0 in most cases, unless you are using image volumes.
-	@item @code{Width}: Number of pixels to copy in the x direction.
-	@item @code{Height}: Number of pixels to copy in the y direction.
-	@item @code{Depth}: Number of pixels to copy in the z direction.
+	@item @code{Width}: Number of pixels to copy in the @i{x} direction.
+	@item @code{Height}: Number of pixels to copy in the @i{y} direction.
+	@item @code{Depth}: Number of pixels to copy in the @i{z} direction.
 This will be 1, unless
 	@item @code{Format, Type, Data}: These are basically the same as ones described above. @pxref{ilTexImage reference}.
 @end itemize
@@ -490,30 +487,30 @@ ILvoid ilSetPixels(ILuint XOff, ILuint YOff, ILuint ZOff,
 @findex ilSetData
 @subsection The Quick Method
 Use @code{ilSetData} to set the image data directly.  
-DevIL will copy the data provided in the Data parameter to the image’s data, so you need not worry about DevIL trying to delete your pointer later on.
+@code{DevIL} will copy the data provided in the Data parameter to the image’s data, so you need not worry about @code{DevIL} trying to delete your pointer later on.
 This function is the counterpart to @code{ilGetData}.
 
-You must provide image data in the exact same format, type, width, height, depth and bpp as the current bound image, since DevIL does no conversions here; it just does a simple memory copy.
+You must provide image data in the exact same format, type, width, height, depth and bpp as the current bound image, since @code{DevIL} does no conversions here; it just does a simple memory copy.
 
 @code{ilSetData} will return @code{IL_FALSE} and set an error of @code{IL_INVALID_PARAM} if Data is @code{NULL}.
 
 @findex ilSetPixels
 @subsection The Flexible Method
 Use @code{ilSetPixels} to set a portion of the current bound image’s data or to set the current image’s data with data of a different format / type.
-Specify the data block, where you want to put it and what kind of data it is, and DevIL takes care of all conversions automatically for you.
+Specify the data block, where you want to put it and what kind of data it is, and @code{DevIL} takes care of all conversions automatically for you.
 The data block can range from a single line to a rectangle, all the way to a cube.
 
 @code{ilSetPixels} has a long parameter list, like @code{ilCopyPixels}, so here is a description of the parameters of @code{ilSetPixels}:
 
 @itemize @minus
 	@item Previous parameters are the same as in @code{ilTexImage}
-	@item @code{Data}: A pointer to the actual data block.  If this is @code{NULL}, DevIL will set an error of @code{IL_INVALID_PARAM} and return @code{IL_FALSE} (please refer to the section on error handling in DevIL).
+	@item @code{Data}: A pointer to the actual data block.  If this is @code{NULL}, @code{DevIL} will set an error of @code{IL_INVALID_PARAM} and return @code{IL_FALSE} (please refer to the section on error handling in @code{DevIL}).
 @end itemize
  
-If you specify a combination of an offset with a width/height/depth that makes your data block overreach the edge of the currently bound image, DevIL will clip your data so that no crashes will occur and that the resulting image will be correctly produced.
+If you specify a combination of an offset with a width/height/depth that makes your data block overreach the edge of the currently bound image, @code{DevIL} will clip your data so that no crashes will occur and that the resulting image will be correctly produced.
 
 @section Copying Images
-DevIL has three functions to copy images: @code{ilCopyImage}, @code{ilOverlayImage} and @code{ilBlit}.
+@code{DevIL} has three functions to copy images: @code{ilCopyImage}, @code{ilOverlayImage} and @code{ilBlit}.
 
 @example
 ILboolean ilCopyImage(ILuint Src);
@@ -540,15 +537,15 @@ A description of the various @code{ilBlit} parameters follows:
 
 @itemize @minus
 	@item @code{Src}: The source image name.
-	@item @code{DestX}: Specifies where to place the block of image data in the x direction.
-	@item @code{DestY}: Specifies where to place the block of image data in the y direction.
-	@item @code{DestZ}: Specifies where to place the block of image data in the z direction.
-	@item @code{SrcX}: Specifies where to start copying in the x direction of the source image.
-	@item @code{SrcY}: Specifies where to start copying in the y direction of the source image.
-	@item @code{SrcZ}: Specifies where to start copying in the z direction of the source image.
-	@item @code{Width}: How many pixels to copy in the x direction of the source image.
-	@item @code{Height}: How many pixels to copy in the y direction of the source image.
-	@item @code{Depth}: How many pixels to copy in the z direction of the source image.
+	@item @code{DestX}: Specifies where to place the block of image data in the @i{x} direction.
+	@item @code{DestY}: Specifies where to place the block of image data in the @i{y} direction.
+	@item @code{DestZ}: Specifies where to place the block of image data in the @i{z} direction.
+	@item @code{SrcX}: Specifies where to start copying in the @i{x} direction of the source image.
+	@item @code{SrcY}: Specifies where to start copying in the @i{y} direction of the source image.
+	@item @code{SrcZ}: Specifies where to start copying in the @i{z} direction of the source image.
+	@item @code{Width}: How many pixels to copy in the @i{x} direction of the source image.
+	@item @code{Height}: How many pixels to copy in the @i{y} direction of the source image.
+	@item @code{Depth}: How many pixels to copy in the @i{z} direction of the source image.
 @end itemize
 
 @findex ilOverlay
@@ -557,9 +554,9 @@ A description of the various @code{ilBlit} parameters follows:
 
 @itemize @minus
 	@item @code{Src}: The source image name.
-	@item @code{DestX}: Specifies where to place the block of image data in the x direction.
-	@item @code{DestY}: Specifies where to place the block of image data in the y direction.
-	@item @code{DestZ}: Specifies where to place the block of image data in the z direction.
+	@item @code{DestX}: Specifies where to place the block of image data in the @i{x} direction.
+	@item @code{DestY}: Specifies where to place the block of image data in the @i{y} direction.
+	@item @code{DestZ}: Specifies where to place the block of image data in the @i{z} direction.
 @end itemize
 
 @subsection Blit/Overlay Behavior
@@ -569,7 +566,7 @@ This behavior can be toggled with @code{ilEnable} and @code{ilDisable}.
 
 @example
 ilDisable(IL_BLIT_BLEND);  // Turns off blending
-ilEnable(IL_BLIT_BLEND);  // Turns on blending
+ilEnable(IL_BLIT_BLEND);   // Turns on blending
 @end example
 
 @chapter Image Characteristics
@@ -578,14 +575,14 @@ All images have a certain set of characteristics:  origin of the image, format o
 
 @section Origin
 Depending on the file format, data can start in the upper left or the lower left corner of the image.
-By default, DevIL keeps the origin in the same place as the original image.
+By default, @code{DevIL} keeps the origin in the same place as the original image.
 This can cause your image to be flipped vertically if the image you are loading has an origin other than what you expect.
 To obtain the origin of the image, use @code{ilGetInteger}.
 @example
 ilGetInteger(IL_IMAGE_ORIGIN);
 @end example
 
-To force DevIL to use just one origin, you need to use the following code:
+To force @code{DevIL} to use just one origin, you need to use the following code:
 @example
 ilEnable(IL_ORIGIN_SET);
 ilSetInteger(@emph{Origin});
@@ -604,8 +601,8 @@ Format refers to the ordering of the bytes for each pixel.
 
 @node Error handling
 @chapter Error handling
-DevIL contains error-handling routines to alert the users of this library to any internal problems in DevIL.
-The @code{ilGetError} function reports all errors in DevIL.  @code{iluErrorString} converts error numbers returned from @code{ilGetError} to a human-readable format.
+@code{DevIL} contains error-handling routines to alert the users of this library to any internal problems in @code{DevIL}.
+The @code{ilGetError} function reports all errors in @code{DevIL}.  @code{iluErrorString} converts error numbers returned from @code{ilGetError} to a human-readable format.
 
 @example
 ILenum	ilGetError(ILvoid);
@@ -614,11 +611,11 @@ const char*	iluErrorString(ILenum Error);
 
 @findex ilGetError
 @section Error Detection
-Problems can always occur in any software application, and DevIL is no different.
-DevIL keeps track of all non-fatal errors that have occurred during its operation.
+Problems can always occur in any software application, and @code{DevIL} is no different.
+@code{DevIL} keeps track of all non-fatal errors that have occurred during its operation.
 All errors are kept on a stack maintained by @code{ilGetError}.  Every time @code{ilGetError} is called, the last error is returned and pushed off the top of the stack.
 You should call @code{ilGetError} until @code{IL_NO_ERROR} is returned.  @code{IL_NO_ERROR} signifies that there are no more errors on the error stack.
-Most errors reported are not harmful, and DevIL operation can continue, except for @code{IL_OUT_OF_MEMORY}.
+Most errors reported are not harmful, and @code{DevIL} operation can continue, except for @code{IL_OUT_OF_MEMORY}.
 
 @xref{error_codes}, for error codes that can be returned by @code{ilGetError}.
 
@@ -637,7 +634,7 @@ The default language is English.
 Languages supported are: English, Arabic, Dutch, German, Japanese and Spanish. 
 @xref{language #defines}, for a list of possible values.
 
-Be aware that if the Unicode version of DevIL is not being used, some translations will not display properly.
+Be aware that if the Unicode version of @code{DevIL} is not being used, some translations will not display properly.
 An example is Arabic, which uses characters outside of the standard ASCII character set.
 
 @node Image manipulation
@@ -647,8 +644,16 @@ ILU (Image Library Utilities) contains functions to manipulate any type of image
 Some functions filter images, while others perform a wider variety of operations, such as scaling an image.
 This section will give a comparison of the utility functions against the below figure.
 
-@center @image{images/sample_original,5cm}
-@center @emph{Original, unmodified image}
+@float Figure,fig:stairway_original
+@center @image{images/original_stairway,14cm}
+@caption{Original, unmodified image}
+@end float
+
+This is a crop of a Bertrand Benoit's @url{http://www.blender.org/index.php?eID=tx_cms_showpic&file=uploads%2Fpics%2FSun-lit_spiral_staircase.jpg&width=800m&height=600m&bodyTag=<body style%3D"margin%3A0%3B background%3A%23fff%3B">&wrap=<a href%3D"javascript%3Aclose()%3B"> | <%2Fa>&md5=8c8fbc473dbe2bda5bc32a0b1eaa7a22,image} taken from @url{http://www.blender.org/features-gallery/gallery/art-gallery/,Blender art gallery}, and Bertrand has kindly allowed us to use it for demonstrations.
+You can check out his @url{http://www.bertrand-benoit.com,website}.
+Thank you, Bertrand!
+
+The image samples here have a better-than-bad resolution, so you don't have to be affraid to zoom at them if you wish to see details.
 
 @findex iluAlienify
 @section Alienifying
@@ -656,10 +661,12 @@ This section will give a comparison of the utility functions against the below f
 The effect @code{iluAlienify} gives to an image is a green and purple tint.
 On images with humans in them, @code{iluAlienify} generally makes the people look green, hence the fabricated term ``alienify''.  
 @code{iluAlienify} does not accept any parameters.
-The figure below illustrates this effect on the DevIL logo.
+The figure below illustrates this effect on the @code{DevIL} logo.
 
-@center @image{images/sample_alienified,5cm}
-@center @emph{``Alienified'' image}
+@float Figure,fig:stairway_alienified
+@center @image{images/small_stairway,4.9cm} @ @image{images/ilu_small_stairway_alienify,4.9cm}
+@caption{Original and ``alienified'' image}
+@end float
 
 @findex iluBlurAverage
 @findex iluBlurGaussian
@@ -674,36 +681,38 @@ Both functions accept a single parameter.
 Call the desired function with the number of iterations of blurring you wish to be performed on the image.
 Increase the number of iterations to increase the blurriness of an image.
 
-@center @image{images/sample_blur_average,5cm}
-@center @emph{Average blurred with 10 iterations applied}
-
-@center @image{images/sample_blur_gauss,5cm}
-@center @emph{Gaussian blurred with 10 iterations applied}
+@float Figure,fig:stairway_blurred
+@center @image{images/small_stairway,4.9cm} @ @image{images/ilu_small_stairway_blurAvg_10,4.9cm} @ @image{images/ilu_small_stairway_blurGaussian_10,4.9cm}
+@caption{Original image, average blurred and gaussian blurred, both with 10 iterations applied}
+@end float
 
 @findex iluContrast
 @section Contrast
 ILU can apply more colour contrast to your image by brightening the lights and darkening the darks via @code{iluContrast}.  This effect can make a dull image livelier and ``stand out'' more.
 
 @code{iluContrast} accepts a single parameter describing the desired amount of contrast to modify the image by.
-A value of 1.0 does not affect the image.
-Values above 1.0 to 1.7 increase the amount of contrast in the image, with 1.7 increasing the contrast the most.
-Values from 0.0 to 1.0 decrease the amount of contrast in the image.
-Values outside of the 0.0 to 1.7 range will give undefined results.  -0.5 to 0.0 will actually create a negative of the image and increase the contrast.
+@itemize
+	@item values from 0.0 to 1.0 decrease the amount of contrast in the image.
+	@item value of 1.0 does not affect the image.
+	@item values above 1.0 to 1.7 increase the amount of contrast in the image, with 1.7 increasing the contrast the most.
+	@item values outside of the 0.0 to 1.7 range will give undefined results.  -0.5 to 0.0 will actually create a negative of the image and increase the contrast.
+@end itemize
 
-@center @image{images/sample_contrast_02,5cm}
-@center @emph{Contrast of 0.1}
-
-@center @image{images/sample_contrast_16,5cm}
-@center @emph{Contrast of 1.7}
+@float Figure,fig:stairway_contrast
+@center @image{images/small_stairway,4.9cm} @ @image{images/ilu_small_stairway_contrast_0.4,4.9cm} @ @image{images/ilu_small_stairway_contrast_1.7,4.9cm} 
+@caption{Original image, image with contrast of 0.4 and with contrast of 1.7}
+@end float
 
 @findex iluEqualize
 @section Equalization
 Sometimes it may be useful to equalize an image – that is, bring the extreme colour values to a median point.
 @code{iluEqualize} darkens the bright colours and lightens the dark colours, reducing the contrast in an image or ``equalizing'' it.
-The below figure shows the results of applying @code{iluEqualize} to the DevIL image.
+The below figure shows the results of applying @code{iluEqualize} to the @code{DevIL} image.
 
-@center @image{images/sample_equalized,5cm}
-@center @emph{Equalized image}
+@float Figure,fig:stairway_equalized
+@center @image{images/small_stairway,4.9cm} @ @image{images/ilu_small_stairway_equalize,4.9cm}
+@caption{Original image and equalized image}
+@end float
 
 @findex iluGammaCorrect
 @section Gamma Correction
@@ -714,11 +723,10 @@ Values in the range @code{0.0 - 1.0} darken the image.
 0.0 leaves a totally black image.
 Anything above 1.0 brightens the image, but values too large may saturate the image.
 
-@c @center @image{images/sample_gamma_05,5cm}
-@c @center @emph{Result of gamma correction of 0.5}
-
-@c @center @image{images/sample_gamma_20,5cm}
-@c @center @emph{Result of gamma correction of 2.0}
+@float Figure,fig:stairway_gamma
+@center @image{images/small_stairway,4.9cm} @ @image{images/ilu_small_stairway_gammaCorrect_0.7,4.9cm} @ @image{images/ilu_small_stairway_gammaCorrect_1.6,4.9cm}
+@caption{Original image, image with gamma 0.7 and with with gamma 1.6}
+@end float
 
 @findex iluNegative
 @section Negativity
@@ -727,8 +735,10 @@ For example, pure white becomes pure black, and vice-versa.
 The resulting colour of a pixel can be determined by this formula: @code{new_colour = ~old_colour} (where the tilde is the negation of the set of bits). 
 @code{iluNegative} does not accept any parameters and is reversible by calling it again.
 
-@c @center @image{images/sample_negative,5cm}
-@c @center @emph{@code{iluNegative} example}
+@float Figure,fig:stairway_negative
+@center @image{images/small_stairway,4.9cm} @ @image{images/ilu_small_stairway_negative,4.9cm}
+@caption{Original and negative image}
+@end float
 
 @findex iluNoisify
 @section Noise
@@ -736,17 +746,17 @@ ILU can add ``random'' noise to any image to make it appear noisy.
 The function, @code{iluNoisify}, simply uses the standard libc @code{rand} function after initializing it with a seed to @code{srand}.  If your program depends on a different seed to @code{rand}, reset it after calling @code{iluNoisify}.  The seed ILU uses is the standard @code{time(NULL)} call.
 Of course, the noise added to the image is not totally random, since no such thing exists, but there should be no repeating, except in extremely large images.
 
+@float Figure,fig:stairway_noisify
+@center @image{images/small_stairway,4.9cm} @ @image{images/ilu_small_stairway_noisify_0.1,4.9cm} @ @image{images/ilu_small_stairway_noisify_0.8,4.9cm}
+@caption{Original image, noisified image 0.1, noisified 0.8}
+@end float
+
 @code{iluNoisify} accepts a single parameter – the tolerance to use.
 This parameter is a clamped (float) value that should be in the range @code{0.0f - 1.0f}.
 Lower values indicate a lower tolerance, while higher values indicate the opposite.
 The tolerance indicates just how much of a mono intensity that @code{iluNoisify} is allowed to apply to each pixel.
 A ``random'' mono intensity is applied to each pixel so that you will not end up with totally new colours, just the same colours with a different luminance value.
 Colours change by both negative and positive values, so some pixels may be darker, some may be lighter, and others will remain the same.
-
-@c @multitable {@image{images/manipulation/noise-0.5,5cm}} {  } {@image{images/manipulation/noise-1.0,5cm}}
-@c 	@item @image{images/manipulation/noise-0.5,5cm}	@tab  @tab  @image{images/manipulation/noise-1.0,5cm}
-@c 	@item @emph{Result of @code{iluNoisify} with a 0.50 tolerance}  @tab  @tab @emph{Result of @code{iluNoisify} with a 1.0 tolerance}
-@c @end multitable
 
 @findex iluPixelize
 @section Pixelization
@@ -759,8 +769,10 @@ The larger the values, the larger the pixel blocks will be.
 A value of 1 will leave the image unchanged.
 Values less than 1 generate an error.
 
-@c @center @image{images/manipulation/pixelize,5cm}
-@c @center @emph{Pixelization of 5 pixels across}
+@float Figure,fig:stairway_pixelize
+@center @image{images/small_stairway,4.9cm} @ @image{images/ilu_small_stairway_pixelize_5,4.9cm}
+@caption{Pixelization of 5 pixels across}
+@end float
 
 @findex iluSharpen
 @section Sharpening
@@ -768,18 +780,21 @@ Sharpening sharply defines the outlines in an image.  @code{iluSharpen} performs
 @code{iluSharpen} accepts two parameters: the sharpening factor and the number of iterations to perform the sharpening effect.
 
 The sharpening factor must be in the range of 0.0 - 2.5.
-A value of 1.0 for the sharpening factor will have no effect on the image.
-Values in the range 1.0 - 2.5 will sharpen the image, with 2.5 having the most pronounced sharpening effect.
-Values from 0.0 to 1.0 do a type of reverse sharpening, blurring the image.
-Values outside of the 0.0 - 2.5 range produce undefined results.
+@itemize
+	@item values from 0.0 to 1.0 do a type of reverse sharpening, blurring the image.
+	@item value of 1.0 for the sharpening factor will have no effect on the image.
+	@item values in the range 1.0 - 2.5 will sharpen the image, with 2.5 having the most pronounced sharpening effect.
+	@item values outside of the 0.0 - 2.5 range produce undefined results.
+@end itemize
 
 The number of iterations to perform will usually be 1, but to achieve more sharpening, increase the number of iterations.
 This parameter is similar to the @emph{Iterations} parameter of the two blurring functions.
 The time it takes to run this function is directly proportional to the number of iterations desired.
 
-@c @center @image{images/manipulation/sharpen,5cm}
-@c @center @emph{Sharpening of 2.5}
-
+@float Figure,fig:stairway_sharpen
+@center @image{images/small_stairway,4.9cm} @ @image{images/ilu_small_stairway_sharpen_1.8_2,4.9cm} @ @image{images/ilu_small_stairway_sharpen_2.1_3,4.9cm}
+@caption{Original image, image sharpened by 1.8 in 2 iterations and sharpened by 2.1 in 3 iterations}
+@end float
 
 @c @node Resizing Images
 @chapter Resizing Images
@@ -860,8 +875,8 @@ Below is a comparison of the different types of filters when enlarging an image.
 @chapter Sub-Images
 
 @section Mipmaps
-Mipmaps in DevIL are successive half-dimensioned power-of-2 images.
-The dimensions do not have to be powers of 2 if you generate them manually, but DevIL's mipmap generation facilities assume power-of-2 images.
+Mipmaps in @code{DevIL} are successive half-dimensioned power-of-2 images.
+The dimensions do not have to be powers of 2 if you generate them manually, but @code{DevIL}'s mipmap generation facilities assume power-of-2 images.
 
 @c @multitable {@image{images/mipmaps/128}} {@image{images/mipmaps/64}} {@image{images/mipmaps/32}} {@image{images/mipmaps/16}} {@image{images/mipmaps/8}} {@image{images/mipmaps/4}}  {@image{images/mipmaps/2}} {@image{images/mipmaps/1}}
 @c 	@item  @image{images/mipmaps/128}
@@ -896,7 +911,7 @@ The only other method for setting the current image to the base image is to call
 
 @section Animations
 Animations are similar to mipmaps, but instead of being smaller successive images, the images are the same size but have different data.
-The successive animation chains in DevIL can be used to create animations in your programs.
+The successive animation chains in @code{DevIL} can be used to create animations in your programs.
 File formats that natively support animations are @code{.gif} and @code{.mng}.
 You can also create your own sub-images as animations.
 
@@ -916,7 +931,7 @@ The only other method for setting the current image to the base image is to call
 @code{iluActiveImage} is functionally equivalent to @code{iluActiveMipmap}, except that it deals with animations and not mipmaps.
 
 @section Layers
-DevIL does not have a full layer implementation yet.
+@code{DevIL} does not have a full layer implementation yet.
 
 @section Sub-Image Mixing
 An image can have both mipmaps and animations at the same time.
@@ -928,20 +943,20 @@ Therefore, if you call @code{iluActiveMipmap} after @code{iluActiveImage}, a mip
 @c @node DXTC/S3TC Notes
 @chapter DXTC/S3TC Notes
 @section DDS Loading/Saving
-DevIL supports loading and saving of Microsoft .dds files.
+@code{DevIL} supports loading and saving of Microsoft .dds files.
 DDS files can either be compressed or uncompressed.
 If they are compressed, DDS files use DirectX Texture Compression (DXTC).  DXTC is also known as S3TC, since Microsoft licensed the compression technology from S3.
 
 @subsection Keeping DXTC Data
-When loading, DevIL uncompresses the DXTC.
-If you call @code{ilEnable} with the @code{IL_KEEP_DXTC_DATA} parameter, DevIL will keep an uncompressed copy of the DXTC data along with the image.
+When loading, @code{DevIL} uncompresses the DXTC.
+If you call @code{ilEnable} with the @code{IL_KEEP_DXTC_DATA} parameter, @code{DevIL} will keep an uncompressed copy of the DXTC data along with the image.
 Functions that deal with DXTC data can use this data without having to recompress the uncompressed data, making these functions operate faster.
 The only drawback is the use of more memory.
 
 @subsection Controlling Saving
-DevIL's DXTC support consists of three different compression formats: DXT1, DXT3 and DXT5.
+@code{DevIL}'s DXTC support consists of three different compression formats: DXT1, DXT3 and DXT5.
 DXT2 and DXT4 use premultiplied alpha, which not even OpenGL supports.
-DevIL loads DXT2 and DXT4 textures but immediately converts them to formats that do not use premultiplied alpha.
+@code{DevIL} loads DXT2 and DXT4 textures but immediately converts them to formats that do not use premultiplied alpha.
 To set what format to save DDS files in, use this line:
 
 @example
@@ -951,8 +966,8 @@ ilSetInteger(IL_DXTC_FORMAT, Format);
 @emph{Format} can be @code{IL_DXT1}, @code{IL_DXT3} or @code{IL_DXT5}.
 
 @subsection Compression Method
-DevIL can use the nVidia Texture Tools (NVTT) library, the libsquish library and its own internal compressor to generate DXTC data.
-By default, DevIL uses its internal compressor.  
+@code{DevIL} can use the nVidia Texture Tools (NVTT) library, the libsquish library and its own internal compressor to generate DXTC data.
+By default, @code{DevIL} uses its internal compressor.  
 This compressor is fast but is not very high quality.
 NVTT is usually CUDA-enabled, meaning that it can run quickly on computers with GeForce 8-series and higher cards.
 libsquish generates images with the highest quality possible, but it can be very slow.
@@ -978,19 +993,19 @@ ILuint ilGetDXTCData(ILvoid *Buffer, ILuint BufferSize,
                      ILenum DXTCFormat);
 @end example
 
-If the DXTC data does not exist in the format that you request, DevIL will automatically compress the data.
+If the DXTC data does not exist in the format that you request, @code{DevIL} will automatically compress the data.
 If @code{ilGetDXTCData} returns 0, then the data could not be compressed.
 To see if a certain format of DXTC data already exists for the currently bound image, call @code{ilGetInteger} with the @code{IL_DXTC_DATA_FORMAT} parameter.
 
 @section Compressing DXTC Data
-In the previous section, it was mentioned that DevIL can compress the data of an image with DXT compression.  If you have image data in your program that you want to compress, you can use the @code{ilCompressDXT} function.
+In the previous section, it was mentioned that @code{DevIL} can compress the data of an image with DXT compression.  If you have image data in your program that you want to compress, you can use the @code{ilCompressDXT} function.
 
 @example
 ILubyte *ilCompressDXT(ILubyte *Data, ILuint Width, ILuint Height,
                     ILuint Depth, ILenum DXTCFormat, ILuint *DXTCSize);
 @end example
 
-Data must be in BGRA format for NVTT and DevIL's compressor, and it must be in RGBA format for libsquish.  Please keep this in mind when calling this @code{ilCompressDXT}.  Look at Compression Method in this section for information on how to use these libraries.
+Data must be in BGRA format for NVTT and @code{DevIL}'s compressor, and it must be in RGBA format for libsquish.  Please keep this in mind when calling this @code{ilCompressDXT}.  Look at Compression Method in this section for information on how to use these libraries.
 
 @section OpenGL/Direct3D DXTC Support
 ILUT allows you to directly send the DXTC data to OpenGL or Direct3D.
@@ -998,7 +1013,7 @@ Several modes in ILUT directly control this behavior.
 
 @subsection OpenGL S3TC Support
 OpenGL can use S3TC (DXTC) textures via extensions.
-If a computer does not support the S3TC texture extension, DevIL will just send the data normally through @code{glTexImage2D}, as always.
+If a computer does not support the S3TC texture extension, @code{DevIL} will just send the data normally through @code{glTexImage2D}, as always.
 Please keep in mind that DDS files store their data in a top-down format, so if you enable the OpenGL S3TC support, make certain to set the origins of all images in the upper left:
 
 @example
@@ -1026,8 +1041,8 @@ ILUT's Direct3D (D3D) support works exactly like the OpenGL support, except you 
 
 
 @node Common #defines
-@appendix Common DevIL @code{#defines}
-Here goes lists of DevIL @code{#defines} used in functions that manipulate image data.
+@appendix Common @code{DevIL} @code{#defines}
+Here goes lists of @code{DevIL} @code{#defines} used in functions that manipulate image data.
 As you can see, they are self-explanatory.
 
 @anchor{format #defines}
@@ -1069,9 +1084,9 @@ As you can see, they are self-explanatory.
 @end itemize
 
 @anchor{error_codes}
-@appendix Common DevIL Error Codes
+@appendix Common @code{DevIL} Error Codes
 
-Errors sometimes occur within DevIL.
+Errors sometimes occur within @code{DevIL}.
 To get the error code of the last error that occurred, call @code{ilGetError} with no parameters.
 To get a human-readable string of an error code, call @code{iluErrorString} with the error code.
 A table of error codes follows:
@@ -1109,8 +1124,8 @@ A table of error codes follows:
 @anchor{file_formats}
 @appendix Supported File Formats
 
-DevIL supports loading and saving of a large number of image formats.
-Table lists the formats DevIL supports sorted according to @code{#define}.
+@code{DevIL} supports loading and saving of a large number of image formats.
+Table lists the formats @code{DevIL} supports sorted according to @code{#define}.
 @c The page should fit into margins since somebody may want to print it...
 @multitable {Graphics Interchange Format} {.pbm, .pgm, } {IL_DOOM_FLAT} {loading?} {saving?}
 	@headitem Format name	@tab Extension	@tab IL @code{#define} @tab Loading?	@tab Saving?
@@ -1153,9 +1168,9 @@ Table lists the formats DevIL supports sorted according to @code{#define}.
 @strong{Exception:} @code{IL_JPG} (IJL) type is not supported by @code{ilLoadF} nor by @code{ilSaveF}. @code{IL_JPG} (libjpeg) is supported by both.
 
 @node Sample program
-@appendix Sample DevIL program
+@appendix Sample @code{DevIL} program
 
-If you are not used to this approach, you may be grateful for a short program demonstrating how to actually use DevIL:
+If you are not used to this approach, you may be grateful for a short program demonstrating how to actually use @code{DevIL}:
 
 @c Generator: GNU source-highlight, by Lorenzo Bettini, http://www.gnu.org/software/src-highlite
 @example
@@ -1164,41 +1179,41 @@ If you are not used to this approach, you may be grateful for a short program de
 
 int @b{main}(int argc, const char * argv[])
 @{
-       ILuint handle, w, h;
-       @i{/* First we initialize the library. */}
-       @i{/*Do not forget that... */}
-       @b{ilInit}();
-       @i{/* We want all images to be loaded in a consistent manner */}
-       @b{ilEnable}(IL_ORIGIN_SET);
-       @i{/* In the next section, we load one image */}
-       @b{ilGenImages}(1, & handle);
-       @b{ilBindImage}(handle);
-       ILboolean loaded = @b{ilLoadImage}(@t{"original_file.jpg"});
-       if (loaded == IL_FALSE)
-          return -1; @i{/* error encountered during loading */}
-       @i{/* Let's spy on it a little bit */}
-       w = @b{ilGetInteger}(IL_IMAGE_WIDTH);    @i{// getting image width}
-       h = @b{ilGetInteger}(IL_IMAGE_HEIGHT);   @i{// and height}
-       @b{printf}(@t{"Our image resolution: %dx%d}@t{\n}@t{"}, w, h);
-       @i{/* how much memory will we need? */}
-       int memory_needed = w * h * 3 * @b{sizeof}(unsigned char);  
-       @i{/* We multiply by 3 here because we want 3 components per pixel */}
-       ILubyte * data = (ILubyte *)@b{malloc}(memory_needed);
-       @i{/* finally get the image data */}
-       @b{ilCopyPixels}(0, 0, 0, w, h, 1, IL_RGB, IL_UNSIGNED_BYTE, data);
-       @i{/* We want to do something with the image, right? */}
-       int i;
-       for(i = 0; i < memory_needed; i++)
-          if(i % 31 == 0) @i{/* vandalise the image */}
-             data[i] = i % 255;
-       @i{/* And maybe we want to save that all... */}
-       @b{ilSetPixels}(0, 0, 0, w, h, 1, IL_RGB, IL_UNSIGNED_BYTE, data);
-       @i{/* and dump them to the disc... */}
-       @b{ilSaveImage}(@t{"our_result.png"});
-       @i{/* Finally, clean the mess! */}
-       @b{ilDeleteImages}(1, & handle);
-       @b{free}(data); data = NULL;
-       @b{return} 0;
+    ILuint handle, w, h;
+    @i{/* First we initialize the library. */}
+    @i{/*Do not forget that... */}
+    @b{ilInit}();
+    @i{/* We want all images to be loaded in a consistent manner */}
+    @b{ilEnable}(IL_ORIGIN_SET);
+    @i{/* In the next section, we load one image */}
+    @b{ilGenImages}(1, & handle);
+    @b{ilBindImage}(handle);
+    ILboolean loaded = @b{ilLoadImage}(@t{"original_file.jpg"});
+    if (loaded == IL_FALSE)
+       return -1; @i{/* error encountered during loading */}
+    @i{/* Let's spy on it a little bit */}
+    w = @b{ilGetInteger}(IL_IMAGE_WIDTH);    @i{// getting image width}
+    h = @b{ilGetInteger}(IL_IMAGE_HEIGHT);   @i{// and height}
+    @b{printf}(@t{"Our image resolution: %dx%d}@t{\n}@t{"}, w, h);
+    @i{/* how much memory will we need? */}
+    int memory_needed = w * h * 3 * @b{sizeof}(unsigned char);  
+    @i{/* We multiply by 3 here because we want 3 components per pixel */}
+    ILubyte * data = (ILubyte *)@b{malloc}(memory_needed);
+    @i{/* finally get the image data */}
+    @b{ilCopyPixels}(0, 0, 0, w, h, 1, IL_RGB, IL_UNSIGNED_BYTE, data);
+    @i{/* We want to do something with the image, right? */}
+    int i;
+    for(i = 0; i < memory_needed; i++)
+       if(i % 31 == 0) @i{/* vandalise the image */}
+          data[i] = i % 255;
+    @i{/* And maybe we want to save that all... */}
+    @b{ilSetPixels}(0, 0, 0, w, h, 1, IL_RGB, IL_UNSIGNED_BYTE, data);
+    @i{/* and dump them to the disc... */}
+    @b{ilSaveImage}(@t{"our_result.png"});
+    @i{/* Finally, clean the mess! */}
+    @b{ilDeleteImages}(1, & handle);
+    @b{free}(data); data = NULL;
+    @b{return} 0;
 @}
 @end example
 
