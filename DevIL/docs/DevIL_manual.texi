@@ -2,6 +2,7 @@
 @c %**start of header
 @setfilename DevIL_manual.info
 @settitle Developer's Image Library manual
+@documentencoding UTF-8
 @c %**end of header
 
 @c QUITE IMPORTANT: This document is revision-controlled.
@@ -13,8 +14,14 @@
 @include version.texi
 
 @copying
-This is @code{DevIL} version @value{VERSION} manual, last updated @value{UPDATED}. 
-Copyright @copyright{} 2008-2009
+This is @code{DevIL @value{VERSION}} manual.
+Last update is from @value{UPDATED}. 
+
+Copyright @copyright{} 2008,2009 Denton Woods, Matěj Týč 
+
+Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.3 or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+A copy of the license is included in the section entitled ``GNU Free Documentation License''.
 @end copying
 
 @titlepage
@@ -29,11 +36,9 @@ Copyright @copyright{} 2008-2009
 @c Output the table of contents at the beginning.
 @contents
 
-@ifnottex
 @node Top
 @top IL manual
 This is a manual describing IL part of @code{DevIL} -- handling images.
-@end ifnottex
 @menu
 * Introduction::     General intro
 * Basic usage::      How to write your first code
@@ -85,14 +90,17 @@ You will need to change some directory settings in MSVC++ to get @code{DevIL} wo
 	@item Click on the Directories tab.
 	@item Under Show directories for, select ``Include files''.
 	@item Click the New button (to the left of the red 'X')
-	@item Type the directory @code{DevIL} is installed in, plus @file{\Include}.  For example, if you installed @code{DevIL} to E:\ImageLib, enter @file{E:\ImageLib\Include}.
+	@item Type the directory @code{DevIL} is installed in, plus @file{\Include}.  
+	For example, if you installed @code{DevIL} to E:\ImageLib, enter @file{E:\ImageLib\Include}.
 	@image{images/devil_msvc_include}
 	@item Under Show directories for, click on ``Library files''.
 	@item Click the New button (to the left of the red 'X').
-	@item Type the directory @code{DevIL} is installed in, plus @file{\Lib}.  For example, if you installed @code{DevIL} to E:\ImageLib, enter @file{E:\ImageLib\Lib}.
+	@item Type the directory @code{DevIL} is installed in, plus @file{\Lib}.  
+	For example, if you installed @code{DevIL} to E:\ImageLib, enter @file{E:\ImageLib\Lib}.
 	@image{images/devil_msvc_lib}
 	@item Click the New button (to the left of the red ‘X').
-	@item Type the directory @code{DevIL} is installed in, plus @file{\Lib\Debug}.  In the previous example, you would enter @file{E:\ImageLib\Lib\Debug}.
+	@item Type the directory @code{DevIL} is installed in, plus @file{\Lib\Debug}.  
+	In the previous example, you would enter @file{E:\ImageLib\Lib\Debug}.
 	@item Choose OK.
 @end enumerate
 
@@ -104,8 +112,8 @@ The header files il.h, ilu.h and ilut.h automatically link the .lib files in via
 To prevent this bug, check for and remove these:
 
 @itemize
-	@item devil.lib, devil-d.lib, ilu.lib, ilu-d.lib, ilut.lib and ilut-d.lib in your project settings (Project – Settings menu).
-	@item devil.lib, devil-d.lib, ilu.lib, ilu-d.lib, ilut.lib and ilut-d.lib in your project's workspace.
+	@item @file{devil.lib}, @file{devil-d.lib}, @file{ilu.lib}, @file{ilu-d.lib}, @file{ilut.lib} and @file{ilut-d.lib} in your project settings (Project – Settings menu).
+	@item @file{devil.lib}, @file{devil-d.lib}, @file{ilu.lib}, @file{ilu-d.lib}, @file{ilut.lib} and @file{ilut-d.lib} in your project's workspace.
 Some people link libraries into their project this way, which really should be discouraged, due to the hardcoded paths.
 @end itemize
 
@@ -395,7 +403,7 @@ ILuint ilSaveL(ILenum Type, ILvoid *Lump, ILuint Size);
 @code{DevIL}'s saving functions are identical to the loading functions, despite the fact that they save images instead of load images.
 
 Typically, the user does not know exactly how large the output image will be.  
-If you pass NULL for @code{Lump} and 0 for @code{Size} to @code{ilSaveL}, @code{ilSaveL} will return the buffer size needed to save an image of @code{Type}.  
+If you pass @code{NULL} for @code{Lump} and 0 for @code{Size} to @code{ilSaveL}, @code{ilSaveL} will return the buffer size needed to save an image of @code{Type}.  
 When a buffer is passed for @code{Lump}, the return value is how many bytes were written to the buffer.
 
 Note that not all formats that have load support have also save support (@pxref{file_formats})
@@ -429,7 +437,7 @@ Common bytes per pixel values are 1, 3 and 4.
 	@item @code{Type}: The type of image data.
 Usually, this will be @code{IL_UNSIGNED_BYTE}, unless you want to utilize multiple bytes per colour channel. @xref{type #defines}, for acceptable type.
 	@item @code{Data}: Mainly for convenience, if you already have image data loaded and ready to put into the newly created image.
-Specifying NULL for this parameter just results in the image having unpredictable image data.
+Specifying @code{NULL} for this parameter just results in the image having unpredictable image data.
 You can specify image data later using @code{ilSetData} or @code{ilSetPixels}.
 @end itemize
 
@@ -450,7 +458,7 @@ Use @code{ilGetData} to get a direct pointer to the current bound image's data p
 Do not ever try to delete this pointer that is returned.
 To get information about the image data, use @code{ilGetInteger}.
 
-@code{ilGetData} will return NULL and set an error of @code{IL_ILLEGAL_OPERATION} if there is no currently bound image.
+@code{ilGetData} will return @code{NULL} and set an error of @code{IL_ILLEGAL_OPERATION} if there is no currently bound image.
  
 @findex ilCopyPixels
 @subsection The Flexible Method

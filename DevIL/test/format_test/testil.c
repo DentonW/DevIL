@@ -1,5 +1,19 @@
 #include <IL/il.h>
 
+/*  This program (testil) is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif /* HAVE_CONFIG_H */
@@ -35,12 +49,6 @@ enum {ACTION_HELP = 0x1, ACTION_VERBOSE = 0x2, ACTION_PRESERVE_TESTFILE = 0x4, A
 enum {EXPECT_EXTENSION = 0x1, EXPECT_QUANTILE = 0x2, EXPECT_FILENAME = 0x4, EXPECT_RESOLUTION = 0x8, EXPECT_IMAGES = 0x10};
 /** What to test for? */
 enum {TEST_NOTHING, TEST_EXTENSION, TEST_IS_TEST_IMAGE, TEST_IMAGES_ARE_SAME};
-
-/*
-int verbose = 0;
-int preserve_testfile = 0;
-double quantile_spec = 0.65;
-*/
 
 int compare_ILubyte (const void * a, const void * b)
 { return ( *(ILubyte * )a - *(ILubyte * )b ); }
@@ -583,8 +591,8 @@ int main(int argc, char ** argv)
 		/* flags */(int)0, 
 		/* bpp */(int)3, 
 		/* resolution */ {603, 300}, 
-		/* quantile spec */ (double)0.70, 
-		/* quantile tresh */ (int)2, 
+		/* quantile spec */ (double)0.80, 
+		/* quantile tresh */ (int)5, 
 		/* integral tresh */ (double)5};
 
 	int to_do = parse_commandline(argc, argv, & params);

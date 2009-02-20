@@ -5,6 +5,20 @@
 #include <IL/il.h>
 #include <IL/ilu.h>
 
+/*  This program (ilur) is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /** What are the classes of types of parameters of ILU functions?
  */
 enum Parameter_types {PARAM_VOID, PARAM_ILUINT, PARAM_ILFLOAT, PARAM_OTHERS};
@@ -55,7 +69,7 @@ void init_strings()
 	ilu_functions[ILU_INVERTALPHA] = (Ilu_function){ "iluInvertAlpha", PARAM_VOID, & iluInvertAlpha };
 	ilu_functions[ILU_MIRROR] = (Ilu_function){ "iluMirror", PARAM_VOID, & iluMirror };
 	ilu_functions[ILU_NEGATIVE] = (Ilu_function){ "iluNegative", PARAM_VOID, & iluNegative };
-	ilu_functions[ILU_NOISIFY] = (Ilu_function){ "iluNoisify", PARAM_OTHERS, & iluNoisify };
+	ilu_functions[ILU_NOISIFY] = (Ilu_function){ "iluNoisify", PARAM_ILFLOAT, & iluNoisify };
 	ilu_functions[ILU_PIXELIZE] = (Ilu_function){ "iluPixelize", PARAM_ILUINT, & iluPixelize };
 	ilu_functions[ILU_REPLACECOLOUR] = (Ilu_function){ "iluReplaceColour", PARAM_OTHERS, & iluReplaceColour };
 	ilu_functions[ILU_ROTATE] = (Ilu_function){ "iluRotate", PARAM_ILFLOAT, & iluRotate };
