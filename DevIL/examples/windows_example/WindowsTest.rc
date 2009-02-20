@@ -198,4 +198,4 @@ END
 // Icon resources
 //
 LANGUAGE LANG_ENGLISH, SUBLANG_DEFAULT
-IDI_ICON1          ICON           "./resources/OpenIL.ico"
+IDI_ICON1          ICON           "./resources/DevIL Logo.ico"

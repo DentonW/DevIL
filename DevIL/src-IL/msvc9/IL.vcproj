@@ -2461,6 +2461,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\src\il_texture.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\il_tiff.c"
 					>
 					<FileConfiguration

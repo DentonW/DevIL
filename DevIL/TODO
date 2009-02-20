@@ -30,10 +30,7 @@ By next release:
 
 Easier:
 - Make DXT1 decompression function that does not do alpha.
-- Add DICOM calls to il_io.c.
-- Add ROT calls to il_io.c.
 - Implement ilIsValid calls for ROT.
-- Keep ROT DXT data.
 - Make sure ilFixImage is called everytime something is loaded.
 - Add BLP loading of alpha sizes other than 0 and 1 for BLP2 RAW.
 - Add BLP loading of mipmaps for all other types (jpeg will be the hardest).

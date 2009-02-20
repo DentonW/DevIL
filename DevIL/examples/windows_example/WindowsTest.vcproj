@@ -1559,7 +1559,7 @@
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
 			<File
-				RelativePath="resources\OpenIL.ico"
+				RelativePath=".\resources\DevIL Logo.ico"
 				>
 			</File>
 			<File

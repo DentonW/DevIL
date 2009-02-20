@@ -1,3 +1,7 @@
+2009-02-19 Denton Woods <doomwiz@users.sf.net>
+	* windows_example\resources: Added DevIL Logo.ico, removed OpenIL Logo.ico.
+	* windows_example\resource.h: Changed to use DevIL Logo.ico.
+
 2009-02-18 Denton Woods <doomwiz@users.sf.net>
 	* configure.ac: Added descriptions of more image formats.
 	* il_ftx.c (iLoadFtxInternal): Changed to load all FTX images as RGBA.
