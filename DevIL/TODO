@@ -6,6 +6,7 @@ Denton:
 
 Bugs:
 - Conversion to IL_ALPHA seems to be crashing (WindowsTest.cpp).
+- Conversion to IL_ALPHA can be flipped?
 
 
 By next release:

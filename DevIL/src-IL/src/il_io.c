@@ -2195,8 +2195,6 @@ ILuint ILAPIENTRY ilSaveF(ILenum Type, ILHANDLE File)
 	\return Boolean value of failure or success.  Returns IL_FALSE if saving failed.*/
 ILuint ILAPIENTRY ilSaveL(ILenum Type, void *Lump, ILuint Size)
 {
-	ILboolean Ret;
-
 	if (Lump == NULL) {
 		if (Size != 0) {
 			ilSetError(IL_INVALID_PARAM);
@@ -2212,94 +2210,77 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, void *Lump, ILuint Size)
 	{
 		#ifndef IL_NO_BMP
 		case IL_BMP:
-			Ret = ilSaveBmpL(Lump, Size);
-			break;
+			return ilSaveBmpL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_EXR
 		case IL_EXR:
-			Ret = ilSaveExrL(Lump, Size);
-			break;
+			return ilSaveExrL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_HDR
 		case IL_HDR:
-			Ret = ilSaveHdrL(Lump, Size);
-			break;
+			return ilSaveHdrL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_JP2
 		case IL_JP2:
-			Ret = ilSaveJp2L(Lump, Size);
-			break;
+			return ilSaveJp2L(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_JPG
 		case IL_JPG:
-			Ret = ilSaveJpegL(Lump, Size);
-			break;
+			return ilSaveJpegL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_PNG
 		case IL_PNG:
-			Ret = ilSavePngL(Lump, Size);
-			break;
+			return ilSavePngL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_PNM
 		case IL_PNM:
-			Ret = ilSavePnmL(Lump, Size);
-			break;
+			return ilSavePnmL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_PSD
 		case IL_PSD:
-			Ret = ilSavePsdL(Lump, Size);
-			break;
+			return ilSavePsdL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_RAW
 		case IL_RAW:
-			Ret = ilSaveRawL(Lump, Size);
-			break;
+			return ilSaveRawL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_SGI
 		case IL_SGI:
-			Ret = ilSaveSgiL(Lump, Size);
-			break;
+			return ilSaveSgiL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_TGA
 		case IL_TGA:
-			Ret = ilSaveTargaL(Lump, Size);
-			break;
+			return ilSaveTargaL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_DDS
 		case IL_DDS:
-			Ret = ilSaveDdsL(Lump, Size);
-			break;
+			return ilSaveDdsL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_WBMP
 		case IL_WBMP:
-			Ret = ilSaveWbmpL(Lump, Size);
-			break;
+			return ilSaveWbmpL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_TIF
 		case IL_TIF:
-			Ret = ilSaveTiffL(Lump, Size);
-			break;
+			return ilSaveTiffL(Lump, Size);
 		#endif
-
-		default:
-			ilSetError(IL_INVALID_ENUM);
-			return 0;
 	}
 
-	return Ret;
+	ilSetError(IL_INVALID_ENUM);
+	return 0;
 }
 
 
