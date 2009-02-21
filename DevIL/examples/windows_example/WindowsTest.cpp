@@ -693,6 +693,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					elapsed = cur_elapsed - last_elapsed;
 					last_elapsed = cur_elapsed;
 
+					iluBuildMipmaps();
 
 					//ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
 					//ilEnable(IL_NVIDIA_COMPRESS);
@@ -790,6 +791,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						CreateGDI();
 					}
 					return (0L);
+
+				/*case ID_EDIT_VIEWFACE:
+					if (DialogBox(hInstance, MAKEINTRESOURCE(IDD_DIALOG_FILTER),
+						hWnd, FilterDlgProc) == TRUE) {
+						ilActiveFace(FilterParamInt);
+						ilutRenderer(ILUT_WIN32);
+						ResizeWin();
+						CreateGDI();
+					}
+					return (0L);*/
 
 				case ID_EDIT_VIEWMIPMAP:
 					if (DialogBox(hInstance, MAKEINTRESOURCE(IDD_DIALOG_FILTER),

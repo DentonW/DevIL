@@ -16,38 +16,31 @@
 #include "ilu_states.h"
 
 
-ILimage *Original;  // So we can increment NumMips
-
-
-// Note:  If any image is a non-power-of-2 image, it will automatically be
-//	converted to a power-of-2 image by iluScaleImage, which is likely to
-//	uglify the image. =]
+//ILimage *Original;  // So we can increment NumMips
 
 
 // @TODO:  Check for 1 bpp textures!
 
 
-// Currently changes all textures to powers of 2...should we change?
+// Note: No longer changes all textures to powers of 2.
 ILboolean iluBuild2DMipmaps()
 {
-	ILimage		*Temp;
 	ILboolean	Resized = IL_FALSE;
-	ILuint		Width, Height;
-	ILenum		OldFilter;
 
-	iluCurImage = Original = ilGetCurImage();
+	iluCurImage = /*Original =*/ ilGetCurImage();
 	if (Original == NULL) {
 		ilSetError(ILU_ILLEGAL_OPERATION);
 		return IL_FALSE;
-	}
+	}*/
 
 	// Get rid of any existing mipmaps.
-	if (Original->Mipmaps) {
-		ilCloseImage(Original->Mipmaps);
-		Original->Mipmaps = NULL;
+	if (iluCurImage->Mipmaps) {
+		ilCloseImage(iluCurImage->Mipmaps);
+		iluCurImage->Mipmaps = NULL;
 	}
 
-	Width = ilNextPower2(iluCurImage->Width);
+	// Removed 02/22/2009.
+	/*Width = ilNextPower2(iluCurImage->Width);
 	Height = ilNextPower2(iluCurImage->Height);
 	if (iluCurImage->Width != Width || iluCurImage->Height != Height) {
 		Resized = IL_TRUE;
@@ -58,17 +51,17 @@ ILboolean iluBuild2DMipmaps()
 		iluScale(Width, Height, 1);
 		iluImageParameter(ILU_FILTER, OldFilter);
 		iluCurImage = ilGetCurImage();
-	}
+	}*/
 
 	CurMipMap = NULL;
-	iBuild2DMipmaps_(iluCurImage->Width >> 1, iluCurImage->Height >> 1);
+	iBuild2DMipmaps_(iluCurImage, iluCurImage->Width >> 1, iluCurImage->Height >> 1);
 
-	if (Resized) {
+	/*if (Resized) {
 		Original->Mipmaps = iluCurImage->Mipmaps;
 		iluCurImage->Mipmaps = NULL;
 		ilCloseImage(iluCurImage);
 		ilSetCurImage(Original);
-	}
+	}*/
 
 	return IL_TRUE;
 }
@@ -254,108 +247,31 @@ ILboolean iBuild1DMipmapsVertical_(ILuint Height)
 }
 
 
-ILboolean iBuild2DMipmaps_(ILuint Width, ILuint Height)
+ILboolean iBuild2DMipmaps_(ILimage *Parent, ILuint Width, ILuint Height)
 {
-	ILimage *MipMap, *Src;
-	ILuint	x1 = 0, x2 = 0, y1 = 0, y2 = 0, c;
+	ILuint	x1 = 0, x2 = 0, y1 = 0, y2 = 0;
 
-	if (CurMipMap) {
-		if (CurMipMap->Width == 1 && CurMipMap->Height == 1) {  // Already at the last mipmap
-			CurMipMap->Mipmaps = NULL;  // Terminate the list
-			return IL_TRUE;
-		}
-
-		if (/*CurMipMap->*/Height == 1) {
-			return iBuild1DMipmaps_(Width);
-		}
-
-		if (/*CurMipMap->*/Width == 1) {
-			return iBuild1DMipmapsVertical_(Height);
-		}
+	if (Parent->Width == 1 && Parent->Height == 1) {  // Already at the last mipmap
+		return IL_TRUE;
 	}
-	else if (iluCurImage->Width <= 1 && iluCurImage->Height <= 1) {  // 8-9-2001 - Not sure...
-		ilSetError(ILU_ILLEGAL_OPERATION);
-		return IL_FALSE;
+
+	if (Height == 1 || Height == 0) {
+		return iBuild1DMipmaps_(Width);
+	}
+	else if (Width == 1 || Width == 0) {
+		return iBuild1DMipmapsVertical_(Height);
 	}
 
 	if (Height == 0 && Width == 0) {
 		ilSetError(ILU_INTERNAL_ERROR);
 		return IL_FALSE;
 	}
-	// 8-9-2001 - Should these two if statements read == 0 || == 1?
-	if (Height == 0) {
-		return iBuild1DMipmaps_(Width);
-	}
-	if (Width == 0) {
-		return iBuild1DMipmapsVertical_(Height);  // 8-9-2001
-	}
 
-	MipMap = ilNewImage(Width, Height, 1, iluCurImage->Bpp, iluCurImage->Bpc);
-	if (MipMap == NULL) {
-		if (CurMipMap != NULL)
-			CurMipMap->Mipmaps = NULL;
+	Parent->Mipmaps = iluScale_(Parent, Width, Height, 1);
+	if (Parent->Mipmaps == NULL)
 		return IL_FALSE;
-	}
 
-	// Copies attributes
-	MipMap->Origin = iluCurImage->Origin;  // 8-11-2001
-	MipMap->Format = iluCurImage->Format;
-	MipMap->Type = iluCurImage->Type;
-	MipMap->Pal.PalSize = iluCurImage->Pal.PalSize;
-	MipMap->Pal.PalType = iluCurImage->Pal.PalType;
-	if (iluCurImage->Pal.Palette && MipMap->Pal.PalSize > 0 && MipMap->Pal.PalType != IL_PAL_NONE) {
-		MipMap->Pal.Palette = (ILubyte*)ialloc(iluCurImage->Pal.PalSize);
-		if (MipMap->Pal.Palette == NULL) {
-			ilCloseImage(MipMap);
-			return IL_FALSE;
-		}
-		memcpy(MipMap->Pal.Palette, iluCurImage->Pal.Palette, MipMap->Pal.PalSize);
-	}
-
-	if (CurMipMap == NULL) {  // First mipmap
-		iluCurImage->Mipmaps = MipMap;
-		Src = iluCurImage;
-	}
-	else {
-		CurMipMap->Mipmaps = MipMap;
-		Src = CurMipMap;
-	}
-
-	if (MipMap->Type == IL_FLOAT) {
-		ILfloat *DestFData = (ILfloat*)MipMap->Data;
-		ILfloat *SrcFData = (ILfloat*)Src->Data;
-		ILuint DestStride = MipMap->Bps / 4;
-		ILuint SrcStride = Src->Bps / 4;
-		for (y1 = 0; y1 < Height; y1++, y2 += 2) {
-			x1 = 0;  x2 = 0;
-			for (; x1 < Width; x1++, x2 += 2) {
-				for (c = 0; c < MipMap->Bpp; c++) {
-					DestFData[y1 * DestStride + x1 * MipMap->Bpp + c] = (
-						SrcFData[y2 * SrcStride + x2 * MipMap->Bpp + c] +
-						SrcFData[y2 * SrcStride + (x2 + 1) * MipMap->Bpp + c] +
-						SrcFData[(y2 + 1) * SrcStride + x2 * MipMap->Bpp + c] +
-						SrcFData[(y2 + 1) * SrcStride + (x2 + 1) * MipMap->Bpp + c]) * .25f;
-				}
-			}
-		}
-	}
-	else {
-		for (y1 = 0; y1 < Height; y1++, y2 += 2) {
-			x1 = 0;  x2 = 0;
-			for (; x1 < Width; x1++, x2 += 2) {
-				for (c = 0; c < MipMap->Bpp; c++) {
-					MipMap->Data[y1 * MipMap->Bps + x1 * MipMap->Bpp + c] = (
-						Src->Data[y2 * Src->Bps + x2 * MipMap->Bpp + c] +
-						Src->Data[y2 * Src->Bps + (x2 + 1) * MipMap->Bpp + c] +
-						Src->Data[(y2 + 1) * Src->Bps + x2 * MipMap->Bpp + c] +
-						Src->Data[(y2 + 1) * Src->Bps + (x2 + 1) * MipMap->Bpp + c]) >> 2;
-				}
-			}
-		}
-	}
-
-	CurMipMap = MipMap;
-	iBuild2DMipmaps_(MipMap->Width >> 1, MipMap->Height >> 1);
+	iBuild2DMipmaps_(Parent->Mipmaps, Parent->Mipmaps->Width >> 1, Parent->Mipmaps->Height >> 1);
 
 	return IL_TRUE;
 }
@@ -374,7 +290,7 @@ ILboolean iBuild3DMipmaps_(ILuint Width, ILuint Height, ILuint Depth)
 		}
 
 		if (CurMipMap->Depth == 1) {
-			return iBuild2DMipmaps_(Width, Height);
+			return iBuild2DMipmaps_(CurMipMap, Width, Height);
 		}
 		if (CurMipMap->Height == 1) {
 			return iBuild3DMipmapsHorizontal_(Width, Depth);
@@ -394,7 +310,7 @@ ILboolean iBuild3DMipmaps_(ILuint Width, ILuint Height, ILuint Depth)
 		return IL_FALSE;
 	}
 	if (Depth == 0) {
-		return iBuild2DMipmaps_(Width, Height);
+		return iBuild2DMipmaps_(CurMipMap, Width, Height);
 	}
 	if (Height == 0) {
 		return iBuild3DMipmapsHorizontal_(Width, Depth);

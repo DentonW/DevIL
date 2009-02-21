@@ -18,7 +18,7 @@
 
 ILboolean	iBuild1DMipmaps_(ILuint Width);
 ILboolean	iBuild1DMipmapsVertical_(ILuint Height);
-ILboolean	iBuild2DMipmaps_(ILuint Width, ILuint Height);
+ILboolean	iBuild2DMipmaps_(ILimage *Parent, ILuint Width, ILuint Height);
 ILboolean	iBuild3DMipmapsVertical_(ILuint Height, ILuint Depth);
 ILboolean	iBuild3DMipmapsHorizontal_(ILuint Width, ILuint Depth);
 ILboolean	iBuild3DMipmaps_(ILuint Width, ILuint Height, ILuint Depth);

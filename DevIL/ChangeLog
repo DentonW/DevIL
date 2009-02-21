@@ -1,4 +1,7 @@
-2009-02-21 Matěj Týč <bubla@users.sf.net>
+2009-02-21 Denton Woods <doomwiz@users.sf.net>
+	* ilu_mipmap.c: Redid mipmap functions to use iluScale functions instead of nearest.
+
+2009-02-20 Matěj Týč <bubla@users.sf.net>
 	* docs/Makefile.am,docs/Devil_manual.texi: Added new ILU images to the
 	manual, set the manual license to GFDL.
 	* testil, ilur: Licensed under GPL v3
