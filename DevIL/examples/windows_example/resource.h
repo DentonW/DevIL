@@ -1523,6 +1523,7 @@
 #define ID_FILE_PROPERTIES              32815
 #define ID_CONVERT_LUMINANCEALPHA       32816
 #define ID_EFFECTS_FILTERS_SCALEBOX     32817
+#define ID_EDIT_VIEWFACE                32818
 #define ID_EDIT_NEXT                    40000
 #define ID_EDIT_PREV                    40001
 #define SC_SIZE                         0xF000

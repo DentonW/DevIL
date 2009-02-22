@@ -631,11 +631,11 @@ void CompressToRXGB(ILimage *Image, ILushort** xgb, ILubyte** r)
 ILuint Compress(ILimage *Image, ILenum DXTCFormat)
 {
 	ILushort	*Data, Block[16], ex0, ex1, *Runner16, t0, t1;
-	ILuint		x, y, z, i, BitMask, DXTCSize;//, Rms1, Rms2;
+	ILuint		x, y, z, i, BitMask;//, DXTCSize, Rms1, Rms2;
 	ILubyte		*Alpha, AlphaBlock[16], AlphaBitMask[6], /*AlphaOut[16],*/ a0, a1;
 	ILboolean	HasAlpha;
 	ILuint		Count = 0;
-	ILubyte		*Data3Dc, *Runner8, *ByteData, *BlockData;
+	ILubyte		*Data3Dc, *Runner8;/*, *ByteData, *BlockData*/;
 
 	if (DXTCFormat == IL_3DC) {
 		Data3Dc = CompressTo88(Image);

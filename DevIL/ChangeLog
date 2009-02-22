@@ -1,3 +1,9 @@
+2009-02-22 Denton Woods <doomwiz@users.sf.net>
+	* il_internal.h: Added IL_NO_EXTLIBS define.
+	* il_dds-save.c: Removed unused variables.
+	* ilu_mipmap.c: Finished redoing all mipmap functions.
+	* ilu_mipmap.h: Removed this file.
+
 2009-02-21 Denton Woods <doomwiz@users.sf.net>
 	* ilu_mipmap.c: Redid mipmap functions to use iluScale functions instead of nearest.
 

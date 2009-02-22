@@ -792,7 +792,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					}
 					return (0L);
 
-				/*case ID_EDIT_VIEWFACE:
+				case ID_EDIT_VIEWFACE:
 					if (DialogBox(hInstance, MAKEINTRESOURCE(IDD_DIALOG_FILTER),
 						hWnd, FilterDlgProc) == TRUE) {
 						ilActiveFace(FilterParamInt);
@@ -800,7 +800,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						ResizeWin();
 						CreateGDI();
 					}
-					return (0L);*/
+					return (0L);
 
 				case ID_EDIT_VIEWMIPMAP:
 					if (DialogBox(hInstance, MAKEINTRESOURCE(IDD_DIALOG_FILTER),

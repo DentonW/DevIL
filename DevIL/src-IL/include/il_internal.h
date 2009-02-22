@@ -58,6 +58,21 @@ extern "C" {
 	#define IL_NO_WAL
 #endif//IL_NO_GAMES
 
+// If we want to compile without support for formats supported by external libraries,
+//  this define will remove them all.
+#ifdef IL_NO_EXTLIBS
+	#define IL_NO_EXR
+	#define IL_NO_JP2
+	#define IL_NO_JPG
+	#define IL_NO_LCMS
+	#define IL_NO_MNG
+	#define IL_NO_PNG
+	#define IL_NO_TIF
+	#define IL_NO_WDP
+	#undef IL_USE_DXTC_NVIDIA
+	#undef IL_USE_DXTC_SQUISH
+#endif//IL_NO_EXTLIBS
+
 // Windows-specific
 #ifdef _WIN32
 	#ifdef _MSC_VER

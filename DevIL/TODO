@@ -7,7 +7,6 @@ Denton:
 Bugs:
 - Conversion to IL_ALPHA seems to be crashing (WindowsTest.cpp).
 - Conversion to IL_ALPHA can be flipped?
-- Make ilu_mipmaps.c use bilinear filtering.
 
 
 By next release:
@@ -28,6 +27,7 @@ By next release:
 - Update http://en.wikipedia.org/wiki/Tagged_Image_File_Format name as above.
 - Same with MNG
 - Update Targa extensions in manual.
+- Update license page on the website.
 
 
 Easier:
