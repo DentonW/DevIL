@@ -167,6 +167,9 @@ More involved:
   http://www.ddj.com/architect/184405586
 - Shear rotation: http://www.codeproject.com/KB/graphics/rotatebyshear.aspx
 - Icon Library (.icl) support.
+- Test all DDS types.
+- New (DX10) DDS types
+- Gamecube BMD and BTI support (http://www.amnoid.de/gc/)
 
 
 Lots of work:
