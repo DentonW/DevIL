@@ -1,3 +1,7 @@
+2009-02-23 Denton Woods <doomwiz@users.sf.net>
+	* il_pnm.c: Fixed bug at https://sourceforge.net/forum/message.php?msg_id=6491617 -
+	  Changed order of lines 448 and 450.
+
 2009-02-22 Denton Woods <doomwiz@users.sf.net>
 	* il_internal.h: Added IL_NO_EXTLIBS define.
 	* il_dds-save.c: Removed unused variables.

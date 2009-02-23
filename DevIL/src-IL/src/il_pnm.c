@@ -445,9 +445,9 @@ ILboolean iGetWord(ILboolean final)
 		}
 		if (Current == IL_EOF)
 			return IL_FALSE;
+		SmallBuff[WordPos] = 0; // 08-17-2008 - was NULL, changed to avoid warning
 		if (final == IL_TRUE)
 	        break;
-		SmallBuff[WordPos] = 0; // 08-17-2008 - was NULL, changed to avoid warning
 
 		if (!Looping)
 			break;
