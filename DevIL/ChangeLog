@@ -1,5 +1,7 @@
 2009-02-24 Denton Woods <doomwiz@users.sf.net>
 	* vc9 Unicode projects: Changed settings to use x64 and x86 directories for .obj files.
+	* test/in: Removed this directory.
+	* Added "Test Images" to SVN.
 
 2009-02-23 Denton Woods <doomwiz@users.sf.net>
 	* il_pnm.c: Fixed bug at https://sourceforge.net/forum/message.php?msg_id=6491617 -
