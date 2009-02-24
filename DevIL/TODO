@@ -84,6 +84,8 @@ Easier:
 - Get rid of globals in il_dds.c and ilu_scale2d.c.
 - Make ilApplyPal also work for file streams and lumps.
 - Make a version of ilApplyPal where a palette buffer and palette type are specified.
+- Renormalize FITS and DICOM files (make it an option?).
+- Add scaling functions to IL (and wrappers in ILU).
 
 
 More involved:
