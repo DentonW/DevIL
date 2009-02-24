@@ -20,7 +20,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\../../lib/debug/unicode"
+			OutputDirectory="../../lib/vc9/x86/unicode/debug/"
 			IntermediateDirectory="Debug"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
@@ -58,9 +58,9 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				PrecompiledHeaderFile=".\../src/obj/debug/IL.pch"
-				AssemblerListingLocation=".\../src/obj/debug/"
-				ObjectFile=".\../src/obj/debug/"
-				ProgramDataBaseFileName=".\../src/obj/debug/"
+				AssemblerListingLocation="../src/obj/x86/unicode/debug/"
+				ObjectFile="../src/obj/x86/unicode/debug/"
+				ProgramDataBaseFileName="../src/obj/x86/unicode/debug/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
@@ -121,7 +121,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory=".\../../lib/debug/unicode"
+			OutputDirectory="../../lib/vc9/x64/unicode/debug/"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
@@ -159,9 +159,9 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				PrecompiledHeaderFile=".\../src/obj/debug/IL.pch"
-				AssemblerListingLocation=".\../src/obj/debug/"
-				ObjectFile=".\../src/obj/debug/"
-				ProgramDataBaseFileName=".\../src/obj/debug/"
+				AssemblerListingLocation="../src/obj/x64/unicode/debug/"
+				ObjectFile="../src/obj/x64/unicode/debug/"
+				ProgramDataBaseFileName="../src/obj/x64/unicode/debug/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -222,7 +222,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\../../lib/unicode"
+			OutputDirectory="../../lib/vc9/x86/unicode/"
 			IntermediateDirectory="Release"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
@@ -261,9 +261,9 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				PrecompiledHeaderFile=".\../src/obj/IL.pch"
-				AssemblerListingLocation=".\../src/obj/"
-				ObjectFile=".\../src/obj/"
-				ProgramDataBaseFileName=".\../src/obj/"
+				AssemblerListingLocation="../src/obj/x86/unicode/"
+				ObjectFile="../src/obj/x86/unicode/"
+				ProgramDataBaseFileName="../src/obj/x86/unicode/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>
@@ -324,7 +324,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory=".\../../lib/unicode"
+			OutputDirectory="../../lib/vc9/x64/unicode/"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
@@ -363,9 +363,9 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				PrecompiledHeaderFile=".\../src/obj/IL.pch"
-				AssemblerListingLocation=".\../src/obj/"
-				ObjectFile=".\../src/obj/"
-				ProgramDataBaseFileName=".\../src/obj/"
+				AssemblerListingLocation="../src/obj/x64/unicode/"
+				ObjectFile="../src/obj/x64/unicode/"
+				ProgramDataBaseFileName="../src/obj/x64/unicode/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>
@@ -385,7 +385,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/ignore:4197"
 				AdditionalDependencies="comdlg32.lib user32.lib advapi32.lib gdi32.lib shell32.lib"
-				OutputFile="../../lib/vc9/x64/unicode/debug/DevIL.dll"
+				OutputFile="../../lib/vc9/x64/unicode/DevIL.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../projects/msvc/extlibs"
