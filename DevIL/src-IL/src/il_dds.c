@@ -219,8 +219,8 @@ ILubyte iCompFormatToBpp(ILenum Format)
 		return 3;
 	else if (Format == PF_ATI1N)
 		return 1;
-	else if (Format == PF_R16F)
-		return 2;
+	//else if (Format == PF_R16F)
+	//	return 2;
 	else if (Format == PF_A16B16G16R16 || Format == PF_A16B16G16R16F
 		|| Format == PF_G32R32F)
 		return 8;
@@ -236,7 +236,7 @@ ILubyte iCompFormatToBpc(ILenum Format)
 	if (Format == PF_R16F || Format == PF_G16R16F || Format == PF_A16B16G16R16F)
 		//DevIL has no internal half type, so these formats are converted to 32 bits
 		return 4;
-	else if (Format == PF_R32F || Format == PF_G32R32F || Format == PF_A32B32G32R32F)
+	else if (Format == PF_R32F || Format == PF_R16F || Format == PF_G32R32F || Format == PF_A32B32G32R32F)
 		return 4;
 	else if(Format == PF_A16B16G16R16)
 		return 2;
@@ -249,10 +249,12 @@ ILubyte iCompFormatToChannelCount(ILenum Format)
 {
 	if (Format == PF_RGB || Format == PF_3DC || Format == PF_RXGB)
 		return 3;
-	else if (Format == PF_LUMINANCE || Format == PF_R16F || Format == PF_R32F || Format == PF_ATI1N)
+	else if (Format == PF_LUMINANCE || /*Format == PF_R16F || Format == PF_R32F ||*/ Format == PF_ATI1N)
 		return 1;
-	else if (Format == PF_LUMINANCE_ALPHA || Format == PF_G16R16F || Format == PF_G32R32F)
+	else if (Format == PF_LUMINANCE_ALPHA /*|| Format == PF_G16R16F || Format == PF_G32R32F*/)
 		return 2;
+	else if (Format == PF_G16R16F || Format == PF_G32R32F || Format == PF_R32F || Format == PF_R16F)
+		return 3;
 	else //if(Format == PF_ARGB || dxt)
 		return 4;
 }
@@ -1645,19 +1647,73 @@ ILboolean iConvFloat16ToFloat32(ILuint* dest, ILushort* src, ILuint size)
 }
 
 
+// Same as iConvFloat16ToFloat32, but we have to set the blue channel to 1.0f.
+//  The destination format is RGB, and the source is R16G16 (little endian).
+ILboolean iConvG16R16ToFloat32(ILuint* dest, ILushort* src, ILuint size)
+{
+	ILuint i;
+	for (i = 0; i < size; i += 3) {
+		//float: 1 sign bit, 8 exponent bits, 23 mantissa bits
+		//half: 1 sign bit, 5 exponent bits, 10 mantissa bits
+		*dest++ = halfToFloat(*src++);
+		*dest++ = halfToFloat(*src++);
+		*((ILfloat*)dest++) = 1.0f;
+	}
+
+	return IL_TRUE;
+}
+
+
+// Same as iConvFloat16ToFloat32, but we have to set the green and blue channels
+//  to 1.0f.  The destination format is RGB, and the source is R16.
+ILboolean iConvR16ToFloat32(ILuint* dest, ILushort* src, ILuint size)
+{
+	ILuint i;
+	for (i = 0; i < size; i += 3) {
+		//float: 1 sign bit, 8 exponent bits, 23 mantissa bits
+		//half: 1 sign bit, 5 exponent bits, 10 mantissa bits
+		*dest++ = halfToFloat(*src++);
+		*((ILfloat*)dest++) = 1.0f;
+		*((ILfloat*)dest++) = 1.0f;
+	}
+
+	return IL_TRUE;
+}
+
+
 ILboolean DecompressFloat(ILuint lCompFormat)
 {
+	ILuint i, j, Size;
+
 	switch (lCompFormat)
 	{
-		case PF_R32F:
-		case PF_G32R32F:
-		case PF_A32B32G32R32F:
+		case PF_R32F:  // Red float, green = blue = max
+			Size = Image->Width * Image->Height * Image->Depth * 3;
+			for (i = 0, j = 0; i < Size; i += 3, j++) {
+				((ILfloat*)Image->Data)[i] = ((ILfloat*)CompData)[j];
+				((ILfloat*)Image->Data)[i+1] = 1.0f;
+				((ILfloat*)Image->Data)[i+2] = 1.0f;
+			}
+			return IL_TRUE;
+		case PF_A32B32G32R32F:  // Direct copy of float RGBA data
 			memcpy(Image->Data, CompData, Image->SizeOfData);
 			return IL_TRUE;
-		case PF_R16F:
-		case PF_G16R16F:
-		case PF_A16B16G16R16F:
+		case PF_G32R32F:  // Red float, green float, blue = max
+			Size = Image->Width * Image->Height * Image->Depth * 3;
+			for (i = 0, j = 0; i < Size; i += 3, j += 2) {
+				((ILfloat*)Image->Data)[i] = ((ILfloat*)CompData)[j];
+				((ILfloat*)Image->Data)[i+1] = ((ILfloat*)CompData)[j+1];
+				((ILfloat*)Image->Data)[i+2] = 1.0f;
+			}
+			return IL_TRUE;
+		case PF_R16F:  // Red float, green = blue = max
+			return iConvR16ToFloat32((ILuint*)Image->Data, (ILushort*)CompData,
+				Image->Width * Image->Height * Image->Depth * Image->Bpp);
+		case PF_A16B16G16R16F:  // Just convert from half to float.
 			return iConvFloat16ToFloat32((ILuint*)Image->Data, (ILushort*)CompData,
+				Image->Width * Image->Height * Image->Depth * Image->Bpp);
+		case PF_G16R16F:  // Convert from half to float, set blue = max.
+			return iConvG16R16ToFloat32((ILuint*)Image->Data, (ILushort*)CompData,
 				Image->Width * Image->Height * Image->Depth * Image->Bpp);
 		default:
 			return IL_FALSE;
