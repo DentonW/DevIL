@@ -213,8 +213,8 @@ ILimage *iluScale2DBilinear_(ILimage *Image, ILimage *Scaled, ILuint Width, ILui
 			for (y = 0; y < Height; y++) {
 				for (x = 0; x < Width; x++) {
 					// Calculate where we want to choose pixels from in our source image.
-					SrcX = (ILfloat)x / ScaleX;
-					SrcY = (ILfloat)y / ScaleY;
+					SrcX = (ILfloat)x / (ILfloat)ScaleX;
+					SrcY = (ILfloat)y / (ILfloat)ScaleY;
 					// Integer part of SrcX and SrcY
 					iSrcX = (ILuint)floor(SrcX);
 					iSrcY = (ILuint)floor(SrcY);
@@ -248,8 +248,8 @@ ILimage *iluScale2DBilinear_(ILimage *Image, ILimage *Scaled, ILuint Width, ILui
 						lrOff = iSrcYPlus1 * Image->Bps + iSrcXPlus1 * Image->Bpp + c;
 
 						// ...and then we do the actual interpolation here.
-						Scaled->Data[y * Scaled->Bps + x * Scaled->Bpp + c] =
-							ul * Image->Data[ulOff] + ll * Image->Data[llOff] + ur * Image->Data[urOff] + lr * Image->Data[lrOff];
+						Scaled->Data[y * Scaled->Bps + x * Scaled->Bpp + c] = (ILubyte)(
+							ul * Image->Data[ulOff] + ll * Image->Data[llOff] + ur * Image->Data[urOff] + lr * Image->Data[lrOff]);
 					}
 				}
 			}

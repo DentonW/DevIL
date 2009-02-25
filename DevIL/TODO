@@ -86,6 +86,7 @@ Easier:
 - Make a version of ilApplyPal where a palette buffer and palette type are specified.
 - Renormalize FITS and DICOM files (make it an option?).
 - Add scaling functions to IL (and wrappers in ILU).
+- Fix DXT2 and DXT4 loading.
 
 
 More involved:
