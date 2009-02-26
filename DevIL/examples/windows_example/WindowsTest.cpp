@@ -405,6 +405,68 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				CreateGDI();
 			}
 
+			if (wParam == '0') {
+				ilBindImage(Undos[0]);  // @TODO: Implement undos better with this.
+				ilutRenderer(ILUT_WIN32);
+				ResizeWin();
+				CreateGDI();
+			}
+
+			if (wParam == '1') {
+				ilActiveMipmap(1);
+				ilutRenderer(ILUT_WIN32);
+				ResizeWin();
+				CreateGDI();
+			}
+			else if (wParam == '2') {
+				ilActiveMipmap(2);
+				ilutRenderer(ILUT_WIN32);
+				ResizeWin();
+				CreateGDI();
+			}
+			else if (wParam == '3') {
+				ilActiveMipmap(3);
+				ilutRenderer(ILUT_WIN32);
+				ResizeWin();
+				CreateGDI();
+			}
+			else if (wParam == '4') {
+				ilActiveMipmap(4);
+				ilutRenderer(ILUT_WIN32);
+				ResizeWin();
+				CreateGDI();
+			}
+			else if (wParam == '5') {
+				ilActiveMipmap(5);
+				ilutRenderer(ILUT_WIN32);
+				ResizeWin();
+				CreateGDI();
+			}
+			else if (wParam == '6') {
+				ilActiveMipmap(6);
+				ilutRenderer(ILUT_WIN32);
+				ResizeWin();
+				CreateGDI();
+			}
+			else if (wParam == '7') {
+				ilActiveMipmap(7);
+				ilutRenderer(ILUT_WIN32);
+				ResizeWin();
+				CreateGDI();
+			}
+			else if (wParam == '8') {
+				ilActiveMipmap(8);
+				ilutRenderer(ILUT_WIN32);
+				ResizeWin();
+				CreateGDI();
+			}
+			else if (wParam == '9') {
+				ilActiveMipmap(9);
+				ilutRenderer(ILUT_WIN32);
+				ResizeWin();
+				CreateGDI();
+			}
+
 			// View the previous image in the animation chain.
 			if (wParam == VK_LEFT) {
 				ilBindImage(Undos[0]);  // @TODO: Implement undos better with this.

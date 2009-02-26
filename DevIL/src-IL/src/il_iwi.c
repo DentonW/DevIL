@@ -326,7 +326,7 @@ ILboolean IwiReadImage(ILimage *BaseImage, IWIHEAD *Header, ILuint NumMips)
 
 			case IWI_DXT1:
 				// DXT1 data has at least 8 bytes, even for one pixel.
-				SizeOfData = IL_MAX(Image->Width * Image->Height / 2, 16);
+				SizeOfData = IL_MAX(Image->Width * Image->Height / 2, 8);
 				CompData = ialloc(SizeOfData);  // Gives a 6:1 compression ratio (or 8:1 for DXT1 with alpha)
 				if (CompData == NULL)
 					return IL_FALSE;
