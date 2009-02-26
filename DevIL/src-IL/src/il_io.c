@@ -85,6 +85,9 @@ ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 		Type = IL_HDR;
 	else if (!iStrCmp(Ext, IL_TEXT("iff")))
 		Type = IL_IFF;
+	else if (!iStrCmp(Ext, IL_TEXT("ilbm")) || !iStrCmp(Ext, IL_TEXT("lbm")) ||
+        !iStrCmp(Ext, IL_TEXT("ham")))
+		Type = IL_ILBM;
 	else if (!iStrCmp(Ext, IL_TEXT("ico")) || !iStrCmp(Ext, IL_TEXT("cur")))
 		Type = IL_ICO;
 	else if (!iStrCmp(Ext, IL_TEXT("icns")))
@@ -211,6 +214,11 @@ ILenum ILAPIENTRY ilDetermineTypeF(ILHANDLE File)
 	#ifndef IL_NO_ICNS
 	if (ilIsValidIcnsF(File))
 		return IL_ICNS;
+	#endif
+
+	#ifndef IL_NO_ILBM
+	if (ilIsValidIlbmF(File))
+		return IL_ILBM;
 	#endif
 
 	#ifndef IL_NO_IWI
@@ -347,6 +355,11 @@ ILenum ILAPIENTRY ilDetermineTypeL(const void *Lump, ILuint Size)
 	#ifndef IL_NO_IWI
 	if (ilIsValidIwiL(Lump, Size))
 		return IL_IWI;
+	#endif
+
+	#ifndef IL_NO_ILBM
+	if (ilIsValidIlbmL(Lump,Size))
+		return IL_ILBM;
 	#endif
 
 	#ifndef IL_NO_JP2
@@ -494,6 +507,11 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, ILconst_string FileName)
 			return ilIsValidIwi(FileName);
 		#endif
 
+    	#ifndef IL_NO_ILBM
+        case IL_ILBM:
+            return ilIsValidIlbm(FileName);
+	    #endif
+
 		#ifndef IL_NO_JP2
 		case IL_JP2:
 			return ilIsValidJp2(FileName);
@@ -634,6 +652,11 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 			return ilIsValidIwiF(File);
 		#endif
 
+    	#ifndef IL_NO_ILBM
+        case IL_ILBM:
+            return ilIsValidIlbmF(File);
+	    #endif
+
 		#ifndef IL_NO_JP2
 		case IL_JP2:
 			return ilIsValidJp2F(File);
@@ -773,6 +796,11 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, void *Lump, ILuint Size)
 		case IL_IWI:
 			return ilIsValidIwiL(Lump, Size);
 		#endif
+
+    	#ifndef IL_NO_ILBM
+        case IL_ILBM:
+            return ilIsValidIlbmL(Lump, Size);
+	    #endif
 
 		#ifndef IL_NO_JP2
 		case IL_JP2:
@@ -983,6 +1011,12 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 		#ifndef IL_NO_IFF
 		case IL_IFF:
 			bRet = ilLoadIff(FileName);
+			break;
+		#endif
+
+		#ifndef IL_NO_ILBM
+		case IL_ILBM:
+			bRet = ilLoadIlbm(FileName);
 			break;
 		#endif
 
@@ -1256,6 +1290,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadIffF(File);
 		#endif
 
+		#ifndef IL_NO_ILBM
+		case IL_ILBM:
+			return ilLoadIlbmF(File);
+		#endif
+
 		#ifndef IL_NO_IWI
 		case IL_IWI:
 			return ilLoadIwiF(File);
@@ -1491,6 +1530,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size)
 		#ifndef IL_NO_IFF
 		case IL_IFF:
 			return ilLoadIffL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_ILBM
+		case IL_ILBM:
+			return ilLoadIlbmL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_IWI
@@ -1773,6 +1817,14 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#ifndef IL_NO_IFF
 		if (!iStrCmp(Ext, IL_TEXT("iff"))) {
 			bRet = ilLoadIff(FileName);
+			goto finish;
+		}
+		#endif
+
+		#ifndef IL_NO_ILBM
+		if (!iStrCmp(Ext, IL_TEXT("ilbm")) || !iStrCmp(Ext, IL_TEXT("lbm")) ||
+            !iStrCmp(Ext, IL_TEXT("ham")) ) {
+			bRet = ilLoadIlbm(FileName);
 			goto finish;
 		}
 		#endif

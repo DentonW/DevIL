@@ -290,6 +290,7 @@ TEST_FORMAT([hdr], [HDR], [HDR is the Radiance High Dynamic Range format, using 
 TEST_FORMAT([icns],[ICNS], [ICNS is the icon format for the Mac OS X operation system.])
 TEST_FORMAT([icon],[ICON], [ICO is the icon format for the Windows operating system.])
 TEST_FORMAT([iff], [IFF], [IFF (Interchange File Format) is used to transfer images between software from different companies.])
+TEST_FORMAT([ilbm], [ILBM], [ILBM (Amiga Interleaved BitMap Format).])
 TEST_FORMAT([jpeg],[JPG], [JPEG is most common lossy format. libjpeg powered], [SETTLE_JPEG])
 TEST_FORMAT([jp2], [JP2], [JP2 (JPEG 2000) is a better, but not so widespread, alternative to JPEG. JasPer powered], [SETTLE_JASPER])
 TEST_FORMAT([lcms],[LCMS], [],[SETTLE_LCMS])
