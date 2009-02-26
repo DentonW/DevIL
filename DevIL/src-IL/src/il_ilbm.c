@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
+// Copyright (C) 2000-2009 by Denton Woods
 // Last modified: 02/09/2009
 //
 // Filename: src-IL/src/il_ilbm.c
