@@ -59,14 +59,43 @@ ILboolean ilLoadDpxL(const void *Lump, ILuint Size)
 }
 
 
+//@TODO: Use size of header instead of sizeof.
+ILboolean DpxGetFileInfo(DPX_FILE_INFO *FileInfo)
+{
+	//if (iread(FileInfo, sizeof(DPX_FILE_INFO), 1) != 1)
+	if (iread(FileInfo, 768, 1) != 1)
+		return IL_FALSE;
+	return IL_TRUE;
+}
+
+
+ILboolean DpxGetImageInfo(DPX_IMAGE_INFO *ImageInfo)
+{
+	//if (iread(FileInfo, sizeof(DPX_FILE_INFO), 1) != 1)
+	if (iread(ImageInfo, sizeof(DPX_IMAGE_INFO), 1) != 1)
+		return IL_FALSE;
+	return IL_TRUE;
+}
+
+
 // Internal function used to load the DPX.
 ILboolean iLoadDpxInternal(void)
 {
+	DPX_FILE_INFO	FileInfo;
+	DPX_IMAGE_INFO	ImageInfo;
+	ILuint			i;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
+	
+	if (!DpxGetFileInfo(&FileInfo))
+		return IL_FALSE;
+	if (!DpxGetImageInfo(&ImageInfo))
+		return IL_FALSE;
+	i = itell();
+	printf("%d\n", ImageInfo.pixels_per_line);
 
 
 	return ilFixImage();

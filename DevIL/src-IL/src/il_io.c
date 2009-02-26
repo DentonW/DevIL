@@ -945,6 +945,12 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 			break;
 		#endif
 
+		#ifndef IL_NO_DPX
+		case IL_DPX:
+			bRet = ilLoadDpx(FileName);
+			break;
+		#endif
+
 		#ifndef IL_NO_GIF
 		case IL_GIF:
 			bRet = ilLoadGif(FileName);
@@ -1250,6 +1256,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadDoomFlatF(File);
 		#endif
 
+		#ifndef IL_NO_DPX
+		case IL_DPX:
+			return ilLoadDpxF(File);
+		#endif
+
 		#ifndef IL_NO_EXR
 		case IL_EXR:
 			return ilLoadExrF(File);
@@ -1490,6 +1501,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size)
 			return ilLoadDoomL(Lump, Size);
 		case IL_DOOM_FLAT:
 			return ilLoadDoomFlatL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_DPX
+		case IL_DPX:
+			return ilLoadDpxL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_EXR
@@ -1740,6 +1756,13 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#ifndef IL_NO_BLP
 		if (!iStrCmp(Ext, IL_TEXT("blp"))) {
 			bRet = ilLoadBlp(FileName);
+			goto finish;
+		}
+		#endif
+
+		#ifndef IL_NO_DPX
+		if (!iStrCmp(Ext, IL_TEXT("dpx"))) {
+			bRet = ilLoadDpx(FileName);
 			goto finish;
 		}
 		#endif
