@@ -13,7 +13,7 @@ libIL_la_SOURCES = il_alloc.c     il_doom.c      il_stack.c    il_pcx.c        i
                    il_xpm.c       il_hdr.c       il_icns.c     il_jp2.c        il_vtf.c \
                    il_wbmp.c      il_exr.cpp     il_nvidia.cpp il_squish.cpp   il_iff.c \
                    il_size.c      il_tpl.c       il_fits.c     il_iwi.c        il_blp.c \
-                   il_ftx.c       il_dicom.c     il_rot.c \
+                   il_ftx.c       il_dicom.c     il_rot.c	   il_ilbm.c \
                    altivec_common.c altivec_typeconversion.c
 
 AM_CFLAGS = @LIBIL_CFLAGS@

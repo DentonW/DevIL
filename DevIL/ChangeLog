@@ -1,3 +1,8 @@
+2009-02-26 Denton Woods <doomwiz@users.sf.net>
+	* configure.ac, lib/Makefile.am, il.h, il_internal.h, il_ilbm.c, il_io.c: Added
+	  patch from Ben Campbell for ILBM files at
+	  https://sourceforge.net/tracker2/index.php?func=detail&aid=2635333&group_id=4470&atid=304470.
+	
 2009-02-25 Denton Woods <doomwiz@users.sf.net>
 	* il_iwi.c:329: Changed IL_MAX parameter from 16 to 8 (copy+paste error).
 	* WindowsTest.cpp: Added mipmap functionality to 0-9 keys (0 goes to main image).

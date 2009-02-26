@@ -196,7 +196,7 @@ typedef long long unsigned int ILuint64;
 #define IL_ICO          0x0424  //!< Microsoft Windows Icons and Cursors - .ico and .cur extensions
 #define IL_JPG          0x0425  //!< JPEG - .jpg, .jpe and .jpeg extensions
 #define IL_JFIF         0x0425  //!<
-#define IL_LBM          0x0426  //!< Interlaced bitmap - .lbm extension
+#define IL_ILBM         0x0426  //!< Amiga IFF (FORM ILBM) - .iff, .ilbm, .lbm extensions
 #define IL_PCD          0x0427  //!< Kodak PhotoCD - .pcd extension
 #define IL_PCX          0x0428  //!< ZSoft PCX - .pcx extension
 #define IL_PIC          0x0429  //!< PIC - .pic extension
