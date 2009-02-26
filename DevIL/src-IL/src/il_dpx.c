@@ -7,6 +7,8 @@
 // Filename: src-IL/src/il_dpx.c
 //
 // Description: Reads from a Digital Picture Exchange (.dpx) file.
+//				Specifications for this format were	found at
+//				http://www.cineon.com/ff_draft.php.
 //
 //-----------------------------------------------------------------------------
 
@@ -69,11 +71,28 @@ ILboolean DpxGetFileInfo(DPX_FILE_INFO *FileInfo)
 }
 
 
+ILboolean GetImageElement(DPX_IMAGE_ELEMENT *ImageElement)
+{
+	ImageElement->DataSign = GetBigUInt();
+	return IL_TRUE;
+}
+
+
 ILboolean DpxGetImageInfo(DPX_IMAGE_INFO *ImageInfo)
 {
-	//if (iread(FileInfo, sizeof(DPX_FILE_INFO), 1) != 1)
-	if (iread(ImageInfo, sizeof(DPX_IMAGE_INFO), 1) != 1)
-		return IL_FALSE;
+	ILuint i;
+
+	//if (iread(ImageInfo, sizeof(DPX_IMAGE_INFO), 1) != 1)
+	//	return IL_FALSE;
+	ImageInfo->Orientation = GetBigUShort();
+	ImageInfo->NumElements = GetBigUShort();
+	ImageInfo->Width = GetBigUInt();
+	ImageInfo->Height = GetBigUInt();
+
+	for (i = 0; i < 8; i++) {
+		GetImageElement(&ImageInfo->ImageElement[i]);
+	}
+
 	return IL_TRUE;
 }
 
@@ -94,8 +113,6 @@ ILboolean iLoadDpxInternal(void)
 		return IL_FALSE;
 	if (!DpxGetImageInfo(&ImageInfo))
 		return IL_FALSE;
-	i = itell();
-	printf("%d\n", ImageInfo.pixels_per_line);
 
 
 	return ilFixImage();

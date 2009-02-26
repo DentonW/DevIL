@@ -6,8 +6,9 @@
 //
 // Filename: src-IL/include/il_dpx.h
 //
-// Description: Reads from a .dpx file.  Specifications for this format were
-//				found at http://www.cineon.com/ff_draft.php.
+// Description: Reads from a Digital Picture Exchange (.dpx) file.
+//				Specifications for this format were	found at
+//				http://www.cineon.com/ff_draft.php.
 //
 //-----------------------------------------------------------------------------
 
@@ -32,67 +33,69 @@ typedef struct R32
 
 typedef struct DPX_FILE_INFO
 {
-    ILubyte   magic_num;        /* magic number 0x53445058 (SDPX) or 0x58504453 (XPDS) */
-    ILubyte   offset;           /* offset to image data in bytes */
-    ILbyte vers[8];          /* which header format version is being used (v1.0)*/
-    ILubyte   file_size;        /* file size in bytes */
-    ILubyte   ditto_key;        /* read time short cut - 0 = same, 1 = new */
-    ILubyte   gen_hdr_size;     /* generic header length in bytes */
-    ILubyte   ind_hdr_size;     /* industry header length in bytes */
-    ILubyte   user_data_size;   /* user-defined data length in bytes */
-    ILbyte file_name[100];   /* iamge file name */
-    ILbyte create_time[24];  /* file creation date "yyyy:mm:dd:hh:mm:ss:LTZ" */
-    ILbyte creator[100];     /* file creator's name */
-    ILbyte project[200];     /* project name */
-    ILbyte copyright[200];   /* right to use or copyright info */
-    ILubyte   key;              /* encryption ( FFFFFFFF = unencrypted ) */
-    ILbyte Reserved[104];    /* reserved field TBD (need to pad) */
+    ILuint	magic_num;        /* magic number 0x53445058 (SDPX) or 0x58504453 (XPDS) */
+    ILuint	offset;           /* offset to image data in bytes */
+    ILbyte	vers[8];          /* which header format version is being used (v1.0)*/
+    ILuint	file_size;        /* file size in bytes */
+    ILuint	ditto_key;        /* read time short cut - 0 = same, 1 = new */
+    ILuint	gen_hdr_size;     /* generic header length in bytes */
+    ILuint	ind_hdr_size;     /* industry header length in bytes */
+    ILuint	user_data_size;   /* user-defined data length in bytes */
+    ILbyte	file_name[100];   /* iamge file name */
+    ILbyte	create_time[24];  /* file creation date "yyyy:mm:dd:hh:mm:ss:LTZ" */
+    ILbyte	creator[100];     /* file creator's name */
+    ILbyte	project[200];     /* project name */
+    ILbyte	copyright[200];   /* right to use or copyright info */
+    ILuint	key;              /* encryption ( FFFFFFFF = unencrypted ) */
+    ILbyte	Reserved[104];    /* reserved field TBD (need to pad) */
 } DPX_FILE_INFO;
+
+typedef struct DPX_IMAGE_ELEMENT
+{
+    ILuint    DataSign;        /* data sign (0 = unsigned, 1 = signed ) */
+			 /* "Core set images are unsigned" */
+    ILuint    RefLowData;     /* reference low data code value */
+    R32    ref_low_quantity; /* reference low quantity represented */
+    ILuint    ref_high_data;    /* reference high data code value */
+    R32    ref_high_quantity;/* reference high quantity represented */
+    ILubyte     descriptor;       /* descriptor for image element */
+    ILubyte     transfer;         /* transfer characteristics for element */
+    ILubyte     colorimetric;     /* colormetric specification for element */
+    ILubyte     bit_size;         /* bit size for element */
+	ILushort    packing;          /* packing for element */
+    ILushort    encoding;         /* encoding for element */
+    ILuint    data_offset;      /* offset to data of element */
+    ILuint    eol_padding;      /* end of line padding used in element */
+    ILuint    eo_image_padding; /* end of image padding used in element */
+    ILbyte  description[32];  /* description of element */
+} DPX_IMAGE_ELEMENT;          /* NOTE THERE ARE EIGHT OF THESE */
+
 
 typedef struct DPX_IMAGE_INFO
 {
-    ILushort    orientation;          /* image orientation */
-    ILushort    element_number;       /* number of image elements */
-    ILubyte    pixels_per_line;      /* or x value */
-    ILubyte    lines_per_image_ele;  /* or y value, per element */
-    struct _image_element
-    {
-        ILubyte    data_sign;        /* data sign (0 = unsigned, 1 = signed ) */
-				 /* "Core set images are unsigned" */
-        ILubyte    ref_low_data;     /* reference low data code value */
-        R32    ref_low_quantity; /* reference low quantity represented */
-        ILubyte    ref_high_data;    /* reference high data code value */
-        R32    ref_high_quantity;/* reference high quantity represented */
-        ILubyte     descriptor;       /* descriptor for image element */
-        ILubyte     transfer;         /* transfer characteristics for element */
-        ILubyte     colorimetric;     /* colormetric specification for element */
-        ILubyte     bit_size;         /* bit size for element */
-	ILushort    packing;          /* packing for element */
-        ILushort    encoding;         /* encoding for element */
-        ILubyte    data_offset;      /* offset to data of element */
-        ILubyte    eol_padding;      /* end of line padding used in element */
-        ILubyte    eo_image_padding; /* end of image padding used in element */
-        ILbyte  description[32];  /* description of element */
-    } image_element[8];          /* NOTE THERE ARE EIGHT OF THESE */
-
-    ILubyte reserved[52];             /* reserved for future use (padding) */
+    ILushort	Orientation;          /* image orientation */
+    ILushort	NumElements;       /* number of image elements */
+    ILuint		Width;      /* or x value */
+    ILuint		Height;  /* or y value, per element */
+	DPX_IMAGE_ELEMENT	ImageElement[8];
+    ILubyte		reserved[52];             /* reserved for future use (padding) */
 } DPX_IMAGE_INFO;
 
 
 typedef struct DPX_IMAGE_ORIENT
 {
-    ILubyte   x_offset;               /* X offset */
-    ILubyte   y_offset;               /* Y offset */
+    ILuint   x_offset;               /* X offset */
+    ILuint   y_offset;               /* Y offset */
     R32   x_center;               /* X center */
     R32   y_center;               /* Y center */
-    ILubyte   x_orig_size;            /* X original size */
-    ILubyte   y_orig_size;            /* Y original size */
+    ILuint   x_orig_size;            /* X original size */
+    ILuint   y_orig_size;            /* Y original size */
     ILbyte file_name[100];         /* source image file name */
     ILbyte creation_time[24];      /* source image creation date and time */
     ILbyte input_dev[32];          /* input device name */
     ILbyte input_serial[32];       /* input device serial number */
     ILushort   border[4];              /* border validity (XL, XR, YT, YB) */
-    ILubyte   pixel_aspect[2];        /* pixel aspect ratio (H:V) */
+    ILuint   pixel_aspect[2];        /* pixel aspect ratio (H:V) */
     ILubyte    reserved[28];           /* reserved for future use (padding) */
 } DPX_IMAGE_ORIENT;
 
@@ -105,9 +108,9 @@ typedef struct DPX_MOTION_PICTURE_HEAD
     ILbyte prefix[6];         /* prefix (6 digits from film edge code) */
     ILbyte count[4];          /* count (4 digits from film edge code)*/
     ILbyte format[32];        /* format (i.e. academy) */
-    ILubyte   frame_position;    /* frame position in sequence */
-    ILubyte   sequence_len;      /* sequence length in frames */
-    ILubyte   held_count;        /* held count (1 = default) */
+    ILuint   frame_position;    /* frame position in sequence */
+    ILuint   sequence_len;      /* sequence length in frames */
+    ILuint   held_count;        /* held count (1 = default) */
     R32   frame_rate;        /* frame rate of original in frames/sec */
     R32   shutter_angle;     /* shutter angle of camera in degrees */
     ILbyte frame_id[32];      /* frame identification (i.e. keyframe) */
@@ -118,8 +121,8 @@ typedef struct DPX_MOTION_PICTURE_HEAD
 
 typedef struct DPX_TELEVISION_HEAD
 {
-    ILubyte tim_code;            /* SMPTE time code */
-    ILubyte userBits;            /* SMPTE user bits */
+    ILuint tim_code;            /* SMPTE time code */
+    ILuint userBits;            /* SMPTE user bits */
     ILubyte  interlace;           /* interlace ( 0 = noninterlaced, 1 = 2:1 interlace*/
     ILubyte  field_num;           /* field number */
     ILubyte  video_signal;        /* video signal standard (table 4)*/
