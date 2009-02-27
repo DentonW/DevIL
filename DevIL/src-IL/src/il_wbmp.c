@@ -97,7 +97,7 @@ ILboolean iLoadWbmpInternal(void)
 	BitPadding = (8 - (Width % 8)) % 8;  // Has to be aligned on a byte boundary.  The rest is padding.
 	File = bfile(iGetFile());
 	if (File == NULL)
-		return IL_FALSE;
+		return IL_FALSE;  //@TODO: Error?
 
 	//@TODO: Do this without bread?  Would be faster, since we would not have to do
 	//  the second loop.
