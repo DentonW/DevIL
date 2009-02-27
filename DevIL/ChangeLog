@@ -1,3 +1,6 @@
+2009-02-27 Denton Woods <doomwiz@users.sf.net>
+	* il_dpx.c / il_dpx.h: Got basic dpx loading working.
+
 2009-02-26 Denton Woods <doomwiz@users.sf.net>
 	* configure.ac, lib/Makefile.am, il.h, il_internal.h, il_ilbm.c, il_io.c: Added
 	  patch from Ben Campbell for ILBM files at

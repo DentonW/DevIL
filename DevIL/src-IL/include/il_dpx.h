@@ -33,42 +33,42 @@ typedef struct R32
 
 typedef struct DPX_FILE_INFO
 {
-    ILuint	magic_num;        /* magic number 0x53445058 (SDPX) or 0x58504453 (XPDS) */
-    ILuint	offset;           /* offset to image data in bytes */
-    ILbyte	vers[8];          /* which header format version is being used (v1.0)*/
-    ILuint	file_size;        /* file size in bytes */
-    ILuint	ditto_key;        /* read time short cut - 0 = same, 1 = new */
-    ILuint	gen_hdr_size;     /* generic header length in bytes */
-    ILuint	ind_hdr_size;     /* industry header length in bytes */
-    ILuint	user_data_size;   /* user-defined data length in bytes */
-    ILbyte	file_name[100];   /* iamge file name */
-    ILbyte	create_time[24];  /* file creation date "yyyy:mm:dd:hh:mm:ss:LTZ" */
-    ILbyte	creator[100];     /* file creator's name */
-    ILbyte	project[200];     /* project name */
-    ILbyte	copyright[200];   /* right to use or copyright info */
-    ILuint	key;              /* encryption ( FFFFFFFF = unencrypted ) */
+    ILuint	MagicNum;        /* magic number 0x53445058 (SDPX) or 0x58504453 (XPDS) */
+    ILuint	Offset;           /* offset to image data in bytes */
+    ILbyte	Vers[8];          /* which header format version is being used (v1.0)*/
+    ILuint	FileSize;        /* file size in bytes */
+    ILuint	DittoKey;        /* read time short cut - 0 = same, 1 = new */
+    ILuint	GenHdrSize;     /* generic header length in bytes */
+    ILuint	IndHdrSize;     /* industry header length in bytes */
+    ILuint	UserDataSize;   /* user-defined data length in bytes */
+    ILbyte	FileName[100];   /* image file name */
+    ILbyte	CreateTime[24];  /* file creation date "yyyy:mm:dd:hh:mm:ss:LTZ" */
+    ILbyte	Creator[100];     /* file creator's name */
+    ILbyte	Project[200];     /* project name */
+    ILbyte	Copyright[200];   /* right to use or copyright info */
+    ILuint	Key;              /* encryption ( FFFFFFFF = unencrypted ) */
     ILbyte	Reserved[104];    /* reserved field TBD (need to pad) */
 } DPX_FILE_INFO;
 
 typedef struct DPX_IMAGE_ELEMENT
 {
-    ILuint    DataSign;        /* data sign (0 = unsigned, 1 = signed ) */
-			 /* "Core set images are unsigned" */
-    ILuint    RefLowData;     /* reference low data code value */
-    R32    ref_low_quantity; /* reference low quantity represented */
-    ILuint    ref_high_data;    /* reference high data code value */
-    R32    ref_high_quantity;/* reference high quantity represented */
-    ILubyte     descriptor;       /* descriptor for image element */
-    ILubyte     transfer;         /* transfer characteristics for element */
-    ILubyte     colorimetric;     /* colormetric specification for element */
-    ILubyte     bit_size;         /* bit size for element */
-	ILushort    packing;          /* packing for element */
-    ILushort    encoding;         /* encoding for element */
-    ILuint    data_offset;      /* offset to data of element */
-    ILuint    eol_padding;      /* end of line padding used in element */
-    ILuint    eo_image_padding; /* end of image padding used in element */
-    ILbyte  description[32];  /* description of element */
-} DPX_IMAGE_ELEMENT;          /* NOTE THERE ARE EIGHT OF THESE */
+    ILuint    DataSign;			/* data sign (0 = unsigned, 1 = signed ) */
+								/* "Core set images are unsigned" */
+    ILuint		RefLowData;		/* reference low data code value */
+    R32			RefLowQuantity;	/* reference low quantity represented */
+    ILuint		RefHighData;	/* reference high data code value */
+    R32			RefHighQuantity;/* reference high quantity represented */
+    ILubyte		Descriptor;		/* descriptor for image element */
+    ILubyte		Transfer;		/* transfer characteristics for element */
+    ILubyte		Colorimetric;	/* colormetric specification for element */
+    ILubyte		BitSize;		/* bit size for element */
+	ILushort	Packing;		/* packing for element */
+    ILushort	Encoding;		/* encoding for element */
+    ILuint		DataOffset;		/* offset to data of element */
+    ILuint		EolPadding;		/* end of line padding used in element */
+    ILuint		EoImagePadding;	/* end of image padding used in element */
+    ILbyte		Description[32];/* description of element */
+} DPX_IMAGE_ELEMENT;  /* NOTE THERE ARE EIGHT OF THESE */
 
 
 typedef struct DPX_IMAGE_INFO
@@ -84,19 +84,19 @@ typedef struct DPX_IMAGE_INFO
 
 typedef struct DPX_IMAGE_ORIENT
 {
-    ILuint   x_offset;               /* X offset */
-    ILuint   y_offset;               /* Y offset */
-    R32   x_center;               /* X center */
-    R32   y_center;               /* Y center */
-    ILuint   x_orig_size;            /* X original size */
-    ILuint   y_orig_size;            /* Y original size */
-    ILbyte file_name[100];         /* source image file name */
-    ILbyte creation_time[24];      /* source image creation date and time */
-    ILbyte input_dev[32];          /* input device name */
-    ILbyte input_serial[32];       /* input device serial number */
-    ILushort   border[4];              /* border validity (XL, XR, YT, YB) */
-    ILuint   pixel_aspect[2];        /* pixel aspect ratio (H:V) */
-    ILubyte    reserved[28];           /* reserved for future use (padding) */
+    ILuint		XOffset;               /* X offset */
+    ILuint		YOffset;               /* Y offset */
+    R32			XCenter;               /* X center */
+    R32			YCenter;               /* Y center */
+    ILuint		XOrigSize;            /* X original size */
+    ILuint		YOrigSize;            /* Y original size */
+    ILbyte		FileName[100];         /* source image file name */
+    ILbyte		CreationTime[24];      /* source image creation date and time */
+    ILbyte		InputDev[32];          /* input device name */
+    ILbyte		InputSerial[32];       /* input device serial number */
+    ILushort	Border[4];              /* border validity (XL, XR, YT, YB) */
+    ILuint		PixelAspect[2];        /* pixel aspect ratio (H:V) */
+    ILubyte		Reserved[28];           /* reserved for future use (padding) */
 } DPX_IMAGE_ORIENT;
 
 
