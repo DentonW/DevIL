@@ -8,7 +8,8 @@
 //
 // Description: Reads from a Digital Picture Exchange (.dpx) file.
 //				Specifications for this format were	found at
-//				http://www.cineon.com/ff_draft.php.
+//				http://www.cineon.com/ff_draft.php and
+//				http://www.fileformat.info/format/dpx/.
 //
 //-----------------------------------------------------------------------------
 
