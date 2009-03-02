@@ -2,7 +2,7 @@
 #define IL_DEBUG
 #endif//_DEBUG
 
-#include <il\il.h>
+#include <IL/il.h>
 #include <windows.h>
 #include <direct.h>
 #include <string>
