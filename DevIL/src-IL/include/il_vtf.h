@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 12/27/2008
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 02/28/2009
 //
 // Filename: src-IL/include/il_vtf.h
 //
@@ -127,5 +127,6 @@ ILboolean	VtfInitMipmaps(ILimage *BaseImage, VTFHEAD *Header);
 ILboolean	VtfReadData(void);
 ILboolean	VtfDecompressDXT1(ILimage *Image);
 ILboolean	VtfDecompressDXT5(ILimage *Image);
+ILboolean	iSaveVtfInternal(void);
 
 #endif//VTF_H

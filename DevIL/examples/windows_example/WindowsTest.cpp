@@ -79,7 +79,7 @@ TCHAR *ExtList[] = {
 	L"pix", L"cut", L"dcx", L"gif", L"mdl", L"lif", L"jpe", L"jpg", L"jpeg", L"lif", L"bmp",
 	L"ico", L"pbm", L"pgm", L"ppm", L"png", L"bw", L"rgb", L"rgba", L"sgi", L"tga", L"tif",
 	L"tiff", L"xpm", L"psp", L"psd", L"iwi", L"exr", L"blp", L"tpl", L"wdp", L"pcx", L"dcm",
-	L"rot", L"iwi", L"ftx", L"dds", L"dpx",
+	L"rot", L"iwi", L"ftx", L"dds", L"dpx", L"vtf",
 	NULL
 };
 
@@ -484,6 +484,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					break;
 
 				DestroyGDI();
+				if (UndoSize == 0)
+					UndoSize = 1;
 				ilDeleteImages(UndoSize, Undos);
 				UndoSize = 0;
 				XOff = 0;
@@ -518,6 +520,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					break;
 
 				DestroyGDI();
+				if (UndoSize == 0)
+					UndoSize = 1;
 				ilDeleteImages(UndoSize, Undos);
 				UndoSize = 0;
 				XOff = 0;
@@ -739,6 +743,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						return (0L);
 
 					DestroyGDI();
+					if (UndoSize == 0)
+						UndoSize = 1;
 					ilDeleteImages(UndoSize, Undos);
 					UndoSize = 0;
 					XOff = 0;
@@ -755,7 +761,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					elapsed = cur_elapsed - last_elapsed;
 					last_elapsed = cur_elapsed;
 
-					iluBuildMipmaps();
+					//iluBuildMipmaps();
 
 					//ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
 					//ilEnable(IL_NVIDIA_COMPRESS);

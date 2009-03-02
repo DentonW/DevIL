@@ -2,11 +2,11 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 01/30/2009
+// Last modified: 02/28/2009
 //
 // Filename: src-IL/src/il_vtf.c
 //
-// Description: Reads from a Valve Texture Format (.vtf) file.
+// Description: Reads from and writes to a Valve Texture Format (.vtf) file.
 //                These are used in Valve's Source games.  VTF specs available
 //                from http://developer.valvesoftware.com/wiki/VTF.
 //
@@ -18,14 +18,6 @@
 #include "il_vtf.h"
 #include "il_dds.h"
 
-// the max and min functions are not present, at least not on Unixes
-#ifndef max
-	#define IL_MAX( a, b ) ( ((a) > (b)) ? (a) : (b) )
-#endif
-
-#ifndef min
-	#define min( a, b ) ( ((a) < (b)) ? (a) : (b) )
-#endif
 
 //@TODO: Get rid of these globals.
 //static VTFHEAD Head;
@@ -36,18 +28,18 @@ ILboolean ilIsValidVtf(ILconst_string FileName)
 {
 	ILHANDLE	VtfFile;
 	ILboolean	bVtf = IL_FALSE;
-	
+
 	if (!iCheckExtension(FileName, IL_TEXT("vtf"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bVtf;
 	}
-	
+
 	VtfFile = iopenr(FileName);
 	if (VtfFile == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
 		return bVtf;
 	}
-	
+
 	bVtf = ilIsValidVtfF(VtfFile);
 	icloser(VtfFile);
 	
@@ -60,12 +52,12 @@ ILboolean ilIsValidVtfF(ILHANDLE File)
 {
 	ILuint		FirstPos;
 	ILboolean	bRet;
-	
+
 	iSetInputFile(File);
 	FirstPos = itell();
 	bRet = iIsValidVtf();
 	iseek(FirstPos, IL_SEEK_SET);
-	
+
 	return bRet;
 }
 
@@ -101,9 +93,16 @@ ILboolean iGetVtfHead(VTFHEAD *Header)
 	Header->LowResImageFormat = GetLittleInt();
 	Header->LowResImageWidth = (ILubyte)igetc();
 	Header->LowResImageHeight = (ILubyte)igetc();
-	Header->Depth = GetLittleUShort();
-
-	iseek(Header->HeaderSize - sizeof(VTFHEAD), IL_SEEK_CUR);
+//@TODO: This is a hack for the moment.
+	if (Header->HeaderSize == 64) {
+		Header->Depth = igetc();
+		if (Header->Depth == 0)
+			Header->Depth = 1;
+	}
+	else {
+		Header->Depth = GetLittleUShort();
+		iseek(Header->HeaderSize - sizeof(VTFHEAD), IL_SEEK_CUR);
+	}
 
 	return IL_TRUE;
 }
@@ -141,7 +140,8 @@ ILboolean iCheckVtf(VTFHEAD *Header)
 	// May change in future version of the specifications.
 	//  80 is through version 7.2, and 96/104 are through 7.4.
 	//  This must be 16-byte aligned, but something is outputting headers with 104.
-	if ((Header->HeaderSize != 80) && (Header->HeaderSize != 96) && (Header->HeaderSize != 104))
+	if ((Header->HeaderSize != 80) && (Header->HeaderSize != 96) && (Header->HeaderSize != 104)
+		&& (Header->HeaderSize != 64))
 		return IL_FALSE;
 
 	// 0 is an invalid dimension
@@ -707,5 +707,247 @@ ILboolean VtfInitMipmaps(ILimage *BaseImage, VTFHEAD *Header)
 
 	return IL_TRUE;
 }
+
+
+
+ILboolean CheckDimensions()
+{
+	if ((ilNextPower2(iCurImage->Width) != iCurImage->Width) || (ilNextPower2(iCurImage->Height) != iCurImage->Height)) {
+		ilSetError(IL_BAD_DIMENSIONS);
+		return IL_FALSE;
+	}
+	return IL_TRUE;
+}
+
+//! Writes a Vtf file
+ILboolean ilSaveVtf(const ILstring FileName)
+{
+	ILHANDLE	VtfFile;
+	ILuint		VtfSize;
+
+	if (!CheckDimensions())
+		return IL_FALSE;
+
+	if (ilGetBoolean(IL_FILE_MODE) == IL_FALSE) {
+		if (iFileExists(FileName)) {
+			ilSetError(IL_FILE_ALREADY_EXISTS);
+			return IL_FALSE;
+		}
+	}
+
+	VtfFile = iopenw(FileName);
+	if (VtfFile == NULL) {
+		ilSetError(IL_COULD_NOT_OPEN_FILE);
+		return IL_FALSE;
+	}
+
+	VtfSize = ilSaveVtfF(VtfFile);
+	iclosew(VtfFile);
+
+	if (VtfSize == 0)
+		return IL_FALSE;
+	return IL_TRUE;
+}
+
+
+//! Writes a .vtf to an already-opened file
+ILuint ilSaveVtfF(ILHANDLE File)
+{
+	ILuint Pos;
+	if (!CheckDimensions())
+		return 0;
+	iSetOutputFile(File);
+	Pos = itellw();
+	if (iSaveVtfInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
+}
+
+
+//! Writes a .vtf to a memory "lump"
+ILuint ilSaveVtfL(void *Lump, ILuint Size)
+{
+	ILuint Pos;
+	if (!CheckDimensions())
+		return 0;
+	iSetOutputLump(Lump, Size);
+	Pos = itellw();
+	if (iSaveVtfInternal() == IL_FALSE)
+		return 0;  // Error occurred
+	return itellw() - Pos;  // Return the number of bytes written.
+}
+
+
+// Internal function used to save the Vtf.
+ILboolean iSaveVtfInternal()
+{
+	ILimage	*TempImage = iCurImage;
+	ILubyte	*TempData, *CompData;
+	ILuint	Format, i, CompSize;
+	ILenum	Compression;
+
+	// Find out if the user has specified to use DXT compression.
+	Compression = ilGetInteger(IL_VTF_COMP);
+
+	//@TODO: Other formats
+	if (Compression == IL_DXT_NO_COMP) {
+		switch (TempImage->Format)
+		{
+			case IL_RGB:
+				Format = IMAGE_FORMAT_RGB888;
+				break;
+			case IL_RGBA:
+				Format = IMAGE_FORMAT_RGBA8888;
+				break;
+			case IL_BGR:
+				Format = IMAGE_FORMAT_BGR888;
+				break;
+			case IL_BGRA:
+				Format = IMAGE_FORMAT_BGRA8888;
+				break;
+			case IL_LUMINANCE:
+				Format = IMAGE_FORMAT_I8;
+				break;
+			case IL_ALPHA:
+				Format = IMAGE_FORMAT_A8;
+				break;
+			case IL_LUMINANCE_ALPHA:
+				Format = IMAGE_FORMAT_IA88;
+				break;
+			//case IL_COLOUR_INDEX:
+			default:
+				Format = IMAGE_FORMAT_BGRA8888;
+				TempImage = iConvertImage(iCurImage, IL_BGRA, IL_UNSIGNED_BYTE);
+				if (TempImage == NULL)
+					return IL_FALSE;
+		}
+
+		//@TODO: When we have the half format available internally, also use IMAGE_FORMAT_RGBA16161616F.
+		if (TempImage->Format == IL_RGBA && TempImage->Type == IL_UNSIGNED_SHORT) {
+			Format = IMAGE_FORMAT_RGBA16161616;
+		}
+		else if (TempImage->Type != IL_UNSIGNED_BYTE) {  //@TODO: Any possibility for shorts, etc. to be used?
+			TempImage = iConvertImage(iCurImage, Format, IL_UNSIGNED_BYTE);
+			if (TempImage == NULL)
+				return IL_FALSE;
+		}
+	}
+	else {  // We are using DXT compression.
+		switch (Compression)
+		{
+			case IL_DXT1:
+				Format = IMAGE_FORMAT_DXT1_ONEBITALPHA;//IMAGE_FORMAT_DXT1;
+				break;
+			case IL_DXT3:
+				Format = IMAGE_FORMAT_DXT3;
+				break;
+			case IL_DXT5:
+				Format = IMAGE_FORMAT_DXT5;
+				break;
+			default:  // Should never reach this point.
+				ilSetError(IL_INTERNAL_ERROR);
+				Format = IMAGE_FORMAT_DXT5;
+		}
+	}
+
+	if (TempImage->Origin != IL_ORIGIN_UPPER_LEFT) {
+		TempData = iGetFlipped(TempImage);
+		if (TempData == NULL) {
+			ilCloseImage(TempImage);
+			return IL_FALSE;
+		}
+	} else {
+		TempData = TempImage->Data;
+	}
+
+	// Write the file signature.
+	iwrite("VTF", 1, 4);
+	// Write the file version - currently using 7.2 specs.
+	SaveLittleUInt(7);
+	SaveLittleUInt(2);
+	// Write the header size.
+	SaveLittleUInt(80);
+	// Now we write the width and height of the image.
+	SaveLittleUShort(TempImage->Width);
+	SaveLittleUShort(TempImage->Height);
+	//@TODO: This is supposed to be the flags used.  What should we use here?  Let users specify?
+	SaveLittleUInt(0);
+	// Number of frames in the animation. - @TODO: Change to use animations.
+	SaveLittleUShort(1);
+	// First frame in the animation
+	SaveLittleUShort(0);
+	// Padding
+	SaveLittleUInt(0);
+	// Reflectivity (3 floats) - @TODO: Use what values?  User specified?
+	SaveLittleFloat(0.0f);
+	SaveLittleFloat(0.0f);
+	SaveLittleFloat(0.0f);
+	// Padding
+	SaveLittleUInt(0);
+	// Bumpmap scale
+	SaveLittleFloat(0.0f);
+	// Image format
+	SaveLittleUInt(Format);
+	// Mipmap count - @TODO: Use mipmaps
+	iputc(1);
+	// Low resolution image format - @TODO: Create low resolution image.
+	SaveLittleUInt(0xFFFFFFFF);
+	// Low resolution image width and height
+	iputc(0);
+	iputc(0);
+	// Depth of the image - @TODO: Support for volumetric images.
+	SaveLittleUShort(1);
+
+	// Write final padding for the header (out to 80 bytes).
+	for (i = 0; i < 15; i++) {
+		iputc(0);
+	}
+
+	if (Compression == IL_DXT_NO_COMP) {
+		// We just write the image data directly.
+		if (iwrite(TempImage->Data, TempImage->SizeOfData, 1) != 1)
+			return IL_FALSE;
+	}
+	else {  // Do DXT compression here and write.
+		// We have to find out how much we are writing first.
+		CompSize = ilGetDXTCData(NULL, 0, Compression);
+		if (CompSize == 0) {
+			ilSetError(IL_INTERNAL_ERROR);
+			if (TempData != TempImage->Data)
+				ifree(TempData);
+			return IL_FALSE;
+		}
+		CompData = (ILubyte*)ialloc(CompSize);
+		if (CompData == NULL) {
+			if (TempData != TempImage->Data)
+				ifree(TempData);
+			return IL_FALSE;
+		}
+
+		// DXT compress the data.
+		CompSize = ilGetDXTCData(CompData, CompSize, Compression);
+		if (CompSize == 0) {
+			ilSetError(IL_INTERNAL_ERROR);
+			if (TempData != TempImage->Data)
+				ifree(TempData);
+			return IL_FALSE;
+		}
+		// Finally write the data.
+		if (iwrite(CompData, CompSize, 1) != 1) {
+			ifree(CompData);
+			if (TempData != TempImage->Data)
+				ifree(TempData);
+			return IL_FALSE;
+		}
+	}
+
+	if (TempData != TempImage->Data)
+		ifree(TempData);
+	if (TempImage != iCurImage)
+		ilCloseImage(TempImage);
+
+	return IL_TRUE;
+}
+
 
 #endif//IL_NO_VTF

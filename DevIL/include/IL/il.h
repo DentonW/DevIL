@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 02/05/2009
+// Last modified: 03/01/2009
 //
 // Filename: IL/il.h
 //
@@ -239,6 +239,7 @@ typedef long long unsigned int ILuint64;
 #define IL_ROT			0x044E  //!< Homeworld 2 - Relic Texture - .rot extension
 #define IL_TEXTURE		0x044F  //!< Medieval II: Total War Texture - .texture extension
 #define IL_DPX			0x0450  //!< Digital Picture Exchange - .dpx extension
+#define IL_UTX			0x0451  //!< Unreal (and Unreal Tournament) Texture - .utx extension
 
 
 #define IL_JASC_PAL     0x0475  //!< PaintShop Pro Palette
@@ -372,9 +373,10 @@ typedef long long unsigned int ILuint64;
 #define IL_JPG_SAVE_FORMAT         0x0721
 #define IL_CHEAD_HEADER_STRING     0x0722
 #define IL_PCD_PICNUM              0x0723
-#define IL_JPG_PROGRESSIVE         0x0725
-
 #define IL_PNG_ALPHA_INDEX 0x0724 //XIX : ILint : the color in the palette at this index value (0-255) is considered transparent, -1 for no trasparent color
+#define IL_JPG_PROGRESSIVE         0x0725
+#define IL_VTF_COMP                0x0726
+
 
 // DXTC definitions
 #define IL_DXTC_FORMAT      0x0705

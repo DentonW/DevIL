@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 01/24/2009
+// Last modified: 03/01/2009
 //
 // Filename: src-IL/include/il_internal.h
 //
@@ -55,6 +55,7 @@ extern "C" {
 	#define IL_NO_MDL
 	#define IL_NO_ROT
 	#define IL_NO_TPL
+	#define IL_NO_UTX
 	#define IL_NO_WAL
 #endif//IL_NO_GAMES
 
@@ -477,13 +478,18 @@ ILboolean ilIsValidTplL(const void *Lump, ILuint Size);
 ILboolean ilLoadTpl(ILconst_string FileName);
 ILboolean ilLoadTplF(ILHANDLE File);
 ILboolean ilLoadTplL(const void *Lump, ILuint Size);
+ILboolean ilLoadUtx(ILconst_string FileName);
+ILboolean ilLoadUtxF(ILHANDLE File);
+ILboolean ilLoadUtxL(const void *Lump, ILuint Size);
 ILboolean ilIsValidVtf(ILconst_string FileName);
 ILboolean ilIsValidVtfF(ILHANDLE File);
 ILboolean ilIsValidVtfL(const void *Lump, ILuint Size);
 ILboolean ilLoadVtf(ILconst_string FileName);
 ILboolean ilLoadVtfF(ILHANDLE File);
 ILboolean ilLoadVtfL(const void *Lump, ILuint Size);
-ILboolean ilLoadWal(ILconst_string FileName);
+ILboolean ilSaveVtf(ILconst_string FileName);
+ILuint    ilSaveVtfF(ILHANDLE File);
+ILuint    ilSaveVtfL(void *Lump, ILuint Size);ILboolean ilLoadWal(ILconst_string FileName);
 ILboolean ilLoadWalF(ILHANDLE File);
 ILboolean ilLoadWalL(const void *Lump, ILuint Size);
 ILboolean ilLoadWbmp(ILconst_string FileName);

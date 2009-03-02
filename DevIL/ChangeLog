@@ -1,5 +1,24 @@
+2009-03-01 Denton Woods <doomwiz@users.sf.net>
+	* il_utx.c: Added this file.
+	* lib/Makefile.am: Added il_utx.c to source line.
+	* il_internal.h: Added .utx loading declarations.
+	* il_io.c: Added loading calls for .utx files.
+	
+2009-02-28 Denton Woods <doomwiz@users.sf.net>
+	* il_states.c / il_states.h: Added ilVtfCompression to IL_STATES.
+	* il_vtf.c: Added more formats to saving.
+	* il.h: Added IL_VTF_COMP define.
+	* il_io.c: Added saving calls for .vtf files.
+	* il_dds.c: Added DecompressARGB16 to load a2r10g10b10 and a2b10g10r10 formats.
+	* il_convbuff (iSwitchTypes): Added several missing break statements.
+	* il_convbuff:1988: Changed to check types instead of bpc.
+
 2009-02-27 Denton Woods <doomwiz@users.sf.net>
 	* il_dpx.c / il_dpx.h: Got basic dpx loading working.
+	* WindowsTest.cpp: Fixed memory leak when loading files.
+	* il_vtf.c (iGetVtfHead): Added support for headers of 64 bytes.
+	* il_iwi.c (iLoadIwiInternal): Added IL_INVALID_FILE_HEADER error.
+	* il_vtf.c: Added VTF writing functions.
 
 2009-02-26 Denton Woods <doomwiz@users.sf.net>
 	* configure.ac, lib/Makefile.am, il.h, il_internal.h, il_ilbm.c, il_io.c: Added

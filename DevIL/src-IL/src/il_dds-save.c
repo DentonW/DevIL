@@ -314,8 +314,7 @@ ILuint ILAPIENTRY ilGetDXTCData(void *Buffer, ILuint BufferSize, ILenum DXTCForm
 {
 	ILubyte	*CurData = NULL;
 	ILuint	retVal;
-
-	ILint BlockNum;
+	ILint	BlockNum;
 
 	if (Buffer == NULL) {  // Return the number that will be written with a subsequent call.
 		BlockNum = ((iCurImage->Width + 3)/4) * ((iCurImage->Height + 3)/4)
