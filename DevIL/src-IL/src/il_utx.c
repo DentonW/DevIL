@@ -62,6 +62,14 @@ typedef struct UTXIMPORTTABLE
 	ILboolean	PackageImported;
 } UTXIMPORTTABLE;
 
+typedef struct UTXPALETTE
+{
+	//char	*Name;
+	ILubyte	*Pal;
+	ILuint	Count;
+	ILuint	Name;
+} UTXPALETTE;
+
 
 //! Reads a UTX file
 ILboolean ilLoadUtx(ILconst_string FileName)
@@ -368,6 +376,17 @@ void UtxDestroyImportTable(UTXIMPORTTABLE *ImportTable, UTXHEADER *Header)
 }
 
 
+void UtxDestroyPalettes(UTXPALETTE *Palettes, ILuint NumPal)
+{
+	ILuint i;
+	for (i = 0; i < NumPal; i++) {
+		//ifree(Palettes[i].Name);
+		ifree(Palettes[i].Pal);
+	}
+	ifree(Palettes);
+}
+
+
 // Internal function used to load the UTX.
 ILboolean iLoadUtxInternal(void)
 {
@@ -375,13 +394,16 @@ ILboolean iLoadUtxInternal(void)
 	UTXENTRYNAME	*NameEntries;
 	UTXEXPORTTABLE	*ExportTable;
 	UTXIMPORTTABLE	*ImportTable;
-	ILuint			i;
+	UTXPALETTE		*Palettes;
+	ILimage			*Image;
+	ILuint			NumPal = 0, i;
 ILubyte Name;
 ILubyte Type;
 ILint	Val;
 ILint	Size;
-ILint	Width = -1;
-ILint	Height = -1;
+ILint	Width, Height, PalEntry;
+ILboolean	BaseCreated = IL_FALSE, HasPal;
+ILuint	Pos;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -412,90 +434,174 @@ ILint	Height = -1;
 	}
 
 	for (i = 0; i < Header.ExportCount; i++) {
-		if (!strcmp(NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name, "Texture"))
-			i = i;
 		if (!strcmp(NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name, "Palette"))
-			i = i;
+			NumPal++;
+	}
+	if (NumPal == 0)  //@TODO: Take care of UTX files without paletted data.
+		return IL_FALSE;
+	Palettes = (UTXPALETTE*)ialloc(NumPal * sizeof(UTXPALETTE));
+	if (Palettes == NULL) {
+		UtxDestroyNameEntries(NameEntries, &Header);
+		UtxDestroyExportTable(ExportTable, &Header);
+		UtxDestroyImportTable(ImportTable, &Header);
+		return IL_FALSE;
+	}
+	NumPal = 0;
+	for (i = 0; i < Header.ExportCount; i++) {
+		if (!strcmp(NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name, "Palette")) {
+			NumPal++;
+			//Palettes[i].Name = strdup(NameEntries[ExportTable[i].ObjectName].Name);
+			Palettes[i].Name = i;//ExportTable[i].ObjectName;
+			iseek(ExportTable[i].SerialOffset, IL_SEEK_SET);
+Name = igetc();  // Skip the 2.
+			Palettes[i].Count = UtxReadCompactInteger();
+			Palettes[i].Pal = (ILubyte*)ialloc(Palettes[i].Count * 4);
+			if (/*Palettes[i].Name == NULL || */Palettes[i].Pal == NULL) {
+				UtxDestroyNameEntries(NameEntries, &Header);
+				UtxDestroyExportTable(ExportTable, &Header);
+				UtxDestroyImportTable(ImportTable, &Header);
+				UtxDestroyPalettes(Palettes, NumPal);
+				return IL_FALSE;
+			}
+			if (iread(Palettes[i].Pal, Palettes[i].Count * 4, 1) != 1)
+				//@TODO: Deallocations here!
+				return IL_FALSE;
+		}
 	}
 
-iseek(156511, IL_SEEK_SET);
+	for (i = 0; i < Header.ExportCount; i++) {
+		if (!strcmp(NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name, "Texture")) {
+			iseek(ExportTable[i].SerialOffset, IL_SEEK_SET);
+			Width = -1;  Height = -1;  PalEntry = NumPal;  HasPal = IL_FALSE;
+
+			do {
+Pos = itell();
+				Name = igetc();
+				if (!strcmp(NameEntries[Name].Name, "None"))
+					break;
+				Type = igetc();
+				Size = (Type & 0x70) >> 4;
+
+				if (/*Name == 0 && */Type == 0xA2)
+					igetc();  // Byte is 1 here...
+
+				switch (Type & 0x0F)
+				{
+					case 1:
+						Val = igetc();
+						break;
+
+					case 2:
+						Val = GetLittleUInt();
+						break;
+
+					case 3:  // Boolean value is in the info byte.
+						igetc();
+						break;
+
+					case 5:
+					case 6:
+						Val = itell();
+						Val = UtxReadCompactInteger();
+						break;
+
+					case 10:
+						Val = igetc();
+						switch (Size)
+						{
+							case 0:
+								iseek(1, IL_SEEK_CUR);
+								break;
+							case 1:
+								iseek(2, IL_SEEK_CUR);
+								break;
+							case 2:
+								iseek(4, IL_SEEK_CUR);
+								break;
+							case 3:
+								iseek(12, IL_SEEK_CUR);
+								break;
+						}
+						break;
+
+					default:  // Uhm...
+						break;
+				}
+
+//
+//
+//
+//@TODO: TOTAL HACK HERE!!!!
+//
+//
+//
+//if (Val == 52)
+//	Val = 51;
+
+				//@TODO: What should we do if Name >= Header.NameCount?
+				if (Name < Header.NameCount) {
+					if (!strcmp(NameEntries[Name].Name, "Palette")) {
+						Val--;
+						if (HasPal == IL_FALSE) {
+							for (PalEntry = 0; PalEntry < NumPal; PalEntry++) {
+								if (Val == Palettes[PalEntry].Name) {
+									HasPal = IL_TRUE;
+									break;
+								}
+							}
+						}
+					}
+					if (!strcmp(NameEntries[Name].Name, "USize"))
+						Width = Val;
+					if (!strcmp(NameEntries[Name].Name, "VSize"))
+						Height = Val;
+				}
+
+			} while (!ieof());
+
+			iseek(8, IL_SEEK_CUR);
+			if (Width == -1 || Height == -1 || PalEntry == NumPal)
+				return IL_FALSE;
+			if (BaseCreated == IL_FALSE) {
+				BaseCreated = IL_TRUE;
+				ilTexImage(Width, Height, 1, 1, IL_COLOR_INDEX, IL_UNSIGNED_BYTE, NULL);
+				Image = iCurImage;
+			}
+			else {
+				Image->Next = ilNewImageFull(Width, Height, 1, 1, IL_COLOR_INDEX, IL_UNSIGNED_BYTE, NULL);
+				if (Image->Next == NULL)
+					return IL_FALSE;
+				Image = Image->Next;
+			}
+
+			Image->Pal.PalSize = Palettes[PalEntry].Count * 4;
+			Image->Pal.Palette = (ILubyte*)ialloc(Image->Pal.PalSize);
+			if (Image->Pal.Palette == NULL)
+				return IL_FALSE;
+			memcpy(Image->Pal.Palette, Palettes[PalEntry].Pal, Image->Pal.PalSize);
+			Image->Pal.PalType = IL_PAL_RGBA32;
+			//@TODO: Do all the deallocations needed here!
+
+			Image->Origin = IL_ORIGIN_UPPER_LEFT;
+			iread(Image->Data, Image->SizeOfData, 1);
+		}
+	}
+
+//iseek(156511, IL_SEEK_SET);
 //iseek(68533, IL_SEEK_SET);
 //iseek(90566, IL_SEEK_SET);
 //iseek(69, IL_SEEK_CUR);
 
-do {
-	i = itell();
-	Name = igetc();
-	if (Name == 2)
-		break;
-	Type = igetc();
-	Size = (Type & 0x70) >> 4;
 
-	if (Name == 0 && Type == 0xA2)
-		igetc();  // Byte is 1 here...
-
-	switch (Type & 0x0F)
-	{
-		case 1:
-			Val = igetc();
-			break;
-
-		case 2:
-			Val = GetLittleUInt();
-			break;
-
-		case 3:  // Boolean value is in the info byte.
-			break;
-
-		case 5:
-		case 6:
-			Val = UtxReadCompactInteger();
-			break;
-
-		case 10:
-			Val = igetc();
-			switch (Size)
-			{
-				case 0:
-					iseek(1, IL_SEEK_CUR);
-					break;
-				case 1:
-					iseek(2, IL_SEEK_CUR);
-					break;
-				case 2:
-					iseek(4, IL_SEEK_CUR);
-					break;
-				case 3:
-					iseek(12, IL_SEEK_CUR);
-					break;
-			}
-			break;
-
-		default:  // Uhm...
-			break;
-	}
-
-	if (!strcmp(NameEntries[Name].Name, "USize"))
-		Width = Val;
-	if (!strcmp(NameEntries[Name].Name, "VSize"))
-		Height = Val;
-
-} while (!ieof() && Name != 2);
-
-iseek(8, IL_SEEK_CUR);
-if (Width == -1 || Height == -1)
-	return IL_FALSE;
-ilTexImage(Width, Height, 1, 1, IL_LUMINANCE, IL_UNSIGNED_BYTE, NULL);
-iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
-iread(iCurImage->Data, iCurImage->SizeOfData, 1);
 
 	UtxDestroyNameEntries(NameEntries, &Header);
 	UtxDestroyExportTable(ExportTable, &Header);
 	UtxDestroyImportTable(ImportTable, &Header);
+	UtxDestroyPalettes(Palettes, NumPal);
 
 
-	return IL_FALSE;
-//return ilFixImage();
+	//return IL_FALSE;
+	return ilFixImage();
 }
 
 #endif//IL_NO_UTX
