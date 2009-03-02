@@ -397,13 +397,14 @@ ILboolean iLoadUtxInternal(void)
 	UTXPALETTE		*Palettes;
 	ILimage			*Image;
 	ILuint			NumPal = 0, i;
-ILubyte Name;
+ILint Name;
 ILubyte Type;
 ILint	Val;
 ILint	Size;
 ILint	Width, Height, PalEntry;
 ILboolean	BaseCreated = IL_FALSE, HasPal;
 ILuint	Pos;
+ILuint	Format;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -476,7 +477,7 @@ Name = igetc();  // Skip the 2.
 
 			do {
 Pos = itell();
-				Name = igetc();
+				Name = UtxReadCompactInteger();
 				if (!strcmp(NameEntries[Name].Name, "None"))
 					break;
 				Type = igetc();
@@ -497,6 +498,10 @@ Pos = itell();
 
 					case 3:  // Boolean value is in the info byte.
 						igetc();
+						break;
+
+					case 4:
+						GetLittleFloat();
 						break;
 
 					case 5:
@@ -525,25 +530,16 @@ Pos = itell();
 						break;
 
 					default:  // Uhm...
+						Val = Val;
 						break;
 				}
 
-//
-//
-//
-//@TODO: TOTAL HACK HERE!!!!
-//
-//
-//
-//if (Val == 52)
-//	Val = 51;
-
 				//@TODO: What should we do if Name >= Header.NameCount?
-				if (Name < Header.NameCount) {
+				if ((ILuint)Name < Header.NameCount) {
 					if (!strcmp(NameEntries[Name].Name, "Palette")) {
 						Val--;
 						if (HasPal == IL_FALSE) {
-							for (PalEntry = 0; PalEntry < NumPal; PalEntry++) {
+							for (PalEntry = 0; (ILuint)PalEntry < NumPal; PalEntry++) {
 								if (Val == Palettes[PalEntry].Name) {
 									HasPal = IL_TRUE;
 									break;
@@ -551,6 +547,8 @@ Pos = itell();
 							}
 						}
 					}
+					if (!strcmp(NameEntries[Name].Name, "Format"))
+						Format = Val;
 					if (!strcmp(NameEntries[Name].Name, "USize"))
 						Width = Val;
 					if (!strcmp(NameEntries[Name].Name, "VSize"))
@@ -561,7 +559,7 @@ Pos = itell();
 
 			iseek(8, IL_SEEK_CUR);
 			if (Width == -1 || Height == -1 || PalEntry == NumPal)
-				return IL_FALSE;
+				return IL_TRUE;//IL_FALSE;
 			if (BaseCreated == IL_FALSE) {
 				BaseCreated = IL_TRUE;
 				ilTexImage(Width, Height, 1, 1, IL_COLOR_INDEX, IL_UNSIGNED_BYTE, NULL);
