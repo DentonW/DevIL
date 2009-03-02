@@ -376,6 +376,12 @@ ILboolean iLoadUtxInternal(void)
 	UTXEXPORTTABLE	*ExportTable;
 	UTXIMPORTTABLE	*ImportTable;
 	ILuint			i;
+ILubyte Name;
+ILubyte Type;
+ILint	Val;
+ILint	Size;
+ILint	Width = -1;
+ILint	Height = -1;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -412,11 +418,74 @@ ILboolean iLoadUtxInternal(void)
 			i = i;
 	}
 
+iseek(156511, IL_SEEK_SET);
 //iseek(68533, IL_SEEK_SET);
-iseek(90566, IL_SEEK_SET);
-iseek(69, IL_SEEK_CUR);
-//ilTexImage(128, 128, 1, 1, IL_LUMINANCE, IL_UNSIGNED_BYTE, NULL);
-ilTexImage(256, 64, 1, 1, IL_LUMINANCE, IL_UNSIGNED_BYTE, NULL);
+//iseek(90566, IL_SEEK_SET);
+//iseek(69, IL_SEEK_CUR);
+
+do {
+	i = itell();
+	Name = igetc();
+	if (Name == 2)
+		break;
+	Type = igetc();
+	Size = (Type & 0x70) >> 4;
+
+	if (Name == 0 && Type == 0xA2)
+		igetc();  // Byte is 1 here...
+
+	switch (Type & 0x0F)
+	{
+		case 1:
+			Val = igetc();
+			break;
+
+		case 2:
+			Val = GetLittleUInt();
+			break;
+
+		case 3:  // Boolean value is in the info byte.
+			break;
+
+		case 5:
+		case 6:
+			Val = UtxReadCompactInteger();
+			break;
+
+		case 10:
+			Val = igetc();
+			switch (Size)
+			{
+				case 0:
+					iseek(1, IL_SEEK_CUR);
+					break;
+				case 1:
+					iseek(2, IL_SEEK_CUR);
+					break;
+				case 2:
+					iseek(4, IL_SEEK_CUR);
+					break;
+				case 3:
+					iseek(12, IL_SEEK_CUR);
+					break;
+			}
+			break;
+
+		default:  // Uhm...
+			break;
+	}
+
+	if (!strcmp(NameEntries[Name].Name, "USize"))
+		Width = Val;
+	if (!strcmp(NameEntries[Name].Name, "VSize"))
+		Height = Val;
+
+} while (!ieof() && Name != 2);
+
+iseek(8, IL_SEEK_CUR);
+if (Width == -1 || Height == -1)
+	return IL_FALSE;
+ilTexImage(Width, Height, 1, 1, IL_LUMINANCE, IL_UNSIGNED_BYTE, NULL);
 iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 iread(iCurImage->Data, iCurImage->SizeOfData, 1);
 
@@ -426,7 +495,7 @@ iread(iCurImage->Data, iCurImage->SizeOfData, 1);
 
 
 	return IL_FALSE;
-//	return ilFixImage();
+//return ilFixImage();
 }
 
 #endif//IL_NO_UTX
