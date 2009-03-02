@@ -1,14 +1,13 @@
 // Microsoft Visual C++ generated resource script.
 //
-#include "resource.h"
+#include "resource."
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include "afxres.h"
-
+#include "afxres.h"
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
@@ -149,7 +148,6 @@ BEGIN
         MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY
         MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE
         MENUITEM "View Mipmap",                 ID_EDIT_VIEWMIPMAP
-        MENUITEM "View Face",                   ID_EDIT_VIEWFACE
         MENUITEM "View ImageNum",               ID_EDIT_VIEWIMAGENUM
         MENUITEM "Next Image",                  ID_EDIT_NEXT
         MENUITEM "Previous Image",              ID_EDIT_PREV
@@ -251,8 +249,7 @@ END
 //
 // Generated from the TEXTINCLUDE 3 resource.
 //
-
-
+
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
 

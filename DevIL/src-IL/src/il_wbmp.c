@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 02/09/2009
+// Last modified: 02/27/2009
 //
 // Filename: src-IL/src/il_wbmp.c
 //
@@ -269,8 +269,6 @@ ILboolean iSaveWbmpInternal()
 
 	return IL_TRUE;
 }
-
-
 
 #endif//IL_NO_WBMP
 

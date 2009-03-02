@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 02/19/2009
+// Last modified: 03/01/2009
 //
 // Filename: src-IL/src/il_io.c
 //
@@ -77,6 +77,8 @@ ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 		Type = IL_GIF;
 	else if (!iStrCmp(Ext, IL_TEXT("cut")))
 		Type = IL_CUT;
+	else if (!iStrCmp(Ext, IL_TEXT("dpx")))
+		Type = IL_DPX;
 	else if (!iStrCmp(Ext, IL_TEXT("exr")))
 		Type = IL_EXR;
 	else if (!iStrCmp(Ext, IL_TEXT("fit")) || !iStrCmp(Ext, IL_TEXT("fits")))
@@ -133,6 +135,8 @@ ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 		Type = IL_TIF;
 	else if (!iStrCmp(Ext, IL_TEXT("tpl")))
 		Type = IL_TPL;
+	else if (!iStrCmp(Ext, IL_TEXT("utx")))
+		Type = IL_UTX;
 	else if (!iStrCmp(Ext, IL_TEXT("vtf")))
 		Type = IL_VTF;
 	else if (!iStrCmp(Ext, IL_TEXT("wal")))
@@ -1140,6 +1144,12 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 			break;
 		#endif
 
+		#ifndef IL_NO_UTX
+		case IL_UTX:
+			bRet = ilLoadUtx(FileName);
+			break;
+		#endif
+
 		#ifndef IL_NO_VTF
 		case IL_VTF:
 			bRet = ilLoadVtf(FileName);
@@ -1401,6 +1411,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadTplF(File);
 		#endif
 
+		#ifndef IL_NO_UTX
+		case IL_UTX:
+			return ilLoadUtxF(File);
+		#endif
+
 		#ifndef IL_NO_VTF
 		case IL_VTF:
 			return ilLoadVtfF(File);
@@ -1646,6 +1661,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size)
 		#ifndef IL_NO_TPL
 		case IL_TPL:
 			return ilLoadTplL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_UTX
+		case IL_UTX:
+			return ilLoadUtxL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_VTF
@@ -1994,6 +2014,13 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		}
 		#endif
 
+		#ifndef IL_NO_UTX
+		if (!iStrCmp(Ext, IL_TEXT("utx"))) {
+			bRet = ilLoadUtx(FileName);
+			goto finish;
+		}
+		#endif
+
 		#ifndef IL_NO_VTF
 		if (!iStrCmp(Ext, IL_TEXT("vtf"))) {
 			bRet = ilLoadVtf(FileName);
@@ -2132,6 +2159,11 @@ ILboolean ILAPIENTRY ilSave(ILenum Type, ILconst_string FileName)
 			return ilSaveTiff(FileName);
 		#endif
 
+		#ifndef IL_NO_VTF
+		case IL_VTF:
+			return ilSaveVtf(FileName);
+		#endif
+
 		#ifndef IL_NO_WBMP
 		case IL_WBMP:
 			return ilSaveWbmp(FileName);
@@ -2234,6 +2266,12 @@ ILuint ILAPIENTRY ilSaveF(ILenum Type, ILHANDLE File)
 		#ifndef IL_NO_TGA
 		case IL_TGA:
 			Ret = ilSaveTargaF(File);
+			break;
+		#endif
+
+		#ifndef IL_NO_VTF
+		case IL_VTF:
+			Ret = ilSaveVtfF(File);
 			break;
 		#endif
 
@@ -2341,6 +2379,11 @@ ILuint ILAPIENTRY ilSaveL(ILenum Type, void *Lump, ILuint Size)
 		#ifndef IL_NO_DDS
 		case IL_DDS:
 			return ilSaveDdsL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_VTF
+		case IL_VTF:
+			return ilSaveVtfL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_WBMP
@@ -2494,6 +2537,13 @@ ILboolean ILAPIENTRY ilSaveImage(ILconst_string FileName)
 	#ifndef IL_NO_TIF
 	if (!iStrCmp(Ext, IL_TEXT("tif")) || !iStrCmp(Ext, IL_TEXT("tiff"))) {
 		bRet = ilSaveTiff(FileName);
+		goto finish;
+	}
+	#endif
+
+	#ifndef IL_NO_VTF
+	if (!iStrCmp(Ext, IL_TEXT("vtf"))) {
+		bRet = ilSaveVtf(FileName);
 		goto finish;
 	}
 	#endif

@@ -196,8 +196,10 @@ ILboolean iLoadIwiInternal(void)
 	// Read the header and check it.
 	if (!iGetIwiHead(&Header))
 		return IL_FALSE;
-	if (!iCheckIwi(&Header))
+	if (!iCheckIwi(&Header)) {
+		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
+	}
 
 	// From a post by Pointy on http://iwnation.com/forums/index.php?showtopic=27903,
 	//  flags ending with 0x3 have no mipmaps.

@@ -11,7 +11,8 @@ Bugs:
 
 By next release:
 
-- ilut_config.h to projects.
+- Make sure all file formats are in ilTypeFromExt.
+- Add new file formats to il_states.c/.h and the new makefile system.
 - NVTT.dll as a delay-loaded DLL.
 - Update docs with next DXT code, new mipmap/cubemap access, new SaveL code.
 - Mention Unicode and 64-bit compatibility on website.
@@ -31,6 +32,7 @@ By next release:
 
 
 Easier:
+- Find out what is different in the VTF headers that are 64 bytes.
 - Make DXT1 decompression function that does not do alpha.
 - Implement ilIsValid calls for ROT.
 - Make sure ilFixImage is called everytime something is loaded.
@@ -173,6 +175,7 @@ More involved:
 - Test all DDS types.
 - New (DX10) DDS types
 - Gamecube BMD and BTI support (http://www.amnoid.de/gc/)
+- Conversion from half to int is producing artifacts.
 
 
 Lots of work:

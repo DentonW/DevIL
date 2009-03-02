@@ -66,6 +66,7 @@ void ilDefaultStates()
 	ilStates[ilCurrentPos].ilDxtcFormat = IL_DXT1;
 	ilStates[ilCurrentPos].ilPcdPicNum = 2;
 	ilStates[ilCurrentPos].ilPngAlphaIndex = -1;
+	ilStates[ilCurrentPos].ilVtfCompression = IL_DXT_NO_COMP;
 
 	ilStates[ilCurrentPos].ilTgaId = NULL;
 	ilStates[ilCurrentPos].ilTgaAuthName = NULL;
@@ -493,6 +494,9 @@ void ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 			break;
 		case IL_TGA_RLE:
 			*Param = ilStates[ilCurrentPos].ilTgaRle;
+			break;
+		case IL_VTF_COMP:
+			*Param = ilStates[ilCurrentPos].ilVtfCompression;
 			break;
 
 		// Boolean values
@@ -1144,6 +1148,12 @@ void ILAPIENTRY ilSetInteger(ILenum Mode, ILint Param)
 		case IL_TGA_RLE:
 			if (Param == IL_FALSE || Param == IL_TRUE) {
 				ilStates[ilCurrentPos].ilTgaRle = Param;
+				return;
+			}
+			break;
+		case IL_VTF_COMP:
+			if (Param == IL_DXT1 || Param == IL_DXT5 || Param == IL_DXT3 || Param == IL_DXT1A || Param == IL_DXT_NO_COMP) {
+				ilStates[ilCurrentPos].ilVtfCompression = Param;
 				return;
 			}
 			break;

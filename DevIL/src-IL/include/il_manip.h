@@ -174,7 +174,7 @@ INLINE ILushort ILAPIENTRY ilFloatToHalf(ILuint i) {
 	}
 }
 
-//stolen from OpenEXR
+// Taken from OpenEXR
 INLINE ILuint ILAPIENTRY ilHalfToFloat (ILushort y) {
 
 	int s = (y >> 15) & 0x00000001;
