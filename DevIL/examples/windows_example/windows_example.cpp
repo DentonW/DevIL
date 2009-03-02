@@ -405,6 +405,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				CreateGDI();
 			}
 
+			// View the previous image in the animation chain.
+			if (wParam == VK_LEFT) {
+				ilBindImage(Undos[0]);  // @TODO: Implement undos better with this.
+				CurImage--;
+				if (CurImage < 0)
+					CurImage = 0;
+				ilActiveImage(CurImage);
+				ilutRenderer(ILUT_WIN32);
+				ResizeWin();
+				CreateGDI();
+			}
+
 			if (wParam == '0') {
 				ilBindImage(Undos[0]);  // @TODO: Implement undos better with this.
 				ilutRenderer(ILUT_WIN32);
@@ -462,18 +474,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			else if (wParam == '9') {
 				ilActiveMipmap(9);
-				ilutRenderer(ILUT_WIN32);
-				ResizeWin();
-				CreateGDI();
-			}
-
-			// View the previous image in the animation chain.
-			if (wParam == VK_LEFT) {
-				ilBindImage(Undos[0]);  // @TODO: Implement undos better with this.
-				CurImage--;
-				if (CurImage < 0)
-					CurImage = 0;
-				ilActiveImage(CurImage);
 				ilutRenderer(ILUT_WIN32);
 				ResizeWin();
 				CreateGDI();
