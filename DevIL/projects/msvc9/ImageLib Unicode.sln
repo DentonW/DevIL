@@ -29,6 +29,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Text Files", "Solu
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Windows Example", "..\..\examples\windows_example\windows_example-vc9.vcproj", "{0C074F70-FA8F-4D7B-BD37-DCEF0371361B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B46B180B-6079-4CE6-8647-A7D712774255} = {B46B180B-6079-4CE6-8647-A7D712774255}
+		{1E0FF575-39C1-4A99-820F-8397E9D1351F} = {1E0FF575-39C1-4A99-820F-8397E9D1351F}
+		{CCEBAA77-521A-4CC3-A4E0-C6B062FC2009} = {CCEBAA77-521A-4CC3-A4E0-C6B062FC2009}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
