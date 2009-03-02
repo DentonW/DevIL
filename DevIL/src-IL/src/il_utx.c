@@ -406,16 +406,27 @@ ILboolean iLoadUtxInternal(void)
 	}
 
 	for (i = 0; i < Header.ExportCount; i++) {
-		if (!strcmp(NameEntries[ExportTable[i].ObjectName].Name, "Texture"))
+		if (!strcmp(NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name, "Texture"))
+			i = i;
+		if (!strcmp(NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name, "Palette"))
 			i = i;
 	}
+
+//iseek(68533, IL_SEEK_SET);
+iseek(90566, IL_SEEK_SET);
+iseek(69, IL_SEEK_CUR);
+//ilTexImage(128, 128, 1, 1, IL_LUMINANCE, IL_UNSIGNED_BYTE, NULL);
+ilTexImage(256, 64, 1, 1, IL_LUMINANCE, IL_UNSIGNED_BYTE, NULL);
+iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
+iread(iCurImage->Data, iCurImage->SizeOfData, 1);
 
 	UtxDestroyNameEntries(NameEntries, &Header);
 	UtxDestroyExportTable(ExportTable, &Header);
 	UtxDestroyImportTable(ImportTable, &Header);
 
 
-	return ilFixImage();
+	return IL_FALSE;
+//	return ilFixImage();
 }
 
 #endif//IL_NO_UTX
