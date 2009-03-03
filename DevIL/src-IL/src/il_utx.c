@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 03/01/2009
+// Last modified: 03/02/2009
 //
 // Filename: src-IL/src/il_utx.c
 //
@@ -14,6 +14,7 @@
 
 #include "il_internal.h"
 #ifndef IL_NO_UTX
+#include "il_dds.h"
 
 ILboolean iLoadUtxInternal(void);
 
@@ -69,6 +70,9 @@ typedef struct UTXPALETTE
 	ILuint	Count;
 	ILuint	Name;
 } UTXPALETTE;
+
+#define UTX_P8		0x00
+#define UTX_DXT1	0x03
 
 
 //! Reads a UTX file
@@ -387,6 +391,32 @@ void UtxDestroyPalettes(UTXPALETTE *Palettes, ILuint NumPal)
 }
 
 
+ILenum UtxFormatToDevIL(ILuint Format)
+{
+	switch (Format)
+	{
+		case UTX_P8:
+			return IL_COLOR_INDEX;
+		case UTX_DXT1:
+			return IL_RGBA;
+	}
+	return IL_BGRA;  // Should never reach here.
+}
+
+
+ILuint UtxFormatToBpp(ILuint Format)
+{
+	switch (Format)
+	{
+		case UTX_P8:
+			return 1;
+		case UTX_DXT1:
+			return 4;
+	}
+	return 4;  // Should never reach here.
+}
+
+
 // Internal function used to load the UTX.
 ILboolean iLoadUtxInternal(void)
 {
@@ -396,7 +426,7 @@ ILboolean iLoadUtxInternal(void)
 	UTXIMPORTTABLE	*ImportTable;
 	UTXPALETTE		*Palettes;
 	ILimage			*Image;
-	ILuint			NumPal = 0, i;
+	ILuint			NumPal = 0, i, j = 0;
 ILint Name;
 ILubyte Type;
 ILint	Val;
@@ -405,6 +435,7 @@ ILint	Width, Height, PalEntry;
 ILboolean	BaseCreated = IL_FALSE, HasPal;
 ILuint	Pos;
 ILuint	Format;
+ILubyte	*CompData = NULL;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -473,7 +504,9 @@ Name = igetc();  // Skip the 2.
 	for (i = 0; i < Header.ExportCount; i++) {
 		if (!strcmp(NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name, "Texture")) {
 			iseek(ExportTable[i].SerialOffset, IL_SEEK_SET);
-			Width = -1;  Height = -1;  PalEntry = NumPal;  HasPal = IL_FALSE;
+			Width = -1;  Height = -1;  PalEntry = NumPal;  HasPal = IL_FALSE;  Format = UTX_P8;
+++j;
+j = j;
 
 			do {
 Pos = itell();
@@ -548,48 +581,75 @@ Pos = itell();
 						}
 					}
 					if (!strcmp(NameEntries[Name].Name, "Format"))
-						Format = Val;
+						if (Format == UTX_P8)
+							Format = Val;
 					if (!strcmp(NameEntries[Name].Name, "USize"))
-						Width = Val;
+						if (Width == -1)
+							Width = Val;
 					if (!strcmp(NameEntries[Name].Name, "VSize"))
-						Height = Val;
+						if (Height == -1)
+							Height = Val;
 				}
 
 			} while (!ieof());
 
 			iseek(8, IL_SEEK_CUR);
-			if (Width == -1 || Height == -1 || PalEntry == NumPal)
-				return IL_TRUE;//IL_FALSE;
+			if (Width == -1 || Height == -1 || (PalEntry == NumPal && Format != UTX_DXT1) || (Format != UTX_P8 && Format != UTX_DXT1))
+				return IL_FALSE;
 			if (BaseCreated == IL_FALSE) {
 				BaseCreated = IL_TRUE;
-				ilTexImage(Width, Height, 1, 1, IL_COLOR_INDEX, IL_UNSIGNED_BYTE, NULL);
+				ilTexImage(Width, Height, 1, UtxFormatToBpp(Format), UtxFormatToDevIL(Format), IL_UNSIGNED_BYTE, NULL);
 				Image = iCurImage;
 			}
 			else {
-				Image->Next = ilNewImageFull(Width, Height, 1, 1, IL_COLOR_INDEX, IL_UNSIGNED_BYTE, NULL);
+				Image->Next = ilNewImageFull(Width, Height, 1, UtxFormatToBpp(Format), UtxFormatToDevIL(Format), IL_UNSIGNED_BYTE, NULL);
 				if (Image->Next == NULL)
 					return IL_FALSE;
 				Image = Image->Next;
 			}
 
-			Image->Pal.PalSize = Palettes[PalEntry].Count * 4;
-			Image->Pal.Palette = (ILubyte*)ialloc(Image->Pal.PalSize);
-			if (Image->Pal.Palette == NULL)
-				return IL_FALSE;
-			memcpy(Image->Pal.Palette, Palettes[PalEntry].Pal, Image->Pal.PalSize);
-			Image->Pal.PalType = IL_PAL_RGBA32;
-			//@TODO: Do all the deallocations needed here!
+			switch (Format)
+			{
+				case UTX_P8:
+					Image->Pal.PalSize = Palettes[PalEntry].Count * 4;
+					Image->Pal.Palette = (ILubyte*)ialloc(Image->Pal.PalSize);
+					if (Image->Pal.Palette == NULL)
+						//@TODO: Do all the deallocations needed here!
+						return IL_FALSE;
+					memcpy(Image->Pal.Palette, Palettes[PalEntry].Pal, Image->Pal.PalSize);
+					Image->Pal.PalType = IL_PAL_RGBA32;
 
+					if (iread(Image->Data, Image->SizeOfData, 1) != 1)
+						return IL_FALSE;  //@TODO: Deallocations...
+					break;
+
+				case UTX_DXT1:
+					Image->DxtcSize = IL_MAX(Image->Width * Image->Height / 2, 8);
+					CompData = (ILubyte*)ialloc(Image->DxtcSize);
+					if (CompData == NULL)
+						//@TODO: Do all the deallocations needed here!
+						return IL_FALSE;
+
+					if (iread(CompData, Image->DxtcSize, 1) != 1) {
+						ifree(CompData);
+						return IL_FALSE;  //@TODO: Deallocations...
+					}
+					// Keep a copy of the DXTC data if the user wants it.
+					if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
+						Image->DxtcData = CompData;
+						Image->DxtcFormat = IL_DXT1;
+						CompData = NULL;
+					}
+					if (DecompressDXT1(Image, CompData) == IL_FALSE) {
+						ifree(CompData);
+						return IL_FALSE;
+					}
+					ifree(CompData);
+					break;
+			}
 			Image->Origin = IL_ORIGIN_UPPER_LEFT;
-			iread(Image->Data, Image->SizeOfData, 1);
 		}
 	}
-
-//iseek(156511, IL_SEEK_SET);
-//iseek(68533, IL_SEEK_SET);
-//iseek(90566, IL_SEEK_SET);
-//iseek(69, IL_SEEK_CUR);
-
 
 
 	UtxDestroyNameEntries(NameEntries, &Header);
