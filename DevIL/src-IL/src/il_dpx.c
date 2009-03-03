@@ -164,7 +164,7 @@ ILboolean iLoadDpxInternal(void)
 	DPX_FILE_INFO		FileInfo;
 	DPX_IMAGE_INFO		ImageInfo;
 	DPX_IMAGE_ORIENT	ImageOrient;
-	BITFILE		*File;
+//	BITFILE		*File;
 	ILuint		i, NumElements, CurElem = 0;
 	ILushort	Val, *ShortData;
 	ILubyte		Data[8];

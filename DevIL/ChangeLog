@@ -1,4 +1,7 @@
 2009-03-01 Denton Woods <doomwiz@users.sf.net>
+	* il_utx.c: Added DXT1 loading in UTX files.
+
+2009-03-01 Denton Woods <doomwiz@users.sf.net>
 	* il_utx.c: Added this file.
 	* lib/Makefile.am: Added il_utx.c to source line.
 	* il_internal.h: Added .utx loading declarations.
