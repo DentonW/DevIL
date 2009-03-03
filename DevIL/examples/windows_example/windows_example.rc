@@ -56,7 +56,7 @@ IDR_MENU1 MENU
 BEGIN
     POPUP "File"
     BEGIN
-        MENUITEM "&Open",                       ID_FILE_OPEN40001
+        MENUITEM "&Open...\tCtrl+O",            ID_FILE_OPEN40001
         MENUITEM "Open &URL...",                ID_FILE_OPENURL
         MENUITEM "&Save...",                    ID_FILE_SAVE40003
         MENUITEM "&Image Properties",           ID_FILE_IMAGEPROPERTIES
@@ -150,7 +150,7 @@ IDI_ICON1               ICON                    "resources\\DevIL Logo.ico"
 // Accelerator
 //
 
-IDR_ACCELERATOR1 ACCELERATORS 
+IDR_MENU1 ACCELERATORS 
 BEGIN
     "C",            ID_EDIT_COPY40054,      VIRTKEY, CONTROL, NOINVERT
     "V",            ID_EDIT_PASTE40010,     VIRTKEY, CONTROL, NOINVERT
