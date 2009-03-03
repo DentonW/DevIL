@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 02/20/2002 <--Y2K Compliant! =]
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 03/03/2009
 //
 // Filename: src-ILU/src/ilu_error.c
 //
@@ -18,17 +18,19 @@
 #include "ilu_error/ilu_err-japanese.h"
 #include "ilu_error/ilu_err-spanish.h"
 #include "ilu_error/ilu_err-german.h"
+#include "ilu_error/ilu_err-french.h"
 
 
 ILconst_string *iluErrors;
 ILconst_string *iluLibErrors;
 ILconst_string *iluMiscErrors;
-#define ILU_NUM_LANGUAGES 6
+#define ILU_NUM_LANGUAGES 7
 
 ILconst_string *iluErrorStrings[ILU_NUM_LANGUAGES] = {
 	iluErrorStringsEnglish,
 	iluErrorStringsArabic,
 	iluErrorStringsDutch,
+	iluErrorStringsFrench,
 	iluErrorStringsJapanese,
 	iluErrorStringsSpanish,
 	iluErrorStringsGerman
@@ -38,6 +40,7 @@ ILconst_string *iluLibErrorStrings[ILU_NUM_LANGUAGES] = {
 	iluLibErrorStringsEnglish,
 	iluLibErrorStringsArabic,
 	iluLibErrorStringsDutch,
+	iluLibErrorStringsFrench,
 	iluLibErrorStringsJapanese,
 	iluLibErrorStringsSpanish,
 	iluLibErrorStringsGerman
@@ -47,6 +50,7 @@ ILconst_string *iluMiscErrorStrings[ILU_NUM_LANGUAGES] = {
 	iluMiscErrorStringsEnglish,
 	iluMiscErrorStringsArabic,
 	iluMiscErrorStringsDutch,
+	iluMiscErrorStringsFrench,
 	iluMiscErrorStringsJapanese,
 	iluMiscErrorStringsSpanish,
 	iluMiscErrorStringsGerman
@@ -80,6 +84,7 @@ ILboolean ILAPIENTRY iluSetLanguage(ILenum Language)
 		case ILU_ENGLISH:
 		case ILU_ARABIC:
 		case ILU_DUTCH:
+		case ILU_FRENCH:
 		case ILU_JAPANESE:
 		case ILU_SPANISH:
 		case ILU_GERMAN:
@@ -95,3 +100,5 @@ ILboolean ILAPIENTRY iluSetLanguage(ILenum Language)
 
 	return IL_TRUE;
 }
+
+ 	  	 

@@ -1,4 +1,7 @@
-2009-03-01 Denton Woods <doomwiz@users.sf.net>
+2009-03-03 Denton Woods <doomwiz@users.sf.net>
+	* ilu_error-french.h: Added French translation of errors.
+
+2009-03-02 Denton Woods <doomwiz@users.sf.net>
 	* il_utx.c: Added DXT1 loading in UTX files.
 	* il_utx.h: Added this file.
 	* lib/Makefile.am: Added il_utx.h to include line.
