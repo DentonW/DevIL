@@ -2761,6 +2761,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\include\il_utx.h"
+					>
+				</File>
+				<File
 					RelativePath="..\include\il_vtf.h"
 					>
 				</File>
