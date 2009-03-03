@@ -377,8 +377,9 @@ ILint	Size;
 ILint	Width, Height, PalEntry;
 ILboolean	BaseCreated = IL_FALSE, HasPal;
 ILuint	Pos;
-ILuint	Format;
+ILint	Format;
 ILubyte	*CompData = NULL;
+ILubyte ExtraData[9];
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -424,30 +425,30 @@ ILubyte	*CompData = NULL;
 	NumPal = 0;
 	for (i = 0; i < Header.ExportCount; i++) {
 		if (!strcmp(NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name, "Palette")) {
-			NumPal++;
 			//Palettes[i].Name = strdup(NameEntries[ExportTable[i].ObjectName].Name);
-			Palettes[i].Name = i;//ExportTable[i].ObjectName;
-			iseek(ExportTable[i].SerialOffset, IL_SEEK_SET);
+			Palettes[NumPal].Name = i;//ExportTable[i].ObjectName;
+			iseek(ExportTable[NumPal].SerialOffset, IL_SEEK_SET);
 Name = igetc();  // Skip the 2.
-			Palettes[i].Count = UtxReadCompactInteger();
-			Palettes[i].Pal = (ILubyte*)ialloc(Palettes[i].Count * 4);
-			if (/*Palettes[i].Name == NULL || */Palettes[i].Pal == NULL) {
+			Palettes[NumPal].Count = UtxReadCompactInteger();
+			Palettes[NumPal].Pal = (ILubyte*)ialloc(Palettes[NumPal].Count * 4);
+			if (/*Palettes[NumPal].Name == NULL || */Palettes[NumPal].Pal == NULL) {
 				UtxDestroyNameEntries(NameEntries, &Header);
 				UtxDestroyExportTable(ExportTable, &Header);
 				UtxDestroyImportTable(ImportTable, &Header);
 				UtxDestroyPalettes(Palettes, NumPal);
 				return IL_FALSE;
 			}
-			if (iread(Palettes[i].Pal, Palettes[i].Count * 4, 1) != 1)
+			if (iread(Palettes[NumPal].Pal, Palettes[NumPal].Count * 4, 1) != 1)
 				//@TODO: Deallocations here!
 				return IL_FALSE;
+			NumPal++;
 		}
 	}
 
 	for (i = 0; i < Header.ExportCount; i++) {
 		if (!strcmp(NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name, "Texture")) {
 			iseek(ExportTable[i].SerialOffset, IL_SEEK_SET);
-			Width = -1;  Height = -1;  PalEntry = NumPal;  HasPal = IL_FALSE;  Format = UTX_P8;
+			Width = -1;  Height = -1;  PalEntry = NumPal;  HasPal = IL_FALSE;  Format = -1;
 ++j;
 j = j;
 
@@ -524,7 +525,7 @@ Pos = itell();
 						}
 					}
 					if (!strcmp(NameEntries[Name].Name, "Format"))
-						if (Format == UTX_P8)
+						if (Format == -1)
 							Format = Val;
 					if (!strcmp(NameEntries[Name].Name, "USize"))
 						if (Width == -1)
@@ -536,7 +537,8 @@ Pos = itell();
 
 			} while (!ieof());
 
-			iseek(8, IL_SEEK_CUR);
+			if (Format == -1)
+				Format = UTX_P8;
 			if (Width == -1 || Height == -1 || (PalEntry == NumPal && Format != UTX_DXT1) || (Format != UTX_P8 && Format != UTX_DXT1))
 				return IL_FALSE;
 			if (BaseCreated == IL_FALSE) {
@@ -550,6 +552,9 @@ Pos = itell();
 					return IL_FALSE;
 				Image = Image->Next;
 			}
+
+			iseek(5, IL_SEEK_CUR);
+			UtxReadCompactInteger();
 
 			switch (Format)
 			{
@@ -567,6 +572,21 @@ Pos = itell();
 					break;
 
 				case UTX_DXT1:
+//
+//
+// HACK!!!
+//
+//
+//igetc();
+//ExtraData[0] = igetc();
+//if (ExtraData[0] == 0x0C)
+	//iseek(8, IL_SEEK_CUR);
+//	iread(ExtraData+1, 8, 1);
+//else
+	//iseek(7, IL_SEEK_CUR);
+//	iread(ExtraData+1, 7, 1);
+//if (igetc() == 0x80)
+//	igetc();
 					Image->DxtcSize = IL_MAX(Image->Width * Image->Height / 2, 8);
 					CompData = (ILubyte*)ialloc(Image->DxtcSize);
 					if (CompData == NULL)

@@ -2,6 +2,8 @@
 	* il_utx.c: Added DXT1 loading in UTX files.
 	* il_utx.h: Added this file.
 	* lib/Makefile.am: Added il_utx.h to include line.
+	* il_utx.c: Fixed loading of larger images.
+	* windows_example.rc: Fixed accelerator for menu.
 
 2009-03-01 Denton Woods <doomwiz@users.sf.net>
 	* il_utx.c: Added this file.
