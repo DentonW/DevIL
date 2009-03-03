@@ -14,65 +14,8 @@
 
 #include "il_internal.h"
 #ifndef IL_NO_UTX
+#include "il_utx.h"
 #include "il_dds.h"
-
-ILboolean iLoadUtxInternal(void);
-
-typedef struct UTXHEADER
-{
-	ILuint		Signature;
-	ILushort	Version;
-	ILushort	LicenseMode;
-	ILuint		Flags;
-	ILuint		NameCount;
-	ILuint		NameOffset;
-	ILuint		ExportCount;
-	ILuint		ExportOffset;
-	ILuint		ImportCount;
-	ILuint		ImportOffset;
-} UTXHEADER;
-
-typedef struct UTXENTRYNAME
-{
-	char	*Name;
-	ILuint	Flags;
-} UTXENTRYNAME;
-
-typedef struct UTXEXPORTTABLE
-{
-	ILint	Class;
-	ILint	Super;
-	ILint	Group;
-	ILint	ObjectName;
-	ILuint	ObjectFlags;
-	ILint	SerialSize;
-	ILint	SerialOffset;
-
-	ILboolean	ClassImported;
-	ILboolean	SuperImported;
-	ILboolean	GroupImported;
-} UTXEXPORTTABLE;
-
-typedef struct UTXIMPORTTABLE
-{
-	ILint		ClassPackage;
-	ILint		ClassName;
-	ILint		Package;
-	ILint		ObjectName;
-
-	ILboolean	PackageImported;
-} UTXIMPORTTABLE;
-
-typedef struct UTXPALETTE
-{
-	//char	*Name;
-	ILubyte	*Pal;
-	ILuint	Count;
-	ILuint	Name;
-} UTXPALETTE;
-
-#define UTX_P8		0x00
-#define UTX_DXT1	0x03
 
 
 //! Reads a UTX file
