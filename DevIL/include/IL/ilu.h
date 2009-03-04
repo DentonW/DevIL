@@ -82,6 +82,7 @@ extern "C" {
 #define ILU_JAPANESE           0x0803
 #define ILU_SPANISH            0x0804
 #define ILU_GERMAN             0x0805
+#define ILU_FRENCH             0x0806
 
 
 // Filters
