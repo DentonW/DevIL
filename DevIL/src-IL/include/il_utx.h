@@ -16,7 +16,16 @@
 #ifndef UTX_H
 #define UTX_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "il_internal.h"
+#include "il_dds.h"
+
+#ifdef __cplusplus
+}
+#endif
 
 typedef struct UTXHEADER
 {

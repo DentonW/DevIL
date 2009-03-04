@@ -2525,6 +2525,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\il_utx.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\src\il_vtf.c"
 					>
 				</File>
