@@ -92,27 +92,18 @@ ILboolean CheckUtxHead(UTXHEADER *Header)
 string GetUtxName(UTXHEADER *Header)
 {
 #define NAME_MAX_LEN 256  //@TODO: Figure out if these can possibly be longer.
-	char	/**Name,*/ OldName[NAME_MAX_LEN];
+	char	Name[NAME_MAX_LEN];
 	ILubyte	Length = 0;
-	string	Name;
 
 	// New style (Unreal Tournament) name.  This has a byte at the beginning telling
 	//  how long the string is (plus terminating 0), followed by the terminating 0. 
 	if (Header->Version >= 64) {
 		Length = igetc();
-		//Name = (char*)ialloc(Length);
-		//if (Name == NULL)
-		//	return NULL;
-		Name.resize(Length);
 		if (iread(OldName, Length, 1) != 1)
 			return "";
 		if (OldName[Length-1] != 0)
 			return "";
-		return string(OldName);
-		//if (iread((void*)Name.c_str(), Length, 1) != 1) {
-		//	return "";
-		//}
-		return Name;
+		return string(Name);
 	}
 
 	// Old style (Unreal) name.  This string length is unknown, but it is terminated
@@ -125,31 +116,17 @@ string GetUtxName(UTXHEADER *Header)
 	if (Length == NAME_MAX_LEN && OldName[Length-1] != 0)
 		return "";
 
-	// Just copy the string and return it.
-	//Name = (char*)ialloc(Length);
-	if (Name == "")
-		return NULL;
-	//memcpy(Name, OldName, Length);
-	Name = OldName;
-
-	return Name;
-
+	return string(Name);
 #undef NAME_MAX_LEN
 }
 
 
 bool GetUtxNameTable(vector <UTXENTRYNAME> &NameEntries, UTXHEADER *Header)
 {
-	//UTXENTRYNAME *NameEntries;
 	ILuint	NumRead;
 
 	// Go to the name table.
 	iseek(Header->NameOffset, IL_SEEK_SET);
-
-	// Allocate the name table.
-	/*NameEntries = (UTXENTRYNAME*)ialloc(Header->NameCount * sizeof(UTXENTRYNAME));
-	if (NameEntries == NULL)
-		return NULL;*/
 
 	NameEntries.resize(Header->NameCount);
 
@@ -163,29 +140,12 @@ bool GetUtxNameTable(vector <UTXENTRYNAME> &NameEntries, UTXHEADER *Header)
 
 	// Did not read all of the entries (most likely GetUtxName failed).
 	if (NumRead < Header->NameCount) {
-		// So we have to free all of the memory we allocated here.
-		/*for (i = 0; i < NumRead; i++) {
-			ifree(NameEntries[NumRead].Name);
-		}*/
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return false;
 	}
 
 	return true;
 }
-
-
-/*void UtxDestroyNameEntries(UTXENTRYNAME *NameEntries, UTXHEADER *Header)
-{
-	ILuint i;
-
-	for (i = 0; i < Header->NameCount; i++) {
-		ifree(NameEntries[i].Name);
-	}
-	ifree(NameEntries);
-
-	return;
-}*/
 
 
 // This following code is from http://wiki.beyondunreal.com/Legacy:Package_File_Format/Data_Details.
@@ -259,6 +219,7 @@ void ChangeObjectReference(ILint *ObjRef, ILboolean *IsImported)
 
 	return;
 }
+
 
 bool GetUtxExportTable(vector <UTXEXPORTTABLE> &ExportTable, UTXHEADER *Header)
 {
