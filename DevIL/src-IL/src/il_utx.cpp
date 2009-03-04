@@ -15,7 +15,6 @@
 #include "il_internal.h"
 #ifndef IL_NO_UTX
 #include "il_utx.h"
-#include "il_dds.h"
 
 
 //! Reads a UTX file
