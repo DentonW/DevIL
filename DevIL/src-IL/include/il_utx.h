@@ -27,6 +27,13 @@ extern "C" {
 }
 #endif
 
+
+#include <memory>
+#include <vector>
+#include <string>
+using namespace std;
+
+
 typedef struct UTXHEADER
 {
 	ILuint		Signature;
@@ -43,7 +50,8 @@ typedef struct UTXHEADER
 
 typedef struct UTXENTRYNAME
 {
-	char	*Name;
+	//char	*Name;
+	string	Name;
 	ILuint	Flags;
 } UTXENTRYNAME;
 

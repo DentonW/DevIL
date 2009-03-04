@@ -15,10 +15,6 @@
 #include "il_internal.h"
 #ifndef IL_NO_UTX
 #include "il_utx.h"
-#include <memory>
-#include <vector>
-#include <string>
-using namespace std;
 
 
 //! Reads a UTX file
@@ -93,23 +89,29 @@ ILboolean CheckUtxHead(UTXHEADER *Header)
 
 
 // Gets a name variable from the file.  Keep in mind that the return value must be freed.
-char *GetUtxName(UTXHEADER *Header)
+string GetUtxName(UTXHEADER *Header)
 {
 #define NAME_MAX_LEN 256  //@TODO: Figure out if these can possibly be longer.
-	char	*Name, OldName[NAME_MAX_LEN];
+	char	/**Name,*/ OldName[NAME_MAX_LEN];
 	ILubyte	Length = 0;
+	string	Name;
 
 	// New style (Unreal Tournament) name.  This has a byte at the beginning telling
 	//  how long the string is (plus terminating 0), followed by the terminating 0. 
 	if (Header->Version >= 64) {
 		Length = igetc();
-		Name = (char*)ialloc(Length);
-		if (Name == NULL)
-			return NULL;
-		if (iread(Name, Length, 1) != 1) {
-			ifree(Name);
-			return NULL;
-		}
+		//Name = (char*)ialloc(Length);
+		//if (Name == NULL)
+		//	return NULL;
+		Name.resize(Length);
+		if (iread(OldName, Length, 1) != 1)
+			return "";
+		if (OldName[Length-1] != 0)
+			return "";
+		return string(OldName);
+		//if (iread((void*)Name.c_str(), Length, 1) != 1) {
+		//	return "";
+		//}
 		return Name;
 	}
 
@@ -121,13 +123,14 @@ char *GetUtxName(UTXHEADER *Header)
 
 	// Never reached the terminating 0.
 	if (Length == NAME_MAX_LEN && OldName[Length-1] != 0)
-		return NULL;
+		return "";
 
 	// Just copy the string and return it.
-	Name = (char*)ialloc(Length);
-	if (Name == NULL)
+	//Name = (char*)ialloc(Length);
+	if (Name == "")
 		return NULL;
-	memcpy(Name, OldName, Length);
+	//memcpy(Name, OldName, Length);
+	Name = OldName;
 
 	return Name;
 
@@ -135,23 +138,25 @@ char *GetUtxName(UTXHEADER *Header)
 }
 
 
-UTXENTRYNAME *GetUtxNameTable(UTXHEADER *Header)
+bool GetUtxNameTable(vector <UTXENTRYNAME> &NameEntries, UTXHEADER *Header)
 {
-	UTXENTRYNAME *NameEntries;
-	ILuint	i, NumRead;
+	//UTXENTRYNAME *NameEntries;
+	ILuint	NumRead;
 
 	// Go to the name table.
 	iseek(Header->NameOffset, IL_SEEK_SET);
 
 	// Allocate the name table.
-	NameEntries = (UTXENTRYNAME*)ialloc(Header->NameCount * sizeof(UTXENTRYNAME));
+	/*NameEntries = (UTXENTRYNAME*)ialloc(Header->NameCount * sizeof(UTXENTRYNAME));
 	if (NameEntries == NULL)
-		return NULL;
+		return NULL;*/
+
+	NameEntries.resize(Header->NameCount);
 
 	// Read in the name table.
 	for (NumRead = 0; NumRead < Header->NameCount; NumRead++) {
 		NameEntries[NumRead].Name = GetUtxName(Header);
-		if (NameEntries[NumRead].Name == NULL)
+		if (NameEntries[NumRead].Name == "")
 			break;
 		NameEntries[NumRead].Flags = GetLittleUInt();
 	}
@@ -159,18 +164,18 @@ UTXENTRYNAME *GetUtxNameTable(UTXHEADER *Header)
 	// Did not read all of the entries (most likely GetUtxName failed).
 	if (NumRead < Header->NameCount) {
 		// So we have to free all of the memory we allocated here.
-		for (i = 0; i < NumRead; i++) {
+		/*for (i = 0; i < NumRead; i++) {
 			ifree(NameEntries[NumRead].Name);
-		}
+		}*/
 		ilSetError(IL_INVALID_FILE_HEADER);
-		return NULL;
+		return false;
 	}
 
-	return NameEntries;
+	return true;
 }
 
 
-void UtxDestroyNameEntries(UTXENTRYNAME *NameEntries, UTXHEADER *Header)
+/*void UtxDestroyNameEntries(UTXENTRYNAME *NameEntries, UTXHEADER *Header)
 {
 	ILuint i;
 
@@ -180,7 +185,7 @@ void UtxDestroyNameEntries(UTXENTRYNAME *NameEntries, UTXHEADER *Header)
 	ifree(NameEntries);
 
 	return;
-}
+}*/
 
 
 // This following code is from http://wiki.beyondunreal.com/Legacy:Package_File_Format/Data_Details.
@@ -364,8 +369,9 @@ ILuint UtxFormatToBpp(ILuint Format)
 ILboolean iLoadUtxInternal(void)
 {
 	UTXHEADER		Header;
-	UTXENTRYNAME	*NameEntries;
+	//UTXENTRYNAME	*NameEntries;
 	//UTXEXPORTTABLE	*ExportTable;
+	vector <UTXENTRYNAME> NameEntries;
 	vector <UTXEXPORTTABLE> ExportTable;
 	UTXIMPORTTABLE	*ImportTable;
 	UTXPALETTE		*Palettes;
@@ -380,6 +386,8 @@ ILboolean	BaseCreated = IL_FALSE, HasPal;
 ILuint	Pos;
 ILint	Format;
 ILubyte	*CompData = NULL;
+string a;
+
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -392,8 +400,10 @@ ILubyte	*CompData = NULL;
 		return IL_FALSE;
 
 	// Now we grab the name table.
-	NameEntries = GetUtxNameTable(&Header);
+	/*NameEntries = GetUtxNameTable(&Header);
 	if (NameEntries == NULL)
+		return IL_FALSE;*/
+	if (!GetUtxNameTable(NameEntries, &Header))
 		return IL_FALSE;
 	// Then we get the export table.
 	/*ExportTable =*/ if (!GetUtxExportTable(ExportTable, &Header))
@@ -405,27 +415,28 @@ ILubyte	*CompData = NULL;
 	// Then the last table is the import table.
 	ImportTable = GetUtxImportTable(&Header);
 	if (ImportTable == NULL) {
-		UtxDestroyNameEntries(NameEntries, &Header);
+		//UtxDestroyNameEntries(NameEntries, &Header);
 		//UtxDestroyExportTable(ExportTable, &Header);
 		return IL_FALSE;
 	}
 
 	for (i = 0; i < Header.ExportCount; i++) {
-		if (!strcmp(NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name, "Palette"))
+		//if (!strcmp(NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name, "Palette"))
+		if (NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name == "Palette")
 			NumPal++;
 	}
 	if (NumPal == 0)  //@TODO: Take care of UTX files without paletted data.
 		return IL_FALSE;
 	Palettes = (UTXPALETTE*)ialloc(NumPal * sizeof(UTXPALETTE));
 	if (Palettes == NULL) {
-		UtxDestroyNameEntries(NameEntries, &Header);
+		//UtxDestroyNameEntries(NameEntries, &Header);
 		//UtxDestroyExportTable(ExportTable, &Header);
 		UtxDestroyImportTable(ImportTable, &Header);
 		return IL_FALSE;
 	}
 	NumPal = 0;
 	for (i = 0; i < Header.ExportCount; i++) {
-		if (!strcmp(NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name, "Palette")) {
+		if (NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name == "Palette") {
 			//Palettes[i].Name = strdup(NameEntries[ExportTable[i].ObjectName].Name);
 			Palettes[NumPal].Name = i;//ExportTable[i].ObjectName;
 			iseek(ExportTable[NumPal].SerialOffset, IL_SEEK_SET);
@@ -433,7 +444,7 @@ Name = igetc();  // Skip the 2.
 			Palettes[NumPal].Count = UtxReadCompactInteger();
 			Palettes[NumPal].Pal = (ILubyte*)ialloc(Palettes[NumPal].Count * 4);
 			if (/*Palettes[NumPal].Name == NULL || */Palettes[NumPal].Pal == NULL) {
-				UtxDestroyNameEntries(NameEntries, &Header);
+				//UtxDestroyNameEntries(NameEntries, &Header);
 				//UtxDestroyExportTable(ExportTable, &Header);
 				UtxDestroyImportTable(ImportTable, &Header);
 				UtxDestroyPalettes(Palettes, NumPal);
@@ -447,7 +458,7 @@ Name = igetc();  // Skip the 2.
 	}
 
 	for (i = 0; i < Header.ExportCount; i++) {
-		if (!strcmp(NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name, "Texture")) {
+		if (NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name == "Texture") {
 			iseek(ExportTable[i].SerialOffset, IL_SEEK_SET);
 			Width = -1;  Height = -1;  PalEntry = NumPal;  HasPal = IL_FALSE;  Format = -1;
 ++j;
@@ -456,7 +467,7 @@ j = j;
 			do {
 Pos = itell();
 				Name = UtxReadCompactInteger();
-				if (!strcmp(NameEntries[Name].Name, "None"))
+				if (NameEntries[Name].Name == "None")
 					break;
 				Type = igetc();
 				Size = (Type & 0x70) >> 4;
@@ -514,7 +525,7 @@ Pos = itell();
 
 				//@TODO: What should we do if Name >= Header.NameCount?
 				if ((ILuint)Name < Header.NameCount) {
-					if (!strcmp(NameEntries[Name].Name, "Palette")) {
+					if (NameEntries[Name].Name == "Palette") {
 						Val--;
 						if (HasPal == IL_FALSE) {
 							for (PalEntry = 0; (ILuint)PalEntry < NumPal; PalEntry++) {
@@ -525,13 +536,13 @@ Pos = itell();
 							}
 						}
 					}
-					if (!strcmp(NameEntries[Name].Name, "Format"))
+					if (NameEntries[Name].Name == "Format")
 						if (Format == -1)
 							Format = Val;
-					if (!strcmp(NameEntries[Name].Name, "USize"))
+					if (NameEntries[Name].Name == "USize")
 						if (Width == -1)
 							Width = Val;
-					if (!strcmp(NameEntries[Name].Name, "VSize"))
+					if (NameEntries[Name].Name == "VSize")
 						if (Height == -1)
 							Height = Val;
 				}
@@ -616,7 +627,7 @@ Pos = itell();
 	}
 
 
-	UtxDestroyNameEntries(NameEntries, &Header);
+	//UtxDestroyNameEntries(NameEntries, &Header);
 	//UtxDestroyExportTable(ExportTable, &Header);
 	UtxDestroyImportTable(ImportTable, &Header);
 	UtxDestroyPalettes(Palettes, NumPal);
