@@ -1,3 +1,6 @@
+2009-03-04 Denton Woods <doomwiz@users.sf.net>
+	* il_utx.cpp: Started cleanup of file using C++ constructs.
+
 2009-03-03 Denton Woods <doomwiz@users.sf.net>
 	* ilu_error-french.h: Added French translation of errors.
 	* ilu.h: Added ILU_FRENCH define.

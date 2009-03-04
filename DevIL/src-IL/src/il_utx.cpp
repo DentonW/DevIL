@@ -15,6 +15,10 @@
 #include "il_internal.h"
 #ifndef IL_NO_UTX
 #include "il_utx.h"
+#include <memory>
+#include <vector>
+#include <string>
+using namespace std;
 
 
 //! Reads a UTX file
@@ -251,18 +255,15 @@ void ChangeObjectReference(ILint *ObjRef, ILboolean *IsImported)
 	return;
 }
 
-UTXEXPORTTABLE *GetUtxExportTable(UTXHEADER *Header)
+bool GetUtxExportTable(vector <UTXEXPORTTABLE> &ExportTable, UTXHEADER *Header)
 {
-	UTXEXPORTTABLE	*ExportTable;
-	ILuint			i;
+	ILuint i;
 
 	// Go to the name table.
 	iseek(Header->ExportOffset, IL_SEEK_SET);
 
-	// Allocate the name table.
-	ExportTable = (UTXEXPORTTABLE*)ialloc(Header->ExportCount * sizeof(UTXEXPORTTABLE));
-	if (ExportTable == NULL)
-		return NULL;
+	// Create ExportCount elements in our array.
+	ExportTable.resize(Header->ExportCount);
 
 	for (i = 0; i < Header->ExportCount; i++) {
 		ExportTable[i].Class = UtxReadCompactInteger();
@@ -278,7 +279,7 @@ UTXEXPORTTABLE *GetUtxExportTable(UTXHEADER *Header)
 		ChangeObjectReference(&ExportTable[i].Group, &ExportTable[i].GroupImported);
 	}
 
-	return ExportTable;
+	return true;
 }
 
 
@@ -364,7 +365,8 @@ ILboolean iLoadUtxInternal(void)
 {
 	UTXHEADER		Header;
 	UTXENTRYNAME	*NameEntries;
-	UTXEXPORTTABLE	*ExportTable;
+	//UTXEXPORTTABLE	*ExportTable;
+	vector <UTXEXPORTTABLE> ExportTable;
 	UTXIMPORTTABLE	*ImportTable;
 	UTXPALETTE		*Palettes;
 	ILimage			*Image;
@@ -378,7 +380,6 @@ ILboolean	BaseCreated = IL_FALSE, HasPal;
 ILuint	Pos;
 ILint	Format;
 ILubyte	*CompData = NULL;
-ILubyte ExtraData[9];
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -395,16 +396,17 @@ ILubyte ExtraData[9];
 	if (NameEntries == NULL)
 		return IL_FALSE;
 	// Then we get the export table.
-	ExportTable = GetUtxExportTable(&Header);
-	if (ExportTable == NULL) {
+	/*ExportTable =*/ if (!GetUtxExportTable(ExportTable, &Header))
+		return IL_FALSE;
+	/*if (ExportTable == NULL) {
 		UtxDestroyNameEntries(NameEntries, &Header);
 		return IL_FALSE;
-	}
+	}*/
 	// Then the last table is the import table.
 	ImportTable = GetUtxImportTable(&Header);
 	if (ImportTable == NULL) {
 		UtxDestroyNameEntries(NameEntries, &Header);
-		UtxDestroyExportTable(ExportTable, &Header);
+		//UtxDestroyExportTable(ExportTable, &Header);
 		return IL_FALSE;
 	}
 
@@ -417,7 +419,7 @@ ILubyte ExtraData[9];
 	Palettes = (UTXPALETTE*)ialloc(NumPal * sizeof(UTXPALETTE));
 	if (Palettes == NULL) {
 		UtxDestroyNameEntries(NameEntries, &Header);
-		UtxDestroyExportTable(ExportTable, &Header);
+		//UtxDestroyExportTable(ExportTable, &Header);
 		UtxDestroyImportTable(ImportTable, &Header);
 		return IL_FALSE;
 	}
@@ -432,7 +434,7 @@ Name = igetc();  // Skip the 2.
 			Palettes[NumPal].Pal = (ILubyte*)ialloc(Palettes[NumPal].Count * 4);
 			if (/*Palettes[NumPal].Name == NULL || */Palettes[NumPal].Pal == NULL) {
 				UtxDestroyNameEntries(NameEntries, &Header);
-				UtxDestroyExportTable(ExportTable, &Header);
+				//UtxDestroyExportTable(ExportTable, &Header);
 				UtxDestroyImportTable(ImportTable, &Header);
 				UtxDestroyPalettes(Palettes, NumPal);
 				return IL_FALSE;
@@ -615,7 +617,7 @@ Pos = itell();
 
 
 	UtxDestroyNameEntries(NameEntries, &Header);
-	UtxDestroyExportTable(ExportTable, &Header);
+	//UtxDestroyExportTable(ExportTable, &Header);
 	UtxDestroyImportTable(ImportTable, &Header);
 	UtxDestroyPalettes(Palettes, NumPal);
 
