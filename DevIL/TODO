@@ -153,7 +153,6 @@ More involved:
 - Redo Compress in il_dds-save.c.
 - Check 16-bit images being loaded have their lower bits properly set.  An example is the il_dds.c entry on 2009-01-15.
 - Fix image loading problems listed on http://www.seriema.net/thumbview/index.php?page=compatibility.
-- Fix iluRotate_ - it shifts images by a pixel each direction sometimes.
 - Look at http://en.wikipedia.org/wiki/Comparison_of_graphics_file_formats
 - Use IL_HALF format internally.
 - PNG and JPG compression in .bmp files?
