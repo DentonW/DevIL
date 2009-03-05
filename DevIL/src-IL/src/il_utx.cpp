@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 03/03/2009
+// Last modified: 03/04/2009
 //
 // Filename: src-IL/src/il_utx.cpp
 //
@@ -44,7 +44,14 @@ ILboolean ilLoadUtxF(ILHANDLE File)
 	
 	iSetInputFile(File);
 	FirstPos = itell();
-	bRet = iLoadUtxInternal();
+	try {
+		bRet = iLoadUtxInternal();
+	}
+	catch (bad_alloc &e) {
+		e;
+		ilSetError(IL_OUT_OF_MEMORY);
+		return IL_FALSE;
+	}
 	iseek(FirstPos, IL_SEEK_SET);
 	
 	return bRet;
@@ -54,42 +61,49 @@ ILboolean ilLoadUtxF(ILHANDLE File)
 //! Reads from a memory "lump" that contains a UTX
 ILboolean ilLoadUtxL(const void *Lump, ILuint Size)
 {
-	iSetInputLump(Lump, Size);
+	try {
+		iSetInputLump(Lump, Size);
+	}
+	catch (bad_alloc &e) {
+		e;
+		ilSetError(IL_OUT_OF_MEMORY);
+		return IL_FALSE;
+	}
 	return iLoadUtxInternal();
 }
 
 
-ILboolean GetUtxHead(UTXHEADER *Header)
+ILboolean GetUtxHead(UTXHEADER &Header)
 {
-	Header->Signature = GetLittleUInt();
-	Header->Version = GetLittleUShort();
-	Header->LicenseMode = GetLittleUShort();
-	Header->Flags = GetLittleUInt();
-	Header->NameCount = GetLittleUInt();
-	Header->NameOffset = GetLittleUInt();
-	Header->ExportCount = GetLittleUInt();
-	Header->ExportOffset = GetLittleUInt();
-	Header->ImportCount = GetLittleUInt();
-	Header->ImportOffset = GetLittleUInt();
+	Header.Signature = GetLittleUInt();
+	Header.Version = GetLittleUShort();
+	Header.LicenseMode = GetLittleUShort();
+	Header.Flags = GetLittleUInt();
+	Header.NameCount = GetLittleUInt();
+	Header.NameOffset = GetLittleUInt();
+	Header.ExportCount = GetLittleUInt();
+	Header.ExportOffset = GetLittleUInt();
+	Header.ImportCount = GetLittleUInt();
+	Header.ImportOffset = GetLittleUInt();
 
 	return IL_TRUE;
 }
 
 
-ILboolean CheckUtxHead(UTXHEADER *Header)
+ILboolean CheckUtxHead(UTXHEADER &Header)
 {
 	// This signature signifies a UTX file.
-	if (Header->Signature != 0x9E2A83C1)
+	if (Header.Signature != 0x9E2A83C1)
 		return IL_FALSE;
 	// Unreal uses 61-63, and Unreal Tournament uses 67-69.
-	if ((Header->Version < 61 || Header->Version > 69))
+	if ((Header.Version < 61 || Header.Version > 69))
 		return IL_FALSE;
 	return IL_TRUE;
 }
 
 
 // Gets a name variable from the file.  Keep in mind that the return value must be freed.
-string GetUtxName(UTXHEADER *Header)
+string GetUtxName(UTXHEADER &Header)
 {
 #define NAME_MAX_LEN 256  //@TODO: Figure out if these can possibly be longer.
 	char	Name[NAME_MAX_LEN];
@@ -97,11 +111,11 @@ string GetUtxName(UTXHEADER *Header)
 
 	// New style (Unreal Tournament) name.  This has a byte at the beginning telling
 	//  how long the string is (plus terminating 0), followed by the terminating 0. 
-	if (Header->Version >= 64) {
+	if (Header.Version >= 64) {
 		Length = igetc();
-		if (iread(OldName, Length, 1) != 1)
+		if (iread(Name, Length, 1) != 1)
 			return "";
-		if (OldName[Length-1] != 0)
+		if (Name[Length-1] != 0)
 			return "";
 		return string(Name);
 	}
@@ -109,11 +123,11 @@ string GetUtxName(UTXHEADER *Header)
 	// Old style (Unreal) name.  This string length is unknown, but it is terminated
 	//  by a 0.
 	do {
-		OldName[Length++] = igetc();
-	} while (!ieof() && OldName[Length-1] != 0 && Length < NAME_MAX_LEN);
+		Name[Length++] = igetc();
+	} while (!ieof() && Name[Length-1] != 0 && Length < NAME_MAX_LEN);
 
 	// Never reached the terminating 0.
-	if (Length == NAME_MAX_LEN && OldName[Length-1] != 0)
+	if (Length == NAME_MAX_LEN && Name[Length-1] != 0)
 		return "";
 
 	return string(Name);
@@ -121,17 +135,17 @@ string GetUtxName(UTXHEADER *Header)
 }
 
 
-bool GetUtxNameTable(vector <UTXENTRYNAME> &NameEntries, UTXHEADER *Header)
+bool GetUtxNameTable(vector <UTXENTRYNAME> &NameEntries, UTXHEADER &Header)
 {
 	ILuint	NumRead;
 
 	// Go to the name table.
-	iseek(Header->NameOffset, IL_SEEK_SET);
+	iseek(Header.NameOffset, IL_SEEK_SET);
 
-	NameEntries.resize(Header->NameCount);
+	NameEntries.resize(Header.NameCount);
 
 	// Read in the name table.
-	for (NumRead = 0; NumRead < Header->NameCount; NumRead++) {
+	for (NumRead = 0; NumRead < Header.NameCount; NumRead++) {
 		NameEntries[NumRead].Name = GetUtxName(Header);
 		if (NameEntries[NumRead].Name == "")
 			break;
@@ -139,7 +153,7 @@ bool GetUtxNameTable(vector <UTXENTRYNAME> &NameEntries, UTXHEADER *Header)
 	}
 
 	// Did not read all of the entries (most likely GetUtxName failed).
-	if (NumRead < Header->NameCount) {
+	if (NumRead < Header.NameCount) {
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return false;
 	}
@@ -221,17 +235,17 @@ void ChangeObjectReference(ILint *ObjRef, ILboolean *IsImported)
 }
 
 
-bool GetUtxExportTable(vector <UTXEXPORTTABLE> &ExportTable, UTXHEADER *Header)
+bool GetUtxExportTable(vector <UTXEXPORTTABLE> &ExportTable, UTXHEADER &Header)
 {
 	ILuint i;
 
 	// Go to the name table.
-	iseek(Header->ExportOffset, IL_SEEK_SET);
+	iseek(Header.ExportOffset, IL_SEEK_SET);
 
 	// Create ExportCount elements in our array.
-	ExportTable.resize(Header->ExportCount);
+	ExportTable.resize(Header.ExportCount);
 
-	for (i = 0; i < Header->ExportCount; i++) {
+	for (i = 0; i < Header.ExportCount; i++) {
 		ExportTable[i].Class = UtxReadCompactInteger();
 		ExportTable[i].Super = UtxReadCompactInteger();
 		ExportTable[i].Group = GetLittleUInt();
@@ -249,27 +263,17 @@ bool GetUtxExportTable(vector <UTXEXPORTTABLE> &ExportTable, UTXHEADER *Header)
 }
 
 
-void UtxDestroyExportTable(UTXEXPORTTABLE *ExportTable, UTXHEADER *Header)
+bool GetUtxImportTable(vector <UTXIMPORTTABLE> &ImportTable, UTXHEADER &Header)
 {
-	ifree(ExportTable);
-	return;
-}
-
-
-UTXIMPORTTABLE *GetUtxImportTable(UTXHEADER *Header)
-{
-	UTXIMPORTTABLE	*ImportTable;
-	ILuint			i;
+	ILuint i;
 
 	// Go to the name table.
-	iseek(Header->ImportOffset, IL_SEEK_SET);
+	iseek(Header.ImportOffset, IL_SEEK_SET);
 
 	// Allocate the name table.
-	ImportTable = (UTXIMPORTTABLE*)ialloc(Header->ImportCount * sizeof(UTXIMPORTTABLE));
-	if (ImportTable == NULL)
-		return NULL;
+	ImportTable.resize(Header.ImportCount);
 
-	for (i = 0; i < Header->ImportCount; i++) {
+	for (i = 0; i < Header.ImportCount; i++) {
 		ImportTable[i].ClassPackage = UtxReadCompactInteger();
 		ImportTable[i].ClassName = UtxReadCompactInteger();
 		ImportTable[i].Package = GetLittleUInt();
@@ -278,18 +282,11 @@ UTXIMPORTTABLE *GetUtxImportTable(UTXHEADER *Header)
 		ChangeObjectReference(&ImportTable[i].Package, &ImportTable[i].PackageImported);
 	}
 
-	return ImportTable;
+	return true;
 }
 
 
-void UtxDestroyImportTable(UTXIMPORTTABLE *ImportTable, UTXHEADER *Header)
-{
-	ifree(ImportTable);
-	return;
-}
-
-
-void UtxDestroyPalettes(UTXPALETTE *Palettes, ILuint NumPal)
+/*void UtxDestroyPalettes(UTXPALETTE *Palettes, ILuint NumPal)
 {
 	ILuint i;
 	for (i = 0; i < NumPal; i++) {
@@ -297,7 +294,7 @@ void UtxDestroyPalettes(UTXPALETTE *Palettes, ILuint NumPal)
 		ifree(Palettes[i].Pal);
 	}
 	ifree(Palettes);
-}
+}*/
 
 
 ILenum UtxFormatToDevIL(ILuint Format)
@@ -330,12 +327,10 @@ ILuint UtxFormatToBpp(ILuint Format)
 ILboolean iLoadUtxInternal(void)
 {
 	UTXHEADER		Header;
-	//UTXENTRYNAME	*NameEntries;
-	//UTXEXPORTTABLE	*ExportTable;
 	vector <UTXENTRYNAME> NameEntries;
 	vector <UTXEXPORTTABLE> ExportTable;
-	UTXIMPORTTABLE	*ImportTable;
-	UTXPALETTE		*Palettes;
+	vector <UTXIMPORTTABLE> ImportTable;
+	vector <UTXPALETTE> Palettes;
 	ILimage			*Image;
 	ILuint			NumPal = 0, i, j = 0;
 ILint Name;
@@ -344,75 +339,46 @@ ILint	Val;
 ILint	Size;
 ILint	Width, Height, PalEntry;
 ILboolean	BaseCreated = IL_FALSE, HasPal;
-ILuint	Pos;
+//ILuint	Pos;
 ILint	Format;
 ILubyte	*CompData = NULL;
-string a;
-
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
-	if (!GetUtxHead(&Header))
+	if (!GetUtxHead(Header))
 		return IL_FALSE;
-	if (!CheckUtxHead(&Header))
+	if (!CheckUtxHead(Header))
 		return IL_FALSE;
 
-	// Now we grab the name table.
-	/*NameEntries = GetUtxNameTable(&Header);
-	if (NameEntries == NULL)
-		return IL_FALSE;*/
-	if (!GetUtxNameTable(NameEntries, &Header))
+	// We grab the name table.
+	if (!GetUtxNameTable(NameEntries, Header))
 		return IL_FALSE;
 	// Then we get the export table.
-	/*ExportTable =*/ if (!GetUtxExportTable(ExportTable, &Header))
+	if (!GetUtxExportTable(ExportTable, Header))
 		return IL_FALSE;
-	/*if (ExportTable == NULL) {
-		UtxDestroyNameEntries(NameEntries, &Header);
-		return IL_FALSE;
-	}*/
 	// Then the last table is the import table.
-	ImportTable = GetUtxImportTable(&Header);
-	if (ImportTable == NULL) {
-		//UtxDestroyNameEntries(NameEntries, &Header);
-		//UtxDestroyExportTable(ExportTable, &Header);
+	if (!GetUtxImportTable(ImportTable, Header))
 		return IL_FALSE;
-	}
 
 	for (i = 0; i < Header.ExportCount; i++) {
-		//if (!strcmp(NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name, "Palette"))
 		if (NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name == "Palette")
 			NumPal++;
 	}
 	if (NumPal == 0)  //@TODO: Take care of UTX files without paletted data.
 		return IL_FALSE;
-	Palettes = (UTXPALETTE*)ialloc(NumPal * sizeof(UTXPALETTE));
-	if (Palettes == NULL) {
-		//UtxDestroyNameEntries(NameEntries, &Header);
-		//UtxDestroyExportTable(ExportTable, &Header);
-		UtxDestroyImportTable(ImportTable, &Header);
-		return IL_FALSE;
-	}
+	Palettes.resize(NumPal);
 	NumPal = 0;
 	for (i = 0; i < Header.ExportCount; i++) {
 		if (NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name == "Palette") {
-			//Palettes[i].Name = strdup(NameEntries[ExportTable[i].ObjectName].Name);
-			Palettes[NumPal].Name = i;//ExportTable[i].ObjectName;
+			Palettes[NumPal].Name = i;
 			iseek(ExportTable[NumPal].SerialOffset, IL_SEEK_SET);
-Name = igetc();  // Skip the 2.
+			Name = igetc();  // Skip the 2.
 			Palettes[NumPal].Count = UtxReadCompactInteger();
-			Palettes[NumPal].Pal = (ILubyte*)ialloc(Palettes[NumPal].Count * 4);
-			if (/*Palettes[NumPal].Name == NULL || */Palettes[NumPal].Pal == NULL) {
-				//UtxDestroyNameEntries(NameEntries, &Header);
-				//UtxDestroyExportTable(ExportTable, &Header);
-				UtxDestroyImportTable(ImportTable, &Header);
-				UtxDestroyPalettes(Palettes, NumPal);
-				return IL_FALSE;
-			}
+			Palettes[NumPal].Pal = new ILubyte[Palettes[NumPal].Count * 4];
 			if (iread(Palettes[NumPal].Pal, Palettes[NumPal].Count * 4, 1) != 1)
-				//@TODO: Deallocations here!
 				return IL_FALSE;
 			NumPal++;
 		}
@@ -422,18 +388,15 @@ Name = igetc();  // Skip the 2.
 		if (NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name == "Texture") {
 			iseek(ExportTable[i].SerialOffset, IL_SEEK_SET);
 			Width = -1;  Height = -1;  PalEntry = NumPal;  HasPal = IL_FALSE;  Format = -1;
-++j;
-j = j;
 
 			do {
-Pos = itell();
 				Name = UtxReadCompactInteger();
 				if (NameEntries[Name].Name == "None")
 					break;
 				Type = igetc();
 				Size = (Type & 0x70) >> 4;
 
-				if (/*Name == 0 && */Type == 0xA2)
+				if (Type == 0xA2)
 					igetc();  // Byte is 1 here...
 
 				switch (Type & 0x0F)
@@ -526,6 +489,8 @@ Pos = itell();
 				Image = Image->Next;
 			}
 
+			// Skip the mipmap count, width offset and mipmap size entries.
+			//@TODO: Implement mipmaps.
 			iseek(5, IL_SEEK_CUR);
 			UtxReadCompactInteger();
 
@@ -535,40 +500,23 @@ Pos = itell();
 					Image->Pal.PalSize = Palettes[PalEntry].Count * 4;
 					Image->Pal.Palette = (ILubyte*)ialloc(Image->Pal.PalSize);
 					if (Image->Pal.Palette == NULL)
-						//@TODO: Do all the deallocations needed here!
 						return IL_FALSE;
 					memcpy(Image->Pal.Palette, Palettes[PalEntry].Pal, Image->Pal.PalSize);
 					Image->Pal.PalType = IL_PAL_RGBA32;
 
 					if (iread(Image->Data, Image->SizeOfData, 1) != 1)
-						return IL_FALSE;  //@TODO: Deallocations...
+						return IL_FALSE;
 					break;
 
 				case UTX_DXT1:
-//
-//
-// HACK!!!
-//
-//
-//igetc();
-//ExtraData[0] = igetc();
-//if (ExtraData[0] == 0x0C)
-	//iseek(8, IL_SEEK_CUR);
-//	iread(ExtraData+1, 8, 1);
-//else
-	//iseek(7, IL_SEEK_CUR);
-//	iread(ExtraData+1, 7, 1);
-//if (igetc() == 0x80)
-//	igetc();
 					Image->DxtcSize = IL_MAX(Image->Width * Image->Height / 2, 8);
 					CompData = (ILubyte*)ialloc(Image->DxtcSize);
 					if (CompData == NULL)
-						//@TODO: Do all the deallocations needed here!
 						return IL_FALSE;
 
 					if (iread(CompData, Image->DxtcSize, 1) != 1) {
 						ifree(CompData);
-						return IL_FALSE;  //@TODO: Deallocations...
+						return IL_FALSE;
 					}
 					// Keep a copy of the DXTC data if the user wants it.
 					if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE) {
@@ -587,14 +535,6 @@ Pos = itell();
 		}
 	}
 
-
-	//UtxDestroyNameEntries(NameEntries, &Header);
-	//UtxDestroyExportTable(ExportTable, &Header);
-	UtxDestroyImportTable(ImportTable, &Header);
-	UtxDestroyPalettes(Palettes, NumPal);
-
-
-	//return IL_FALSE;
 	return ilFixImage();
 }
 

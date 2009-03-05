@@ -80,13 +80,16 @@ typedef struct UTXIMPORTTABLE
 	ILboolean	PackageImported;
 } UTXIMPORTTABLE;
 
-typedef struct UTXPALETTE
+class UTXPALETTE
 {
-	//char	*Name;
+public:
+	UTXPALETTE() { Pal = NULL; }
+	~UTXPALETTE() { delete [] Pal; }
+
 	ILubyte	*Pal;
 	ILuint	Count;
 	ILuint	Name;
-} UTXPALETTE;
+};
 
 // Data formats
 #define UTX_P8		0x00
