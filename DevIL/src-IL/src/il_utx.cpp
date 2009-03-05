@@ -331,17 +331,16 @@ ILboolean iLoadUtxInternal(void)
 	vector <UTXEXPORTTABLE> ExportTable;
 	vector <UTXIMPORTTABLE> ImportTable;
 	vector <UTXPALETTE> Palettes;
-	ILimage			*Image;
-	ILuint			NumPal = 0, i, j = 0;
-ILint Name;
-ILubyte Type;
-ILint	Val;
-ILint	Size;
-ILint	Width, Height, PalEntry;
-ILboolean	BaseCreated = IL_FALSE, HasPal;
-//ILuint	Pos;
-ILint	Format;
-ILubyte	*CompData = NULL;
+	ILimage		*Image;
+	ILuint		NumPal = 0, i, j = 0;
+	ILint		Name;
+	ILubyte		Type;
+	ILint		Val;
+	ILint		Size;
+	ILint		Width, Height, PalEntry;
+	ILboolean	BaseCreated = IL_FALSE, HasPal;
+	ILint		Format;
+	ILubyte		*CompData = NULL;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -363,19 +362,20 @@ ILubyte	*CompData = NULL;
 	if (!GetUtxImportTable(ImportTable, Header))
 		return IL_FALSE;
 
+	// Find the number of palettes in the export table.
 	for (i = 0; i < Header.ExportCount; i++) {
 		if (NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name == "Palette")
 			NumPal++;
 	}
-	if (NumPal == 0)  //@TODO: Take care of UTX files without paletted data.
-		return IL_FALSE;
 	Palettes.resize(NumPal);
+
+	// Read in all of the palettes.
 	NumPal = 0;
 	for (i = 0; i < Header.ExportCount; i++) {
 		if (NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name == "Palette") {
 			Palettes[NumPal].Name = i;
 			iseek(ExportTable[NumPal].SerialOffset, IL_SEEK_SET);
-			Name = igetc();  // Skip the 2.
+			Name = igetc();  // Skip the 2.  @TODO: Can there be more in front of the palettes?
 			Palettes[NumPal].Count = UtxReadCompactInteger();
 			Palettes[NumPal].Pal = new ILubyte[Palettes[NumPal].Count * 4];
 			if (iread(Palettes[NumPal].Pal, Palettes[NumPal].Count * 4, 1) != 1)
@@ -385,11 +385,13 @@ ILubyte	*CompData = NULL;
 	}
 
 	for (i = 0; i < Header.ExportCount; i++) {
+		// Find textures in the file.
 		if (NameEntries[ImportTable[ExportTable[i].Class].ObjectName].Name == "Texture") {
 			iseek(ExportTable[i].SerialOffset, IL_SEEK_SET);
 			Width = -1;  Height = -1;  PalEntry = NumPal;  HasPal = IL_FALSE;  Format = -1;
 
 			do {
+				// Always starts with a comptact integer that gives us an entry into the name table.
 				Name = UtxReadCompactInteger();
 				if (NameEntries[Name].Name == "None")
 					break;
@@ -401,11 +403,11 @@ ILubyte	*CompData = NULL;
 
 				switch (Type & 0x0F)
 				{
-					case 1:
+					case 1:  // Get a single byte.
 						Val = igetc();
 						break;
 
-					case 2:
+					case 2:  // Get unsigned integer.
 						Val = GetLittleUInt();
 						break;
 
@@ -413,14 +415,14 @@ ILubyte	*CompData = NULL;
 						igetc();
 						break;
 
-					case 4:
+					case 4:  // Skip flaots for right now.
 						GetLittleFloat();
 						break;
 
 					case 5:
-					case 6:
-						Val = itell();
+					case 6:  // Get a compact integer - an object reference.
 						Val = UtxReadCompactInteger();
+						Val--;
 						break;
 
 					case 10:
@@ -443,15 +445,15 @@ ILubyte	*CompData = NULL;
 						break;
 
 					default:  // Uhm...
-						Val = Val;
 						break;
 				}
 
 				//@TODO: What should we do if Name >= Header.NameCount?
-				if ((ILuint)Name < Header.NameCount) {
+				if ((ILuint)Name < Header.NameCount) {  // Don't want to go past the end of our array.
 					if (NameEntries[Name].Name == "Palette") {
-						Val--;
+						// If it has references to more than one palette, just use the first one.
 						if (HasPal == IL_FALSE) {
+							// We go through the palette list here to match names.
 							for (PalEntry = 0; (ILuint)PalEntry < NumPal; PalEntry++) {
 								if (Val == Palettes[PalEntry].Name) {
 									HasPal = IL_TRUE;
@@ -460,21 +462,22 @@ ILubyte	*CompData = NULL;
 							}
 						}
 					}
-					if (NameEntries[Name].Name == "Format")
+					if (NameEntries[Name].Name == "Format")  // Not required for P8 images but can be present.
 						if (Format == -1)
 							Format = Val;
-					if (NameEntries[Name].Name == "USize")
+					if (NameEntries[Name].Name == "USize")  // Width of the image
 						if (Width == -1)
 							Width = Val;
-					if (NameEntries[Name].Name == "VSize")
+					if (NameEntries[Name].Name == "VSize")  // Height of the image
 						if (Height == -1)
 							Height = Val;
 				}
-
 			} while (!ieof());
 
+			// If the format property is not present, it is a paletted (P8) image.
 			if (Format == -1)
 				Format = UTX_P8;
+			// Just checks for everything being proper.  If the format is P8, we check to make sure that a palette was found.
 			if (Width == -1 || Height == -1 || (PalEntry == NumPal && Format != UTX_DXT1) || (Format != UTX_P8 && Format != UTX_DXT1))
 				return IL_FALSE;
 			if (BaseCreated == IL_FALSE) {
