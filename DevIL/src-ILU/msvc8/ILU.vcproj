@@ -1076,6 +1076,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\include\ilu_error\ilu_err-french.h"
+					>
+				</File>
+				<File
 					RelativePath="..\include\ilu_error\ilu_err-german.h"
 					>
 				</File>
