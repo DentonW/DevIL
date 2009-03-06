@@ -1,3 +1,6 @@
+2009-03-06 Denton Woods <doomwiz@users.sf.net>
+	* Updated VC8 projects to use il_mp3.c.
+
 2009-03-05 Denton Woods <doomwiz@users.sf.net>
 	* il_mp3.c: Added this file.
 	* il_io.c: Added loading calls for .mp3 files.
