@@ -322,8 +322,7 @@ ILboolean iLoadJpegInternal()
 	struct jpeg_decompress_struct	JpegInfo;
 	ILboolean						result;
 
-	if (iCurImage == NULL)
-	{
+	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}

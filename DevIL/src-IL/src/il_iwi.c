@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 02/07/2009
+// Last modified: 03/04/2009
 //
 // Filename: src-IL/src/il_iwi.c
 //
@@ -28,6 +28,7 @@ typedef struct IWIHEAD
 #define IWI_RGB8	0x02
 #define IWI_ARGB4	0x03
 #define IWI_A8		0x04
+#define IWI_JPG		0x07
 #define IWI_DXT1	0x0B
 #define IWI_DXT3	0x0C
 #define IWI_DXT5	0x0D

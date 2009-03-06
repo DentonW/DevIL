@@ -154,6 +154,7 @@ ILuint iFindMp3Pic(MP3HEAD *Header)
 
 		GetBigUShort();  // Skip the flags.
 
+		//@TODO: Support multiple APIC entries in an mp3 file.
 		if (!strncmp(ID, "APIC", 4)) {
 			//@TODO: Use TextEncoding properly - UTF16 strings starting with FFFE or FEFF.
 			TextEncoding = igetc();

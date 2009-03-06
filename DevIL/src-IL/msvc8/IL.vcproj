@@ -1907,6 +1907,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\src\il_mp3.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\il_pal.c"
 					>
 					<FileConfiguration
