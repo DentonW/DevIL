@@ -24,8 +24,9 @@ int main()
 	string	OldLine, NewLine;
 	fstream	file;
 	string	line;
-	int		pos1, pos2;
-	//streamoff pos1, pos2;
+	//int		pos1, pos2;
+	streamoff pos1, pos2;
+	//fpos_t pos1, pos2;
 
 	//oldversion[0] = '1';
 	//oldversion[1] = '7';
@@ -58,21 +59,21 @@ int main()
 
 //
 //
-// src-IL/msvc/IL.rc and src-IL/msvc8/IL.rc
+// src-IL/msvc9/IL.rc and src-IL/msvc8/IL.rc
 //
 //
-	for (int i = 0; i < 2; i++) {
-		string ILrc[2] = {"src-IL/msvc8/IL.rc", "src-IL/msvc/IL.rc"};
+	/*for (int i = 0; i < 2; i++) {
+		string ILrc[2] = {"src-IL/msvc8/IL.rc", "src-IL/msvc9/IL.rc"};
 		file.open(ILrc[i].c_str(), fstream::in | fstream::out);
 		if (!file.is_open()) {
 			cout << "Unable to open " << ILrc[i] << endl;
 			return 0;
 		}
 		do {
-			pos1 = file.tellg().seekpos();
+			pos1 = file.tellg();//.seekpos();
 			getline(file, line);
 			int linelen = line.length();
-			pos2 = file.tellg().seekpos();
+			pos2 = file.tellg();//.seekpos();
 
 			OldLine = string(" FILEVERSION 0,") + string(oldversion[0]) + "," + string(oldversion[1]) + "," + string(oldversion[2]);
 			if (line == OldLine) {
@@ -80,6 +81,7 @@ int main()
 				NewLine = string(" FILEVERSION 0,") + string(newversion[0]) + "," + string(newversion[1]) + "," + string(newversion[2]);
 				file << NewLine;
 				file.seekg(pos2, ios_base::beg);
+				int j = file.tellg();
 			}
 			OldLine = string(" PRODUCTVERSION 0,") + string(oldversion[0]) + "," + string(oldversion[1]) + "," + string(oldversion[2]);
 			if (line == OldLine) {
@@ -112,17 +114,17 @@ int main()
 		} while (!file.eof());
 		file.close();
 		file.clear();
-	}
+	}*/
 
 
 
 //
 //
-// src-IL/msvc/IL Unicode.rc and src-IL/msvc8/IL Unicode.rc
+// src-IL/msvc9/IL Unicode.rc and src-IL/msvc/IL Unicode.rc
 //
 //
 	for (int i = 0; i < 2; i++) {
-		string ILrc[2] = {"src-IL/msvc/IL Unicode.rc", "src-IL/msvc8/IL Unicode.rc"};
+		string ILrc[2] = {"src-IL/msvc9/IL Unicode.rc", "src-IL/msvc8/IL Unicode.rc"};
 		file.open(ILrc[i].c_str(), fstream::in | fstream::out);
 		if (!file.is_open()) {
 			cout << "Unable to open IL Unicode.rc" << endl;
@@ -138,7 +140,8 @@ int main()
 				file.seekp(pos1);
 				NewLine = string(" FILEVERSION 0,") + string(newversion[0]) + "," + string(newversion[1]) + "," + string(newversion[2]);
 				file << NewLine;
-				file.seekg(pos2);
+				file.seekg(pos1);
+				file.seekp(pos1);
 			}
 			OldLine = string(" PRODUCTVERSION 0,") + string(oldversion[0]) + "," + string(oldversion[1]) + "," + string(oldversion[2]);
 			if (line == OldLine) {
