@@ -225,7 +225,7 @@ typedef long long unsigned int ILuint64;
 #define IL_ICNS			0x0440  //!< Macintosh Icon - .icns extension
 #define IL_JP2			0x0441  //!< Jpeg 2000 - .jp2 extension
 #define IL_EXR			0x0442  //!< OpenEXR - .exr extension
-#define IL_WDP			0x0443  //!< 
+#define IL_WDP			0x0443  //!< Microsoft HD Photo - .wdp and .hdp extension
 #define IL_VTF			0x0444  //!< Valve Texture Format - .vtf extension
 #define IL_WBMP			0x0445  //!< Wireless Bitmap - .wbmp extension
 #define IL_SUN			0x0446  //!< Sun Raster - .sun, .ras, .rs, .im1, .im8, .im24 and .im32 extensions
