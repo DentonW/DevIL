@@ -5,8 +5,21 @@
 \begin{document}
 \maketitle
 
-\subsection*{Adding .c/.cpp File}
+\subsection*{Adding the .c/.cpp File}
+Make sure that the new .c or .cpp file is added to the Subversion repository using \emph{svn ci} command.
+
+\subsubsection*{Microsoft Visual C++}
 The .c or .cpp file must be added to the Microsoft Visual C++ 9 projects "src-IL/projects/msvc9/ImageLib Unicode.sln" and "src-IL/projects/msvc9/ImageLib.sln".  The file must also be added to the MSVC++ 8 projects "src-IL/projects/msvc8/ImageLib Unicode.sln" and "src-IL/projects/msvc8/ImageLib.sln".
+
+\subsubsection*{Linux, Cygwin and Mac OS X}
+For the Linux/Cygwin/Mac OS X makefile system, add the filename to the libIL_la_SOURCES line of lib/Makefile.am.
+
+
+\subsection*{il_io.c}
+
+\subsubsection*{Loading}
+
+\subsubsection*{Saving}
 
 \end{document}
 
