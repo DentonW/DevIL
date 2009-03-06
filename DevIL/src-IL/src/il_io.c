@@ -106,6 +106,8 @@ ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 		Type = IL_MDL;
 	else if (!iStrCmp(Ext, IL_TEXT("mng")) || !iStrCmp(Ext, IL_TEXT("jng")))
 		Type = IL_MNG;
+	else if (!iStrCmp(Ext, IL_TEXT("mp3")))
+		Type = IL_MP3;
 	else if (!iStrCmp(Ext, IL_TEXT("pcd")))
 		Type = IL_PCD;
 	else if (!iStrCmp(Ext, IL_TEXT("pcx")))
@@ -245,6 +247,11 @@ ILenum ILAPIENTRY ilDetermineTypeF(ILHANDLE File)
 		return IL_MDL;
 	#endif
 
+	#ifndef IL_NO_MDL
+	if (ilIsValidMp3F(File))
+		return IL_MP3;
+	#endif
+
 	#ifndef IL_NO_PCX
 	if (ilIsValidPcxF(File))
 		return IL_PCX;
@@ -379,6 +386,11 @@ ILenum ILAPIENTRY ilDetermineTypeL(const void *Lump, ILuint Size)
 	#ifndef IL_NO_MDL
 	if (ilIsValidMdlL(Lump, Size))
 		return IL_MDL;
+	#endif
+
+	#ifndef IL_NO_MP3
+	if (ilIsValidMp3L(Lump, Size))
+		return IL_MP3;
 	#endif
 
 	#ifndef IL_NO_PCX
@@ -531,6 +543,11 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, ILconst_string FileName)
 			return ilIsValidMdl(FileName);
 		#endif
 
+		#ifndef IL_NO_MP3
+		case IL_MP3:
+			return ilIsValidMp3(FileName);
+		#endif
+
 		#ifndef IL_NO_PCX
 		case IL_PCX:
 			return ilIsValidPcx(FileName);
@@ -676,6 +693,11 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 			return ilIsValidMdlF(File);
 		#endif
 
+		#ifndef IL_NO_MP3
+		case IL_MP3:
+			return ilIsValidMp3F(File);
+		#endif
+
 		#ifndef IL_NO_PCX
 		case IL_PCX:
 			return ilIsValidPcxF(File);
@@ -819,6 +841,11 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, void *Lump, ILuint Size)
 		#ifndef IL_NO_MDL
 		case IL_MDL:
 			return ilIsValidMdlL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_MP3
+		case IL_MP3:
+			return ilIsValidMp3L(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_PCX
@@ -1051,6 +1078,12 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 		#ifndef IL_NO_MNG
 		case IL_MNG:
 			bRet = ilLoadMng(FileName);
+			break;
+		#endif
+
+		#ifndef IL_NO_MP3
+		case IL_MP3:
+			bRet = ilLoadMp3(FileName);
 			break;
 		#endif
 
@@ -1336,6 +1369,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadMngF(File);
 		#endif
 
+		#ifndef IL_NO_MP3
+		case IL_MP3:
+			return ilLoadMp3F(File);
+		#endif
+
 		#ifndef IL_NO_PCD
 		case IL_PCD:
 			return ilLoadPcdF(File);
@@ -1586,6 +1624,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size)
 		#ifndef IL_NO_MNG
 		case IL_MNG:
 			return ilLoadMngL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_MP3
+		case IL_MP3:
+			return ilLoadMp3L(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_PCD
@@ -1896,6 +1939,13 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		#ifndef IL_NO_MNG
 		if (!iStrCmp(Ext, IL_TEXT("mng")) || !iStrCmp(Ext, IL_TEXT("jng"))) {
 			bRet = ilLoadMng(FileName);
+			goto finish;
+		}
+		#endif
+
+		#ifndef IL_NO_MP3
+		if (!iStrCmp(Ext, IL_TEXT("mp3"))) {
+			bRet = ilLoadMp3(FileName);
 			goto finish;
 		}
 		#endif
