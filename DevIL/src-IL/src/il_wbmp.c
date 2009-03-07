@@ -2,11 +2,11 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 02/27/2009
+// Last modified: 03/07/2009
 //
 // Filename: src-IL/src/il_wbmp.c
 //
-// Description: Reads from a .wbmp file.  Specs available from
+// Description: Reads from a Wireless Bitmap (.wbmp) file.  Specs available from
 //				http://www.ibm.com/developerworks/wireless/library/wi-wbmp/
 //
 //-----------------------------------------------------------------------------

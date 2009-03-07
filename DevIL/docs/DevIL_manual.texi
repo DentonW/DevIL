@@ -661,7 +661,7 @@ This is a crop of a Bertrand Benoit's @url{http://www.blender.org/index.php?eID=
 You can check out his @url{http://www.bertrand-benoit.com,website}.
 Thank you, Bertrand!
 
-The image samples here have a better-than-bad resolution, so you don't have to be affraid to zoom at them if you wish to see details.
+The image samples here have a better-than-bad resolution, so you don't have to be afraid to zoom at them if you wish to see details.
 
 @findex iluAlienify
 @section Alienifying
@@ -1137,17 +1137,24 @@ Table lists the formats @code{DevIL} supports sorted according to @code{#define}
 @c The page should fit into margins since somebody may want to print it...
 @multitable {Graphics Interchange Format} {.pbm, .pgm, } {IL_DOOM_FLAT} {loading?} {saving?}
 	@headitem Format name	@tab Extension	@tab IL @code{#define} @tab Loading?	@tab Saving?
+	@item Blizzard texture	@tab .blp	@tab @code{IL_BLP}	@tab yes	@tab no
 	@item Windows bitmap	@tab .bmp	@tab @code{IL_BMP}	@tab yes	@tab yes
 	@item C-style header	@tab .h	@tab @code{IL_CHED}	@tab no	@tab yes
 	@item Dr. Halo Cut File	@tab .cut	@tab @code{IL_CUT}	@tab yes	@tab no
 	@item ZSoft Multi-PCX	@tab .dcx	@tab @code{IL_DCX}	@tab yes	@tab no
+	@item DICOM	@tab .dicom, .dcm	@tab @code{IL_DCM}	@tab yes	@tab no
 	@item DirectDraw surface	@tab .dds	@tab @code{IL_DDS}	@tab yes	@tab yes
+	@item Digital Picture Exchange	@tab .dpx	@tab @code{IL_DPX}	@tab yes	@tab no
 	@item DOOM walls/flats	@tab .lmp	@tab @code{IL_DOOM}, @code{IL_DOOM_FLAT}	@tab yes	@tab no
+	@item OpenEXR	@tab .exr	@tab @code{IL_EXR}	@tab yes	@tab yes
+	@item Flexible Image Transport System	@tab .fits, .fit	@tab @code{IL_FITS}	@tab yes	@tab no
+	@item Heavy Metal: FAKK 2 Texture	@tab .ftx	@tab @code{IL_FTX}	@tab yes	@tab no
 	@item Graphics Interchange Format	@tab .gif	@tab @code{IL_GIF}	@tab yes	@tab no
 	@item Radiance High Dynamic Range	@tab .hdr	@tab @code{IL_HDR}	@tab yes	@tab yes
-	@item Icons	@tab .ico, .cur	@tab @code{IL_ICO}	@tab yes	@tab no
 	@item Macintosh Icons	@tab .icns	@tab @code{IL_ICNS}	@tab yes	@tab no
+	@item Windows Icons	@tab .ico, .cur	@tab @code{IL_ICO}	@tab yes	@tab no
 	@item Interchange File Format	@tab .iff	@tab @code{IL_IFF}	@tab yes	@tab no
+	@item Infinity Ward Image	@tab .iwi	@tab @code{IL_IWI}	@tab yes	@tab no
 	@item Jpeg Network Graphics	@tab .jng	@tab @code{IL_JNG}	@tab yes	@tab no
 	@item Jpeg 2000	@tab .jp2	@tab @code{IL_JP2}	@tab yes	@tab yes
 	@item Jpeg	@tab .jpg, .jpe, .jpeg	@tab @code{IL_JPG}	@tab yes	@tab yes
@@ -1155,21 +1162,28 @@ Table lists the formats @code{DevIL} supports sorted according to @code{#define}
 	@item Homeworld File	@tab .lif	@tab @code{IL_LIF}	@tab yes	@tab no
 	@item Half-Life Model	@tab .mdl	@tab @code{IL_MDL}	@tab yes	@tab no
 	@item Mng Animation	@tab .mng	@tab @code{IL_MNG}	@tab yes	@tab no
-	@item OpenEXR	@tab .exr	@tab @code{IL_EXR}	@tab yes	@tab yes
+	@item Mp3	@tab .mp3	@tab @code{IL_MP3}	@tab yes	@tab no
 	@item PhotoCD	@tab .pcd	@tab @code{IL_PCD}	@tab yes	@tab no
 	@item ZSoft PCX	@tab .pcx	@tab @code{IL_PCX}	@tab yes	@tab yes
-	@item PIC	@tab .pic	@tab @code{IL_PIC}	@tab yes	@tab no
+	@item Softimage PIC	@tab .pic	@tab @code{IL_PIC}	@tab yes	@tab no
 	@item PIX	@tab .pix	@tab @code{IL_PIX}	@tab yes	@tab no
 	@item Portable Network Graphics	@tab .png	@tab @code{IL_PNG}	@tab yes	@tab yes
 	@item Pnm	@tab .pbm, .pgm, .ppm, .pnm	@tab @code{IL_PPM}	@tab yes	@tab yes
 	@item Adobe PhotoShop	@tab .psd	@tab @code{IL_PSD}	@tab yes	@tab yes
 	@item PaintShop Pro	@tab .psp	@tab @code{IL_PSP}	@tab yes	@tab no
 	@item Pixar	@tab .pxr	@tab @code{IL_PXR}	@tab yes	@tab no
-	@item Raw data	@tab *	@tab @code{IL_RAW}	@tab yes	@tab yes
+	@item Raw Data	@tab *	@tab @code{IL_RAW}	@tab yes	@tab yes
+	@item Homeworld 2 Texture 	@tab .rot	@tab @code{IL_ROT}	@tab yes	@tab no
 	@item Silicon Graphics @tab .sgi, .bw, .rgb, .rgba	@tab @code{IL_SGI}	@tab yes	@tab yes
+	@item Sun RAS	@tab .sun, .ras, .rs, .im*	@tab @code{IL_SUN}	@tab yes	@tab no
+	@item Creative Assembly Texture	@tab .texture	@tab @code{IL_TEXTURE}	@tab yes	@tab no
 	@item Targa	@tab .tga	@tab @code{IL_TGA}	@tab yes	@tab yes
-	@item TIFF	@tab .tif, .tiff	@tab @code{IL_TIF}	@tab yes	@tab yes
+	@item Tagged Image File Format	@tab .tif, .tiff	@tab @code{IL_TIF}	@tab yes	@tab yes
+	@item Gamecube Texture	@tab .tpl	@tab @code{IL_TPL}	@tab yes	@tab no
+	@item Unreal Texture	@tab .utx	@tab @code{IL_UTX}	@tab yes	@tab no
+	@item Valve Texture	@tab .vtf	@tab @code{IL_VTF}	@tab yes	@tab yes
 	@item Quake2 Texture	@tab .wal	@tab @code{IL_WAL}	@tab yes	@tab no
+	@item HD Photo	@tab .wdp, .hdp	@tab @code{IL_WDP}	@tab yes	@tab no
 	@item X Pixel Map	@tab .xpm	@tab @code{IL_XPM}	@tab yes	@tab yes
 @end multitable
 
