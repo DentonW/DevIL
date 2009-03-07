@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/04/2002 <--Y2K Compliant! =]
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 03/07/2009
 //
 // Filename: src-IL/src/il_psp.c
 //
@@ -190,9 +190,7 @@ ILboolean iLoadPspInternal()
 		return IL_FALSE;
 
 	Cleanup();
-	ilFixImage();
-
-	return IL_TRUE;
+	return ilFixImage();
 }
 
 

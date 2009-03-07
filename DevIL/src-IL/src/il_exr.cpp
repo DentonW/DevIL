@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 01/04/2009
+// Last modified: 03/07/2009
 //
 // Filename: src-IL/src/il_exr.cpp
 //
@@ -291,9 +291,7 @@ ILboolean iLoadExrInternal()
 	}
 
 	// Converts the image to predefined type, format and/or origin if needed.
-	ilFixImage();
-
-	return IL_TRUE;
+	return ilFixImage();
 }
 
 

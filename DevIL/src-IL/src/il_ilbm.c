@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 02/09/2009
+// Last modified: 03/07/2009
 //
 // Filename: src-IL/src/il_ilbm.c
 //
@@ -148,9 +148,7 @@ ILboolean iLoadIlbmInternal()
         return IL_FALSE;
     }
 
-    ilFixImage();
-
-    return IL_TRUE;
+    return ilFixImage();
 }
 
 

@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2001 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 03/07/2009
 //
 // Filename: src-IL/src/rawdata.c
 //
@@ -91,9 +91,7 @@ ILboolean iLoadDataInternal(ILuint Width, ILuint Height, ILuint Depth, ILubyte B
 	else  // 4
 		iCurImage->Format = IL_RGBA;
 
-	ilFixImage();
-
-	return IL_TRUE;
+	return ilFixImage();
 }
 
 

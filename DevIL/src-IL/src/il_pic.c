@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 01/22/2009
+// Last modified: 03/07/2009
 //
 // Filename: src-IL/src/il_pic.c
 //
@@ -239,9 +239,7 @@ finish:
 	if (Read == IL_FALSE)
 		return IL_FALSE;
 
-	ilFixImage();
-
-	return IL_TRUE;
+	return ilFixImage();
 }
 
 

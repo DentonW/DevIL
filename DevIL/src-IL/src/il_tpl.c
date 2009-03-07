@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 01/28/2009
+// Last modified: 03/07/2009
 //
 // Filename: src-IL/src/il_tpl.c
 //
@@ -232,7 +232,7 @@ ILboolean iLoadTplInternal(void)
 				ilSetError(IL_ILLEGAL_FILE_VALUE);
 				return IL_FALSE;
 			}
-			// Break out of our for loop and run ilFixImages on the images.
+			// Break out of our for loop and run ilFixImage on the images.
 			break;
 		}
 

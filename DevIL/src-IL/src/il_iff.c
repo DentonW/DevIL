@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Last modified: 01/20/2009
+// Last modified: 03/07/2009
 //
 // Filename: src-IL/src/il_iff.c
 //
@@ -268,9 +268,8 @@ ILboolean iLoadIffInternal(void)
 
 		}
 	}
-	ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
-	ilFixImage();
-	return IL_TRUE;
+	//ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);  // Why was this here?
+	return ilFixImage();
 }
 
 /*

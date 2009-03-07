@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 06/07/2007
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 03/07/2009
 //
 // Filename: src-IL/src/il_doom.c
 //
@@ -160,9 +160,7 @@ ILboolean iLoadDoomInternal()
 		ifree(NewData);
 	}
 
-	ilFixImage();
-
-	return IL_TRUE;
+	return ilFixImage();
 }
 
 
@@ -267,9 +265,7 @@ ILboolean iLoadDoomFlatInternal()
 		ifree(NewData);
 	}
 
-	ilFixImage();
-
-	return IL_TRUE;
+	return ilFixImage();
 }
 
 

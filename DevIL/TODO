@@ -42,9 +42,6 @@ Easier:
 - DxtcReadColor and DxtcReadColors need to expand the colours from 565 to 888 properly.
 - Add faces to WindowsTest.
 - Add reading other files in directory to WindowsTest, so you can easily view all files in a dir.
-- Rename WindowsTest to WindowsExample.
-- Check all possible IWI types.
-- Tell IWI converter guy that his converter does not read all mipmaps.
 - Finish BLP loading (indexed mipmaps, jpeg data).
 - dcraw support
 - http://en.wikipedia.org/wiki/2xSaI
@@ -86,17 +83,17 @@ Easier:
 - Add scaling functions to IL (and wrappers in ILU).
 - Fix DXT2 and DXT4 loading.
 - Add _ilLoadExt/_ilSaveExt Unicode in il_states.c.
+- XCF (Gimp) support
 
 
 More involved:
 - ILinfo struct still has number of images...
 - Use loaded mipmaps in OpenGL and DirectX.
-- JPEG and PNG in .bmp files
+- JPEG and PNG in .bmp files?
 - It looks like ilSetRead/ilSetWrite don't actually do anything.
 - Run Valgrind on library - all functions.
 - Make iSaveJp2Internal and iSaveExrInternal work with palettes (make ilConvertBuffer work on palettes as well).
 - Make .ico/.icns uses Mipmaps field instead for smaller icons (can icns have multiple images?).
-- Rewrite all code that uses mipmaps.
 - Work on http://en.wikipedia.org/wiki/Apple_Icon_Image page.
 - http://mirrored.xentax.com/gfe/index.html (lots of game graphics formats)
 - Strife textures
@@ -110,9 +107,7 @@ More involved:
 - APNG support
 - Koala support
 - Flashpix (.fpx) support
-- DPX support
 - Multipage PNM files
-- MP3 album art (ID3V2 tag)
 - Fortran support
 - D language support - There exists a program to convert C headers to D.
 - Better DirectX 10 support
@@ -126,7 +121,6 @@ More involved:
 - Get rid of globals in il_dds.c.
 - TIFF with JPEG encoding
 - Bicubic scaling
-- Use glTexImage3D and update OpenGL calls.
 - Freebasic support
 - Multiple images in FITs files (through extensions).
 - Reorder loading/saving in il_io.c

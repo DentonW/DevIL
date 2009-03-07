@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2001-2009 by Denton Woods
-// Last modified: 01/15/2009
+// Last modified: 03/07/2009
 //
 // Filename: src-IL/src/il_icon.c
 //
@@ -366,9 +366,7 @@ ILboolean iLoadIconInternal()
 	ifree(IconImages);
 	ifree(DirEntries);
 
-	ilFixImage();
-
-	return IL_TRUE;
+	return ilFixImage();
 
 file_read_error:
 	if (IconImages) {
