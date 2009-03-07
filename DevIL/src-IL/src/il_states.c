@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 01/30/2009
+// Last modified: 03/07/2009
 //
 // Filename: src-IL/src/il_states.c
 //
@@ -20,7 +20,7 @@
 #include <stdlib.h>
 
 ILconst_string _ilVendor		= IL_TEXT("Abysmal Software");
-ILconst_string _ilVersion		= IL_TEXT("Developer's Image Library (DevIL) 1.7.7");
+ILconst_string _ilVersion		= IL_TEXT("Developer's Image Library (DevIL) 1.7.8");
 
 
 char* _ilLoadExt		= "" IL_BMP_EXT IL_CUT_EXT IL_DCX_EXT IL_DDS_EXT

@@ -2,7 +2,7 @@
 //
 // ImageLib Utility Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 02/05/2009
+// Last modified: 03/07/2009
 //
 // Filename: IL/ilu.h
 //
@@ -37,8 +37,8 @@ extern "C" {
 #endif
 
 
-#define ILU_VERSION_1_7_7 1
-#define ILU_VERSION       177
+#define ILU_VERSION_1_7_8 1
+#define ILU_VERSION       178
 
 
 #define ILU_FILTER         0x2600
