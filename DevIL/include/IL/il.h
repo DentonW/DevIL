@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 03/01/2009
+// Last modified: 03/07/2009
 //
 // Filename: IL/il.h
 //
@@ -161,8 +161,8 @@ typedef long long unsigned int ILuint64;
 // IL-specific #define's
 //
 
-#define IL_VERSION_1_7_7 1
-#define IL_VERSION       177
+#define IL_VERSION_1_7_8 1
+#define IL_VERSION       178
 
 
 // Attribute Bits

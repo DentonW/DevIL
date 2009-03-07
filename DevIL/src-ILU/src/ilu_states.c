@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 12/17/2008
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 03/07/2009
 //
 // Filename: src-ILU/src/ilu_states.c
 //
@@ -16,7 +16,7 @@
 
 
 ILconst_string _iluVendor	= IL_TEXT("Abysmal Software");
-ILconst_string _iluVersion	= IL_TEXT("Developer's Image Library Utilities (ILU) 1.7.7 ");// IL_TEXT(__DATE__));
+ILconst_string _iluVersion	= IL_TEXT("Developer's Image Library Utilities (ILU) 1.7.8");// IL_TEXT(__DATE__));
 
 
 ILstring ILAPIENTRY iluGetString(ILenum StringName)

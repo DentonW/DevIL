@@ -59,8 +59,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,1,7,7
- PRODUCTVERSION 0,1,7,7
+ FILEVERSION 0,1,7,8
+ PRODUCTVERSION 0,1,7,8
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x29L
@@ -78,14 +78,14 @@ BEGIN
             VALUE "Comments", "ILUT: A portable image library in development"
             VALUE "CompanyName", "Abysmal Software"
             VALUE "FileDescription", "ILUT: A portable image library in development"
-            VALUE "FileVersion", "1.7.7"
+            VALUE "FileVersion", "1.7.8"
             VALUE "InternalName", "ILUT"
             VALUE "LegalCopyright", "Copyright © 2000-2008"
             VALUE "LegalTrademarks", "Under LGPL License"
             VALUE "OriginalFilename", "ILUT.dll"
             VALUE "PrivateBuild", "Open Source"
             VALUE "ProductName", "Developer's Image Utility Toolkit Library"
-            VALUE "ProductVersion", "1.7.7 Ansi"
+            VALUE "ProductVersion", "1.7.8 Ansi"
             VALUE "SpecialBuild", "Ansi"
         END
     END
@@ -112,7 +112,7 @@ IDI_ICON1               ICON                    "resources\\IL Logo.ico"
 
 STRINGTABLE 
 BEGIN
-    IDC_OPENILUT            "Developer's Image Utility Toolkit Library, Version 1.7.7"
+    IDC_OPENILUT            "Developer's Image Utility Toolkit Library, Version 1.7.8"
 END
 
 #endif    // English (U.S.) resources
