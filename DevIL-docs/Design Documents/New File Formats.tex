@@ -46,6 +46,9 @@ Next add the appropriate function calls to \textbf{ilLoad}, \textbf{ilLoadF}, \t
 Add the function calls to \textbf{ilSave}, \textbf{ilSaveF}, \textbf{ilSaveL} and \textbf{ilSaveImage}.  Make sure to put the IL\_XXX define in the Doxygen comment before the function!
 
 
+\section*{il\_states.c and il\_states.h}
+Change \_ilLoadExt and/or \_ilSaveExt to include the new format name in il\_states.c.  Also add the format to il\_states.h.
+
 \section*{Website}
 Add to the list of types the DevIL can load on the About and the Features pages.
 
@@ -72,6 +75,7 @@ Add to the list of types the DevIL can load on the About and the Features pages.
 		\item \textbf{ilSave}, \textbf{ilSaveF}, \textbf{ilSaveL} and \textbf{ilSaveImage}
 		\item Add Doxygen comments to \textbf{ilSave}, \textbf{ilSaveF}, \textbf{ilSaveL} and \textbf{ilSaveImage}.
 	\end {itemize}
+\item Add to il\_states.c and il\_states.h.
 \item Add to website (about and features pages).
 \end{itemize}
 
