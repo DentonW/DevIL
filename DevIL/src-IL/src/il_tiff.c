@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 02/09/2009
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 03/07/2009
 //
 // Filename: src-IL/src/il_tiff.c
 //
@@ -713,9 +713,7 @@ ILboolean iLoadTiffInternal()
 
 	TIFFClose(tif);
 
-	ilFixImage();
-
-	return IL_TRUE;
+	return ilFixImage();
 }
 
 /*----------------------------------------------------------------------------*/

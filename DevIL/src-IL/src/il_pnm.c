@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 02/09/2009
+// Last modified: 03/07/2009
 //
 // Filename: src-IL/src/il_pnm.c
 //
@@ -286,12 +286,9 @@ ILboolean iLoadPnmInternal()
 		PmImage->Format = IL_RGB;
 	PmImage->Origin = IL_ORIGIN_UPPER_LEFT;
 
-	ilFixImage();
-
 	if (PmImage == NULL)
 		return IL_FALSE;
-
-	return IL_TRUE;
+	return ilFixImage();
 }
 
 

@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2009 by Denton Woods
+// Last modified: 03/07/2009
 //
 // Filename: src-IL/src/il_lif.c
 //
@@ -192,9 +192,7 @@ ILboolean iLoadLifInternal()
 		iCurImage->Data[i]++;
 	}
 
-	ilFixImage();
-
-	return IL_TRUE;
+	return ilFixImage();
 }
 
 #endif//IL_NO_LIF

@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 02/09/2009
+// Last modified: 03/07/2009
 //
 // Filename: src-IL/src/il_pcx.c
 //
@@ -203,9 +203,9 @@ ILboolean iLoadPcxInternal()
 
 	bPcx = iUncompressPcx(&Header);
 
-	ilFixImage();
-
-	return bPcx;
+	if (!bPcx)
+		return IL_FALSE;
+	return ilFixImage();
 }
 
 

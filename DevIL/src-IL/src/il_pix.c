@@ -153,9 +153,7 @@ ILboolean iLoadPixInternal()
 
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 
-	ilFixImage();
-
-	return IL_TRUE;
+	return ilFixImage();
 }
 
 #endif//IL_NO_PIX

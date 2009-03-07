@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2008 by Denton Woods
-// Last modified: 02/14/2009
+// Last modified: 03/07/2009
 //
 // Filename: src-IL/src/il_gif.c
 //
@@ -182,9 +182,7 @@ ILboolean iLoadGifInternal()
 	GlobalPal.Palette = NULL;
 	GlobalPal.PalSize = 0;
 
-	ilFixImage();
-
-	return IL_TRUE;
+	return ilFixImage();
 }
 
 
