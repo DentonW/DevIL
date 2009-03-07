@@ -11,7 +11,6 @@ Bugs:
 
 By next release:
 
-- Add new file formats to il_states.c/.h and the new makefile system.
 - NVTT.dll as a delay-loaded DLL.
 - Update docs with next DXT code, new mipmap/cubemap access, new SaveL code.
 - Mention Unicode and 64-bit compatibility on website.
@@ -21,7 +20,6 @@ By next release:
 - Add http://vrml.cip.ica.uni-stuttgart.de/dune/install.html to projects page.
 - Verify all formats are listed in il_io.c Doxygen documentation.
 - http://www.fileformat.info/format/drhalo/sample/index.htm - Check these.
-- Add .wbmp and .sun to DevIL_manual.pdf.
 - Update Portable Any Map name in manual and code. http://www.bbhscanners.com/support/infinity_WF/faqs/faq_001.html
 - Update http://en.wikipedia.org/wiki/Tagged_Image_File_Format name as above.
 - Same with MNG

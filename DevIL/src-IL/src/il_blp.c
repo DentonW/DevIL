@@ -646,7 +646,7 @@ ILboolean iLoadBlp1()
 							if (Header.MipOffsets[i] == 0 || Header.MipLengths[i] == 0)  // No more mipmaps in the file.
 								break;
 
-							Image->Mipmaps = ilNewImageFull(Image->Width >> 1, Image->Height >> 1, 1, 4, IL_RGBA, IL_UNSIGNED_BYTE, NULL);
+							Image->Mipmaps = ilNewImageFull(Image->Width >> 1, Image->Height >> 1, 1, 1, IL_COLOR_INDEX, IL_UNSIGNED_BYTE, NULL);
 							if (Image->Mipmaps == NULL)
 								return IL_FALSE;
 
@@ -656,7 +656,7 @@ ILboolean iLoadBlp1()
 								return IL_FALSE;
 							Image->Mipmaps->Pal.PalSize = 1024;
 							Image->Mipmaps->Pal.PalType = IL_PAL_BGRA32;
-							memcpy(Image->Mipmaps->Pal.Palette, Image->Mipmaps->Pal.Palette, 1024);
+							memcpy(Image->Mipmaps->Pal.Palette, Image->Pal.Palette, 1024);
 
 							// Move to the next mipmap in the linked list.
 							Image = Image->Mipmaps;

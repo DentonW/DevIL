@@ -6,6 +6,8 @@
 	* il_io.c (ilTypeFromExt): Changed return value of FITS files to IL_FITS.
 		Added DICOM, FTX, Rot and Texture checks.
 	* il_states.c/.h: Updated with newer file formats.
+	* il_blp.c:649: Fixed ilNewImageFull call to use color index.
+			   659: Fixed memcpy from base image to new mipmap.
 
 2009-03-06 Denton Woods <doomwiz@users.sf.net>
 	* Updated VC8 projects to use il_mp3.c.
