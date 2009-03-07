@@ -118,6 +118,12 @@ typedef struct IL_HINTS
 IL_HINTS ilHints;
 
 
+#ifndef IL_NO_BLP
+	#define IL_BLP_EXT "blp "
+#else
+	#define IL_BLP_EXT ""
+#endif
+
 #ifndef IL_NO_BMP
 	#define IL_BMP_EXT "bmp dib "
 #else
@@ -142,16 +148,40 @@ IL_HINTS ilHints;
 	#define IL_DCX_EXT ""
 #endif
 
+#ifndef IL_NO_DCM
+	#define IL_DCM_EXT "dicom dcm"
+#else
+	#define IL_DCM_EXT ""
+#endif
+
 #ifndef IL_NO_DDS
 	#define IL_DDS_EXT "dds "
 #else
 	#define IL_DDS_EXT ""
 #endif
 
+#ifndef IL_NO_DPX
+	#define IL_DPX_EXT "dds "
+#else
+	#define IL_DPX_EXT ""
+#endif
+
 #ifndef IL_NO_EXR
 	#define IL_EXR_EXT "exr "
 #else
 	#define IL_EXR_EXT ""
+#endif
+
+#ifndef IL_NO_FITS
+	#define IL_FITS_EXT "fit fits "
+#else
+	#define IL_FITS_EXT ""
+#endif
+
+#ifndef IL_NO_FTX
+	#define IL_FTX_EXT "ftx "
+#else
+	#define IL_FTX_EXT ""
 #endif
 
 #ifndef IL_NO_GIF
@@ -184,6 +214,12 @@ IL_HINTS ilHints;
 	#define IL_IFF_EXT ""
 #endif
 
+#ifndef IL_NO_IWI
+	#define IL_IWI_EXT "iwi "
+#else
+	#define IL_IWI_EXT ""
+#endif
+
 #ifndef IL_NO_JP2
 	#define IL_JP2_EXT "jp2 "
 #else
@@ -212,6 +248,12 @@ IL_HINTS ilHints;
 	#define IL_MNG_EXT "mng jng "
 #else
 	#define IL_MNG_EXT ""
+#endif
+
+#ifndef IL_NO_MP3
+	#define IL_MP3_EXT "mp3 "
+#else
+	#define IL_MP3_EXT ""
 #endif
 
 #ifndef IL_NO_PCD
@@ -274,6 +316,12 @@ IL_HINTS ilHints;
 	#define IL_RAW_EXT ""
 #endif
 
+#ifndef IL_NO_ROT
+	#define IL_ROT_EXT "rot "
+#else
+	#define IL_ROT_EXT ""
+#endif
+
 #ifndef IL_NO_SGI
 	#define IL_SGI_EXT "sgi bw rgb rgba "
 #else
@@ -281,9 +329,15 @@ IL_HINTS ilHints;
 #endif
 
 #ifndef IL_NO_SUN
-	#define IL_SUN_EXT "sun "
+	#define IL_SUN_EXT "sun ras rs im1 im8 im24 im32 "
 #else
 	#define IL_SUN_EXT ""
+#endif
+
+#ifndef IL_NO_TEXTURE
+	#define IL_TEX_EXT "texture "
+#else
+	#define IL_TEX_EXT ""
 #endif
 
 #ifndef IL_NO_TGA
@@ -296,6 +350,18 @@ IL_HINTS ilHints;
 	#define IL_TIF_EXT "tif tiff "
 #else
 	#define IL_TIF_EXT ""
+#endif
+
+#ifndef IL_NO_TPL
+	#define IL_TPL_EXT "tpl "
+#else
+	#define IL_TPL_EXT ""
+#endif
+
+#ifndef IL_NO_UTX
+	#define IL_UTX_EXT "utx "
+#else
+	#define IL_UTX_EXT ""
 #endif
 
 #ifndef IL_NO_VTF
@@ -314,6 +380,12 @@ IL_HINTS ilHints;
 	#define IL_WBMP_EXT "wbmp "
 #else
 	#define IL_WBMP_EXT ""
+#endif
+
+#ifndef IL_NO_WDP
+	#define IL_WDP_EXT "wdp "
+#else
+	#define IL_WDP_EXT ""
 #endif
 
 #ifndef IL_NO_XPM

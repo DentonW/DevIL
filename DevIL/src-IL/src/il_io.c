@@ -2,7 +2,7 @@
 //
 // ImageLib Sources
 // Copyright (C) 2000-2009 by Denton Woods
-// Last modified: 03/17/2009
+// Last modified: 03/07/2009
 //
 // Filename: src-IL/src/il_io.c
 //
@@ -75,6 +75,8 @@ ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 		Type = IL_BMP;
 	else if (!iStrCmp(Ext, IL_TEXT("gif")))
 		Type = IL_GIF;
+	else if (!iStrCmp(Ext, IL_TEXT("blp")))
+		Type = IL_BLP;
 	else if (!iStrCmp(Ext, IL_TEXT("cut")))
 		Type = IL_CUT;
 	else if (!iStrCmp(Ext, IL_TEXT("dcm")) || !iStrCmp(Ext, IL_TEXT("dicom")))
@@ -84,7 +86,9 @@ ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 	else if (!iStrCmp(Ext, IL_TEXT("exr")))
 		Type = IL_EXR;
 	else if (!iStrCmp(Ext, IL_TEXT("fit")) || !iStrCmp(Ext, IL_TEXT("fits")))
-		Type = IL_BMP;
+		Type = IL_FITS;
+	else if (!iStrCmp(Ext, IL_TEXT("ftx")))
+		Type = IL_FTX;
 	else if (!iStrCmp(Ext, IL_TEXT("hdr")))
 		Type = IL_HDR;
 	else if (!iStrCmp(Ext, IL_TEXT("iff")))
@@ -127,6 +131,8 @@ ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 		Type = IL_PSP;
 	else if (!iStrCmp(Ext, IL_TEXT("pxr")))
 		Type = IL_PXR;
+	else if (!iStrCmp(Ext, IL_TEXT("rot")))
+		Type = IL_ROT;
 	else if (!iStrCmp(Ext, IL_TEXT("sgi")) || !iStrCmp(Ext, IL_TEXT("bw")) ||
 		!iStrCmp(Ext, IL_TEXT("rgb")) || !iStrCmp(Ext, IL_TEXT("rgba")))
 		Type = IL_SGI;
@@ -135,6 +141,8 @@ ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 			 !iStrCmp(Ext, IL_TEXT("im8")) || !iStrCmp(Ext, IL_TEXT("im24")) ||
 			 !iStrCmp(Ext, IL_TEXT("im32")))
 		Type = IL_SUN;
+	else if (!iStrCmp(Ext, IL_TEXT("texture")))
+		Type = IL_TEXTURE;
 	else if (!iStrCmp(Ext, IL_TEXT("tif")) || !iStrCmp(Ext, IL_TEXT("tiff")))
 		Type = IL_TIF;
 	else if (!iStrCmp(Ext, IL_TEXT("tpl")))
