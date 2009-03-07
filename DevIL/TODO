@@ -11,7 +11,6 @@ Bugs:
 
 By next release:
 
-- Make sure all file formats are in ilTypeFromExt.
 - Add new file formats to il_states.c/.h and the new makefile system.
 - NVTT.dll as a delay-loaded DLL.
 - Update docs with next DXT code, new mipmap/cubemap access, new SaveL code.
@@ -88,6 +87,7 @@ Easier:
 - Renormalize FITS and DICOM files (make it an option?).
 - Add scaling functions to IL (and wrappers in ILU).
 - Fix DXT2 and DXT4 loading.
+- Add _ilLoadExt/_ilSaveExt Unicode in il_states.c.
 
 
 More involved:
@@ -153,7 +153,6 @@ More involved:
 - Check 16-bit images being loaded have their lower bits properly set.  An example is the il_dds.c entry on 2009-01-15.
 - Fix image loading problems listed on http://www.seriema.net/thumbview/index.php?page=compatibility.
 - Look at http://en.wikipedia.org/wiki/Comparison_of_graphics_file_formats
-- Use IL_HALF format internally.
 - PNG and JPG compression in .bmp files?
 - Scan line table for RLE .tga files.
 - Allow more formats for saving .tga (does not do IL_ALPHA for instance) - also in iTargaSize.
@@ -163,7 +162,6 @@ More involved:
 - Find test images for all .tpl formats.
 - Create new palette types for luminance, luminance-alpha and alpha (.tpl has luminance-alpha) (also change ilutConvertToSDLSurface and maybe others).
 - iGetActiveNum needs to be rewritten somehow to allow for mipmaps under a cubemap in an animation chain (extreme example).
-- VTF saving
 - TPL saving
 - Test Windows Mobile code.
 - OpenMP support: http://stackoverflow.com/questions/326487/multithreaded-image-processing-in-c
@@ -174,6 +172,7 @@ More involved:
 - New (DX10) DDS types
 - Gamecube BMD and BTI support (http://www.amnoid.de/gc/)
 - Conversion from half to int is producing artifacts.
+- Support for mp3 frames with Unicode strings
 
 
 Lots of work:
