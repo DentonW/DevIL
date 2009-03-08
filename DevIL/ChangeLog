@@ -1,3 +1,9 @@
+2009-03-08 Matěj Týč <bubla@users.sf.net>
+	* docs/Makefile.am: Fixed distcheck by overriding dvi target.
+	* lib/Makefile.am: Renoved ilu_mipmap.h file
+	* configure.ac: Added option to disable checks for 'nvidia texture tools' and
+	'libsquish'
+
 2009-03-08 Denton Woods <doomwiz@users.sf.net>
 	* il_ilbm.c:410: Changed to IL_BGR from IL_RGB.
 	* il_iff.c (ilLoadIffF/ilLoadIffL): Changed to call Lbm loading functions
