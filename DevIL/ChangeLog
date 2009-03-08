@@ -1,3 +1,8 @@
+2009-03-08 Denton Woods <doomwiz@users.sf.net>
+	* il_ilbm.c:410: Changed to IL_BGR from IL_RGB.
+	* il_iff.c (ilLoadIffF/ilLoadIffL): Changed to call Lbm loading functions
+	  if Iff loading fails, since they both can have the .iff extension.
+
 2009-03-07 Denton Woods <doomwiz@users.sf.net>
 	* Updated version numbers to 1.7.8 project-wide.
 	* DevIL_manual.texi: Added several file formats to the appendix.

@@ -407,7 +407,7 @@ static ILboolean load_ilbm(void)
     }
 
     if( bmhd.planes==24 || flagHAM==1 ) {
-        format = IL_RGB;
+        format = IL_BGR;
     } else {
         format = IL_COLOUR_INDEX;
     }
