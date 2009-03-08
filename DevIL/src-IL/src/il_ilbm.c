@@ -413,6 +413,7 @@ static ILboolean load_ilbm(void)
     }
     if( !ilTexImage( width, bmhd.h, 1, (format==IL_COLOUR_INDEX)?1:3, format, IL_UNSIGNED_BYTE, NULL ) )
         goto done;
+	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 
 #if 0 /*  No transparent colour support in DevIL? (TODO: confirm) */
     if ( bmhd.mask & 2 )               /* There is a transparent color */
