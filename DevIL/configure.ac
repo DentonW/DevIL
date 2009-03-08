@@ -130,7 +130,7 @@ AC_ARG_ENABLE([ILU],
 dnl Whether to build ILUT...
 AC_ARG_ENABLE([ILUT],
 	      [AS_HELP_STRING([--enable-ILUT[[=yes/no]]],
-			      [Build ILUT part of DevIL. Default set to no. ILU will be built along whether you wan it or not since ILUT depends upon it.])],
+			      [Build ILUT part of DevIL. Default set to no. ILU will be built along whether you want it or not since ILUT depends upon it.])],
               [],
 	      [enable_ILUT="no"])
 dnl We have to build ILU if we want ILUT as well...
@@ -280,26 +280,31 @@ AS_IF([test "x$enable_game_formats" = "xno"],
 dnl 
 dnl Ask here whether the user wants to support a format, optionally do some tests whether it can be supported
 dnl
+TEST_FORMAT([blp], [BLP], [BLP is the texture format for Blizzard games.])
 TEST_FORMAT([bmp], [BMP], [BMP is a standard Windows bitmap.])
 TEST_FORMAT([dcx], [DCX], [DCX is a multi-page PCX file.])
 TEST_FORMAT([dds], [DDS], [DDS (DirectDraw Surface) is used by DirectX to load images (usually DXTC).])
+TEST_FORMAT([dicom], [DICOM], [DICOM (Digital Imaging and Communications in Medicine) is used extensively in medical imaging.])
 TEST_FORMAT([doom],[WAD], [WAD is the format for graphics in the original DooM I/II.])
 TEST_FORMAT([exr], [EXR], [EXR is a HDR image file format standardized by Industrial Light and Magic. OpenEXR powered], [SETTLE_OPENEXR])
+TEST_FORMAT([fits], [FITS], [FITS (Flexible Image Transport System) is used for storing scientific images and is used extensively in astronomy.])
 TEST_FORMAT([gif], [GIF], [GIF is lossy and proprietary format used mainly to make animations])
 TEST_FORMAT([hdr], [HDR], [HDR is the Radiance High Dynamic Range format, using more bits per channel than normal.])
 TEST_FORMAT([icns],[ICNS], [ICNS is the icon format for the Mac OS X operation system.])
 TEST_FORMAT([icon],[ICON], [ICO is the icon format for the Windows operating system.])
 TEST_FORMAT([iff], [IFF], [IFF (Interchange File Format) is used to transfer images between software from different companies.])
 TEST_FORMAT([ilbm], [ILBM], [ILBM (Amiga Interleaved BitMap Format).])
+TEST_FORMAT([iwi], [IWI], [IWI is the Infinity Ward Image format used in the Call of Duty games.])
 TEST_FORMAT([jpeg],[JPG], [JPEG is most common lossy format. libjpeg powered], [SETTLE_JPEG])
 TEST_FORMAT([jp2], [JP2], [JP2 (JPEG 2000) is a better, but not so widespread, alternative to JPEG. JasPer powered], [SETTLE_JASPER])
 TEST_FORMAT([lcms],[LCMS], [],[SETTLE_LCMS])
 TEST_FORMAT([lif], [LIF], [LIF is the image format of the game Homeworld.])
 TEST_FORMAT([mdl], [MDL], [MDL is the format for models in the game Half-Life.])
 TEST_FORMAT([mng], [MNG], [MNG is basically the animated version of PNG but is not widespread.], [SETTLE_MNG])
+TEST_FORMAT([mp3], [MP3], [MP3 (MPEG-1 Audio Layer 3) sometimes have images in them, such as cover art.])
 TEST_FORMAT([pcx], [PCX], [PCX is one of the first widely accepted DOS imaging standards])
 TEST_FORMAT([pcd], [PCD], [PCD is the Kodak PhotoCD format.])
-TEST_FORMAT([pic], [PIC], [])
+TEST_FORMAT([pic], [PIC], [PIC is used by SoftImage software.])
 TEST_FORMAT([pix], [PIX], [])
 TEST_FORMAT([png], [PNG], [PNG is a smart, loseless and even open format. libpng powered.], [SETTLE_PNG])
 TEST_FORMAT([pnm], [PNM], [PNM (Portable aNy Map format) is considered the least-common-denominator for converting pixmap, graymap, or bitmap files between different platforms.])
@@ -314,6 +319,7 @@ TEST_FORMAT([texture], [TEXTURE], [TEXTURE is the format used in Medieval II: To
 TEST_FORMAT([tga], [TGA], [TGA (aka TARGA file format) has been used mainly in games. It is open and simple.])
 TEST_FORMAT([tiff],[TIF], [TIFF is a lossless format supporting greater color depths. libtiff powered], [SETTLE_TIFF])
 TEST_FORMAT([tpl], [TPL], [TPL is the format used by many GameCube and Wii games.])
+TEST_FORMAT([utx], [UTX], [UTX is the format used in the Unreal Tournament game series.])
 TEST_FORMAT([vtf], [VTF], [VTF (Valve Texture Format) is used by games based on Valve's Source engine.])
 TEST_FORMAT([wal], [WAL], [WAL is the image format used for the game Quake 2.])
 TEST_FORMAT([wbmp], [WBMP], [WBMP (Wireless Application Protocol Bitmap) is a monochrome graphics file format optimized for mobile computing devices])

@@ -1142,7 +1142,7 @@ Table lists the formats @code{DevIL} supports sorted according to @code{#define}
 	@item C-style header	@tab .h	@tab @code{IL_CHED}	@tab no	@tab yes
 	@item Dr. Halo Cut File	@tab .cut	@tab @code{IL_CUT}	@tab yes	@tab no
 	@item ZSoft Multi-PCX	@tab .dcx	@tab @code{IL_DCX}	@tab yes	@tab no
-	@item DICOM	@tab .dicom, .dcm	@tab @code{IL_DCM}	@tab yes	@tab no
+	@item Digital Imaging and Communications in Medicine	@tab .dicom, .dcm	@tab @code{IL_DCM}	@tab yes	@tab no
 	@item DirectDraw surface	@tab .dds	@tab @code{IL_DDS}	@tab yes	@tab yes
 	@item Digital Picture Exchange	@tab .dpx	@tab @code{IL_DPX}	@tab yes	@tab no
 	@item DOOM walls/flats	@tab .lmp	@tab @code{IL_DOOM}, @code{IL_DOOM_FLAT}	@tab yes	@tab no
@@ -1162,7 +1162,7 @@ Table lists the formats @code{DevIL} supports sorted according to @code{#define}
 	@item Homeworld File	@tab .lif	@tab @code{IL_LIF}	@tab yes	@tab no
 	@item Half-Life Model	@tab .mdl	@tab @code{IL_MDL}	@tab yes	@tab no
 	@item Mng Animation	@tab .mng	@tab @code{IL_MNG}	@tab yes	@tab no
-	@item Mp3	@tab .mp3	@tab @code{IL_MP3}	@tab yes	@tab no
+	@item MPEG-1 Audio Layer 3	@tab .mp3	@tab @code{IL_MP3}	@tab yes	@tab no
 	@item PhotoCD	@tab .pcd	@tab @code{IL_PCD}	@tab yes	@tab no
 	@item ZSoft PCX	@tab .pcx	@tab @code{IL_PCX}	@tab yes	@tab yes
 	@item Softimage PIC	@tab .pic	@tab @code{IL_PIC}	@tab yes	@tab no
