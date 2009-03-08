@@ -1,5 +1,31 @@
 These are just highlights of what was changed during each release.  For a more in-depth version of what was changed, please look at the ChangeLog.
 
+1.7.8
+---
+- Loading added: fits, iwi, blp, dicom, ftx, rot, texture, dpx, ilbm, utx, mp3
+- Saving added: vtf
+- Rewrote bilinear scaling routine.
+- Rewrote the HD Photo code so that it works properly.
+- Fixed return values of ilSaveL.
+- Windows Example: Added slideshow capabilities with Page Up and Page Down.
+- Windows Example: Added mipmap functionality to 0-9 keys (0 goes to main image).
+- Added Mathematica interface project.
+- Added the ilur - commandline ILU frontend.
+- Added IL_NO_GAMES define.
+- Updated documentation.
+- Added new ILU images to the manual; set the manual license to GFDL.
+- Fixed iluBuildMipmaps (only generated one).
+- Redid iluBuildMipmaps to use iluScale functions instead of nearest.
+- Added an option to describe image formats in configure script.
+- Fixed PNM loading bug.
+- Added support for DDS g16b16, g32b32, r16, r32, a2r10g10b10 and a2b10g10r10 images.
+- Added support for VTF files with 64-byte headers.
+- Fixed some errors in image type conversion.
+- Added IL_VTF_COMP define to control the output format of VTF files.
+- Added French translation of errors.
+- Updated libraries.txt with new external libraries.
+	
+
 1.7.7
 ---
 - Redefined clamping values in il.h.
