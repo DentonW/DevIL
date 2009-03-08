@@ -245,7 +245,7 @@ dnl
 dnl Libraries development checking
 dnl
 AC_ARG_WITH([zlib],
-            [AC_HELP_STRING([--with-zlib=[[yes/no]]],
+            [AC_HELP_STRING([--with-zlib[[=yes/no]]],
                             [Do wou want to use zlib?])],
 	    [],
             [enable_zlib="yes"])
@@ -326,8 +326,25 @@ TEST_FORMAT([wbmp], [WBMP], [WBMP (Wireless Application Protocol Bitmap) is a mo
 TEST_FORMAT([wdp], [WDP], [WDP is Microsoft's successor to JPEG, able to store many different image types either lossy or losslessly, also known as HD Photo.])
 TEST_FORMAT([xpm], [XPM], [XPM (X PixMap) is an ASCII-based image used in X Windows.])
 
-DEVIL_CHECK_LIBSQUISH
-DEVIL_CHECK_NVIDIA_TEXTOOLS
+dnl
+dnl Give users chance to disable check for these two libraries that can't be disabled 
+dnl by any other means...
+dnl 
+AC_ARG_WITH([libsquish],
+	    [AS_HELP_STRING([--with-squish[[=yes/no]]],
+			    [Do you want to use the squish library if possible? (enables HW accelerated DXT compression, default="yes")]) ],
+	    [],
+	    [with_libsquish="yes"])
+AS_IF([test "x$with_libsquish" = "xyes"],
+      [DEVIL_CHECK_LIBSQUISH])
+
+AC_ARG_WITH([nvtt],
+	    [AS_HELP_STRING([--with-nvtt[[=yes/no]]],
+			    [Do you want to use the Nvidia texture tools if possible? (enables GPU accelerated image manipulation, default="yes")]) ],
+	    [],
+	    [with_nvtt="yes"])
+AS_IF([test "x$with_nvtt" = "xyes"],
+      [DEVIL_CHECK_NVIDIA_TEXTOOLS])
 
 dnl
 dnl ILUT APIs library checking

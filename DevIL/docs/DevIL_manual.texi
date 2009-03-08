@@ -108,7 +108,7 @@ You will need to change some directory settings in MSVC++ to get @code{DevIL} wo
 
 Microsoft Visual C++ 6.0 has a bug that prevents debugging of a project.
 The bug appears to occur when you use a #pragma to link a .lib file and link it via another method.
-The header files il.h, ilu.h and ilut.h automatically link the .lib files in via a #pragma for convenience.
+The header files @file{il.h}, @file{ilu.h} and @file{ilut.h} automatically link the .lib files in via a @code{#pragma} for convenience.
 To prevent this bug, check for and remove these:
 
 @itemize
@@ -147,7 +147,7 @@ Use the -d command line option if using pkunzip.
 	@item Copy the files to their respective places:
 	@itemize
 		@item To use the precompiled libraries, copy @file{libil.a}, @file{libilu.a} and @file{libilut.a} from ImageLib\lib\djgpp to your @code{DJGPP} lib directory.
-Then copy il.h, ilu.h and ilut.h from your ImageLib\lib\il directory to your @code{DJGPP} include\il directory.
+Then copy @file{il.h}, @file{ilu.h} and @file{ilut.h} from your ImageLib\lib\il directory to your @code{DJGPP} include\il directory.
 		@item To compile the library yourself, change directories to ImageLib\Makefiles\Djgpp.
 This folder contains only a makefile for @code{DJGPP}.
 Simply type @command{make}, and the makefile will compile @code{DevIL} and copy the files to their respective locations.
@@ -377,7 +377,7 @@ Refer to the previous section for detailed behaviour of these two functions.
 @code{DevIL}'s file stream loading function is @code{ilLoadF}.
 @code{ilLoadF} is exactly equivalent to @code{ilLoad}, but instead of accepting a const char pointer, @code{ilLoadF} accepts an @code{ILHANDLE}.
 @code{DevIL} defines @code{ILHANDLE} as a void pointer via a typedef.
-Under normal circumstances, File will be a @code{FILE} struct pointer defined in stdio.h.
+Under normal circumstances, File will be a @code{FILE} struct pointer defined in @file{stdio.h}.
 
 @xref{registration}, for instructions on how to use your own file handling functions and file handles.
 
@@ -657,7 +657,7 @@ This section will give a comparison of the utility functions against the below f
 @caption{Original, unmodified image}
 @end float
 
-This is a crop of a Bertrand Benoit's @url{http://www.blender.org/index.php?eID=tx_cms_showpic&file=uploads%2Fpics%2FSun-lit_spiral_staircase.jpg&width=800m&height=600m&bodyTag=<body style%3D"margin%3A0%3B background%3A%23fff%3B">&wrap=<a href%3D"javascript%3Aclose()%3B"> | <%2Fa>&md5=8c8fbc473dbe2bda5bc32a0b1eaa7a22,image} taken from @url{http://www.blender.org/features-gallery/gallery/art-gallery/,Blender art gallery}, and Bertrand has kindly allowed us to use it for demonstrations.
+This is a crop of a Bertrand Benoit's image taken from @url{http://www.blender.org/features-gallery/gallery/art-gallery/,Blender art gallery}, and Bertrand has kindly allowed us to use it for demonstrations.
 You can check out his @url{http://www.bertrand-benoit.com,website}.
 Thank you, Bertrand!
 
