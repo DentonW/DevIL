@@ -4,7 +4,7 @@
 	  if Iff loading fails, since they both can have the .iff extension.
 	* il_ilbm.c:416: Added origin reference.
 	* configure.ac: Added more file formats to the format checks.
-	* Makefile.am: Removed ilu_mipmap.h.
+	* Makefile.am: Removed ilu_mipmap.h.  Added ilu_error-french.h.
 
 2009-03-07 Denton Woods <doomwiz@users.sf.net>
 	* Updated version numbers to 1.7.8 project-wide.
