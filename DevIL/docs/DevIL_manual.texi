@@ -1184,7 +1184,7 @@ Table lists the formats @code{DevIL} supports sorted according to @code{#define}
 	@item Valve Texture	@tab .vtf	@tab @code{IL_VTF}	@tab yes	@tab yes
 	@item Quake2 Texture	@tab .wal	@tab @code{IL_WAL}	@tab yes	@tab no
 	@item HD Photo	@tab .wdp, .hdp	@tab @code{IL_WDP}	@tab yes	@tab no
-	@item X Pixel Map	@tab .xpm	@tab @code{IL_XPM}	@tab yes	@tab yes
+	@item X Pixel Map	@tab .xpm	@tab @code{IL_XPM}	@tab yes	@tab no
 @end multitable
 
 @strong{Exception:} @code{IL_JPG} (IJL) type is not supported by @code{ilLoadF} nor by @code{ilSaveF}. @code{IL_JPG} (libjpeg) is supported by both.
