@@ -1,3 +1,6 @@
+2009-03-10 Denton Woods <doomwiz@users.sf.net>
+	* lib/Makefile.am: Added ilut_config.h.
+
 2009-03-08 Matěj Týč <bubla@users.sf.net>
 	* docs/Makefile.am: Fixed distcheck by overriding dvi target.
 	* lib/Makefile.am: Renoved ilu_mipmap.h file

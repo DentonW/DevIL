@@ -35,7 +35,7 @@ endif #BUILD_ILU
 if BUILD_ILUT
 
 lib_LTLIBRARIES += libILUT.la 
-il_HEADERS += $(all_include)/IL/ilut.h
+il_HEADERS += $(all_include)/IL/ilut.h $(all_include)/IL/ilut_config.h
 
 endif #BUILD_ILUT
 
