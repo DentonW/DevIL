@@ -5,16 +5,18 @@ VERBOSE=""    # set VERBOSE="v" for verbose mode
 EXTENSIONS="@SUPPORTED_FORMATS@"
 # Here are the extensions that should support saving according to docs
 #CAN_SAVE=" BMP DDS HDR ICO JPG PCX PNG PPM PSD RAW SGI TGA TIF XPM " RAW and XPM are problematic...
-CAN_SAVE="BMP DDS EXR HDR ICO JP2 JPG PCX PNG PPM PSD SGI TGA TIF"
+CAN_SAVE="BMP DDS EXR HDR ICO JP2 JPG PCX PNG PPM PSD SGI TGA TIF VTF"
 # List of formats that we don't test since they are problematic
-PROBLEMATIC="RAW WBMP XPM"
+PROBLEMATIC="RAW VTF WBMP XPM"
 
+echo
 echo "Running saving and loading consistency test..."
+
 FAILED_FORMATS=""
 PASSED_FORMATS=""
 
 # if using Wine makes sense, use it...
-if [ "x@BUILD_OS@" != "x@HOST_OS@" ] 
+if [ "x@build_os@" != "x@host_os@" ] 
 	then
 	if [ "x@PLATFORM@" = "xMINGW32" -o "x@PLATFORM@" = "xCYGWIN" ] 
 	then
@@ -55,8 +57,6 @@ else #something went wrong
 	FAILED="1"
 fi # end of something went wrong
 echo "Problematic (untested) formats: $PROBLEMATIC"
-
-echo
 
 # And we have to tell the result to the shell, too...
 exit $FAILED

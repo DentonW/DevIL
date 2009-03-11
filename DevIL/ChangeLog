@@ -1,3 +1,7 @@
+2009-03-11 Matěj Týč <bubla@users.sf.net>
+	* configure.ac: Removed "Break on warnings" option.
+	* tests/format_test/ilu_checks.sh: Added ILU test
+
 2009-03-10 Denton Woods <doomwiz@users.sf.net>
 	* lib/Makefile.am: Added ilut_config.h.
 

@@ -284,7 +284,7 @@ int test_is_testimage(Parameters params)
 	if (loaded == IL_FALSE)
 	{/* something went wrong */
 		ERROR_LOADING_FILE_MACRO(params.first_filename, loaded);
-		return loaded;
+		return TEST_FAIL;
 	}
 	/* getting image width and height */
 	int w, h;
@@ -361,7 +361,7 @@ int test_are_same(Parameters params)
 				free(image_data[i]);
 				image_data[i] = NULL;
 			}
-			return loaded;
+			return TEST_FAIL;
 		}
 		/* getting image width and height */
 		if (i == 0)
@@ -529,7 +529,7 @@ int parse_commandline(int argc, char ** argv, Parameters * params)
 			}
 			else if (expectations & EXPECT_IMAGES)
 			{/* Masterpiece, this parameter SHOULD specify two comma separated filenames... */
-				sscanf(argv[i], "%30[^,],%30s", params->first_filename, params->second_filename);
+				sscanf(argv[i], "%64[^,],%64s", params->first_filename, params->second_filename);
 				if ((params->flags & ACTION_PRESERVE_TESTFILE) == 0)
 				{
 					params->flags |= ACTION_PRESERVE_TESTFILE;
@@ -591,9 +591,9 @@ int main(int argc, char ** argv)
 		/* flags */(int)0, 
 		/* bpp */(int)3, 
 		/* resolution */ {603, 300}, 
-		/* quantile spec */ (double)0.80, 
-		/* quantile tresh */ (int)5, 
-		/* integral tresh */ (double)5};
+		/* quantile spec */ (double)0.85, 
+		/* quantile tresh */ (int)10, 
+		/* integral tresh */ (double)6};
 
 	int to_do = parse_commandline(argc, argv, & params);
 	int return_value = 0;
