@@ -10,4 +10,4 @@ EXTRA_DIST = README.unix README.win Libraries.txt CREDITS MSVC++.txt configure.b
 # Actually it has to be commented now... It is currently very troublesome to include the projects in the distribution archive...
 #SUBDIRS += projects
 
-DISTCHECK_CONFIGURE_FLAGS = --enable-ILU --enable-ILUT --with-examples --disable-dvi
+DISTCHECK_CONFIGURE_FLAGS = --enable-ILU --enable-ILUT --with-examples --enable-debug 
