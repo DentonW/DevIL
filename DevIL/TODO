@@ -13,7 +13,6 @@ By next release:
 
 - NVTT.dll as a delay-loaded DLL.
 - Update docs with next DXT code, new mipmap/cubemap access, new SaveL code.
-- Mention Unicode and 64-bit compatibility on website.
 - Update DevIL website with file formats (psd-saving, etc.).
 - Add Nebula Device to projects page.
 - Add VTF Edit to projects page.

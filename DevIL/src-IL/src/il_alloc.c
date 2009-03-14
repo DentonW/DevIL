@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Last modified: 08/17/2008
+// Last modified: 08/17/2009
 //
 // Filename: src-IL/src/il_alloc.c
 //
@@ -127,7 +127,7 @@ static void ILAPIENTRY DefaultFreeFunc(const void * CONST_RESTRICT ptr)
 	    _mm_free((void*)ptr);
 #else
 #if defined(VECTORMEM) & !defined(POSIX_MEMALIGN) & !defined(VALLOC) & !defined(MEMALIGN) & !defined(MM_MALLOC)
-	    free(((char*)Ptr) - ((char*)Ptr)[-1]);
+	    free(((char*)ptr) - ((char*)ptr)[-1]);
 #else	    
 	    free((void*)ptr);
 #endif //OTHERS...
