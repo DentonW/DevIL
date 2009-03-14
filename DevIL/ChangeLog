@@ -1,3 +1,6 @@
+2009-03-14 Denton Woods <doomwiz@users.sf.net>
+	* il_alloc.c:130: Fixed bug #2671858 (used Ptr instead of ptr).
+	
 2009-03-11 Matěj Týč <bubla@users.sf.net>
 	* configure.ac: Removed "Break on warnings" option.
 	* tests/format_test/ilu_checks.sh: Added ILU test
