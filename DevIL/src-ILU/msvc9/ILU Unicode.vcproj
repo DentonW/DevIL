@@ -3482,6 +3482,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\include\ilu_error\ilu_err-italian.h"
+					>
+				</File>
+				<File
 					RelativePath="..\include\ilu_error\ilu_err-japanese.h"
 					>
 				</File>

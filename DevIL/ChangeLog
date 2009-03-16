@@ -1,5 +1,7 @@
 2009-03-16 Denton Woods <doomwiz@users.sf.net>
 	* ilu_error-italian.h: Added Italian translation of error messages.
+	* ilu_error.c: Added Italian support.
+	* ilu.h: Added ILU_ITALIAN.
 
 2009-03-14 Denton Woods <doomwiz@users.sf.net>
 	* il_alloc.c:130: Fixed bug #2671858 (used Ptr instead of ptr).
