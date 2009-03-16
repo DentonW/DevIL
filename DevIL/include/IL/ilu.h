@@ -83,6 +83,7 @@ extern "C" {
 #define ILU_SPANISH            0x0804
 #define ILU_GERMAN             0x0805
 #define ILU_FRENCH             0x0806
+#define ILU_ITALIAN            0x0807
 
 
 // Filters
