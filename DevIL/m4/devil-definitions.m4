@@ -114,7 +114,7 @@ AC_DEFUN([TEST_FORMAT],
                [AC_MSG_RESULT([no])
                 AC_DEFINE([IL_NO_$2],
                           [],
-                          [$1 support ($3)])],
+                          [$1 support ($3) ]) ],
                [AC_MSG_RESULT([yes]) 
                 SUPPORTED_FORMATS="$SUPPORTED_FORMATS $2"]) 
          lib_test_result="" ])
@@ -137,8 +137,9 @@ dnl
 dnl Check for libraries
 dnl
 dnl Usage:
-dnl DEVIL_IL_LIB(<include>, <library>)
+dnl DEVIL_IL_LIB(<include>, <library>[, <define>])
 dnl 	the <library> is appended to IL_LIBS, sets have_<library> to yes/no
+dnl dnl If we don't detect the LIB, optionally #define IL_NO_<define>
 dnl Nothing else is done, see MAYBE_OPTIONAL_DEPENDENCY macro...
 dnl
 AC_DEFUN([DEVIL_IL_LIB],
@@ -149,6 +150,10 @@ AC_DEFUN([DEVIL_IL_LIB],
                                          have_$2="yes"],
                                         [have_$2="no"])],
                           [have_$2="no"]) ])
+dnl	 AS_IF([test $# = 3 -a "x$have_$2" = "xno"],
+dnl	       [AC_DEFINE([IL_NO_$3],
+dnl                         [],
+dnl                          [$2 support ]) ]) ])
 
 dnl
 dnl Checks for squish library = GPU accelerated DXT compression
@@ -198,7 +203,10 @@ AS_IF([test "x$have_lcms_lib" = "xyes" -a "x$have_lcms_h" = "xyes"],
       [have_lcms="yes"
        IL_LIBS_REQUIRED="$IL_LIBS_REQUIRED lcms"
        lib_test_result="yes"],
-      [lib_test_result="no"]) ])
+      [lib_test_result="no"
+       AC_DEFINE([IL_NO_LCMS],
+		 [1],
+		 [We don't have LCMS]) ]) ])
 
 AC_DEFUN([SETTLE_OPENEXR],
          [PKG_CHECK_MODULES([OPENEXR], 

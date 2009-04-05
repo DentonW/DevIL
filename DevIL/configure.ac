@@ -351,6 +351,9 @@ dnl The AM_COND_IF seems to be too new at the moment, let's wait a little bit ti
 dnl
 
 dnl AM_COND_IF([BUILD_ILU],
+AS_IF([test "x$enable_ILU" != "xyes"],
+	   [EXAMPLES_TO_BUILD="$EXAMPLES_TO_BUILD IL_override IL_read IL_simple"])
+
 AS_IF([test "x$enable_ILU" = "xyes"],
 	   [EXAMPLES_TO_BUILD="$EXAMPLES_TO_BUILD ILU_override ILU_read ILU_simple"])
 
