@@ -1,6 +1,12 @@
-2009-03- Matěj Týč <bubla@users.sf.net>
+2009-06-16 Matěj Týč <bubla@users.sf.net>
+	* m4/devil-definitions.m4: Fixed handling of nvtt and libsquish as C++
+	libraries instead of C (caused header found but could not be compiled
+	error)
+
+2009-03-? Matěj Týč <bubla@users.sf.net> NOTE: COMMIT PROBABLY NEVER HAPPENED
+IN THIS BRANCH
 	* configure.ac: Corrected example compilation report
-	* m4/devil-definitions.m4: Added correct LCMS absence correct handling
+	* m4/devil-definitions.m4: Added correct LCMS absence handling
 
 2009-03-16 Denton Woods <doomwiz@users.sf.net>
 	* ilu_error-italian.h: Added Italian translation of error messages.
