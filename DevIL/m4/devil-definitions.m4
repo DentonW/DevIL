@@ -160,7 +160,8 @@ dnl Checks for squish library = GPU accelerated DXT compression
 dnl Can be used along with nvidia texture tools
 dnl
 AC_DEFUN([DEVIL_CHECK_LIBSQUISH],
-         [DEVIL_IL_LIB([squish.h],
+         [AC_LANG_PUSH([C++])
+	  DEVIL_IL_LIB([squish.h],
                        [squish])
           lib_test_result="$have_squish"
           AS_IF([test "x$lib_test_result" = "xyes"],
@@ -168,14 +169,16 @@ AC_DEFUN([DEVIL_CHECK_LIBSQUISH],
                            [1],
                            [Define if you have libsquish installed]) 
                  MAYBE_OPTIONAL_DEPENDENCY([IL], 
-                                           [libsquish]) ]) ])
+                                           [libsquish]) ])
+          AC_LANG_POP([C++]) ])
 
 dnl
 dnl Checks for nvidia texture tools library - GPU acceleration of DXT compression
 dnl Can be used along with libsquish
 dnl 
 AC_DEFUN([DEVIL_CHECK_NVIDIA_TEXTOOLS],
-         [DEVIL_IL_LIB([nvtt/nvtt.h],
+         [AC_LANG_PUSH([C++])
+          DEVIL_IL_LIB([nvtt/nvtt.h],
                        [nvtt])
           lib_test_result="$have_nvtt"
           AS_IF([test "x$lib_test_result" = "xyes"],
@@ -183,7 +186,8 @@ AC_DEFUN([DEVIL_CHECK_NVIDIA_TEXTOOLS],
                            [1],
                            [Define if you have nvidia texture tools library installed]) 
                  MAYBE_OPTIONAL_DEPENDENCY([IL], 
-                                           [libnvtt-nvidia_texture_tools]) ]) ])
+                                           [libnvtt-nvidia_texture_tools]) ])
+          AC_LANG_POP([C++]) ])
 
 AC_DEFUN([SETTLE_LCMS],
 [AC_CHECK_LIB([lcms],
