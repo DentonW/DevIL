@@ -123,7 +123,7 @@ static void ILAPIENTRY DefaultFreeFunc(const void * CONST_RESTRICT ptr)
 {
 	if (ptr)
 	{
-#ifdef MM_MALLOC
+#if defined(VECTORMEM) & defined(MM_MALLOC)
 	    _mm_free((void*)ptr);
 #else
 #if defined(VECTORMEM) & !defined(POSIX_MEMALIGN) & !defined(VALLOC) & !defined(MEMALIGN) & !defined(MM_MALLOC)
