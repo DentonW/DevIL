@@ -14,7 +14,6 @@
 #include "il_internal.h"
 #ifndef IL_NO_DCX
 #include "il_dcx.h"
-#include "il_manip.h"
 
 
 //! Checks if the file specified in FileName is a valid .dcx file.

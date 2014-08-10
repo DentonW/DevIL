@@ -44,7 +44,6 @@
 	#endif
 
 #include "il_jpeg.h"
-#include "il_manip.h"
 #include <setjmp.h>
 
 
