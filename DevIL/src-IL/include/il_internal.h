@@ -38,6 +38,7 @@ extern "C" {
 #include <IL/devil_internal_exports.h>
 #include "il_files.h"
 #include "il_endian.h"
+#include "il_manip.h"
 
 #ifndef _WIN32
 	// The Microsoft HD Photo Device Porting Kit has not been ported to anything other

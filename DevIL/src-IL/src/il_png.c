@@ -19,7 +19,6 @@
 #include "il_internal.h"
 #ifndef IL_NO_PNG
 #include <png.h>
-#include "il_manip.h"
 #include <stdlib.h>
 #if PNG_LIBPNG_VER < 10200
 	#warning DevIL was designed with libpng 1.2.0 or higher in mind.  Consider upgrading at www.libpng.org.
