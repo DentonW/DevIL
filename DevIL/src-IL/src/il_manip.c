@@ -11,7 +11,6 @@
 //-----------------------------------------------------------------------------
 
 #include "il_internal.h"
-#include "il_manip.h"
 
 
 ILAPI void ILAPIENTRY iFlipBuffer(ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num)

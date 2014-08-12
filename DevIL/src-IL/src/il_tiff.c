@@ -17,7 +17,6 @@
 #include "tiffio.h"
 
 #include <time.h>
-#include "il_manip.h"
 
 #define MAGIC_HEADER1	0x4949
 #define MAGIC_HEADER2	0x4D4D

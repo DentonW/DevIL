@@ -14,7 +14,6 @@
 #include "il_internal.h"
 #include <string.h>
 #include <limits.h>
-#include "il_manip.h"
 
 
 ILAPI ILboolean ILAPIENTRY ilInitImage(ILimage *Image, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, void *Data)

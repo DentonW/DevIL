@@ -14,7 +14,6 @@
 #include "il_internal.h"
 #ifndef IL_NO_PCX
 #include "il_pcx.h"
-#include "il_manip.h"
 
 
 //! Checks if the file specified in FileName is a valid .pcx file.
