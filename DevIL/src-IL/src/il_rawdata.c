@@ -13,7 +13,6 @@
 
 #include "il_internal.h"
 //#ifndef IL_NO_DATA
-#include "il_manip.h"
 
 
 ILboolean iLoadDataInternal(ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp);

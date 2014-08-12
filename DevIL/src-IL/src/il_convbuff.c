@@ -12,7 +12,6 @@
 
 
 #include "il_internal.h"
-#include "il_manip.h"
 #ifdef ALTIVEC_GCC
 #include "altivec_typeconversion.h"
 #endif

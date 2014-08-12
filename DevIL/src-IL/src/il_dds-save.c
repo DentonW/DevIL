@@ -13,7 +13,6 @@
 
 #include "il_internal.h"
 #include "il_dds.h"
-#include "il_manip.h"
 #include <limits.h>
 
 
