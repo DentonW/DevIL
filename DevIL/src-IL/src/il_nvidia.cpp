@@ -18,7 +18,6 @@
 
 #ifdef IL_USE_DXTC_NVIDIA
 #include <nvtt/nvtt.h>
-#include <nvcore/Memory.h>
 
 using namespace nvtt;
 
