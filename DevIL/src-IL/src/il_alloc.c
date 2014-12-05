@@ -42,18 +42,15 @@ static mFree  ifree_ptr = DefaultFreeFunc;
 void *vec_malloc(const ILsizei size)
 {
 	const ILsizei _size =  size % 16 > 0 ? size + 16 - (size % 16) : size; // align size value
-	
-#ifdef MM_MALLOC
+
+#if defined(MM_MALLOC)
 	return _mm_malloc(_size,16);
-#else
-#ifdef VALLOC
+#elif defined(VALLOC)
 	return valloc( _size );
-#else
-#ifdef POSIX_MEMALIGN
+#elif defined(POSIX_MEMALIGN)
 	char *buffer;
 	return posix_memalign((void**)&buffer, 16, _size) == 0 ? buffer : NULL;
-#else
-#ifdef MEMALIGN
+#elif defined(MEMALIGN)
 	return memalign( 16, _size );
 #else
 	// Memalign hack from ffmpeg for MinGW
@@ -64,10 +61,17 @@ void *vec_malloc(const ILsizei size)
 	ptr = (void*)(((char*)ptr)+diff);
 	((char*)ptr)[-1]= diff;
 	return ptr;
-#endif //MEMALIGN
-#endif //POSIX_MEMALIGN
-#endif //VALLOC
-#endif //MM_MALLOC
+#endif
+}
+
+void vec_free(void* buffer) {
+#if defined(MM_MALLOC)
+	_mm_free(buffer);
+#elif defined(VALLOC) || defined(POSIX_MEMALIGN) || defined(MEMALIGN)
+	free(buffer);
+#else
+	free(((char*)ptr) - ((char*)ptr)[-1]);
+#endif
 }
 
 void *ivec_align_buffer(void *buffer, const ILsizei size)
@@ -123,15 +127,11 @@ static void ILAPIENTRY DefaultFreeFunc(const void * CONST_RESTRICT ptr)
 {
 	if (ptr)
 	{
-#if defined(VECTORMEM) & defined(MM_MALLOC)
-	    _mm_free((void*)ptr);
+#ifdef VECTORMEM
+		vec_free((void*)ptr);
 #else
-#if defined(VECTORMEM) & !defined(POSIX_MEMALIGN) & !defined(VALLOC) & !defined(MEMALIGN) & !defined(MM_MALLOC)
-	    free(((char*)ptr) - ((char*)ptr)[-1]);
-#else	    
 	    free((void*)ptr);
-#endif //OTHERS...
-#endif //MM_MALLOC
+#endif
 	}
 }
 
