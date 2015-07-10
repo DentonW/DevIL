@@ -1,6 +1,6 @@
 PROJECT(DevIL)
 
-FILE(GLOB DevIL_SRCS src/*.c)
+FILE(GLOB DevIL_SRCS src/*.c src/*.cpp)
 FILE(GLOB DevIL_INC include/*.h ../include/IL/config.h ../include/IL/devil_internal_exports.h ../include/IL/il.h)
 FILE(GLOB DevIL_RSRC)
 FILE(GLOB DevIL_TXT)
@@ -38,26 +38,45 @@ SOURCE_GROUP("Header Files" FILES ${DevIL_INC} )
 SOURCE_GROUP("Resource Files" FILES ${DevIL_RSRC} )
 SOURCE_GROUP("Text Files" FILES ${DevIL_TXT} )
 
-# Remove SHARED to create a static library
-ADD_LIBRARY(DevIL SHARED ${DevIL_SRCS} ${DevIL_INC} ${DevIL_RSRC} ${DevIL_TXT})
+IF(BUILD_SHARED_LIBS)
+    ADD_LIBRARY(DevIL SHARED ${DevIL_SRCS} ${DevIL_INC} ${DevIL_RSRC} ${DevIL_TXT})
+ELSE(BUILD_SHARED_LIBS)
+    ADD_LIBRARY(DevIL ${DevIL_SRCS} ${DevIL_INC} ${DevIL_RSRC} ${DevIL_TXT})
+ENDIF(BUILD_SHARED_LIBS)
 
 ## add link sub library info
 
 TARGET_LINK_LIBRARIES(DevIL
-	lcms
-	libjpeg
-	libmng
-	libpng
-	libtiff
-	zlib
+    #	lcms
+    jpeg
+	mng
+	png
+	tiff
+	z
 )
 
-INCLUDE_DIRECTORIES(
+#TARGET_LINK_LIBRARIES(DevIL
+#	lcms
+#	libjpeg
+#	libmng
+#	libpng
+#	libtiff
+#	zlib
+#)
 
-	 ${LCMS_SOURCE_DIR}
-	 ${LIBJPEG_SOURCE_DIR}
-	 ${LIBMNG_SOURCE_DIR}
-	 ${LIBPNG_SOURCE_DIR}
-	 ${LIBTIFF_SOURCE_DIR}
-	 ${ZLIB_SOURCE_DIR}
+#INCLUDE_DIRECTORIES(
+#
+#	 ${LCMS_SOURCE_DIR}
+#	 ${LIBJPEG_SOURCE_DIR}
+#	 ${LIBMNG_SOURCE_DIR}
+#	 ${LIBPNG_SOURCE_DIR}
+#	 ${LIBTIFF_SOURCE_DIR}
+#	 ${ZLIB_SOURCE_DIR}
+#)
+
+install (TARGETS DevIL
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
 )
+install (FILES ../include/IL/il.h DESTINATION include/IL)
