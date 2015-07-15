@@ -179,7 +179,7 @@ IL_USE_JPEGLIB_UNMODIFIED
 
 /* mng support (MNG is basically the animated version of PNG but is not
    widespread.) */
-#undef IL_NO_MNG
+#cmakedefine IL_NO_MNG @IL_NO_MNG@
 
 /* mp3 support (MP3 (MPEG-1 Audio Layer 3) sometimes have images in them, such
    as cover art.) */

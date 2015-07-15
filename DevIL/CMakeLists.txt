@@ -18,7 +18,7 @@ find_package(PNG)
 find_package(TIFF)
 find_package(JPEG)
 find_package(Jasper)
-# TODO: check for openexr, squish, lcms, nvidia texture tools... others?
+# TODO: check for libmng, openexr, squish, lcms, nvidia texture tools... others?
 
 # TODO: add options for manually configuring formats (eg IL_NO_GAMES)
 
@@ -34,6 +34,10 @@ endif(NOT FOUND_JPEG)
 if(NOT FOUND_TIFF)
     set(IL_NO_TIF 1)
 endif(NOT FOUND_TIFF)
+
+if(NOT FOUND_MNG)
+    set(IL_NO_MNG 1)
+endif(NOT FOUND_MNG)
 
 # should offer user exr support as an option if openexr lib is found
 if(NOT FOUND_OPENEXR)
