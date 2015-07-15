@@ -23,36 +23,36 @@ find_package(Jasper)
 # TODO: add options for manually configuring formats (eg IL_NO_GAMES)
 
 
-if(NOT FOUND_PNG)
+if(NOT PNG_FOUND)
     set(IL_NO_PNG 1)
-endif(NOT FOUND_PNG)
+endif(NOT PNG_FOUND)
 
-if(NOT FOUND_JPEG)
+if(NOT JPEG_FOUND)
     set(IL_NO_JPG 1)
-endif(NOT FOUND_JPEG)
+endif(NOT JPEG_FOUND) 
 
-if(NOT FOUND_TIFF)
+if(NOT TIFF_FOUND)
     set(IL_NO_TIF 1)
-endif(NOT FOUND_TIFF)
+endif(NOT TIFF_FOUND)
 
-if(NOT FOUND_MNG)
+if(NOT MNG_FOUND)
     set(IL_NO_MNG 1)
-endif(NOT FOUND_MNG)
+endif(NOT MNG_FOUND)
 
 # should offer user exr support as an option if openexr lib is found
-if(NOT FOUND_OPENEXR)
+if(NOT OPENEXR_FOUND)
     set(IL_NO_EXR 1)
-endif(NOT FOUND_OPENEXR)
+endif(NOT OPENEXR_FOUND)
 
 # jpeg2000 support requires libjasper
-if(NOT FOUND_JASPER)
+if(NOT JASPER_FOUND)
     set(IL_NO_JP2 1)
-endif(NOT FOUND_JASPER)
+endif(NOT JASPER_FOUND)
 
 # can use lcms lib?
-if(NOT FOUND_LCMS)
+if(NOT LCMS_FOUND)
     set(IL_NO_LCMS 1)
-endif(NOT FOUND_LCMS)
+endif(NOT LCMS_FOUND)
 
 # TODO: utx doesn't currently compile (as C, anyway)
 set(IL_NO_UTX 1)
