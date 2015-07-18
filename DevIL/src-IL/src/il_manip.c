@@ -12,12 +12,6 @@
 
 #include <IL/il.h>
 
-// Awful inline shenanigans as per
-// http://www.greenend.org.uk/rjk/tech/inline.html
-#define INLINE
-#include "il_manip.h"
-#undef INLINE
-
 #include "il_internal.h"
 
 

@@ -21,25 +21,19 @@
 	#define assert(x)
 #endif
 
-//#ifndef NOINLINE
-#ifndef INLINE
-#if defined(__GNUC__)
-	#define INLINE extern inline
-#elif defined(_MSC_VER)	//@TODO: Get this working in MSVC++.
-						//  http://www.greenend.org.uk/rjk/2003/03/inline.html
-	#define NOINLINE
-	//#define INLINE
-	/*#ifndef _WIN64  // Cannot use inline assembly in x64 target platform.
-		#define USE_WIN32_ASM
-	#endif//_WIN64*/
-	#define INLINE __inline
+
+#ifdef NOINLINE
+    // No inlining. Treat all inline funcs as static.
+    // Functions will be replicated in all translation units
+    // use them.
+    #define STATIC_INLINE static
 #else
-	#define INLINE inline
-#endif
-#endif
-//#else
-//#define INLINE
-//#endif //NOINLINE
+    // Portable across C99, GNU89, C++
+    // TODO: This might fail on MSVC C compiler (but should be fine on the
+    // MSVC C++ compiler). May need to use __inline on MSVC
+    #define STATIC_INLINE static inline
+#endif // NOINLINE
+
 
 #ifdef __cplusplus
 extern "C" {
