@@ -28,10 +28,13 @@
     // use them.
     #define STATIC_INLINE static
 #else
-    // Portable across C99, GNU89, C++
-    // TODO: This might fail on MSVC C compiler (but should be fine on the
-    // MSVC C++ compiler). May need to use __inline on MSVC
-    #define STATIC_INLINE static inline
+    #if defined(_MSC_VER) && !defined(__cplusplus)
+        // MSVC compiler uses __inline when compiling C (not C++)
+        #define STATIC_INLINE static __inline
+    #else
+        // Portable across C99, GNU89, C++...
+        #define STATIC_INLINE static inline
+    #endif
 #endif // NOINLINE
 
 
