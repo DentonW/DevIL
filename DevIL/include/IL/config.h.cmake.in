@@ -4,7 +4,7 @@
 /* this file is either config.h.cmake.in or generated from it by cmake */
 
 
-/* Theses are present in original autoconf setup, but unused:
+/* Theses are present in original autoconf setup, but unused in the code:
 
 AC_APPLE_UNIVERSAL_BUILD
 HAVE_STDINT_H
@@ -32,6 +32,9 @@ PTHREAD_CREATE_JOINABLE
 STDC_HEADERS
 X_DISPLAY_MISSING
 IL_USE_JPEGLIB_UNMODIFIED
+SSE
+SSE2
+SSE3
 
 */
 
@@ -56,14 +59,6 @@ IL_USE_JPEGLIB_UNMODIFIED
 /* restric keyword available */
 #undef RESTRICT_KEYWORD
 
-/* SSE extension found */
-#undef SSE
-
-/* SSE2 extension found */
-#undef SSE2
-
-/* SSE3 extension found */
-#undef SSE3
 
 #cmakedefine WORDS_BIGENDIAN @WORDS_BIGENDIAN@
 
@@ -170,6 +165,8 @@ IL_USE_JPEGLIB_UNMODIFIED
 
 /* lcms support () */
 #cmakedefine IL_NO_LCMS @IL_NO_LCMS@
+/* LCMS: include lcms.h instead of lcms/lcms.h (implicit on windows) */
+#undef LCMS_NODIRINCLUDE
 
 /* lif support (LIF is the image format of the game Homeworld.) */
 #undef IL_NO_LIF
@@ -270,14 +267,12 @@ IL_USE_JPEGLIB_UNMODIFIED
 #undef IL_NO_XPM
 
 /* Define if you have nvidia texture tools library installed */
-#undef IL_USE_DXTC_NVIDIA
+#define IL_USE_DXTC_NVIDIA %IL_USE_DXTC_NVIDIA%
 
 /* Define if you have libsquish installed */
 #undef IL_USE_DXTC_SQUISH
 
 
-/* LCMS include without lcms/ support */
-#undef LCMS_NODIRINCLUDE
 
 
 

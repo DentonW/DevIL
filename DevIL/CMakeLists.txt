@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 2.6)
 
 PROJECT(ImageLib)
 
+# include our custom modules
+set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
 #include (CheckIncludeFile)
 #include (CheckFunctionExists)
 include (TestBigEndian)
@@ -18,7 +21,13 @@ find_package(PNG)
 find_package(TIFF)
 find_package(JPEG)
 find_package(Jasper)
-# TODO: check for libmng, openexr, squish, lcms, nvidia texture tools... others?
+find_package(Squish)
+
+find_package(NVTT)      # NVidia texture tools
+find_package(OpenEXR)
+find_package(LCMS)
+
+# TODO: check for libmng, others?
 
 # TODO: add options for manually configuring formats (eg IL_NO_GAMES)
 
@@ -39,6 +48,10 @@ if(NOT MNG_FOUND)
     set(IL_NO_MNG 1)
 endif(NOT MNG_FOUND)
 
+if(NOT SQUISH_FOUND)
+    set(IL_NO_SQUISH 1)
+endif(NOT SQUISH_FOUND)
+
 # should offer user exr support as an option if openexr lib is found
 if(NOT OPENEXR_FOUND)
     set(IL_NO_EXR 1)
@@ -53,6 +66,10 @@ endif(NOT JASPER_FOUND)
 if(NOT LCMS_FOUND)
     set(IL_NO_LCMS 1)
 endif(NOT LCMS_FOUND)
+
+if(NVTT_FOUND)
+    set(IL_USE_DXTC_NVIDIA ON)
+endif(NVTT_FOUND)
 
 # TODO: utx doesn't currently compile (as C, anyway)
 set(IL_NO_UTX 1)
