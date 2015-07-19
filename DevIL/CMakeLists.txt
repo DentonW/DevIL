@@ -75,8 +75,8 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/IL/config.h.cmake.in ${CMAKE_
 #)
 
 add_subdirectory(src-IL)
-#add_subdirectory(src-ILU)
-#add_subdirectory(src-ILUT)
+add_subdirectory(src-ILU)
+add_subdirectory(src-ILUT)
 
 
 # need to check for vc6 or vc2003 output dir
