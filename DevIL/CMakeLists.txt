@@ -10,6 +10,8 @@ set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 #include (CheckFunctionExists)
 include (TestBigEndian)
 
+#set(CMAKE_C_FLAGS "-std=c99")
+
 OPTION(BUILD_SHARED_LIBS "Build with shared (.DLL .SO) libraries." ON)
 
 # various compiler stuff
