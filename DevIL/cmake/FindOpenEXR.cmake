@@ -1,6 +1,6 @@
 # Locate OpenEXR
 # This module defines
-# OPENEXR_LIBRARY
+# OPENEXR_LIBRARIES
 # OPENEXR_FOUND, if false, do not try to link to OpenEXR 
 # OPENEXR_INCLUDE_DIR, where to find the headers
 #

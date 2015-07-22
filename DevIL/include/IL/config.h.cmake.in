@@ -56,7 +56,7 @@ SSE3
 /* X86_ASM assembly found */
 #undef GCC_X86_ASM
 
-/* restric keyword available */
+/* restrict keyword available */
 #undef RESTRICT_KEYWORD
 
 
@@ -130,8 +130,7 @@ SSE3
 /* Define if you want to disable support for various game formats */
 #undef IL_NO_GAMES
 
-/* gif support (GIF is lossy and proprietary format used mainly to make
-   animations) */
+/* gif support */
 #undef IL_NO_GIF
 
 /* hdr support (HDR is the Radiance High Dynamic Range format, using more bits
@@ -166,7 +165,7 @@ SSE3
 /* lcms support () */
 #cmakedefine IL_NO_LCMS @IL_NO_LCMS@
 /* LCMS: include lcms.h instead of lcms/lcms.h (implicit on windows) */
-#undef LCMS_NODIRINCLUDE
+#cmakedefine LCMS_NODIRINCLUDE @LCMS_NODIRINCLUDE@
 
 /* lif support (LIF is the image format of the game Homeworld.) */
 #undef IL_NO_LIF
@@ -267,10 +266,11 @@ SSE3
 #undef IL_NO_XPM
 
 /* Define if you have nvidia texture tools library installed */
-#define IL_USE_DXTC_NVIDIA %IL_USE_DXTC_NVIDIA%
+#cmakedefine IL_USE_DXTC_NVIDIA %IL_USE_DXTC_NVIDIA%
 
 /* Define if you have libsquish installed */
-#undef IL_USE_DXTC_SQUISH
+#cmakedefine IL_USE_DXTC_SQUISH %IL_USE_DXTC_SQUISH%
+
 
 
 

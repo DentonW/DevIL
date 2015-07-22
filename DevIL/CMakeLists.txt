@@ -9,7 +9,7 @@ set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 #include (CheckIncludeFile)
 #include (CheckFunctionExists)
 include (TestBigEndian)
-
+include(CMakeDependentOption)
 #set(CMAKE_C_FLAGS "-std=c99")
 
 OPTION(BUILD_SHARED_LIBS "Build with shared (.DLL .SO) libraries." ON)
@@ -31,50 +31,78 @@ find_package(LCMS)
 
 # TODO: check for libmng, others?
 
+
+# TODO: utx doesn't currently compile (as C, anyway)
+set(IL_NO_UTX 1)
+
 # TODO: add options for manually configuring formats (eg IL_NO_GAMES)
 
-
-if(NOT PNG_FOUND)
+if(PNG_FOUND)
+    option(IL_NO_PNG "Disable PNG support (libpng)" 0)
+else(PNG_FOUND)
     set(IL_NO_PNG 1)
-endif(NOT PNG_FOUND)
+endif(PNG_FOUND)
 
-if(NOT JPEG_FOUND)
-    set(IL_NO_JPG 1)
-endif(NOT JPEG_FOUND) 
-
-if(NOT TIFF_FOUND)
+if(TIFF_FOUND)
+    option(IL_NO_TIF "Disable TIFF support (libtiff)" 0)
+else(TIFF_FOUND)
     set(IL_NO_TIF 1)
-endif(NOT TIFF_FOUND)
+endif(TIFF_FOUND)
 
-if(NOT MNG_FOUND)
-    set(IL_NO_MNG 1)
-endif(NOT MNG_FOUND)
+if(JPEG_FOUND)
+    option(IL_NO_JPG "Disable JPEG support (libjpeg)" 0)
+else(JPEG_FOUND)
+    set(IL_NO_JPG 1)
+endif(JPEG_FOUND)
 
-if(NOT SQUISH_FOUND)
-    set(IL_NO_SQUISH 1)
-endif(NOT SQUISH_FOUND)
-
-# should offer user exr support as an option if openexr lib is found
-if(NOT OPENEXR_FOUND)
+if(OPENEXR_FOUND)
+    option(IL_NO_EXR "Disable EXR support (openEXR)" 0)
+else(OPENEXR_FOUND)
     set(IL_NO_EXR 1)
-endif(NOT OPENEXR_FOUND)
+endif(OPENEXR_FOUND)
 
 # jpeg2000 support requires libjasper
-if(NOT JASPER_FOUND)
+if(JASPER_FOUND)
+    option(IL_NO_JP2 "Disable JP2 support (libjasper)" 0)
+else(JASPER_FOUND)
     set(IL_NO_JP2 1)
-endif(NOT JASPER_FOUND)
+endif(JASPER_FOUND)
 
-# can use lcms lib?
-if(NOT LCMS_FOUND)
+
+if(MNG_FOUND)
+    option(IL_NO_MNG "Disable MNG support (libmng)" 0)
+else(MNG_FOUND)
+    set(IL_NO_MNG 1)
+endif(MNG_FOUND)
+
+if(LCMS_FOUND)
+    option(IL_NO_LCMS "Disable LCMS support (Little CMS)" 0)
+else(LCMS_FOUND)
     set(IL_NO_LCMS 1)
-endif(NOT LCMS_FOUND)
+endif(LCMS_FOUND)
+
+
+set(LCMS_NODIRINCLUDE 1)
 
 if(NVTT_FOUND)
     set(IL_USE_DXTC_NVIDIA ON)
 endif(NVTT_FOUND)
 
-# TODO: utx doesn't currently compile (as C, anyway)
-set(IL_NO_UTX 1)
+if(NVTT_FOUND)
+    option(IL_USE_DXTC_NVIDIA "Use Nvidia Texture Tools (NVTT) for DXTC support" 1)
+else(NVTT_FOUND)
+    set(IL_USE_DXTC_NVIDIA 0)
+endif(NVTT_FOUND)
+
+if(SQUISH_FOUND)
+    option(IL_USE_DXTC_SQUISH "Use libsquish for DXTC support" 1)
+else(SQUISH_FOUND)
+    set(IL_USE_DXTC_SQUISH 0)
+endif(SQUISH_FOUND)
+
+
+
+
 
 
 # generate the config.h

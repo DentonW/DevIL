@@ -44,35 +44,37 @@ ELSE(BUILD_SHARED_LIBS)
     ADD_LIBRARY(DevIL ${DevIL_SRCS} ${DevIL_INC} ${DevIL_RSRC} ${DevIL_TXT})
 ENDIF(BUILD_SHARED_LIBS)
 
-## add link sub library info
 
-TARGET_LINK_LIBRARIES(DevIL
-    #	lcms
-    jpeg
-	mng
-	png
-	tiff
-	z
+
+# include and link external libs
+if(NOT IL_NO_LCMS)
+    include_directories( ${LCMS_INCLUDE_DIR} )
+    target_link_libraries( DevIL ${LCMS_LIBRARIES} )
+endif(NOT IL_NO_LCMS)
+
+
+INCLUDE_DIRECTORIES(
+    ${PNG_INCLUDE_DIRS}
+    ${TIFF_INCLUDE_DIR}
+    ${JPEG_INCLUDE_DIR}
+    ${JASPER_INCLUDE_DIR} 
+    ${LCMS_INCLUDE_DIRS}
+    ${OPENEXR_INCLUDE_DIR}
+    ${NVTT_INCLUDE_DIR}
 )
 
-#TARGET_LINK_LIBRARIES(DevIL
-#	lcms
-#	libjpeg
-#	libmng
-#	libpng
-#	libtiff
-#	zlib
-#)
 
-#INCLUDE_DIRECTORIES(
-#
-#	 ${LCMS_SOURCE_DIR}
-#	 ${LIBJPEG_SOURCE_DIR}
-#	 ${LIBMNG_SOURCE_DIR}
-#	 ${LIBPNG_SOURCE_DIR}
-#	 ${LIBTIFF_SOURCE_DIR}
-#	 ${ZLIB_SOURCE_DIR}
-#)
+#TARGET_LINK_LIBRARIES(
+#    DevIL
+    #    ${PNG_LIBRARIES}
+    #    ${JPEG_LIBRARIES}
+    #${TIFF_LIBRARIES}
+    #${JASPER_LIBRARIES}
+    #${LCMS_LIBRARIES}
+    #${OPENEXR_LIBRARIES}
+    #${NVTT_LIBRARY}
+    #)
+
 
 install (TARGETS DevIL
     ARCHIVE DESTINATION lib
