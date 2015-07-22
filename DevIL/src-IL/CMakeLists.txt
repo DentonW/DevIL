@@ -45,36 +45,63 @@ ELSE(BUILD_SHARED_LIBS)
 ENDIF(BUILD_SHARED_LIBS)
 
 
+# configure include dirs and linkage for the optional external libs
+set(libs "")
+set(incs "")
 
-# include and link external libs
+if(NOT IL_NO_PNG)
+    list(APPEND incs ${PNG_INCLUDE_DIRS} )
+    list(APPEND libs ${PNG_LIBRARIES} )
+endif(NOT IL_NO_PNG)
+
+if(NOT IL_NO_JPG)
+    list(APPEND incs ${JPEG_INCLUDE_DIRS} )
+    list(APPEND libs ${JPEG_LIBRARIES} )
+endif(NOT IL_NO_JPG)
+
+if(NOT IL_NO_TIF)
+    list(APPEND incs ${TIFF_INCLUDE_DIRS} )
+    list(APPEND libs ${TIFF_LIBRARIES} )
+endif(NOT IL_NO_TIF)
+
+if(NOT IL_NO_JP2)
+    list(APPEND incs ${JASPER_INCLUDE_DIR} )
+    list(APPEND libs ${JASPER_LIBRARIES} )
+endif(NOT IL_NO_JP2)
+
+if(NOT IL_NO_MNG)
+    list(APPEND incs ${MNG_INCLUDE_DIRS} )
+    list(APPEND libs ${MNG_LIBRARIES} )
+endif(NOT IL_NO_MNG)
+
 if(NOT IL_NO_LCMS)
-    include_directories( ${LCMS_INCLUDE_DIR} )
-    target_link_libraries( DevIL ${LCMS_LIBRARIES} )
+    list(APPEND incs ${LCMS_INCLUDE_DIRS} )
+    list(APPEND libs ${LCMS_LIBRARIES} )
 endif(NOT IL_NO_LCMS)
 
+if(NOT IL_NO_EXR)
+    list(APPEND incs ${OPENEXR_INCLUDE_DIRS} )
+    list(APPEND libs ${OPENEXR_LIBRARIES} )
+endif(NOT IL_NO_EXR)
 
-INCLUDE_DIRECTORIES(
-    ${PNG_INCLUDE_DIRS}
-    ${TIFF_INCLUDE_DIR}
-    ${JPEG_INCLUDE_DIR}
-    ${JASPER_INCLUDE_DIR} 
-    ${LCMS_INCLUDE_DIRS}
-    ${OPENEXR_INCLUDE_DIR}
-    ${NVTT_INCLUDE_DIR}
-)
+if(IL_USE_DXTC_NVIDIA)
+    list(APPEND incs ${NVTT_INCLUDE_DIR} )
+    list(APPEND libs ${NVTT_LIBRARY} )
+endif(IL_USE_DXTC_NVIDIA)
+
+if(IL_USE_DXTC_NVIDIA)
+    list(APPEND incs ${NVTT_INCLUDE_DIR} )
+    list(APPEND libs ${NVTT_LIBRARY} )
+endif(IL_USE_DXTC_NVIDIA)
+
+# TODO: does Squish require linking/includes?
 
 
-#TARGET_LINK_LIBRARIES(
-#    DevIL
-    #    ${PNG_LIBRARIES}
-    #    ${JPEG_LIBRARIES}
-    #${TIFF_LIBRARIES}
-    #${JASPER_LIBRARIES}
-    #${LCMS_LIBRARIES}
-    #${OPENEXR_LIBRARIES}
-    #${NVTT_LIBRARY}
-    #)
+include_directories(${incs})
+target_link_libraries(DevIL ${libs})
 
+
+# Installation
 
 install (TARGETS DevIL
     ARCHIVE DESTINATION lib
