@@ -24,6 +24,12 @@
 	#include <IL/config.h>
 #endif
 
+#if defined(__GNUC__) && __STDC_VERSION__ >= 199901L
+    // this makes various common-but-not-C99 functions visable in gcc -std-c99
+    // most notably, strdup, strcasecmp().
+    #define _GNU_SOURCE
+#endif
+
 // Standard headers
 #include <stdlib.h>
 #include <stdio.h>
