@@ -34,6 +34,9 @@ find_package(LCMS)
 # TODO: utx doesn't currently compile (as C, anyway)
 set(IL_NO_UTX 1)
 
+# TODO: WDP requires Microsoft HD Photo Device Porting Kit 1.0
+set(IL_NO_WDP 1)
+
 # TODO: add options for manually configuring formats (eg IL_NO_GAMES)
 
 
