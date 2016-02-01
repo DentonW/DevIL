@@ -77,18 +77,11 @@ ILfloat ilSin(ILfloat Angle);
 ILint ilRound(ILfloat Num);
 
 #ifndef NOINLINE
-INLINE ILfloat ilCos(ILfloat Angle) {
-	return (ILfloat)(cos(Angle * IL_DEGCONV));
-}
+ILfloat ilCos(ILfloat Angle);
 
-INLINE ILfloat ilSin(ILfloat Angle) {
-	return (ILfloat)(sin(Angle * IL_DEGCONV));
-}
+ILfloat ilSin(ILfloat Angle);
 
-
-INLINE ILint ilRound(ILfloat Num) {
-	return (ILint)(Num + 0.5); // this is truncating in away-from-0, not rounding
-}
+ILint ilRound(ILfloat Num);
 #endif
 
 

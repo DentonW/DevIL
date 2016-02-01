@@ -63,7 +63,7 @@ extern "C" {
 	#endif
 #endif
 
-#ifdef RESTRICT_KEYWORD
+#if defined(RESTRICT_KEYWORD) && !defined(__cplusplus)
 #define RESTRICT restrict
 #define CONST_RESTRICT const restrict
 #else

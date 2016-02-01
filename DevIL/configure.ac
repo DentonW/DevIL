@@ -150,9 +150,7 @@ AS_IF([test "x$enable_ILU" = "xyes" -o "x$enable_ILUT" = "xyes"],
 dnl Test for restrict c/c++ keyword
 DEVIL_CHECK_RESTRICT
 
-dnl checking if the -std=gnu99 flag is required
-AS_IF([test  "x$restrict_keyword" = "xfound"],
-      [DEVIL_CHECK_RESTRICT_GNU99])
+
 
 dnl must add AC_CACHE_CHECK support where possible
 
