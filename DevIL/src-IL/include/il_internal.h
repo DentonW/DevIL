@@ -46,11 +46,6 @@ extern "C" {
 #include "il_endian.h"
 #include "il_manip.h"
 
-#ifndef _WIN32
-	// The Microsoft HD Photo Device Porting Kit has not been ported to anything other
-	//  than Windows yet, so we disable this if Windows is not the current platform.
-	#define IL_NO_WDP
-#endif//_WIN32
 
 // If we do not want support for game image formats, this define removes them all.
 #ifdef IL_NO_GAMES
