@@ -1,7 +1,7 @@
 PROJECT(ILUT)
 
 FILE(GLOB ILUT_SRCS src/*.c)
-FILE(GLOB ILUT_INC include/*.h ../include/IL/config.h ../include/IL/devil_internal_exports.h ../include/IL/ilut.h)
+FILE(GLOB ILUT_INC include/*.h ../include/IL/devil_internal_exports.h ../include/IL/ilut.h)
 FILE(GLOB ILUT_RSRC)
 
 INCLUDE_DIRECTORIES(
