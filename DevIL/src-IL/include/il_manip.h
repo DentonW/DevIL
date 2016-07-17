@@ -20,12 +20,12 @@ extern "C" {
 ILboolean ilFlipImage(void);
 ILboolean ilMirrorImage(void);	//@JASON New routine created 03/28/2001
 
+
 //-----------------------------------------------
 // Overflow handler for float-to-half conversion;
 // generates a hardware floating-point overflow,
 // which may be trapped by the operating system.
 //-----------------------------------------------
-//#ifndef NOINLINE  //DW:04/20/2016
 
 #ifndef NOINLINE
 #define INLINE
@@ -35,7 +35,7 @@ ILboolean ilMirrorImage(void);	//@JASON New routine created 03/28/2001
 	#pragma warning(push)
 	#pragma warning(disable : 4756)  // Disables 'named type definition in parentheses' warning
 #endif
-INLINE ILfloat /*ILAPIENTRY*/ ilFloatToHalfOverflow() {
+STATIC_INLINE ILfloat ilFloatToHalfOverflow() {
 	ILfloat f = 1e10;
 	ILint j;
 	for (j = 0; j < 10; j++)
@@ -51,7 +51,7 @@ INLINE ILfloat /*ILAPIENTRY*/ ilFloatToHalfOverflow() {
 // Float-to-half conversion -- general case, including
 // zeroes, denormalized numbers and exponent overflows.
 //-----------------------------------------------------
-INLINE ILushort ILAPIENTRY ilFloatToHalf(ILuint i) {
+STATIC_INLINE ILushort ilFloatToHalf(ILuint i) {
 	//
 	// Our floating point number, f, is represented by the bit
 	// pattern in integer i.  Disassemble that bit pattern into
@@ -179,7 +179,7 @@ INLINE ILushort ILAPIENTRY ilFloatToHalf(ILuint i) {
 }
 
 // Taken from OpenEXR
-INLINE ILuint ILAPIENTRY ilHalfToFloat (ILushort y) {
+STATIC_INLINE ILuint ilHalfToFloat (ILushort y) {
 
 	int s = (y >> 15) & 0x00000001;
 	int e = (y >> 10) & 0x0000001f;
@@ -244,7 +244,6 @@ INLINE ILuint ILAPIENTRY ilHalfToFloat (ILushort y) {
 
 	return (s << 31) | (e << 23) | m;
 }
-//#endif //NOINLINE
 
 #ifdef _cplusplus
 }

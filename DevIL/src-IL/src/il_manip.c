@@ -10,10 +10,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <IL/il.h>
+
 #include "il_internal.h"
 
 
-ILAPI void ILAPIENTRY iFlipBuffer(ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num)
+void ILAPIENTRY iFlipBuffer(ILubyte *buff, ILuint depth, ILuint line_size, ILuint line_num)
 {
 	ILubyte *StartPtr, *EndPtr;
 	ILuint y, d;
