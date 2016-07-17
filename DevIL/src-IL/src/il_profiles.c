@@ -30,14 +30,14 @@
 	#if defined(IL_USE_PRAGMA_LIBS)
 		#if defined(_MSC_VER) || defined(__BORLANDC__)
 			#ifndef _DEBUG
-				#pragma comment(lib, "lcms.lib")
+				#pragma comment(lib, "lcms2_static.lib")
 			#else
-				#pragma comment(lib, "lcms-d.lib")
+				#pragma comment(lib, "lcms2_static.lib")
 			#endif
 		#endif
 	#endif
 
-	#include <lcms.h>
+	#include <lcms2.h>
 #endif//_WIN32
 
 #ifdef PACKAGE_NAME

@@ -24,14 +24,14 @@
 	#if defined(_MSC_VER) || defined(__BORLANDC__)
 		#ifndef _DEBUG
 			#pragma comment(lib, "libmng.lib")
-			#pragma comment(lib, "lcms.lib")
+			#pragma comment(lib, "lcms2.lib")
 			#pragma comment(lib, "libjpeg.lib")
-			#pragma comment(lib, "zlib.lib")
+			#pragma comment(lib, "zlibstatic.lib")
 		#else
-			#pragma comment(lib, "libmng-d.lib")
-			#pragma comment(lib, "lcms-d.lib")
-			#pragma comment(lib, "libjpeg-d.lib")
-			#pragma comment(lib, "zlib-d.lib")
+			#pragma comment(lib, "libmng.lib")
+			#pragma comment(lib, "lcms2.lib")
+			#pragma comment(lib, "libjpeg.lib")
+			#pragma comment(lib, "zlibstatic.lib")
 		#endif
 	#endif
 #endif

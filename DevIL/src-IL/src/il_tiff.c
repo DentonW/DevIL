@@ -25,9 +25,10 @@
 #if (defined(_WIN32) || defined(_WIN64)) && defined(IL_USE_PRAGMA_LIBS)
 	#if defined(_MSC_VER) || defined(__BORLANDC__)
 		#ifndef _DEBUG
-			#pragma comment(lib, "libtiff.lib")
+			#pragma comment(lib, "tiff.lib")
 		#else
-			#pragma comment(lib, "libtiff-d.lib")
+			//#pragma comment(lib, "tiff-d.lib")
+			#pragma comment(lib, "tiff.lib")
 		#endif
 	#endif
 #endif

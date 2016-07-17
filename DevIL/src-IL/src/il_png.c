@@ -27,11 +27,11 @@
 #if (defined(_WIN32) || defined(_WIN64)) && defined(IL_USE_PRAGMA_LIBS)
 	#if defined(_MSC_VER) || defined(__BORLANDC__)
 		#ifndef _DEBUG
-			#pragma comment(lib, "libpng.lib")
-			#pragma comment(lib, "zlib.lib")
+			#pragma comment(lib, "libpng16_static.lib")
+			#pragma comment(lib, "zlibstatic.lib")
 		#else
-			#pragma comment(lib, "libpng-d.lib")
-			#pragma comment(lib, "zlib-d.lib")
+			#pragma comment(lib, "libpng16_staticd.lib")
+			#pragma comment(lib, "zlibstatic.lib")
 		#endif
 	#endif
 #endif
@@ -104,7 +104,7 @@ ILboolean iIsValidPng()
 	Read = iread(Signature, 1, 8);
 	iseek(-Read, IL_SEEK_CUR);
 
-	return png_sig_cmp(Signature, 0, 8);
+	return !png_sig_cmp(Signature, 0, 8);  // DW 5/2/2016: They changed the behavior of this function?
 }
 
 

@@ -25,7 +25,11 @@ ILboolean ilMirrorImage(void);	//@JASON New routine created 03/28/2001
 // generates a hardware floating-point overflow,
 // which may be trapped by the operating system.
 //-----------------------------------------------
+//#ifndef NOINLINE  //DW:04/20/2016
+
 #ifndef NOINLINE
+#define INLINE
+#endif
 
 #if defined(_MSC_VER)
 	#pragma warning(push)
@@ -240,7 +244,7 @@ INLINE ILuint ILAPIENTRY ilHalfToFloat (ILushort y) {
 
 	return (s << 31) | (e << 23) | m;
 }
-#endif //NOINLINE
+//#endif //NOINLINE
 
 #ifdef _cplusplus
 }

@@ -27,7 +27,7 @@
 			#ifndef _DEBUG
 				#pragma comment(lib, "libjasper.lib")
 			#else
-				#pragma comment(lib, "libjasper-d.lib")
+				#pragma comment(lib, "libjasper.lib")  //libjasper-d.lib
 			#endif
 		#endif
 	#endif

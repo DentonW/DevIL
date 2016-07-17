@@ -106,6 +106,8 @@ ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 		Type = IL_IWI;
 	else if (!iStrCmp(Ext, IL_TEXT("jng")))
 		Type = IL_JNG;
+	else if (!iStrCmp(Ext, IL_TEXT("ktx")))
+		Type = IL_KTX;
 	else if (!iStrCmp(Ext, IL_TEXT("lif")))
 		Type = IL_LIF;
 	else if (!iStrCmp(Ext, IL_TEXT("mdl")))
@@ -247,6 +249,11 @@ ILenum ILAPIENTRY ilDetermineTypeF(ILHANDLE File)
 		return IL_JP2;
 	#endif
 
+	#ifndef IL_NO_KTX
+	if (ilIsValidKtxF(File))
+		return IL_KTX;
+	#endif
+
 	#ifndef IL_NO_LIF
 	if (ilIsValidLifF(File))
 		return IL_LIF;
@@ -386,6 +393,11 @@ ILenum ILAPIENTRY ilDetermineTypeL(const void *Lump, ILuint Size)
 	#ifndef IL_NO_JP2
 	if (ilIsValidJp2L(Lump, Size))
 		return IL_JP2;
+	#endif
+
+	#ifndef IL_NO_KTX
+	if (ilIsValidKtxL(Lump, Size))
+		return IL_KTX;
 	#endif
 
 	#ifndef IL_NO_LIF
@@ -543,6 +555,11 @@ ILboolean ILAPIENTRY ilIsValid(ILenum Type, ILconst_string FileName)
 			return ilIsValidJp2(FileName);
 		#endif
 
+		#ifndef IL_NO_KTX
+		case IL_KTX:
+			return ilIsValidKtx(FileName);
+		#endif
+
 		#ifndef IL_NO_LIF
 		case IL_LIF:
 			return ilIsValidLif(FileName);
@@ -693,6 +710,11 @@ ILboolean ILAPIENTRY ilIsValidF(ILenum Type, ILHANDLE File)
 			return ilIsValidJp2F(File);
 		#endif
 
+		#ifndef IL_NO_KTX
+		case IL_KTX:
+			return ilIsValidKtxF(File);
+		#endif
+
 		#ifndef IL_NO_LIF
 		case IL_LIF:
 			return ilIsValidLifF(File);
@@ -841,6 +863,11 @@ ILboolean ILAPIENTRY ilIsValidL(ILenum Type, void *Lump, ILuint Size)
 		#ifndef IL_NO_JP2
 		case IL_JP2:
 			return ilIsValidJp2L(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_KTX
+		case IL_KTX:
+			return ilIsValidKtxL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_LIF
@@ -1071,6 +1098,12 @@ ILboolean ILAPIENTRY ilLoad(ILenum Type, ILconst_string FileName)
 		#ifndef IL_NO_IWI
 		case IL_IWI:
 			bRet = ilLoadIwi(FileName);
+			break;
+		#endif
+
+		#ifndef IL_NO_KTX
+		case IL_KTX:
+			bRet = ilLoadKtx(FileName);
 			break;
 		#endif
 
@@ -1366,6 +1399,11 @@ ILboolean ILAPIENTRY ilLoadF(ILenum Type, ILHANDLE File)
 			return ilLoadIwiF(File);
 		#endif
 
+		#ifndef IL_NO_KTX
+		case IL_KTX:
+			return ilLoadKtxF(File);
+		#endif
+
 		#ifndef IL_NO_LIF
 		case IL_LIF:
 			return ilLoadLifF(File);
@@ -1622,6 +1660,11 @@ ILboolean ILAPIENTRY ilLoadL(ILenum Type, const void *Lump, ILuint Size)
 		#ifndef IL_NO_IWI
 		case IL_IWI:
 			return ilLoadIwiL(Lump, Size);
+		#endif
+
+		#ifndef IL_NO_KTX
+		case IL_KTX:
+			return ilLoadKtxL(Lump, Size);
 		#endif
 
 		#ifndef IL_NO_LIF
@@ -1935,6 +1978,13 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 		}
 		#endif
 
+		#ifndef IL_NO_KTX
+		if (!iStrCmp(Ext, IL_TEXT("ktx"))) {
+			bRet = ilLoadKtx(FileName);
+			goto finish;
+		}
+		#endif
+
 		#ifndef IL_NO_LIF
 		if (!iStrCmp(Ext, IL_TEXT("lif"))) {
 			bRet = ilLoadLif(FileName);
@@ -2181,6 +2231,11 @@ ILboolean ILAPIENTRY ilSave(ILenum Type, ILconst_string FileName)
 		case IL_JPG:
 			return ilSaveJpeg(FileName);
 		#endif
+
+		/*#ifndef IL_NO_KTX
+		case IL_KTX:
+			return ilSaveKtx(FileName);
+		#endif*/
 
 		#ifndef IL_NO_PCX
 		case IL_PCX:

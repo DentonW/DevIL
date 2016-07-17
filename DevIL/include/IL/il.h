@@ -25,7 +25,7 @@
 extern "C" {
 #endif
 
-//this define controls if floats and doubles are clampled to [0..1]
+//this define controls if floats and doubles are clamped to [0..1]
 //during conversion. It takes a little more time, but it is the correct
 //way of doing this. If you are sure your floats are always valid,
 //you can undefine this value...
@@ -241,6 +241,7 @@ typedef long long unsigned int ILuint64;
 #define IL_DPX			0x0450  //!< Digital Picture Exchange - .dpx extension
 #define IL_UTX			0x0451  //!< Unreal (and Unreal Tournament) Texture - .utx extension
 #define IL_MP3			0x0452  //!< MPEG-1 Audio Layer 3 - .mp3 extension
+#define IL_KTX			0x0453  //!< Khronos Texture - .ktx extension
 
 
 #define IL_JASC_PAL     0x0475  //!< PaintShop Pro Palette

@@ -55,7 +55,8 @@
 			#ifndef _DEBUG
 				#pragma comment(lib, "libjpeg.lib")
 			#else
-				#pragma comment(lib, "libjpeg-d.lib")
+				//#pragma comment(lib, "libjpeg-d.lib")
+				#pragma comment(lib, "libjpeg.lib")
 			#endif
 		#endif//IL_USE_IJL
 	#endif
