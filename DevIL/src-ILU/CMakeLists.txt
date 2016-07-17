@@ -1,7 +1,7 @@
 PROJECT(ILU)
 
 FILE(GLOB ILU_SRCS src/*.c)
-FILE(GLOB ILU_INC include/*.h ../include/IL/config.h ../include/IL/devil_internal_exports.h ../include/IL/ilu.h)
+FILE(GLOB ILU_INC include/*.h ../include/IL/devil_internal_exports.h ../include/IL/ilu.h)
 FILE(GLOB ILU_RSRC)
 
 INCLUDE_DIRECTORIES(

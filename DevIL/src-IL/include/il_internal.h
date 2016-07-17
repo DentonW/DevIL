@@ -24,6 +24,12 @@
 	#include <IL/config.h>
 #endif
 
+#if defined(__GNUC__) && __STDC_VERSION__ >= 199901L
+    // this makes various common-but-not-C99 functions visable in gcc -std-c99
+    // most notably, strdup, strcasecmp().
+    #define _GNU_SOURCE
+#endif
+
 // Standard headers
 #include <stdlib.h>
 #include <stdio.h>
@@ -40,11 +46,6 @@ extern "C" {
 #include "il_endian.h"
 #include "il_manip.h"
 
-#ifndef _WIN32
-	// The Microsoft HD Photo Device Porting Kit has not been ported to anything other
-	//  than Windows yet, so we disable this if Windows is not the current platform.
-	#define IL_NO_WDP
-#endif//_WIN32
 
 // If we do not want support for game image formats, this define removes them all.
 #ifdef IL_NO_GAMES

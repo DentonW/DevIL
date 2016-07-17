@@ -8,10 +8,6 @@
 //
 // Description: Portable network graphics file (.png) functions
 //
-// 20040223 XIX : now may spit out pngs with a transparent index, this is mostly a hack
-// but the proper way of doing it would be to change the pal stuff to think in argb rather than rgb
-// which is something of a bigger job.
-//
 //-----------------------------------------------------------------------------
 
 // Most of the comments are left in this file from libpng's excellent example.c
@@ -104,7 +100,7 @@ ILboolean iIsValidPng()
 	Read = iread(Signature, 1, 8);
 	iseek(-Read, IL_SEEK_CUR);
 
-	return png_sig_cmp(Signature, 0, 8);
+	return !png_sig_cmp(Signature, 0, 8);
 }
 
 
@@ -495,11 +491,6 @@ ILboolean iSavePngInternal()
 	ILuint		BitDepth, i, j;
 	ILubyte 	**RowPtr = NULL;
 	ILimage 	*Temp = NULL;
-	ILpal		*TempPal = NULL;
-
-//XIX alpha
-	ILubyte		transpart[1];
-	ILint		trans;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -603,19 +594,40 @@ ILboolean iSavePngInternal()
 			PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
 	}
 
+    // set the palette if there is one.  REQUIRED for indexed-color images.
 	if (iCurImage->Format == IL_COLOUR_INDEX) {
-		// set the palette if there is one.  REQUIRED for indexed-color images.
-		TempPal = iConvertPal(&iCurImage->Pal, IL_PAL_RGB24);
-		png_set_PLTE(png_ptr, info_ptr, (png_colorp)TempPal->Palette,
-			ilGetInteger(IL_PALETTE_NUM_COLS));
+	    ILpal		*TempPal = NULL;
+        ILint       palType;
+        ILint numCols;
 
-//XIX alpha
-		trans=iGetInt(IL_PNG_ALPHA_INDEX);
-		if ( trans>=0)
-		{
-			transpart[0]=(ILubyte)trans;
-			png_set_tRNS(png_ptr, info_ptr, transpart, 1, 0);
-		}
+        numCols = ilGetInteger(IL_PALETTE_NUM_COLS);
+        if(numCols>256) {
+            numCols = 256;  // png maximum
+        }
+
+		TempPal = iConvertPal(&iCurImage->Pal, IL_PAL_RGB24);
+		png_set_PLTE(png_ptr, info_ptr, (png_colorp)TempPal->Palette, numCols);
+        ilClosePal(TempPal);
+
+        palType = ilGetInteger(IL_PALETTE_TYPE);
+        if( palType==IL_PAL_RGBA32 || palType==IL_PAL_BGRA32 ) {
+            // the palette has transparency, so we need a tRNS chunk.
+            png_byte trans[256];    // png supports up to 256 palette entries
+            int maxTrans = -1;
+            int i;
+            for(i=0; i<numCols; ++i) {
+                ILubyte alpha = iCurImage->Pal.Palette[(4*i) + 3];
+                trans[i] = alpha;
+                if(alpha<255) {
+                    // record the highest non-opaque index
+                    maxTrans = i;
+                }
+            }
+            // only write tRNS chunk if we've got some non-opaque colours
+            if(maxTrans!=-1) {
+                png_set_tRNS(png_ptr, info_ptr, trans, maxTrans+1, 0);
+            }
+        }
 	}
 
 	/*
@@ -711,7 +723,6 @@ ILboolean iSavePngInternal()
 
 	if (Temp != iCurImage)
 		ilCloseImage(Temp);
-	ilClosePal(TempPal);
 
 	return IL_TRUE;
 
@@ -720,7 +731,6 @@ error_label:
 	ifree(RowPtr);
 	if (Temp != iCurImage)
 		ilCloseImage(Temp);
-	ilClosePal(TempPal);
 	return IL_FALSE;
 }
 
