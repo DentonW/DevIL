@@ -1,3 +1,0 @@
-#! /bin/sh
-./configure --enable-ILU --enable-ILUT --enable-debug=yes --prefix=/usr --with-examples
-
