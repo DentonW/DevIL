@@ -39,9 +39,9 @@ SOURCE_GROUP("Resource Files" FILES ${DevIL_RSRC} )
 SOURCE_GROUP("Text Files" FILES ${DevIL_TXT} )
 
 IF(BUILD_SHARED_LIBS)
-    ADD_LIBRARY(DevIL SHARED ${DevIL_SRCS} ${DevIL_INC} ${DevIL_RSRC} ${DevIL_TXT})
+    ADD_LIBRARY(IL SHARED ${DevIL_SRCS} ${DevIL_INC} ${DevIL_RSRC} ${DevIL_TXT})
 ELSE(BUILD_SHARED_LIBS)
-    ADD_LIBRARY(DevIL ${DevIL_SRCS} ${DevIL_INC} ${DevIL_RSRC} ${DevIL_TXT})
+    ADD_LIBRARY(IL ${DevIL_SRCS} ${DevIL_INC} ${DevIL_RSRC} ${DevIL_TXT})
 ENDIF(BUILD_SHARED_LIBS)
 
 
@@ -98,12 +98,12 @@ endif(IL_USE_DXTC_NVIDIA)
 
 
 include_directories(${incs})
-target_link_libraries(DevIL ${libs})
+target_link_libraries(IL ${libs})
 
 
 # Installation
 
-install (TARGETS DevIL
+install (TARGETS IL
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin

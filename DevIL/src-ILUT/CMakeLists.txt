@@ -41,13 +41,11 @@ ADD_LIBRARY(ILUT SHARED ${ILUT_SRCS} ${ILUT_INC} ${ILUT_RSRC})
 ## add link sub library info
 
 TARGET_LINK_LIBRARIES(ILUT
-
-	DevIL
+	IL
 	ILU
 )
 
 INCLUDE_DIRECTORIES(
-
 	${DevIL_SOURCE_DIR}/../include
 	${DevIL_SOURCE_DIR}/include
 	${DevILU_SOURCE_DIR}/include
