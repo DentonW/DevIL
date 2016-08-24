@@ -4,6 +4,7 @@ Build DevIL with CMake
 
 For Linux/Unix/OSX/mingw, using makefiles:
 
+    $ cd devil/DevIL
     $ mkdir build
     $ cd build
     $ cmake ..
@@ -34,4 +35,13 @@ TODO:
     - brew packages to install for OSX
     - instructions for Msys2 on windows
     - steps for setting up libs for visual studio
+
+
+
+Building with msys2 and mingw32/mingw64:
+
+  $ cmake -G "MSYS Makefiles" ..
+
+To set install prefix (windows default seems to be C:/program files/....):
+  $ cmake -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=/usr/local ..
 
