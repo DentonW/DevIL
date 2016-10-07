@@ -10,7 +10,7 @@
 # Created by Robert Osfield. 
 
 
-FIND_PATH(OPENEXR_INCLUDE_DIR OpenEXR/ImfIO.h
+FIND_PATH(OPENEXR_INCLUDE_DIR ImfIO.h
     $ENV{OPENEXR_DIR}/include
     $ENV{OPENEXR_DIR}
     ~/Library/Frameworks
