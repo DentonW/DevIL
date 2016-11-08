@@ -101,11 +101,5 @@ add_subdirectory(src-IL)
 #add_subdirectory(src-ILUT)
 
 
-# need to check for vc6 or vc2003 output dir
-if(BUILD_SHARED_LIBS)
-	set(DEVIL_LIB_DEST_DIR	${CMAKE_CURRENT_SOURCE_DIR}/lib/	)
-else(BUILD_SHARED_LIBS)
-	set(DEVIL_LIB_DEST_DIR	${CMAKE_CURRENT_SOURCE_DIR}/lib/	)
-endif(BUILD_SHARED_LIBS)
 
 

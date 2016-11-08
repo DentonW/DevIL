@@ -1,22 +1,14 @@
 project(DevIL)
 
 file(GLOB DevIL_SRCS src/*.c src/*.cpp)
-file(GLOB DevIL_INC include/*.h ../include/IL/config.h ../include/IL/devil_internal_exports.h ../include/IL/il.h)
+file(GLOB DevIL_INC include/*.h ../include/config.h ../include/IL/devil_internal_exports.h ../include/IL/il.h)
 file(GLOB DevIL_RSRC)
 file(GLOB DevIL_TXT)
 
-include_directories(
+include_directories( include ../include )
 
-	${DevIL_SOURCE_DIR}/include
-	${DevIL_SOURCE_DIR}/../include
-)
-
-# generate the config.h
+# generate config.h
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/config.h.cmake.in ${CMAKE_CURRENT_SOURCE_DIR}/include/config.h)
-
-#SET(DevIL_INC ${DEVIL_INCS} ${DEVIL_SRCS})
-
-set(LIBRARY_OUTPUT_PATH		${DEVIL_LIB_DEST_DIR}	)
 
 #
 # for windows add the .def and .rc files to the source list
