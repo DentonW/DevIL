@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 
 
-PROJECT(ImageLib)
+project(ImageLib)
 
 # include our custom modules
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -12,7 +12,7 @@ include (TestBigEndian)
 include(CMakeDependentOption)
 #set(CMAKE_C_FLAGS "-std=c99")
 
-OPTION(BUILD_SHARED_LIBS "Build with shared (.DLL .SO) libraries." ON)
+option(BUILD_SHARED_LIBS "Build with shared (.DLL .SO) libraries." ON)
 
 # various compiler stuff
 test_big_endian(WORDS_BIGENDIAN)
@@ -120,10 +120,10 @@ add_subdirectory(src-IL)
 
 
 # need to check for vc6 or vc2003 output dir
-IF(BUILD_SHARED_LIBS)
-	SET(DEVIL_LIB_DEST_DIR	${CMAKE_CURRENT_SOURCE_DIR}/lib/	)
-ELSE(BUILD_SHARED_LIBS)
-	SET(DEVIL_LIB_DEST_DIR	${CMAKE_CURRENT_SOURCE_DIR}/lib/	)
-ENDIF(BUILD_SHARED_LIBS)
+if(BUILD_SHARED_LIBS)
+	set(DEVIL_LIB_DEST_DIR	${CMAKE_CURRENT_SOURCE_DIR}/lib/	)
+else(BUILD_SHARED_LIBS)
+	set(DEVIL_LIB_DEST_DIR	${CMAKE_CURRENT_SOURCE_DIR}/lib/	)
+endif(BUILD_SHARED_LIBS)
 
 

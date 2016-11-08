@@ -1,11 +1,11 @@
-PROJECT(DevIL)
+project(DevIL)
 
-FILE(GLOB DevIL_SRCS src/*.c src/*.cpp)
-FILE(GLOB DevIL_INC include/*.h ../include/IL/config.h ../include/IL/devil_internal_exports.h ../include/IL/il.h)
-FILE(GLOB DevIL_RSRC)
-FILE(GLOB DevIL_TXT)
+file(GLOB DevIL_SRCS src/*.c src/*.cpp)
+file(GLOB DevIL_INC include/*.h ../include/IL/config.h ../include/IL/devil_internal_exports.h ../include/IL/il.h)
+file(GLOB DevIL_RSRC)
+file(GLOB DevIL_TXT)
 
-INCLUDE_DIRECTORIES(
+include_directories(
 
 	${DevIL_SOURCE_DIR}/include
 	${DevIL_SOURCE_DIR}/../include
@@ -13,36 +13,36 @@ INCLUDE_DIRECTORIES(
 
 #SET(DevIL_INC ${DEVIL_INCS} ${DEVIL_SRCS})
 
-SET(LIBRARY_OUTPUT_PATH		${DEVIL_LIB_DEST_DIR}	)
+set(LIBRARY_OUTPUT_PATH		${DEVIL_LIB_DEST_DIR}	)
 
 #
 # for windows add the .def and .rc files to the source list
 #
-IF(WIN32)
-	ADD_DEFINITIONS(-DIL_USE_PRAGMA_LIBS)
-	IF(BUILD_SHARED_LIBS)
+if(WIN32)
+	add_definitions(-DIL_USE_PRAGMA_LIBS)
+	if(BUILD_SHARED_LIBS)
 		#ADD_DEFINITIONS(-DIL_DLL -DMNG_DLL -DMNG_USE_DLL -DJPEGDLL)
-		ADD_DEFINITIONS(-DIL_DLL -DJPEGSTATIC)
-		SET(DevIL_SRCS ${DevIL_SRCS} msvc/il.def)
-		SET(DevIL_RSRC ${DevIL_RSRC} "msvc/resources/IL Logo.ico" msvc/IL.rc)
-        SET(DevIL_TXT ${DevIL_TXT} ../AUTHORS ../ChangeLog ../CREDITS ../libraries.txt ../README ../README.cmake ../TODO)
+		add_definitions(-DIL_DLL -DJPEGSTATIC)
+		set(DevIL_SRCS ${DevIL_SRCS} msvc/il.def)
+		set(DevIL_RSRC ${DevIL_RSRC} "msvc/resources/IL Logo.ico" msvc/IL.rc)
+        set(DevIL_TXT ${DevIL_TXT} ../AUTHORS ../ChangeLog ../CREDITS ../libraries.txt ../README ../README.cmake ../TODO)
 #		SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:msvcrt.lib ")
-		SET(CMAKE_C_FLAGS_RELEASE "/MT /O2")
-	ELSE(BUILD_SHARED_LIBS)
-		ADD_DEFINITIONS(-DIL_STATIC_LIB -DJPEGSTATIC)
-	ENDIF(BUILD_SHARED_LIBS)
-ENDIF(WIN32)
+		set(CMAKE_C_FLAGS_RELEASE "/MT /O2")
+	else(BUILD_SHARED_LIBS)
+		add_definitions(-DIL_STATIC_LIB -DJPEGSTATIC)
+	endif(BUILD_SHARED_LIBS)
+endif(WIN32)
 
-SOURCE_GROUP("Source Files" FILES src/*.c src/*.cpp)
-SOURCE_GROUP("Header Files" FILES ${DevIL_INC} )
-SOURCE_GROUP("Resource Files" FILES ${DevIL_RSRC} )
-SOURCE_GROUP("Text Files" FILES ${DevIL_TXT} )
+source_group("Source Files" FILES src/*.c src/*.cpp)
+source_group("Header Files" FILES ${DevIL_INC} )
+source_group("Resource Files" FILES ${DevIL_RSRC} )
+source_group("Text Files" FILES ${DevIL_TXT} )
 
-IF(BUILD_SHARED_LIBS)
-    ADD_LIBRARY(IL SHARED ${DevIL_SRCS} ${DevIL_INC} ${DevIL_RSRC} ${DevIL_TXT})
-ELSE(BUILD_SHARED_LIBS)
-    ADD_LIBRARY(IL ${DevIL_SRCS} ${DevIL_INC} ${DevIL_RSRC} ${DevIL_TXT})
-ENDIF(BUILD_SHARED_LIBS)
+if(BUILD_SHARED_LIBS)
+    add_library(IL SHARED ${DevIL_SRCS} ${DevIL_INC} ${DevIL_RSRC} ${DevIL_TXT})
+else(BUILD_SHARED_LIBS)
+    add_library(IL ${DevIL_SRCS} ${DevIL_INC} ${DevIL_RSRC} ${DevIL_TXT})
+endif(BUILD_SHARED_LIBS)
 
 
 # configure include dirs and linkage for the optional external libs
