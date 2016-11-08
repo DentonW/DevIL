@@ -16,7 +16,7 @@ include_directories( include ../include )
 
 # for windows add the .def and .rc files to the source list
 if(WIN32)
-    add_definitions(-DIL_USE_PRAGMA_LIBS)
+    #add_definitions(-DIL_USE_PRAGMA_LIBS)
 	if(BUILD_SHARED_LIBS)
 		#ADD_DEFINITIONS(-DIL_DLL -DMNG_DLL -DMNG_USE_DLL -DJPEGDLL)
 		add_definitions(-DIL_DLL -DJPEGSTATIC)
