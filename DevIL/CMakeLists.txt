@@ -6,11 +6,7 @@ project(ImageLib)
 # include our custom modules
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-#include (CheckIncludeFile)
-#include (CheckFunctionExists)
 include (TestBigEndian)
-include(CMakeDependentOption)
-#set(CMAKE_C_FLAGS "-std=c99")
 
 option(BUILD_SHARED_LIBS "Build with shared (.DLL .SO) libraries." ON)
 
@@ -99,20 +95,6 @@ endif(SQUISH_FOUND)
 
 
 
-
-# generate the config.h
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/IL/config.h.cmake.in ${CMAKE_CURRENT_SOURCE_DIR}/include/IL/config.h)
-
-#SET(DEVIL_INCS
-#
-#	${DEVIL_SOURCE_DIR}/include/IL/config.h
-#	${DEVIL_SOURCE_DIR}/include/IL/devil_internal_exports.h
-#	${DEVIL_SOURCE_DIR}/include/IL/il.h
-#	${DEVIL_SOURCE_DIR}/include/IL/il_wrap.h
-#	${DEVIL_SOURCE_DIR}/include/IL/ilu.h
-#	${DEVIL_SOURCE_DIR}/include/IL/ilu_region.h
-#	${DEVIL_SOURCE_DIR}/include/IL/ilut.h
-#)
 
 add_subdirectory(src-IL)
 #add_subdirectory(src-ILU)

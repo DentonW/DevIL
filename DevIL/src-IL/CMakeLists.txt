@@ -11,6 +11,9 @@ include_directories(
 	${DevIL_SOURCE_DIR}/../include
 )
 
+# generate the config.h
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/config.h.cmake.in ${CMAKE_CURRENT_SOURCE_DIR}/include/config.h)
+
 #SET(DevIL_INC ${DEVIL_INCS} ${DEVIL_SRCS})
 
 set(LIBRARY_OUTPUT_PATH		${DEVIL_LIB_DEST_DIR}	)
@@ -39,9 +42,9 @@ source_group("Resource Files" FILES ${DevIL_RSRC} )
 source_group("Text Files" FILES ${DevIL_TXT} )
 
 if(BUILD_SHARED_LIBS)
-    add_library(IL SHARED ${DevIL_SRCS} ${DevIL_INC} ${DevIL_RSRC} ${DevIL_TXT})
+    add_library(IL SHARED ${DevIL_SRCS} )
 else(BUILD_SHARED_LIBS)
-    add_library(IL ${DevIL_SRCS} ${DevIL_INC} ${DevIL_RSRC} ${DevIL_TXT})
+    add_library(IL ${DevIL_SRCS} )
 endif(BUILD_SHARED_LIBS)
 
 
