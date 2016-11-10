@@ -6,6 +6,7 @@ project(DevIL)
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include (TestBigEndian)
 
+option(BUILD_SHARED_LIBS "Build with shared (.DLL .SO) libraries." ON)
 
 file(GLOB DevIL_SRCS src/*.c src/*.cpp)
 file(GLOB DevIL_INC include/*.h ../include/config.h ../include/IL/devil_internal_exports.h ../include/IL/il.h)
@@ -43,7 +44,6 @@ endif(BUILD_SHARED_LIBS)
 
 
 
-option(BUILD_SHARED_LIBS "Build with shared (.DLL .SO) libraries." ON)
 
 # various compiler stuff
 test_big_endian(WORDS_BIGENDIAN)
