@@ -1,7 +1,7 @@
 #ifndef __ILUT_CONFIG_H__
 #define __ILUT_CONFIG_H__
 
-#define IL_USE_PRAGMA_LIBS
+//#define IL_USE_PRAGMA_LIBS
 
 // Supported APIs (ILUT)
 
