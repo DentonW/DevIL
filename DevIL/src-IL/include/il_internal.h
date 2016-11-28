@@ -13,16 +13,8 @@
 #define INTERNAL_H
 #define _IL_BUILD_LIBRARY
 
-
-// Local headers
-/*#if (defined(_WIN32) || defined(_WIN64)) && !defined(HAVE_CONFIG_H)
-	#define HAVE_CONFIG_H
-#endif*/
-#ifdef HAVE_CONFIG_H //if we use autotools, we have HAVE_CONFIG_H defined and we have to look for it like that
-	#include <config.h>
-#else // If we do not use autotools, we have to point to (possibly different) config.h than in the opposite case
-	#include <IL/config.h>
-#endif
+// config.h is auto-generated
+#include "config.h"
 
 #if defined(__GNUC__) && __STDC_VERSION__ >= 199901L
     // this makes various common-but-not-C99 functions visable in gcc -std-c99

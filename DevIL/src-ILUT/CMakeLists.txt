@@ -1,54 +1,55 @@
-PROJECT(ILUT)
+cmake_minimum_required(VERSION 2.6)
 
-FILE(GLOB ILUT_SRCS src/*.c)
-FILE(GLOB ILUT_INC include/*.h ../include/IL/devil_internal_exports.h ../include/IL/ilut.h)
-FILE(GLOB ILUT_RSRC)
+project(ILUT)
 
-INCLUDE_DIRECTORIES(
+file(GLOB ILUT_SRCS src/*.c)
+file(GLOB ILUT_INC include/*.h ../include/IL/devil_internal_exports.h ../include/IL/ilut.h)
+file(GLOB ILUT_RSRC)
 
-	${ILUT_SOURCE_DIR}/include
-)
+include_directories( include ../include )
 
-#SET(ILUT_SRCS ${ILUT_SRCS} ${ILUT_INCS} )
-
-
-SET(LIBRARY_OUTPUT_PATH		${DEVIL_LIB_DEST_DIR}	)
-
-#
 # for windows add the .def and .rc files to the source list
-#
-IF(WIN32)
-	ADD_DEFINITIONS(-DALLEGRO_MSVC)
-	ADD_DEFINITIONS(-DIL_USE_PRAGMA_LIBS)
-	IF(BUILD_SHARED_LIBS)
-		ADD_DEFINITIONS(-DILUT_DLL)
-		SET(ILUT_SRCS ${ILUT_SRCS} msvc/ilut.def)
-		SET(ILUT_RSRC ${ILUT_RSRC} "msvc/resources/IL Logo.ico" msvc/ILUT.rc)
-		SET(CMAKE_C_FLAGS_RELEASE "/MT /O2")
-	ELSE(BUILD_SHARED_LIBS)
-		ADD_DEFINITIONS(-DIL_STATIC_LIB)
-	ENDIF(BUILD_SHARED_LIBS)
-ENDIF(WIN32)
+if(WIN32)
+	add_definitions(-DALLEGRO_MSVC)
+	add_definitions(-DIL_USE_PRAGMA_LIBS)
+	if(BUILD_SHARED_LIBS)
+		add_definitions(-DILUT_DLL)
+        #set(ILUT_SRCS ${ILUT_SRCS} msvc/ilut.def)
+		set(ILUT_RSRC ${ILUT_RSRC} "msvc/resources/IL Logo.ico" msvc/ILUT.rc)
+		set(CMAKE_C_FLAGS_RELEASE "/MT /O2")
+	else(BUILD_SHARED_LIBS)
+		add_definitions(-DIL_STATIC_LIB)
+	endif(BUILD_SHARED_LIBS)
+endif(WIN32)
 
-SOURCE_GROUP("Source Files" FILES src/*.c)
-SOURCE_GROUP("Header Files" FILES ${ILUT_INC} )
-SOURCE_GROUP("Resource Files" FILES ${ILUT_RSRC} )
+source_group("Source Files" FILES src/*.c)
+source_group("Header Files" FILES ${ILUT_INC} )
+source_group("Resource Files" FILES ${ILUT_RSRC} )
 
 # Remove SHARED to create a static library
-ADD_LIBRARY(ILUT SHARED ${ILUT_SRCS} ${ILUT_INC} ${ILUT_RSRC})
-
+add_library(ILUT SHARED ${ILUT_SRCS} ${ILUT_INC} ${ILUT_RSRC})
 
 ## add link sub library info
-
-TARGET_LINK_LIBRARIES(ILUT
-
-	DevIL
+target_link_libraries(ILUT
+	IL
 	ILU
 )
 
-INCLUDE_DIRECTORIES(
+# generate pkg-config file
+configure_file( pkgconfig/ILUT.pc.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/ILUT.pc @ONLY)
 
-	${DevIL_SOURCE_DIR}/../include
-	${DevIL_SOURCE_DIR}/include
-	${DevILU_SOURCE_DIR}/include
+
+# Installation
+install (TARGETS ILUT
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
 )
+install (FILES ../include/IL/ilut.h DESTINATION include/IL)
+
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/ILUT.pc
+	DESTINATION lib/pkgconfig
+)
+
