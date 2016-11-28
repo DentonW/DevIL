@@ -719,23 +719,30 @@ ILboolean iSaveTargaInternal()
 		TempImage = iCurImage;
 	}
 	
-	if (TempImage->Origin != IL_ORIGIN_LOWER_LEFT)
+	if (TempImage->Origin != IL_ORIGIN_LOWER_LEFT) {
 		TempData = (char*)iGetFlipped(TempImage);
+	}
 	else
 		TempData = (char*)TempImage->Data;
 	
 	// Write out the origin stuff.
-	Temp = 0;
-	iwrite(&Temp, sizeof(ILshort), 1);
-	iwrite(&Temp, sizeof(ILshort), 1);
+	ILshort zero_short = 0;
+	iwrite(&zero_short, sizeof(ILshort), 1);
+	iwrite(&zero_short, sizeof(ILshort), 1);
 	
-	Temp = iCurImage->Bpp << 3;  // Changes to bits per pixel
+	Temp = iCurImage->Bpp << 3;  // Changes to bits per pixel 
 	SaveLittleUShort((ILushort)iCurImage->Width);
 	SaveLittleUShort((ILushort)iCurImage->Height);
 	iwrite(&Temp, sizeof(ILubyte), 1);
 	
 	// Still don't know what exactly this is for...
+	// It's actually the 'Image Descriptor Byte'
+	// from wiki: Image descriptor (1 byte): bits 3-0 give the alpha channel depth, bits 5-4 give direction
 	Temp = 0;
+	if (iCurImage->Bpp > 3)
+		Temp = 8;
+	if (TempImage->Origin == IL_ORIGIN_UPPER_LEFT)
+		Temp |= 0x20; //set 5th bit
 	iwrite(&Temp, sizeof(ILubyte), 1);
 	iwrite(ID, sizeof(char), IDLen);
 	ifree(ID);
@@ -810,7 +817,7 @@ ILboolean iSaveTargaInternal()
 	// Write the footer.
 	SaveLittleUInt(ExtOffset);	// No extension area
 	SaveLittleUInt(0);	// No developer directory
-	iwrite(Footer, 1, ilCharStrLen(Footer));
+	iwrite(Footer, 1, ilCharStrLen(Footer)+1);
 	
 	if (TempImage->Origin != IL_ORIGIN_LOWER_LEFT) {
 		ifree(TempData);
