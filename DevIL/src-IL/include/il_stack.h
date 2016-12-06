@@ -26,18 +26,7 @@ typedef struct iFree
 } iFree;
 
 
-// Internal functions
-ILboolean	iEnlargeStack(void);
-void		iFreeMem(void);
-
-// Globals for il_stack.c
-ILuint		StackSize = 0;
-ILuint		LastUsed = 0;
-ILuint		CurName = 0;
-ILimage		**ImageStack = NULL;
-iFree		*FreeNames = NULL;
-ILboolean	OnExit = IL_FALSE;
-ILboolean	ParentImage = IL_TRUE;
-
+// the currently-bound image
+extern ILuint CurName;
 
 #endif//IMAGESTACK_H

@@ -17,6 +17,20 @@
 #include "il_internal.h"
 #include "il_stack.h"
 
+ILuint CurName = 0;
+
+// Internal functions
+static ILboolean iEnlargeStack();
+
+
+static ILuint		StackSize = 0;
+static ILuint		LastUsed = 0;
+static ILimage		**ImageStack = NULL;
+static iFree		*FreeNames = NULL;
+static ILboolean	OnExit = IL_FALSE;
+static ILboolean	ParentImage = IL_TRUE;
+
+
 //! Creates Num images and puts their index in Images - similar to glGenTextures().
 void ILAPIENTRY ilGenImages(ILsizei Num, ILuint *Images)
 {
