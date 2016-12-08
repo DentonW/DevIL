@@ -16,15 +16,6 @@
 #include "il_internal.h"
 
 
-// Just a guess...seems large enough
-#define I_STACK_INCREMENT 1024
-
-typedef struct iFree
-{
-	ILuint	Name;
-	void	*Next;
-} iFree;
-
 
 // the currently-bound image
 extern ILuint CurName;

@@ -19,13 +19,26 @@
 
 ILuint CurName = 0;
 
-// Internal functions
-static ILboolean iEnlargeStack();
+// Internal stuff
 
+// Just a guess...seems large enough
+#define I_STACK_INCREMENT 1024
+
+typedef struct iFree
+{
+	ILuint	Name;
+	void	*Next;
+} iFree;
+
+
+static ILboolean iEnlargeStack();
 
 static ILuint		StackSize = 0;
 static ILuint		LastUsed = 0;
+
+// two fixed slots - slot 0 is default (fallback) image, slot 1 is temp image
 static ILimage		**ImageStack = NULL;
+
 static iFree		*FreeNames = NULL;
 static ILboolean	OnExit = IL_FALSE;
 static ILboolean	ParentImage = IL_TRUE;
