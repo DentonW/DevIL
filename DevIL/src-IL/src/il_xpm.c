@@ -205,7 +205,7 @@ void XpmInsertEntry(XPMHASHENTRY **Table, const ILubyte* Name, int Len, XpmPixel
 	if (NewEntry != NULL) {
 		NewEntry->Next = Table[Index];
 		memcpy(NewEntry->ColourName, Name, Len);
-		memcpy(NewEntry->ColourValue, Colour, sizeof(Colour));
+		memcpy(NewEntry->ColourValue, Colour, sizeof(XpmPixel));
 		Table[Index] = NewEntry;
 	}
 }
@@ -222,7 +222,7 @@ void XpmGetEntry(XPMHASHENTRY **Table, const ILubyte* Name, int Len, XpmPixel Co
 		Entry = Entry->Next;
 
 	if (Entry != NULL)
-		memcpy(Colour, Entry->ColourValue, sizeof(Colour));
+		memcpy(Colour, Entry->ColourValue, sizeof(XpmPixel));
 }
 
 #endif //XPM_DONT_USE_HASHTABLE
