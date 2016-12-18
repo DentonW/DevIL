@@ -28,8 +28,6 @@ ILboolean ilMirrorImage(void);	//@JASON New routine created 03/28/2001
 //-----------------------------------------------
 
 #ifndef NOINLINE
-#define INLINE
-#endif
 
 #if defined(_MSC_VER)
 	#pragma warning(push)
