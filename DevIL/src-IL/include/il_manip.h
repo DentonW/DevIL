@@ -28,6 +28,7 @@ ILboolean ilMirrorImage(void);	//@JASON New routine created 03/28/2001
 //-----------------------------------------------
 
 #ifndef NOINLINE
+#define INLINE
 
 #if defined(_MSC_VER)
 	#pragma warning(push)
@@ -35,6 +36,8 @@ ILboolean ilMirrorImage(void);	//@JASON New routine created 03/28/2001
 #endif
 
 ILfloat /*ILAPIENTRY*/ ilFloatToHalfOverflow();
+ILushort ILAPIENTRY ilFloatToHalf(ILuint i);
+ILuint ILAPIENTRY ilHalfToFloat(ILushort y);
 
 #if defined(_MSC_VER)
 	#pragma warning(pop)
