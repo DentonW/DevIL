@@ -39,8 +39,10 @@
 	#define BigDouble(d)  
 #else
 	#undef __BIG_ENDIAN__
+#if !defined(__LITTLE_ENDIAN__) 
 	#undef __LITTLE_ENDIAN__  // Not sure if it's defined by any compiler...
 	#define __LITTLE_ENDIAN__
+#endif
 	#define Short(s)  
 	#define UShort(s)  
 	#define Int(i)  
@@ -56,6 +58,7 @@
 	#define BigDouble(d) iSwapDouble(d)
 #endif
 
+<<<<<<< HEAD
 
 
 STATIC_INLINE void iSwapUShort(ILushort *s)  {
@@ -336,5 +339,45 @@ STATIC_INLINE ILubyte SaveBigDouble(ILdouble d) {
 }
 
 void		EndianSwapData(void *_Image);
+=======
+#ifdef IL_ENDIAN_C
+#undef NOINLINE
+#undef INLINE
+#define INLINE
+#endif
+
+void   iSwapUShort(ILushort *s);
+void   iSwapShort(ILshort *s);
+void   iSwapUInt(ILuint *i);
+void   iSwapInt(ILint *i);
+void   iSwapFloat(ILfloat *f);
+void   iSwapDouble(ILdouble *d);
+ILushort GetLittleUShort();
+ILshort  GetLittleShort();
+ILuint   GetLittleUInt();
+ILint    GetLittleInt();
+ILfloat  GetLittleFloat();
+ILdouble GetLittleDouble();
+ILushort GetBigUShort();
+ILshort  GetBigShort();
+ILuint   GetBigUInt();
+ILint    GetBigInt();
+ILfloat  GetBigFloat();
+ILdouble GetBigDouble();
+ILubyte SaveLittleUShort(ILushort s);
+ILubyte SaveLittleShort(ILshort s);
+ILubyte SaveLittleUInt(ILuint i);
+ILubyte SaveLittleInt(ILint i);
+ILubyte SaveLittleFloat(ILfloat f);
+ILubyte SaveLittleDouble(ILdouble d);
+ILubyte SaveBigUShort(ILushort s);
+ILubyte SaveBigShort(ILshort s);
+ILubyte SaveBigUInt(ILuint i);
+ILubyte SaveBigInt(ILint i);
+ILubyte SaveBigFloat(ILfloat f);
+ILubyte SaveBigDouble(ILdouble d);
+
+void EndianSwapData(void *_Image);
+>>>>>>> 08765db00c5bfd0c21c360f7266a670a6031e44a
 
 #endif//ENDIAN_H

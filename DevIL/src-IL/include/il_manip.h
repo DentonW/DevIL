@@ -35,6 +35,7 @@ ILboolean ilMirrorImage(void);	//@JASON New routine created 03/28/2001
 	#pragma warning(push)
 	#pragma warning(disable : 4756)  // Disables 'named type definition in parentheses' warning
 #endif
+<<<<<<< HEAD
 STATIC_INLINE ILfloat ilFloatToHalfOverflow() {
 	ILfloat f = 1e10;
 	ILint j;
@@ -43,6 +44,11 @@ STATIC_INLINE ILfloat ilFloatToHalfOverflow() {
 	// the for loop terminates
 	return f;
 }
+=======
+
+ILfloat /*ILAPIENTRY*/ ilFloatToHalfOverflow();
+
+>>>>>>> 08765db00c5bfd0c21c360f7266a670a6031e44a
 #if defined(_MSC_VER)
 	#pragma warning(pop)
 #endif
@@ -51,6 +57,7 @@ STATIC_INLINE ILfloat ilFloatToHalfOverflow() {
 // Float-to-half conversion -- general case, including
 // zeroes, denormalized numbers and exponent overflows.
 //-----------------------------------------------------
+<<<<<<< HEAD
 STATIC_INLINE ILushort ilFloatToHalf(ILuint i) {
 	//
 	// Our floating point number, f, is represented by the bit
@@ -244,6 +251,11 @@ STATIC_INLINE ILuint ilHalfToFloat (ILushort y) {
 
 	return (s << 31) | (e << 23) | m;
 }
+=======
+ILushort ILAPIENTRY ilFloatToHalf(ILuint i);
+
+#endif //NOINLINE
+>>>>>>> 08765db00c5bfd0c21c360f7266a670a6031e44a
 
 #ifdef _cplusplus
 }

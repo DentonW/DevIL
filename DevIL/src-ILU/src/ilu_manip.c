@@ -903,3 +903,122 @@ ILboolean ILAPIENTRY iluEqualize() {
 
 	return IL_TRUE;
 }
+
+
+// Method from the paper "Underwater image quality enhancement through composition of
+//  dual - intensity images and Rayleigh - stretching" by Ghani and Isa
+// (http://springerplus.springeropen.com/articles/10.1186/2193-1801-3-757),
+//  DOI : 10.1186 / 2193 - 1801 - 3 - 757
+// Note that the ordering of the colors does not matter for the first part of this method.
+ILboolean ILAPIENTRY iluEqualize2(void)
+{
+	iluCurImage = ilGetCurImage();
+	if (iluCurImage == NULL) {
+		ilSetError(ILU_ILLEGAL_OPERATION);
+		return 0;
+	}
+
+	// @TODO:  Change to work with other types!
+	if (iluCurImage->Bpc > 1 || (iluCurImage->Format != IL_RGB && iluCurImage->Format != IL_RGBA
+		&& iluCurImage->Format != IL_BGR && iluCurImage->Format != IL_BGRA)) {
+		ilSetError(ILU_INTERNAL_ERROR);
+		return IL_FALSE;
+	}
+
+	// Start of the Modified Von Kries hypothesis
+
+	ILdouble ChanAvgs[3] = { 0.0, 0.0, 0.0 };
+	ILuint NumPix = iluCurImage->Width * iluCurImage->Height;
+	if (NumPix < 1) {
+		ilSetError(IL_INTERNAL_ERROR);
+		return IL_FALSE;
+	}
+	for (ILuint i = 0; i < iluCurImage->SizeOfData; i += iluCurImage->Bpp)
+	{
+		ChanAvgs[0] += iluCurImage->Data[i + 0];
+		ChanAvgs[1] += iluCurImage->Data[i + 1];
+		ChanAvgs[2] += iluCurImage->Data[i + 2];
+	}
+	ChanAvgs[0] /= NumPix;
+	ChanAvgs[1] /= NumPix;
+	ChanAvgs[2] /= NumPix;
+
+	//@TODO: This is a really crude way of sorting the array - could be much simpler code
+	//  in C++ or using an actual sorting function. With only 3 elements, this isn't too bad.
+	ILdouble ChanAvgsCopy[3];
+	ChanAvgsCopy[0] = IL_MIN(ChanAvgs[0], IL_MIN(ChanAvgs[1], ChanAvgs[2]));
+	ChanAvgsCopy[2] = IL_MAX(ChanAvgs[0], IL_MAX(ChanAvgs[1], ChanAvgs[2]));
+	ChanAvgsCopy[1] = -1;  // Just a dummy value
+
+	ILuint MinPos = -1, MaxPos = -1;
+	for (ILuint i = 0; i < 3; i++)
+	{
+		if (ChanAvgs[i] == ChanAvgsCopy[0])
+			MinPos = i;
+		if (ChanAvgs[i] == ChanAvgsCopy[2])
+			MaxPos = i;
+	}
+	for (ILuint i = 0; i < 3; i++)
+	{
+		if (i != MinPos && i != MaxPos)
+			ChanAvgsCopy[1] = ChanAvgs[i];
+	}
+
+	if (ChanAvgsCopy[0] < 1.0 || ChanAvgsCopy[2] < 1.0) {
+		// This prevents division by 0 - could possibly be lowered less than 1
+		//ilSetError(IL_INTERNAL_ERROR);
+		return IL_FALSE;
+	}
+
+	ILdouble A = ChanAvgsCopy[1] / ChanAvgsCopy[0];  // Median of RGB divided by minimum of RGB
+	ILdouble B = ChanAvgsCopy[1] / ChanAvgsCopy[2];  // Median of RGB divided by maximum of RGB
+
+	ILdouble *Corrected = (ILdouble*)ialloc(iluCurImage->SizeOfData * sizeof(ILdouble));
+	if (Corrected == NULL) {
+		return IL_FALSE;
+	}
+
+	// Make a copy of the data as doubles
+	for (ILuint i = 0; i < iluCurImage->SizeOfData; i++)
+		Corrected[i] = iluCurImage->Data[i];
+
+	for (ILuint i = 0; i < iluCurImage->SizeOfData; i += iluCurImage->Bpp)
+	{
+		// These values can overflow
+		Corrected[i + MinPos] = iluCurImage->Data[i + MinPos] * A;
+		Corrected[i + MaxPos] = iluCurImage->Data[i + MaxPos] * B;
+	}
+
+	ILdouble MinVals[3] = { 1e9, 1e9, 1e9 }, MaxVals[3] = { -1, -1, -1 };
+	//@TODO: This could be rolled into the averaging loop, since we can just scale these by A and B
+	for (ILuint i = 0; i < iluCurImage->SizeOfData; i += iluCurImage->Bpp)
+	{
+		for (ILuint c = 0; c < 3; c++) {
+			if (Corrected[i + c] > MaxVals[c])
+				MaxVals[c] = Corrected[i + c];
+			if (Corrected[i + c] < MinVals[c])
+				MinVals[c] = Corrected[i + c];
+		}
+	}
+
+	// Histogram stretching
+
+	for (ILuint c = 0; c < 3; c++) {
+		if ((MaxVals[c] - MinVals[c]) < 1.0) {
+			// This is the case if an image is a solid color. The original image is unmodified.
+			return IL_FALSE;
+		}
+	}
+
+	for (ILuint i = 0; i < iluCurImage->SizeOfData; i += iluCurImage->Bpp)
+	{
+		for (ILuint c = 0; c < 3; c++) {
+			iluCurImage->Data[i + c] = (ILubyte)((Corrected[i + c] - MinVals[c]) * ((255.0 - 0.0) / (MaxVals[c] - MinVals[c])) + 0);
+		}
+	}
+
+	ifree(Corrected);
+
+	return IL_TRUE;
+}
+

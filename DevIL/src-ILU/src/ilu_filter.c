@@ -1316,3 +1316,66 @@ ILAPI ILboolean ILAPIENTRY iluConvolution(ILint *matrix, ILint scale, ILint bias
 	return IL_TRUE;
 }
 
+
+// Sepia conversion values recommended by Microsoft and seen at
+//  http://stackoverflow.com/questions/1061093/how-is-a-sepia-tone-created
+ILboolean ILAPIENTRY iluSepia(void)
+{
+	ILubyte	*Data;
+
+	iluCurImage = ilGetCurImage();
+	if (iluCurImage == NULL) {
+		ilSetError(ILU_ILLEGAL_OPERATION);
+		return IL_FALSE;
+	}
+	if (iluCurImage->Type != IL_UNSIGNED_BYTE) {
+		ilSetError(ILU_INVALID_VALUE);  //@TODO: Support other types
+		return IL_FALSE;
+	}
+	Data = iluCurImage->Data;
+
+	switch (iluCurImage->Format)
+	{
+		case IL_BGR:
+		case IL_BGRA:
+			for (ILuint i = 0; i < iluCurImage->SizeOfData; i += iluCurImage->Bpp) {
+				ILubyte r = Data[i+2], g = Data[i+1], b = Data[i];
+				/*double Y = 0.299 * r + 0.587 * g + 0.114 * b;
+				double I = 0.596 * r - 0.274 * g - 0.322 * b;
+				double Q = 0.212 * r - 0.523 * g + 0.311 * b;
+				I = 51;
+				Q = 0;
+				Data[i+2] = (ILubyte)IL_MIN(255, 1.0 * Y + 0.956 * I + 0.621 * Q);
+				Data[i+1] = (ILubyte)IL_MIN(255, 1.0 * Y - 0.272 * I - 0.647 * Q);
+				Data[i]   = (ILubyte)IL_MIN(255, 1.0 * Y - 1.105 * I + 1.702 * Q);*/
+				Data[i+2] = (ILubyte)IL_MIN(255, (r * 0.393) + (g * 0.769) + (b * 0.189));
+				Data[i+1] = (ILubyte)IL_MIN(255, (r * 0.349) + (g * 0.686) + (b * 0.168));
+				Data[i]   = (ILubyte)IL_MIN(255, (r * 0.272) + (g * 0.534) + (b * 0.131));
+			}
+		break;
+
+		case IL_RGB:
+		case IL_RGBA:
+			for (ILuint i = 0; i < iluCurImage->SizeOfData; i += iluCurImage->Bpp) {
+				ILubyte r = Data[i], g = Data[i+1], b = Data[i+2];
+				/*double Y = 0.299 * r + 0.587 * g + 0.114 * b;
+				double I = 0.596 * r - 0.274 * g - 0.322 * b;
+				double Q = 0.212 * r - 0.523 * g + 0.311 * b;
+				I = 51;
+				Q = 0;
+				Data[i]   = (ILubyte)IL_MIN(255, 1.0 * Y + 0.956 * I + 0.621 * Q);
+				Data[i+1] = (ILubyte)IL_MIN(255, 1.0 * Y - 0.272 * I - 0.647 * Q);
+				Data[i+2] = (ILubyte)IL_MIN(255, 1.0 * Y - 1.105 * I + 1.702 * Q);*/
+				Data[i]   = (ILubyte)IL_MIN(255, (r * 0.393) + (g * 0.769) + (b * 0.189));
+				Data[i+1] = (ILubyte)IL_MIN(255, (r * 0.349) + (g * 0.686) + (b * 0.168));
+				Data[i+2] = (ILubyte)IL_MIN(255, (r * 0.272) + (g * 0.534) + (b * 0.131));
+			}
+		break;
+
+		default:
+			//ilSetError(ILU_ILLEGAL_OPERATION);
+			return IL_FALSE;
+	}
+
+	return IL_TRUE;
+}

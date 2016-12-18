@@ -151,6 +151,7 @@ ILAPI ILboolean      ILAPIENTRY iluEmboss(void);
 ILAPI ILboolean      ILAPIENTRY iluEnlargeCanvas(ILuint Width, ILuint Height, ILuint Depth);
 ILAPI ILboolean      ILAPIENTRY iluEnlargeImage(ILfloat XDim, ILfloat YDim, ILfloat ZDim);
 ILAPI ILboolean      ILAPIENTRY iluEqualize(void);
+ILAPI ILboolean      ILAPIENTRY iluEqualize2(void);
 ILAPI ILconst_string 		 ILAPIENTRY iluErrorString(ILenum Error);
 ILAPI ILboolean      ILAPIENTRY iluConvolution(ILint *matrix, ILint scale, ILint bias);
 ILAPI ILboolean      ILAPIENTRY iluFlipImage(void);
@@ -178,6 +179,7 @@ ILAPI ILboolean      ILAPIENTRY iluSaturate4f(ILfloat r, ILfloat g, ILfloat b, I
 ILAPI ILboolean      ILAPIENTRY iluScale(ILuint Width, ILuint Height, ILuint Depth);
 ILAPI ILboolean      ILAPIENTRY iluScaleAlpha(ILfloat scale);
 ILAPI ILboolean      ILAPIENTRY iluScaleColours(ILfloat r, ILfloat g, ILfloat b);
+ILAPI ILboolean      ILAPIENTRY iluSepia(void);
 ILAPI ILboolean      ILAPIENTRY iluSetLanguage(ILenum Language);
 ILAPI ILboolean      ILAPIENTRY iluSharpen(ILfloat Factor, ILuint Iter);
 ILAPI ILboolean      ILAPIENTRY iluSwapColours(void);
