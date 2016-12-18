@@ -608,6 +608,7 @@ ILboolean iSaveTargaInternal()
 	char		*idString = "Developer's Image Library (DevIL)";
 	ILuint		Day, Month, Year, Hour, Minute, Second;
 	char		*TempData;
+	ILshort		zero_short = 0;
 
 	if (iCurImage == NULL) {
 		ilSetError(IL_ILLEGAL_OPERATION);
@@ -726,7 +727,6 @@ ILboolean iSaveTargaInternal()
 		TempData = (char*)TempImage->Data;
 	
 	// Write out the origin stuff.
-	ILshort zero_short = 0;
 	iwrite(&zero_short, sizeof(ILshort), 1);
 	iwrite(&zero_short, sizeof(ILshort), 1);
 	
