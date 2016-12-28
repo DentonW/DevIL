@@ -8,7 +8,7 @@ include (TestBigEndian)
 
 option(BUILD_SHARED_LIBS "Build with shared (.DLL .SO) libraries." ON)
 
-file(GLOB DevIL_SRCS src/*.c src/*.cpp)
+file(GLOB DevIL_SRCS src/*.c src/*.cpp msvc9/il.def)
 file(GLOB DevIL_INC include/*.h ../include/config.h ../include/IL/devil_internal_exports.h ../include/IL/il.h)
 file(GLOB DevIL_RSRC)
 file(GLOB DevIL_TXT)
@@ -129,11 +129,16 @@ else(SQUISH_FOUND)
     set(IL_USE_DXTC_SQUISH 0)
 endif(SQUISH_FOUND)
 
+set_target_properties(IL PROPERTIES RUNTIME_OUTPUT_DIRECTORY "../lib")
+if(WIN32)
+	# Linux uses libIL.so, libILU.so, and libILUT.so, but Windows uses
+	#  DevIL.dll, ILU.dll, and ILUT.dll.
+	set_target_properties(IL PROPERTIES OUTPUT_NAME "DevIL")
+endif(WIN32)
 
-
-
-
-
+#if(COMPILER_MSVC)
+#    add_definitions(-DUNICODE -D_UNICODE)
+#endif()
 
 # configure include dirs and linkage for the optional external libs
 set(libs "")

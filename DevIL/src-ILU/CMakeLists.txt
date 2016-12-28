@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 
 project(ILU)
 
-file(GLOB ILU_SRCS src/*.c)
+file(GLOB ILU_SRCS src/*.c msvc9/il.def)
 file(GLOB ILU_INC include/*.h ../include/IL/devil_internal_exports.h ../include/IL/ilu.h)
 file(GLOB ILU_RSRC)
 
@@ -40,6 +40,8 @@ target_link_libraries(ILU
 # (needed to support static linking?)
 configure_file( pkgconfig/ILU.pc.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/ILU.pc @ONLY)
+
+set_target_properties(ILU PROPERTIES RUNTIME_OUTPUT_DIRECTORY "../lib")
 
 
 # Installation

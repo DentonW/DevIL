@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 
 project(ILUT)
 
-file(GLOB ILUT_SRCS src/*.c)
+file(GLOB ILUT_SRCS src/*.c msvc9/il.def)
 file(GLOB ILUT_INC include/*.h ../include/IL/devil_internal_exports.h ../include/IL/ilut.h)
 file(GLOB ILUT_RSRC)
 
@@ -38,6 +38,8 @@ target_link_libraries(ILUT
 # generate pkg-config file
 configure_file( pkgconfig/ILUT.pc.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/ILUT.pc @ONLY)
+
+set_target_properties(ILUT PROPERTIES RUNTIME_OUTPUT_DIRECTORY "../lib")
 
 
 # Installation
