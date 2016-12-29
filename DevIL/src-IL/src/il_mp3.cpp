@@ -167,9 +167,9 @@ ILuint iFindMp3Pic(MP3HEAD *Header)
 			// The MimeType must be terminated by 0 in the file by the specs.
 			if (MimeType[i] != 0)
 				return MP3_NONE;
-			if (!strcmp(MimeType, "image/jpeg"))
+			if (!strcmp((char*)MimeType, "image/jpeg"))
 				Type = MP3_JPG;
-			else if (!strcmp(MimeType, "image/png"))
+			else if (!strcmp((char*)MimeType, "image/png"))
 				Type = MP3_PNG;
 			else
 				Type = MP3_NONE;

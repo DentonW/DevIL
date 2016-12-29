@@ -89,7 +89,7 @@ ILboolean iLoadRotInternal(void)
 	iread(Form, 1, 4);
 	FormLen = GetBigUInt();
 	iread(FormName, 1, 4);
-	if (strncmp(Form, "FORM", 4) || FormLen != 0x14 || strncmp(FormName, "HEAD", 4)) {
+	if (strncmp((char*)Form, "FORM", 4) || FormLen != 0x14 || strncmp((char*)FormName, "HEAD", 4)) {
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
 	}
@@ -118,7 +118,7 @@ ILboolean iLoadRotInternal(void)
 			FormatIL = IL_RGBA;
 			// Allocates the maximum needed (the first width/height given in the file).
 			CompSize = ((Width + 3) / 4) * ((Height + 3) / 4) * 16;
-			CompData = ialloc(CompSize);
+			CompData = (ILubyte*)ialloc(CompSize);
 			if (CompData == NULL)
 				return IL_FALSE;
 			break;
@@ -141,7 +141,7 @@ ILboolean iLoadRotInternal(void)
 	FormLen = GetBigUInt();
 	iread(FormName, 1, 4);
 	//@TODO: Not sure if the FormLen has to be anything specific here.
-	if (strncmp(Form, "FORM", 4) || strncmp(FormName, "MIPS", 4)) {
+	if (strncmp((char*)Form, "FORM", 4) || strncmp((char*)FormName, "MIPS", 4)) {
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
 	}
@@ -154,7 +154,7 @@ ILboolean iLoadRotInternal(void)
 		// This is the size of the mipmap data.
 		MipSize = GetBigUInt();
 		iread(FormName, 1, 4);
-		if (strncmp(Form, "FORM", 4)) {
+		if (strncmp((char*)Form, "FORM", 4)) {
 			if (!BaseCreated) {  // Our file is malformed.
 				ilSetError(IL_INVALID_FILE_HEADER);
 				return IL_FALSE;
@@ -162,7 +162,7 @@ ILboolean iLoadRotInternal(void)
 			// We have reached the end of the mipmap data.
 			break;
 		}
-		if (strncmp(FormName, "MLVL", 4)) {
+		if (strncmp((char*)FormName, "MLVL", 4)) {
 			ilSetError(IL_INVALID_FILE_HEADER);
 			return IL_FALSE;
 		}
@@ -204,7 +204,7 @@ ILboolean iLoadRotInternal(void)
 					ilSetError(IL_INVALID_FILE_HEADER);
 					return IL_FALSE;
 				}
-				CompData = ialloc(CompSize);
+				CompData = (ILubyte*)ialloc(CompSize);
 				if (CompData == NULL)
 					return IL_FALSE;
 
@@ -231,7 +231,7 @@ ILboolean iLoadRotInternal(void)
 					ilSetError(IL_INVALID_FILE_HEADER);
 					return IL_FALSE;
 				}
-				CompData = ialloc(CompSize);
+				CompData = (ILubyte*)ialloc(CompSize);
 				if (CompData == NULL)
 					return IL_FALSE;
 
@@ -258,7 +258,7 @@ ILboolean iLoadRotInternal(void)
 					ilSetError(IL_INVALID_FILE_HEADER);
 					return IL_FALSE;
 				}
-				CompData = ialloc(CompSize);
+				CompData = (ILubyte*)ialloc(CompSize);
 				if (CompData == NULL)
 					return IL_FALSE;
 

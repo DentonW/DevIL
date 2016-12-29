@@ -145,11 +145,11 @@ ILboolean iGetDicomHead(DICOMHEAD *Header)
 						//@TODO: Look at pg. 60 of 07_05pu.pdf (PS 3.5) for more UIDs.
 						if (!GetUID(UID))
 							return IL_FALSE;
-						if (!strncmp(UID, "1.2.840.10008.1.2.2", 64))  // Explicit big endian
+						if (!strncmp((char*)UID, "1.2.840.10008.1.2.2", 64))  // Explicit big endian
 							Header->BigEndian = IL_TRUE;
-						else if (!strncmp(UID, "1.2.840.10008.1.2.1", 64))  // Explicit little endian
+						else if (!strncmp((char*)UID, "1.2.840.10008.1.2.1", 64))  // Explicit little endian
 							Header->BigEndian = IL_FALSE;
-						else if (!strncmp(UID, "1.2.840.10008.1.2", 64))  // Implicit little endian
+						else if (!strncmp((char*)UID, "1.2.840.10008.1.2", 64))  // Implicit little endian
 							Header->BigEndian = IL_FALSE;
 						else 
 							return IL_FALSE;  // Unrecognized UID.
@@ -440,7 +440,7 @@ ILboolean GetUID(ILubyte *UID)
 ILboolean iCheckDicom(DICOMHEAD *Header)
 {
 	// Always has the signature "DICM" at position 0x80.
-	if (strncmp(Header->Signature, "DICM", 4))
+	if (strncmp((char*)Header->Signature, "DICM", 4))
 		return IL_FALSE;
 	// Does not make sense to have any dimension = 0.
 	if (Header->Width == 0 || Header->Height == 0 || Header->Depth == 0)

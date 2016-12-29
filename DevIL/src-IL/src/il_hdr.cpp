@@ -468,7 +468,7 @@ ILboolean RGBE_WriteHeader(ILuint width, ILuint height, rgbe_header_info *info)
 	char *programtype = "RGBE";
 
 	if (info && (info->valid & RGBE_VALID_PROGRAMTYPE))
-		programtype = info->programtype;
+		programtype = (char*)info->programtype;
 	if (ilprintf("#?%s\n",programtype) < 0)
 		return IL_FALSE;
 	/* The #? is to identify file type, the programtype is optional. */

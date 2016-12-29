@@ -544,6 +544,12 @@ void* ILAPIENTRY ilRecalloc(void *Ptr, ILuint OldSize, ILuint NewSize)
 }
 
 
+// To keep Visual Studio happy with its unhappiness with ILAPIENTRY for atexit
+void ilShutDownInternal()
+{
+	ilShutDown();
+}
+
 // Internal function to enlarge the image stack by I_STACK_INCREMENT members.
 ILboolean iEnlargeStack()
 {
@@ -554,7 +560,7 @@ ILboolean iEnlargeStack()
 			AddToAtexit();  // So iFreeMem doesn't get called after unfreed information.
 		#endif//_MEM_DEBUG
 #if (!defined(_WIN32_WCE)) && (!defined(IL_STATIC_LIB))
-			atexit((void*)ilShutDown);
+			atexit(ilShutDownInternal);
 #endif
 		OnExit = IL_TRUE;
 	}
@@ -568,6 +574,12 @@ ILboolean iEnlargeStack()
 
 
 static ILboolean IsInit = IL_FALSE;
+
+// To keep Visual Studio happy with its unhappiness with ILAPIENTRY for atexit
+void ilRemoveRegisteredInternal()
+{
+	ilRemoveRegistered();
+}
 
 // ONLY call at startup.
 void ILAPIENTRY ilInit()
@@ -583,7 +595,7 @@ void ILAPIENTRY ilInit()
 	ilResetRead();
 	ilResetWrite();
 #if (!defined(_WIN32_WCE)) && (!defined(IL_STATIC_LIB))
-	atexit((void*)ilRemoveRegistered);
+	atexit(ilRemoveRegisteredInternal);
 #endif
 	//_WIN32_WCE
 	//ilShutDown();

@@ -155,7 +155,7 @@ ILboolean iIsValidBlp2(void)
 ILboolean iCheckBlp2(BLP2HEAD *Header)
 {
 	// The file signature is 'BLP2'.
-	if (strncmp(Header->Sig, "BLP2", 4))
+	if (strncmp((char*)Header->Sig, "BLP2", 4))
 		return IL_FALSE;
 	// Valid types are JPEG and DXTC.  JPEG is not common, though.
 	//  WoW only uses DXTC.
@@ -531,7 +531,7 @@ ILboolean iGetBlp1Head(BLP1HEAD *Header)
 ILboolean iCheckBlp1(BLP1HEAD *Header)
 {
 	// The file signature is 'BLP1'.
-	if (strncmp(Header->Sig, "BLP1", 4))
+	if (strncmp((char*)Header->Sig, "BLP1", 4))
 		return IL_FALSE;
 	// Valid types are JPEG and RAW.  JPEG is not common, though.
 	if (Header->Compression != BLP_TYPE_JPG && Header->Compression != BLP_RAW)

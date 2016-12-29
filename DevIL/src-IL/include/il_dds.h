@@ -176,7 +176,7 @@ ILboolean	ReadData();
 ILboolean	AllocImage(ILuint CompFormat);
 ILboolean	DdsDecompress(ILuint CompFormat);
 ILboolean	ReadMipmaps(ILuint CompFormat);
-ILuint		DecodePixelFormat();
+ILuint		DecodePixelFormat(ILuint *CompFormat);
 void		DxtcReadColor(ILushort Data, Color8888* Out);
 void		DxtcReadColors(const ILubyte* Data, Color8888* Out);
 ILboolean	DecompressARGB(ILuint CompFormat);

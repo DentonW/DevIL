@@ -399,7 +399,7 @@ ILboolean iLoadVtfInternal(void)
 					case IMAGE_FORMAT_DXT1_ONEBITALPHA:
 						// The block size is 8.
 						SizeOfData = IL_MAX(Image->Width * Image->Height * Image->Depth / 2, 8);
-						CompData = ialloc(SizeOfData);  // Gives a 6:1 compression ratio (or 8:1 for DXT1 with alpha)
+						CompData = (ILubyte*)ialloc(SizeOfData);  // Gives a 6:1 compression ratio (or 8:1 for DXT1 with alpha)
 						if (CompData == NULL)
 							return IL_FALSE;
 						iread(CompData, 1, SizeOfData);
@@ -417,7 +417,7 @@ ILboolean iLoadVtfInternal(void)
 					case IMAGE_FORMAT_DXT3:
 						// The block size is 16.
 						SizeOfData = IL_MAX(Image->Width * Image->Height * Image->Depth, 16);
-						CompData = ialloc(SizeOfData);  // Gives a 4:1 compression ratio
+						CompData = (ILubyte*)ialloc(SizeOfData);  // Gives a 4:1 compression ratio
 						if (CompData == NULL)
 							return IL_FALSE;
 						iread(CompData, 1, SizeOfData);
@@ -435,7 +435,7 @@ ILboolean iLoadVtfInternal(void)
 					case IMAGE_FORMAT_DXT5:
 						// The block size is 16.
 						SizeOfData = IL_MAX(Image->Width * Image->Height * Image->Depth, 16);
-						CompData = ialloc(SizeOfData);  // Gives a 4:1 compression ratio
+						CompData = (ILubyte*)ialloc(SizeOfData);  // Gives a 4:1 compression ratio
 						if (CompData == NULL)
 							return IL_FALSE;
 						iread(CompData, 1, SizeOfData);
@@ -477,7 +477,7 @@ ILboolean iLoadVtfInternal(void)
 					// Uncompressed 24-bit data with an unused alpha channel (we discard it)
 					case IMAGE_FORMAT_BGRX8888:
 						SizeOfData = Image->Width * Image->Height * Image->Depth * 3;
-						Temp = CompData = ialloc(SizeOfData / 3 * 4);  // Not compressed data
+						Temp = CompData = (ILubyte*)ialloc(SizeOfData / 3 * 4);  // Not compressed data
 						if (CompData == NULL)
 							return IL_FALSE;
 						if (iread(CompData, 1, SizeOfData / 3 * 4) != SizeOfData / 3 * 4) {
@@ -496,7 +496,7 @@ ILboolean iLoadVtfInternal(void)
 					// Uncompressed 16-bit floats (must be converted to 32-bit)
 					case IMAGE_FORMAT_RGBA16161616F:
 						SizeOfData = Image->Width * Image->Height * Image->Depth * Image->Bpp * 2;
-						CompData = ialloc(SizeOfData);  // Not compressed data
+						CompData = (ILubyte*)ialloc(SizeOfData);  // Not compressed data
 						if (CompData == NULL)
 							return IL_FALSE;
 						if (iread(CompData, 1, SizeOfData) != SizeOfData) {
@@ -534,7 +534,7 @@ ILboolean iLoadVtfInternal(void)
 					case IMAGE_FORMAT_RGB565:
 					case IMAGE_FORMAT_BGR565:
 						SizeOfData = Image->Width * Image->Height * Image->Depth * 2;
-						Data16Bit = CompData = ialloc(SizeOfData);  // Not compressed data
+						Data16Bit = CompData = (ILubyte*)ialloc(SizeOfData);  // Not compressed data
 						if (CompData == NULL)
 							return IL_FALSE;
 						if (iread(CompData, 1, SizeOfData) != SizeOfData) {
@@ -555,7 +555,7 @@ ILboolean iLoadVtfInternal(void)
 					//   The data is in the file as: gggbbbbb arrrrrgg
 					case IMAGE_FORMAT_BGRA5551:
 						SizeOfData = Image->Width * Image->Height * Image->Depth * 2;
-						Data16Bit = CompData = ialloc(SizeOfData);  // Not compressed data
+						Data16Bit = CompData = (ILubyte*)ialloc(SizeOfData);  // Not compressed data
 						if (CompData == NULL)
 							return IL_FALSE;
 						if (iread(CompData, 1, SizeOfData) != SizeOfData) {
@@ -575,7 +575,7 @@ ILboolean iLoadVtfInternal(void)
 					// Same as above, but the alpha channel is unused.
 					case IMAGE_FORMAT_BGRX5551:
 						SizeOfData = Image->Width * Image->Height * Image->Depth * 2;
-						Data16Bit = CompData = ialloc(SizeOfData);  // Not compressed data
+						Data16Bit = CompData = (ILubyte*)ialloc(SizeOfData);  // Not compressed data
 						if (iread(CompData, 1, SizeOfData) != SizeOfData) {
 							bVtf = IL_FALSE;
 							break;
@@ -591,7 +591,7 @@ ILboolean iLoadVtfInternal(void)
 					// Data is reduced to a 4-bits per channel format.
 					case IMAGE_FORMAT_BGRA4444:
 						SizeOfData = Image->Width * Image->Height * Image->Depth * 4;
-						Temp = CompData = ialloc(SizeOfData / 2);  // Not compressed data
+						Temp = CompData = (ILubyte*)ialloc(SizeOfData / 2);  // Not compressed data
 						if (CompData == NULL)
 							return IL_FALSE;
 						if (iread(CompData, 1, SizeOfData / 2) != SizeOfData / 2) {

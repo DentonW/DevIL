@@ -252,7 +252,7 @@ ILboolean iIcnsReadData(ILboolean *BaseCreated, ILboolean IsAlpha, ILint Width, 
 		}
 	}
 
-	Data = ialloc(Entry->Size - 8);
+	Data = (ILubyte*)ialloc(Entry->Size - 8);
 	if (Data == NULL)
 		return IL_FALSE;
 

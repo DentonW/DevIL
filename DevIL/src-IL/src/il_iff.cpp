@@ -343,7 +343,7 @@ void iff_end_read_chunk()
 
 char * iff_read_data(int size)
 {
-	char *buffer = ialloc(size * sizeof(char));
+	char *buffer = (char*)ialloc(size * sizeof(char));
 	if (buffer == NULL)
 		return NULL;
 	
@@ -368,7 +368,7 @@ char *iffReadUncompressedTile(ILushort width, ILushort height, ILbyte depth)
 	int		i, j;
 	int		tam = width* height * depth * sizeof(char);
 
-	data = ialloc(tam);
+	data = (char*)ialloc(tam);
 	if (data == NULL)
 		return NULL;
 
@@ -414,7 +414,7 @@ char *iff_decompress_tile_rle(ILushort width, ILushort height, ILushort depth,
 	}
 
     // Build all the channels from the decompression into an RGBA array.
-	data = ialloc(width * height * depth * sizeof(char));
+	data = (char*)ialloc(width * height * depth * sizeof(char));
 	if (data == NULL)
 		return NULL;
 
@@ -435,7 +435,7 @@ char *iff_decompress_rle(ILuint numBytes, char *compressedData,
 							ILuint *compressedStartIndex)
 {
 
-	char	*data = ialloc(numBytes * sizeof(char));
+	char	*data = (char*)ialloc(numBytes * sizeof(char));
 	unsigned char	nextChar, count;
 	int		i;
 	ILuint	byteCount = 0;

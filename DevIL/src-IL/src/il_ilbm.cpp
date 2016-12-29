@@ -399,7 +399,8 @@ static ILboolean load_ilbm(void)
     /* Allocate memory for a temporary buffer ( used for
            decompression/deinterleaving ) */
 
-    if ( ( MiniBuf = (void *)malloc( bytesperline * nbplanes ) ) == NULL )
+	//@TODO: Why do we have a malloc here instead of ialloc?
+    if ( ( MiniBuf = (ILubyte*)malloc( bytesperline * nbplanes ) ) == NULL )
     {
         ilSetError( IL_OUT_OF_MEMORY );
         error="no enough memory for temporary buffer";

@@ -152,7 +152,8 @@ ILboolean ilIsValidJpegL(const void *Lump, ILuint Size)
 #ifndef IL_USE_IJL // Use libjpeg instead of the IJL.
 
 // Overrides libjpeg's stupid error/warning handlers. =P
-void ExitErrorHandle (struct jpeg_common_struct *JpegInfo)
+//void ExitErrorHandle (struct jpeg_common_struct *JpegInfo)
+void ExitErrorHandle(j_common_ptr cinfo)
 {
 	ilSetError(IL_LIB_JPEG_ERROR);
 	jpgErrorOccured = IL_TRUE;
@@ -925,7 +926,7 @@ ILboolean ilSaveFromJpegStruct(void *_JpegInfo)
 {
 #ifndef IL_NO_JPG
 #ifndef IL_USE_IJL
-	void (*errorHandler)();
+	void (*errorHandler)(j_common_ptr);
 	JSAMPROW	row_pointer[1];
 	ILimage		*TempImage;
 	ILubyte		*TempData;
