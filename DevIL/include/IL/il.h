@@ -161,8 +161,8 @@ typedef long long unsigned int ILuint64;
 // IL-specific #define's
 //
 
-#define IL_VERSION_1_7_8 1
-#define IL_VERSION       178
+#define IL_VERSION_1_8_0 1
+#define IL_VERSION       180
 
 
 // Attribute Bits
