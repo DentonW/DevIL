@@ -1015,87 +1015,9 @@ void DxtcReadColor(ILushort Data, Color8888* Out)
 	Out->b = b << 3 | r >> 2;
 }
 
-ILboolean DecompressDXT1(ILimage *lImage, ILubyte *lCompData)
-{
-	ILuint		x, y, z, i, j, k, Select;
-	ILubyte		*Temp;
-	Color8888	colours[4], *col;
-	ILushort	color_0, color_1;
-	ILuint		bitmask, Offset;
 
-	if (!lCompData)
-		return IL_FALSE;
-
-	Temp = lCompData;
-	colours[0].a = 0xFF;
-	colours[1].a = 0xFF;
-	colours[2].a = 0xFF;
-	//colours[3].a = 0xFF;
-	for (z = 0; z < lImage->Depth; z++) {
-		for (y = 0; y < lImage->Height; y += 4) {
-			for (x = 0; x < lImage->Width; x += 4) {
-				color_0 = *((ILushort*)Temp);
-				UShort(&color_0);
-				color_1 = *((ILushort*)(Temp + 2));
-				UShort(&color_1);
-				DxtcReadColor(color_0, colours);
-				DxtcReadColor(color_1, colours + 1);
-				bitmask = ((ILuint*)Temp)[1];
-				UInt(&bitmask);
-				Temp += 8;
-
-				if (color_0 > color_1) {
-					// Four-color block: derive the other two colors.
-					// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
-					// These 2-bit codes correspond to the 2-bit fields 
-					// stored in the 64-bit block.
-					colours[2].b = (2 * colours[0].b + colours[1].b + 1) / 3;
-					colours[2].g = (2 * colours[0].g + colours[1].g + 1) / 3;
-					colours[2].r = (2 * colours[0].r + colours[1].r + 1) / 3;
-					//colours[2].a = 0xFF;
-
-					colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
-					colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
-					colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
-					colours[3].a = 0xFF;
-				}
-				else { 
-					// Three-color block: derive the other color.
-					// 00 = color_0,  01 = color_1,  10 = color_2,
-					// 11 = transparent.
-					// These 2-bit codes correspond to the 2-bit fields 
-					// stored in the 64-bit block. 
-					colours[2].b = (colours[0].b + colours[1].b) / 2;
-					colours[2].g = (colours[0].g + colours[1].g) / 2;
-					colours[2].r = (colours[0].r + colours[1].r) / 2;
-					//colours[2].a = 0xFF;
-
-					colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
-					colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
-					colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
-					colours[3].a = 0x00;
-				}
-
-				for (j = 0, k = 0; j < 4; j++) {
-					for (i = 0; i < 4; i++, k++) {
-						Select = (bitmask & (0x03 << k*2)) >> k*2;
-						col = &colours[Select];
-
-						if (((x + i) < lImage->Width) && ((y + j) < lImage->Height)) {
-							Offset = z * lImage->SizeOfPlane + (y + j) * lImage->Bps + (x + i) * lImage->Bpp;
-							lImage->Data[Offset + 0] = col->r;
-							lImage->Data[Offset + 1] = col->g;
-							lImage->Data[Offset + 2] = col->b;
-							lImage->Data[Offset + 3] = col->a;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	return IL_TRUE;
-}
+// Defined at the bottom of the file
+//ILboolean DecompressDXT1(ILimage *lImage, ILubyte *lCompData)
 
 
 ILboolean DecompressDXT2(ILimage *lImage, ILubyte *lCompData)
@@ -2517,7 +2439,88 @@ ILAPI ILboolean ILAPIENTRY ilInvertSurfaceDxtcDataAlpha()
 	return IL_TRUE;
 }
 
-
-
-
 #endif//IL_NO_DDS
+
+// Needed for UTX and potentially others outside of DDS
+ILboolean DecompressDXT1(ILimage *lImage, ILubyte *lCompData)
+{
+	ILuint		x, y, z, i, j, k, Select;
+	ILubyte		*Temp;
+	Color8888	colours[4], *col;
+	ILushort	color_0, color_1;
+	ILuint		bitmask, Offset;
+
+	if (!lCompData)
+		return IL_FALSE;
+
+	Temp = lCompData;
+	colours[0].a = 0xFF;
+	colours[1].a = 0xFF;
+	colours[2].a = 0xFF;
+	//colours[3].a = 0xFF;
+	for (z = 0; z < lImage->Depth; z++) {
+		for (y = 0; y < lImage->Height; y += 4) {
+			for (x = 0; x < lImage->Width; x += 4) {
+				color_0 = *((ILushort*)Temp);
+				UShort(&color_0);
+				color_1 = *((ILushort*)(Temp + 2));
+				UShort(&color_1);
+				DxtcReadColor(color_0, colours);
+				DxtcReadColor(color_1, colours + 1);
+				bitmask = ((ILuint*)Temp)[1];
+				UInt(&bitmask);
+				Temp += 8;
+
+				if (color_0 > color_1) {
+					// Four-color block: derive the other two colors.
+					// 00 = color_0, 01 = color_1, 10 = color_2, 11 = color_3
+					// These 2-bit codes correspond to the 2-bit fields 
+					// stored in the 64-bit block.
+					colours[2].b = (2 * colours[0].b + colours[1].b + 1) / 3;
+					colours[2].g = (2 * colours[0].g + colours[1].g + 1) / 3;
+					colours[2].r = (2 * colours[0].r + colours[1].r + 1) / 3;
+					//colours[2].a = 0xFF;
+
+					colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
+					colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
+					colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
+					colours[3].a = 0xFF;
+				}
+				else {
+					// Three-color block: derive the other color.
+					// 00 = color_0,  01 = color_1,  10 = color_2,
+					// 11 = transparent.
+					// These 2-bit codes correspond to the 2-bit fields 
+					// stored in the 64-bit block. 
+					colours[2].b = (colours[0].b + colours[1].b) / 2;
+					colours[2].g = (colours[0].g + colours[1].g) / 2;
+					colours[2].r = (colours[0].r + colours[1].r) / 2;
+					//colours[2].a = 0xFF;
+
+					colours[3].b = (colours[0].b + 2 * colours[1].b + 1) / 3;
+					colours[3].g = (colours[0].g + 2 * colours[1].g + 1) / 3;
+					colours[3].r = (colours[0].r + 2 * colours[1].r + 1) / 3;
+					colours[3].a = 0x00;
+				}
+
+				for (j = 0, k = 0; j < 4; j++) {
+					for (i = 0; i < 4; i++, k++) {
+						Select = (bitmask & (0x03 << k * 2)) >> k * 2;
+						col = &colours[Select];
+
+						if (((x + i) < lImage->Width) && ((y + j) < lImage->Height)) {
+							Offset = z * lImage->SizeOfPlane + (y + j) * lImage->Bps + (x + i) * lImage->Bpp;
+							lImage->Data[Offset + 0] = col->r;
+							lImage->Data[Offset + 1] = col->g;
+							lImage->Data[Offset + 2] = col->b;
+							lImage->Data[Offset + 3] = col->a;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return IL_TRUE;
+}
+

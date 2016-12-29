@@ -8,7 +8,7 @@ include (TestBigEndian)
 
 option(BUILD_SHARED_LIBS "Build with shared (.DLL .SO) libraries." ON)
 
-file(GLOB DevIL_SRCS src/*.c src/*.cpp)
+file(GLOB DevIL_SRCS src/*.cpp)
 file(GLOB DevIL_INC include/*.h ../include/config.h ../include/IL/devil_internal_exports.h ../include/IL/il.h)
 file(GLOB DevIL_RSRC)
 file(GLOB DevIL_TXT)
@@ -32,15 +32,15 @@ if(WIN32)
 	endif(BUILD_SHARED_LIBS)
 endif(WIN32)
 
-source_group("Source Files" FILES src/*.c src/*.cpp)
+source_group("Source Files" FILES src/*.cpp)
 source_group("Header Files" FILES ${DevIL_INC} )
 source_group("Resource Files" FILES ${DevIL_RSRC} )
 source_group("Text Files" FILES ${DevIL_TXT} )
 
 if(BUILD_SHARED_LIBS)
-    add_library(IL SHARED ${DevIL_SRCS} )
+    add_library(IL SHARED ${DevIL_SRCS} ${DevIL_INC} ${DevIL_RSRC} ${DevIL_TXT})
 else(BUILD_SHARED_LIBS)
-    add_library(IL ${DevIL_SRCS} )
+    add_library(IL ${DevIL_SRCS} ${DevIL_INC} ${DevIL_RSRC} ${DevIL_TXT})
 endif(BUILD_SHARED_LIBS)
 
 
@@ -64,7 +64,7 @@ find_package(LCMS)
 
 
 # TODO: utx doesn't currently compile (as C, anyway)
-set(IL_NO_UTX 1)
+#set(IL_NO_UTX 1)
 
 # TODO: WDP requires Microsoft HD Photo Device Porting Kit 1.0
 set(IL_NO_WDP 1)

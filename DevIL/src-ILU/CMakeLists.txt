@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 
 project(ILU)
 
-file(GLOB ILU_SRCS src/*.c src/*.cpp)
+file(GLOB ILU_SRCS src/*.cpp)
 file(GLOB ILU_INC include/*.h ../include/IL/devil_internal_exports.h ../include/IL/ilu.h)
 file(GLOB ILU_RSRC)
 
@@ -22,7 +22,7 @@ if(WIN32)
 endif(WIN32)
 
 
-source_group("Source Files" FILES src/*.c src/*.cpp)
+source_group("Source Files" FILES src/*.cpp)
 source_group("Header Files" FILES ${ILU_INC} )
 source_group("Resource Files" FILES ${ILU_RSRC} )
 

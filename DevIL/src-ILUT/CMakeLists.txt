@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 
 project(ILUT)
 
-file(GLOB ILUT_SRCS src/*.c src/*.cpp msvc9/il.def)
+file(GLOB ILUT_SRCS src/*.cpp)
 file(GLOB ILUT_INC include/*.h ../include/IL/devil_internal_exports.h ../include/IL/ilut.h)
 file(GLOB ILUT_RSRC)
 
@@ -22,7 +22,7 @@ if(WIN32)
 	endif(BUILD_SHARED_LIBS)
 endif(WIN32)
 
-source_group("Source Files" FILES src/*.c src/*.cpp)
+source_group("Source Files" FILES src/*.cpp)
 source_group("Header Files" FILES ${ILUT_INC} )
 source_group("Resource Files" FILES ${ILUT_RSRC} )
 
