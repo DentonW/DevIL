@@ -13,6 +13,10 @@
 #ifndef IL_ENDIAN_H
 #define IL_ENDIAN_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "il_internal.h"
 
 #ifdef WORDS_BIGENDIAN  // This is defined by ./configure.
@@ -96,5 +100,9 @@ ILubyte SaveBigFloat(ILfloat f);
 ILubyte SaveBigDouble(ILdouble d);
 
 void EndianSwapData(void *_Image);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif//ENDIAN_H
