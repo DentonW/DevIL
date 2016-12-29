@@ -8,7 +8,7 @@ include (TestBigEndian)
 
 option(BUILD_SHARED_LIBS "Build with shared (.DLL .SO) libraries." ON)
 
-file(GLOB DevIL_SRCS src/*.c src/*.cpp msvc9/il.def)
+file(GLOB DevIL_SRCS src/*.c src/*.cpp)
 file(GLOB DevIL_INC include/*.h ../include/config.h ../include/IL/devil_internal_exports.h ../include/IL/il.h)
 file(GLOB DevIL_RSRC)
 file(GLOB DevIL_TXT)
@@ -22,7 +22,7 @@ if(WIN32)
 		#ADD_DEFINITIONS(-DIL_DLL -DMNG_DLL -DMNG_USE_DLL -DJPEGDLL)
 		add_definitions(-DIL_DLL -DJPEGSTATIC)
         # note: .def not used for now - __declspec() in source handles export.
-        # set(DevIL_SRCS ${DevIL_SRCS} msvc/il.def)
+        set(DevIL_SRCS ${DevIL_SRCS} msvc/il.def)
 		set(DevIL_RSRC ${DevIL_RSRC} "msvc/resources/IL Logo.ico" msvc/IL.rc)
         set(DevIL_TXT ${DevIL_TXT} ../AUTHORS ../ChangeLog ../CREDITS ../libraries.txt ../README ../README.cmake ../TODO)
 #		SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:msvcrt.lib ")

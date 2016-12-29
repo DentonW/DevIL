@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 
 project(ILU)
 
-file(GLOB ILU_SRCS src/*.c src/*.cpp msvc9/il.def)
+file(GLOB ILU_SRCS src/*.c src/*.cpp)
 file(GLOB ILU_INC include/*.h ../include/IL/devil_internal_exports.h ../include/IL/ilu.h)
 file(GLOB ILU_RSRC)
 
@@ -13,7 +13,7 @@ if(WIN32)
     #add_definitions(-DIL_USE_PRAGMA_LIBS)
 	if(BUILD_SHARED_LIBS)
 		add_definitions(-DILU_DLL)
-        #set(ILU_SRCS ${ILU_SRCS} msvc/ilu.def)
+        set(ILU_SRCS ${ILU_SRCS} msvc/ilu.def)
 		set(ILU_RSRC ${ILU_RSRC} "msvc/resources/IL Logo.ico" msvc/ILU.rc)
 		set(CMAKE_C_FLAGS_RELEASE "/MT /O2")
 	else(BUILD_SHARED_LIBS)
