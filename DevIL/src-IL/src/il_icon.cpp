@@ -592,7 +592,7 @@ ILboolean ico_readpng_get_image(ICOIMAGE *Icon, ILdouble display_exponent)
 
 	Icon->Head.Width = width;
 	Icon->Head.Height = height;
-	Icon->Data = ialloc(width * height * Icon->Head.BitCount / 8);
+	Icon->Data = (ILubyte*)ialloc(width * height * Icon->Head.BitCount / 8);
 	if (Icon->Data == NULL)
 	{
 		png_destroy_read_struct(&ico_png_ptr, &ico_info_ptr, NULL);
