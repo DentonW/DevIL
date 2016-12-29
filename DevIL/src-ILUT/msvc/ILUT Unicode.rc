@@ -83,8 +83,8 @@ BEGIN
             VALUE "OriginalFilename", "ILUT.dll"
             VALUE "PrivateBuild", "Open Source"
             VALUE "ProductName", "Developer's Image Utility Toolkit Library"
-            VALUE "ProductVersion", "1.8.0 Ansi"
-            VALUE "SpecialBuild", "Ansi"
+            VALUE "ProductVersion", "1.8.0 Unicode"
+            VALUE "SpecialBuild", "Unicode"
         END
     END
     BLOCK "VarFileInfo"
@@ -110,7 +110,7 @@ IDI_ICON1               ICON                    "resources\\IL Logo.ico"
 
 STRINGTABLE
 BEGIN
-    IDC_OPENILUT            "Developer's Image Utility Toolkit Library, Version 1.8.0"
+    IDC_OPENILUT            "Developer's Image Utility Toolkit Library, Version 1.7.8"
 END
 
 #endif    // English (United States) resources

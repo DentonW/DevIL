@@ -73,18 +73,18 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "Comments", "ILUT: A portable image library in development"
+            VALUE "Comments", "ILU: A portable image library in development"
             VALUE "CompanyName", "Abysmal Software"
-            VALUE "FileDescription", "ILUT: A portable image library in development"
+            VALUE "FileDescription", "ILU: A portable image library in development"
             VALUE "FileVersion", "1.8.0.0"
-            VALUE "InternalName", "ILUT"
+            VALUE "InternalName", "ILU"
             VALUE "LegalCopyright", "Copyright © 2000-2016"
             VALUE "LegalTrademarks", "Under LGPL License"
-            VALUE "OriginalFilename", "ILUT.dll"
+            VALUE "OriginalFilename", "ILU.dll"
             VALUE "PrivateBuild", "Open Source"
-            VALUE "ProductName", "Developer's Image Utility Toolkit Library"
-            VALUE "ProductVersion", "1.8.0 Ansi"
-            VALUE "SpecialBuild", "Ansi"
+            VALUE "ProductName", "Developer's Image Utilities Library"
+            VALUE "ProductVersion", "1.8.0 Unicode"
+            VALUE "SpecialBuild", "Unicode"
         END
     END
     BLOCK "VarFileInfo"
@@ -110,7 +110,7 @@ IDI_ICON1               ICON                    "resources\\IL Logo.ico"
 
 STRINGTABLE
 BEGIN
-    IDC_OPENILUT            "Developer's Image Utility Toolkit Library, Version 1.8.0"
+    IDC_OPENILU             "Developer's Image Utilities Library, Version 1.8.0"
 END
 
 #endif    // English (United States) resources

@@ -7,8 +7,7 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include "afxres.h"
-
+#include "afxres.h"
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
@@ -51,8 +50,8 @@ BEGIN
             VALUE "OriginalFilename", "DevIL.dll"
             VALUE "PrivateBuild", "Open Source"
             VALUE "ProductName", "Developer's Image Library (DevIL)"
-            VALUE "ProductVersion", "1.8.0 Ansi"
-            VALUE "SpecialBuild", "Ansi"
+            VALUE "ProductVersion", "1.8.0 Unicode"
+            VALUE "SpecialBuild", "Unicode"
         END
     END
     BLOCK "VarFileInfo"
@@ -79,12 +78,17 @@ IDI_ICON1               ICON                    "resources\\IL Logo.ico"
 
 1 TEXTINCLUDE 
 BEGIN
-    "resource.\0"
+    "resource.h\0"
 END
 
 3 TEXTINCLUDE 
 BEGIN
     "\r\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\0"
 END
 
 #endif    // APSTUDIO_INVOKED

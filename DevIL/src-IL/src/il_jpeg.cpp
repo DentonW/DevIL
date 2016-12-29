@@ -33,7 +33,7 @@
 			#pragma warning(disable : 4142)  //  jmorecfg.h
 		#endif
 
-		#include "jpeglib.h"
+		#include <jpeglib.h>
 
 		#if JPEG_LIB_VERSION < 62
 			#warning DevIL was designed with libjpeg 6b or higher in mind.  Consider upgrading at www.ijg.org

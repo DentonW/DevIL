@@ -167,6 +167,10 @@ enum PixFormat
 
 #define CUBEMAP_SIDES 6
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Internal functions
 ILboolean	iLoadDdsInternal(void);
 ILboolean	iIsValidDds(void);
@@ -217,5 +221,8 @@ void		PreMult(ILushort *Data, ILubyte *Alpha);
 
 extern ILuint CubemapDirections[CUBEMAP_SIDES];
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif//DDS_H

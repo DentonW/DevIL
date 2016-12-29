@@ -15,7 +15,11 @@ if(WIN32)
 	if(BUILD_SHARED_LIBS)
 		add_definitions(-DILUT_DLL)
         set(ILUT_SRCS ${ILUT_SRCS} msvc/ilut.def)
-		set(ILUT_RSRC ${ILUT_RSRC} "msvc/resources/IL Logo.ico" msvc/ILUT.rc)
+		if(UNICODE)
+			set(ILUT_RSRC ${ILUT_RSRC} "msvc/resources/IL Logo.ico" "msvc/ILUT Unicode.rc")
+		else(UNICODE)
+			set(ILUT_RSRC ${ILUT_RSRC} "msvc/resources/IL Logo.ico" "msvc/ILUT.rc")
+		endif(UNICODE)
 		set(CMAKE_C_FLAGS_RELEASE "/MT /O2")
 	else(BUILD_SHARED_LIBS)
 		add_definitions(-DIL_STATIC_LIB)
@@ -39,8 +43,20 @@ target_link_libraries(ILUT
 configure_file( pkgconfig/ILUT.pc.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/ILUT.pc @ONLY)
 
-set_target_properties(ILUT PROPERTIES RUNTIME_OUTPUT_DIRECTORY "../lib")
+if(UNICODE)
+	set_target_properties(ILUT PROPERTIES RUNTIME_OUTPUT_DIRECTORY "../lib/unicode")
+	set_target_properties(ILUT PROPERTIES LIBRARY_OUTPUT_DIRECTORY "../lib/unicode")
+	set_target_properties(ILUT PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "../lib/unicode")
+else(UNICODE)
+	set_target_properties(ILUT PROPERTIES RUNTIME_OUTPUT_DIRECTORY "../lib")
+	set_target_properties(ILUT PROPERTIES LIBRARY_OUTPUT_DIRECTORY "../lib")
+	set_target_properties(ILUT PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "../lib")
+endif(UNICODE)
 
+if(UNICODE)
+	MESSAGE("Compiling ILUT Unicode")
+	add_definitions(-DUNICODE -D_UNICODE)
+endif(UNICODE)
 
 # Installation
 install (TARGETS ILUT

@@ -23,7 +23,11 @@ if(WIN32)
 		add_definitions(-DIL_DLL -DJPEGSTATIC)
         # note: .def not used for now - __declspec() in source handles export.
         set(DevIL_SRCS ${DevIL_SRCS} msvc/il.def)
-		set(DevIL_RSRC ${DevIL_RSRC} "msvc/resources/IL Logo.ico" msvc/IL.rc)
+		if(UNICODE)
+			set(DevIL_RSRC ${DevIL_RSRC} "msvc/resources/IL Logo.ico" "msvc/IL Unicode.rc")
+		else(UNICODE)
+			set(DevIL_RSRC ${DevIL_RSRC} "msvc/resources/IL Logo.ico" "msvc/IL.rc")
+		endif(UNICODE)
         set(DevIL_TXT ${DevIL_TXT} ../AUTHORS ../ChangeLog ../CREDITS ../libraries.txt ../README ../README.cmake ../TODO)
 #		SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:msvcrt.lib ")
 		set(CMAKE_C_FLAGS_RELEASE "/MT /O2")
@@ -129,16 +133,27 @@ else(SQUISH_FOUND)
     set(IL_USE_DXTC_SQUISH 0)
 endif(SQUISH_FOUND)
 
-set_target_properties(IL PROPERTIES RUNTIME_OUTPUT_DIRECTORY "../lib")
+if(UNICODE)
+	set_target_properties(IL PROPERTIES RUNTIME_OUTPUT_DIRECTORY "../lib/unicode")
+	set_target_properties(IL PROPERTIES LIBRARY_OUTPUT_DIRECTORY "../lib/unicode")
+	set_target_properties(IL PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "../lib/unicode")
+else(UNICODE)
+	set_target_properties(IL PROPERTIES RUNTIME_OUTPUT_DIRECTORY "../lib")
+	set_target_properties(IL PROPERTIES LIBRARY_OUTPUT_DIRECTORY "../lib")
+	set_target_properties(IL PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "../lib")
+endif(UNICODE)
+
 if(WIN32)
 	# Linux uses libIL.so, libILU.so, and libILUT.so, but Windows uses
 	#  DevIL.dll, ILU.dll, and ILUT.dll.
 	set_target_properties(IL PROPERTIES OUTPUT_NAME "DevIL")
 endif(WIN32)
 
+if(UNICODE)
+	MESSAGE("Compiling IL Unicode")
+	add_definitions(-DUNICODE -D_UNICODE)
+endif(UNICODE)
 #if(COMPILER_MSVC)
-#    add_definitions(-DUNICODE -D_UNICODE)
-#endif()
 
 # configure include dirs and linkage for the optional external libs
 set(libs "")

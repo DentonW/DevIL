@@ -14,7 +14,11 @@ if(WIN32)
 	if(BUILD_SHARED_LIBS)
 		add_definitions(-DILU_DLL)
         set(ILU_SRCS ${ILU_SRCS} msvc/ilu.def)
-		set(ILU_RSRC ${ILU_RSRC} "msvc/resources/IL Logo.ico" msvc/ILU.rc)
+		if(UNICODE)
+			set(ILU_RSRC ${ILU_RSRC} "msvc/resources/IL Logo.ico" "msvc/ILU Unicode.rc")
+		else(UNICODE)
+			set(ILU_RSRC ${ILU_RSRC} "msvc/resources/IL Logo.ico" "msvc/ILU.rc")
+		endif(UNICODE)
 		set(CMAKE_C_FLAGS_RELEASE "/MT /O2")
 	else(BUILD_SHARED_LIBS)
 		add_definitions(-DIL_STATIC_LIB)
@@ -41,8 +45,20 @@ target_link_libraries(ILU
 configure_file( pkgconfig/ILU.pc.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/ILU.pc @ONLY)
 
-set_target_properties(ILU PROPERTIES RUNTIME_OUTPUT_DIRECTORY "../lib")
+if(UNICODE)
+	set_target_properties(ILU PROPERTIES RUNTIME_OUTPUT_DIRECTORY "../lib/unicode")
+	set_target_properties(ILU PROPERTIES LIBRARY_OUTPUT_DIRECTORY "../lib/unicode")
+	set_target_properties(ILU PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "../lib/unicode")
+else(UNICODE)
+	set_target_properties(ILU PROPERTIES RUNTIME_OUTPUT_DIRECTORY "../lib")
+	set_target_properties(ILU PROPERTIES LIBRARY_OUTPUT_DIRECTORY "../lib")
+	set_target_properties(ILU PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "../lib")
+endif(UNICODE)
 
+if(UNICODE)
+	MESSAGE("Compiling ILU Unicode")
+	add_definitions(-DUNICODE -D_UNICODE)
+endif(UNICODE)
 
 # Installation
 install (TARGETS ILU
