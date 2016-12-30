@@ -262,14 +262,14 @@ static ILboolean load_ilbm(void)
     start = SDL_RWtell(src);
     if ( !SDL_RWread( src, id, 4, 1 ) )
     {
-        error="error reading IFF chunk";
+        error=(char*)"error reading IFF chunk";
         goto done;
     }
 
     /* Should be the size of the file minus 4+4 ( 'FORM'+size ) */
     if ( !SDL_RWread( src, &size, 4, 1 ) )
     {
-        error="error reading IFF chunk size";
+        error=(char*)"error reading IFF chunk size";
         goto done;
     }
 
@@ -278,13 +278,13 @@ static ILboolean load_ilbm(void)
     if ( memcmp( id, "FORM", 4 ) != 0 )
     {
         ilSetError(IL_INVALID_FILE_HEADER);
-        error="not a IFF file";
+        error=(char*)"not a IFF file";
         goto done;
     }
 
     if ( !SDL_RWread( src, id, 4, 1 ) )
     {
-        error="error reading IFF chunk";
+        error=(char*)"error reading IFF chunk";
         goto done;
     }
 
@@ -295,7 +295,7 @@ static ILboolean load_ilbm(void)
     else if ( memcmp( id, "ILBM", 4 ) )
     {
         ilSetError(IL_INVALID_FILE_HEADER);
-        error="not a IFF picture";
+        error=(char*)"not a IFF picture";
         goto done;
     }
 
@@ -309,13 +309,13 @@ static ILboolean load_ilbm(void)
     {
         if ( !SDL_RWread( src, id, 4, 1 ) ) 
         {
-            error="error reading IFF chunk";
+            error=(char*)"error reading IFF chunk";
             goto done;
         }
 
         if ( !SDL_RWread( src, &size, 4, 1 ) )
         {
-            error="error reading IFF chunk size";
+            error=(char*)"error reading IFF chunk size";
             goto done;
         }
 
@@ -327,7 +327,7 @@ static ILboolean load_ilbm(void)
         {
             if ( !SDL_RWread( src, &bmhd, sizeof( BMHD ), 1 ) )
             {
-                error="error reading BMHD chunk";
+                error=(char*)"error reading BMHD chunk";
                 goto done;
             }
 
@@ -346,7 +346,7 @@ static ILboolean load_ilbm(void)
         {
             if ( !SDL_RWread( src, &colormap, size, 1 ) )
             {
-                error="error reading CMAP chunk";
+                error=(char*)"error reading CMAP chunk";
                 goto done;
             }
 
@@ -359,7 +359,7 @@ static ILboolean load_ilbm(void)
             Uint32 viewmodes;
             if ( !SDL_RWread( src, &viewmodes, sizeof(viewmodes), 1 ) )
             {
-                error="error reading CAMG chunk";
+                error=(char*)"error reading CAMG chunk";
                 goto done;
             }
 
@@ -403,7 +403,7 @@ static ILboolean load_ilbm(void)
     if ( ( MiniBuf = (ILubyte*)malloc( bytesperline * nbplanes ) ) == NULL )
     {
         ilSetError( IL_OUT_OF_MEMORY );
-        error="no enough memory for temporary buffer";
+        error=(char*)"not enough memory for temporary buffer";
         goto done;
     }
 
@@ -488,7 +488,7 @@ static ILboolean load_ilbm(void)
                 {
                     if ( !SDL_RWread( src, &count, 1, 1 ) )
                     {
-                        error="error reading BODY chunk";
+                        error=(char*)"error reading BODY chunk";
                         goto done;
                     }
 
@@ -501,7 +501,7 @@ static ILboolean load_ilbm(void)
                         {
                             if( count>remainingbytes)
                                 ilSetError(IL_ILLEGAL_FILE_VALUE );
-                           error="error reading BODY chunk";
+                           error=(char*)"error reading BODY chunk";
                             goto done;
                         }
                         memset( ptr, color, count );
@@ -514,7 +514,7 @@ static ILboolean load_ilbm(void)
                         {
                             if( count>remainingbytes)
                                 ilSetError(IL_ILLEGAL_FILE_VALUE );
-                           error="error reading BODY chunk";
+                           error=(char*)"error reading BODY chunk";
                             goto done;
                         }
                     }
@@ -528,7 +528,7 @@ static ILboolean load_ilbm(void)
             {
                 if ( !SDL_RWread( src, ptr, bytesperline, 1 ) )
                 {
-                    error="error reading BODY chunk";
+                    error=(char*)"error reading BODY chunk";
                     goto done;
                 }
             }

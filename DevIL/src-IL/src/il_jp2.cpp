@@ -783,7 +783,7 @@ ILboolean iSaveJp2Internal()
 	Jp2ConvertData(Mem, Jp2Image);
 
 	// Does all of the encoding.
-	if (jas_image_encode(Jp2Image, Stream, jas_image_strtofmt("jp2"), NULL)) {  //@TODO: Do we want to use any options?
+	if (jas_image_encode(Jp2Image, Stream, jas_image_strtofmt((char*)"jp2"), NULL)) {  //@TODO: Do we want to use any options?
 		jas_stream_close(Mem);
 		jas_stream_close(Stream);
 		jas_image_destroy(Jp2Image);

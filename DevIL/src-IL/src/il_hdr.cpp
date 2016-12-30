@@ -465,7 +465,7 @@ typedef struct {
 /* default minimal header. modify if you want more information in header */
 ILboolean RGBE_WriteHeader(ILuint width, ILuint height, rgbe_header_info *info)
 {
-	char *programtype = "RGBE";
+	char *programtype = (char*)"RGBE";
 
 	if (info && (info->valid & RGBE_VALID_PROGRAMTYPE))
 		programtype = (char*)info->programtype;

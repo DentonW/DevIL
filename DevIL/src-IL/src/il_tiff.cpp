@@ -287,7 +287,7 @@ ILboolean iLoadTiffInternal()
 	//TIFFSetWarningHandler(warningHandler);
 	//TIFFSetErrorHandler(errorHandler);
 
-	tif = iTIFFOpen("r");
+	tif = iTIFFOpen((char*)"r");
 	if (tif == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
 		return IL_FALSE;
@@ -976,7 +976,7 @@ ILboolean iSaveTiffInternal(/*ILconst_string Filename*/)
 	#endif*/
 
 	// Control writing functions ourself.
-	File = iTIFFOpen("w");
+	File = iTIFFOpen((char*)"w");
 	if (File == NULL) {
 		ilSetError(IL_COULD_NOT_OPEN_FILE);
 		return IL_FALSE;
