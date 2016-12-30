@@ -540,7 +540,7 @@
 #define VK_MENU                         0x12
 #define WM_QUIT                         0x0012
 #define HTBORDER                        18
-#define CF_MAX                          18
+//#define CF_MAX                          18
 #define LANG_KOREAN                     0x12
 #define SUBLANG_ENGLISH_SINGAPORE       0x12
 #define SUBLANG_SPANISH_HONDURAS        0x12
@@ -1478,7 +1478,7 @@
 #define LVS_TYPESTYLEMASK               0xfc00
 #define SPVERSION_MASK                  0x0000FF00
 #define UNICODE_NOCHAR                  0xFFFF
-#define HTTRANSPARENT                   -1
+//#define HTTRANSPARENT                   -1
 
 // Next default values for new objects
 // 
