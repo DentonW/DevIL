@@ -80,7 +80,7 @@ find_package(NVTT)      # NVidia texture tools
 find_package(OpenEXR)
 #find_package(LCMS)
 find_package(LCMS2)
-
+find_package(MNG)
 # TODO: check for libmng, others?
 
 # TODO: WDP requires Microsoft HD Photo Device Porting Kit 1.0
@@ -195,7 +195,7 @@ if(NOT IL_NO_JP2)
 endif(NOT IL_NO_JP2)
 
 if(NOT IL_NO_MNG)
-    list(APPEND incs ${MNG_INCLUDE_DIRS} )
+    list(APPEND incs ${MNG_INCLUDE_DIR} )
     list(APPEND libs ${MNG_LIBRARIES} )
 endif(NOT IL_NO_MNG)
 

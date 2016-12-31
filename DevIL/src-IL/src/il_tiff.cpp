@@ -325,7 +325,7 @@ ILboolean iLoadTiffInternal()
 		TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES,	&extrasamples, &sampleinfo);
 		TIFFGetFieldDefaulted(tif, TIFFTAG_ORIENTATION, 	&orientation);
 
-		linesize = TIFFScanlineSize(tif);
+		linesize = (uint32)TIFFScanlineSize(tif);
 		
 		//added 2003-08-31
 		//1 bpp tiffs are not neccessarily greyscale, they can
@@ -727,7 +727,7 @@ static tsize_t
 _tiffFileReadProc(thandle_t fd, tdata_t pData, tsize_t tSize)
 {
 	fd;
-	return iread(pData, 1, tSize);
+	return iread(pData, 1, (ILuint)tSize);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -749,7 +749,7 @@ static tsize_t
 _tiffFileWriteProc(thandle_t fd, tdata_t pData, tsize_t tSize)
 {
 	fd;
-	return iwrite(pData, 1, tSize);
+	return iwrite(pData, 1, (ILuint)tSize);
 }
 
 /*----------------------------------------------------------------------------*/

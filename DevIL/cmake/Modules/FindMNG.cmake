@@ -1,30 +1,10 @@
-# Denton: Found at https://github.com/realhidden/stratagus/blob/master/cmake/modules/FindMNG.cmake
-#
-# - Try to find the MNG library
-# Once done this will define
-#
-#  MNG_FOUND - system has Mikmod
-#  MNG_INCLUDE_DIR - the Mikmod include directory
-#  MNG_LIBRARY - The Mikmod library
+# Denton: Modified from the libsquish one
+FIND_PATH(MNG_INCLUDE_DIR mng.h PATHS . mng .. ../mng DOC "Directory containing libmng headers")
+FIND_LIBRARY(MNG_LIBRARY NAMES mng libmng PATHS . mng .. ../mng PATH_SUFFIXES lib lib64 release minsizerel relwithdebinfo DOC "Path to libmng library")
 
-# Copyright (c) 2011, Pali Rohár <pali.rohar@gmail.com>
-#
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+SET(MNG_LIBRARIES ${MNG_LIBRARY})
 
-if(MNG_INCLUDE_DIR AND MNG_LIBRARY)
-	set(MNG_FOUND true)
-else()
-	find_path(MNG_INCLUDE_DIR libmng.h)
-	find_library(MNG_LIBRARY NAMES mng)
-
-	if(MNG_INCLUDE_DIR AND MNG_LIBRARY)
-		set(MNG_FOUND true)
-		message(STATUS "Found MNG: ${MNG_LIBRARY}")
-	else()
-		set(MNG_FOUND false)
-		message(STATUS "Could not find MNG")
-	endif()
-
-	mark_as_advanced(MNG_INCLUDE_DIR MNG_LIBRARY)
-endif()
+IF (MNG_LIBRARY AND MNG_INCLUDE_DIR)
+   SET(MNG_FOUND TRUE)
+   MESSAGE(STATUS "Found libmng: ${MNG_LIBRARY}")
+ENDIF (MNG_LIBRARY AND MNG_INCLUDE_DIR)
