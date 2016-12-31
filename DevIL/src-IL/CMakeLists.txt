@@ -78,7 +78,8 @@ find_package(Jasper)
 find_package(libSquish)
 find_package(NVTT)      # NVidia texture tools
 find_package(OpenEXR)
-find_package(LCMS)
+#find_package(LCMS)
+find_package(LCMS2)
 
 # TODO: check for libmng, others?
 
@@ -125,13 +126,13 @@ else(MNG_FOUND)
     set(IL_NO_MNG 1)
 endif(MNG_FOUND)
 
-if(LCMS_FOUND)
+if(LCMS2_FOUND)
     option(IL_NO_LCMS "Disable LCMS support (Little CMS)" 0)
     #TODO: be more clever about lcms include... it smells wrong.
-    option(LCMS_NODIRINCLUDE "Include lcms.h instead of lcms/lcms.h" 1)
-else(LCMS_FOUND)
+    #option(LCMS_NODIRINCLUDE "Include lcms.h instead of lcms/lcms.h" 1)
+else(LCMS2_FOUND)
     set(IL_NO_LCMS 1)
-endif(LCMS_FOUND)
+endif(LCMS2_FOUND)
 
 if(NVTT_FOUND)
     option(IL_USE_DXTC_NVIDIA "Use Nvidia Texture Tools (NVTT) for DXTC support" 1)
@@ -199,8 +200,8 @@ if(NOT IL_NO_MNG)
 endif(NOT IL_NO_MNG)
 
 if(NOT IL_NO_LCMS)
-    list(APPEND incs ${LCMS_INCLUDE_DIRS} )
-    list(APPEND libs ${LCMS_LIBRARIES} )
+    list(APPEND incs ${LCMS2_INCLUDE_DIRS} )
+    list(APPEND libs ${LCMS2_LIBRARIES} )
 endif(NOT IL_NO_LCMS)
 
 if(NOT IL_NO_EXR)
