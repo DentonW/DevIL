@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Last modified: 03/0/2009
+// Last modified: 03/01/2009
 //
 // Filename: src-IL/src/il_iff.cpp
 //

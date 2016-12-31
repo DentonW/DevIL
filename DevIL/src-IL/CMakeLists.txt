@@ -8,6 +8,9 @@ include (TestBigEndian)
 
 option(BUILD_SHARED_LIBS "Build with shared (.DLL .SO) libraries." ON)
 
+# libSquish not currently supported by CMake
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+
 file(GLOB DevIL_SRCS src/*.cpp)
 file(GLOB DevIL_INC include/*.h ../include/config.h ../include/IL/devil_internal_exports.h ../include/IL/il.h)
 file(GLOB DevIL_RSRC)
@@ -71,7 +74,8 @@ find_package(PNG)
 find_package(TIFF)
 find_package(JPEG)
 find_package(Jasper)
-find_package(Squish)
+#find_package(Squish)
+find_package(libSquish)
 find_package(NVTT)      # NVidia texture tools
 find_package(OpenEXR)
 find_package(LCMS)
@@ -135,11 +139,11 @@ else(NVTT_FOUND)
     set(IL_USE_DXTC_NVIDIA 0)
 endif(NVTT_FOUND)
 
-if(SQUISH_FOUND)
+if(LIBSQUISH_FOUND)
     option(IL_USE_DXTC_SQUISH "Use libsquish for DXTC support" 1)
-else(SQUISH_FOUND)
+else(LIBSQUISH_FOUND)
     set(IL_USE_DXTC_SQUISH 0)
-endif(SQUISH_FOUND)
+endif(LIBSQUISH_FOUND)
 
 # Sets the output folders
 set(LIBDIR "../lib/")
@@ -215,6 +219,10 @@ if(IL_USE_DXTC_NVIDIA)
 endif(IL_USE_DXTC_NVIDIA)
 
 # TODO: does Squish require linking/includes?
+if(IL_USE_DXTC_SQUISH)
+    list(APPEND incs ${LIBSQUISH_INCLUDE_DIR} )
+    list(APPEND libs ${LIBSQUISH_LIBRARY} )
+endif(IL_USE_DXTC_SQUISH)
 
 
 include_directories(${incs})
