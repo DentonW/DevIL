@@ -1,3 +1,5 @@
+# Denton: Found in LibMNG sources
+#
 # - Find LCMS version 2 library
 #
 #  LCMS2_INCLUDE_DIR    - Where to find lcms2.h, etc.
