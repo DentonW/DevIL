@@ -40,7 +40,7 @@ if(WIN32)
 		else(UNICODE)
 			set(DevIL_RSRC ${DevIL_RSRC} "msvc/resources/IL Logo.ico" "msvc/IL.rc")
 		endif(UNICODE)
-        set(DevIL_TXT ${DevIL_TXT} ../AUTHORS ../ChangeLog ../CREDITS ../libraries.txt ../README ../README.cmake ../TODO)
+        set(DevIL_TXT ${DevIL_TXT} ../AUTHORS ../ChangeLog ../CREDITS ../libraries.txt ../README.md ../README.cmake ../TODO)
 #		SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:msvcrt.lib ")
 		set(CMAKE_C_FLAGS_RELEASE "/MT /O2")
 	else(BUILD_SHARED_LIBS)
@@ -77,10 +77,6 @@ find_package(OpenEXR)
 find_package(LCMS)
 
 # TODO: check for libmng, others?
-
-
-# TODO: utx doesn't currently compile (as C, anyway)
-#set(IL_NO_UTX 1)
 
 # TODO: WDP requires Microsoft HD Photo Device Porting Kit 1.0
 set(IL_NO_WDP 1)
