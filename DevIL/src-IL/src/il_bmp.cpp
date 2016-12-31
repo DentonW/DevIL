@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
+// Copyright (C) 2000-2017 by Denton Woods
 // Last modified: 02/09/2009
 //
-// Filename: src-IL/src/il_bmp.c
+// Filename: src-IL/src/il_bmp.cpp
 //
 // Description: Reads from and writes to a bitmap (.bmp) file.
 //

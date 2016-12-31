@@ -5,7 +5,7 @@
 // Copyright (C) 2002 Nelson Rush.
 // Last modified: 05/18/2002
 //
-// Filename: src-ILUT/src/ilut_sdlsurface.c
+// Filename: src-ILUT/src/ilut_sdlsurface.cpp
 //
 // Description:  SDL Surface functions for images
 //

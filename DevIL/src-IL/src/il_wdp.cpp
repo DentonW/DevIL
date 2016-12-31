@@ -3,7 +3,7 @@
 // ImageLib Sources
 // Last modified: 02/09/2009
 //
-// Filename: src-IL/src/il_wdp.c
+// Filename: src-IL/src/il_wdp.cpp
 //
 // Description: Reads a Microsoft HD Photo (.wdp or .hdp)
 //   Based very much on the Microsoft HD Photo Device Porting Kit 1.0

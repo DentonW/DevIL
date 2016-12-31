@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
+// Copyright (C) 2000-2017 by Denton Woods
 // Last modified: 10/10/2006
 //
-// Filename: src-IL/src/il_header.c
+// Filename: src-IL/src/il_header.cpp
 //
 // Description: Generates a C-style header file for the current image.
 //

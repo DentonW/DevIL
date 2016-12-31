@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/26/2002 <--Y2K Compliant! =]
+// Copyright (C) 2000-2017 by Denton Woods
+// Last modified: 05/26/2002
 //
-// Filename: src-IL/src/il_pxr.c
+// Filename: src-IL/src/il_pxr.cpp
 //
 // Description: Reads from a Pxrar (.pxr) file.
 //

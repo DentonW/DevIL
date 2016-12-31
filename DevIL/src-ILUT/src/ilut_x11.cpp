@@ -5,7 +5,7 @@
 // Copyright (C) 2002 Nelson Rush.
 // Last modified: 05/18/2002
 //
-// Filename: src-ILUT/src/ilut_x11.c
+// Filename: src-ILUT/src/ilut_x11.cpp
 //
 // Description: X11 Pixmap and XImage binding functions (with XShm)
 //

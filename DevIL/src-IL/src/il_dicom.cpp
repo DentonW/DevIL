@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2009 by Denton Woods
+// Copyright (C) 2000-2017 by Denton Woods
 // Last modified: 02/14/2009
 //
-// Filename: src-IL/src/il_dicom.c
+// Filename: src-IL/src/il_dicom.cpp
 //
 // Description: Reads from a Digital Imaging and Communications in Medicine
 //				(DICOM) file.  Specifications can be found at 

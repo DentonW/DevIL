@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 05/25/2001 <--Y2K Compliant! =]
+// Copyright (C) 2000-2017 by Denton Woods
+// Last modified: 05/25/2001
 //
-// Filename: src-ILU/src/ilu_scale.c
+// Filename: src-ILU/src/ilu_scale.cpp
 //
 // Description: Scales an image.
 //

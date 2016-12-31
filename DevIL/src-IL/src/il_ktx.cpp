@@ -4,7 +4,7 @@
 // Copyright (C) 2000-2016 by Denton Woods
 // Last modified: 05/15/2016
 //
-// Filename: src-IL/src/il_ktx.c
+// Filename: src-IL/src/il_ktx.cpp
 //
 // Description: Reads a Khronos Texture .ktx file
 //

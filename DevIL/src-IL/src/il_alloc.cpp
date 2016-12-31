@@ -1,9 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
+// Copyright (C) 2000-2017 by Denton Woods
 // Last modified: 08/17/2009
 //
-// Filename: src-IL/src/il_alloc.c
+// Filename: src-IL/src/il_alloc.cpp
 //
 // Description: Memory allocation functions
 //

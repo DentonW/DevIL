@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
+// Copyright (C) 2000-2017 by Denton Woods
 // Last modified: 06/02/2007
 //
-// Filename: src-IL/src/il_error.c
+// Filename: src-IL/src/il_error.cpp
 //
 // Description: The error functions
 //

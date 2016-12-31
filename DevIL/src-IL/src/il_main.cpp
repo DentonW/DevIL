@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2002 by Denton Woods
-// Last modified: 02/16/2002 <--Y2K Compliant! =]
+// Copyright (C) 2000-2017 by Denton Woods
+// Last modified: 02/16/2002
 //
-// Filename: src-IL/src/il_main.c
+// Filename: src-IL/src/il_main.cpp
 //
 // Description: Startup function
 //

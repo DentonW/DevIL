@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2008 by Denton Woods
+// Copyright (C) 2000-2017 by Denton Woods
 // Last modified: 08/14/2004
 //
-// Filename: src-IL/src/il_bits.c
+// Filename: src-IL/src/il_bits.cpp
 //
 // Description: Implements a file class that reads/writes bits directly.
 //

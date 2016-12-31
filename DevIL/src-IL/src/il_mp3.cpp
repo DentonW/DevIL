@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2009 by Denton Woods
+// Copyright (C) 2000-2017 by Denton Woods
 // Last modified: 03/05/2009
 //
-// Filename: src-IL/src/il_mp3.c
+// Filename: src-IL/src/il_mp3.cpp
 //
 // MimeType: Reads from an MPEG-1 Audio Layer 3 (.mp3) file.
 //

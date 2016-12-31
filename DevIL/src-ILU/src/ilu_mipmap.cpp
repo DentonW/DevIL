@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Utility Sources
-// Copyright (C) 2000-2009 by Denton Woods
+// Copyright (C) 2000-2017 by Denton Woods
 // Last modified: 02/21/2009
 //
-// Filename: src-ILU/src/ilu_mipmap.c
+// Filename: src-ILU/src/ilu_mipmap.cpp
 //
 // Description: Generates mipmaps for the current image.
 //

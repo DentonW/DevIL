@@ -3,7 +3,7 @@
 // ImageLib Sources
 // Last modified: 03/0/2009
 //
-// Filename: src-IL/src/il_iff.c
+// Filename: src-IL/src/il_iff.cpp
 //
 // Description: Reads from an .iff file.  Contribution from GAIA:
 //				http://gaia.fdi.ucm.es/grupo/projects/javy/devzone.html#DevILNotes.

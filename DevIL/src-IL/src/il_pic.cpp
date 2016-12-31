@@ -1,10 +1,10 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2009 by Denton Woods
+// Copyright (C) 2000-2017 by Denton Woods
 // Last modified: 03/07/2009
 //
-// Filename: src-IL/src/il_pic.c
+// Filename: src-IL/src/il_pic.cpp
 //
 // Description: Softimage Pic (.pic) functions
 //	Lots of this code is taken from Paul Bourke's Softimage Pic code at
