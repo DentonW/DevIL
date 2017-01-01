@@ -129,7 +129,7 @@ endif(MNG_FOUND)
 if(LCMS2_FOUND)
     option(IL_NO_LCMS "Disable LCMS support (Little CMS)" 0)
     #TODO: be more clever about lcms include... it smells wrong.
-    #option(LCMS_NODIRINCLUDE "Include lcms.h instead of lcms/lcms.h" 1)
+    option(LCMS_NODIRINCLUDE "Include lcms.h instead of lcms/lcms.h" 1)
 else(LCMS2_FOUND)
     set(IL_NO_LCMS 1)
 endif(LCMS2_FOUND)
