@@ -18,6 +18,7 @@ iluEmboss
 iluEnlargeCanvas
 iluEnlargeImage
 iluEqualize
+iluEqualize2
 iluErrorString
 iluFlipImage
 iluGenImage
@@ -44,6 +45,7 @@ iluSaturate4f
 iluScaleColours
 iluScale
 iluScaleAlpha
+iluSepia
 iluSetLanguage
 iluSharpen
 iluSwapColours

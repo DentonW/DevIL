@@ -1,3 +1,9 @@
+2017-01-01 Denton Woods <doomwiz@users.sf.net>
+	* Added iluSepia and iluEqualize2
+	* Added ktx file format support
+	* Much updated CMake build system
+	* Various bugfixes from GitHub users
+
 2009-06-16 Matěj Týč <bubla@users.sf.net>
 	* m4/devil-definitions.m4: Fixed handling of nvtt and libsquish as C++
 	libraries instead of C (caused header found but could not be compiled

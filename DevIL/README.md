@@ -1,4 +1,4 @@
-Developer's Image Library version 1.7.8 Readme, Notes and Quick Use
+Developer's Image Library version 1.8.0 Readme, Notes and Quick Use
 -------------------------------------------------------------------
 
 <DZA[afk]> DevIL song: "la la la, a cross-platform image library utilizing a

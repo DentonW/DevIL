@@ -1,4 +1,4 @@
-Credits as of 02/06/2009
+Credits as of 01/01/2017
 ------------------------
 
 If I inadvertently omitted anyone's name from this list, please e-mail me at
@@ -79,7 +79,7 @@ me how Microsoft does their .bmp padding.  He then wrote most of the
 iluEqualize() code from the base code on
 http://www.manning.com/Kabir/Files.html .
 
-Joel Wilsson, alias Siigron (siigron@hotmail.com) for pointing-out several
+Joel Wilsson, alias Siigron (siigron@hotmail.com) for pointing out several
 design flaws that I (Denton) had introduced and posing very useful
 suggestions.
 
@@ -245,6 +245,8 @@ and redoing the ilutConvertToHBitmap code.  Their changes are at
 http://gaia.fdi.ucm.es/grupo/projects/javy/devzone.html#DevILNotes.
 
 Jesse Maurais for support of X11 component
+
+Ben Campbell (https://github.com/bcampbell) for overhauling the CMake build system and various bugfixes
 
 
 Translations:
