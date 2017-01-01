@@ -151,8 +151,6 @@ set(LIBDIR "../lib/")
 set(LIBDIR "${LIBDIR}${EX_PLATFORM_NAME}")
 if(UNICODE)
 	set(LIBDIR "${LIBDIR}/unicode")
-else(UNICODE)
-	set(LIBDIR "${LIBDIR}")  # Seems not to terminate properly if not Unicode
 endif(UNICODE)
 set_target_properties(IL PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIBDIR})
 set_target_properties(IL PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${LIBDIR})
