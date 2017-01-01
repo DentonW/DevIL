@@ -112,6 +112,7 @@ ilShutDown
 ilSurfaceToDxtcData
 ilTexImage
 ilTexImageDxtc
+ilTexImageSurface
 ilTypeFromExt
 ilTypeFunc
 ilLoadData

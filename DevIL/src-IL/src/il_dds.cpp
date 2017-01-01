@@ -2028,7 +2028,7 @@ ILAPI ILboolean ILAPIENTRY ilDxtcDataToImage()
 ILAPI ILboolean ILAPIENTRY ilSurfaceToDxtcData(ILenum Format)
 {
 	ILuint Size;
-	void* Data;
+	ILubyte* Data;
 	ilFreeSurfaceDxtcData();
 
 	Size = ilGetDXTCData(NULL, 0, Format);
@@ -2036,15 +2036,15 @@ ILAPI ILboolean ILAPIENTRY ilSurfaceToDxtcData(ILenum Format)
 		return IL_FALSE;
 	}
 
-	Data = ialloc(Size);
+	Data = (ILubyte*)ialloc(Size);
     
 	if (Data == NULL)
 		return IL_FALSE;
             
-	ilGetDXTCData(Data, Size, Format);
+	ilGetDXTCData((void*)Data, Size, Format);
 
 	//These have to be after the call to ilGetDXTCData()
-	iCurImage->DxtcData = (ILubyte*)Data;
+	iCurImage->DxtcData = Data;
 	iCurImage->DxtcFormat = Format;
 	iCurImage->DxtcSize = Size;
 
@@ -2139,7 +2139,7 @@ ILAPI ILboolean ILAPIENTRY ilTexImageDxtc(ILint w, ILint h, ILint d, ILenum DxtF
 	DataSize = yBlocks * LineSize * d;
 
 	Image->DxtcFormat  = DxtFormat;
-        Image->DxtcSize = DataSize;
+    Image->DxtcSize = DataSize;
 	Image->DxtcData    = (ILubyte*)ialloc(DataSize);
 
 	if (Image->DxtcData == NULL) {

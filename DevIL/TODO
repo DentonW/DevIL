@@ -11,6 +11,7 @@ Bugs:
 
 By next release:
 
+- https://www.cvedetails.com/vulnerability-list/vendor_id-8981/product_id-15876/version_id-67926/Devil-Developers-Image-Library-1.7.4.html
 - NVTT.dll as a delay-loaded DLL.
 - Update docs with next DXT code, new mipmap/cubemap access, new SaveL code.
 - Update DevIL website with file formats (psd-saving, etc.).
@@ -167,6 +168,8 @@ More involved:
 
 
 Lots of work:
+- Go through forks on GitHub to see what needs to be included in the main release
+- Thread safe version: look at https://github.com/gscept/DevIL/commit/a8bbbb934344237c362a15164b536f97f54d2cd8
 - Linux Unicode support is partially broken.
 - Write own .exr routines.
 - Native WDP support
@@ -175,7 +178,6 @@ Lots of work:
 - Give estimates for buffer sizes for ilSaveL.
 - MNG saving
 - Metadata
-- Thread safe version
 - Add flag for determining whether DDS data is outdated.
 - TIFF saving to file streams and lumps
 - Use fseek/ftell 64-bit?
@@ -183,7 +185,7 @@ Lots of work:
 - Possibly make palettes always 768 (or 1024) bytes so that it is not possible to access outside by bad data?
 - Add padding options, so that each line could be DWORD-padded, for instance.
 - Add dithering.
-- Work on making DevIL more stable.  There's probably a few places where I don't check the return value of ilNewImage, for instance.
+- Work on making DevIL more stable. There's probably a few places where I don't check the return value of ilNewImage, for instance.
 - Add support for callbacks so that users can create progress meters for loading and saving in their applications.  We could extend this idea further and allow cancellation of loading/saving images.
 - global use of restricted pointers where available (for now only il_bmp.{c,h} uses it)
 - iluScaleColours is BUGGED, doesn't handle the image with the correct type! more Bpc (except luminance and paletted one)
@@ -197,9 +199,9 @@ Lots of work:
 - Finish support for regions in ILU.
 - Add support for regions in IL.  This could be used to save only a specific portion of an image.
 - Add support for user-defined filters (possibly of a user-defined size).
-- Add more filters.  Some sites to look at are http://www.jasonwaltman.com/thesis/introduction.html http://www.dai.ed.ac.uk/CVonline/transf.htm http://www.fortunecity.com/lavendar/kane/39/ffpg.htm and http://www.opengl.org/developers/documentation/Version1.2/1.2specs/convolution_border_modes.txt .  The last link describes ways to handle borders for the convolution filters.  It might be worthwhile to allow these kinds of options.
+- Add more filters. Some sites to look at are http://www.jasonwaltman.com/thesis/introduction.html http://www.dai.ed.ac.uk/CVonline/transf.htm http://www.fortunecity.com/lavendar/kane/39/ffpg.htm and http://www.opengl.org/developers/documentation/Version1.2/1.2specs/convolution_border_modes.txt .  The last link describes ways to handle borders for the convolution filters.  It might be worthwhile to allow these kinds of options.
 - Possibly add support for other colour spaces besides RGB (CMYK, YUV, etc.)
-- Implement a scripting "language" with LUA for ILU.  This way, people can generate scripts to run a certain set of filters on all images.
+- Implement a scripting "language" with LUA for ILU. This way, people can generate scripts to run a certain set of filters on all images.
 - Look at other rescaling algorithms:
 http://java.sun.com/products/java-media/jai/forDevelopers/jai1_0guide/Geom-image-manip.doc.html
 http://java.sun.com/products/java-media/jai/forDevelopers/jai1_0guide/Geom-image-manip.doc.html#55431
@@ -207,7 +209,7 @@ http://www.npac.syr.edu/projects/nasa/MILOJE/final/node36.html
 http://www.ultranet.com/~aramini/design.html
 - ilKeyColor ilAddKey...
 - Find a way to make the filters (especially the convolution filters) work in three dimensions.
-- Make better versions of the DevIL ports of the NeHe tutorials.  Several of the tutorials don't call ilInit, for instance.
+- Make better versions of the DevIL ports of the NeHe tutorials. Several of the tutorials don't call ilInit, for instance.
 - Change parameters of iread to use ILsizei.
 - Make sure all bugs in bug tracker are squashed.
 
@@ -217,7 +219,7 @@ Questions:
 - Possibly readd VC6 projects?
 - Add BeOS support back in?
 - Create Dev-C++/MingW/Cygwin .a files for releases?
-- Does ilIsValidTga generate an unncessary IL_INVALID_EXTENSION error?
+- Does ilIsValidTga generate an unnecessary IL_INVALID_EXTENSION error?
 - Why is IL_HALF even used in ilut_directx9.c?
 - Fix problems loading .dds files on Big Endian machines (still a problem or not?)
 - Should we be calculating DXT endpoints before converting data to 565 format?

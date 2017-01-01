@@ -98,10 +98,8 @@ ILboolean iGetHdrHead(HDRHEADER *Header)
 	if (iread(&a, 1, 1) != 1)
 		return IL_FALSE;
 	while (a != '\n') {
-		if (count >= 80) {  // Line shouldn't be this long at all.
-			ilSetError(IL_INVALID_FILE_HEADER);
+		if (count >= 80)  // Line shouldn't be this long at all.
 			return IL_FALSE;
-		}
 		buff[count] = a;
 		if (iread(&a, 1, 1) != 1)
 			return IL_FALSE;
