@@ -217,10 +217,16 @@ if(IL_USE_DXTC_NVIDIA)
     list(APPEND libs ${NVTT_LIBRARY} )
 endif(IL_USE_DXTC_NVIDIA)
 
-# TODO: does Squish require linking/includes?
 if(IL_USE_DXTC_SQUISH)
     list(APPEND incs ${LIBSQUISH_INCLUDE_DIR} )
-    list(APPEND libs ${LIBSQUISH_LIBRARY} )
+    #list(APPEND libs ${LIBSQUISH_LIBRARY} )
+	# Deals with strangeness in Visual Studio linking DevIL debug to libsquish release
+	if(LIBSQUISH_LIBRARY_DEBUG)
+		set(SQUISH_LINK_LIBRARY optimized ${LIBSQUISH_LIBRARY} debug ${LIBSQUISH_LIBRARY_DEBUG})
+	else(LIBSQUISH_LIBRARY_DEBUG)
+		set(SQUISH_LINK_LIBRARY ${LIBSQUISH_LIBRARY})
+	endif(LIBSQUISH_LIBRARY_DEBUG)
+	list(APPEND libs ${SQUISH_LINK_LIBRARY} )
 endif(IL_USE_DXTC_SQUISH)
 
 
