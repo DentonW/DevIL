@@ -57,6 +57,7 @@ typedef struct KTX_HEAD
 //#define I_GL_3_BYTES                        0x1408
 //#define I_GL_4_BYTES                        0x1409
 #define I_GL_DOUBLE                         0x140A
+#define I_GL_HALF                           0x140B
 #define I_GL_ALPHA                          0x1906
 #define I_GL_RGB                            0x1907
 #define I_GL_RGBA                           0x1908
@@ -169,8 +170,8 @@ ILboolean iLoadKtxInternal()
 {
 	KTX_HEAD	Header;
 	ILuint		imageSize;
-	ILenum		Format;
-	ILubyte		Bpp;
+	ILenum		Format, Type;
+	ILubyte		Bpp, Bpc;
 	char		FileIdentifier[12] = {
 		//0xAB, 0x4B, 0x54, 0x58, 0x20, 0x31, 0x31, 0xBB, 0x0D, 0x0A, 0x1A, 0x0A
 		'«', 'K', 'T', 'X', ' ', '1', '1', '»', '\r', '\n', '\x1A', '\n'
@@ -207,11 +208,13 @@ ILboolean iLoadKtxInternal()
 		return IL_FALSE;
 	}
 	//@TODO: Additional types
-	if (Header.glType != I_GL_UNSIGNED_BYTE || Header.glTypeSize != 1) {
+	//@TODO: Really needed with the switch statements below?
+	if ((Header.glType != I_GL_UNSIGNED_BYTE && Header.glType != I_GL_HALF) || Header.glTypeSize != 1) {
 		ilSetError(IL_ILLEGAL_FILE_VALUE);
 		return IL_FALSE;
 	}
 	//@TODO: Additional formats
+	//@TODO: Really needed with the switch statements below?
 	if (Header.glFormat <= I_GL_ALPHA || Header.glFormat >= I_GL_LUMINANCE_ALPHA || Header.glInternalFormat != Header.glFormat /*|| Header.glBaseInternalFormat != Header.glFormat*/) {
 		ilSetError(IL_ILLEGAL_FILE_VALUE);
 		return IL_FALSE;
@@ -226,42 +229,57 @@ ILboolean iLoadKtxInternal()
 	if (iseek(Header.bytesOfKeyValueData, IL_SEEK_CUR))
 		return IL_FALSE;
 
-	switch (Header.glFormat)
+	switch (Header.glType)
 	{
-		case I_GL_LUMINANCE:
-			Bpp = 1;
-			Format = IL_LUMINANCE;
+		case I_GL_UNSIGNED_BYTE:
+			Bpc = 1;
+			Type = IL_UNSIGNED_BYTE;
 			break;
-		case IL_LUMINANCE_ALPHA:
-			Bpp = 2;
-			Format = IL_LUMINANCE_ALPHA;
-			break;
-		case I_GL_RGB:
-			Bpp = 3;
-			Format = IL_RGB;
-			break;
-		case I_GL_RGBA:
-			Bpp = 4;
-			Format = IL_RGBA;
+		case I_GL_HALF:
+			Bpc = 2;
+			Type = IL_HALF;
 			break;
 		default:
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
 			return IL_FALSE;
 	}
 
+	switch (Header.glFormat)
+	{
+	case I_GL_LUMINANCE:
+		Bpp = 1;
+		Format = IL_LUMINANCE;
+		break;
+	case I_GL_LUMINANCE_ALPHA:
+		Bpp = 2;
+		Format = IL_LUMINANCE_ALPHA;
+		break;
+	case I_GL_RGB:
+		Bpp = 3;
+		Format = IL_RGB;
+		break;
+	case I_GL_RGBA:
+		Bpp = 4;
+		Format = IL_RGBA;
+		break;
+	default:
+		ilSetError(IL_ILLEGAL_FILE_VALUE);
+		return IL_FALSE;
+	}
+
 	//@TODO: More than just RGBA
-	if (!ilTexImage(Header.pixelWidth, Header.pixelHeight, 1, Bpp, Format, IL_UNSIGNED_BYTE, NULL)) {
+	if (!ilTexImage(Header.pixelWidth, Header.pixelHeight, 1, Bpp, Format, Type, NULL)) {
 		return IL_FALSE;
 	}
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 
 	imageSize = GetLittleUInt();
-	if (imageSize != Header.pixelWidth * Header.pixelHeight * Bpp) {
+	if (imageSize != Header.pixelWidth * Header.pixelHeight * Bpp * Bpc) {
 		ilSetError(IL_ILLEGAL_FILE_VALUE);
 		return IL_FALSE;
 	}
 
-	if (iread(iCurImage->Data, Bpp, Header.pixelWidth * Header.pixelHeight) != Header.pixelWidth * Header.pixelHeight)
+	if (iread(iCurImage->Data, Bpp*Bpc, Header.pixelWidth * Header.pixelHeight) != Header.pixelWidth * Header.pixelHeight)
 		return IL_FALSE;
 
 	return ilFixImage();

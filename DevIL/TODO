@@ -9,6 +9,16 @@ Bugs:
 - Conversion to IL_ALPHA can be flipped?
 
 
+File formats:
+
+
+Interfaces:
+- Newer DirectX
+- Newer OpenGL
+- Newer Windows
+- Vulkan
+
+
 By next release:
 
 - https://www.cvedetails.com/vulnerability-list/vendor_id-8981/product_id-15876/version_id-67926/Devil-Developers-Image-Library-1.7.4.html
@@ -28,6 +38,7 @@ By next release:
 
 
 Easier:
+- PAM file format (http://netpbm.sourceforge.net/doc/pam.html)
 - Find out what is different in the VTF headers that are 64 bytes.
 - Make DXT1 decompression function that does not do alpha.
 - Implement ilIsValid calls for ROT.
@@ -170,6 +181,7 @@ More involved:
 Lots of work:
 - Go through forks on GitHub to see what needs to be included in the main release
 - Thread safe version: look at https://github.com/gscept/DevIL/commit/a8bbbb934344237c362a15164b536f97f54d2cd8
+- Half precision floating point type
 - Linux Unicode support is partially broken.
 - Write own .exr routines.
 - Native WDP support

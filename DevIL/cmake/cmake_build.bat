@@ -1,5 +1,7 @@
 rem @echo off
 
+cd ..
+
 rem BUILD 1 - 32-BIT ANSI
 rem =====================
 
