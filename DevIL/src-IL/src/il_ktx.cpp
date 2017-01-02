@@ -14,6 +14,7 @@
 #include "il_internal.h"
 #ifndef IL_NO_KTX
 #include "il_bits.h"
+#include "rg_etc1.h"
 
 
 ILboolean	iIsValidKtx(void);
@@ -58,11 +59,25 @@ typedef struct KTX_HEAD
 //#define I_GL_4_BYTES                        0x1409
 #define I_GL_DOUBLE                         0x140A
 #define I_GL_HALF                           0x140B
+
 #define I_GL_ALPHA                          0x1906
 #define I_GL_RGB                            0x1907
 #define I_GL_RGBA                           0x1908
 #define I_GL_LUMINANCE                      0x1909
 #define I_GL_LUMINANCE_ALPHA                0x190A
+// From gl2ext.h
+#define I_GL_ETC1_RGB8_OES                  0x8D64
+// From https://www.opengl.org/registry/specs/ARB/ES3_compatibility.txt
+#define I_GL_COMPRESSED_RGB8_ETC2                             0x9274
+#define I_GL_COMPRESSED_SRGB8_ETC2                            0x9275
+#define I_GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2         0x9276
+#define I_GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2        0x9277
+#define I_GL_COMPRESSED_RGBA8_ETC2_EAC                        0x9278
+#define I_GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC                 0x9279
+#define I_GL_COMPRESSED_R11_EAC                               0x9270
+#define I_GL_COMPRESSED_SIGNED_R11_EAC                        0x9271
+#define I_GL_COMPRESSED_RG11_EAC                              0x9272
+#define I_GL_COMPRESSED_SIGNED_RG11_EAC                       0x9273
 
 
 
@@ -172,6 +187,7 @@ ILboolean iLoadKtxInternal()
 	ILuint		imageSize;
 	ILenum		Format, Type;
 	ILubyte		Bpp, Bpc;
+	ILboolean	Compressed;
 	char		FileIdentifier[12] = {
 		//0xAB, 0x4B, 0x54, 0x58, 0x20, 0x31, 0x31, 0xBB, 0x0D, 0x0A, 0x1A, 0x0A
 		'«', 'K', 'T', 'X', ' ', '1', '1', '»', '\r', '\n', '\x1A', '\n'
@@ -201,24 +217,22 @@ ILboolean iLoadKtxInternal()
 	Header.numberOfFaces = GetLittleUInt();
 	Header.numberOfMipmapLevels = GetLittleUInt();
 	Header.bytesOfKeyValueData = GetLittleUInt();
-
+	imageSize = GetLittleUInt();
 
 	if (memcmp(Header.identifier, FileIdentifier, 12) || Header.endianness != 0x04030201) {
 		ilSetError(IL_ILLEGAL_FILE_VALUE);
 		return IL_FALSE;
 	}
-	//@TODO: Additional types
-	//@TODO: Really needed with the switch statements below?
-	if ((Header.glType != I_GL_UNSIGNED_BYTE && Header.glType != I_GL_HALF) || Header.glTypeSize != 1) {
+
+	if (Header.glTypeSize != 1) {  //@TODO: Cases when this is different?
 		ilSetError(IL_ILLEGAL_FILE_VALUE);
 		return IL_FALSE;
 	}
-	//@TODO: Additional formats
-	//@TODO: Really needed with the switch statements below?
-	if (Header.glFormat <= I_GL_ALPHA || Header.glFormat >= I_GL_LUMINANCE_ALPHA || Header.glInternalFormat != Header.glFormat /*|| Header.glBaseInternalFormat != Header.glFormat*/) {
+	//@TODO: Really needed?
+	/*if (Header.glInternalFormat != Header.glFormat || Header.glBaseInternalFormat != Header.glFormat) {
 		ilSetError(IL_ILLEGAL_FILE_VALUE);
 		return IL_FALSE;
-	}
+	}*/
 
 	//@TODO: Mipmaps, etc.
 	if (Header.numberOfArrayElements != 0 || Header.numberOfFaces != 1 || Header.numberOfMipmapLevels != 1) {
@@ -229,58 +243,124 @@ ILboolean iLoadKtxInternal()
 	if (iseek(Header.bytesOfKeyValueData, IL_SEEK_CUR))
 		return IL_FALSE;
 
-	switch (Header.glType)
+	//@TODO: Additional formats
+	if (Header.glFormat != 0)  // Uncompressed formats
 	{
-		case I_GL_UNSIGNED_BYTE:
-			Bpc = 1;
-			Type = IL_UNSIGNED_BYTE;
-			break;
-		case I_GL_HALF:
-			Bpc = 2;
-			Type = IL_HALF;
-			break;
-		default:
-			ilSetError(IL_ILLEGAL_FILE_VALUE);
-			return IL_FALSE;
+		switch (Header.glFormat)
+		{
+			case I_GL_LUMINANCE:
+				Bpp = 1;
+				Format = IL_LUMINANCE;
+				Compressed = IL_FALSE;
+				break;
+			case I_GL_LUMINANCE_ALPHA:
+				Bpp = 2;
+				Format = IL_LUMINANCE_ALPHA;
+				Compressed = IL_FALSE;
+				break;
+			case I_GL_RGB:
+				Bpp = 3;
+				Format = IL_RGB;
+				Compressed = IL_FALSE;
+				break;
+			case I_GL_RGBA:
+				Bpp = 4;
+				Format = IL_RGBA;
+				Compressed = IL_FALSE;
+				break;
+			default:
+				ilSetError(IL_ILLEGAL_FILE_VALUE);
+				return IL_FALSE;
+		}
+	}
+	else  // Compressed formats - Note that type must be set here!
+	{
+		switch (Header.glInternalFormat)
+		{
+			case I_GL_ETC1_RGB8_OES:
+				Bpp = 4;
+				Format = IL_RGBA;
+				Compressed = IL_TRUE;
+				Type = IL_UNSIGNED_BYTE;
+				break;
+			default:
+				ilSetError(IL_ILLEGAL_FILE_VALUE);
+				return IL_FALSE;
+		}
 	}
 
-	switch (Header.glFormat)
-	{
-	case I_GL_LUMINANCE:
-		Bpp = 1;
-		Format = IL_LUMINANCE;
-		break;
-	case I_GL_LUMINANCE_ALPHA:
-		Bpp = 2;
-		Format = IL_LUMINANCE_ALPHA;
-		break;
-	case I_GL_RGB:
-		Bpp = 3;
-		Format = IL_RGB;
-		break;
-	case I_GL_RGBA:
-		Bpp = 4;
-		Format = IL_RGBA;
-		break;
-	default:
-		ilSetError(IL_ILLEGAL_FILE_VALUE);
-		return IL_FALSE;
-	}
-
-	//@TODO: More than just RGBA
 	if (!ilTexImage(Header.pixelWidth, Header.pixelHeight, 1, Bpp, Format, Type, NULL)) {
 		return IL_FALSE;
 	}
 	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
 
-	imageSize = GetLittleUInt();
-	if (imageSize != Header.pixelWidth * Header.pixelHeight * Bpp * Bpc) {
-		ilSetError(IL_ILLEGAL_FILE_VALUE);
-		return IL_FALSE;
-	}
+	if (!Compressed)
+	{
+		//@TODO: Additional types
+		switch (Header.glType)
+		{
+			case I_GL_UNSIGNED_BYTE:
+				Bpc = 1;
+				Type = IL_UNSIGNED_BYTE;
+				break;
+			case I_GL_HALF:
+				Bpc = 2;
+				Type = IL_HALF;
+				break;
+			default:
+				ilSetError(IL_ILLEGAL_FILE_VALUE);
+				return IL_FALSE;
+		}
 
-	if (iread(iCurImage->Data, Bpp*Bpc, Header.pixelWidth * Header.pixelHeight) != Header.pixelWidth * Header.pixelHeight)
-		return IL_FALSE;
+		if (imageSize != Header.pixelWidth * Header.pixelHeight * Bpp * Bpc) {
+			ilSetError(IL_ILLEGAL_FILE_VALUE);
+			return IL_FALSE;
+		}
+
+		if (iread(iCurImage->Data, Bpp*Bpc, Header.pixelWidth * Header.pixelHeight) != Header.pixelWidth * Header.pixelHeight)
+			return IL_FALSE;
+	}
+	else {  // Compressed formats require different handling
+		switch (Header.glInternalFormat)
+		{
+			case I_GL_ETC1_RGB8_OES:
+				ILubyte *FullBuffer = (ILubyte*)ialloc(Header.pixelWidth * Header.pixelHeight / 2);
+				ILuint UnpackBuff[16*4];
+				ILuint *Data = (ILuint*)iCurImage->Data;  // Easier copies
+
+				if (FullBuffer == NULL)
+					return IL_FALSE;
+				if (imageSize != Header.pixelWidth * Header.pixelHeight / 2) {
+					ilSetError(IL_ILLEGAL_FILE_VALUE);
+					return IL_FALSE;
+				}
+				if (iread(FullBuffer, 1, imageSize) != imageSize)
+					return IL_FALSE;
+
+				ILuint BlockPos = 0;
+				for (ILuint y = 0; y < iCurImage->Height; y+=4)
+				{
+					for (ILuint x = 0; x < iCurImage->Width; x+=4)
+					{
+						ILuint ImagePos = y * iCurImage->Width + x;
+						rg_etc1::unpack_etc1_block(&FullBuffer[BlockPos], (ILuint*)UnpackBuff, false);
+						ILuint c = 0;
+						for (ILuint y1 = 0; y1 < 4; y1++)
+						{
+							for (ILuint x1 = 0; x1 < 4; x1++)
+							{
+								Data[ImagePos + y1*iCurImage->Width + x1] = UnpackBuff[c++];
+							}
+						}
+						BlockPos += 8;
+					}
+				}
+
+				ifree(FullBuffer);
+				break;
+		}
+		//return IL_FALSE;
+	}
 
 	return ilFixImage();
 }
