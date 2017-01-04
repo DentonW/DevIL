@@ -58,6 +58,7 @@ source_group("Text Files" FILES ${DevIL_TXT} )
 
 if(BUILD_SHARED_LIBS)
     add_library(IL SHARED ${DevIL_SRCS} ${DevIL_INC} ${DevIL_RSRC} ${DevIL_TXT})
+    set_target_properties(IL PROPERTIES SOVERSION 1)
 else(BUILD_SHARED_LIBS)
     add_library(IL ${DevIL_SRCS} ${DevIL_INC} ${DevIL_RSRC} ${DevIL_TXT})
 endif(BUILD_SHARED_LIBS)
