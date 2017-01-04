@@ -245,7 +245,7 @@ fill_input_buffer (j_decompress_ptr cinfo)
 		src->buffer[0] = (JOCTET) 0xFF;
 		src->buffer[1] = (JOCTET) JPEG_EOI;
 		nbytes = 2;
-		return IL_FALSE;
+		return (boolean)IL_FALSE;
 	}
 	if (nbytes < INPUT_BUF_SIZE) {
 		ilGetError();  // Gets rid of the IL_FILE_READ_ERROR.
@@ -255,7 +255,7 @@ fill_input_buffer (j_decompress_ptr cinfo)
 	src->pub.bytes_in_buffer = nbytes;
 	src->start_of_file = IL_FALSE;
 
-	return IL_TRUE;
+	return (boolean)IL_TRUE;
 }
 
 
