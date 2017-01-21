@@ -125,7 +125,7 @@ ILenum ILAPIENTRY ilTypeFromExt(ILconst_string FileName)
 	else if (!iStrCmp(Ext, IL_TEXT("pix")))
 		Type = IL_PIX;
 	else if (!iStrCmp(Ext, IL_TEXT("pbm")) || !iStrCmp(Ext, IL_TEXT("pgm")) ||
-		!iStrCmp(Ext, IL_TEXT("pnm")) || !iStrCmp(Ext, IL_TEXT("ppm")))
+		!iStrCmp(Ext, IL_TEXT("pnm")) || !iStrCmp(Ext, IL_TEXT("ppm")) || !iStrCmp(Ext, IL_TEXT("pam")))
 		Type = IL_PNM;
 	else if (!iStrCmp(Ext, IL_TEXT("psd")) || !iStrCmp(Ext, IL_TEXT("pdd")))
 		Type = IL_PSD;
@@ -2055,6 +2055,10 @@ ILboolean ILAPIENTRY ilLoadImage(ILconst_string FileName)
 			goto finish;
 		}
 		if (!iStrCmp(Ext, IL_TEXT("ppm"))) {
+			bRet = ilLoadPnm(FileName);
+			goto finish;
+		}
+		if (!iStrCmp(Ext, IL_TEXT("pam"))) {
 			bRet = ilLoadPnm(FileName);
 			goto finish;
 		}

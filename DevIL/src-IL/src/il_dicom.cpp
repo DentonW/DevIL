@@ -427,7 +427,7 @@ ILboolean GetUID(ILubyte *UID)
 		return IL_FALSE;
 
 	ValLen = GetLittleUShort();
-	if (ValLen > 64)
+	if (ValLen > 64)  // Addresses this vulnerability: https://vuldb.com/?id.51054
 		return IL_FALSE;
 	if (iread(UID, ValLen, 1) != 1)
 		return IL_FALSE;

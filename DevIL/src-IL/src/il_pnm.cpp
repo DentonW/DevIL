@@ -17,11 +17,17 @@
 #include "il_pnm.h"
 #include <limits.h>  // for maximum values
 #include <ctype.h>
+#include <string>
 #include "il_bits.h"
+
+using namespace std;
+
 
 // According to the ppm specs, it's 70, but PSP
 //  likes to output longer lines.
 #define MAX_BUFFER 180  
+
+//@TODO: Get rid of these globals
 static ILbyte LineBuffer[MAX_BUFFER];
 static ILbyte SmallBuff[MAX_BUFFER];
 
@@ -38,7 +44,8 @@ ILboolean ilIsValidPnm(ILconst_string FileName)
 	if (   !iCheckExtension(FileName, IL_TEXT("pbm"))
 		&& !iCheckExtension(FileName, IL_TEXT("pgm"))
 		&& !iCheckExtension(FileName, IL_TEXT("ppm"))
-		&& !iCheckExtension(FileName, IL_TEXT("pnm"))) {
+		&& !iCheckExtension(FileName, IL_TEXT("pnm"))
+		&& !iCheckExtension(FileName, IL_TEXT("pam"))) {
 		ilSetError(IL_INVALID_EXTENSION);
 		return bPnm;
 	}
@@ -107,6 +114,7 @@ ILboolean iCheckPnm(char Header[2])
 		case '4':
 		case '5':
 		case '6':
+		case '7':
 			return IL_TRUE;
 	}
 
@@ -179,7 +187,8 @@ ILboolean iLoadPnmInternal()
 		return IL_FALSE;
 	}
 
-	switch( SmallBuff[1] ) {
+	switch (SmallBuff[1])
+	{
 		case '1':
 			Info.Type = IL_PBM_ASCII;
 			break;
@@ -202,6 +211,9 @@ ILboolean iLoadPnmInternal()
 		case '6':
 			Info.Type = IL_PPM_BINARY;
 			break;
+		case '7':
+			//Info.Type = IL_PAM;
+			return ilReadPam();
 		default:
 			ilSetError(IL_INVALID_FILE_HEADER);
 			return IL_FALSE;
@@ -225,29 +237,40 @@ ILboolean iLoadPnmInternal()
 	}
 
 	// Retrieve the maximum colour component value
-	if (Info.Type != IL_PBM_ASCII && Info.Type != IL_PBM_BINARY) {
+	if (Info.Type != IL_PBM_ASCII && Info.Type != IL_PBM_BINARY)
+	{
 		if (iGetWord(IL_TRUE) == IL_FALSE)
 			return IL_FALSE;
-		if ((Info.MaxColour = atoi((const char*)SmallBuff)) == 0) {
+		if ((Info.MaxColour = atoi((const char*)SmallBuff)) == 0)
+		{
 			ilSetError(IL_INVALID_FILE_HEADER);
 			return IL_FALSE;
 		}
-	} else {
+	}
+	else
+	{
 		Info.MaxColour = 1;
 	}
 	
 	if (Info.Type == IL_PBM_ASCII || Info.Type == IL_PBM_BINARY ||
-		Info.Type == IL_PGM_ASCII || Info.Type == IL_PGM_BINARY) {
-		if (Info.Type == IL_PGM_ASCII) {
+		Info.Type == IL_PGM_ASCII || Info.Type == IL_PGM_BINARY)
+	{
+		if (Info.Type == IL_PGM_ASCII)
+		{
 			Info.Bpp = Info.MaxColour < 256 ? 1 : 2;
-		} else {
+		}
+		else
+		{
 			Info.Bpp = 1;
 		}
-	} else {
+	}
+	else
+	{
 		Info.Bpp = 3;
 	}
 	
-	switch (Info.Type) {
+	switch (Info.Type)
+	{
 		case IL_PBM_ASCII:
 		case IL_PGM_ASCII:
 		case IL_PPM_ASCII:
@@ -260,18 +283,22 @@ ILboolean iLoadPnmInternal()
 		case IL_PPM_BINARY:
 			PmImage = ilReadBinaryPpm(&Info);
 			break;
+		/*case IL_PAM:
+			PmImage = ilReadPam(&Info);*/
 		default:
 			return IL_FALSE;
 	}
 
-	if (PmImage == NULL) {
+	if (PmImage == NULL)
+	{
 	    iCurImage->Format = ilGetFormatBpp(iCurImage->Bpp);
 	    ilSetError(IL_FILE_READ_ERROR);
 	    return IL_FALSE;
 	}
 
 	// Is this conversion needed?  Just 0's and 1's shows up as all black
-	if (Info.Type == IL_PBM_ASCII) {
+	if (Info.Type == IL_PBM_ASCII)
+	{
 		PbmMaximize(PmImage);
 	}
 
@@ -363,7 +390,7 @@ ILimage *ilReadAsciiPpm(PPMINFO *Info)
 
 ILimage *ilReadBinaryPpm(PPMINFO *Info)
 {
-	ILuint	Size;
+	ILuint Size;
 
 	Size = Info->Width * Info->Height * Info->Bpp;
 
@@ -382,7 +409,7 @@ ILimage *ilReadBinaryPpm(PPMINFO *Info)
 	ILuint size = itell();
 	iseek(size-Size,IL_SEEK_SET);
 	*/
-	if (iread(iCurImage->Data, 1, Size ) != Size) {
+	if (iread(iCurImage->Data, 1, Size) != Size) {
 		ilCloseImage(iCurImage);	
 		return NULL;
 	}
@@ -413,6 +440,143 @@ ILimage *ilReadBitPbm(PPMINFO *Info)
 }
 
 
+ILboolean ilReadPam()
+{
+	PPMINFO Info;
+	string TempStr;
+	ILuint Size;
+
+	memset(&Info, 0, sizeof(PPMINFO));
+
+	while (!ieof())
+	{
+		if (iGetWord(IL_FALSE) == IL_FALSE)
+			return IL_FALSE;
+		if (!strncmp((const char*)SmallBuff, "ENDHDR", 6))
+			break;
+
+		TempStr = (char*)SmallBuff;  // Save the first identifier of the line
+		if (iGetWord(IL_FALSE) == IL_FALSE)
+			return IL_FALSE;
+		if (!strncmp(TempStr.c_str(), "WIDTH", 5))
+			Info.Width = atoi((const char*)SmallBuff);
+		else if (!strncmp(TempStr.c_str(), "HEIGHT", 6))
+			Info.Height = atoi((const char*)SmallBuff);
+		else if (!strncmp(TempStr.c_str(), "DEPTH", 5))
+			Info.Depth = atoi((const char*)SmallBuff);
+		else if (!strncmp(TempStr.c_str(), "MAXVAL", 6))
+			Info.MaxColour = atoi((const char*)SmallBuff);
+		else if (!strncmp(TempStr.c_str(), "TUPLTYPE", 8))
+			Info.TuplType = DecodeTupleType(string((char*)SmallBuff));
+	}
+
+	//@TODO: Handle other max colors and tuple types
+	if (Info.Width == 0 || Info.Height == 0 || Info.Depth == 0 || Info.Depth > 4 || Info.TuplType == 0)
+	{
+		ilSetError(IL_INVALID_FILE_HEADER);
+		return IL_FALSE;
+	}
+	switch (Info.MaxColour)
+	{
+		case 255:
+			Info.Type = IL_UNSIGNED_BYTE;
+			Size = 1;
+			break;
+		case 65535:
+			Info.Type = IL_UNSIGNED_SHORT;
+			Size = 2;
+			break;
+		default:
+			ilSetError(IL_INVALID_FILE_HEADER);
+			return IL_FALSE;
+	}
+
+	switch (Info.TuplType)
+	{
+		case PAM_GRAY:
+			if (Info.Depth != 1)
+			{
+				ilSetError(IL_INVALID_FILE_HEADER);
+				return IL_FALSE;
+			}
+			if (!ilTexImage(Info.Width, Info.Height, 1, Info.Depth, 0, Info.Type, NULL))
+				return IL_FALSE;
+			Size *= Info.Width * Info.Height * Info.Depth;
+			iCurImage->Format = IL_LUMINANCE;
+			break;
+
+		case PAM_GRAY_ALPHA:
+			if (Info.Depth != 2)
+			{
+				ilSetError(IL_INVALID_FILE_HEADER);
+				return IL_FALSE;
+			}
+			if (!ilTexImage(Info.Width, Info.Height, 1, Info.Depth, 0, Info.Type, NULL))
+				return IL_FALSE;
+			Size *= Info.Width * Info.Height * Info.Depth;
+			iCurImage->Format = IL_LUMINANCE_ALPHA;
+			break;
+
+		case PAM_RGB:
+			if (Info.Depth != 3)
+			{
+				ilSetError(IL_INVALID_FILE_HEADER);
+				return IL_FALSE;
+			}
+			if (!ilTexImage(Info.Width, Info.Height, 1, Info.Depth, 0, Info.Type, NULL))
+				return IL_FALSE;
+			Size *= Info.Width * Info.Height * Info.Depth;
+			iCurImage->Format = IL_RGB;
+			break;
+
+		case PAM_RGB_ALPHA:
+			if (Info.Depth != 4)
+			{
+				ilSetError(IL_INVALID_FILE_HEADER);
+				return IL_FALSE;
+			}
+			if (!ilTexImage(Info.Width, Info.Height, 1, Info.Depth, 0, Info.Type, NULL))
+				return IL_FALSE;
+			Size *= Info.Width * Info.Height * Info.Depth;
+			iCurImage->Format = IL_RGBA;
+			break;
+
+		default:
+			//@TODO: Handle black and white case
+			ilSetError(IL_INVALID_FILE_HEADER);
+			return IL_FALSE;
+	}
+	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
+
+	if (iread(iCurImage->Data, 1, Size) != Size)
+	{
+		ilCloseImage(iCurImage);
+		return NULL;
+	}
+
+	return IL_TRUE;
+}
+
+
+ILint DecodeTupleType(string &TupleStr)
+{
+	if (TupleStr == "BLACKANDWHITE")
+		return PAM_BW;
+	else if (TupleStr == "GRAYSCALE")
+		return PAM_GRAY;
+	else if (TupleStr == "RGB")
+		return PAM_RGB;
+	else if (TupleStr == "BLACKANDWHITE_ALPHA")
+		return PAM_BW_ALPHA;
+	else if (TupleStr == "GRAYSCALE_ALPHA")
+		return PAM_GRAY_ALPHA;
+	else if (TupleStr == "RGB_ALPHA")
+		return PAM_RGB_ALPHA;
+
+	return 0;
+}
+
+
 ILboolean iGetWord(ILboolean final)
 {
 	ILint WordPos = 0;
@@ -423,12 +587,14 @@ ILboolean iGetWord(ILboolean final)
 	if (ieof())
 		return IL_FALSE;
 
-	while (Looping) {
-		while ((Current = igetc()) != IL_EOF && Current != '\n' && Current != '#' && Current != ' ') {
+	while (Looping)
+	{
+		while ((Current = igetc()) != IL_EOF && Current != '\n' && Current != '#' && Current != ' ')
+		{
 			if (WordPos >= MAX_BUFFER)  // We have hit the maximum line length.
 				return IL_FALSE;
 
-			if (!isalnum(Current)) {
+			if (!isalnum(Current) && Current != '_') {
 				if (Started) {
 					Looping = IL_FALSE;
 					break;
