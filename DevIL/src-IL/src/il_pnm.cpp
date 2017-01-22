@@ -551,10 +551,10 @@ ILboolean ilReadPam()
 	if (iread(iCurImage->Data, 1, Size) != Size)
 	{
 		ilCloseImage(iCurImage);
-		return NULL;
+		return IL_FALSE;
 	}
 
-	return IL_TRUE;
+	return ilFixImage();
 }
 
 
