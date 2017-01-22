@@ -409,33 +409,40 @@ ILboolean iLoadDdsInternal()
 	CompData = NULL;
 	Image = NULL;
 
-	if (iCurImage == NULL) {
+	if (iCurImage == NULL)
+	{
 		ilSetError(IL_ILLEGAL_OPERATION);
 		return IL_FALSE;
 	}
 
-	if (!iGetDdsHead(&Head)) {
+	if (!iGetDdsHead(&Head))
+	{
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
 	}
-	if (!iCheckDds(&Head)) {
+	if (!iCheckDds(&Head))
+	{
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
 	}
 
 	BlockSize = DecodePixelFormat(&CompFormat);
-	if (CompFormat == PF_UNKNOWN) {
+	if (CompFormat == PF_UNKNOWN)
+	{
 		ilSetError(IL_INVALID_FILE_HEADER);
 		return IL_FALSE;
 	}
 
-	if (CompFormat == PF_DX10) {
+	if (CompFormat == PF_DX10)
+	{
 		IsDXT10 = IL_TRUE;
-		if (!iGetDXT10Head(&HeadDXT10)) {
+		if (!iGetDXT10Head(&HeadDXT10))
+		{
 			ilSetError(IL_INVALID_FILE_HEADER);
 			return IL_FALSE;
 		}
-		if (!iCheckDxt10(&HeadDXT10)) {
+		if (!iCheckDxt10(&HeadDXT10))
+		{
 			ilSetError(IL_INVALID_FILE_HEADER);
 			return IL_FALSE;
 		}
@@ -1121,7 +1128,8 @@ ILboolean ReadMipmaps(ILuint CompFormat, ILboolean IsDXT10)
 	}
 
 	LastLinear = Head.LinearSize;
-	for (i = 0; i < Head.MipMapCount - 1; i++) {
+	for (i = 0; i < Head.MipMapCount - 1; i++)
+	{
 		Depth = Depth / 2;
 		Width = Width / 2;
 		Height = Height / 2;

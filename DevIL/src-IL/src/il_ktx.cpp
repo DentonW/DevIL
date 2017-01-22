@@ -19,6 +19,7 @@
 
 ILboolean	iIsValidKtx(void);
 ILboolean	iLoadKtxInternal();
+ILboolean	iKtxReadMipmaps(ILboolean Compressed, ILuint NumMips);
 
 
 #ifdef _MSC_VER
@@ -217,7 +218,6 @@ ILboolean iLoadKtxInternal()
 	Header.numberOfFaces = GetLittleUInt();
 	Header.numberOfMipmapLevels = GetLittleUInt();
 	Header.bytesOfKeyValueData = GetLittleUInt();
-	imageSize = GetLittleUInt();
 
 	if (memcmp(Header.identifier, FileIdentifier, 12) || Header.endianness != 0x04030201) {
 		ilSetError(IL_ILLEGAL_FILE_VALUE);
@@ -229,13 +229,15 @@ ILboolean iLoadKtxInternal()
 		return IL_FALSE;
 	}
 	//@TODO: Really needed?
-	/*if (Header.glInternalFormat != Header.glFormat || Header.glBaseInternalFormat != Header.glFormat) {
+	/*if (Header.glInternalFormat != Header.glFormat || Header.glBaseInternalFormat != Header.glFormat)
+	{
 		ilSetError(IL_ILLEGAL_FILE_VALUE);
 		return IL_FALSE;
 	}*/
 
 	//@TODO: Mipmaps, etc.
-	if (Header.numberOfArrayElements != 0 || Header.numberOfFaces != 1 || Header.numberOfMipmapLevels != 1) {
+	if (Header.numberOfArrayElements != 0 || Header.numberOfFaces != 1 /*|| Header.numberOfMipmapLevels != 1*/)
+	{
 		ilSetError(IL_ILLEGAL_FILE_VALUE);
 		return IL_FALSE;
 	}
@@ -289,11 +291,6 @@ ILboolean iLoadKtxInternal()
 		}
 	}
 
-	if (!ilTexImage(Header.pixelWidth, Header.pixelHeight, 1, Bpp, Format, Type, NULL)) {
-		return IL_FALSE;
-	}
-	iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;
-
 	if (!Compressed)
 	{
 		//@TODO: Additional types
@@ -312,15 +309,28 @@ ILboolean iLoadKtxInternal()
 				return IL_FALSE;
 		}
 
-		if (imageSize != Header.pixelWidth * Header.pixelHeight * Bpp * Bpc) {
+		if (!ilTexImage(Header.pixelWidth, Header.pixelHeight, 1, Bpp, Format, Type, NULL))
+			return IL_FALSE;
+
+		if (!iKtxReadMipmaps(Compressed, Header.numberOfMipmapLevels))
+			return IL_FALSE;
+
+		//iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;  //@TODO: Correct for all?
+	}
+	else  // Compressed formats require different handling
+	{
+		//@TODO: Add support for compressed mipmaps
+		if (Header.numberOfMipmapLevels != 1)
+		{
 			ilSetError(IL_ILLEGAL_FILE_VALUE);
 			return IL_FALSE;
 		}
 
-		if (iread(iCurImage->Data, Bpp*Bpc, Header.pixelWidth * Header.pixelHeight) != Header.pixelWidth * Header.pixelHeight)
+		imageSize = GetLittleUInt();
+
+		if (!ilTexImage(Header.pixelWidth, Header.pixelHeight, 1, Bpp, Format, Type, NULL))
 			return IL_FALSE;
-	}
-	else {  // Compressed formats require different handling
+
 		switch (Header.glInternalFormat)
 		{
 			case I_GL_ETC1_RGB8_OES:
@@ -359,11 +369,79 @@ ILboolean iLoadKtxInternal()
 				ifree(FullBuffer);
 				break;
 		}
-		//return IL_FALSE;
+
+		iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;  //@TODO: Correct for all?
 	}
 
 	return ilFixImage();
 }
 
+
+ILboolean iKtxReadMipmaps(ILboolean Compressed, ILuint NumMips)
+{
+	ILimage *Image = iCurImage;
+	ILuint Width = iCurImage->Width, Height = iCurImage->Height;
+	ILuint imageSize, Padding, Pos;
+
+	for (ILuint Mip = 0; Mip < NumMips; Mip++)
+	{
+		imageSize = GetLittleUInt();
+		Padding = 3 - ((Image->Bps + 3) % 4);
+
+		if (imageSize != Image->SizeOfData + Padding*Image->Height)
+		{
+			ilSetError(IL_ILLEGAL_FILE_VALUE);
+			goto mip_fail;
+		}
+
+		// Note: The KTX spec at https://www.khronos.org/opengles/sdk/tools/KTX/file_format_spec/
+		//  seems to imply dword-alignment of the entire image.
+		if (Image->Bps % 4 == 0)  // Required to be dword-aligned
+		{
+			if (iread(Image->Data, 1, Image->SizeOfData) != Image->SizeOfData)
+				return IL_FALSE;
+		}
+		else  // Since not dword-aligned, have to read each line separately.
+		{
+			Pos = 0;
+			for (ILuint h = 0; h < Height; h++)
+			{
+				if (iread(&Image->Data[Pos], 1, Image->Bps) != Image->Bps)
+					return IL_FALSE;
+				iseek(Padding, IL_SEEK_CUR);
+				Pos += Image->Bps;
+			}
+
+		}
+
+		Image->Origin = IL_ORIGIN_LOWER_LEFT;  //@TODO: Correct for all?
+		Width = Width / 2;
+		Height = Height / 2;
+
+		if (Mip < NumMips - 1)
+		{
+			Image->Mipmaps = ilNewImage(Width, Height, 1, Image->Bpp, Image->Bpc);
+			if (Image->Mipmaps == NULL)
+				goto mip_fail;
+			Image->Mipmaps->Format = Image->Format;
+			Image->Mipmaps->Type = Image->Type;
+			Image = Image->Mipmaps;
+		}
+	}
+
+	return IL_TRUE;
+
+mip_fail:
+	Image = iCurImage;
+	ILimage *StartImage = Image->Mipmaps, *TempImage;
+	while (StartImage) {
+		TempImage = StartImage;
+		StartImage = StartImage->Mipmaps;
+		ifree(TempImage);
+	}
+
+	Image->Mipmaps = NULL;
+	return IL_FALSE;
+}
 
 #endif//IL_NO_KTX

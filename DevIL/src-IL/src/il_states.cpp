@@ -419,7 +419,8 @@ void ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param)
 
 	*Param = 0;
 
-	switch (Mode) {
+	switch (Mode)
+	{
 		// Integer values
 		case IL_COMPRESS_MODE:
 			*Param = ilStates[ilCurrentPos].ilCompression;
