@@ -19,7 +19,8 @@
 
 ILboolean	iIsValidKtx(void);
 ILboolean	iLoadKtxInternal();
-ILboolean	iKtxReadMipmaps(ILboolean Compressed, ILuint NumMips);
+ILboolean	iKtxReadMipmaps(ILboolean Compressed, ILuint NumMips, ILenum Origin);
+ILboolean	iKtxKeyValueData(ILuint bytesOfKeyValueData, ILenum &Origin);
 
 
 #ifdef _MSC_VER
@@ -186,7 +187,7 @@ ILboolean iLoadKtxInternal()
 {
 	KTX_HEAD	Header;
 	ILuint		imageSize;
-	ILenum		Format, Type;
+	ILenum		Format, Type, Origin;
 	ILubyte		Bpp, Bpc;
 	ILboolean	Compressed;
 	char		FileIdentifier[12] = {
@@ -224,7 +225,8 @@ ILboolean iLoadKtxInternal()
 		return IL_FALSE;
 	}
 
-	if (Header.glTypeSize != 1) {  //@TODO: Cases when this is different?
+	if (Header.glTypeSize != 1)  //@TODO: Cases when this is different?
+	{
 		ilSetError(IL_ILLEGAL_FILE_VALUE);
 		return IL_FALSE;
 	}
@@ -241,8 +243,7 @@ ILboolean iLoadKtxInternal()
 		ilSetError(IL_ILLEGAL_FILE_VALUE);
 		return IL_FALSE;
 	}
-	//@TODO: Parse this data
-	if (iseek(Header.bytesOfKeyValueData, IL_SEEK_CUR))
+	if (!iKtxKeyValueData(Header.bytesOfKeyValueData, Origin))
 		return IL_FALSE;
 
 	//@TODO: Additional formats
@@ -304,6 +305,7 @@ ILboolean iLoadKtxInternal()
 				Bpc = 2;
 				Type = IL_HALF;
 				break;
+			//case I_GL_SHORT:
 			default:
 				ilSetError(IL_ILLEGAL_FILE_VALUE);
 				return IL_FALSE;
@@ -311,11 +313,8 @@ ILboolean iLoadKtxInternal()
 
 		if (!ilTexImage(Header.pixelWidth, Header.pixelHeight, 1, Bpp, Format, Type, NULL))
 			return IL_FALSE;
-
-		if (!iKtxReadMipmaps(Compressed, Header.numberOfMipmapLevels))
+		if (!iKtxReadMipmaps(Compressed, Header.numberOfMipmapLevels, Origin))
 			return IL_FALSE;
-
-		//iCurImage->Origin = IL_ORIGIN_LOWER_LEFT;  //@TODO: Correct for all?
 	}
 	else  // Compressed formats require different handling
 	{
@@ -370,14 +369,61 @@ ILboolean iLoadKtxInternal()
 				break;
 		}
 
-		iCurImage->Origin = IL_ORIGIN_UPPER_LEFT;  //@TODO: Correct for all?
+		iCurImage->Origin = Origin;  //@TODO: Correct for all?
 	}
 
 	return ilFixImage();
 }
 
 
-ILboolean iKtxReadMipmaps(ILboolean Compressed, ILuint NumMips)
+// There are multiple items that can be in the key values, but all we care about
+//  right now is the orientation/origin data.
+ILboolean iKtxKeyValueData(ILuint bytesOfKeyValueData, ILenum &Origin)
+{
+	ILubyte	*KeyValueData;
+	ILuint	Pos = 0, Length;
+
+	Origin = IL_ORIGIN_UPPER_LEFT;  // KTX specs declare that this is the default
+
+	if (bytesOfKeyValueData == 0)
+		return IL_TRUE;
+
+	KeyValueData = (ILubyte*)ialloc(bytesOfKeyValueData);
+	if (KeyValueData == NULL)
+		return IL_FALSE;
+
+	if (iread(KeyValueData, 1, bytesOfKeyValueData) != bytesOfKeyValueData)
+		return IL_FALSE;
+
+	// Just a very rudimentary check on the origin values
+	while (Pos < bytesOfKeyValueData)
+	{
+		Length = *((ILuint*)&KeyValueData[Pos]);
+		if (Length >= 22)  // Size needed for the KTXorientation key
+		{
+			if (!strncmp((const char*)&KeyValueData[Pos+4], "KTXorientation", 14))
+			{
+				// Found the orientation key we need
+				ILubyte TopDownOrient = KeyValueData[Pos+25];
+				if (TopDownOrient == 'd')
+					Origin = IL_ORIGIN_UPPER_LEFT;
+				else if (TopDownOrient == 'u')
+					Origin = IL_ORIGIN_LOWER_LEFT;
+			}
+		}
+
+		Pos += Length;
+		if (Pos >= bytesOfKeyValueData)
+			break;
+	}
+
+	ifree(KeyValueData);
+
+	return IL_TRUE;
+}
+
+
+ILboolean iKtxReadMipmaps(ILboolean Compressed, ILuint NumMips, ILenum Origin)
 {
 	ILimage *Image = iCurImage;
 	ILuint Width = iCurImage->Width, Height = iCurImage->Height;
@@ -395,7 +441,7 @@ ILboolean iKtxReadMipmaps(ILboolean Compressed, ILuint NumMips)
 		}
 
 		// Note: The KTX spec at https://www.khronos.org/opengles/sdk/tools/KTX/file_format_spec/
-		//  seems to imply dword-alignment of the entire image.
+		//  seems to imply dword-alignment of the entire image, but this is per scanline.
 		if (Image->Bps % 4 == 0)  // Required to be dword-aligned
 		{
 			if (iread(Image->Data, 1, Image->SizeOfData) != Image->SizeOfData)
@@ -411,10 +457,9 @@ ILboolean iKtxReadMipmaps(ILboolean Compressed, ILuint NumMips)
 				iseek(Padding, IL_SEEK_CUR);
 				Pos += Image->Bps;
 			}
-
 		}
 
-		Image->Origin = IL_ORIGIN_LOWER_LEFT;  //@TODO: Correct for all?
+		Image->Origin = Origin;
 		Width = Width / 2;
 		Height = Height / 2;
 
