@@ -6,7 +6,9 @@ include (TestBigEndian)
 option(BUILD_SHARED_LIBS "Build with shared (.DLL .SO) libraries." ON)
 
 # libSquish not currently supported by CMake
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${DevIL_SOURCE_DIR}/cmake/Modules")
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 file(GLOB DevIL_SRCS src/*.cpp)
 file(GLOB DevIL_INC include/*.h ../include/config.h ../include/IL/devil_internal_exports.h ../include/IL/il.h)
