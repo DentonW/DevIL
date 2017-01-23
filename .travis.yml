@@ -1,0 +1,15 @@
+#
+# libdevil travis hook
+#
+
+language: cpp
+
+compiler:
+    - clang
+    - gcc
+before_script:
+    - sudo apt-get install libpng12-dev zlib1g-dev libjpeg-dev libtiff4-dev libmng-dev
+    - sudo apt-get install libjasper-dev liblcms1-dev freeglut3-dev libsdl1.2-dev
+script:
+    - cmake DevIL
+    - make all
