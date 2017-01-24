@@ -467,7 +467,7 @@ ILboolean ilReadPam()
 		else if (!strncmp(TempStr.c_str(), "MAXVAL", 6))
 			Info.MaxColour = atoi((const char*)SmallBuff);
 		else if (!strncmp(TempStr.c_str(), "TUPLTYPE", 8))
-			Info.TuplType = DecodeTupleType(string((char*)SmallBuff));
+			Info.TuplType = DecodeTupleType(TempStr);
 	}
 
 	//@TODO: Handle other max colors and tuple types
