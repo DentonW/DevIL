@@ -1,0 +1,12 @@
+add_subdirectory(Benchmark)
+add_subdirectory(UnitTest)
+# TODO
+#add_subdirectory(DDrawTest)
+#add_subdirectory(Fltk)
+#add_subdirectory(format_test)
+#add_subdirectory(MdiTest)
+#add_subdirectory(old)
+#add_subdirectory(Stress)
+#add_subdirectory(Unzip)
+#add_subdirectory(URar)
+#add_subdirectory(VolTex)
