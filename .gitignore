@@ -1,0 +1,10 @@
+CMakeFiles/
+Makefile
+cmake_install.cmake
+*.swp
+
+/src-IL/IL.pc
+/src-ILU/ILU.pc
+/src-ILUT/ILUT.pc
+/DevIL/src-IL/include/config.h
+/CMakeCache.txt

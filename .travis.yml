@@ -1,0 +1,16 @@
+#
+# libdevil travis hook
+#
+
+language: cpp
+dist: trusty
+sudo: required
+
+compiler:
+    - clang
+    - gcc
+before_script:
+    - sudo apt-get install libpng12-dev zlib1g-dev libjpeg-dev libtiff4-dev libmng-dev libjasper-dev liblcms1-dev freeglut3-dev libsdl1.2-dev liblcms2-dev libcppunit-dev
+script:
+    - cmake DevIL
+    - make all UnitTest benchmark

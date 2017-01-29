@@ -632,7 +632,7 @@ ILuint DecodePixelFormat(ILuint *CompFormat)
 //--------------------------------------------------------------------------------------
 // Return the BPP for a particular format.
 //--------------------------------------------------------------------------------------
-static size_t BitsPerPixel(_In_ DXGI_FORMAT fmt)
+static size_t BitsPerPixel(DXGI_FORMAT fmt)
 {
 	switch (fmt)
 	{
