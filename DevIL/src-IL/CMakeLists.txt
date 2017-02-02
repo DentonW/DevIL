@@ -219,11 +219,11 @@ set_target_properties(IL PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIBDIR})
 set_target_properties(IL PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${LIBDIR})
 set_target_properties(IL PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIBDIR})
 
-if(WIN32)
+if(MSVC)
 	# Linux uses libIL.so, libILU.so, and libILUT.so, but Windows uses
 	#  DevIL.dll, ILU.dll, and ILUT.dll.
 	set_target_properties(IL PROPERTIES OUTPUT_NAME "DevIL")
-endif(WIN32)
+endif(MSVC)
 
 if(UNICODE)
 	MESSAGE("DevIL, Compiling IL Unicode")
