@@ -266,7 +266,7 @@ if(NOT IL_NO_LCMS)
 endif(NOT IL_NO_LCMS)
 
 if(NOT IL_NO_EXR)
-  list(APPEND incs ${OPENEXR_INCLUDE_DIRS} )
+  list(APPEND incs ${OPENEXR_INCLUDE_DIR} )
   list(APPEND libs ${OPENEXR_LIBRARIES} )
 endif(NOT IL_NO_EXR)
 
