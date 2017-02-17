@@ -42,9 +42,13 @@ source_group("Source Files" FILES src/*.cpp)
 source_group("Header Files" FILES ${ILUT_INC} )
 source_group("Resource Files" FILES ${ILUT_RSRC} )
 
-# Remove SHARED to create a static library
-add_library(ILUT SHARED ${ILUT_SRCS} ${ILUT_INC} ${ILUT_RSRC})
-set_target_properties(ILUT PROPERTIES SOVERSION 1)
+if(BUILD_SHARED_LIBS)
+    add_library(ILUT SHARED ${ILUT_SRCS} ${ILUT_INC} ${ILUT_RSRC})
+    set_target_properties(ILUT PROPERTIES SOVERSION 1)
+else(BUILD_SHARED_LIBS)
+    add_library(ILUT ${ILUT_SRCS} ${ILUT_INC} ${ILUT_RSRC})
+endif(BUILD_SHARED_LIBS)
+
 
 ## add link sub library info
 target_link_libraries(ILUT
