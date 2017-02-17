@@ -42,9 +42,13 @@ source_group("Source Files" FILES src/*.cpp)
 source_group("Header Files" FILES ${ILU_INC} )
 source_group("Resource Files" FILES ${ILU_RSRC} )
 
-# Remove SHARED to create a static library
-add_library(ILU SHARED ${ILU_SRCS} ${ILU_INC} ${ILU_RSRC})
-set_target_properties(ILU PROPERTIES SOVERSION 1)
+if(BUILD_SHARED_LIBS)
+    add_library(ILU SHARED ${ILU_SRCS} ${ILU_INC} ${ILU_RSRC})
+    set_target_properties(ILU PROPERTIES SOVERSION 1)
+else(BUILD_SHARED_LIBS)
+    add_library(ILU ${ILU_SRCS} ${ILU_INC} ${ILU_RSRC})
+endif(BUILD_SHARED_LIBS)
+
 
 
 ## ILU requires IL
