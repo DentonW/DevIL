@@ -761,10 +761,10 @@ ILboolean ILAPIENTRY ilutLoadResource(HINSTANCE hInst, ILint ID, ILstring Resour
 }
 
 
-#if !defined(_WIN32_WCE) && !(defined(_WIN32) && defined(__GNUC__))
-#define BUFFSIZE 8192  // Change to suit the efficiency.
 ILboolean ILAPIENTRY ilutWinLoadUrl(ILstring Url)
 {
+#if !defined(_WIN32_WCE) && !(defined(_WIN32) && defined(__GNUC__))
+#define BUFFSIZE 8192  // Change to suit the efficiency.
 	HINTERNET	Handle, UrlHandle;
 	DWORD		BytesRead = 0, Context = 1;
 	ILubyte		Buff[BUFFSIZE], *Buffer, *TempBuff;
@@ -847,10 +847,10 @@ ILboolean ILAPIENTRY ilutWinLoadUrl(ILstring Url)
 	}
 
 	ifree(Buffer);
+#endif
 
 	return IL_TRUE;
 }
-#endif
 
 
 #endif//ILUT_USE_WIN32
