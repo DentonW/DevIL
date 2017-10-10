@@ -4,6 +4,30 @@ project(ImageLib)
 # include our custom modules
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
 
+
+# From http://stackoverflow.com/questions/17317350/compiling-32-and-64-bit
+if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+    MESSAGE( "DevIL, 64 bit compiler detected" )
+    SET( EX_PLATFORM 64 )
+    SET( EX_PLATFORM_NAME "x64" )
+else( CMAKE_SIZEOF_VOID_P EQUAL 8 ) 
+    MESSAGE( "DevIL, 32 bit compiler detected" )
+    SET( EX_PLATFORM 32 )
+    SET( EX_PLATFORM_NAME "x86" )
+endif( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+
+# Sets the output folders
+set(LIBDIR "../lib/")
+set(LIBDIR "${LIBDIR}${EX_PLATFORM_NAME}")
+if(UNICODE)
+	set(LIBDIR "${LIBDIR}/unicode")
+endif(UNICODE)
+
+# Sets the output folders
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${LIBDIR})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${LIBDIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LIBDIR})
+
 add_subdirectory(src-IL)
 
 option(IL_BUILD_ILU "build ILU library" ON)
