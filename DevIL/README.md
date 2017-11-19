@@ -1,10 +1,11 @@
 Developer's Image Library version 1.8.0 Readme, Notes and Quick Use
 -------------------------------------------------------------------
 
-<DZA[afk]> DevIL song: "la la la, a cross-platform image library utilizing a
-           simple syntax to load, save, convert, manipulate, filter and display
-           a variety of images with ease, la la la"
+<DZA[afk]> DevIL song:
 
+> la la la, a cross-platform image library utilizing a
+> simple syntax to load, save, convert, manipulate, filter and display
+> a variety of images with ease, la la la"
 
 What is it?
 -----------
@@ -60,10 +61,10 @@ Errors:
 -------
 
 All errors generated inside DevIL, along with illegal parameters passed to
-DevIL functions are caught and passed to ilSetError(), an internal library
-function.  The calling program can call ilGetError() to get the value of the
-error generated.  Error types are defined in il.h, using the 0x501 - 0x5FF
-range.  ilGetError() will return 0 (IL_NO_ERROR) if no error has occurred.
+DevIL functions are caught and passed to `ilSetError()`, an internal library
+function.  The calling program can call `ilGetError()` to get the value of the
+error generated.  Error types are defined in il.h, using the `0x501` - `0x5FF`
+range. `ilGetError()` will return `0` (`IL_NO_ERROR`) if no error has occurred.
 
 
 Basic Usage:
@@ -72,11 +73,12 @@ Basic Usage:
 This demonstrates loading an image through DevIL for OpenGL. Don't forget to 
 call ilInit before you before you do anything:
 
+```
 #include <IL/il.h>
 #include <IL/ilu.h>
 #include <IL/ilut.h>
 
-...
+// ...
 
 ILuint devilError;
 
@@ -90,7 +92,7 @@ if (devilError != IL_NO_ERROR) {
   exit (2);
 }
 
-....
+// ...
 
 ILuint devilID;
 
@@ -105,11 +107,11 @@ if (devilError != IL_NO_ERROR) {
   exit (2);
 }
 
-....
+// ...
 
 ilutRenderer(IL_OPENGL);  // Switch the renderer
 
-....
+// ...
 
 GLuint openglID, openglError;
 
@@ -134,7 +136,7 @@ if (openglError != GL_NO_ERROR) {
 
 glDeleteTextures(1, &openglID);
 ilDeleteImages  (1, &devilID);
-
+```
 
 More Examples:
 ---------
@@ -143,7 +145,7 @@ The TestIL project is included to test features of DevIL.
 
 DevIL includes a project called GLTest.  This is a simple test of DevIL's
 capabilities.  All it does it load any image and displays it in a window
-created by FreeGlut, which is available on http://freeglut.sourceforge.net. It
+created by FreeGlut, which is available on [SourceForge](http://freeglut.sourceforge.net). It
 is also included to let the user have an idea of what the library can really
 be used for.
 
