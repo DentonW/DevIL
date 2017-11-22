@@ -36,11 +36,18 @@ if(WIN32)
 		add_definitions(-DIL_DLL -DJPEGSTATIC)
         # note: .def not used for now - __declspec() in source handles export.
         set(DevIL_SRCS ${DevIL_SRCS} msvc/il.def)
-		if(UNICODE)
-			set(DevIL_RSRC ${DevIL_RSRC} "msvc/resources/IL Logo.ico" "msvc/IL Unicode.rc")
-		else(UNICODE)
-			set(DevIL_RSRC ${DevIL_RSRC} "msvc/resources/IL Logo.ico" "msvc/IL.rc")
-		endif(UNICODE)
+		if(${MSVC_VERSION} GREATER 1899) # MSVC 2015 or later
+			option(DEVIL_INCLUDE_RESOURCES "DevIL: compile-in resources" OFF)
+		else()
+			option(DEVIL_INCLUDE_RESOURCES "DevIL: compile-in resources" ON)
+		endif()
+		if(DEVIL_INCLUDE_RESOURCES)
+			if(UNICODE)
+				set(DevIL_RSRC ${DevIL_RSRC} "msvc/resources/IL Logo.ico" "msvc/IL Unicode.rc")
+			else(UNICODE)
+				set(DevIL_RSRC ${DevIL_RSRC} "msvc/resources/IL Logo.ico" "msvc/IL.rc")
+			endif(UNICODE)
+		endif(DEVIL_INCLUDE_RESOURCES)
         set(DevIL_TXT ${DevIL_TXT} ../AUTHORS ../ChangeLog ../CREDITS ../libraries.txt ../README.md ../README.cmake ../TODO)
 #		SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:msvcrt.lib ")
 		set(CMAKE_C_FLAGS_RELEASE "/MT /O2")
@@ -293,11 +300,11 @@ if(IL_USE_DXTC_SQUISH)
 endif(IL_USE_DXTC_SQUISH)
 
 
-include_directories(${incs})
+include_directories(${incs} "${CMAKE_CURRENT_BINARY_DIR}/include")
 target_link_libraries(IL ${libs})
 
 # generate config.h
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/config.h.cmake.in ${CMAKE_CURRENT_SOURCE_DIR}/include/config.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/config.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/include/config.h)
 
 
 
