@@ -15,16 +15,6 @@ file(GLOB DevIL_INC include/*.h ../include/config.h ../include/IL/devil_internal
 file(GLOB DevIL_RSRC)
 file(GLOB DevIL_TXT)
 
-# From http://stackoverflow.com/questions/17317350/compiling-32-and-64-bit
-if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-    MESSAGE( "DevIL, 64 bit compiler detected" )
-    SET( EX_PLATFORM 64 )
-    SET( EX_PLATFORM_NAME "x64" )
-else( CMAKE_SIZEOF_VOID_P EQUAL 8 ) 
-    MESSAGE( "DevIL, 32 bit compiler detected" )
-    SET( EX_PLATFORM 32 )
-    SET( EX_PLATFORM_NAME "x86" )
-endif( CMAKE_SIZEOF_VOID_P EQUAL 8 )
 
 include_directories( include ../include )
 
@@ -209,15 +199,6 @@ if(NOT ${IL_SQUISH_LIB})
   endif(LIBSQUISH_FOUND)
 endif(NOT ${IL_SQUISH_LIB})
 
-# Sets the output folders
-set(LIBDIR "../lib/")
-set(LIBDIR "${LIBDIR}${EX_PLATFORM_NAME}")
-if(UNICODE)
-	set(LIBDIR "${LIBDIR}/unicode")
-endif(UNICODE)
-set_target_properties(IL PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIBDIR})
-set_target_properties(IL PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${LIBDIR})
-set_target_properties(IL PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIBDIR})
 
 if(MSVC)
 	# Linux uses libIL.so, libILU.so, and libILUT.so, but Windows uses
