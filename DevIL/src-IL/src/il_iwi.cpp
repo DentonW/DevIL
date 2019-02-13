@@ -22,6 +22,12 @@ typedef struct IWIHEAD
 	ILubyte		Flags;
 	ILushort	Width;
 	ILushort	Height;
+	ILubyte		Unknown1;
+	ILubyte		Unknown2;
+	ILuint		Filesize;
+	ILuint		OffsetTexture;
+	ILuint		OffsetMipmap1;
+	ILuint		OffsetMipmap2;
 } IWIHEAD;
 
 #define IWI_ARGB8	0x01
@@ -90,14 +96,18 @@ ILboolean ilIsValidIwiL(const void *Lump, ILuint Size)
 // Internal function used to get the IWI header from the current file.
 ILboolean iGetIwiHead(IWIHEAD *Header)
 {
+	//Partially based on: https://github.com/CptAsgard/CoD2Unity/blob/master/Assets/cod2iwifiles.txt
 	Header->Signature = GetLittleUInt();
 	Header->Format = igetc();
 	Header->Flags = igetc();  //@TODO: Find out what the flags mean.
 	Header->Width = GetLittleUShort();
 	Header->Height = GetLittleUShort();
-
-	// @TODO: Find out what is in the rest of the header.
-	iseek(18, IL_SEEK_CUR);
+	Header->Unknown1 = igetc();  //@TODO: Find out what this byte means.
+	Header->Unknown2 = igetc();  //@TODO: Find out what this byte means.
+	Header->Filesize = GetLittleUInt();
+	Header->OffsetTexture = GetLittleUInt();
+	Header->OffsetMipmap1 = GetLittleUInt();
+	Header->OffsetMipmap2 = GetLittleUInt();
 
 	return IL_TRUE;
 }
@@ -292,6 +302,8 @@ ILboolean IwiReadImage(ILimage *BaseImage, IWIHEAD *Header, ILuint NumMips)
 	ILubyte	*CompData = NULL;
 	ILint	i, j, k, m;
 
+	iseek(Header->OffsetTexture, IL_SEEK_SET);
+
 	for (i = NumMips; i >= 0; i--) {
 		Image = BaseImage;
 		// Go to the ith mipmap level.
@@ -299,6 +311,7 @@ ILboolean IwiReadImage(ILimage *BaseImage, IWIHEAD *Header, ILuint NumMips)
 		for (j = 0; j < i; j++)
 			Image = Image->Mipmaps;
 
+		//@TODO: Seek to the mipmap offset
 		switch (Header->Format)
 		{
 			case IWI_ARGB8: // These are all
