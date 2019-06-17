@@ -852,6 +852,8 @@ ILboolean ReadData(ILuint CompFormat, ILboolean IsDXT10)
 	else {
 		if (IsDXT10)
 			Bps = Head.LinearSize;  //@TODO: Head.RGBBitCount is always 0 from the texconv.exe tool?
+		else if ((Head.RGBBitCount == 0) && (Head.Flags1 & DDS_PITCH))
+			Bps = Head.LinearSize;  //@TODO: Microsoft recomends recomputing this instead.
 		else
 			Bps = Width * Head.RGBBitCount / 8;
 		CompSize = Bps * Height * Depth;
