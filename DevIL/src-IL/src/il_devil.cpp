@@ -187,7 +187,7 @@ ILboolean ILAPIENTRY ilTexImageSurface(ILuint Width, ILuint Height, ILuint Depth
 // Internal version of ilTexImageSurface.
 ILboolean ILAPIENTRY ilTexImageSurface_(ILimage *Image, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, void *Data)
 {
-	ILimage* mips;
+	ILimage* mipmaps;
 	ILimage* next;
 	ILimage* faces;
 	ILimage* layers;
@@ -220,7 +220,7 @@ ILboolean ILAPIENTRY ilTexImageSurface_(ILimage *Image, ILuint Width, ILuint Hei
 	return IL_FALSE;
 	}*/
 
-	mips = Image->Mipmaps;
+	mipmaps = Image->Mipmaps;
 	next = Image->Next;
 	faces = Image->Faces;
 	layers = Image->Layers;
@@ -230,7 +230,7 @@ ILboolean ILAPIENTRY ilTexImageSurface_(ILimage *Image, ILuint Width, ILuint Hei
 	retval = ilInitImage(Image, Width, Height, Depth, Bpp, Format, Type, Data);
 
 	// reset our chains
-	Image->Mipmaps = mips;
+	Image->Mipmaps = mipmaps;
 	Image->Next = next;
 	Image->Faces = faces;
 	Image->Layers = layers;
