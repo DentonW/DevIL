@@ -257,7 +257,7 @@ ILboolean iLoadBlpInternal(void)
 						break;
 					if (Image->Width == 1 && Image->Height == 1)  // Already at the smallest mipmap (1x1), so we are done.
 						break;
-					if (Header.MipOffsets[Mip] == 0 || Header.MipLengths == 0)  // No more mipmaps in the file.
+					if (Header.MipOffsets[Mip] == 0 || Header.MipLengths[Mip] == 0)  // No more mipmaps in the file.
 						break;
 				}
 
