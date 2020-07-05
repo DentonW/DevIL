@@ -223,7 +223,7 @@ METHODDEF(void)
 init_source (j_decompress_ptr cinfo)
 {
 	iread_ptr src = (iread_ptr) cinfo->src;
-	src->start_of_file = (boolean)IL_TRUE;
+	src->start_of_file = TRUE;
 }
 
 
@@ -245,7 +245,7 @@ fill_input_buffer (j_decompress_ptr cinfo)
 		src->buffer[0] = (JOCTET) 0xFF;
 		src->buffer[1] = (JOCTET) JPEG_EOI;
 		nbytes = 2;
-		return (boolean)IL_FALSE;
+		return FALSE;
 	}
 	if (nbytes < INPUT_BUF_SIZE) {
 		ilGetError();  // Gets rid of the IL_FILE_READ_ERROR.
@@ -253,9 +253,9 @@ fill_input_buffer (j_decompress_ptr cinfo)
 
 	src->pub.next_input_byte = src->buffer;
 	src->pub.bytes_in_buffer = nbytes;
-	src->start_of_file = (boolean)IL_FALSE;
+	src->start_of_file = FALSE;
 
-	return (boolean)IL_TRUE;
+	return TRUE;
 }
 
 
@@ -334,13 +334,13 @@ ILboolean iLoadJpegInternal()
 
 	if ((result = setjmp(JpegJumpBuffer) == 0) != IL_FALSE) {
 		jpeg_create_decompress(&JpegInfo);
-		JpegInfo.do_block_smoothing = (boolean)IL_TRUE;
-		JpegInfo.do_fancy_upsampling = (boolean)IL_TRUE;
+		JpegInfo.do_block_smoothing = TRUE;
+		JpegInfo.do_fancy_upsampling = TRUE;
 
 		//jpeg_stdio_src(&JpegInfo, iGetFile());
 
 		devil_jpeg_read_init(&JpegInfo);
-		jpeg_read_header(&JpegInfo, (boolean)IL_TRUE);
+		jpeg_read_header(&JpegInfo, TRUE);
 
 		result = ilLoadFromJpegStruct(&JpegInfo);
 
@@ -391,7 +391,7 @@ empty_output_buffer (j_compress_ptr cinfo)
 	iwrite(dest->buffer, 1, OUTPUT_BUF_SIZE);
 	dest->pub.next_output_byte = dest->buffer;
 	dest->pub.free_in_buffer = OUTPUT_BUF_SIZE;
-	return (boolean)IL_TRUE;
+	return TRUE;
 }
 
 METHODDEF(void)
@@ -550,16 +550,16 @@ ILboolean iSaveJpegInternal()
 	} //EXIF not present in libjpeg...
 #else*/
 	Type = Type;
-	JpegInfo.write_JFIF_header = (boolean)TRUE;
+	JpegInfo.write_JFIF_header = TRUE;
 //#endif//IL_USE_JPEGLIB_UNMODIFIED
 
 	// Set the quality output
-	jpeg_set_quality(&JpegInfo, iGetInt(IL_JPG_QUALITY), (boolean)IL_TRUE);
+	jpeg_set_quality(&JpegInfo, iGetInt(IL_JPG_QUALITY), TRUE);
 	// Sets progressive saving here
 	if (ilGetBoolean(IL_JPG_PROGRESSIVE))
 		jpeg_simple_progression(&JpegInfo);
 
-	jpeg_start_compress(&JpegInfo, (boolean)IL_TRUE);
+	jpeg_start_compress(&JpegInfo, TRUE);
 
 	//row_stride = image_width * 3;	// JSAMPLEs per row in image_buffer
 
@@ -970,7 +970,7 @@ ILboolean ilSaveFromJpegStruct(void *_JpegInfo)
 	JpegInfo->image_height = TempImage->Height;
 	JpegInfo->input_components = TempImage->Bpp;  // # of color components per pixel
 
-	jpeg_start_compress(JpegInfo, (boolean)IL_TRUE);
+	jpeg_start_compress(JpegInfo, TRUE);
 
 	//row_stride = image_width * 3;	// JSAMPLEs per row in image_buffer
 
