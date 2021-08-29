@@ -4,6 +4,8 @@ project(ImageLib)
 # include our custom modules
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
 
+include(GNUInstallDirs)
+
 add_subdirectory(src-IL)
 add_subdirectory(src-ILU)
 add_subdirectory(src-ILUT)
