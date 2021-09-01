@@ -102,7 +102,7 @@ ILboolean iGetFitsHead(FITSHEAD *Header)
 	ILenum	CardKey;
 
 //@TODO: Use something other than memset?
-	memset(Header, 0, sizeof(Header));  // Clear the header to all 0s first.
+	memset(Header, 0, sizeof(*Header));  // Clear the header to all 0s first.
 
 	do {
 		CardKey = GetCardImage(Header);
