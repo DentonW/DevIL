@@ -6,18 +6,6 @@ file(GLOB ILU_SRCS src/*.cpp)
 file(GLOB ILU_INC include/*.h ../include/IL/devil_internal_exports.h ../include/IL/ilu.h)
 file(GLOB ILU_RSRC)
 
-# From http://stackoverflow.com/questions/17317350/compiling-32-and-64-bit
-MESSAGE(" ")
-if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-    MESSAGE( "64 bit compiler detected" )
-    SET( EX_PLATFORM 64 )
-    SET( EX_PLATFORM_NAME "x64" )
-else( CMAKE_SIZEOF_VOID_P EQUAL 8 ) 
-    MESSAGE( "32 bit compiler detected" )
-    SET( EX_PLATFORM 32 )
-    SET( EX_PLATFORM_NAME "x86" )
-endif( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-
 include_directories( include ../include )
 
 # for windows add the .def and .rc files to the source list
@@ -57,16 +45,6 @@ target_link_libraries(ILU
 # (needed to support static linking?)
 configure_file( pkgconfig/ILU.pc.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/ILU.pc @ONLY)
-
-# Sets the output folders
-set(LIBDIR "../lib/")
-set(LIBDIR "${LIBDIR}${EX_PLATFORM_NAME}")
-if(UNICODE)
-	set(LIBDIR "${LIBDIR}/unicode")
-endif(UNICODE)
-set_target_properties(ILU PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIBDIR})
-set_target_properties(ILU PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${LIBDIR})
-set_target_properties(ILU PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIBDIR})
 
 if(UNICODE)
 	MESSAGE("Compiling ILU Unicode")

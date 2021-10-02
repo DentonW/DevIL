@@ -6,18 +6,6 @@ file(GLOB ILUT_SRCS src/*.cpp)
 file(GLOB ILUT_INC include/*.h ../include/IL/devil_internal_exports.h ../include/IL/ilut.h)
 file(GLOB ILUT_RSRC)
 
-# From http://stackoverflow.com/questions/17317350/compiling-32-and-64-bit
-MESSAGE(" ")
-if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-    MESSAGE( "64 bit compiler detected" )
-    SET( EX_PLATFORM 64 )
-    SET( EX_PLATFORM_NAME "x64" )
-else( CMAKE_SIZEOF_VOID_P EQUAL 8 ) 
-    MESSAGE( "32 bit compiler detected" )
-    SET( EX_PLATFORM 32 )
-    SET( EX_PLATFORM_NAME "x86" )
-endif( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-
 include_directories( include ../include )
 
 # Find glut
@@ -78,15 +66,6 @@ target_link_libraries(ILUT
 configure_file( pkgconfig/ILUT.pc.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/ILUT.pc @ONLY)
 
-# Sets the output folders
-set(LIBDIR "../lib/")
-set(LIBDIR "${LIBDIR}${EX_PLATFORM_NAME}")
-if(UNICODE)
-	set(LIBDIR "${LIBDIR}/unicode")
-endif(UNICODE)
-set_target_properties(ILUT PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIBDIR})
-set_target_properties(ILUT PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${LIBDIR})
-set_target_properties(ILUT PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIBDIR})
 
 if(UNICODE)
 	MESSAGE("Compiling ILUT Unicode")
