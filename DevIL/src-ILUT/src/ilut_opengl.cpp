@@ -84,6 +84,7 @@ void *aglGetProcAddress( const GLubyte *name ) {
 
 static ILboolean HasCubemapHardware = IL_FALSE;
 static ILboolean HasNonPowerOfTwoHardware = IL_FALSE;
+static ILboolean HasBTPCHardware = IL_FALSE;
 #if defined(_WIN32) || defined(_WIN64) || defined(linux) || defined(__APPLE__)
 	ILGLTEXIMAGE3DARBPROC			ilGLTexImage3D = NULL;
 	ILGLTEXSUBIMAGE3DARBPROC		ilGLTexSubImage3D = NULL;
@@ -170,6 +171,8 @@ ILboolean ilutGLInit()
 		HasCubemapHardware = IL_TRUE;
 	if (IsExtensionSupported("GL_ARB_texture_non_power_of_two"))
 		HasNonPowerOfTwoHardware = IL_TRUE;
+	if (IsExtensionSupported("GL_ARB_texture_compression_bptc"))
+		HasBTPCHardware = IL_TRUE;
 	
 	return IL_TRUE;
 }
@@ -241,6 +244,20 @@ ILuint GLGetDXTCNum(ILenum DXTCFormat)
 	return DXTCFormat;
 }
 
+ILuint GLGetDXGINum(ILenum DXGIFormat)
+{
+	switch (DXGIFormat)
+	{
+	case IL_DXGI_BC7_UNORM:
+		DXGIFormat = 0x8E8C;
+		break;
+	case IL_DXGI_BC7_UNORM_SRGB:
+		DXGIFormat = 0x8E8D;
+		break;
+	}
+	return DXGIFormat;
+}
+
 
 // We assume *all* states have been set by the user, including 2D texturing!
 ILboolean ILAPIENTRY ilutGLTexImage_(GLuint Level, GLuint Target, ILimage *Image)
@@ -263,9 +280,23 @@ ILboolean ILAPIENTRY ilutGLTexImage_(GLuint Level, GLuint Target, ILimage *Image
 	if (ilutGetBoolean(ILUT_GL_USE_S3TC) && ilGLCompressed2D != NULL) {
 		if (Image->DxtcData != NULL && Image->DxtcSize != 0) {
 			DXTCFormat = GLGetDXTCNum(Image->DxtcFormat);
-			ilGLCompressed2D(Target, Level, DXTCFormat, Image->Width,
-				Image->Height, 0, Image->DxtcSize, Image->DxtcData);
-			return IL_TRUE;
+			if (DXTCFormat == IL_DXT_NO_COMP && Image->DxgiFormat != IL_DXGI_UNKNOWN)
+			{
+				if (HasBTPCHardware)
+				{
+					DXTCFormat = GLGetDXGINum(Image->DxgiFormat);
+					ilGLCompressed2D(Target, Level, DXTCFormat, Image->Width,
+						Image->Height, 0, Image->DxtcSize, Image->DxtcData);
+					return IL_TRUE;
+				}
+				// Fallthrough if not supported
+			}
+			else
+			{
+				ilGLCompressed2D(Target, Level, DXTCFormat, Image->Width,
+					Image->Height, 0, Image->DxtcSize, Image->DxtcData);
+				return IL_TRUE;
+			}
 		}
 
 		if (ilutGetBoolean(ILUT_GL_GEN_S3TC)) {
