@@ -686,6 +686,7 @@ ILAPI ILboolean ILAPIENTRY ilGetBoolean(ILenum Mode);
 ILAPI void      ILAPIENTRY ilGetBooleanv(ILenum Mode, ILboolean *Param);
 ILAPI ILubyte*  ILAPIENTRY ilGetData(void);
 ILAPI ILuint    ILAPIENTRY ilGetDXTCData(void *Buffer, ILuint BufferSize, ILenum DXTCFormat);
+ILAPI ILubyte*	ILAPIENTRY ilGetKeptDXTCData(ILuint* DXTCSize, ILenum* DXTCFormat, ILenum* DXGIFormat);
 ILAPI ILenum    ILAPIENTRY ilGetError(void);
 ILAPI ILint     ILAPIENTRY ilGetInteger(ILenum Mode);
 ILAPI void      ILAPIENTRY ilGetIntegerv(ILenum Mode, ILint *Param);

@@ -362,6 +362,13 @@ ILuint ILAPIENTRY ilGetDXTCData(void *Buffer, ILuint BufferSize, ILenum DXTCForm
 	return retVal;
 }
 
+ILAPI ILubyte* ILAPIENTRY ilGetKeptDXTCData(ILuint* DXTCSize, ILenum* DXTCFormat, ILenum* DXGIFormat)
+{
+	*DXTCSize = iCurImage->DxtcSize;
+	*DXTCFormat = iCurImage->DxtcFormat;
+	*DXGIFormat = iCurImage->DxgiFormat;
+	return iCurImage->DxtcData;
+}
 
 // Added the next two functions based on Charles Bloom's rant at
 //  http://cbloomrants.blogspot.com/2008/12/12-08-08-dxtc-summary.html.
