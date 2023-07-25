@@ -362,12 +362,29 @@ ILuint ILAPIENTRY ilGetDXTCData(void *Buffer, ILuint BufferSize, ILenum DXTCForm
 	return retVal;
 }
 
-ILAPI ILubyte* ILAPIENTRY ilGetKeptDXTCData(ILuint* DXTCSize, ILenum* DXTCFormat, ILenum* DXGIFormat)
+ILAPI void ILAPIENTRY ilGetKeptDXTCData(ILubyte** DXTCData, ILuint* DXTCMipMapCount, ILuint* DXTCSize, ILenum* DXTCFormat, ILenum* DXGIFormat)
 {
-	*DXTCSize = iCurImage->DxtcSize;
+	ILuint mipMapCount = 1;
+	ILimage* mipmap = iCurImage;
+	if (DXTCData == nullptr)
+	{
+		while (mipmap->Mipmaps)
+		{
+			++mipMapCount;
+			mipmap = mipmap->Mipmaps;
+		}
+		*DXTCMipMapCount = mipMapCount;
+		return;
+	}
+
 	*DXTCFormat = iCurImage->DxtcFormat;
 	*DXGIFormat = iCurImage->DxgiFormat;
-	return iCurImage->DxtcData;
+	for (int i = 0; i < *DXTCMipMapCount && mipmap; ++i)
+	{
+		DXTCData[i] = mipmap->DxtcData;
+		DXTCSize[i] = mipmap->DxtcSize;
+		mipmap = mipmap->Mipmaps;
+	}
 }
 
 // Added the next two functions based on Charles Bloom's rant at
