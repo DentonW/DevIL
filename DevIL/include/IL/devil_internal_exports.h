@@ -45,6 +45,8 @@ extern "C" {
 #define IL_MAX(a,b) (((a) > (b)) ? (a) : (b))
 #define IL_MIN(a,b) (((a) < (b)) ? (a) : (b))
 
+#define IL_SWAP(T,a,b) {T t = a; a = b; b = t;}
+
 
 //! Basic Palette struct
 typedef struct ILpal
@@ -86,6 +88,7 @@ typedef struct ILimage
 	ILuint			OffY;        //!< y-offset of the image
 	ILubyte*        DxtcData;    //!< compressed data
 	ILenum          DxtcFormat;  //!< compressed data format
+	ILenum          DxgiFormat;  //!< compressed data format
 	ILuint          DxtcSize;    //!< compressed data size
 } ILimage;
 

@@ -24,6 +24,8 @@
 //	too strictly while reading.
 
 
+#include "bc7decomp.h"
+
 #include "il_internal.h"
 #ifndef IL_NO_DDS
 #include "il_dds.h"
@@ -446,11 +448,13 @@ ILboolean iLoadDdsInternal()
 			ilSetError(IL_INVALID_FILE_HEADER);
 			return IL_FALSE;
 		}
+		BlockSize = GetDX10BlockSize();
 
 		CompFormat = HeadDXT10.dxgiFormat;
 	}
 	else
 	{
+
 	}
 
 	// Needed for DXT10?
@@ -623,6 +627,18 @@ ILuint DecodePixelFormat(ILuint *CompFormat)
 		BlockSize = (Head.Width * Head.Height * Head.Depth * (Head.RGBBitCount >> 3));
 	}
 
+	return BlockSize;
+}
+
+ILuint GetDX10BlockSize()
+{
+	ILuint BlockSize = ((Head.Width + 3) / 4) * ((Head.Height + 3) / 4) * Head.Depth;
+	switch (HeadDXT10.dxgiFormat)
+	{
+	case DXGI_FORMAT_BC7_UNORM:
+	case DXGI_FORMAT_BC7_UNORM_SRGB:
+		BlockSize *= 16;
+	}
 	return BlockSize;
 }
 
@@ -889,6 +905,7 @@ ILboolean AllocImage(ILuint CompFormat, ILboolean IsDXT10)
 
 	if (!IsDXT10)
 	{
+		iCurImage->DxgiFormat = IL_DXGI_UNKNOWN;
 		switch (CompFormat)
 		{
 			case PF_RGB:
@@ -982,6 +999,22 @@ ILboolean AllocImage(ILuint CompFormat, ILboolean IsDXT10)
 					return IL_FALSE;
 				break;
 
+			case DXGI_FORMAT_BC7_TYPELESS:
+			case DXGI_FORMAT_BC7_UNORM:
+			case DXGI_FORMAT_BC7_UNORM_SRGB:
+				if (!ilTexImage(Width, Height, Depth, channels, format, IL_UNSIGNED_BYTE, NULL))
+					return IL_FALSE;
+				if (ilGetInteger(IL_KEEP_DXTC_DATA) == IL_TRUE && CompData) {
+					iCurImage->DxtcData = (ILubyte*)ialloc(Head.LinearSize);
+					if (iCurImage->DxtcData == NULL)
+						return IL_FALSE;
+					iCurImage->DxtcFormat = IL_DXT_NO_COMP;
+					iCurImage->DxgiFormat = CompFormat;
+					iCurImage->DxtcSize = Head.LinearSize;
+					memcpy(iCurImage->DxtcData, CompData, iCurImage->DxtcSize);
+				}
+				break;
+
 			default:
 				ilSetError(IL_INVALID_FILE_HEADER);
 				return IL_FALSE;
@@ -1010,9 +1043,20 @@ ILboolean AllocImage(ILuint CompFormat, ILboolean IsDXT10)
  */
 ILboolean DdsDecompress(ILuint CompFormat, ILboolean IsDXT10)
 {
+	if (Image->DxtcData && ilGetInteger(IL_SKIP_DXTC_DECOMPRESS) == IL_TRUE)
+		return IL_TRUE;
+
 	if (IsDXT10)
-	{  //@TODO: Put in compressed formats
-		return DecompressARGBDX10(CompFormat);
+	{  //@TODO: Put in all compressed formats
+		switch (CompFormat)
+		{
+		case DXGI_FORMAT_BC7_TYPELESS:
+		case DXGI_FORMAT_BC7_UNORM:
+		case DXGI_FORMAT_BC7_UNORM_SRGB:
+			return DecompressBC7UNORM(Image, CompData);
+		default:
+			return DecompressARGBDX10(CompFormat);
+		}
 	}
 
 	switch (CompFormat)
@@ -1077,9 +1121,6 @@ ILboolean ReadMipmaps(ILuint CompFormat, ILboolean IsDXT10)
 
 	ILboolean isCompressed = IL_FALSE;
 
-	if (IsDXT10)  //@TODO: Add in mipmap support
-		return IL_TRUE;
-
 	Bpp = iCompFormatToBpp(CompFormat);
 	Channels = iCompFormatToChannelCount(CompFormat);
 	Bpc = iCompFormatToBpc(CompFormat);
@@ -1092,8 +1133,21 @@ ILboolean ReadMipmaps(ILuint CompFormat, ILboolean IsDXT10)
 	//if (Head.Flags1 & DDS_LINEARSIZE) {
 	//	CompFactor = (Width * Height * Depth * Bpp) / Head.LinearSize;
 	//}
-	switch (CompFormat)
+	if (IsDXT10)
 	{
+		switch (CompFormat)
+		{
+		case DXGI_FORMAT_BC7_UNORM:
+		case DXGI_FORMAT_BC7_UNORM_SRGB:
+			CompFactor = 4;
+			isCompressed = IL_TRUE;
+			break;
+		}
+	}
+	else
+	{
+		switch (CompFormat)
+		{
 		case PF_DXT1:
 			// This is officially 6, we have 8 here because DXT1 may contain alpha.
 			CompFactor = 8;
@@ -1116,6 +1170,7 @@ ILboolean ReadMipmaps(ILuint CompFormat, ILboolean IsDXT10)
 			break;
 		default:
 			CompFactor = 1;
+		}
 	}
 
 	StartImage = Image;
@@ -1190,7 +1245,13 @@ ILboolean ReadMipmaps(ILuint CompFormat, ILboolean IsDXT10)
 			Image->DxtcData = (ILubyte*)ialloc(Head.LinearSize);
 			if (Image->DxtcData == NULL)
 				return IL_FALSE;
-			Image->DxtcFormat = CompFormat - PF_DXT1 + IL_DXT1;
+			if (IsDXT10)
+			{
+				Image->DxgiFormat = CompFormat;
+				Image->DxtcFormat = IL_DXT_NO_COMP;
+			}
+			else
+				Image->DxtcFormat = CompFormat - PF_DXT1 + IL_DXT1;
 			Image->DxtcSize = Head.LinearSize;
 			memcpy(Image->DxtcData, CompData, Image->DxtcSize);
 		}
@@ -1473,6 +1534,32 @@ ILboolean DecompressDXT5(ILimage *lImage, ILubyte *lCompData)
 	return IL_TRUE;
 }
 
+ILboolean DecompressBC7UNORM(ILimage* lImage, ILubyte* lCompData)
+{
+	const size_t blocks_x = (lImage->Width + 3) / 4;
+	const size_t blocks_y = (lImage->Height + 3) / 4;
+
+	for (size_t by = 0; by < blocks_y; by++)
+	{
+		for (size_t bx = 0; bx < blocks_x; bx++)
+		{
+			void* pBlock = &lCompData[(bx + by * blocks_x) * 16];
+
+			bc7decomp::color_rgba unpacked_pixels[16];
+			for (size_t i = 0; i < 16; i++)
+				unpacked_pixels[i].set(0, 0, 0, 255);
+
+			bc7decomp::unpack_bc7((const uint8_t*)pBlock, (bc7decomp::color_rgba*)unpacked_pixels);
+
+			size_t copyX = IL_MIN(4, lImage->Width - bx * 4);
+			size_t copyY = IL_MIN(4, lImage->Height - by * 4);
+			for (size_t y = 0; y < copyY; y++)
+				memcpy(&lImage->Data[bx * 16 + (by * 4 + y) * lImage->Width * 4], &unpacked_pixels[y * 4], copyX * 4);
+		} // bx
+	} // by
+
+	return IL_TRUE;
+}
 
 ILboolean Decompress3Dc()
 {

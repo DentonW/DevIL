@@ -324,7 +324,11 @@ ILboolean iLoadJp2Internal(jas_stream_t	*Stream, ILimage *Image)
 // see: https://github.com/OSGeo/gdal/commit/9ef8e16e27c5fc4c491debe50bf2b7f3e94ed334
 //      https://github.com/DentonW/DevIL/issues/90
 #if defined(PRIjas_seqent)
-static int iJp2_file_read(jas_stream_obj_t *obj, char *buf, unsigned cnt)
+#if JAS_VERSION_MAJOR >= 3
+static ssize_t iJp2_file_read(jas_stream_obj_t *obj, char *buf, size_t cnt)
+#elif JAS_VERSION_MAJOR < 3
+static int iJp2_file_read(jas_stream_obj_t* obj, char* buf, unsigned cnt)
+#endif
 #else
 static int iJp2_file_read(jas_stream_obj_t *obj, char *buf, int cnt)
 #endif
@@ -334,7 +338,11 @@ static int iJp2_file_read(jas_stream_obj_t *obj, char *buf, int cnt)
 }
 
 #if defined(JAS_INCLUDE_JP2_CODEC)
-static int iJp2_file_write(jas_stream_obj_t *obj, const char *buf, unsigned cnt)
+#if JAS_VERSION_MAJOR >= 3
+static ssize_t iJp2_file_write(jas_stream_obj_t* obj, const char* buf, size_t cnt)
+#elif JAS_VERSION_MAJOR < 3
+static ssize_t iJp2_file_write(jas_stream_obj_t *obj, const char *buf, size_t cnt)
+#endif
 #elif defined(PRIjas_seqent)
 static int iJp2_file_write(jas_stream_obj_t *obj, char *buf, unsigned cnt)
 #else
