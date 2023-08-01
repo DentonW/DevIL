@@ -1043,6 +1043,9 @@ ILboolean AllocImage(ILuint CompFormat, ILboolean IsDXT10)
  */
 ILboolean DdsDecompress(ILuint CompFormat, ILboolean IsDXT10)
 {
+	if (Image->DxtcData && ilGetInteger(IL_SKIP_DXTC_DECOMPRESS) == IL_TRUE)
+		return IL_TRUE;
+
 	if (IsDXT10)
 	{  //@TODO: Put in all compressed formats
 		switch (CompFormat)

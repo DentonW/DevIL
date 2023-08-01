@@ -390,6 +390,7 @@ typedef long long unsigned int ILuint64;
 #define IL_DXT5             0x070A
 #define IL_DXT_NO_COMP      0x070B
 #define IL_KEEP_DXTC_DATA   0x070C
+#define IL_SKIP_DXTC_DECOMPRESS 0x070D
 #define IL_DXTC_DATA_FORMAT 0x070D
 #define IL_3DC              0x070E
 #define IL_RXGB             0x070F
