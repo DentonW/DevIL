@@ -789,9 +789,6 @@ ILboolean iSaveTargaInternal()
 	SaveLittleUShort((ILushort)Minute);
 	SaveLittleUShort((ILushort)Second);
 	
-	for (i = 0; i < 6; i++) {  // Time created
-		SaveLittleUShort(0);
-	}
 	for (i = 0; i < 41; i++) {	// Job name/ID
 		iputc(0);
 	}
