@@ -406,7 +406,7 @@ main(argc, argv)
 int argc;
 char *argv[];
 {
-	register int c;
+	int c;
 	int optind;
 	char *optarg;
 	int xsize = 0, ysize = 0;
