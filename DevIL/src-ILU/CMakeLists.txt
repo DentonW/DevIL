@@ -43,7 +43,7 @@ source_group("Header Files" FILES ${ILU_INC} )
 source_group("Resource Files" FILES ${ILU_RSRC} )
 
 # Remove SHARED to create a static library
-add_library(ILU SHARED ${ILU_SRCS} ${ILU_INC} ${ILU_RSRC})
+add_library(ILU ${ILU_SRCS} ${ILU_INC} ${ILU_RSRC})
 set_target_properties(ILU PROPERTIES SOVERSION 1)
 
 
