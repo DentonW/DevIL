@@ -1985,8 +1985,7 @@ void* ILAPIENTRY iSwitchTypes(ILuint SizeOfData, ILenum SrcType, ILenum DestType
 
 	Size = SizeOfData / BpcSrc;
 
-	//if (BpcSrc == BpcDest) {
-	if (SrcType == DestType) {
+	if (SrcType == DestType || (SrcType < IL_FLOAT && DestType < IL_FLOAT && BpcSrc == BpcDest)) {
 		return Buffer;
 	}
 
