@@ -719,13 +719,9 @@ ILboolean iSaveTargaInternal()
 	else {
 		TempImage = iCurImage;
 	}
-	
-	if (TempImage->Origin != IL_ORIGIN_LOWER_LEFT) {
-		TempData = (char*)iGetFlipped(TempImage);
-	}
-	else
-		TempData = (char*)TempImage->Data;
-	
+
+	TempData = (char*)TempImage->Data;
+
 	// Write out the origin stuff.
 	iwrite(&zero_short, sizeof(ILshort), 1);
 	iwrite(&zero_short, sizeof(ILshort), 1);
@@ -818,10 +814,7 @@ ILboolean iSaveTargaInternal()
 	SaveLittleUInt(ExtOffset);	// No extension area
 	SaveLittleUInt(0);	// No developer directory
 	iwrite(Footer, 1, ilCharStrLen(Footer)+1);
-	
-	if (TempImage->Origin != IL_ORIGIN_LOWER_LEFT) {
-		ifree(TempData);
-	}
+
 	if (Format == IL_RGB || Format == IL_RGBA) {
 		ilSwapColours();
 	}
